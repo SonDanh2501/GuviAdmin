@@ -23,22 +23,18 @@ const ReportOrderByCustomer = () => {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState([]);
   const [dataTotal, setDataTotal] = useState({});
-
-
   const [startDate, setStartDate] = useState("")
   const [endDate, setEndDate] = useState("")
   const [sameStartDate, setSameStartDate] = useState("")
   const [sameEndDate, setSameEndDate] = useState("")
   const [start, setStart] = useState(0)
-
   const [typeCustomer, setTypeCustomer] = useState("all")
   const [typeDate, setTypeDate] = useState("date_work")
   const [detectLoading, setDetectLoading] = useState(null)
-
-
   const [isLoading, setIsLoading] = useState(false);
   const { width } = useWindowDimensions();
   const lang = useSelector(getLanguageState);
+  const [lengthPage, setLengthPage] = useState(20);
 
   const [customerNew, setCustomerNew] = useState({
     mainInfo: {
@@ -91,14 +87,14 @@ const ReportOrderByCustomer = () => {
       getDataReportOrderByCustomer();
       getDataReportTotalOrderByCustomer();
     }
-  }, [sameStartDate, sameEndDate])
+  }, [sameStartDate, sameEndDate, lengthPage])
 
   useEffect(() => {
-    if (startDate !== "") { 
-      setDetectLoading(start+typeCustomer)
+    if (startDate !== "") {
+      setDetectLoading(start + typeCustomer);
       getDataReportOrderByCustomer();
     }
-  }, [start, typeCustomer])
+  }, [start, typeCustomer, lengthPage]);
 
 
   useEffect(() => {
@@ -116,7 +112,7 @@ const ReportOrderByCustomer = () => {
 
 
   const getDataReportOrderByCustomer = async () => {
-    const res = await getReportOrderByCustomer(startDate, endDate, typeCustomer, typeDate,  start, 100);
+    const res = await getReportOrderByCustomer(startDate, endDate, typeCustomer, typeDate,  start, lengthPage);
     setData(res.data);
     setTotal(res?.totalItem);
     setDataTotal(res?.total[0]);
@@ -403,21 +399,21 @@ const ReportOrderByCustomer = () => {
 
   return (
     <React.Fragment>
-    <div className="div-container-content">
-      <div className="div-flex-row">
-        <div className="div-header-container">
-          <h4 className="title-cv">Báo cáo số lượng đơn hàng theo khách hàng</h4>
+      <div className="div-container-content">
+        <div className="div-flex-row">
+          <div className="div-header-container">
+            <h4 className="title-cv">
+              Báo cáo số lượng đơn hàng theo khách hàng
+            </h4>
+          </div>
         </div>
-
-      </div>
-
 
         <div className="div-flex-row-flex-start">
           <div className="date-picker">
             <RangeDatePicker
               setStartDate={setStartDate}
               setEndDate={setEndDate}
-              onCancel={() => { }}
+              onCancel={() => {}}
               defaults={"thirty_last"}
             />
           </div>
@@ -435,20 +431,18 @@ const ReportOrderByCustomer = () => {
           </div>
         </div>
 
-
         <div className="div-flex-row">
           <CardMultiInfo
-            mainInfo={customerNew.mainInfo} 
+            mainInfo={customerNew.mainInfo}
             secondInfo={customerNew.secondInfo}
-            />
-                      <CardMultiInfo
-            mainInfo={customerOld.mainInfo} 
+          />
+          <CardMultiInfo
+            mainInfo={customerOld.mainInfo}
             secondInfo={customerOld.secondInfo}
-            />
+          />
         </div>
 
-
-      {/* <div className="div-flex-row-flex-start">
+        {/* <div className="div-flex-row-flex-start">
           <div className="block-content-100">
             <div className="header">
               <div className="text-header">
@@ -478,40 +472,36 @@ const ReportOrderByCustomer = () => {
           </div>
         </div> */}
 
+        <div className="div-flex-row">
+          <Select
+            defaultValue="all"
+            style={{ width: 150 }}
+            onChange={changeTypeCustomer}
+            options={[
+              { value: "all", label: "Tất cả" },
+              { value: "new", label: "Khách hàng mới" },
+              { value: "old", label: "Khách hàng cũ" },
+            ]}
+          />
+        </div>
 
-<div className="div-flex-row">
-<Select
-      defaultValue="all"
-      style={{ width: 150 }}
-      onChange={changeTypeCustomer}
-      options={[
-        { value: 'all', label: 'Tất cả' },
-        { value: 'new', label: 'Khách hàng mới' },
-        { value: 'old', label: 'Khách hàng cũ' },
-      ]}
-    />
-</div>
-
-
-
-      <div className="div-flex-row-start">
-
-        <DataTable
-          columns={columns}
-          data={data}
-          // actionColumn={addActionColumn}
-          start={startPage}
-          pageSize={100}
-          totalItem={total}
-          detectLoading={detectLoading}
-          // getItemRow={setItem}
-          onCurrentPageChange={setStart}
-        />
+        <div className="div-flex-row-start">
+          <DataTable
+            columns={columns}
+            data={data}
+            // actionColumn={addActionColumn}
+            start={startPage}
+            pageSize={lengthPage}
+            setLengthPage={setLengthPage}
+            totalItem={total}
+            detectLoading={detectLoading}
+            // getItemRow={setItem}
+            onCurrentPageChange={setStart}
+          />
+        </div>
       </div>
-    </div>
-
     </React.Fragment>
-  )
+  );
 }
 
 

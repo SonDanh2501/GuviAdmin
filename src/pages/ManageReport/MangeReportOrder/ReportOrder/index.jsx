@@ -17,8 +17,7 @@ import "./index.scss";
 const ReportOrder = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [startPage, setStartPage] = useState(0);
-  const [lengthPage, setLengthPage] = useState(100);
-
+  const [lengthPage, setLengthPage] = useState(20);
   const [data, setData] = useState([]);
   const [total, setTotal] = useState([]);
   const [dataTotal, setDataTotal] = useState({});
@@ -75,7 +74,7 @@ const ReportOrder = () => {
     if (startDate !== "") {
       getDataReportOrder();
     }
-  }, [startDate, endDate, start, selectStatus]);
+  }, [startDate, endDate, start, selectStatus,lengthPage]);
 
   const getDataReportOrder = async () => {
     const res = await getReportOrder(
@@ -959,6 +958,7 @@ const ReportOrder = () => {
           // actionColumn={addActionColumn}
           start={startPage}
           pageSize={lengthPage}
+          setLengthPage={setLengthPage}
           totalItem={total}
           // detectLoading={detectLoading}
           // getItemRow={setItem}

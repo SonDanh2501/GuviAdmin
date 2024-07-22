@@ -69,6 +69,7 @@ const ManageTopUpWithdraw = () => {
   const checkElement = useSelector(getElementState);
   const [data, setData] = useState([]);
   const [startPage, setStartPage] = useState(0);
+  const [lengthPage, setLengthPage] = useState(20);
   const [total, setTotal] = useState(100);
   const [item, setItem] = useState();
   const [openModalCancel, setOpenModalCancel] = useState(false);
@@ -125,7 +126,6 @@ const ManageTopUpWithdraw = () => {
   for (const key of Object.keys(selectedDate)) {
     queryDate += `${key}=${selectedDate[key]}&`;
   }
-  // NOTE
   let query =
     returnFilter.map((item) => `&${item.key}=${item.value}`).join("") +
     queryDate +
@@ -138,7 +138,7 @@ const ManageTopUpWithdraw = () => {
     dataIndex: "action",
     key: "action",
     fixed: "right",
-    width: width > 900 ? 60 : 20,
+    width: width > 900 ? 60 : 25,
     render: (_, record) => {
       // console.log("CHECK STATUS", record?.status);
       const _isDisableVerify =
@@ -311,7 +311,7 @@ const ManageTopUpWithdraw = () => {
   );
   // Fetch dữ liệu
   const getList = () => {
-    getListTransactionV2Api(startPage, LENGTH_ITEM, query, valueSearch)
+    getListTransactionV2Api(startPage, lengthPage, query, valueSearch)
       .then((res) => {
         console.log("data", data);
         setData(res?.data);
@@ -342,7 +342,7 @@ const ManageTopUpWithdraw = () => {
     if (selectedDate.end_date !== "") {
       getList();
     }
-  }, [startPage, returnFilter, tab, valueSearch, selectedDate]);
+  }, [startPage, returnFilter, tab, valueSearch, selectedDate, lengthPage]);
   // console.log("CHECK DATA >>> ", data);
   // ---------------------------- UI ------------------------------------ //
   return (
@@ -410,7 +410,8 @@ const ManageTopUpWithdraw = () => {
           data={data}
           actionColumn={addActionColumn}
           start={startPage}
-          pageSize={LENGTH_ITEM}
+          pageSize={lengthPage}
+          setLengthPage={setLengthPage}
           totalItem={total}
           getItemRow={setItem}
           onCurrentPageChange={onChangePage}

@@ -100,7 +100,7 @@
   }
 
   .btn-add {
-    background-color: #48cae4;
+    background-color: #9e68df;
     color: white;
   }
 }
@@ -242,15 +242,49 @@
   background: #1f4ce0 !important;
 }
 
-.ant-layout-sider-children {
-  background-color: #FFFFFF;
-  // box-shadow: 10px 0 10px -5px #333;
-  // border-right: 1px solid silver;
+
+.ant-layout-sider::-webkit-scrollbar {
+  // width: 2px;
+  // transition-duration: 500ms;
+  // :hover {
+    display: none;
 }
 
+
+// .ant-layout-sider:hover::-webkit-scrollbar {
+// display: flex;
+// }
+
+// .ant-layout-sider::-webkit-scrollbar-track {
+
+// }
+
+// .ant-layout-sider::-webkit-scrollbar-thumb {
+//   background: red; 
+//   // border-radius: 10px;
+// }
+
+// .ant-layout-sider:hover::-webkit-scrollbar-track {
+//   box-shadow: inset 0 0 5px grey; 
+//   // border-radius: 10px;
+// }
+
+// .ant-layout-sider:hover::-webkit-scrollbar-thumb {
+//   background: purple; 
+//   // border-radius: 10px;
+// }
+
+.ant-layout-sider-children {
+  background-color: #FFFFFF;
+}
+
+/*~~~ Ant desgin menu css ~~~*/
 .ant-menu {
   background-color: #FFFFFF;
-  padding: 0 0 10px 0;
+  border: 0px solid black !important;
+
+
+  // padding: 0 0 10px 0;
 
   /* ~~~ Css của một item ~~~ */
   .ant-menu-item {
@@ -288,12 +322,12 @@
     }
 
     // Icon
-    .ant-menu-item-icon {
-    }
+    .ant-menu-item-icon {}
   }
 
   /* ~~~ Css của item là submenu ~~~ */
   .ant-menu-submenu {
+
     // Label và cả icon
     .ant-menu-submenu-title {
       // color: red;
@@ -319,6 +353,7 @@
 
   /* ~~~ Css của item là submenu selected ~~~ */
   .ant-menu-submenu-selected {
+
     // Label và cả icon
     .ant-menu-submenu-title {
       background-color: #d8c2f2;
@@ -371,29 +406,35 @@
   }
 }
 
+/*~~~ Ant desgin dropdown css ~~~*/
 .ant-dropdown-menu {
   max-height: 250px;
   overflow: auto;
 }
 
+/*~~~ Ant desgin table css ~~~*/
+// .ant-table tbody tr:hover {
+//   background-color: #ff0000 !important; /* Màu nền khi hover */
+//   // cursor: pointer; /* Thay đổi con trỏ chuột thành pointer */
+// }
+// .ant-table tbody tr:focus {
+//   background-color: #ff0000 !important; /* Màu nền khi hover */
+//   // cursor: pointer; /* Thay đổi con trỏ chuột thành pointer */
+// }
+// .ant-table-thead {
+//   border-bottom: 1px solid black;
+// }
+.ant-table-thead p {
+  color: white;
+}
+.ant-table tbody tr:nth-child(odd) td {
+  background-color: #f6f6f6;
+  // border: 1px solid #CCC;
+  // padding: 10px;
+}
 
-// .ant-select {
-//   width: fit-content !important;
-//   .ant-select-selector {
-//     background: yellow;
-//   }
-//   // background-color: transparent !important;
-//   // background: transparent !important;
-// }
-
-// ::-webkit-scrollbar {
-//   width: 5px;
-// }
-
-// ::-webkit-scrollbar-thumb {
-//   background: #fff;
-//   border-radius: 10px;
-// }
-// ::-webkit-scrollbar-track {
-//   background: red;
-// }
+.ant-table tbody tr:nth-child(even) td {
+  // background-color: #f6f6f6;
+  // border: 1px solid #CCC;
+  // padding: 10px;
+}

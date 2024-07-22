@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Dropdown, Space, Input } from "antd";
+import { Dropdown, Space, Input, Select, ConfigProvider } from "antd";
 import { UilEllipsisV } from "@iconscout/react-unicons";
 import { SearchOutlined } from "@ant-design/icons";
 import moment from "moment";
@@ -22,11 +22,14 @@ import { OPTIONS_SELECT_STATUS_HANDLE_REVIEW } from "../../../@core/constant/con
 import "./index.scss";
 import DeleteModal from "./components/DeleteModal";
 import { IoStar } from "react-icons/io5";
+import LoadingPagination from "../../../components/paginationLoading";
+import CustomHeaderDatatable from "../../../components/tables/tableHeader";
 
 const ReviewCollaborator = () => {
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
   const [data, setData] = useState([]);
+  const [star, setStar] = useState(0);
   const [startPage, setStartPage] = useState(0);
   const [totalRating, setTotalRating] = useState({
     totalFiveStar: 0,
@@ -35,9 +38,10 @@ const ReviewCollaborator = () => {
     totalTwoStar: 0,
     totalOneStar: 0,
   });
-  const [lengthPage, setLengthPage] = useState(25);
+  const [lengthPage, setLengthPage] = useState(20);
   const [valueSearch, setValueSearch] = useState("");
   const [detectLoading, setDetectLoading] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [totalItem, setTotalItem] = useState(0);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -50,7 +54,7 @@ const ReviewCollaborator = () => {
     if (startDate !== "") {
       getReviewCollaborator();
     }
-  }, [valueSearch, startPage, startDate]);
+  }, [valueSearch, startPage, startDate, lengthPage ]);
 
   const handleSearch = useCallback(
     _debounce((value) => {
@@ -65,7 +69,8 @@ const ReviewCollaborator = () => {
       startPage,
       lengthData,
       startDate,
-      endDate
+      endDate,
+      star
     );
     calculateRating(res);
   };
@@ -75,7 +80,8 @@ const ReviewCollaborator = () => {
       startPage,
       lengthPage,
       startDate,
-      endDate
+      endDate,
+      star
     );
 
     for (let i = 0; i < res.data.length; i++) {
@@ -124,83 +130,149 @@ const ReviewCollaborator = () => {
 
   const columns = [
     {
-      // i18n_title: 'date_create',
-      title: "Ngày",
-      dataIndex: "date_create_review",
-      key: "date_time",
-      width: 100,
+      title: "STT",
+      dataIndex: "",
+      key: "ordinal",
+      width: 60,
       fontSize: "text-size-M",
     },
     {
-      title: "Đơn hàng",
+      // title: "Mã Đơn Hàng",
+      customTitle: (
+        <CustomHeaderDatatable
+          title="Mã đơn hàng"
+          textToolTip="Mã đơn hàng được đánh giá, nhấn vào để xem chi tiết"
+        />
+      ),
       dataIndex: "id_view",
       key: "code_order_name_service",
       width: 140,
       fontSize: "text-size-M",
     },
     {
-      i18n_title: "customer",
-      dataIndex: "id_customer",
-      key: "customer-name-phone",
-      width: 120,
-      fontSize: "text-size-M",
-    },
-    {
-      title: "Đánh giá sao",
-      dataIndex: "service_title",
-      key: "id_view_name_service",
-      width: 140,
-      maxLength: 20,
-      fontSize: "text-size-M",
-    },
-    {
-      // i18n_title: 'customer',
-      title: "Cộng tác viên",
-      dataIndex: "id_collaborator",
-      key: "collaborator_no_star",
-      width: 150,
-      fontSize: "text-size-M",
-    },
-    {
-      // i18n_title: 'address',
-      title: "Đánh giá nhanh",
-      dataIndex: "short_review",
-      key: "text",
-      width: 140,
-      maxLength: 35,
-      fontSize: "text-size-M",
-    },
-    {
-      title: "Chi tiết đánh giá",
-      dataIndex: "review",
-      key: "text",
-      width: 220,
-      maxLength: 90,
-      fontSize: "text-size-M",
-    },
-    {
-      i18n_title: "status",
-      dataIndex: "status_handle_review",
-      key: "status_handle_review",
-      selectOptions: OPTIONS_SELECT_STATUS_HANDLE_REVIEW,
-      width: 185,
-      fontSize: "text-size-M",
-    },
-    {
-      title: "NV liên hệ",
-      dataIndex: "full_name_user_system_handle_review",
-      key: "other",
+      // i18n_title: 'date_create',
+      // title: "Thời Gian",
+      customTitle: (
+        <CustomHeaderDatatable
+          title="Thời Gian"
+          textToolTip="Thời gian đánh giá được gửi đến"
+        />
+      ),
+      dataIndex: "date_create_review",
+      key: "date_time",
       width: 110,
       fontSize: "text-size-M",
     },
     {
-      i18n_title: "note",
-      dataIndex: "note_admin",
-      key: "text",
-      maxLength: 90,
-      width: 220,
+      // i18n_title: "customer",
+      // title: "Khách Hàng",
+      customTitle: (
+        <CustomHeaderDatatable
+          title="Khách Hàng"
+          textToolTip="Thông tin khách hàng gửi đánh giá"
+        />
+      ),
+      dataIndex: "id_customer",
+      key: "customer_full_name",
+      width: 140,
       fontSize: "text-size-M",
     },
+    {
+      // i18n_title: "service",
+      // title: "Dịch vụ",\
+      customTitle: (
+        <CustomHeaderDatatable
+          title="Dịch Vụ"
+          textToolTip="Dịch vụ được lựa chọn"
+        />
+      ),
+      dataIndex: "service._id.title.vi",
+      key: "service_customer",
+      width: 130,
+      fontSize: "text-size-M",
+    },
+    {
+      // title: "Số Sao",
+      customTitle: (
+        <CustomHeaderDatatable
+          title="Số Sao"
+          textToolTip="Số sao được đánh giá bởi khách hàng sử dụng dịch vụ"
+        />
+      ),
+      dataIndex: "service_title",
+      key: "id_view_name_service",
+      width: 130,
+      // maxLength: 35,
+      fontSize: "text-size-M",
+    },
+    // {
+    //   // i18n_title: 'customer',
+    //   title: "Cộng tác viên",
+    //   dataIndex: "id_collaborator",
+    //   key: "collaborator_no_star",
+    //   width: 190,
+    //   fontSize: "text-size-M",
+    // },
+    {
+      // i18n_title: 'address',
+      
+      // title: "Đánh Giá",
+      customTitle: (
+        <CustomHeaderDatatable
+          title="Đánh Giá"
+          textToolTip="Nội dung đánh giá mà khách hàng gửi"
+        />
+      ),
+      dataIndex: "short_review",
+      key: "text",
+      width: 200,
+      // maxLength: 90,
+      fontSize: "text-size-M",
+    },
+    {
+      // title: "Chi Tiết",
+      customTitle: (
+        <CustomHeaderDatatable
+          title="Chi Tiết"
+          textToolTip="Chi tiết của đánh giá"
+        />
+      ),
+      dataIndex: "review",
+      key: "text",
+      width: 200,
+      // maxLength: 90,
+      fontSize: "text-size-M",
+    },
+    {
+      // i18n_title: "status",
+      customTitle: (
+        <CustomHeaderDatatable
+          title="Trạng Thái"
+          textToolTip="Trạng thái của đánh giá được duyệt bởi bình luận viên"
+        />
+      ),
+      // title: "Trạng Thái",
+      dataIndex: "status_handle_review",
+      key: "status_handle_review",
+      selectOptions: OPTIONS_SELECT_STATUS_HANDLE_REVIEW,
+      width: 150,
+      fontSize: "text-size-M",
+    },
+    // {
+    //   title: "NV liên hệ",
+    //   dataIndex: "full_name_user_system_handle_review",
+    //   key: "other",
+    //   width: 110,
+    //   fontSize: "text-size-M",
+    // },
+    // {
+    //   i18n_title: "note",
+    //   dataIndex: "note_admin",
+    //   key: "text",
+    //   maxLength: 90,
+    //   width: 200,
+    //   fontSize: "text-size-M",
+    // },
   ];
 
   const showModal = (key) => {
@@ -213,7 +285,7 @@ const ReviewCollaborator = () => {
     //   key: "0",
     //   label: checkElement?.includes("delete_request_service") &&
     //     (<p className="m-0" onClick={()=>showModal("delete")}>{`${i18n.t("delete", { lng: lang })}`}</p>)
-    // },
+    // }, 
     {
       key: "0",
       label: checkElement?.includes("delete_request_service") && (
@@ -231,7 +303,7 @@ const ReviewCollaborator = () => {
     dataIndex: "action",
     key: "action",
     fixed: "right",
-    width: 40,
+    width: 55,
     render: () => (
       <Space size="middle">
         <Dropdown menu={{ items }} trigger={["click"]}>
@@ -244,7 +316,6 @@ const ReviewCollaborator = () => {
   };
 
   const calculateRating = (data) => {
-    // console.log("CHECK DATA ", data);
     let totalFiveStarTemp = 0;
     let totalFourStarTemp = 0;
     let totalThreeStarTemp = 0;
@@ -268,13 +339,29 @@ const ReviewCollaborator = () => {
     });
   };
   const calculateRatingPercent = (total, child) => {
-    const percent = Math.round((child / total) * 100);
-    return percent ? percent : 0;
+    let percent = (child / total) * 100;
+    return percent ? Math.round((percent + Number.EPSILON) * 100) / 100 : 0;
   };
-  console.log("total", totalRating);
+  const handleFilter = useCallback(
+    (star) => {
+      setStar(star);
+      getDataReviewCollaborator(
+        startPage,
+        lengthPage,
+        startDate,
+        endDate,
+        star
+      ).then((res) => {
+        setData(res?.data);
+        setTotalItem(res?.totalItem);
+      });
+    },
+    [startPage, lengthPage, startDate, endDate, star]
+  );
   return (
-    <React.Fragment>
+    <>
       <div className="div-container-content">
+        {/* Label */}
         <div className="div-flex-row">
           <div className="div-header-container">
             <h4 className="title-cv">Đánh giá CTV</h4>
@@ -283,7 +370,7 @@ const ReviewCollaborator = () => {
         </div>
         {/* Container cho total đánh giá */}
         <div className="flex flex-row gap-8">
-          <div className="w-1/5 rounded-xl boxcss flex flex-col p-2">
+          <div className="w-1/5 rounded-xl bg-white boxcss flex flex-col px-2 py-2.5">
             <div className="flex px-2 py-3 items-center gap-2 h-1/3 bg-green-500/25 rounded-lg">
               <IoStar
                 size="1.2rem"
@@ -306,7 +393,7 @@ const ReviewCollaborator = () => {
               </span>
             </div>
           </div>
-          <div className="w-1/5 rounded-xl boxcss flex flex-col p-2">
+          <div className="w-1/5 rounded-xl bg-white boxcss flex flex-col px-2 py-2.5">
             <div className="flex px-2 py-3 items-center gap-2 h-1/3 bg-lime-500/25 rounded-lg">
               <IoStar
                 size="1.2rem"
@@ -329,7 +416,7 @@ const ReviewCollaborator = () => {
               </span>
             </div>
           </div>
-          <div className="w-1/5 rounded-xl boxcss flex flex-col p-2">
+          <div className="w-1/5 rounded-xl bg-white boxcss flex flex-col px-2 py-2.5">
             <div className="flex px-2 py-3 items-center gap-2 h-1/3 bg-yellow-500/25 rounded-lg">
               <IoStar
                 size="1.2rem"
@@ -355,7 +442,7 @@ const ReviewCollaborator = () => {
               </span>
             </div>
           </div>
-          <div className="w-1/5 rounded-xl boxcss flex flex-col p-2">
+          <div className="w-1/5 rounded-xl bg-white boxcss flex flex-col px-2 py-2.5">
             <div className="flex px-2 py-3 items-center gap-2 h-1/3 bg-orange-500/25 rounded-lg">
               <IoStar
                 size="1.2rem"
@@ -378,8 +465,8 @@ const ReviewCollaborator = () => {
               </span>
             </div>
           </div>
-          <div className="w-1/5 rounded-xl boxcss flex flex-col p-2">
-            <div className="flex px-2 py-3 items-center gap-2 h-1/3 bg-red-500/25 rounded-md ">
+          <div className="w-1/5 rounded-xl bg-white boxcss flex flex-col px-2 py-2.5">
+            <div className="flex px-2 py-3 items-center gap-2 h-1/3 bg-red-500/25 rounded-lg">
               <IoStar
                 size="1.2rem"
                 color="red"
@@ -402,52 +489,89 @@ const ReviewCollaborator = () => {
             </div>
           </div>
         </div>
-        <div className="div-flex-row-flex-start">
-          <div className="date-picker">
-            <RangeDatePicker
-              setStartDate={setStartDate}
-              setEndDate={setEndDate}
-              onCancel={() => {}}
-              defaults={"thirty_last"}
+        <div className="bg-white rounded-xl my-4 p-4 boxcss border-gray-300 border">
+          <div className="flex gap-6">
+            <div className="w-3/4 flex gap-4">
+              {/* Lịch */}
+              <div className="flex flex-col gap-1">
+                <div>
+                  <span className="font-bold">Khoảng thời gian</span>
+                </div>
+                <div className="flex gap-2">
+                  <RangeDatePicker
+                    setStartDate={setStartDate}
+                    setEndDate={setEndDate}
+                    onCancel={() => {}}
+                    defaults={"thirty_last"}
+                  />
+                  <div className="border rounded-md flex justify-center items-center px-[10px] py-[6.4px]">
+                    <p className="m-0 text-date-same">
+                      Kỳ này: {moment(startDate).format("DD/MM/YYYY")}-
+                      {moment(endDate).format("DD/MM/YYYY")}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              {/* Bộ lọc */}
+              <div className="flex flex-col gap-1 min-w-[150px]">
+                <div>
+                  <span className="font-bold">Đánh giá</span>
+                </div>
+                <div className="">
+                  <Select
+                    value={star}
+                    // style={{ width: width <= 490 ? "100%" : "18%" }}
+                    onChange={handleFilter}
+                    style={{ width: "100%" }}
+                    options={[
+                      { value: 0, label: `${i18n.t("Tất cả", { lng: lang })}` },
+                      { value: 1, label: `1 ${i18n.t("star", { lng: lang })}` },
+                      { value: 2, label: `2 ${i18n.t("star", { lng: lang })}` },
+                      { value: 3, label: `3 ${i18n.t("star", { lng: lang })}` },
+                      { value: 4, label: `4 ${i18n.t("star", { lng: lang })}` },
+                      { value: 5, label: `5 ${i18n.t("star", { lng: lang })}` },
+                    ]}
+                    defaultValue={"Tất cả"}
+                  />
+                </div>
+              </div>
+            </div>
+            {/* Tìm kiếm  */}
+            <div className="w-1/4 flex flex-col gap-1">
+              <div>
+                <span className="font-bold">Tìm kiếm</span>
+              </div>
+              <div className="">
+                <Input
+                  placeholder={`${i18n.t("search", { lng: lang })}`}
+                  value={valueSearch}
+                  prefix={<SearchOutlined />}
+                  // className="input-search"
+                  onChange={(e) => {
+                    handleSearch(e.target.value);
+                    setValueSearch(e.target.value);
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+          {/* table */}
+          <div>
+            <DataTable
+              columns={columns}
+              data={data}
+              actionColumn={addActionColumn}
+              start={startPage}
+              pageSize={lengthPage}
+              totalItem={totalItem}
+              onCurrentPageChange={onChangePage}
+              detectLoading={detectLoading}
+              onChangeValue={onChangePropsValue}
+              setLengthPage = {setLengthPage}
+              // onShowModal={onShowModal}
+              getItemRow={setItem}
             />
           </div>
-          <div className="div-same">
-            <p className="m-0 text-date-same">
-              Kỳ này: {moment(startDate).format("DD/MM/YYYY")}-
-              {moment(endDate).format("DD/MM/YYYY")}
-            </p>
-          </div>
-        </div>
-
-        <div className="div-flex-row">
-          <div className="div-filter"></div>
-          <div className="div-search">
-            <Input
-              placeholder={`${i18n.t("search", { lng: lang })}`}
-              // value={valueSearch}
-              prefix={<SearchOutlined />}
-              className="input-search"
-              onChange={(e) => {
-                handleSearch(e.target.value);
-                // setValueSearch(e.target.value);
-              }}
-            />
-          </div>
-        </div>
-        <div>
-          <DataTable
-            columns={columns}
-            data={data}
-            actionColumn={addActionColumn}
-            start={startPage}
-            pageSize={lengthPage}
-            totalItem={totalItem}
-            onCurrentPageChange={onChangePage}
-            detectLoading={detectLoading}
-            onChangeValue={onChangePropsValue}
-            // onShowModal={onShowModal}
-            getItemRow={setItem}
-          />
         </div>
       </div>
       <ModalNoteAdmin
@@ -456,8 +580,9 @@ const ReviewCollaborator = () => {
         handleOk={(payload) => processHandleReview(payload)}
         handleCancel={setModal}
       />
+      {/* {isLoading && <LoadingPagination />} */}
       {/* <DeleteModal isShow={(modal === "delete") ? true : false} item={item} handleOk={(payload) => processHandleReview(payload)} handleCancel={setModal}/> */}
-    </React.Fragment>
+    </>
   );
 };
 

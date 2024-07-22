@@ -3,7 +3,12 @@ import {
   UilFileExport,
   UilTimes,
 } from "@iconscout/react-unicons";
-import { SearchOutlined, CaretDownOutlined } from "@ant-design/icons";
+import {
+  SearchOutlined,
+  CaretDownOutlined,
+  PoweroffOutlined,
+  PlusCircleOutlined,
+} from "@ant-design/icons";
 import {
   Button,
   DatePicker,
@@ -75,6 +80,7 @@ const ManageOrder = () => {
 
   const [saveToCookie, readCookie] = useCookies();
   const checkElement = useSelector(getElementState);
+  const [lengthPage, setLengthPage] = useState(20);
   const lang = useSelector(getLanguageState);
   const service = useSelector(getService);
   const province = useSelector(getProvince);
@@ -125,6 +131,7 @@ const ManageOrder = () => {
     city,
     district,
     reCallData,
+    lengthPage,
   ]);
 
   const handleSearch = useCallback(
@@ -141,7 +148,7 @@ const ManageOrder = () => {
     getOrderApi(
       valueSearch,
       startPage,
-      20,
+      lengthPage,
       tab,
       kind,
       type,
@@ -158,6 +165,13 @@ const ManageOrder = () => {
   };
 
   const columns = [
+    {
+      title: "STT",
+      dataIndex: "",
+      key: "ordinal",
+      width: 60,
+      fontSize: "text-size-M",
+    },
     {
       i18n_title: "code_order",
       dataIndex: "id_view",
@@ -297,7 +311,7 @@ const ManageOrder = () => {
     dataIndex: "action",
     key: "action",
     fixed: "right",
-    width: 40,
+    width: 50,
     render: () => (
       <Space size="middle">
         <Dropdown menu={{ items }} trigger={["click"]}>
@@ -316,7 +330,7 @@ const ManageOrder = () => {
         getOrderApi(
           valueSearch,
           startPage,
-          20,
+          lengthPage,
           tab,
           kind,
           type,
@@ -511,9 +525,10 @@ const ManageOrder = () => {
             {/*Tạo đơn*/}
             <Button
               className="btn-add"
+              icon={<PlusCircleOutlined />}
               onClick={() => navigate("/group-order/manage-order/create-order")}
             >
-              <i class="uil uil-plus-circle"></i>
+              {/* <i class="uil uil-plus-circle"></i> */}
               {`${i18n.t("create_order", { lng: lang })}`}
             </Button>
             {/*Thanh tìm kiếm*/}
@@ -557,7 +572,7 @@ const ManageOrder = () => {
             >
               <Space>
                 <span>Dịch vụ: </span>
-                <span className="fw-500">
+                <span style={{ cursor: "pointer" }} className="fw-500">
                   {serviceLabel ? serviceLabel : optionsService[0]?.label}
                 </span>
                 <CaretDownOutlined />
@@ -579,7 +594,7 @@ const ManageOrder = () => {
             >
               <Space>
                 <span>Thành Phố:</span>
-                <span className="fw-500">
+                <span style={{ cursor: "pointer" }} className="fw-500">
                   {cityLabel ? cityLabel : "Tất cả"}
                 </span>
                 <CaretDownOutlined />
@@ -603,7 +618,7 @@ const ManageOrder = () => {
               <Space>
                 <span>Quận/Huyện:</span>
                 <div>
-                  {districtLabel?.map((el, index) => {
+                  {/* { districtLabel?.map((el, index) => {
                     if (index < 3) {
                       return (
                         <span className="fw-500" style={{ marginRight: 4 }}>
@@ -617,14 +632,41 @@ const ManageOrder = () => {
                     } else {
                       return <span></span>;
                     }
-                  })}
+                  })} */}
+                  {districtLabel && districtLabel.length > 0 ? (
+                    districtLabel.map((el, index) => {
+                      if (index < 3) {
+                        return (
+                          <span className="fw-500" style={{ marginRight: 4 }}>
+                            {el},
+                          </span>
+                        );
+                      } else if (index === 3) {
+                        return <span className="fw-500">{el}</span>;
+                      } else if (index === 4) {
+                        return <span className="fw-500">,...</span>;
+                      } else {
+                        return <span></span>;
+                      }
+                    })
+                  ) : (
+                    <span
+                      className={`fw-500 duration-500 ${
+                        cityLabel && cityLabel !== "Tất cả"
+                          ? "text-black cursor-pointer"
+                          : "text-black/25 cursor-not-allowed"
+                      } `}
+                    >
+                      Tất cả
+                    </span>
+                  )}
                 </div>
                 <CaretDownOutlined />
               </Space>
             </Dropdown>
           </div>
-           {/*Các giá trị lọc*/}
-           {checkCondition && (
+          {/*Các giá trị lọc*/}
+          {checkCondition && (
             <div className="filter-container">
               {/*Dịch vụ*/}
               <div className="iteServicem-select">
@@ -697,7 +739,8 @@ const ManageOrder = () => {
           data={data}
           actionColumn={addActionColumn}
           start={startPage}
-          pageSize={20}
+          pageSize={lengthPage}
+          setLengthPage={setLengthPage}
           totalItem={total}
           getItemRow={setItem}
           onCurrentPageChange={onChangePage}

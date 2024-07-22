@@ -7,7 +7,7 @@ import {
   MenuUnfoldOutlined,
   SmileOutlined,
 } from "@ant-design/icons";
-import { Dropdown, List, Select, Space, Opti, Tooltip } from "antd";
+import { Dropdown, List, Select, Space, Opti, Tooltip, Drawer } from "antd";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -24,10 +24,13 @@ import {
   IoSunny,
   IoSunnyOutline,
   IoGlobeOutline,
+  IoCaretForwardOutline,
+  IoPersonCircle ,
 } from "react-icons/io5";
 
 import logoVN from "../../assets/images/vn.svg";
 import logoUS from "../../assets/images/en.svg";
+import Sidebar from "../../layout/Slidebar";
 const { Option } = Select;
 
 const Header = ({ onClick, hide }) => {
@@ -87,12 +90,19 @@ const Header = ({ onClick, hide }) => {
 
   return (
     <div className="div-container-header">
-      {/*Icon open or close sidebar menu*/}
-      <Tooltip placement="bottom" title="Thu nhỏ">
-        <div className="menu-icon" onClick={onClick}>
-          <IoMenu size={"1.4rem"} />
-        </div>
-      </Tooltip>
+      {hide ? (
+        <Tooltip placement="bottom" title="Mở thanh điều hướng">
+          <div className="menu-icon" onClick={onClick}>
+            <IoCaretForwardOutline size={"1.4rem"} />
+          </div>
+        </Tooltip>
+      ) : (
+        <Tooltip placement="bottom" title="Thu nhỏ">
+          <div className="menu-icon" onClick={onClick}>
+            <IoMenu size={"1.4rem"} />
+          </div>
+        </Tooltip>
+      )}
       <div className="nav-header">
         {/*Language change*/}
         <Tooltip placement="bottom" title="Chuyển đổi ngôn ngữ">
@@ -109,7 +119,13 @@ const Header = ({ onClick, hide }) => {
             }}
           >
             <IoGlobeOutline size={"1.3rem"} />
-            <span style={{ fontWeight: "bold", fontSize: "1rem" }}>VN</span>
+            <span style={{ fontWeight: "bold", fontSize: "1rem" }}>
+              {selectedLanguage === "vi"
+                ? "VN"
+                : selectedLanguage === "en"
+                ? "EN"
+                : "VN"}
+            </span>
           </div>
         </Tooltip>
         {isSelectLanguage && (
@@ -198,14 +214,15 @@ const Header = ({ onClick, hide }) => {
           }}
           trigger={["click"]}
         >
-          <div>
-            <a onClick={(e) => e.preventDefault()}>
-              <Space>
-                <a className="text-name">Xin chào, {user?.full_name}</a>
-                <CaretDownOutlined className="icon-down" />
-              </Space>
-            </a>
-          </div>
+          <span
+            className=" flex items-center justify-center gap-2"
+            onClick={(e) => e.preventDefault()}
+          >
+            {/* <img style={{ height: "26px" }} src={defaultAvatar}></img> */}
+            <IoPersonCircle size="1.5rem" color="#9e68df" />
+            <a className="text-name">{user?.full_name}</a>
+            <CaretDownOutlined className="icon-down" />
+          </span>
         </Dropdown>
       </div>
     </div>
