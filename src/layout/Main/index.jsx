@@ -160,71 +160,95 @@ const { Header, Sider, Content } = Layout; // Set content có trong Layout, ở 
 
 const Main = ({ hide }) => {
   const [collapsed, setCollapsed] = useState(false);
+  const [isOpenDrawler, setIsOpenDrawler] = useState(false);
   const {
     token: { colorBgContainer },
   } = theme.useToken();
   const { width } = useWindowDimensions(); // Lấy độ rộng của màn hình hiển thị
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const handleClickSideBar = () => {
+    if (width > 900 ) {
+      setCollapsed(!collapsed)
+    }
+    else {
+      setIsOpenDrawler(true);
+    }
+  }
   useEffect(() => {
     dispatch(permissionAction.permissionRequest({ navigate: navigate }));
     dispatch(getProvinceAction.getProvinceRequest());
     dispatch(getUserAction.getUserRequest());
   }, [dispatch, navigate]);
-
   useEffect(() => {
-    // Responsive cho thanh side bar
+    // Auto close sidebar
     if (width > 900) {
-      setCollapsed(true);
-    } else {
       setCollapsed(false);
+    } else {
+      setCollapsed(true);
     }
   }, [width]);
-
   return (
     <Layout hasSider style={{ overflowX: "hidden" }}>
-      <Sider
-        trigger={null}
-        collapsible
-        collapsed={!collapsed}
-        width={250}
-        collapsedWidth={80}
-        style={{
-          overflow: "auto",
-          height: "100vh",
-          position: "fixed",
-          left: 0,
-          top: 0,
-          bottom: 0,
-        }}
-      >
-        {/*Sider content*/}
-        <Sidebar hide={collapsed} />
-      </Sider>
+      {width > 900 ? (
+        <Sider
+          trigger={null}
+          collapsible
+          collapsed={collapsed}
+          width={200}
+          // breakpoint="sm"
+          collapsedWidth={70}
+          style={{
+            overflow: "auto",
+            height: "100vh",
+            position: "fixed",
+            left: 0,
+            top: 0,
+            bottom: 0,
+            boxShadow: "0 3px 12px rgba(57, 63, 72, 0.3)",
+          }}
+        >
+          {/*Sider content*/}
+          <Sidebar hide={collapsed} />
+        </Sider>
+      ) : (
+        <Drawer
+          open={isOpenDrawler}
+          width={250}
+          onClose={() => setIsOpenDrawler(false)}
+          placement="left"
+          headerStyle={{
+            height: 30,
+            paddingLeft: 0,
+            display: "none",
+            margin: 0,
+          }}
+        >
+          {/*Drawler content*/}
+          <Sidebar hide={true} />
+        </Drawer>
+      )}
       <Layout
         style={{
-          marginLeft: collapsed ? 250 : 80,
-          transitionDuration: "300ms",  
+          marginLeft: width > 900 ? (collapsed ? 70 : 200) : 0,
+          transitionDuration: "100ms",
+          height: "100vh",
         }}
       >
         <Header
           style={{
             padding: 0,
-            background: "#023E8A",
-            borderBottom: "2px solid #E6EAEC",
+            background: "#FFFFFF",
+            // borderBottom: "2px solid silver",
+            boxShadow: "0 3px 5px rgba(57, 63, 72, 0.3)",
           }}
         >
           {/*Component for header*/}
-          <HeaderBar
-            onClick={() => setCollapsed(!collapsed)}
-            hide={collapsed}
-          />
+          <HeaderBar onClick={() => handleClickSideBar()} hide={collapsed} />
         </Header>
         <Content
           style={{
-            margin: "10px 16px 0",
+            margin: "20px",
             overflow: "initial",
           }}
         >

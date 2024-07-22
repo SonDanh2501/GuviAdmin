@@ -138,7 +138,7 @@ const HistoryActivity = (props) => {
                   <div className="" style={{ width: "100%" }}>
                     {/*Lấy full của 75% của toàn bộ component*/}
                     {/*Header mỗi giao dịch */}
-                    <p style={{ fontSize: "14px" }}>{title?.vi}</p>
+                    <p style={{ fontSize: "14px" }}>{title_admin}</p>
                     {/*Container for web*/}
                     {width > 490 && (
                       <div className="container-wallet ">

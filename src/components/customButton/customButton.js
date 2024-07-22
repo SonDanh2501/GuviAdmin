@@ -7,8 +7,8 @@ const CustomButton = (props) => {
   return (
     <>
       <Button
-        color={color}
-        type={type}
+        color={color ? color : "purple"}
+        type={type ? type : "primary"}
         className={["btn-custom", className]}
         onClick={onClick}
         style={style}

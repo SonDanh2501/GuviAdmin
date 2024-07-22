@@ -1767,7 +1767,8 @@ export default function Home() {
                     setEndDate={setEndDate}
                     rangeDateDefaults={"thirty_last"}
                     rangeDatePrevious
-                    disableFutureDay
+                    
+                    // disableFutureDay
                   />
                 </div>
                 {/* <CustomDatePicker

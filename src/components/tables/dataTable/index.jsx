@@ -8,6 +8,8 @@ import {
   Tooltip,
   Rate,
   Button,
+  ConfigProvider,
+  Popover,
 } from "antd";
 import { StarFilled } from "@ant-design/icons";
 import { Link } from "react-router-dom";
@@ -17,7 +19,7 @@ import useWindowDimensions from "../../../helper/useWindowDimensions";
 import { formatMoney } from "../../../helper/formatMoney";
 import { useWindowScrollPositions } from "../../../helper/useWindowPosition";
 import moment from "moment";
-import { Spin, Image } from "antd";
+import { Spin, Image, Select } from "antd";
 import {
   getElementState,
   getLanguageState,
@@ -29,6 +31,7 @@ import platinum from "../../../assets/images/iconPlatinum.svg";
 import silver from "../../../assets/images/iconSilver.svg";
 import { useNavigate } from "react-router-dom";
 import SelectDefault from "../../Select/SelectDefault";
+import { IoHelpCircleOutline } from "react-icons/io5";
 
 const DataTable = (props) => {
   const {
@@ -42,6 +45,7 @@ const DataTable = (props) => {
     setOpenModalChangeStatus,
     setOpenModalCancel,
     scrollX,
+    setLengthPage,
   } = props;
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
@@ -60,15 +64,47 @@ const DataTable = (props) => {
   const [item, setItem] = useState(data[0]);
   const [currentPage, setCurrentPage] = useState(1);
   const [ordinalNumber, setOrdinalNumber] = useState(1);
-  // const [items3, setItems3] = useState(items);
-  // let items3 = [...items]
+  const [scrollYValue, setScrollYValue] = useState(0);
+  const [scroll, setScroll] = useState([]);
+  const [pageSizeOption, setPageSizeOption] = useState({
+    value: pageSize,
+    label: `${pageSize} dòng/trang`,
+  });
+  let pageSizeOptions = [
+    { value: 10, label: "10 dòng/trang" },
+    { value: 20, label: "20 dòng/trang" },
+    { value: 50, label: "50 dòng/trang" },
+    { value: 100, label: "100 dòng/trang" },
+  ];
+  // let flag = false;
+  // pageSizeOptions.map((el) => {
+  //   if (el.value === pageSizeOption.value) flag = true;
+  // });
+  // if (flag === false) {
+  //   pageSizeOptions.push({
+  //     value: pageSizeOption.value,
+  //     label: pageSizeOption.label,
+  //   });
+  // }
+  // console.log(pageSizeOptions);
+  // setPageSizeOptions(tempOptions)
+  // console.log(tempOptions);
+  // scroll.x = "100vw";
+  // scroll.y = 240;
   let widthPage = 0;
   let headerTable = [];
   const [hidePhone, setHidePhone] = useState(false);
   const [rowIndex, setRowIndex] = useState(0);
   const navigate = useNavigate();
-  useEffect(() => {}, []);
-
+  const onSelectChange = (newSelectedRowKeys) => {
+    console.log("selectedRowKeys changed: ", newSelectedRowKeys);
+    setSelectedRowKeys(newSelectedRowKeys);
+  };
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: onSelectChange,
+  };
+  const hasSelected = selectedRowKeys.length > 0;
   useEffect(() => {
     setOrdinalNumber(start);
     if (start === 0) {
@@ -101,6 +137,16 @@ const DataTable = (props) => {
       };
       props.onChangeValue(data);
     }
+  };
+
+  const hideMiddleChars = (str) => {
+    const length = str.length;
+    const numStars = Math.floor(length / 2);
+    const halfIndex = Math.floor((length - numStars) / 2);
+
+    const stars = '*'.repeat(numStars);
+
+    return str.slice(0, halfIndex) + stars + str.slice(halfIndex + numStars);
   };
 
   for (const item of columns) {
@@ -216,7 +262,6 @@ const DataTable = (props) => {
                     {data?.id_customer?.full_name || data?.full_name}
                   </p>
                 </Link>
-
                 <p className={`text-phone-customer ${item?.fontSize}`}>
                   {data?.id_customer?.phone || data?.phone}
                 </p>
@@ -232,13 +277,13 @@ const DataTable = (props) => {
                   }`}
                 >
                   <p className={`text-name-customer ${item?.fontSize}`}>
-                    {data?.id_customer?.full_name || data?.full_name}
+                    {hideMiddleChars(data?.id_customer?.full_name) ||
+                      hideMiddleChars(data?.full_name)}
                   </p>
                 </Link>
               </div>
             );
             break;
-
           case "service":
             return (
               <div>
@@ -260,6 +305,9 @@ const DataTable = (props) => {
                 <p className={`${item?.fontSize}`}>{timeWork(data)}</p>
               </div>
             );
+            break;
+          case "service_customer":
+            return <p>{data?.service_title}</p>;
             break;
           case "date_work":
             return (
@@ -383,7 +431,7 @@ const DataTable = (props) => {
             );
             break;
           }
-          case "subject_transaction": {
+          case "subject": {
             let _type_wallet = "";
             if (data?.type_transfer === "top_up") {
               if (data?.subject === "customer") {
@@ -954,6 +1002,38 @@ const DataTable = (props) => {
             break;
           }
           case "text": {
+            const max = item.maxLength || 75;
+            let getDataView = data[item.dataIndex] || "";
+            const indexSlice = getDataView.length - max;
+            const sliceData =
+              indexSlice > 0 ? getDataView.slice(0, max) + "..." : getDataView;
+            return (
+              <Tooltip placement="topRight" title={getDataView}>
+                <span className={`${item?.fontSize} `}> {sliceData}</span>
+              </Tooltip>
+            );
+            break;
+          }
+          case "text_link": {
+            linkRedirect = `/details-order/${data?.id_group_order}`;
+            const max = item.maxLength || 75;
+            let getDataView = data[item.dataIndex] || "";
+            const indexSlice = getDataView.length - max;
+            const sliceData =
+              indexSlice > 0 ? getDataView.slice(0, max) + "..." : getDataView;
+            return (
+              <Link target="_blank" to={linkRedirect}>
+                <Tooltip placement="topRight" title={getDataView}>
+                  <span className={`${item?.fontSize} text-id-code-order`}>
+                    {" "}
+                    {sliceData}
+                  </span>
+                </Tooltip>
+              </Link>
+            );
+            break;
+          }
+          case "text_link": {
             linkRedirect = `/details-order/${data?.id_group_order}`;
             const max = item.maxLength || 75;
             let getDataView = data[item.dataIndex] || "";
@@ -1002,8 +1082,7 @@ const DataTable = (props) => {
                     {data?.id_view}
                   </p>
                 </Link>
-
-                <p className={` ${item?.fontSize}`}>{data?.service_title}</p>
+                {/* <p className={` ${item?.fontSize}`}>{data?.service_title}</p> */}
               </>
             );
             break;
@@ -1455,39 +1534,143 @@ const DataTable = (props) => {
   const toggleModal = (event) => {
     if (props.onToggleModal) props.onToggleModal(true);
   };
-  // console.log("CHECK WIDTH", width);
+  const handleSelectScrollY = (e) => {
+    if (e === 0) {
+      setScroll([]);
+    } else if (e === 1) {
+      setScroll({ y: 700 });
+    } else if (e === 2) {
+      setScroll({ y: 500 });
+    } else if (e === 3) {
+      setScroll({ y: 300 });
+    }
+    setScrollYValue(e);
+  };
+  const footerRender = () => {
+    return (
+      <div className="flex gap-4">
+        <div className="flex flex-col gap-1 min-w-[150px]">
+          <Popover
+            content={
+              "Chiều dài của bảng dữ liệu, người dùng chọn để giới hạn chiều dài bảng"
+            }
+            placement="top"
+            overlayInnerStyle={{
+              backgroundColor: "white",
+            }}
+          >
+            <div className="flex items-center gap-2">
+              <span className="font-bold">Chiều dài bảng</span>
+              <IoHelpCircleOutline />
+            </div>
+          </Popover>
+          <Select
+            className=" w-fit"
+            value={scrollYValue}
+            // style={{ width: width <= 490 ? "100%" : "18%" }}
+            onChange={(e) => handleSelectScrollY(e)}
+            style={{ width: "100%" }}
+            options={[
+              { value: 0, label: "Hiển thị tất cả" },
+              { value: 1, label: "Hiển thị nhiều" },
+              { value: 2, label: "Hiển thị vừa" },
+              { value: 3, label: "Hiển thị ít" },
+            ]}
+            defaultValue={0}
+          />
+          {/* <span onClick={() => {}}>Fixed Header</span> */}
+        </div>
+        <div className="flex flex-col gap-1 min-w-[150px]">
+          <Popover
+            content={"Số dòng hiển thị trong một trang"}
+            placement="top"
+            overlayInnerStyle={{
+              backgroundColor: "white",
+            }}
+          >
+            <div className="flex items-center gap-2">
+              <span className="font-bold">Số dòng</span>
+              <IoHelpCircleOutline />
+            </div>
+          </Popover>{" "}
+          <Select
+            className=" w-fit"
+            value={pageSizeOption}
+            // style={{ width: width <= 490 ? "100%" : "18%" }}
+            onChange={(e) => handleSelectPagination(e)}
+            style={{ width: "100%" }}
+            options={pageSizeOptions}
+            defaultValue={0}
+          />
+        </div>
+      </div>
+    );
+  };
+  const handleSelectPagination = (e) => {
+    const tempPageSizeOption = { value: e, label: `${e} dòng/trang` };
+    setPageSizeOption(tempPageSizeOption);
+    if (setLengthPage) setLengthPage(e);
+  };
+  scroll.x = scrollX ? scrollX : widthPage;
   return (
     <React.Fragment>
       <div className="mr-t">
-        <Table
-          columns={headerTable}
-          dataSource={data}
-          pagination={false}
-          scroll={{ x: scrollX ? scrollX : widthPage }}
-          // loading={detectLoading}
-          onRow={(record, rowIndex) => {
-            return {
-              onClick: (event) => {
-                setItem(record);
-                setRowIndex(rowIndex);
-                if (props.getItemRow) props.getItemRow(record);
+        <ConfigProvider
+          theme={{
+            components: {
+              Table: {
+                headerBg: "#7e53b2",
+                rowHoverBg: "#f0f0f0",
+                borderColor: "#d8d8d8",
+                lineWidth: 1,
               },
-            };
+            },
           }}
-        />
+        >
+          <Table
+            bordered
+            // rowSelection={rowSelection}
+            columns={headerTable}
+            title={() => (
+              // <p className="font-bold">
+              //   {`${i18n.t("total", { lng: lang })}`}: {totalItem}
+              // </p>
+              <div className="flex gap-1">
+                <span className="font-bold">
+                  {`${i18n.t("total", { lng: lang })}`}:
+                </span>
+                <span>{totalItem}</span>
+              </div>
+            )}
+            footer={() => footerRender()}
+            dataSource={data}
+            pagination={false}
+            // scroll={{ x: scrollX ? scrollX : widthPage, y: 1080 }}
+            scroll={scroll}
+            // scroll={{ x: 'max-content' }}
+            // loading={detectLoading}
+            onRow={(record, rowIndex) => {
+              return {
+                onClick: (event) => {
+                  setItem(record);
+                  setRowIndex(rowIndex);
+                  if (props.getItemRow) props.getItemRow(record);
+                },
+              };
+            }}
+          />
+        </ConfigProvider>
       </div>
-
       <div className="mt-2 p-2 pagination">
-        <p>
-          {`${i18n.t("total", { lng: lang })}`}: {totalItem}
-        </p>
+        <div></div>
         <div>
           <Pagination
             current={currentPage}
             onChange={calculateCurrentPage}
             total={totalItem}
             showSizeChanger={false}
-            pageSize={pageSize || 20}
+            // pageSize={pageSize || 20}
+            pageSize={pageSizeOption?.value || 20}
             hideOnSinglePage={true}
           />
         </div>

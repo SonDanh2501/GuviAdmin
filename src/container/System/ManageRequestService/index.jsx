@@ -32,6 +32,7 @@ const { TextArea } = Input;
 const ManageRequestService = () => {
   const lang = useSelector(getLanguageState);
   const [valueSearch, setValueSearch] = useState("");
+  const [lengthPage, setLengthPage] = useState(20);
   const [startPage, setStartPage] = useState(0);
   const [detectLoading, setDetectLoading] = useState(null);
   const [data, setData] = useState([]);
@@ -144,7 +145,7 @@ const ManageRequestService = () => {
 
   useEffect(() => {
     getListRequest();
-  }, [valueSearch, startPage, tab]);
+  }, [valueSearch, startPage, tab, setLengthPage]);
 
   const handleSearch = useCallback(
     _debounce((value) => {
@@ -155,7 +156,7 @@ const ManageRequestService = () => {
   );
 
   const getListRequest = () => {
-    getCusomerRequest(valueSearch, startPage, 20, tab, "", lang)
+    getCusomerRequest(valueSearch, startPage, lengthPage, tab, "", lang)
       .then((res) => {
         setData(res?.data);
         setTotalItem(res?.totalItem);
@@ -218,7 +219,8 @@ const ManageRequestService = () => {
           data={data}
           actionColumn={addActionColumn}
           start={startPage}
-          pageSize={20}
+          pageSize={lengthPage}
+          setLengthPage={setLengthPage}
           totalItem={totalItem}
           onCurrentPageChange={onChangePage}
           detectLoading={detectLoading}

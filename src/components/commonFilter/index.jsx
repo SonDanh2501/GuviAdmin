@@ -46,7 +46,6 @@ const CommonFilter = (props) => {
       setDate(temp);
     }
   }, [startDate, endDate]);
-
   return (
     <div>
       <div className="filter-transfer_container">

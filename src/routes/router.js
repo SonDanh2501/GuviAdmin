@@ -54,6 +54,8 @@ import {
   IoEllipse,
 } from "react-icons/io5";
 
+import { Link, useNavigate } from "react-router-dom";
+
 // const router = [
 //   {
 //     path: "/",
@@ -574,38 +576,75 @@ const IconCustom = ({ icon }) => {
 };
 
 const router = [
-  getItem("Tổng quan", "/", <IoHome />, null, "dashboard"),
+  // Tổng quan
   getItem(
-    "GUVI Jobs",
+    <Link style={{ textDecoration: "none" }} to="/">
+      Tổng quan
+    </Link>,
+    "/",
+    <IoHome />,
+    null,
+    "dashboard"
+  ),
+  // Guvi jobs
+  getItem(
+    <Link style={{ textDecoration: "none" }} to="/group-order/manage-order">
+      GUVIJOBS
+    </Link>,
     "/group-order/manage-order",
     <IoBagHandle />,
     null,
     "guvi_job"
   ),
+  // Yêu cầu dịch vụ
   getItem(
-    "Yêu cầu dịch vụ",
+    <Link
+      style={{ textDecoration: "none" }}
+      to="/system/request-service-manage"
+    >
+      Yêu cầu dịch vụ
+    </Link>,
     "/system/request-service-manage",
     <IoRadio />,
     null,
     "request_service"
   ),
-  getItem("Khách hàng", "/system/user-manage", <IoPeople />, null, "customer"),
-  // getItem('Cộng tác viên', '/system/collaborator-manage', <IconCustom icon={collaborator} />, null, "collaborator"),
-
+  // Khách hàng
   getItem(
-    "Cộng tác viên",
+    <Link style={{ textDecoration: "none" }} to="/system/user-manage">
+      Khách hàng
+    </Link>,
+    "/system/user-manage",
+    <IoPeople />,
+    null,
+    "customer"
+  ),
+  // getItem('Cộng tác viên', '/system/collaborator-manage', <IconCustom icon={collaborator} />, null, "collaborator"),
+  // Đối tác
+  getItem(
+    "Đối tác",
     "/system/collaborator-manage",
     <IoPerson />,
     [
       getItem(
-        "Đang hoạt động",
+        <Link
+          style={{ textDecoration: "none" }}
+          to="/system/collaborator-verify-manage"
+        >
+          Đang hoạt động
+        </Link>,
         "/system/collaborator-verify-manage",
         null,
         null
       ),
       "collaborator",
       getItem(
-        "Hồ sơ ứng tuyển",
+        <Link
+          style={{ textDecoration: "none" }}
+          to="/system/collaborator-not-verify-manage"
+        >
+          Hồ sơ ứng tuyển
+        </Link>,
         "/system/collaborator-not-verify-manage",
         null,
         null
@@ -614,30 +653,53 @@ const router = [
     ],
     "collaborator"
   ),
-
+  // Dịch vụ
   getItem(
-    "Dịch vụ",
+    <Link
+      style={{ textDecoration: "none" }}
+      to="/services/manage-group-service/service"
+    >
+      Dịch vụ
+    </Link>,
     "/services/manage-group-service/service",
     <IoHeadset />,
     null,
     "service"
   ),
+  // Marketing
   getItem(
     "Marketing",
     "sub1",
     <IoMegaphone />,
     [
-      getItem("Khuyến mãi", "/promotion/manage-setting", null, null),
+      getItem(
+        <Link style={{ textDecoration: "none" }} to="/promotion/manage-setting">
+          Khuyến mãi
+        </Link>,
+        "/promotion/manage-setting",
+        null,
+        null
+      ),
       "promotion",
       getItem(
-        "Banner",
+        <Link
+          style={{ textDecoration: "none" }}
+          to="/promotion/manage-setting/banner"
+        >
+          Banner
+        </Link>,
         "/promotion/manage-setting/banner",
         null,
         null,
         "promotion"
       ),
       getItem(
-        "Bài viết",
+        <Link
+          style={{ textDecoration: "none" }}
+          to="/promotion/manage-setting/news"
+        >
+          Bài viết
+        </Link>,
         "/promotion/manage-setting/news",
         null,
         null,
@@ -646,20 +708,28 @@ const router = [
     ],
     "promotion"
   ),
+  // CSKH
   getItem(
     "CSKH",
     "/feedback/manage-feedback",
     <IoMail />,
     [
       getItem(
-        "Đánh giá CTV",
+        <Link
+          style={{ textDecoration: "none" }}
+          to="/customer-care/review-collaborator"
+        >
+          Đánh giá CTV{" "}
+        </Link>,
         "/customer-care/review-collaborator",
         null,
         null,
         "support_customer"
       ),
       getItem(
-        "Phản hồi",
+        <Link style={{ textDecoration: "none" }} to="/customer-care/feedback">
+          Phản hồi
+        </Link>,
         "/customer-care/feedback",
         null,
         null,
@@ -669,7 +739,9 @@ const router = [
     "support_customer"
   ),
   getItem(
-    "Tài chính",
+    <Link style={{ textDecoration: "none" }} to="/finance/manage-finance">
+      Tài chính
+    </Link>,
     "/finance/manage-finance",
     <IoTrendingUp />,
     null,
@@ -693,8 +765,25 @@ const router = [
       //   null
       // ),
       // getItem("Khác", "/transaction/manage-transaction-staff", null, null),
-      getItem("Sổ quỹ", "/transaction/manage-transaction", null, null),
-      getItem("Phạt", "/punish/manage-punish", null, null),
+      getItem(
+        <Link
+          style={{ textDecoration: "none" }}
+          to="/transaction/manage-transaction"
+        >
+          Sổ quỹ
+        </Link>,
+        "/transaction/manage-transaction",
+        null,
+        null
+      ),
+      getItem(
+        <Link style={{ textDecoration: "none" }} to="/punish/manage-punish">
+          Phạt
+        </Link>,
+        "/punish/manage-punish",
+        null,
+        null
+      ),
       // getItem(
       //   "Thưởng",
       //   "/reward/manage-reward",
@@ -705,16 +794,34 @@ const router = [
     ],
     "cash_book"
   ),
-  getItem("Báo cáo", "/report/manage-report", <IoStatsChart />, null, "report"),
   getItem(
-    "Thông báo",
+    <Link style={{ textDecoration: "none" }} to="/report/manage-report">
+      Báo cáo
+    </Link>,
+    "/report/manage-report",
+    <IoStatsChart />,
+    null,
+    "report"
+  ),
+  getItem(
+    <Link
+      style={{ textDecoration: "none" }}
+      to="/notification/manage-push-notification"
+    >
+      Thông báo
+    </Link>,
     "/notification/manage-push-notification",
     <IoNotifications />,
     null,
     "notification"
   ),
   getItem(
-    "Cấu hình",
+    <Link
+      style={{ textDecoration: "none" }}
+      to="/adminManage/manage-configuration"
+    >
+      Cấu hình
+    </Link>,
     "/adminManage/manage-configuration",
     <IoSettings />,
     null,
