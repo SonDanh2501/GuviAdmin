@@ -47,7 +47,6 @@ const DataTable = (props) => {
     scrollX,
     setLengthPage,
   } = props;
-  console.log("check data", data);
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
   const [saveToCookie] = useCookies();
@@ -67,7 +66,6 @@ const DataTable = (props) => {
   const [ordinalNumber, setOrdinalNumber] = useState(1);
   const [scrollYValue, setScrollYValue] = useState(0);
   const [scroll, setScroll] = useState([]);
-  console.log(pageSize);
   const [pageSizeOption, setPageSizeOption] = useState({
     value: pageSize,
     label: `${pageSize} dòng/trang`,
@@ -1537,7 +1535,6 @@ const DataTable = (props) => {
     if (props.onToggleModal) props.onToggleModal(true);
   };
   const handleSelectScrollY = (e) => {
-    console.log("CO CHAY HONG", e);
     if (e === 0) {
       setScroll([]);
     } else if (e === 1) {
@@ -1615,7 +1612,6 @@ const DataTable = (props) => {
     if (setLengthPage) setLengthPage(e);
   };
   scroll.x = scrollX ? scrollX : widthPage;
-  console.log("Checking option", pageSizeOptions);
   return (
     <React.Fragment>
       <div className="mr-t">

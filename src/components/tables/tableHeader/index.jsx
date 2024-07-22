@@ -14,7 +14,13 @@ const CustomHeaderDatatable = ({
       <React.Fragment>
         <div className="div-table-header">
           <div className="table-header-label">
-            <p style={{ color: title === "Doanh thu" ? "#2463eb" : "none" }}>
+            <p
+              style={{
+                fontSize: "14px",
+                fontWeight: "500",
+                color: title === "Doanh thu" ? "#2463eb" : "none",
+              }}
+            >
               {title}
             </p>
             {textToolTip ? (
@@ -26,7 +32,10 @@ const CustomHeaderDatatable = ({
                 }}
               >
                 <div>
-                  <IoHelpCircleOutline size = {size ? size : 16} color={color ? color : "white"} />
+                  <IoHelpCircleOutline
+                    size={size ? size : 18}
+                    color={color ? color : "white"}
+                  />
                   {/* <i
                     style={{
                       color: title === "Doanh thu" ? "#2463eb" : "none",

@@ -258,7 +258,6 @@ const ManageCustomer = () => {
     },
     [startPage, status, idGroup, lang, lengthPage]
   );
-  console.log("data", data);
   return (
     <>
       <div className="div-container-content">

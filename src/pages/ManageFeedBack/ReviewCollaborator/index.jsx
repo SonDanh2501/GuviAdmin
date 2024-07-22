@@ -160,7 +160,7 @@ const ReviewCollaborator = () => {
       ),
       dataIndex: "date_create_review",
       key: "date_time",
-      width: 100,
+      width: 110,
       fontSize: "text-size-M",
     },
     {
@@ -188,7 +188,7 @@ const ReviewCollaborator = () => {
       ),
       dataIndex: "service._id.title.vi",
       key: "service_customer",
-      width: 120,
+      width: 130,
       fontSize: "text-size-M",
     },
     {
@@ -201,7 +201,7 @@ const ReviewCollaborator = () => {
       ),
       dataIndex: "service_title",
       key: "id_view_name_service",
-      width: 120,
+      width: 130,
       // maxLength: 35,
       fontSize: "text-size-M",
     },
@@ -255,7 +255,7 @@ const ReviewCollaborator = () => {
       dataIndex: "status_handle_review",
       key: "status_handle_review",
       selectOptions: OPTIONS_SELECT_STATUS_HANDLE_REVIEW,
-      width: 140,
+      width: 150,
       fontSize: "text-size-M",
     },
     // {
@@ -358,8 +358,6 @@ const ReviewCollaborator = () => {
     },
     [startPage, lengthPage, startDate, endDate, star]
   );
-console.log("check lengthPage", lengthPage);
-  console.log("checking data ", data);
   return (
     <>
       <div className="div-container-content">

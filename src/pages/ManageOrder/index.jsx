@@ -508,7 +508,6 @@ const ManageOrder = () => {
     setDistrictLabel(district_label_filter);
     setDistrict(district_filter);
   };
-  console.log("check", lengthPage);
   return (
     <div className="div-container-content">
       <div className="div-flex-row">
