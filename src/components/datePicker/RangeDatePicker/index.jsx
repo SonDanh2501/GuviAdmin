@@ -522,14 +522,6 @@ const RangeDatePicker = (props) => {
       // setLastTermEndCalendar(previousDateTemp[0]);
       setPreviousDate(previousDateTemp);
     }
-
-
-    console.log(lengthDaySelected);
-    console.log(item);
-    console.log(lengthToCurrent);
-    console.log(lengthDayToCurrent);
-    console.log(lengthDaySelected);
-
     setLastTermStartCalendar(previousDateTemp[previousDateTemp.length - 1]);
     setLastTermEndCalendar(previousDateTemp[0]);
 

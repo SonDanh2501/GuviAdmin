@@ -66,6 +66,13 @@ const CollaboratorVerify = () => {
 
   const columns = [
     {
+      title: "STT",
+      dataIndex: "",
+      key: "ordinal",
+      width: 60,
+      fontSize: "text-size-M",
+    },
+    {
       title: "Mã CTV",
       dataIndex: "id_view",
       key: "other",
@@ -144,7 +151,7 @@ const CollaboratorVerify = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState([]);
   const [startPage, setStartPage] = useState(0);
-  const [lengthPage, setLengthPage] = useState(25);
+  const [lengthPage, setLengthPage] = useState(20);
   const [city, setCity] = useState("");
 
   const [totalItem, setTotalItem] = useState(0);
@@ -274,7 +281,7 @@ const CollaboratorVerify = () => {
 
   useEffect(() => {
     getListCollaborator();
-  }, [valueSearch, startPage, province, tabStatus, city]);
+  }, [valueSearch, startPage, province, tabStatus, city, lengthPage]);
 
   const handleSearch = useCallback(
     _debounce((value) => {
@@ -583,7 +590,8 @@ const CollaboratorVerify = () => {
             data={data}
             actionColumn={addActionColumn}
             start={startPage}
-            pageSize={20}
+            pageSize={lengthPage}
+            setLengthPage={setLengthPage}
             totalItem={totalItem}
             detectLoading={detectLoading}
             getItemRow={setItem}

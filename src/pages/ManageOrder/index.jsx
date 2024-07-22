@@ -3,7 +3,12 @@ import {
   UilFileExport,
   UilTimes,
 } from "@iconscout/react-unicons";
-import { SearchOutlined, CaretDownOutlined, PoweroffOutlined, PlusCircleOutlined, } from "@ant-design/icons";
+import {
+  SearchOutlined,
+  CaretDownOutlined,
+  PoweroffOutlined,
+  PlusCircleOutlined,
+} from "@ant-design/icons";
 import {
   Button,
   DatePicker,
@@ -75,6 +80,7 @@ const ManageOrder = () => {
 
   const [saveToCookie, readCookie] = useCookies();
   const checkElement = useSelector(getElementState);
+  const [lengthPage, setLengthPage] = useState(20);
   const lang = useSelector(getLanguageState);
   const service = useSelector(getService);
   const province = useSelector(getProvince);
@@ -125,6 +131,7 @@ const ManageOrder = () => {
     city,
     district,
     reCallData,
+    lengthPage,
   ]);
 
   const handleSearch = useCallback(
@@ -141,7 +148,7 @@ const ManageOrder = () => {
     getOrderApi(
       valueSearch,
       startPage,
-      20,
+      lengthPage,
       tab,
       kind,
       type,
@@ -158,6 +165,13 @@ const ManageOrder = () => {
   };
 
   const columns = [
+    {
+      title: "STT",
+      dataIndex: "",
+      key: "ordinal",
+      width: 60,
+      fontSize: "text-size-M",
+    },
     {
       i18n_title: "code_order",
       dataIndex: "id_view",
@@ -297,7 +311,7 @@ const ManageOrder = () => {
     dataIndex: "action",
     key: "action",
     fixed: "right",
-    width: 40,
+    width: 50,
     render: () => (
       <Space size="middle">
         <Dropdown menu={{ items }} trigger={["click"]}>
@@ -316,7 +330,7 @@ const ManageOrder = () => {
         getOrderApi(
           valueSearch,
           startPage,
-          20,
+          lengthPage,
           tab,
           kind,
           type,
@@ -494,6 +508,7 @@ const ManageOrder = () => {
     setDistrictLabel(district_label_filter);
     setDistrict(district_filter);
   };
+  console.log("check", lengthPage);
   return (
     <div className="div-container-content">
       <div className="div-flex-row">
@@ -725,7 +740,8 @@ const ManageOrder = () => {
           data={data}
           actionColumn={addActionColumn}
           start={startPage}
-          pageSize={20}
+          pageSize={lengthPage}
+          setLengthPage={setLengthPage}
           totalItem={total}
           getItemRow={setItem}
           onCurrentPageChange={onChangePage}

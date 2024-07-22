@@ -158,7 +158,7 @@ const AddCustomer = (props) => {
                 <CustomButton
                   title={`${i18n.t("add", { lng: lang })}`}
                   className="float-right btn-add-cus mt-5"
-                  type="button"
+                  type="primary"
                   onClick={handleSubmit}
                   style={{ width: "auto" }}
                 />

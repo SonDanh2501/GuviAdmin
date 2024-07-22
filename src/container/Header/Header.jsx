@@ -7,7 +7,7 @@ import {
   MenuUnfoldOutlined,
   SmileOutlined,
 } from "@ant-design/icons";
-import { Dropdown, List, Select, Space, Opti, Tooltip } from "antd";
+import { Dropdown, List, Select, Space, Opti, Tooltip, Drawer } from "antd";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -24,11 +24,13 @@ import {
   IoSunny,
   IoSunnyOutline,
   IoGlobeOutline,
+  IoCaretForwardOutline 
 } from "react-icons/io5";
 
 import logoVN from "../../assets/images/vn.svg";
 import logoUS from "../../assets/images/en.svg";
 import defaultAvatar from '../../assets/images/avatar.png'
+import Sidebar from "../../layout/Slidebar";
 const { Option } = Select;
 
 const Header = ({ onClick, hide }) => {
@@ -88,12 +90,19 @@ const Header = ({ onClick, hide }) => {
 
   return (
     <div className="div-container-header">
-      {/*Icon open or close sidebar menu*/}
-      <Tooltip placement="bottom" title="Thu nhỏ">
-        <div className="menu-icon" onClick={onClick}>
-          <IoMenu size={"1.4rem"} />
-        </div>
-      </Tooltip>
+      {hide ? (
+        <Tooltip placement="bottom" title="Mở thanh điều hướng">
+          <div className="menu-icon" onClick={onClick}>
+            <IoCaretForwardOutline size={"1.4rem"} />
+          </div>
+        </Tooltip>
+      ) : (
+        <Tooltip placement="bottom" title="Thu nhỏ">
+          <div className="menu-icon" onClick={onClick}>
+            <IoMenu size={"1.4rem"} />
+          </div>
+        </Tooltip>
+      )}
       <div className="nav-header">
         {/*Language change*/}
         <Tooltip placement="bottom" title="Chuyển đổi ngôn ngữ">

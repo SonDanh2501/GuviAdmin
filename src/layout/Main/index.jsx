@@ -160,26 +160,32 @@ const { Header, Sider, Content } = Layout; // Set content có trong Layout, ở 
 
 const Main = ({ hide }) => {
   const [collapsed, setCollapsed] = useState(false);
+  const [isOpenDrawler, setIsOpenDrawler] = useState(false);
   const {
     token: { colorBgContainer },
   } = theme.useToken();
   const { width } = useWindowDimensions(); // Lấy độ rộng của màn hình hiển thị
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const handleClickSideBar = () => {
+    if (width > 900 ) {
+      setCollapsed(!collapsed)
+    }
+    else {
+      setIsOpenDrawler(true);
+    }
+  }
   useEffect(() => {
     dispatch(permissionAction.permissionRequest({ navigate: navigate }));
     dispatch(getProvinceAction.getProvinceRequest());
     dispatch(getUserAction.getUserRequest());
   }, [dispatch, navigate]);
-
   useEffect(() => {
-    // Responsive cho thanh side bar
+    // Auto close sidebar
     if (width > 900) {
-      setCollapsed(true);
-    } else {
       setCollapsed(false);
+    } else {
+      setCollapsed(true);
     }
   }, [width]);
   return (
@@ -190,6 +196,7 @@ const Main = ({ hide }) => {
           collapsible
           collapsed={collapsed}
           width={200}
+          // breakpoint="sm"
           collapsedWidth={70}
           style={{
             overflow: "auto",
@@ -206,9 +213,9 @@ const Main = ({ hide }) => {
         </Sider>
       ) : (
         <Drawer
-          open={collapsed}
+          open={isOpenDrawler}
           width={250}
-          onClose={() => setCollapsed(false)}
+          onClose={() => setIsOpenDrawler(false)}
           placement="left"
           headerStyle={{
             height: 30,
@@ -237,14 +244,11 @@ const Main = ({ hide }) => {
           }}
         >
           {/*Component for header*/}
-          <HeaderBar
-            onClick={() => setCollapsed(!collapsed)}
-            hide={collapsed}
-          />
+          <HeaderBar onClick={() => handleClickSideBar()} hide={collapsed} />
         </Header>
         <Content
           style={{
-            margin: "10px 16px 0",
+            margin: "20px",
             overflow: "initial",
           }}
         >

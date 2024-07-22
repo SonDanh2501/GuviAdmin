@@ -37,6 +37,7 @@ const ManageCustomer = () => {
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
   const [isLoading, setIsLoading] = useState(false);
+  const [lengthPage, setLengthPage] = useState(20);
   const [data, setData] = useState([]);
   const [startPage, setStartPage] = useState(0);
   const [idGroup, setIdGroup] = useState("all");
@@ -53,7 +54,7 @@ const ManageCustomer = () => {
   const [saveToCookie, readCookie] = useCookies();
 
   const getListCustomerByType = () => {
-    fetchCustomers(lang, startPage, 50, status, idGroup, valueSearch)
+    fetchCustomers(lang, startPage, lengthPage, status, idGroup, valueSearch)
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItems);
@@ -74,11 +75,11 @@ const ManageCustomer = () => {
         setDataTab(dataTab.concat(temp));
       })
       .catch((err) => {});
-  }, []);
+  }, [lengthPage]);
 
   useEffect(() => {
     getListCustomerByType();
-  }, [valueSearch, startPage, idGroup]);
+  }, [valueSearch, startPage, idGroup, lengthPage]);
 
   const handleSearch = useCallback(
     _debounce((value) => {
@@ -117,6 +118,13 @@ const ManageCustomer = () => {
   items = items.filter((x) => x.label !== false);
 
   const columns = [
+    {
+      title: "STT",
+      dataIndex: "",
+      key: "ordinal",
+      width: 60,
+      fontSize: "text-size-M",
+    },
     {
       i18n_title: "code_customer",
       dataIndex: "id_view",
@@ -180,7 +188,7 @@ const ManageCustomer = () => {
     dataIndex: "action",
     key: "action",
     fixed: "right",
-    width: 50,
+    width: 40,
     render: () => (
       <Space size="middle">
         <Dropdown menu={{ items }} trigger={["click"]}>
@@ -208,7 +216,7 @@ const ManageCustomer = () => {
       setIsLoading(true);
       deleteCustomer(id, { is_delete: true })
         .then((res) => {
-          fetchCustomers(lang, startPage, 50, status, idGroup, "")
+          fetchCustomers(lang, startPage, lengthPage, status, idGroup, "")
             .then((res) => {
               setData(res?.data);
               setTotal(res?.totalItems);
@@ -224,7 +232,7 @@ const ManageCustomer = () => {
           setIsLoading(false);
         });
     },
-    [status, startPage, idGroup, lang]
+    [status, startPage, idGroup, lang, lengthPage]
   );
 
   const blockCustomer = useCallback(
@@ -233,7 +241,7 @@ const ManageCustomer = () => {
       activeCustomer(id, { is_active: active ? false : true })
         .then((res) => {
           setModalBlock(false);
-          fetchCustomers(lang, startPage, 50, status, idGroup, "")
+          fetchCustomers(lang, startPage, lengthPage, status, idGroup, "")
             .then((res) => {
               setData(res?.data);
               setTotal(res?.totalItems);
@@ -248,9 +256,9 @@ const ManageCustomer = () => {
           setIsLoading(false);
         });
     },
-    [startPage, status, idGroup, lang]
+    [startPage, status, idGroup, lang, lengthPage]
   );
-
+  console.log("data", data);
   return (
     <>
       <div className="div-container-content">
@@ -299,7 +307,8 @@ const ManageCustomer = () => {
             data={data}
             actionColumn={addActionColumn}
             start={startPage}
-            pageSize={20}
+            pageSize={lengthPage}
+            setLengthPage={setLengthPage}
             totalItem={total}
             detectLoading={detectLoading}
             getItemRow={setItem}

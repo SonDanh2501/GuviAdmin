@@ -29,6 +29,7 @@ import RangeDatePicker from "../../../../components/datePicker/RangeDatePicker";
 import { number_processing } from "../../../../helper/numberProcessing";
 import { CaretDownOutlined, CaretUpOutlined } from "@ant-design/icons";
 import "./styles.scss";
+import { IoHelpCircleOutline } from "react-icons/io5";
 
 const ReportOrderDaily = () => {
   const headerDefault = {
@@ -46,6 +47,7 @@ const ReportOrderDaily = () => {
       ? "date_work"
       : "date_create";
   const [startDate, setStartDate] = useState("");
+  const [lengthPage, setLengthPage] = useState(20);
   const [endDate, setEndDate] = useState("");
   const [sameStartDate, setSameStartDate] = useState("");
   const [sameEndDate, setSameEndDate] = useState("");
@@ -96,7 +98,7 @@ const ReportOrderDaily = () => {
       getTotalReportDaily();
       //  getDataReportToday()
     }
-  }, [sameStartDate, sameEndDate]);
+  }, [sameStartDate, sameEndDate, lengthPage]);
 
   useEffect(() => {
     if (startDate !== "") {
@@ -127,7 +129,7 @@ const ReportOrderDaily = () => {
   const getDataReportDaily = async () => {
     const res = await getReportOrderDaily(
       start,
-      100,
+      lengthPage,
       startDate,
       endDate,
       typeDate,
@@ -147,7 +149,7 @@ const ReportOrderDaily = () => {
     const endToday = moment().subtract(0, "days").endOf("days").toISOString();
     const res = await getReportOrderDaily(
       start,
-      100,
+      lengthPage,
       startToday,
       endToday,
       "date_work"
@@ -265,12 +267,15 @@ const ReportOrderDaily = () => {
                 }}
               >
                 <div>
-                  <i
+                  <IoHelpCircleOutline
+                    color={`${title === "Doanh thu" ? "#2463eb" : "white"}`}
+                  />
+                  {/* <i
                     style={{
                       color: title === "Doanh thu" ? "#2463eb" : "none",
                     }}
                     class="uil uil-question-circle icon-question"
-                  ></i>
+                  ></i> */}
                 </div>
               </Popover>
             ) : (
@@ -642,7 +647,8 @@ const ReportOrderDaily = () => {
             data={data}
             // actionColumn={addActionColumn}
             start={startPage}
-            pageSize={100}
+            pageSize={lengthPage}
+            setLengthPage={setLengthPage}
             totalItem={total}
             // detectLoading={detectLoading}
             // getItemRow={setItem}
