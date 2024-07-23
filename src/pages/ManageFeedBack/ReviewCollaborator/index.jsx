@@ -70,7 +70,6 @@ const ReviewCollaborator = () => {
   );
 
   const getAllReviewCollaborator = async (lengthData) => {
-    console.log("RUN HERE 1 >>>", lengthData);
     const res = await getDataReviewCollaborator(
       startPage,
       lengthData,
@@ -82,7 +81,6 @@ const ReviewCollaborator = () => {
   };
 
   const getReviewCollaborator = async () => {
-    console.log("RUN HERE 4");
     const res = await getDataReviewCollaborator(
       startPage,
       lengthPage,
@@ -107,7 +105,7 @@ const ReviewCollaborator = () => {
 
       // res.data[i]["name_service"] = res.data[i].service._id.title.vi
     }
-    // console.log(res?.data, 'res?.data');
+    //
     getAllReviewCollaborator(res?.totalItem);
     setData(res?.data);
     setTotalItem(res?.totalItem);
@@ -129,7 +127,7 @@ const ReviewCollaborator = () => {
       note_admin: dataChange.note_admin,
       status_handle_review: dataChange.status_handle_review,
     };
-    // console.log(payload, 'payload');
+    //
     await updateProcessHandleReview(payload);
     getReviewCollaborator();
     setModal("");
@@ -284,7 +282,7 @@ const ReviewCollaborator = () => {
 
   const showModal = (key) => {
     setModal(key);
-    // console.log(modal, "modal");
+    //
   };
 
   let items = [
@@ -323,8 +321,6 @@ const ReviewCollaborator = () => {
   };
 
   const calculateRating = (data) => {
-    console.log("RUN HERE 2");
-    console.log("check data calculateRating", data);
     let totalFiveStarTemp = 0;
     let totalFourStarTemp = 0;
     let totalThreeStarTemp = 0;
@@ -353,7 +349,6 @@ const ReviewCollaborator = () => {
   };
   const handleFilter = useCallback(
     (star) => {
-      console.log("RUN HERE 3");
       // setTotalRating({
       //   totalFiveStar: 0,
       //   totalFourStar: 0,
@@ -364,7 +359,6 @@ const ReviewCollaborator = () => {
 
       setStar(star);
 
-      console.log("CHECK >>> ", lengthPage);
       getDataReviewCollaborator(
         startPage,
         totalItem,
@@ -379,8 +373,8 @@ const ReviewCollaborator = () => {
     },
     [startPage, lengthPage, startDate, endDate, star]
   );
-  // console.log(totalItem);
-  // console.log("check data >>> ", totalRating);
+  //
+  //
   return (
     <>
       <div className="div-container-content">

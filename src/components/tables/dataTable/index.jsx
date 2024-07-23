@@ -65,16 +65,17 @@ const DataTable = (props) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [ordinalNumber, setOrdinalNumber] = useState(1);
   const [scrollYValue, setScrollYValue] = useState(
-    JSON.parse(localStorage.getItem("linePerPage")).y === 700
+    JSON.parse(localStorage.getItem("tableHeight")).y === 700
       ? 1
-      : JSON.parse(localStorage.getItem("linePerPage")).y === 500
+      : JSON.parse(localStorage.getItem("tableHeight")).y === 500
       ? 2
-      : JSON.parse(localStorage.getItem("linePerPage")).y === 300
+      : JSON.parse(localStorage.getItem("tableHeight")).y === 300
       ? 3
-      : JSON.parse(localStorage.getItem("linePerPage")).y
-      ? JSON.parse(localStorage.getItem("linePerPage")).y
+      : JSON.parse(localStorage.getItem("tableHeight")).y
+      ? JSON.parse(localStorage.getItem("tableHeight")).y
       : 0
   );
+
   const [scroll, setScroll] = useState([]);
   const [pageSizeOption, setPageSizeOption] = useState({
     value: JSON.parse(localStorage.getItem("linePerPage")).value
@@ -100,9 +101,9 @@ const DataTable = (props) => {
   //     label: pageSizeOption.label,
   //   });
   // }
-  // console.log(pageSizeOptions);
+  //
   // setPageSizeOptions(tempOptions)
-  // console.log(tempOptions);
+  //
   // scroll.x = "100vw";
   // scroll.y = 240;
   let widthPage = 0;
@@ -111,7 +112,6 @@ const DataTable = (props) => {
   const [rowIndex, setRowIndex] = useState(0);
   const navigate = useNavigate();
   const onSelectChange = (newSelectedRowKeys) => {
-    console.log("selectedRowKeys changed: ", newSelectedRowKeys);
     setSelectedRowKeys(newSelectedRowKeys);
   };
   const rowSelection = {
@@ -158,7 +158,7 @@ const DataTable = (props) => {
     const numStars = Math.floor(length / 2);
     const halfIndex = Math.floor((length - numStars) / 2);
 
-    const stars = '*'.repeat(numStars);
+    const stars = "*".repeat(numStars);
 
     return str.slice(0, halfIndex) + stars + str.slice(halfIndex + numStars);
   };
@@ -1536,7 +1536,7 @@ const DataTable = (props) => {
   // Nếu có actionColumn thì đẩy vào table
   if (actionColumn) headerTable.push(actionColumn);
   const calculateCurrentPage = (event) => {
-    // console.log("evet", event);
+    //
     setCurrentPage(event);
     if (props.onCurrentPageChange) {
       setIsLoading(true);
@@ -1551,28 +1551,28 @@ const DataTable = (props) => {
     let myObj_serialized;
     if (e === 0) {
       myObj_serialized = JSON.stringify([]);
-      setScrollYValue(0)
+      setScrollYValue(0);
     } else if (e === 1) {
-      myObj_serialized = JSON.stringify({y: 700})
+      myObj_serialized = JSON.stringify({ y: 700 });
     } else if (e === 2) {
-      myObj_serialized = JSON.stringify({y: 500})
+      myObj_serialized = JSON.stringify({ y: 500 });
     } else if (e === 3) {
       myObj_serialized = JSON.stringify({ y: 300 });
     }
     localStorage.setItem("tableHeight", myObj_serialized);
-setScrollYValue(e);
+    setScrollYValue(e);
   };
 
   const handleSelectPagination = (e) => {
     const tempPageSizeOption = { value: e, label: `${e} dòng/trang` };
-    let myObj_serialized = JSON.stringify(tempPageSizeOption)
+    let myObj_serialized = JSON.stringify(tempPageSizeOption);
     localStorage.setItem("linePerPage", myObj_serialized);
     setPageSizeOption(tempPageSizeOption);
-    if (setLengthPage){
+    if (setLengthPage) {
       setLengthPage(e);
     }
   };
-  // console.log("check local storal", localStorage);
+  //
   const footerRender = () => {
     return (
       <div className="flex gap-4">
