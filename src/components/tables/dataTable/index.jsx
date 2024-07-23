@@ -64,11 +64,25 @@ const DataTable = (props) => {
   const [item, setItem] = useState(data[0]);
   const [currentPage, setCurrentPage] = useState(1);
   const [ordinalNumber, setOrdinalNumber] = useState(1);
-  const [scrollYValue, setScrollYValue] = useState(0);
+  const [scrollYValue, setScrollYValue] = useState(
+    JSON.parse(localStorage.getItem("linePerPage")).y === 700
+      ? 1
+      : JSON.parse(localStorage.getItem("linePerPage")).y === 500
+      ? 2
+      : JSON.parse(localStorage.getItem("linePerPage")).y === 300
+      ? 3
+      : JSON.parse(localStorage.getItem("linePerPage")).y
+      ? JSON.parse(localStorage.getItem("linePerPage")).y
+      : 0
+  );
   const [scroll, setScroll] = useState([]);
   const [pageSizeOption, setPageSizeOption] = useState({
-    value: pageSize,
-    label: `${pageSize} dòng/trang`,
+    value: JSON.parse(localStorage.getItem("linePerPage")).value
+      ? JSON.parse(localStorage.getItem("linePerPage")).value
+      : pageSize,
+    label: JSON.parse(localStorage.getItem("linePerPage")).label
+      ? JSON.parse(localStorage.getItem("linePerPage")).label
+      : `${pageSize} dòng/trang`,
   });
   let pageSizeOptions = [
     { value: 10, label: "10 dòng/trang" },
@@ -277,8 +291,7 @@ const DataTable = (props) => {
                   }`}
                 >
                   <p className={`text-name-customer ${item?.fontSize}`}>
-                    {hideMiddleChars(data?.id_customer?.full_name) ||
-                      hideMiddleChars(data?.full_name)}
+                    {data?.id_customer?.full_name || data?.full_name}
                   </p>
                 </Link>
               </div>
@@ -1535,17 +1548,31 @@ const DataTable = (props) => {
     if (props.onToggleModal) props.onToggleModal(true);
   };
   const handleSelectScrollY = (e) => {
+    let myObj_serialized;
     if (e === 0) {
-      setScroll([]);
+      myObj_serialized = JSON.stringify([]);
+      setScrollYValue(0)
     } else if (e === 1) {
-      setScroll({ y: 700 });
+      myObj_serialized = JSON.stringify({y: 700})
     } else if (e === 2) {
-      setScroll({ y: 500 });
+      myObj_serialized = JSON.stringify({y: 500})
     } else if (e === 3) {
-      setScroll({ y: 300 });
+      myObj_serialized = JSON.stringify({ y: 300 });
     }
-    setScrollYValue(e);
+    localStorage.setItem("tableHeight", myObj_serialized);
+setScrollYValue(e);
   };
+
+  const handleSelectPagination = (e) => {
+    const tempPageSizeOption = { value: e, label: `${e} dòng/trang` };
+    let myObj_serialized = JSON.stringify(tempPageSizeOption)
+    localStorage.setItem("linePerPage", myObj_serialized);
+    setPageSizeOption(tempPageSizeOption);
+    if (setLengthPage){
+      setLengthPage(e);
+    }
+  };
+  // console.log("check local storal", localStorage);
   const footerRender = () => {
     return (
       <div className="flex gap-4">
@@ -1606,12 +1633,12 @@ const DataTable = (props) => {
       </div>
     );
   };
-  const handleSelectPagination = (e) => {
-    const tempPageSizeOption = { value: e, label: `${e} dòng/trang` };
-    setPageSizeOption(tempPageSizeOption);
-    if (setLengthPage) setLengthPage(e);
-  };
+
+  scroll.y = JSON.parse(localStorage.getItem("tableHeight")).y
+    ? JSON.parse(localStorage.getItem("tableHeight")).y
+    : [];
   scroll.x = scrollX ? scrollX : widthPage;
+
   return (
     <React.Fragment>
       <div className="mr-t">
@@ -1628,6 +1655,7 @@ const DataTable = (props) => {
           }}
         >
           <Table
+            // size="small"
             bordered
             // rowSelection={rowSelection}
             columns={headerTable}

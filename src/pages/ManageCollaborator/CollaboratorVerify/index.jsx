@@ -151,7 +151,11 @@ const CollaboratorVerify = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState([]);
   const [startPage, setStartPage] = useState(0);
-  const [lengthPage, setLengthPage] = useState(20);
+  const [lengthPage, setLengthPage] = useState(
+    JSON.parse(localStorage.getItem("linePerPage")).value
+      ? JSON.parse(localStorage.getItem("linePerPage")).value
+      : 20
+  );
   const [city, setCity] = useState("");
 
   const [totalItem, setTotalItem] = useState(0);

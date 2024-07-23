@@ -32,7 +32,11 @@ const { TextArea } = Input;
 const ManageRequestService = () => {
   const lang = useSelector(getLanguageState);
   const [valueSearch, setValueSearch] = useState("");
-  const [lengthPage, setLengthPage] = useState(20);
+  const [lengthPage, setLengthPage] = useState(
+    JSON.parse(localStorage.getItem("linePerPage")).value
+      ? JSON.parse(localStorage.getItem("linePerPage")).value
+      : 20
+  );
   const [startPage, setStartPage] = useState(0);
   const [detectLoading, setDetectLoading] = useState(null);
   const [data, setData] = useState([]);

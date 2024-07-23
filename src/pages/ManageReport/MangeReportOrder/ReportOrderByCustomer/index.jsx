@@ -34,7 +34,11 @@ const ReportOrderByCustomer = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { width } = useWindowDimensions();
   const lang = useSelector(getLanguageState);
-  const [lengthPage, setLengthPage] = useState(20);
+  const [lengthPage, setLengthPage] = useState(
+    JSON.parse(localStorage.getItem("linePerPage")).value
+      ? JSON.parse(localStorage.getItem("linePerPage")).value
+      : 20
+  );
 
   const [customerNew, setCustomerNew] = useState({
     mainInfo: {

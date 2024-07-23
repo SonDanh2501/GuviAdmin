@@ -38,7 +38,12 @@ const ReviewCollaborator = () => {
     totalTwoStar: 0,
     totalOneStar: 0,
   });
-  const [lengthPage, setLengthPage] = useState(20);
+
+  const [lengthPage, setLengthPage] = useState(
+    JSON.parse(localStorage.getItem("linePerPage")).value
+      ? JSON.parse(localStorage.getItem("linePerPage")).value
+      : 20
+  );
   const [valueSearch, setValueSearch] = useState("");
   const [detectLoading, setDetectLoading] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -54,7 +59,7 @@ const ReviewCollaborator = () => {
     if (startDate !== "") {
       getReviewCollaborator();
     }
-  }, [valueSearch, startPage, startDate, lengthPage ]);
+  }, [valueSearch, startPage, startDate, lengthPage]);
 
   const handleSearch = useCallback(
     _debounce((value) => {
@@ -65,6 +70,7 @@ const ReviewCollaborator = () => {
   );
 
   const getAllReviewCollaborator = async (lengthData) => {
+    console.log("RUN HERE 1 >>>", lengthData);
     const res = await getDataReviewCollaborator(
       startPage,
       lengthData,
@@ -76,6 +82,7 @@ const ReviewCollaborator = () => {
   };
 
   const getReviewCollaborator = async () => {
+    console.log("RUN HERE 4");
     const res = await getDataReviewCollaborator(
       startPage,
       lengthPage,
@@ -205,17 +212,17 @@ const ReviewCollaborator = () => {
       // maxLength: 35,
       fontSize: "text-size-M",
     },
-    // {
-    //   // i18n_title: 'customer',
-    //   title: "Cộng tác viên",
-    //   dataIndex: "id_collaborator",
-    //   key: "collaborator_no_star",
-    //   width: 190,
-    //   fontSize: "text-size-M",
-    // },
+    {
+      // i18n_title: 'customer',
+      title: "Cộng tác viên",
+      dataIndex: "id_collaborator",
+      key: "collaborator_no_star",
+      width: 190,
+      fontSize: "text-size-M",
+    },
     {
       // i18n_title: 'address',
-      
+
       // title: "Đánh Giá",
       customTitle: (
         <CustomHeaderDatatable
@@ -255,7 +262,7 @@ const ReviewCollaborator = () => {
       dataIndex: "status_handle_review",
       key: "status_handle_review",
       selectOptions: OPTIONS_SELECT_STATUS_HANDLE_REVIEW,
-      width: 150,
+      width: 140,
       fontSize: "text-size-M",
     },
     // {
@@ -285,7 +292,7 @@ const ReviewCollaborator = () => {
     //   key: "0",
     //   label: checkElement?.includes("delete_request_service") &&
     //     (<p className="m-0" onClick={()=>showModal("delete")}>{`${i18n.t("delete", { lng: lang })}`}</p>)
-    // }, 
+    // },
     {
       key: "0",
       label: checkElement?.includes("delete_request_service") && (
@@ -316,6 +323,8 @@ const ReviewCollaborator = () => {
   };
 
   const calculateRating = (data) => {
+    console.log("RUN HERE 2");
+    console.log("check data calculateRating", data);
     let totalFiveStarTemp = 0;
     let totalFourStarTemp = 0;
     let totalThreeStarTemp = 0;
@@ -330,7 +339,7 @@ const ReviewCollaborator = () => {
       if (rating.star === 1) totalOneStarTemp += 1;
     });
     setTotalRating({
-      ...totalRating,
+      // ...totalRating,
       totalFiveStar: totalFiveStarTemp,
       totalFourStar: totalFourStarTemp,
       totalThreeStar: totalThreeStarTemp,
@@ -344,20 +353,34 @@ const ReviewCollaborator = () => {
   };
   const handleFilter = useCallback(
     (star) => {
+      console.log("RUN HERE 3");
+      // setTotalRating({
+      //   totalFiveStar: 0,
+      //   totalFourStar: 0,
+      //   totalThreeStar: 0,
+      //   totalTwoStar: 0,
+      //   totalOneStar: 0,
+      // });
+
       setStar(star);
+
+      console.log("CHECK >>> ", lengthPage);
       getDataReviewCollaborator(
         startPage,
-        lengthPage,
+        totalItem,
         startDate,
         endDate,
         star
       ).then((res) => {
         setData(res?.data);
+        calculateRating(res);
         setTotalItem(res?.totalItem);
       });
     },
     [startPage, lengthPage, startDate, endDate, star]
   );
+  // console.log(totalItem);
+  // console.log("check data >>> ", totalRating);
   return (
     <>
       <div className="div-container-content">
@@ -506,7 +529,7 @@ const ReviewCollaborator = () => {
                   />
                   <div className="border rounded-md flex justify-center items-center px-[10px] py-[6.4px]">
                     <p className="m-0 text-date-same">
-                      Kỳ này: {moment(startDate).format("DD/MM/YYYY")}-
+                      Khoảng ngày: {moment(startDate).format("DD/MM/YYYY")}-
                       {moment(endDate).format("DD/MM/YYYY")}
                     </p>
                   </div>
@@ -525,11 +548,11 @@ const ReviewCollaborator = () => {
                     style={{ width: "100%" }}
                     options={[
                       { value: 0, label: `${i18n.t("Tất cả", { lng: lang })}` },
-                      { value: 1, label: `1 ${i18n.t("star", { lng: lang })}` },
-                      { value: 2, label: `2 ${i18n.t("star", { lng: lang })}` },
-                      { value: 3, label: `3 ${i18n.t("star", { lng: lang })}` },
-                      { value: 4, label: `4 ${i18n.t("star", { lng: lang })}` },
                       { value: 5, label: `5 ${i18n.t("star", { lng: lang })}` },
+                      { value: 4, label: `4 ${i18n.t("star", { lng: lang })}` },
+                      { value: 3, label: `3 ${i18n.t("star", { lng: lang })}` },
+                      { value: 2, label: `2 ${i18n.t("star", { lng: lang })}` },
+                      { value: 1, label: `1 ${i18n.t("star", { lng: lang })}` },
                     ]}
                     defaultValue={"Tất cả"}
                   />
@@ -567,7 +590,7 @@ const ReviewCollaborator = () => {
               onCurrentPageChange={onChangePage}
               detectLoading={detectLoading}
               onChangeValue={onChangePropsValue}
-              setLengthPage = {setLengthPage}
+              setLengthPage={setLengthPage}
               // onShowModal={onShowModal}
               getItemRow={setItem}
             />
