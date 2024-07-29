@@ -21,9 +21,10 @@ import { OPTIONS_SELECT_STATUS_HANDLE_REVIEW } from "../../../@core/constant/con
 
 import "./index.scss";
 import DeleteModal from "./components/DeleteModal";
-import { IoStar } from "react-icons/io5";
 import LoadingPagination from "../../../components/paginationLoading";
 import CustomHeaderDatatable from "../../../components/tables/tableHeader";
+import CardStatistical from "../../../components/card/cardStatistical";
+import { IoStar } from "react-icons/io5";
 
 const ReviewCollaborator = () => {
   const checkElement = useSelector(getElementState);
@@ -219,6 +220,22 @@ const ReviewCollaborator = () => {
       fontSize: "text-size-M",
     },
     {
+      // i18n_title: "status",
+      customTitle: (
+        <CustomHeaderDatatable
+          title="Trạng Thái"
+          textToolTip="Trạng thái của đánh giá được duyệt bởi nhân viên chăm sóc khách hàng"
+        />
+      ),
+      // title: "Trạng Thái",
+      dataIndex: "status_handle_review",
+      key: "status_handle_review",
+      selectOptions: OPTIONS_SELECT_STATUS_HANDLE_REVIEW,
+      width: 140,
+      fontSize: "text-size-M",
+    },
+
+    {
       // i18n_title: 'address',
 
       // title: "Đánh Giá",
@@ -248,21 +265,11 @@ const ReviewCollaborator = () => {
       // maxLength: 90,
       fontSize: "text-size-M",
     },
-    {
-      // i18n_title: "status",
-      customTitle: (
-        <CustomHeaderDatatable
-          title="Trạng Thái"
-          textToolTip="Trạng thái của đánh giá được duyệt bởi bình luận viên"
-        />
-      ),
-      // title: "Trạng Thái",
-      dataIndex: "status_handle_review",
-      key: "status_handle_review",
-      selectOptions: OPTIONS_SELECT_STATUS_HANDLE_REVIEW,
-      width: 140,
-      fontSize: "text-size-M",
-    },
+
+
+
+
+
     // {
     //   title: "NV liên hệ",
     //   dataIndex: "full_name_user_system_handle_review",
@@ -318,6 +325,7 @@ const ReviewCollaborator = () => {
         </Dropdown>
       </Space>
     ),
+    
   };
 
   const calculateRating = (data) => {
@@ -387,7 +395,52 @@ const ReviewCollaborator = () => {
         </div>
         {/* Container cho total đánh giá */}
         <div className="flex flex-row gap-8">
-          <div className="w-1/5 rounded-xl bg-white boxcss flex flex-col px-2 py-2.5">
+          <CardStatistical
+            totalStar={totalRating.totalFiveStar}
+            totalPercent={calculateRatingPercent(
+              totalItem,
+              totalRating.totalFiveStar
+            )}
+            color={"rgb(34 197 94 / 0.25)"}
+            icon_color={"#008000"}
+          />
+          <CardStatistical
+            totalStar={totalRating.totalFourStar}
+            totalPercent={calculateRatingPercent(
+              totalItem,
+              totalRating.totalFourStar
+            )}
+            color={"rgb(132 204 22 / 0.25)"}
+            icon_color={"#2fc22f"}
+          />
+          <CardStatistical
+            totalStar={totalRating.totalThreeStar}
+            totalPercent={calculateRatingPercent(
+              totalItem,
+              totalRating.totalThreeStar
+            )}
+            color={"rgb(234 179 8 / 0.25)"}
+            icon_color={"#FFD700"}
+          />
+          <CardStatistical
+            totalStar={totalRating.totalTwoStar}
+            totalPercent={calculateRatingPercent(
+              totalItem,
+              totalRating.totalTwoStar
+            )}
+            color={"rgb(249 115 22 / 0.25)"}
+            icon_color={"#FFA500"}
+          />
+          <CardStatistical
+            totalStar={totalRating.totalOneStar}
+            totalPercent={calculateRatingPercent(
+              totalItem,
+              totalRating.totalOneStar
+            )}
+            color={"rgb(239 68 68 / 0.25)"}
+            icon_color={"#FF0000"}
+          />
+          {/*<div className="w-1/5 rounded-xl bg-white card-shadow flex flex-col px-2 py-2.5">
             <div className="flex px-2 py-3 items-center gap-2 h-1/3 bg-green-500/25 rounded-lg">
               <IoStar
                 size="1.2rem"
@@ -410,7 +463,7 @@ const ReviewCollaborator = () => {
               </span>
             </div>
           </div>
-          <div className="w-1/5 rounded-xl bg-white boxcss flex flex-col px-2 py-2.5">
+           <div className="w-1/5 rounded-xl bg-white card-shadow flex flex-col px-2 py-2.5">
             <div className="flex px-2 py-3 items-center gap-2 h-1/3 bg-lime-500/25 rounded-lg">
               <IoStar
                 size="1.2rem"
@@ -433,7 +486,7 @@ const ReviewCollaborator = () => {
               </span>
             </div>
           </div>
-          <div className="w-1/5 rounded-xl bg-white boxcss flex flex-col px-2 py-2.5">
+          <div className="w-1/5 rounded-xl bg-white card-shadow flex flex-col px-2 py-2.5">
             <div className="flex px-2 py-3 items-center gap-2 h-1/3 bg-yellow-500/25 rounded-lg">
               <IoStar
                 size="1.2rem"
@@ -459,7 +512,7 @@ const ReviewCollaborator = () => {
               </span>
             </div>
           </div>
-          <div className="w-1/5 rounded-xl bg-white boxcss flex flex-col px-2 py-2.5">
+          <div className="w-1/5 rounded-xl bg-white card-shadow flex flex-col px-2 py-2.5">
             <div className="flex px-2 py-3 items-center gap-2 h-1/3 bg-orange-500/25 rounded-lg">
               <IoStar
                 size="1.2rem"
@@ -482,7 +535,7 @@ const ReviewCollaborator = () => {
               </span>
             </div>
           </div>
-          <div className="w-1/5 rounded-xl bg-white boxcss flex flex-col px-2 py-2.5">
+          <div className="w-1/5 rounded-xl bg-white card-shadow flex flex-col px-2 py-2.5">
             <div className="flex px-2 py-3 items-center gap-2 h-1/3 bg-red-500/25 rounded-lg">
               <IoStar
                 size="1.2rem"
@@ -504,9 +557,9 @@ const ReviewCollaborator = () => {
                 </span>
               </span>
             </div>
-          </div>
+          </div> */}
         </div>
-        <div className="bg-white rounded-xl my-4 p-4 boxcss border-gray-300 border">
+        <div className="bg-white rounded-xl my-4 p-4 card-shadow border-gray-300 border">
           <div className="flex gap-6">
             <div className="w-3/4 flex gap-4">
               {/* Lịch */}

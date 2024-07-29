@@ -136,7 +136,7 @@
 
 import { NavLink } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-import { Drawer, Layout, Menu, Button, theme, FloatButton } from "antd";
+import { Drawer, Layout, Menu, Button, theme, FloatButton, ConfigProvider } from "antd";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -189,76 +189,88 @@ const Main = ({ hide }) => {
     }
   }, [width]);
   return (
-    <Layout hasSider style={{ overflowX: "hidden" }}>
-      {width > 900 ? (
-        <Sider
-          trigger={null}
-          collapsible
-          collapsed={collapsed}
-          width={200}
-          // breakpoint="sm"
-          collapsedWidth={70}
+    <ConfigProvider
+      theme={{
+        components: {
+          Layout: {
+            bodyBg: "#F0F5F8",
+          },
+        },
+      }}
+    >
+      <Layout hasSider style={{ overflowX: "hidden" }}>
+        {width > 900 ? (
+          <Sider
+            trigger={null}
+            collapsible
+            collapsed={collapsed}
+            width={200}
+            // breakpoint="sm"
+            collapsedWidth={70}
+            style={{
+              overflow: "auto",
+              height: "100vh",
+              position: "fixed",
+              left: 0,
+              top: 0,
+              bottom: 0,
+              borderRight: "2px solid #ececec",
+              // boxShadow: "0 3px 4px rgba(57, 63, 72, 0.3)",
+            }}
+          >
+            {/*Sider content*/}
+            <Sidebar hide={collapsed} />
+          </Sider>
+        ) : (
+          <Drawer
+            open={isOpenDrawler}
+            width={250}
+            onClose={() => setIsOpenDrawler(false)}
+            placement="left"
+            headerStyle={{
+              height: 30,
+              paddingLeft: 0,
+              display: "none",
+              margin: 0,
+            }}
+          >
+            {/*Drawler content*/}
+            <Sidebar hide={true} />
+          </Drawer>
+        )}
+        <Layout
           style={{
-            overflow: "auto",
+            marginLeft: width > 900 ? (collapsed ? 70 : 200) : 0,
+            transitionDuration: "100ms",
             height: "100vh",
-            position: "fixed",
-            left: 0,
-            top: 0,
-            bottom: 0,
-            boxShadow: "0 3px 12px rgba(57, 63, 72, 0.3)",
           }}
         >
-          {/*Sider content*/}
-          <Sidebar hide={collapsed} />
-        </Sider>
-      ) : (
-        <Drawer
-          open={isOpenDrawler}
-          width={250}
-          onClose={() => setIsOpenDrawler(false)}
-          placement="left"
-          headerStyle={{
-            height: 30,
-            paddingLeft: 0,
-            display: "none",
-            margin: 0,
-          }}
-        >
-          {/*Drawler content*/}
-          <Sidebar hide={true} />
-        </Drawer>
-      )}
-      <Layout
-        style={{
-          marginLeft: width > 900 ? (collapsed ? 70 : 200) : 0,
-          transitionDuration: "100ms",
-          height: "100vh",
-        }}
-      >
-        <Header
-          style={{
-            padding: 0,
-            background: "#FFFFFF",
-            // borderBottom: "2px solid silver",
-            boxShadow: "0 3px 5px rgba(57, 63, 72, 0.3)",
-          }}
-        >
-          {/*Component for header*/}
-          <HeaderBar onClick={() => handleClickSideBar()} hide={collapsed} />
-        </Header>
-        <Content
-          style={{
-            margin: "20px",
-            overflow: "initial",
-          }}
-        >
-          {/*Button để scroll to top page*/}
-          <FloatButton.BackTop />
-          {/*Các navigate page trong admin */}
-          <Admin />
-        </Content>
+          <Header
+            style={{
+              padding: 0,
+              background: "#FFFFFF",
+              borderBottom: "2px solid #ececec",
+              // borderBottom: "2px solid silver",
+              // boxShadow: "0 3px 10px rgba(57, 63, 72, 0.3)",
+            }}
+          >
+            {/*Component for header*/}
+            <HeaderBar onClick={() => handleClickSideBar()} hide={collapsed} />
+          </Header>
+          <Content
+            style={{
+              margin: "20px",
+              overflow: "initial",
+            }}
+          >
+            {/*Button để scroll to top page*/}
+            <FloatButton.BackTop />
+            {/*Các navigate page trong admin */}
+            <Admin />
+          </Content>
+        </Layout>
       </Layout>
-    </Layout>
+    </ConfigProvider>
   );
 };
 

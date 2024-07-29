@@ -1,6 +1,7 @@
 import { Image } from "antd";
 import { useEffect, useState } from "react";
 import { arrDaysVN, default_avatar } from "../../../../constants";
+import avatarDefault from "../../../../assets/images/user.png";
 import { Link } from "react-router-dom";
 import {
   CloseCircleFilled,
@@ -148,7 +149,7 @@ const CustomerInfo = ({
             <Image
               style={{ height: 50, width: 50 }}
               className="customer-info_avatar-img"
-              src={avatar || default_avatar}
+              src={avatar || avatarDefault}
             />
           )}
           {isAddress && (

@@ -65,14 +65,14 @@ const DataTable = (props) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [ordinalNumber, setOrdinalNumber] = useState(1);
   const [scrollYValue, setScrollYValue] = useState(
-    JSON.parse(localStorage.getItem("tableHeight")).y === 700
+    JSON.parse(localStorage.getItem("tableHeight"))?.y === 700
       ? 1
-      : JSON.parse(localStorage.getItem("tableHeight")).y === 500
+      : JSON.parse(localStorage.getItem("tableHeight"))?.y === 500
       ? 2
-      : JSON.parse(localStorage.getItem("tableHeight")).y === 300
+      : JSON.parse(localStorage.getItem("tableHeight"))?.y === 300
       ? 3
-      : JSON.parse(localStorage.getItem("tableHeight")).y
-      ? JSON.parse(localStorage.getItem("tableHeight")).y
+      : JSON.parse(localStorage.getItem("tableHeight"))?.y
+      ? JSON.parse(localStorage.getItem("tableHeight"))?.y
       : 0
   );
 
@@ -142,7 +142,7 @@ const DataTable = (props) => {
     // item: phan tu trong mang data
     // dataIndex: ten field thay doi
     // value: gia tri moi da thay doi
-
+console.log("check ", item, dataIndex, value);
     if (props.onChangeValue) {
       const data = {
         item,
@@ -1069,7 +1069,6 @@ const DataTable = (props) => {
             const getItemStatus = item.selectOptions.filter(
               (a) => a.value === data[item.dataIndex]
             );
-
             return (
               <div
                 className={`current-status-handle ${getItemStatus[0]?.className}`}
@@ -1634,14 +1633,14 @@ const DataTable = (props) => {
     );
   };
 
-  scroll.y = JSON.parse(localStorage.getItem("tableHeight")).y
-    ? JSON.parse(localStorage.getItem("tableHeight")).y
-    : [];
+  scroll.y =
+    JSON.parse(localStorage.getItem("tableHeight")).y ?
+    JSON.parse(localStorage.getItem("tableHeight")).y : [];
   scroll.x = scrollX ? scrollX : widthPage;
 
   return (
     <React.Fragment>
-      <div className="mr-t">
+      <div className="mr-t ">
         <ConfigProvider
           theme={{
             components: {

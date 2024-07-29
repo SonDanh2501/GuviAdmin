@@ -1,11 +1,14 @@
 import { HeartFilled } from "@ant-design/icons";
-import { Switch } from "antd";
+import { Progress, Switch, Tooltip } from "antd";
 import moment from "moment";
 import { useCallback, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import {
   getCollaboratorsById,
+  getHistoryActivityCollaborator,
+  getInfoTestTrainingLessonByCollaboratorApi,
+  getListTrainingLessonByCollaboratorApi,
   getOverviewCollaborator,
   verifyCollaborator,
 } from "../../../../../../../api/collaborator";
@@ -15,7 +18,53 @@ import { formatMoney } from "../../../../../../../helper/formatMoney";
 import { errorNotify } from "../../../../../../../helper/toast";
 import i18n from "../../../../../../../i18n";
 import { getLanguageState } from "../../../../../../../redux/selectors/auth";
+import avatarDefault from "../../../../../../../assets/images/user.png";
 import "./styles.scss";
+import { getProvince } from "../../../../../../../redux/selectors/service";
+import {
+  IoCallOutline,
+  IoShieldCheckmarkOutline,
+  IoCalendarOutline,
+  IoPersonOutline,
+  IoHeartOutline,
+  IoTimeOutline,
+  IoNewspaperOutline,
+  IoCheckmark,
+  IoCloseCircleOutline,
+  IoCheckmarkDoneOutline,
+  IoFlagOutline,
+  IoAlertOutline,
+  IoHourglassOutline,
+  IoCalendarNumberOutline,
+  IoHelpCircleOutline,
+  IoLogoUsd,
+  IoCashOutline,
+  IoTodayOutline,
+  IoWalletOutline,
+  IoCheckmarkCircleOutline,
+  IoWarningOutline,
+  IoStar,
+  IoThumbsDownOutline,
+  IoMedalOutline,
+  IoReceiptOutline,
+} from "react-icons/io5";
+import {
+  ResponsiveContainer,
+  Legend,
+  PolarAngleAxis,
+  PolarGrid,
+  PolarRadiusAxis,
+  Radar,
+  RadarChart,
+  PieChart,
+  Pie,
+  Cell,
+  Sector,
+} from "recharts";
+import { loadingAction } from "../../../../../../../redux/actions/loading";
+import testLogo from "../../../../../../../assets/images/testLogo.svg";
+import moneyLogo from "../../../../../../../assets/images/moneyLogo.svg";
+import jobLogo from "../../../../../../../assets/images/jobLogo.svg";
 
 const Overview = ({ id }) => {
   const [total, setTotal] = useState({
@@ -25,12 +74,67 @@ const Overview = ({ id }) => {
     remainder: 0,
     gift_remainder: 0,
   });
+  const province = useSelector(getProvince);
+  const dataAreaChart = [
+    {
+      subject: "Làm việc chăm chỉ",
+      A: 1,
+      B: 2,
+      fullMark: 10,
+    },
+    {
+      subject: "Đồng phục gọn gàn, sạch sẽ",
+      A: 1,
+      B: 2,
+      fullMark: 10,
+    },
+    {
+      subject: "Dụng cụ chuẩn bị đầy đủ",
+      A: 3,
+      B: 4,
+      fullMark: 10,
+    },
+    {
+      subject: "Làm việc rất tốt, dọn dẹp sạch sẽ",
+      A: 5,
+      B: 6,
+      fullMark: 10,
+    },
+    {
+      subject: "Giờ giấc chuẩn, luôn đến trước giờ hẹn",
+      A: 3,
+      B: 4,
+      fullMark: 10,
+    },
+  ];
+  const CustomDot = (props) => {
+    const { cx, cy, value } = props;
+
+    if (value > 2500) {
+      return <circle cx={cx} cy={cy} r={10} fill="red" stroke="none" />;
+    }
+
+    return <circle cx={cx} cy={cy} r={5} fill="#9e68df" stroke="none" />;
+  };
+  const dispatch = useDispatch();
   const [data, setData] = useState([]);
+  const [percentSuccess, setPercentSuccess] = useState(0);
+  const [percentCancel, setPercentCancel] = useState(0);
+  const [cityName, setCityName] = useState("");
+  const [dataActivity, setDataActivity] = useState([]);
+  const [dataLesson, setDataLesson] = useState([]);
+  const [dataLessonDetail, setDataLessonDetail] = useState([]);
   const [dataDetail, setDataDetail] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [modalVerify, setModalVerify] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
   const lang = useSelector(getLanguageState);
+  const city = province.filter((x) => x.code === dataDetail.city)[0];
 
+  useEffect(() => {
+    setPercentSuccess(80);
+    setPercentCancel(20);
+  }, []);
   useEffect(() => {
     getOverviewCollaborator(id)
       .then((res) => {
@@ -47,7 +151,6 @@ const Overview = ({ id }) => {
         });
       })
       .catch((err) => {});
-
     getCollaboratorsById(id)
       .then((res) => {
         setDataDetail(res);
@@ -57,8 +160,57 @@ const Overview = ({ id }) => {
           message: err?.message,
         });
       });
+
+    // setCityName(province.filter((x) => x.code === dataDetail.city));
   }, [id]);
 
+  useEffect(() => {
+    dispatch(loadingAction.loadingRequest(true));
+    getHistoryActivityCollaborator(id, 0, 5)
+      .then((res) => {
+        setDataActivity(res.data);
+        dispatch(loadingAction.loadingRequest(false));
+      })
+      .catch((err) => {
+        errorNotify({
+          message: err?.message,
+        });
+        dispatch(loadingAction.loadingRequest(false));
+      });
+  }, [id, dispatch]);
+
+  useEffect(() => {
+    getListTrainingLessonByCollaboratorApi(id, 0, 20, "all")
+      .then((res) => {
+        setDataLesson(res?.data);
+      })
+      .catch((err) => {});
+  }, [id]);
+
+  // useEffect(() => {
+  //   getInfoTestTrainingLessonByCollaboratorApi(_id, id)
+  //     .then((res) => {
+  //       setDataLessonDetail(res?.data);
+  //     })
+  //     .catch((err) => {});
+  // }, [id]);
+
+  const timeWork = (data) => {
+    const start = moment(new Date(data.date_work)).format("HH:mm");
+
+    const timeEnd = moment(new Date(data?.date_work))
+      .add(data?.total_estimate, "hours")
+      .format("HH:mm");
+
+    return start + " - " + timeEnd;
+  };
+  // useEffect(() => {
+  // setCityName(getCityName());
+  // },[])
+  // const getCityName = () => {
+  // return ;
+  // }
+  // Thêm city vào trong dataDetail
   const onVerifyCollaborator = useCallback((id, is_verify) => {
     setIsLoading(true);
     verifyCollaborator(id)
@@ -83,146 +235,980 @@ const Overview = ({ id }) => {
       });
   }, []);
 
+  console.log("check dataDetail", dataDetail);
+  console.log("dataLesson", dataLesson);
+  // console.log("Check total", total)
+  // console.log("check activity collaborator >>> ", dataActivity);
+  const data01 = [
+    {
+      name: "5 sao",
+      value: 400,
+    },
+    {
+      name: "4 sao",
+      value: 300,
+    },
+    {
+      name: "3 Sao",
+      value: 300,
+    },
+    {
+      name: "2 sao",
+      value: 200,
+    },
+    {
+      name: "1 sao",
+      value: 278,
+    },
+  ];
+  const COLORS = ["#008000", "#2fc22f", "#FFD700", "#FFA500", "#FF0000"];
+
+  const RADIAN = Math.PI / 180;
+  const renderActiveShape = (props) => {
+    const RADIAN = Math.PI / 180;
+    const { cx, cy, midAngle, innerRadius, outerRadius, startAngle, endAngle, fill, payload, percent, value } = props;
+    const sin = Math.sin(-RADIAN * midAngle);
+    const cos = Math.cos(-RADIAN * midAngle);
+    const sx = cx + (outerRadius + 10) * cos;
+    const sy = cy + (outerRadius + 10) * sin;
+    const mx = cx + (outerRadius + 30) * cos;
+    const my = cy + (outerRadius + 30) * sin;
+    const ex = mx + (cos >= 0 ? 1 : -1) * 22;
+    const ey = my;
+    const textAnchor = cos >= 0 ? 'start' : 'end';
+  
+    return (
+      <g>
+        <text x={cx} y={cy} dy={8} textAnchor="middle" fill={fill}>
+          {payload.value} đánh giá
+        </text>
+        <text x={cx} y={cy + 20} dy={8} textAnchor="middle" fill={fill}>
+          {`(${(percent * 100).toFixed(2)}%)`}
+        </text>
+        <Sector
+          cx={cx}
+          cy={cy}
+          innerRadius={innerRadius}
+          outerRadius={outerRadius}
+          startAngle={startAngle}
+          endAngle={endAngle}
+          fill={fill}
+        />
+        <Sector
+          cx={cx}
+          cy={cy}
+          startAngle={startAngle}
+          endAngle={endAngle}
+          innerRadius={outerRadius + 6}
+          outerRadius={outerRadius + 10}
+          fill={fill}
+        />
+      </g>
+    );
+  };
+  const onPieEnter = (_,index) => {
+    setActiveIndex(index);
+
+  }
   return (
-    <>
-      <div className="div-overview">
-        <div className="div-body-overview">
-          <div className="div-head-overview">
-            <div className="div-wallet">
-              <p className="text-wallet">
-                Ví nạp: {formatMoney(total?.work_wallet)}
-              </p>
-              <p className="text-wallet">
-                Ví CTV: {formatMoney(total?.collaborator_wallet)}
-              </p>
-              {/* <p className="text-wallet">
-                Ví Chính: {formatMoney(total?.remainder)}
-              </p>
-              <p className="text-wallet">
-                Ví Thưởng: {formatMoney(total?.gift_remainder)}
-              </p> */}
+    <div className="pb-4">
+      <div class="flex w-full gap-4">
+        <div class="w-1/3 flex flex-col gap-4">
+          <div className="bg-white rounded-xl card-shadow">
+            <div className="flex items-center gap-2 border-b-2 border-gray-200 py-2.5 px-3">
+              <span className="font-bold text-sm">Thống kê đánh giá</span>
+              <Tooltip placement="top" title="Tính năng chưa hoàn thiện">
+                <IoHelpCircleOutline size={16} color="#9ca3af" />
+              </Tooltip>
             </div>
-            <Switch
-              style={{
-                width: 40,
-                backgroundColor: dataDetail?.is_verify ? "#00cf3a" : "",
-              }}
-              onClick={() => setModalVerify(true)}
-              checked={dataDetail?.is_verify}
-              disabled={dataDetail?.is_verify ? true : false}
-            />
-          </div>
-          <div className="div-total">
-            <div className="div-item-total">
-              <p className="number-total">{total.total_order}</p>
-              <p className="detail-total">Số ca làm</p>
-            </div>
-
-            <div className="div-item-total">
-              <p className="number-total">{total.total_hour}</p>
-              <p className="detail-total">Số giờ làm</p>
-            </div>
-
-            <div className="div-item-total-favorite">
-              <div className="div-number">
-                <p className="number-total">{total.total_favourite}</p>
-                <HeartFilled
-                  style={{
-                    color: "red",
-                    marginLeft: 10,
-                    fontSize: 20,
-                  }}
-                />
-              </div>
-              <p className="detail-total">Yêu thích</p>
-            </div>
-          </div>
-
-          <div className="mt-4">
-            <p className="text-order-near">Đơn gần nhất</p>
-            {data.map((item, index) => {
-              return (
-                <div key={index} className="item-list-order">
-                  <div className="div-detail-item">
-                    <Link to={`/details-order/${item?.id_group_order}`}>
-                      <p className="text-item">Mã: {item?.id_view}</p>
-                    </Link>
-                    <p className="text-item">
-                      Dịch vụ:{" "}
-                      {item?.type === "loop" && item?.is_auto_order
-                        ? `${i18n.t("repeat", { lng: lang })}`
-                        : item?.service?._id?.kind === "giup_viec_theo_gio"
-                        ? `${i18n.t("cleaning", { lng: lang })}`
-                        : item?.service?._id?.kind === "giup_viec_co_dinh"
-                        ? `${i18n.t("cleaning_subscription", { lng: lang })}`
-                        : item?.service?._id?.kind === "phuc_vu_nha_hang"
-                        ? `${i18n.t("serve", { lng: lang })}`
-                        : ""}
-                    </p>
-                    <p className="text-item">
-                      Ngày làm:{" "}
-                      {moment(item?.date_work).format("DD/MM/YYYY - HH:mm")}{" "}
-                    </p>
-                    <Link to={`/profile-customer/${item?.id_customer?._id}`}>
-                      <p className="text-item">
-                        Khách hàng: {item?.name_customer}
-                      </p>
-                    </Link>
-                    <p className="text-item">Địa chỉ: {item?.address}</p>
+            <div className="py-2.5 px-3">
+              {/*Container hiệu quả công việc */}
+              <div className="flex flex-col justify-center mt-4">
+                <div className="flex flex-col items-center justify-center pb-2">
+                  <div className="flex py-2.5 px-4 rounded-full w-fit items-center justify-center bg-indigo-50 gap-1">
+                    <IoStar size="25" color="orange" />
+                    <IoStar size="25" color="orange" />
+                    <IoStar size="25" color="orange" />
+                    <IoStar size="25" color="orange" />
+                    <IoStar size="25" color="orange" />
+                    <span className="text-xs font-normal pt-1 ml-2">
+                      4.7 trên 5
+                    </span>
                   </div>
-                  <div className="item-detail-right">
-                    <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        alignItems: "center",
-                      }}
-                    >
-                      <p className="title-status mr-2 m-0">Trạng thái: </p>
-                      <p
-                        className={
-                          item?.status === "pending"
-                            ? "text-pen-order"
-                            : item?.status === "confirm"
-                            ? "text-confirm-order"
-                            : item?.status === "doing"
-                            ? "text-doing-order"
-                            : item?.status === "done"
-                            ? "text-done-order"
-                            : "text-cancel-order"
-                        }
+                  <div className="text-xs text-center mt-1">
+                    <span>40 khách hàng đã đánh giá</span>
+                  </div>
+                </div>
+                {/* const COLORS = ["#008000", "#2fc22f", "#FFD700", "#FFA500", "#FF0000"]; */}
+
+                <div className="flex flex-col items-center justify-center gap-2">
+                  <ResponsiveContainer width="100%" height={250}>
+                    <PieChart>
+                      <Pie
+                        activeIndex={activeIndex}
+                        activeShape={renderActiveShape}
+                        data={data01}
+                        dataKey="value"
+                        nameKey="name"
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={80}
+                        outerRadius={110}
+                        paddingAngle={5}
+                        fill="#8884d8"
+                        // label={renderCustomizedLabel}
+                        // labelLine={false}
+                        onMouseEnter={onPieEnter}
                       >
-                        {item?.status === "pending"
-                          ? `${i18n.t("pending", { lng: lang })}`
-                          : item?.status === "confirm"
-                          ? `${i18n.t("confirm", { lng: lang })}`
-                          : item?.status === "doing"
-                          ? `${i18n.t("doing", { lng: lang })}`
-                          : item?.status === "done"
-                          ? `${i18n.t("complete", { lng: lang })}`
-                          : `${i18n.t("cancel", { lng: lang })}`}
-                      </p>
+                        {data01.map((entry, index) => (
+                          <Cell
+                            key={`cell-${index}`}
+                            fill={COLORS[index % COLORS.length]}
+                          />
+                        ))}
+                      </Pie>
+                    </PieChart>
+                  </ResponsiveContainer>
+                  <div className="flex flex-col items-center gap-2">
+                    <div className="flex items-center justify-center gap-2">
+                      <div className="flex gap-1 items-center">
+                        <div className="w-4 h-4 bg-[#008000]"></div>
+                        <span className="text-sm text-color-[#008000]">
+                          5 sao
+                        </span>
+                      </div>
+                      <div className="flex gap-1 items-center">
+                        <div className="w-4 h-4 bg-[#2fc22f]"></div>
+                        <span className="text-sm">4 sao</span>
+                      </div>
+                      <div className="flex gap-1 items-center">
+                        <div className="w-4 h-4 bg-[#FFD700]"></div>
+                        <span className="text-sm">3 sao</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-center gap-2">
+                      <div className="flex gap-1 items-center">
+                        <div className="w-4 h-4 bg-[#FFA500]"></div>
+                        <span className="text-sm">2 sao</span>
+                      </div>
+                      <div className="flex gap-1 items-center">
+                        <div className="w-4 h-4 bg-[#FF0000]"></div>
+                        <span className="text-sm">1 sao</span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              );
-            })}
+              </div>
+            </div>
+          </div>
+          <div className="bg-white rounded-xl card-shadow">
+            {/* Header Label */}
+            <div className="flex items-center gap-2 border-b-2 border-gray-200 py-2.5 px-3">
+              <span className="font-bold text-sm">Tiêu chí đánh giá</span>
+              <Tooltip placement="top" title="Tính năng chưa hoàn thiện">
+                <IoHelpCircleOutline size={16} color="#9ca3af" />
+              </Tooltip>
+            </div>
+            <div className="flex py-3 justify-center items-center text-center">
+              <ResponsiveContainer
+                height={300}
+                width={"95%"}
+                // min-width={350}
+                // className={"bg-black"}
+              >
+                <RadarChart outerRadius={120} data={dataAreaChart}>
+                  {/* Biểu đồ bên trong */}
+                  <PolarGrid opacity={0.9} stroke="#e5e7eb" />
+                  {/* Các trường giá trị*/}
+                  <PolarAngleAxis tick={{ fontSize: 12 }} dataKey="subject" />
+                  {/* Các mốc giá trị */}
+                  <PolarRadiusAxis angle={0} domain={[0, 10]} />
+                  <Radar
+                    dot={<CustomDot />}
+                    label={false}
+                    legendType="square"
+                    name="Mục đánh giá"
+                    dataKey="B"
+                    stroke="#9e68df"
+                    strokeWidth={3}
+                    fill="transparent"
+                    fillOpacity={0.6}
+                  />
+                  <Legend />
+                </RadarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+          <div className="bg-white rounded-xl card-shadow">
+            {/* Header Label */}
+            <div className="flex items-center gap-2 border-b-2 border-gray-200 py-2.5 px-3">
+              <span className="font-bold text-sm">Khen thưởng, kỷ luật</span>
+              <Tooltip placement="top" title="Tính năng chưa hoàn thiện">
+                <IoHelpCircleOutline size={16} color="#9ca3af" />
+              </Tooltip>
+            </div>
+            {/* Container Information*/}
+            <div className="flex flex-col pt-2.5 pb-4 px-3 gap-6 mt-3">
+              <div className="flex gap-4">
+                <div className="w-1/2 flex items-center p-2.5 border rounded-xl gap-2">
+                  {/*Icon*/}
+                  <IoMedalOutline
+                    className="bg-green-100 p-2.5 w-11 h-11 rounded-xl"
+                    color="green"
+                  />
+                  <div className="flex flex-col">
+                    <span className="text-sm text-gray-700/50">
+                      Khen thưởng
+                    </span>
+                    <span className="font-bold text-lg">
+                      15 <span className="uppercase text-xs">lần</span>
+                    </span>
+                  </div>
+                </div>
+                <div className="w-1/2 flex items-center p-2.5 border rounded-xl gap-2">
+                  {/*Icon*/}
+                  <IoThumbsDownOutline
+                    className="bg-red-100 p-2.5 w-11 h-11 rounded-xl"
+                    color="red"
+                  />
+                  <div className="flex flex-col">
+                    <span className="text-sm text-gray-700/50">Kỷ luật</span>
+                    <span className="font-bold text-lg">
+                      4 <span className="uppercase text-xs">lần</span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div className="flex justify-between items-center p-3 rounded-xl gap-3 border-[2px] border-green-500">
+                <div className="flex gap-3">
+                  <IoReceiptOutline
+                    className="bg-green-100 p-2.5 w-11 h-11 rounded-xl"
+                    color="green"
+                  />
+                  <div className="flex flex-col">
+                    <span className="font-bold text-sm">
+                      Quyết định khen thưởng
+                    </span>
+                    <span className="text-xs text-gray-700/50">
+                      Quyết định: 10 thg 02, 2023
+                    </span>
+                  </div>
+                </div>
+                <div>
+                  <span className="py-1 px-2 bg-yellow-500 rounded-full text-white">
+                    Chờ duyệt
+                  </span>
+                </div>
+              </div>
+              <div className="flex justify-between items-center p-3 rounded-xl gap-3 border-[2px] border-red-500">
+                <div className="flex gap-3">
+                  <IoReceiptOutline
+                    className="bg-red-100 p-2.5 w-11 h-11 rounded-xl"
+                    color="red"
+                  />
+                  <div className="flex flex-col">
+                    <span className="font-bold text-sm">Quyết định phạt</span>
+                    <span className="text-xs text-gray-700/50">
+                      Quyết định: 10 thg 02, 2023
+                    </span>
+                  </div>
+                </div>
+                <div>
+                  <span className="py-1 px-2 bg-green-500 rounded-full text-white">
+                    Đã duyệt
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/*Thực hiện bài kiểm tra*/}
+          <div className="bg-white rounded-xl card-shadow">
+            <div className="border-b-2 border-gray-200 py-2.5 px-3">
+              <span className="font-bold text-sm">Kiểm tra</span>
+            </div>
+            <div className="py-2.5 px-3 mt-3">
+              <div className="w-full h-24 bg-violet-100 rounded-xl flex justify-between items-center">
+                <span className="px-4 text-lg font-bold">Các bài kiểm tra</span>
+                <img className=" h-full" src={testLogo}></img>
+              </div>
+              {/*Container các bài kiểm tra */}
+              {dataLesson.map((lesson, index) => (
+                <div
+                  className={`flex justify-between items-center py-4 ${
+                    index !== dataLesson.length - 1 &&
+                    "border-b-[1px] border-gray-300/70"
+                  }`}
+                >
+                  <div className="flex flex-col gap-1">
+                    <span className="text-sm font-bold">
+                      {lesson?.title?.vi}
+                    </span>
+                    <span className="text-sm text-gray-500/50">
+                      {lesson?.description?.vi}
+                    </span>
+                  </div>
+                  {lesson?.is_pass ? (
+                    <div className="bg-green-50 py-1 px-3 text-center border-[1px] border-green-500 rounded-full">
+                      <span className="text-green-500">Hoàn thành</span>
+                    </div>
+                  ) : (
+                    <div className="bg-gray-50 py-1 px-3 text-center border-[1px] border-gray-500 rounded-full">
+                      <span className="text-gray-500/50">Chưa hoàn thành</span>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div class="w-1/3 flex flex-col gap-4">
+          <div className="bg-white rounded-xl card-shadow">
+            <div className="flex items-center gap-2 border-b-2 border-gray-200 py-2.5 px-3">
+              <span className="font-bold text-sm">Tài chính</span>
+              <Tooltip placement="top" title="Tính năng chưa hoàn thiện">
+                <IoHelpCircleOutline size={16} color="#9ca3af" />
+              </Tooltip>
+            </div>
+            <div className="py-2.5 px-3 mt-3">
+              <div className="w-full h-24 bg-amber-100 rounded-xl flex justify-between items-center">
+                <div className="flex flex-col">
+                  <span className="px-4 text-base font-bold text-gray-500/70">
+                    Tổng tiền thu được
+                  </span>
+                  <span className="px-4 text-2xl font-bold">100.000.000đ</span>
+                </div>
+                <img className=" h-full" src={moneyLogo}></img>
+              </div>
+              {/*Container các mốc tài chính */}
+              <div className="flex flex-col justify-center gap-4 mt-4">
+                <div className="flex justify-between items-center border-b-[1px] border-gray-300/70 pb-3">
+                  <div className="flex items-center gap-2">
+                    <div>
+                      <IoLogoUsd
+                        className="bg-green-100 p-2.5 w-11 h-11 rounded-xl"
+                        color="green"
+                      />
+                    </div>
+                    <div>
+                      <span className="text-sm font-medium text-gray-500/70">
+                        Thu nhập/tháng
+                      </span>
+                    </div>
+                  </div>
+                  <div>
+                    <span className="text-sm bg-green-100 p-2 rounded-md">
+                      10.000.000đ
+                    </span>
+                  </div>
+                </div>
+                <div className="flex justify-between items-center border-b-[1px] border-gray-300/70 pb-3">
+                  <div className="flex items-center gap-2">
+                    <div>
+                      <IoCashOutline
+                        className="bg-yellow-100 p-2.5 w-11 h-11 rounded-xl"
+                        color="orange"
+                      />
+                    </div>
+                    <div>
+                      <span className="text-sm font-medium text-gray-500/70">
+                        Thu nhập/năm
+                      </span>
+                    </div>
+                  </div>
+                  <div>
+                    <span className="text-sm bg-yellow-100 p-2 rounded-md">
+                      100.000.000đ
+                    </span>
+                  </div>
+                </div>
+                <div className="flex justify-between items-center border-gray-300/70 pb-3">
+                  <div className="flex items-center gap-2">
+                    <div>
+                      <IoWalletOutline
+                        className="bg-blue-100 p-2.5 w-11 h-11 rounded-xl"
+                        color="blue"
+                      />
+                    </div>
+                    <div>
+                      <span className="text-sm font-medium text-gray-500/70">
+                        Tổng doanh thu
+                      </span>
+                    </div>
+                  </div>
+                  <div>
+                    <span className="text-sm bg-blue-100 p-2 rounded-md">
+                      300.000.000đ
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="bg-white rounded-xl card-shadow">
+            <div className="flex items-center gap-2 border-b-2 border-gray-200 py-2.5 px-3">
+              <span className="font-bold text-sm">Hiệu quả công việc</span>
+              <Tooltip placement="top" title="Tính năng chưa hoàn thiện">
+                <IoHelpCircleOutline size={16} color="#9ca3af" />
+              </Tooltip>
+            </div>
+            <div className="py-2.5 px-3 mt-3">
+              <div className="w-full h-24 bg-blue-100 rounded-xl flex justify-between items-center">
+                <div className="flex flex-col">
+                  <span className="px-4 text-base font-bold text-gray-500">
+                    Tổng số công việc
+                  </span>
+                  <div className="flex px-4 gap-1 items-center">
+                    <span className="text-2xl font-bold">240</span>
+                    <span className="text-base font-bold uppercase">việc</span>
+                  </div>
+                </div>
+                <img className=" h-full" src={jobLogo}></img>
+              </div>
+              {/*Container hiệu quả công việc */}
+              <div className="flex flex-col justify-center gap-4 mt-4">
+                <div className="flex items-center gap-4 border-b-[1px] border-gray-300/70 pb-3">
+                  <div>
+                    <IoCheckmarkCircleOutline
+                      className="bg-green-100 p-2.5 w-11 h-11 rounded-xl"
+                      color="green"
+                    />
+                  </div>
+                  <div className="w-full">
+                    <div className="flex justify-between items-center ">
+                      <span className="text-sm font-medium text-gray-500/70">
+                        Đơn đã hủy
+                      </span>
+                      <span className="text-sm font-medium ">240 đơn </span>
+                    </div>
+                    <div className="w-full rounded-full bg-gray-100 ">
+                      <div
+                        className="bg-green-500 p-0.5 rounded-full flex justify-center items-center leading-none text-xs font-medium progress-bar-success"
+                        style={{ width: "80%" }}
+                      >
+                        <span className="text-white italic text-xs">80%</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-4 border-gray-300/70 pb-3">
+                  <div>
+                    <IoCloseCircleOutline
+                      className="bg-red-100 p-2.5 w-11 h-11 rounded-xl"
+                      color="red"
+                    />
+                  </div>
+                  <div className="w-full">
+                    <div className="flex justify-between items-center ">
+                      <span className="text-sm font-medium text-gray-500/70">
+                        Đơn đã hủy
+                      </span>
+                      <span className="text-sm font-medium ">40 đơn </span>
+                    </div>
+                    <div className="w-full rounded-full bg-gray-100 ">
+                      <div
+                        className="bg-red-500 p-0.5 rounded-full flex justify-center items-center leading-none text-xs font-medium progress-bar-cancel"
+                        style={{ width: "20%" }}
+                      >
+                        <span className="text-white italic text-xs">20%</span>
+                      </div>
+                    </div>
+                    {/* <div class="w3-light-grey">
+                      <div
+                        class="w3-container w3-green w3-center"
+                        style={{ width: "25%" }}
+                      >
+                        25%
+                      </div>
+                    </div> */}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/*Hoạt động gần đây*/}
+          <div className="bg-white rounded-xl card-shadow">
+            <div className="border-b-2 border-gray-200 py-2.5 px-3">
+              <span className="font-bold text-sm">Hoạt động gần đây</span>
+            </div>
+            {dataActivity.length > 0 ? (
+              <div className="flex flex-col py-2.5 px-3 mt-3 mb-2">
+                {dataActivity?.map((activity, index) => (
+                  <div className="flex pb-4">
+                    <div className="w-3/12 flex flex-col items-center ">
+                      <div>
+                        <span className="text-sm font-bold">
+                          {moment(new Date(activity?.date_work)).format(
+                            "DD/MM/YYYY"
+                          )}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="text-sm text-gray-500/50">
+                          {moment(new Date(activity?.date_work))
+                            .locale(lang)
+                            .format("dddd")}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="w-2/12 items-center flex flex-col -mb-[24px]">
+                      <div
+                        className={`p-2 w-fit h-fit rounded-full ${
+                          activity?.status === "pending"
+                            ? "bg-yellow-100"
+                            : activity?.status === "confirm"
+                            ? "bg-blue-100"
+                            : activity?.status === "doing"
+                            ? "bg-blue-100"
+                            : activity?.status === "done"
+                            ? "bg-green-100"
+                            : "bg-red-100"
+                        }`}
+                      >
+                        {activity?.status === "pending" ? (
+                          <IoAlertOutline size={15} color="orange" />
+                        ) : activity?.status === "confirm" ? (
+                          <IoFlagOutline size={15} color="blue" />
+                        ) : activity?.status === "doing" ? (
+                          <IoHourglassOutline size={15} color="blue" />
+                        ) : activity?.status === "done" ? (
+                          <IoCheckmarkDoneOutline size={15} color="green" />
+                        ) : (
+                          <IoCloseCircleOutline size={15} color="red" />
+                        )}
+                      </div>
+                      <div className="w-[2px] h-[100%] bg-gray-300/50"></div>
+                    </div>
+                    <div className="w-7/12">
+                      <div>
+                        <span className="font-bold text-sm">
+                          {activity?.type === "loop" && activity?.is_auto_order
+                            ? `${i18n.t("repeat", { lng: lang })}`
+                            : activity?.service?._id?.kind ===
+                              "giup_viec_theo_gio"
+                            ? `${i18n.t("cleaning", { lng: lang })}`
+                            : activity?.service?._id?.kind ===
+                              "giup_viec_co_dinh"
+                            ? `${i18n.t("cleaning_subscription", {
+                                lng: lang,
+                              })}`
+                            : activity?.service?._id?.kind ===
+                              "phuc_vu_nha_hang"
+                            ? `${i18n.t("serve", { lng: lang })}`
+                            : ""}{" "}
+                          / {timeWork(activity)}
+                        </span>
+                      </div>
+                      <div>
+                        <Tooltip placement="top" title={activity?.address}>
+                          <span className="text-sm text-gray-500/50 line-clamp-2">
+                            {activity?.address}
+                          </span>
+                        </Tooltip>
+                      </div>
+                      <div
+                        className={`w-fit px-1 py-0.5 rounded-lg border-[1px] mt-2 ${
+                          activity?.status === "pending"
+                            ? "bg-yellow-50 border-yellow-500 text-yellow-500"
+                            : activity?.status === "confirm"
+                            ? "bg-blue-50 border-blue-500 text-blue-500"
+                            : activity?.status === "doing"
+                            ? "bg-blue-50 border-blue-500 text-blue-500"
+                            : activity?.status === "done"
+                            ? "bg-green-50 border-green-500 text-green-500"
+                            : "bg-red-50 border-red-500 text-red-500"
+                        }`}
+                      >
+                        <span className="text-sm ">
+                          {activity?.status === "pending"
+                            ? `${i18n.t("pending", { lng: lang })}`
+                            : activity?.status === "confirm"
+                            ? `${i18n.t("confirm", { lng: lang })}`
+                            : activity?.status === "doing"
+                            ? `${i18n.t("doing", { lng: lang })}`
+                            : activity?.status === "done"
+                            ? `${i18n.t("complete", { lng: lang })}`
+                            : `${i18n.t("cancel", { lng: lang })}`}{" "}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="flex justify-center items-center p-4">
+                <span className="text-sm text-gray-500/50 italic">
+                  Cộng tác viên chưa có hoạt động nào
+                </span>
+              </div>
+            )}
+          </div>
+        </div>
+        <div class="w-1/3 flex flex-col gap-4">
+          {/*Thông tin CTV*/}
+          <div className="bg-white rounded-xl card-shadow">
+            {/* Container avatar */}
+            <div
+              style={{ backgroundColor: "#ebe0f8" }}
+              className="rounded-xl m-3 p-4 flex justify-center"
+            >
+              <div className="flex flex-col items-center justify-center">
+                {/* Avatar */}
+                <img
+                  class="h-[150px] w-[150px] p-2 bg-white rounded-full shadow-lg"
+                  src={dataDetail?.avatar ? dataDetail?.avatar : avatarDefault}
+                  alt=""
+                />
+                {/* Tên, Mã nhân vien, Khu vực, Trạng thái*/}
+                <div className="flex flex-col items-center mt-3 gap-4">
+                  {/* Tên*/}
+                  <span className="font-bold text-xl">{dataDetail?.name}</span>
+                  {/* Mã giới thiệu*/}
+                  <div className="text-center">
+                    <span style={{ fontWeight: "500" }} className="text-sm ">
+                      Mã giới thiệu: {dataDetail?.invite_code} /
+                    </span>
+                    <span style={{ fontWeight: "500" }} className="text-sm">
+                      {" "}
+                      Khu vực: {city?.name}
+                    </span>
+                  </div>
+                  {/* Trạng thái hoạt động*/}
+                  <Tooltip
+                    placement="bottom"
+                    title={
+                      dataDetail?.status === "locked" &&
+                      dataDetail?.note_handle_admin
+                        ? dataDetail?.note_handle_admin
+                        : "Tài khoản đã bị khóa"
+                    }
+                  >
+                    <span
+                      className={`py-2 px-4 rounded-full ${
+                        dataDetail?.status === "actived"
+                          ? "status-done"
+                          : "status-not-contact"
+                      }`}
+                    >
+                      {dataDetail?.status === "actived"
+                        ? "Đang hoạt động"
+                        : dataDetail?.status === "locked"
+                        ? "Đang khóa"
+                        : "Khác"}
+                    </span>
+                  </Tooltip>
+                </div>
+              </div>
+            </div>
+            {/* Container thông tin*/}
+            <div className="flex flex-col gap-6 mx-3 my-4">
+              <span className="font-bold text-sm">Thông tin nhân sự</span>
+              {/* Thông tin thứ nhất*/}
+              <div className="flex gap-3 items-center">
+                {/*Icon*/}
+                <IoPersonOutline
+                  className="bg-blue-100 p-2.5 w-11 h-11 rounded-xl"
+                  color="DodgerBlue"
+                />
+                <div className="flex flex-col gap-0.5">
+                  <span
+                    style={{ fontWeight: "500" }}
+                    className="text-sm text-gray-500/70"
+                  >
+                    Giới tính
+                  </span>
+                  <span style={{ fontWeight: "500" }} className="text-sm">
+                    {dataDetail.gender === "male" ? "Nam" : "Nữ"}
+                  </span>
+                </div>
+              </div>
+              {/* Thông tin thứ hai*/}
+              <div className="flex gap-3 items-center">
+                {/*Icon*/}
+                <IoShieldCheckmarkOutline
+                  className="bg-green-100 p-2.5 w-11 h-11 rounded-xl"
+                  color="green"
+                />
+                <div className="flex flex-col gap-0.5">
+                  <span
+                    style={{ fontWeight: "500" }}
+                    className="text-sm text-gray-500/70"
+                  >
+                    Ngày kích hoạt
+                  </span>
+                  <span style={{ fontWeight: "500" }} className="text-sm">
+                    {moment(dataDetail?.date_create).format("DD/MM/YYYY")}
+                  </span>
+                </div>
+              </div>
+              {/* Thông tin thứ ba*/}
+              <div className="flex gap-3 items-center">
+                {/*Icon*/}
+                <IoCalendarOutline
+                  className="bg-yellow-100 p-2.5 w-11 h-11 rounded-xl"
+                  color="orange"
+                />
+                <div className="flex flex-col gap-0.5">
+                  <span
+                    style={{ fontWeight: "500" }}
+                    className="text-sm text-gray-500/70"
+                  >
+                    Ngày sinh
+                  </span>
+                  <span style={{ fontWeight: "500" }} className="text-sm">
+                    {moment(dataDetail?.birthday).format("DD/MM/YYYY")}
+                  </span>
+                </div>
+              </div>
+              {/* Thông tin thứ tư*/}
+              <div className="flex gap-3 items-center">
+                {/*Icon*/}
+                <IoCallOutline
+                  className="bg-red-100 p-2.5 w-11 h-11 rounded-xl"
+                  color="red"
+                />
+                <div className="flex flex-col gap-0.5">
+                  <span
+                    style={{ fontWeight: "500" }}
+                    className="text-sm text-gray-500/70"
+                  >
+                    Số điện thoại
+                  </span>
+                  <span style={{ fontWeight: "500" }} className="text-sm">
+                    {dataDetail?.phone}
+                  </span>
+                </div>
+              </div>
+              {/* Thông tin thứ sáu*/}
+              <div className="flex gap-3 items-center">
+                {/*Icon*/}
+                <IoNewspaperOutline
+                  className="bg-blue-100 p-2.5 w-11 h-11 rounded-xl"
+                  color="DodgerBlue"
+                />
+                <div className="flex flex-col gap-0.5">
+                  <span
+                    style={{ fontWeight: "500" }}
+                    className="text-sm text-gray-500/70"
+                  >
+                    Tổng số đơn
+                  </span>
+                  <span style={{ fontWeight: "500" }} className="text-sm">
+                    {total?.total_order} đơn
+                  </span>
+                </div>
+              </div>
+              {/* Thông tin thứ năm*/}
+              <div className="flex gap-3 items-center">
+                {/*Icon*/}
+                <IoTimeOutline
+                  className="bg-green-100 p-2.5 w-11 h-11 rounded-xl"
+                  color="green"
+                />
+                <div className="flex flex-col gap-0.5">
+                  <span
+                    style={{ fontWeight: "500" }}
+                    className="text-sm text-gray-500/70"
+                  >
+                    Tổng số giờ làm
+                  </span>
+                  <span style={{ fontWeight: "500" }} className="text-sm">
+                    {total?.total_hour} giờ
+                  </span>
+                </div>
+              </div>
+              {/* Thông tin thứ bảy*/}
+              <div className="flex gap-3 items-center">
+                {/*Icon*/}
+                <IoCalendarNumberOutline
+                  className="bg-yellow-100 p-2.5 w-11 h-11 rounded-xl"
+                  color="orange"
+                />
+                <div className="flex flex-col gap-0.5">
+                  <span
+                    style={{ fontWeight: "500" }}
+                    className="text-sm text-gray-500/70"
+                  >
+                    Ngày đăng ký
+                  </span>
+                  <span style={{ fontWeight: "500" }} className="text-sm">
+                    {moment(dataDetail?.date_create).format("DD/MM/YYYY")}
+                  </span>
+                </div>
+              </div>
+              {/* Thông tin thứ tám*/}
+              <div className="flex gap-3 items-center">
+                {/*Icon*/}
+                <IoHeartOutline
+                  className="bg-red-100 p-2.5 w-11 h-11 rounded-xl"
+                  color="red"
+                />
+                <div className="flex flex-col gap-0.5">
+                  <span
+                    style={{ fontWeight: "500" }}
+                    className="text-sm text-gray-500/70"
+                  >
+                    Tổng lượt yêu thích
+                  </span>
+                  <span style={{ fontWeight: "500" }} className="text-sm">
+                    {total?.total_favourite} lượt yêu thích
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="bg-white rounded-xl card-shadow">
+            {/* Header Label */}
+            <div className="border-b-2 border-gray-200 py-2.5 px-3">
+              <span className="font-bold text-sm">
+                Tiến trình hồ sơ của cộng tác viên
+              </span>
+            </div>
+            {/* Container Information*/}
+            <div className="flex flex-col pt-2.5 pb-4 px-3 gap-6 mt-3">
+              <div className="flex justify-between">
+                <div className="flex gap-4 items-center">
+                  <div
+                    className={`p-1 ${
+                      dataDetail?.is_identity
+                        ? "status-done"
+                        : "status-not-process"
+                    } rounded-full`}
+                  >
+                    {dataDetail?.is_document_code ? (
+                      <IoCheckmark color="green" />
+                    ) : (
+                      <IoCheckmark
+                        style={{ visibility: "hidden" }}
+                        color="gray"
+                      />
+                    )}
+                  </div>
+                  <span
+                    style={{ fontWeight: "500" }}
+                    className={`text-sm ${
+                      !dataDetail?.is_document_code && "text-gray-500/50"
+                    } `}
+                  >
+                    Thỏa thuận hợp tác
+                  </span>
+                </div>
+                <div>
+                  <span className="text-gray-500/50 italic text-sm">
+                    {dataDetail?.document_code ? dataDetail?.document_code : ""}
+                  </span>
+                </div>
+              </div>
+              <div className="flex items-center gap-4">
+                <div
+                  className={`p-1 ${
+                    dataDetail?.is_identity
+                      ? "status-done"
+                      : "status-not-process"
+                  } rounded-full`}
+                >
+                  {dataDetail?.is_identity ? (
+                    <IoCheckmark color="green" />
+                  ) : (
+                    <IoCheckmark
+                      style={{ visibility: "hidden" }}
+                      color="gray"
+                    />
+                  )}
+                </div>
+                <span
+                  style={{ fontWeight: "500" }}
+                  className={`text-sm ${
+                    !dataDetail?.is_identity && "text-gray-500/50"
+                  } `}
+                >
+                  {" "}
+                  CCCD/CMND
+                </span>
+              </div>
+              <div className="flex items-center gap-4">
+                <div
+                  className={`p-1 ${
+                    dataDetail?.is_personal_infor
+                      ? "status-done"
+                      : "status-not-process"
+                  } rounded-full`}
+                >
+                  {dataDetail?.is_personal_infor ? (
+                    <IoCheckmark color="green" />
+                  ) : (
+                    <IoCheckmark
+                      style={{ visibility: "hidden" }}
+                      color="gray"
+                    />
+                  )}
+                </div>
+                <span
+                  style={{ fontWeight: "500" }}
+                  className={`text-sm ${
+                    !dataDetail?.is_personal_infor && "text-gray-500/50"
+                  } `}
+                >
+                  {" "}
+                  Sơ yếu lí lịch
+                </span>
+              </div>
+              <div className="flex items-center gap-4">
+                <div
+                  className={`p-1 ${
+                    dataDetail?.is_household_book
+                      ? "status-done"
+                      : "status-not-process"
+                  } rounded-full`}
+                >
+                  {dataDetail?.is_household_book ? (
+                    <IoCheckmark color="green" />
+                  ) : (
+                    <IoCheckmark
+                      style={{ visibility: "hidden" }}
+                      color="gray"
+                    />
+                  )}
+                </div>
+                <span
+                  style={{ fontWeight: "500" }}
+                  className={`text-sm ${
+                    !dataDetail?.is_household_book && "text-gray-500/50"
+                  } `}
+                >
+                  Sổ hộ khẩu
+                </span>
+              </div>
+              <div className="flex items-center gap-4">
+                <div
+                  className={`p-1 ${
+                    dataDetail?.is_behaviour
+                      ? "status-done"
+                      : "status-not-process"
+                  } rounded-full`}
+                >
+                  {dataDetail?.is_behaviour ? (
+                    <IoCheckmark color="green" />
+                  ) : (
+                    <IoCheckmark
+                      style={{ visibility: "hidden" }}
+                      color="gray"
+                    />
+                  )}
+                </div>
+                <span
+                  style={{ fontWeight: "500" }}
+                  className={`text-sm ${
+                    !dataDetail?.is_behaviour && "text-gray-500/50 "
+                  } `}
+                >
+                  Giấy xác nhận hạnh kiểm
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-
-      <ModalCustom
-        isOpen={modalVerify}
-        title="Xác thực cộng tác viên"
-        handleOk={() =>
-          onVerifyCollaborator(dataDetail?._id, dataDetail?.is_verify)
-        }
-        textOk="Xác thực"
-        handleCancel={() => setModalVerify(false)}
-        body={<p>Bạn có chắc xác thực cho CTV này? {dataDetail?.full_name}</p>}
-      />
-      {isLoading && <LoadingPagination />}
-    </>
+    </div>
   );
 };
 

@@ -287,7 +287,7 @@ const ManageReportOrderByCollaborator = () => {
     },
   ];
 
-  const changeStatusOrder = (value: string) => {
+  const changeStatusOrder = (value) => {
     setSelectStatus(value);
   };
 
