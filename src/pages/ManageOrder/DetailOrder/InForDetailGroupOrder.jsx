@@ -37,6 +37,7 @@ import moment from "moment";
 import { getListReasonCancel } from "../../../api/reasons";
 import InputCustom from "../../../components/textInputCustom";
 import LoadingPagination from "../../../components/paginationLoading";
+import { unAssignCollaborator } from "../../../api/groupOrder";
 const { TextArea } = Input;
 const InForDetailGroupOrder = (props) => {
   const { id } = props;
@@ -386,6 +387,15 @@ const InForDetailGroupOrder = (props) => {
     onChangeStatus(item?._id, { status: "next" });
     setIsOpenModalChangeStatus(false);
   };
+  const handleUnassignCollaborator = (id) => {
+    unAssignCollaborator(id)
+      .then((res) => {
+        // console.log("check response", res);
+      })
+      .catch((err) => {
+        // console.log("err", err);
+      });
+  }
   console.log("data ", collaborator);
   return (
     <div className="info-detail-order_container ">
@@ -598,6 +608,7 @@ const InForDetailGroupOrder = (props) => {
         isOpen={modalCancelCollaborator}
         title={"Đẩy cộng tác viên ra khỏi đơn hàng"}
         textOk={"Xác nhận"}
+        handleOk={() => handleUnassignCollaborator(id)}
         handleCancel={() => setModalCancelCollaborator(false)}
         body={
           <>

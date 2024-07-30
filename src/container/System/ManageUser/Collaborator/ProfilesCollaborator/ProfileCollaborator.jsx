@@ -111,7 +111,7 @@ const [isShowMore, setIsShowMore] = useState(false);
       return hidePhone;
     }
   }
-// console.log("CHECK DATA", data?.phone);
+// console.log("CHECK DATA", data);
   return (
     <div className="">
       <div className="">
@@ -122,7 +122,7 @@ const [isShowMore, setIsShowMore] = useState(false);
           onChange={onChangeTab}
         >
           <Tabs.TabPane tab="Tổng quan" key="1">
-            <Overview id={id} />
+            <Overview id={id} star={data?.star} />
           </Tabs.TabPane>
           <Tabs.TabPane tab={`${i18n.t("info", { lng: lang })}`} key="2">
             <Information data={data} image={img} idCTV={id} setData={setData} />

@@ -293,6 +293,7 @@
 
   /* ~~~ Css của một item ~~~ */
   .ant-menu-item {
+    margin-bottom: 8px !important;
     // color: #909FAB;
     // height: fit-content !important;
     // padding-top: 14px !important;
@@ -332,6 +333,7 @@
 
   /* ~~~ Css của item là submenu ~~~ */
   .ant-menu-submenu {
+    margin-bottom: 8px !important;
 
     // Label và cả icon
     .ant-menu-submenu-title {

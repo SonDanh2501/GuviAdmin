@@ -193,7 +193,8 @@ const Main = ({ hide }) => {
       theme={{
         components: {
           Layout: {
-            bodyBg: "#F0F5F8",
+            bodyBg: "#F5F6FB",
+            headerHeight: 70,
           },
         },
       }}
@@ -204,7 +205,7 @@ const Main = ({ hide }) => {
             trigger={null}
             collapsible
             collapsed={collapsed}
-            width={200}
+            width={220}
             // breakpoint="sm"
             collapsedWidth={70}
             style={{
@@ -214,7 +215,7 @@ const Main = ({ hide }) => {
               left: 0,
               top: 0,
               bottom: 0,
-              borderRight: "2px solid #ececec",
+              // borderRight: "2px solid #ececec",
               // boxShadow: "0 3px 4px rgba(57, 63, 72, 0.3)",
             }}
           >
@@ -240,7 +241,7 @@ const Main = ({ hide }) => {
         )}
         <Layout
           style={{
-            marginLeft: width > 900 ? (collapsed ? 70 : 200) : 0,
+            marginLeft: width > 900 ? (collapsed ? 70 : 220) : 0,
             transitionDuration: "100ms",
             height: "100vh",
           }}
@@ -249,9 +250,9 @@ const Main = ({ hide }) => {
             style={{
               padding: 0,
               background: "#FFFFFF",
-              borderBottom: "2px solid #ececec",
+              // borderBottom: "2px solid #ececec",
               // borderBottom: "2px solid silver",
-              // boxShadow: "0 3px 10px rgba(57, 63, 72, 0.3)",
+              boxShadow: "0 3px 10px rgba(57, 63, 72, 0.3)",
             }}
           >
             {/*Component for header*/}

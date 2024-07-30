@@ -186,6 +186,7 @@ console.log("check ", item, dataIndex, value);
       },
       // Dữ liệu
       render: (data, record, index) => {
+        // console.log("check", data);
         // Link default
         let linkRedirect = `#`;
         switch (item.key) {
@@ -271,7 +272,11 @@ console.log("check ", item, dataIndex, value);
           case "customer-name-phone":
             return (
               <div className="div-customer-name-phone">
-                <Link to={`/profile-customer/${data?.id_customer?._id}`}>
+                <Link
+                  to={`/profile-customer/${
+                    data?.id_customer?._id ? data?.id_customer?._id : data?._id
+                  }`}
+                >
                   <p className={`text-name-customer ${item?.fontSize}`}>
                     {data?.id_customer?.full_name || data?.full_name}
                   </p>

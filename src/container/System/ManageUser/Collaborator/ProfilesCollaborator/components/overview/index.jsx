@@ -10,6 +10,7 @@ import {
   getInfoTestTrainingLessonByCollaboratorApi,
   getListTrainingLessonByCollaboratorApi,
   getOverviewCollaborator,
+  getReviewCollaborator,
   verifyCollaborator,
 } from "../../../../../../../api/collaborator";
 import ModalCustom from "../../../../../../../components/modalCustom";
@@ -65,8 +66,12 @@ import { loadingAction } from "../../../../../../../redux/actions/loading";
 import testLogo from "../../../../../../../assets/images/testLogo.svg";
 import moneyLogo from "../../../../../../../assets/images/moneyLogo.svg";
 import jobLogo from "../../../../../../../assets/images/jobLogo.svg";
+import { calculateNumberPercent, renderStarFromNumber } from "../../../../../../../utils/contant";
+// import RangeDatePicker from "../../../../../../../components/datePicker/RangeDatePicker";
 
-const Overview = ({ id }) => {
+const Overview = ({ id, star }) => {
+  // const [startDate, setStartDate] = useState("");
+  // const [endDate, setEndDate] = useState("");
   const [total, setTotal] = useState({
     total_favourite: 0,
     total_order: 0,
@@ -74,6 +79,33 @@ const Overview = ({ id }) => {
     remainder: 0,
     gift_remainder: 0,
   });
+  const [totalCountRating, setTotalCountRating] = useState(0);
+  const [totalRating, setTotalRating] = useState([
+    // {
+    //   name: "total",
+    //   value: 0,
+    // },
+    {
+      name: "5 sao",
+      value: 1,
+    },
+    {
+      name: "4 sao",
+      value: 1,
+    },
+    {
+      name: "3 sao",
+      value: 1,
+    },
+    {
+      name: "2 sao",
+      value: 1,
+    },
+    {
+      name: "1 sao",
+      value: 1,
+    },
+  ]);
   const province = useSelector(getProvince);
   const dataAreaChart = [
     {
@@ -116,14 +148,99 @@ const Overview = ({ id }) => {
 
     return <circle cx={cx} cy={cy} r={5} fill="#9e68df" stroke="none" />;
   };
+  // const data01 = [
+  //   {
+  //     name: "5 sao",
+  //     value: 400,
+  //   },
+  //   {
+  //     name: "4 sao",
+  //     value: 300,
+  //   },
+  //   {
+  //     name: "3 Sao",
+  //     value: 300,
+  //   },
+  //   {
+  //     name: "2 sao",
+  //     value: 200,
+  //   },
+  //   {
+  //     name: "1 sao",
+  //     value: 278,
+  //   },
+  // ];
+  const COLORS = ["#008000", "#2fc22f", "#FFD700", "#FFA500", "#FF0000"];
+
+  const renderActiveShape = (props) => {
+    const RADIAN = Math.PI / 180;
+    const {
+      cx,
+      cy,
+      midAngle,
+      innerRadius,
+      outerRadius,
+      startAngle,
+      endAngle,
+      fill,
+      payload,
+      percent,
+      value,
+    } = props;
+
+    const sin = Math.sin(-RADIAN * midAngle);
+    const cos = Math.cos(-RADIAN * midAngle);
+    const sx = cx + (outerRadius + 10) * cos;
+    const sy = cy + (outerRadius + 10) * sin;
+    const mx = cx + (outerRadius + 30) * cos;
+    const my = cy + (outerRadius + 30) * sin;
+    const ex = mx + (cos >= 0 ? 1 : -1) * 22;
+    const ey = my;
+    const textAnchor = cos >= 0 ? "start" : "end";
+    return (
+      <g>
+        <text x={cx} y={cy} dy={8} textAnchor="middle" fill={fill}>
+          {totalCountRating === 0 ? 0 : payload.value} đánh giá
+        </text>
+        <text x={cx} y={cy + 20} dy={8} textAnchor="middle" fill={fill}>
+          {`(${(percent * 100).toFixed(2)}%)`}
+        </text>
+        <Sector
+          cx={cx}
+          cy={cy}
+          innerRadius={innerRadius}
+          outerRadius={outerRadius}
+          startAngle={startAngle}
+          endAngle={endAngle}
+          fill={fill}
+        />
+        <Sector
+          cx={cx}
+          cy={cy}
+          startAngle={startAngle}
+          endAngle={endAngle}
+          innerRadius={outerRadius + 6}
+          outerRadius={outerRadius + 10}
+          fill={fill}
+        />
+      </g>
+    );
+  };
+  const onPieEnter = (_, index) => {
+    setActiveIndex(index);
+  };
   const dispatch = useDispatch();
   const [data, setData] = useState([]);
-  const [percentSuccess, setPercentSuccess] = useState(0);
-  const [percentCancel, setPercentCancel] = useState(0);
+  // const [percentSuccess, setPercentSuccess] = useState(0);
+  // const [percentCancel, setPercentCancel] = useState(0);
   const [cityName, setCityName] = useState("");
+  const [totalDataActivity, setTotalDataActivity] = useState(0);
+  const [totalSuccessActivity, setTotalSuccessActivity] = useState(0);
+  const [totalCancelActivity, setTotalCancelActivity] = useState(0);
+  const [totalOtherActivity, setTotalOtherActivity] = useState(0);
   const [dataActivity, setDataActivity] = useState([]);
   const [dataLesson, setDataLesson] = useState([]);
-  const [dataLessonDetail, setDataLessonDetail] = useState([]);
+  const [dataReview, setDataReview] = useState([]);
   const [dataDetail, setDataDetail] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [modalVerify, setModalVerify] = useState(false);
@@ -131,10 +248,10 @@ const Overview = ({ id }) => {
   const lang = useSelector(getLanguageState);
   const city = province.filter((x) => x.code === dataDetail.city)[0];
 
-  useEffect(() => {
-    setPercentSuccess(80);
-    setPercentCancel(20);
-  }, []);
+  // useEffect(() => {
+  //   setPercentSuccess(80);
+  //   setPercentCancel(20);
+  // }, []);
   useEffect(() => {
     getOverviewCollaborator(id)
       .then((res) => {
@@ -165,10 +282,13 @@ const Overview = ({ id }) => {
   }, [id]);
 
   useEffect(() => {
+    let tempTotalActivity = 0;
     dispatch(loadingAction.loadingRequest(true));
     getHistoryActivityCollaborator(id, 0, 5)
       .then((res) => {
-        setDataActivity(res.data);
+        tempTotalActivity = res.totalItem;
+        setTotalDataActivity(res?.totalItem);
+        setDataActivity(res?.data);
         dispatch(loadingAction.loadingRequest(false));
       })
       .catch((err) => {
@@ -177,12 +297,44 @@ const Overview = ({ id }) => {
         });
         dispatch(loadingAction.loadingRequest(false));
       });
+
+    let tempTotalDoneActivity = 0;
+    let tempTotalCancelActivity = 0;
+    let tempTotalOtherActivity = 0;
+    getHistoryActivityCollaborator(id, 0, tempTotalActivity)
+      .then((res) => {
+        // console.log("res", res);
+        res?.data?.forEach((el) => {
+          if (el.status === "done") tempTotalDoneActivity += 1;
+          else if (el.status === "cancel") tempTotalCancelActivity += 1;
+          else tempTotalOtherActivity += 1;
+        });
+        setTotalSuccessActivity(tempTotalDoneActivity);
+        setTotalCancelActivity(tempTotalCancelActivity);
+        setTotalOtherActivity(tempTotalOtherActivity);
+      })
+      .catch((err) => {});
   }, [id, dispatch]);
 
   useEffect(() => {
     getListTrainingLessonByCollaboratorApi(id, 0, 20, "all")
       .then((res) => {
         setDataLesson(res?.data);
+      })
+      .catch((err) => {});
+  }, [id]);
+
+  useEffect(() => {
+    let tempTotalDataReview = 0;
+    getReviewCollaborator(id, 0, 1)
+      .then((res) => {
+        tempTotalDataReview = res.totalItem;
+      })
+      .catch((err) => {});
+    getReviewCollaborator(id, 0, tempTotalDataReview)
+      .then((res) => {
+        getStar(totalRating, res);
+        setDataReview(res);
       })
       .catch((err) => {});
   }, [id]);
@@ -235,108 +387,76 @@ const Overview = ({ id }) => {
       });
   }, []);
 
-  console.log("check dataDetail", dataDetail);
-  console.log("dataLesson", dataLesson);
-  // console.log("Check total", total)
-  // console.log("check activity collaborator >>> ", dataActivity);
-  const data01 = [
-    {
-      name: "5 sao",
-      value: 400,
-    },
-    {
-      name: "4 sao",
-      value: 300,
-    },
-    {
-      name: "3 Sao",
-      value: 300,
-    },
-    {
-      name: "2 sao",
-      value: 200,
-    },
-    {
-      name: "1 sao",
-      value: 278,
-    },
-  ];
-  const COLORS = ["#008000", "#2fc22f", "#FFD700", "#FFA500", "#FF0000"];
+  const getStar = (totalRating, dataReview) => {
+    if (totalRating.length > 0 && dataReview.totalItem > 0) {
+      let fiveStar = 0;
+      let fourStar = 0;
+      let threeStar = 0;
+      let twoStar = 0;
+      let oneStar = 0;
+      dataReview?.data?.forEach((el) => {
+        if (el.star === 5) fiveStar += 1;
+        if (el.star === 4) fourStar += 1;
+        if (el.star === 3) threeStar += 1;
+        if (el.star === 2) twoStar += 1;
+        if (el.star === 1) oneStar += 1;
+      });
 
-  const RADIAN = Math.PI / 180;
-  const renderActiveShape = (props) => {
-    const RADIAN = Math.PI / 180;
-    const { cx, cy, midAngle, innerRadius, outerRadius, startAngle, endAngle, fill, payload, percent, value } = props;
-    const sin = Math.sin(-RADIAN * midAngle);
-    const cos = Math.cos(-RADIAN * midAngle);
-    const sx = cx + (outerRadius + 10) * cos;
-    const sy = cy + (outerRadius + 10) * sin;
-    const mx = cx + (outerRadius + 30) * cos;
-    const my = cy + (outerRadius + 30) * sin;
-    const ex = mx + (cos >= 0 ? 1 : -1) * 22;
-    const ey = my;
-    const textAnchor = cos >= 0 ? 'start' : 'end';
-  
-    return (
-      <g>
-        <text x={cx} y={cy} dy={8} textAnchor="middle" fill={fill}>
-          {payload.value} đánh giá
-        </text>
-        <text x={cx} y={cy + 20} dy={8} textAnchor="middle" fill={fill}>
-          {`(${(percent * 100).toFixed(2)}%)`}
-        </text>
-        <Sector
-          cx={cx}
-          cy={cy}
-          innerRadius={innerRadius}
-          outerRadius={outerRadius}
-          startAngle={startAngle}
-          endAngle={endAngle}
-          fill={fill}
-        />
-        <Sector
-          cx={cx}
-          cy={cy}
-          startAngle={startAngle}
-          endAngle={endAngle}
-          innerRadius={outerRadius + 6}
-          outerRadius={outerRadius + 10}
-          fill={fill}
-        />
-      </g>
-    );
+      totalRating?.forEach((element) => {
+        if (element.name === "5 sao") {
+          element.value = fiveStar;
+        }
+        if (element.name === "4 sao") {
+          element.value = fourStar;
+        }
+        if (element.name === "3 sao") {
+          element.value = threeStar;
+        }
+        if (element.name === "2 sao") {
+          element.value = twoStar;
+        }
+        if (element.name === "1 sao") {
+          element.value = oneStar;
+        }
+      });
+      setTotalCountRating(fiveStar + fourStar + threeStar + twoStar + oneStar);
+    }
   };
-  const onPieEnter = (_,index) => {
-    setActiveIndex(index);
 
-  }
+  console.log("check total activity done", totalSuccessActivity);
+  console.log("check total activity cancel", totalCancelActivity);
+
   return (
     <div className="pb-4">
-      <div class="flex w-full gap-4">
+      <div className="flex w-fit bg-white rounded-lg">
+        {/* <RangeDatePicker
+          setStartDate={setStartDate}
+          setEndDate={setEndDate}
+          rangeDateDefaults={"thirty_last"}
+          rangeDatePrevious
+          // disableFutureDay
+        /> */}
+      </div>
+      <div class="flex w-full gap-4 mt-3">
         <div class="w-1/3 flex flex-col gap-4">
           <div className="bg-white rounded-xl card-shadow">
             <div className="flex items-center gap-2 border-b-2 border-gray-200 py-2.5 px-3">
               <span className="font-bold text-sm">Thống kê đánh giá</span>
-              <Tooltip placement="top" title="Tính năng chưa hoàn thiện">
-                <IoHelpCircleOutline size={16} color="#9ca3af" />
-              </Tooltip>
             </div>
             <div className="py-2.5 px-3">
               {/*Container hiệu quả công việc */}
               <div className="flex flex-col justify-center mt-4">
                 <div className="flex flex-col items-center justify-center pb-2">
                   <div className="flex py-2.5 px-4 rounded-full w-fit items-center justify-center bg-indigo-50 gap-1">
-                    <IoStar size="25" color="orange" />
-                    <IoStar size="25" color="orange" />
-                    <IoStar size="25" color="orange" />
-                    <IoStar size="25" color="orange" />
-                    <IoStar size="25" color="orange" />
+                    {renderStarFromNumber(star).map((el, index) => (
+                      <span>{el}</span>
+                    ))}
                     <span className="text-xs font-normal pt-1 ml-2">
-                      4.7 trên 5
+                      {star} trên 5
                     </span>
                   </div>
                   <div className="text-xs text-center mt-1">
-                    <span>40 khách hàng đã đánh giá</span>
+                    <span>{dataReview.totalItem} khách hàng đã đánh giá</span>
                   </div>
                 </div>
                 {/* const COLORS = ["#008000", "#2fc22f", "#FFD700", "#FFA500", "#FF0000"]; */}
@@ -347,20 +467,20 @@ const Overview = ({ id }) => {
                       <Pie
                         activeIndex={activeIndex}
                         activeShape={renderActiveShape}
-                        data={data01}
+                        data={totalRating}
                         dataKey="value"
                         nameKey="name"
                         cx="50%"
                         cy="50%"
                         innerRadius={80}
                         outerRadius={110}
-                        paddingAngle={5}
+                        paddingAngle={7}
                         fill="#8884d8"
                         // label={renderCustomizedLabel}
                         // labelLine={false}
                         onMouseEnter={onPieEnter}
                       >
-                        {data01.map((entry, index) => (
+                        {totalRating.map((entry, index) => (
                           <Cell
                             key={`cell-${index}`}
                             fill={COLORS[index % COLORS.length]}
@@ -647,9 +767,6 @@ const Overview = ({ id }) => {
           <div className="bg-white rounded-xl card-shadow">
             <div className="flex items-center gap-2 border-b-2 border-gray-200 py-2.5 px-3">
               <span className="font-bold text-sm">Hiệu quả công việc</span>
-              <Tooltip placement="top" title="Tính năng chưa hoàn thiện">
-                <IoHelpCircleOutline size={16} color="#9ca3af" />
-              </Tooltip>
             </div>
             <div className="py-2.5 px-3 mt-3">
               <div className="w-full h-24 bg-blue-100 rounded-xl flex justify-between items-center">
@@ -658,11 +775,15 @@ const Overview = ({ id }) => {
                     Tổng số công việc
                   </span>
                   <div className="flex px-4 gap-1 items-center">
-                    <span className="text-2xl font-bold">240</span>
+                    <span className="text-2xl font-bold">
+                      {totalCancelActivity +
+                        totalSuccessActivity +
+                        totalOtherActivity}
+                    </span>
                     <span className="text-base font-bold uppercase">việc</span>
                   </div>
                 </div>
-                <img className=" h-full" src={jobLogo}></img>
+                <img className="h-full" src={jobLogo}></img>
               </div>
               {/*Container hiệu quả công việc */}
               <div className="flex flex-col justify-center gap-4 mt-4">
@@ -676,16 +797,29 @@ const Overview = ({ id }) => {
                   <div className="w-full">
                     <div className="flex justify-between items-center ">
                       <span className="text-sm font-medium text-gray-500/70">
-                        Đơn đã hủy
+                        Đơn đã hoàn thành
                       </span>
-                      <span className="text-sm font-medium ">240 đơn </span>
+                      <span className="text-sm font-medium ">
+                        {totalSuccessActivity + totalOtherActivity} đơn
+                      </span>
                     </div>
                     <div className="w-full rounded-full bg-gray-100 ">
                       <div
                         className="bg-green-500 p-0.5 rounded-full flex justify-center items-center leading-none text-xs font-medium progress-bar-success"
-                        style={{ width: "80%" }}
+                        style={{
+                          width: `${calculateNumberPercent(
+                            totalDataActivity,
+                            totalSuccessActivity + totalOtherActivity
+                          )}%`,
+                        }}
                       >
-                        <span className="text-white italic text-xs">80%</span>
+                        <span className="text-black italic text-xs">
+                          {calculateNumberPercent(
+                            totalDataActivity,
+                            totalSuccessActivity + totalOtherActivity
+                          )}
+                          %
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -702,14 +836,27 @@ const Overview = ({ id }) => {
                       <span className="text-sm font-medium text-gray-500/70">
                         Đơn đã hủy
                       </span>
-                      <span className="text-sm font-medium ">40 đơn </span>
+                      <span className="text-sm font-medium ">
+                        {totalCancelActivity} đơn
+                      </span>
                     </div>
                     <div className="w-full rounded-full bg-gray-100 ">
                       <div
                         className="bg-red-500 p-0.5 rounded-full flex justify-center items-center leading-none text-xs font-medium progress-bar-cancel"
-                        style={{ width: "20%" }}
+                        style={{
+                          width: `${calculateNumberPercent(
+                            totalDataActivity,
+                            totalCancelActivity
+                          )}%`,
+                        }}
                       >
-                        <span className="text-white italic text-xs">20%</span>
+                        <span className="text-black italic text-xs">
+                          {calculateNumberPercent(
+                            totalDataActivity,
+                            totalCancelActivity
+                          )}
+                          %
+                        </span>
                       </div>
                     </div>
                     {/* <div class="w3-light-grey">

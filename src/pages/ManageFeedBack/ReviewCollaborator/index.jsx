@@ -25,6 +25,7 @@ import LoadingPagination from "../../../components/paginationLoading";
 import CustomHeaderDatatable from "../../../components/tables/tableHeader";
 import CardStatistical from "../../../components/card/cardStatistical";
 import { IoStar } from "react-icons/io5";
+import { calculateNumberPercent } from "../../../utils/contant";
 
 const ReviewCollaborator = () => {
   const checkElement = useSelector(getElementState);
@@ -351,10 +352,7 @@ const ReviewCollaborator = () => {
       totalOneStar: totalOneStarTemp,
     });
   };
-  const calculateRatingPercent = (total, child) => {
-    let percent = (child / total) * 100;
-    return percent ? Math.round((percent + Number.EPSILON) * 100) / 100 : 0;
-  };
+
   const handleFilter = useCallback(
     (star) => {
       // setTotalRating({
@@ -397,7 +395,7 @@ const ReviewCollaborator = () => {
         <div className="flex flex-row gap-8">
           <CardStatistical
             totalStar={totalRating.totalFiveStar}
-            totalPercent={calculateRatingPercent(
+            totalPercent={calculateNumberPercent(
               totalItem,
               totalRating.totalFiveStar
             )}
@@ -406,7 +404,7 @@ const ReviewCollaborator = () => {
           />
           <CardStatistical
             totalStar={totalRating.totalFourStar}
-            totalPercent={calculateRatingPercent(
+            totalPercent={calculateNumberPercent(
               totalItem,
               totalRating.totalFourStar
             )}
@@ -415,7 +413,7 @@ const ReviewCollaborator = () => {
           />
           <CardStatistical
             totalStar={totalRating.totalThreeStar}
-            totalPercent={calculateRatingPercent(
+            totalPercent={calculateNumberPercent(
               totalItem,
               totalRating.totalThreeStar
             )}
@@ -424,7 +422,7 @@ const ReviewCollaborator = () => {
           />
           <CardStatistical
             totalStar={totalRating.totalTwoStar}
-            totalPercent={calculateRatingPercent(
+            totalPercent={calculateNumberPercent(
               totalItem,
               totalRating.totalTwoStar
             )}
@@ -433,7 +431,7 @@ const ReviewCollaborator = () => {
           />
           <CardStatistical
             totalStar={totalRating.totalOneStar}
-            totalPercent={calculateRatingPercent(
+            totalPercent={calculateNumberPercent(
               totalItem,
               totalRating.totalOneStar
             )}
@@ -457,7 +455,7 @@ const ReviewCollaborator = () => {
               <span className="w-1/2 flex flex-col items-center justify-center">
                 <span>Chiếm</span>
                 <span className="font-bold">
-                  {calculateRatingPercent(totalItem, totalRating.totalFiveStar)}{" "}
+                  {calculateNumberPercent(totalItem, totalRating.totalFiveStar)}{" "}
                   %
                 </span>
               </span>
@@ -480,7 +478,7 @@ const ReviewCollaborator = () => {
               <span className="w-1/2 flex flex-col items-center justify-center">
                 <span>Chiếm</span>
                 <span className="font-bold">
-                  {calculateRatingPercent(totalItem, totalRating.totalFourStar)}{" "}
+                  {calculateNumberPercent(totalItem, totalRating.totalFourStar)}{" "}
                   %
                 </span>
               </span>
@@ -503,7 +501,7 @@ const ReviewCollaborator = () => {
               <span className="w-1/2 flex flex-col items-center justify-center">
                 <span>Chiếm</span>
                 <span className="font-bold">
-                  {calculateRatingPercent(
+                  {calculateNumberPercent(
                     totalItem,
                     totalRating.totalThreeStar
                   )}{" "}
@@ -529,7 +527,7 @@ const ReviewCollaborator = () => {
               <span className="w-1/2 flex flex-col items-center justify-center">
                 <span>Chiếm</span>
                 <span className="font-bold">
-                  {calculateRatingPercent(totalItem, totalRating.totalTwoStar)}{" "}
+                  {calculateNumberPercent(totalItem, totalRating.totalTwoStar)}{" "}
                   %
                 </span>
               </span>
@@ -552,7 +550,7 @@ const ReviewCollaborator = () => {
               <span className="w-1/2 flex flex-col items-center justify-center">
                 <span>Chiếm</span>
                 <span className="font-bold">
-                  {calculateRatingPercent(totalItem, totalRating.totalOneStar)}{" "}
+                  {calculateNumberPercent(totalItem, totalRating.totalOneStar)}{" "}
                   %
                 </span>
               </span>

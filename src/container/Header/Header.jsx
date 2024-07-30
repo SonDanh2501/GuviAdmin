@@ -25,7 +25,8 @@ import {
   IoSunnyOutline,
   IoGlobeOutline,
   IoCaretForwardOutline,
-  IoPersonCircle ,
+  IoPersonCircle, 
+  IoPersonCircleOutline,
 } from "react-icons/io5";
 
 import logoVN from "../../assets/images/vn.svg";
@@ -174,7 +175,7 @@ const Header = ({ onClick, hide }) => {
             className="div-noti"
             onClick={() => setStatus(!status)}
           >
-            <IoNotifications size={"1.4rem"} />
+            <IoNotificationsOutline size={"1.4rem"} />
           </div>
         </Tooltip>
         {/* {status && (
@@ -219,7 +220,7 @@ const Header = ({ onClick, hide }) => {
             onClick={(e) => e.preventDefault()}
           >
             {/* <img style={{ height: "26px" }} src={defaultAvatar}></img> */}
-            <IoPersonCircle size="1.5rem" color="#9e68df" />
+            <IoPersonCircleOutline size="1.5rem" color="#9e68df" />
             <a className="text-name">{user?.full_name}</a>
             <CaretDownOutlined className="icon-down" />
           </span>
