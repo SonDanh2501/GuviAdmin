@@ -205,7 +205,7 @@ const Main = ({ hide }) => {
             trigger={null}
             collapsible
             collapsed={collapsed}
-            width={220}
+            width={210}
             // breakpoint="sm"
             collapsedWidth={70}
             style={{
@@ -215,7 +215,7 @@ const Main = ({ hide }) => {
               left: 0,
               top: 0,
               bottom: 0,
-              // borderRight: "2px solid #ececec",
+              borderRight: "1px solid #efefef",
               // boxShadow: "0 3px 4px rgba(57, 63, 72, 0.3)",
             }}
           >
@@ -241,7 +241,7 @@ const Main = ({ hide }) => {
         )}
         <Layout
           style={{
-            marginLeft: width > 900 ? (collapsed ? 70 : 220) : 0,
+            marginLeft: width > 900 ? (collapsed ? 70 : 210) : 0,
             transitionDuration: "100ms",
             height: "100vh",
           }}
