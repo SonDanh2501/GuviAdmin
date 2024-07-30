@@ -80,7 +80,11 @@ const ManageOrder = () => {
 
   const [saveToCookie, readCookie] = useCookies();
   const checkElement = useSelector(getElementState);
-  const [lengthPage, setLengthPage] = useState(20);
+  const [lengthPage, setLengthPage] = useState(
+    JSON.parse(localStorage.getItem("linePerPage")).value
+      ? JSON.parse(localStorage.getItem("linePerPage")).value
+      : 20
+  );
   const lang = useSelector(getLanguageState);
   const service = useSelector(getService);
   const province = useSelector(getProvince);
@@ -144,6 +148,8 @@ const ManageOrder = () => {
     []
   );
 
+
+  console.log("check >>>", totalOrder);
   const getJobList = () => {
     getOrderApi(
       valueSearch,

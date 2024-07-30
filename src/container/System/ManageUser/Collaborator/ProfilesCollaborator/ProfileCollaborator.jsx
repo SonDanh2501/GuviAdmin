@@ -111,13 +111,18 @@ const [isShowMore, setIsShowMore] = useState(false);
       return hidePhone;
     }
   }
-// console.log("CHECK DATA", data?.phone);
+// console.log("CHECK DATA", data);
   return (
-    <div className="div-container-profile-ctv">
-      <div className="div-tab-profile-collaborator">
-        <Tabs defaultActiveKey="1" activeKey={activeKey} onChange={onChangeTab}>
+    <div className="">
+      <div className="">
+        <Tabs
+          // type="card"
+          defaultActiveKey="1"
+          activeKey={activeKey}
+          onChange={onChangeTab}
+        >
           <Tabs.TabPane tab="Tổng quan" key="1">
-            <Overview id={id} />
+            <Overview id={id} star={data?.star} />
           </Tabs.TabPane>
           <Tabs.TabPane tab={`${i18n.t("info", { lng: lang })}`} key="2">
             <Information data={data} image={img} idCTV={id} setData={setData} />
@@ -156,85 +161,6 @@ const [isShowMore, setIsShowMore] = useState(false);
             <BankAccount id={data?._id} />
           </Tabs.TabPane>
         </Tabs>
-      </div>
-      {/*Card Profile*/}
-      <div className="div-card-profile">
-        <div className="headerCard ">
-          <Image
-            style={{
-              width: 100,
-              height: 100,
-              backgroundColor: "transparent",
-              borderRadius: 10,
-            }}
-            src={img ? img : data?.avatar ? data?.avatar : user}
-            // className="rounded-circle"
-          />
-          {activeKey === "2" && (
-            <>
-              <label for="choose-image">
-                <CameraOutlined /> {`${i18n.t("choose_image", { lng: lang })}`}
-              </label>
-              <input
-                name="image"
-                type="file"
-                placeholder=""
-                accept={".jpg,.png,.jpeg"}
-                id="choose-image"
-                onChange={onChangeThumbnail}
-              />
-            </>
-          )}
-        </div>
-        <div style={{ marginTop: "8px" }}>
-          <div className="text-body ">
-            {data?.password_default && (
-              <p style={{ margin: 0 }}>
-                {`${i18n.t("default_password", { lng: lang })}`}:{" "}
-                {data?.password_default}
-              </p>
-            )}
-            {/*Họ và tên*/}
-            <p className="text-name">{data?.full_name}</p>
-            {/*Số điện thoại*/}
-            <p className="text-phone">
-              SĐT:{" "}
-              {isShowPhone
-                ? `${data?.phone}`
-                : `${hidePhoneNumber(data?.phone)}`}
-              <i
-                style={{ cursor: "pointer" }}
-                onClick={() => setIsShowPhone(!isShowPhone)}
-                className={`${isShowPhone ? "uil-eye-slash" : "uil-eye"}`}
-              ></i>
-            </p>
-            {/*Mã giới thiệu*/}
-            {data?.invite_code && (
-              <p className="text-sub">
-                {`${i18n.t("code_invite", { lng: lang })}`}: {data?.invite_code}
-              </p>
-            )}
-            {/*Tuổi*/}
-            {(width > 900 || isShowMore) && (
-              <p className="text-sub-customer">
-                {!data?.birthday
-                  ? ""
-                  : `${i18n.t("age", { lng: lang })}` +
-                    ": " +
-                    moment().diff(data?.birthday, "years")}
-              </p>
-            )}
-            {/*Show More*/}
-            {width < 900 && (
-              <p
-                className="text-showmore"
-                onClick={() => setIsShowMore(!isShowMore)}
-              >
-                {isShowMore ? "Thu gọn" : "Xem thêm"}
-              </p>
-            )}
-          </div>
-        </div>
       </div>
       <FloatButton.BackTop />
     </div>

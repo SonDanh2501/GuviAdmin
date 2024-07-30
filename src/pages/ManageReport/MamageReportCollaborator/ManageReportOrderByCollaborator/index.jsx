@@ -18,7 +18,11 @@ const ManageReportOrderByCollaborator = () => {
   const [selectStatus, setSelectStatus] = useState(["done"]);
   const [detectLoading, setDetectLoading] = useState(null);
   // const [length, setLength] = useState(100)
-  const [lengthPage, setLengthPage] = useState(20);
+  const [lengthPage, setLengthPage] = useState(
+    JSON.parse(localStorage.getItem("linePerPage")).value
+      ? JSON.parse(localStorage.getItem("linePerPage")).value
+      : 20
+  );
 
   useEffect(() => {
     if (startDate !== "") {
@@ -283,7 +287,7 @@ const ManageReportOrderByCollaborator = () => {
     },
   ];
 
-  const changeStatusOrder = (value: string) => {
+  const changeStatusOrder = (value) => {
     setSelectStatus(value);
   };
 

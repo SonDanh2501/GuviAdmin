@@ -64,11 +64,26 @@ const DataTable = (props) => {
   const [item, setItem] = useState(data[0]);
   const [currentPage, setCurrentPage] = useState(1);
   const [ordinalNumber, setOrdinalNumber] = useState(1);
-  const [scrollYValue, setScrollYValue] = useState(0);
+  const [scrollYValue, setScrollYValue] = useState(
+    JSON.parse(localStorage.getItem("tableHeight"))?.y === 700
+      ? 1
+      : JSON.parse(localStorage.getItem("tableHeight"))?.y === 500
+      ? 2
+      : JSON.parse(localStorage.getItem("tableHeight"))?.y === 300
+      ? 3
+      : JSON.parse(localStorage.getItem("tableHeight"))?.y
+      ? JSON.parse(localStorage.getItem("tableHeight"))?.y
+      : 0
+  );
+
   const [scroll, setScroll] = useState([]);
   const [pageSizeOption, setPageSizeOption] = useState({
-    value: pageSize,
-    label: `${pageSize} dòng/trang`,
+    value: JSON.parse(localStorage.getItem("linePerPage")).value
+      ? JSON.parse(localStorage.getItem("linePerPage")).value
+      : pageSize,
+    label: JSON.parse(localStorage.getItem("linePerPage")).label
+      ? JSON.parse(localStorage.getItem("linePerPage")).label
+      : `${pageSize} dòng/trang`,
   });
   let pageSizeOptions = [
     { value: 10, label: "10 dòng/trang" },
@@ -86,9 +101,9 @@ const DataTable = (props) => {
   //     label: pageSizeOption.label,
   //   });
   // }
-  // console.log(pageSizeOptions);
+  //
   // setPageSizeOptions(tempOptions)
-  // console.log(tempOptions);
+  //
   // scroll.x = "100vw";
   // scroll.y = 240;
   let widthPage = 0;
@@ -97,7 +112,6 @@ const DataTable = (props) => {
   const [rowIndex, setRowIndex] = useState(0);
   const navigate = useNavigate();
   const onSelectChange = (newSelectedRowKeys) => {
-    console.log("selectedRowKeys changed: ", newSelectedRowKeys);
     setSelectedRowKeys(newSelectedRowKeys);
   };
   const rowSelection = {
@@ -128,7 +142,7 @@ const DataTable = (props) => {
     // item: phan tu trong mang data
     // dataIndex: ten field thay doi
     // value: gia tri moi da thay doi
-
+console.log("check ", item, dataIndex, value);
     if (props.onChangeValue) {
       const data = {
         item,
@@ -144,7 +158,7 @@ const DataTable = (props) => {
     const numStars = Math.floor(length / 2);
     const halfIndex = Math.floor((length - numStars) / 2);
 
-    const stars = '*'.repeat(numStars);
+    const stars = "*".repeat(numStars);
 
     return str.slice(0, halfIndex) + stars + str.slice(halfIndex + numStars);
   };
@@ -172,6 +186,7 @@ const DataTable = (props) => {
       },
       // Dữ liệu
       render: (data, record, index) => {
+        // console.log("check", data);
         // Link default
         let linkRedirect = `#`;
         switch (item.key) {
@@ -257,7 +272,11 @@ const DataTable = (props) => {
           case "customer-name-phone":
             return (
               <div className="div-customer-name-phone">
-                <Link to={`/profile-customer/${data?.id_customer?._id}`}>
+                <Link
+                  to={`/profile-customer/${
+                    data?.id_customer?._id ? data?.id_customer?._id : data?._id
+                  }`}
+                >
                   <p className={`text-name-customer ${item?.fontSize}`}>
                     {data?.id_customer?.full_name || data?.full_name}
                   </p>
@@ -277,8 +296,7 @@ const DataTable = (props) => {
                   }`}
                 >
                   <p className={`text-name-customer ${item?.fontSize}`}>
-                    {hideMiddleChars(data?.id_customer?.full_name) ||
-                      hideMiddleChars(data?.full_name)}
+                    {data?.id_customer?.full_name || data?.full_name}
                   </p>
                 </Link>
               </div>
@@ -1056,7 +1074,6 @@ const DataTable = (props) => {
             const getItemStatus = item.selectOptions.filter(
               (a) => a.value === data[item.dataIndex]
             );
-
             return (
               <div
                 className={`current-status-handle ${getItemStatus[0]?.className}`}
@@ -1523,7 +1540,7 @@ const DataTable = (props) => {
   // Nếu có actionColumn thì đẩy vào table
   if (actionColumn) headerTable.push(actionColumn);
   const calculateCurrentPage = (event) => {
-    // console.log("evet", event);
+    //
     setCurrentPage(event);
     if (props.onCurrentPageChange) {
       setIsLoading(true);
@@ -1535,17 +1552,31 @@ const DataTable = (props) => {
     if (props.onToggleModal) props.onToggleModal(true);
   };
   const handleSelectScrollY = (e) => {
+    let myObj_serialized;
     if (e === 0) {
-      setScroll([]);
+      myObj_serialized = JSON.stringify([]);
+      setScrollYValue(0);
     } else if (e === 1) {
-      setScroll({ y: 700 });
+      myObj_serialized = JSON.stringify({ y: 700 });
     } else if (e === 2) {
-      setScroll({ y: 500 });
+      myObj_serialized = JSON.stringify({ y: 500 });
     } else if (e === 3) {
-      setScroll({ y: 300 });
+      myObj_serialized = JSON.stringify({ y: 300 });
     }
+    localStorage.setItem("tableHeight", myObj_serialized);
     setScrollYValue(e);
   };
+
+  const handleSelectPagination = (e) => {
+    const tempPageSizeOption = { value: e, label: `${e} dòng/trang` };
+    let myObj_serialized = JSON.stringify(tempPageSizeOption);
+    localStorage.setItem("linePerPage", myObj_serialized);
+    setPageSizeOption(tempPageSizeOption);
+    if (setLengthPage) {
+      setLengthPage(e);
+    }
+  };
+  //
   const footerRender = () => {
     return (
       <div className="flex gap-4">
@@ -1606,15 +1637,15 @@ const DataTable = (props) => {
       </div>
     );
   };
-  const handleSelectPagination = (e) => {
-    const tempPageSizeOption = { value: e, label: `${e} dòng/trang` };
-    setPageSizeOption(tempPageSizeOption);
-    if (setLengthPage) setLengthPage(e);
-  };
+
+  scroll.y =
+    JSON.parse(localStorage.getItem("tableHeight")).y ?
+    JSON.parse(localStorage.getItem("tableHeight")).y : [];
   scroll.x = scrollX ? scrollX : widthPage;
+
   return (
     <React.Fragment>
-      <div className="mr-t">
+      <div className="mr-t ">
         <ConfigProvider
           theme={{
             components: {
@@ -1628,6 +1659,7 @@ const DataTable = (props) => {
           }}
         >
           <Table
+            // size="small"
             bordered
             // rowSelection={rowSelection}
             columns={headerTable}

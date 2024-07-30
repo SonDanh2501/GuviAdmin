@@ -37,7 +37,11 @@ const ManageCustomer = () => {
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
   const [isLoading, setIsLoading] = useState(false);
-  const [lengthPage, setLengthPage] = useState(20);
+  const [lengthPage, setLengthPage] = useState(
+    JSON.parse(localStorage.getItem("linePerPage")).value
+      ? JSON.parse(localStorage.getItem("linePerPage")).value
+      : 20
+  );
   const [data, setData] = useState([]);
   const [startPage, setStartPage] = useState(0);
   const [idGroup, setIdGroup] = useState("all");
