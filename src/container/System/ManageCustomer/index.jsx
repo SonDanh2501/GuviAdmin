@@ -1,4 +1,4 @@
-import { SearchOutlined } from "@ant-design/icons";
+import { PlusCircleOutlined, SearchOutlined } from "@ant-design/icons";
 import {
   Button,
   DatePicker,
@@ -32,8 +32,10 @@ import Tabs from "../../../components/tabs/tabs1";
 import { getGroupCustomerApi } from "../../../api/promotion";
 import ModalCustom from "../../../components/modalCustom";
 import { errorNotify } from "../../../helper/toast";
+import { useNavigate } from "react-router-dom";
 
 const ManageCustomer = () => {
+  const navigate = useNavigate();
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
   const [isLoading, setIsLoading] = useState(false);
@@ -126,7 +128,7 @@ const ManageCustomer = () => {
       title: "STT",
       dataIndex: "",
       key: "ordinal",
-      width: 60,
+      width: 50,
       fontSize: "text-size-M",
     },
     {
@@ -134,7 +136,7 @@ const ManageCustomer = () => {
       dataIndex: "id_view",
       key: "code_customer",
       fontSize: "text-size-L",
-      width: 110,
+      width: 100,
     },
     {
       i18n_title: "date_create",
@@ -161,7 +163,7 @@ const ManageCustomer = () => {
       dataIndex: "default_address.address",
       key: "address",
       fontSize: "text-size-L",
-      width: 220,
+      width: 200,
     },
 
     {
@@ -169,7 +171,7 @@ const ManageCustomer = () => {
       dataIndex: "total_order",
       key: "total_order",
       fontSize: "text-size-L",
-      width: 110,
+      width: 100,
     },
     {
       i18n_title: "nearest_order",
@@ -180,7 +182,7 @@ const ManageCustomer = () => {
     },
     {
       i18n_title: "total",
-      dataIndex: "total",
+      dataIndex: "total_price",
       key: "money",
       fontSize: "text-size-L",
       width: 100,
@@ -271,7 +273,6 @@ const ManageCustomer = () => {
               lng: lang,
             })}`}</h4>
           </div>
-
           <div className="btn-action-header">
             {checkElement?.includes("create_customer") && (
               <AddCustomer
@@ -284,6 +285,15 @@ const ManageCustomer = () => {
               />
             )}
           </div>
+          {/*Button tạo đơn*/}
+          <Button
+            className="bg-[#9e68df] text-white hover:text-black ml-2"
+            icon={<PlusCircleOutlined />}
+            onClick={() => navigate("/group-order/manage-order/create-order")}
+          >
+            {/* <i class="uil uil-plus-circle"></i> */}
+            {`${i18n.t("create_order", { lng: lang })}`}
+          </Button>
         </div>
 
         <div className="div-flex-row">

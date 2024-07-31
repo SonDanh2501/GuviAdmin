@@ -137,12 +137,11 @@ const DataTable = (props) => {
       </React.Fragment>
     );
   };
-
+  // console.log("check ", data);
   const onChangeValue = (item, dataIndex, value) => {
     // item: phan tu trong mang data
     // dataIndex: ten field thay doi
     // value: gia tri moi da thay doi
-console.log("check ", item, dataIndex, value);
     if (props.onChangeValue) {
       const data = {
         item,
@@ -186,7 +185,11 @@ console.log("check ", item, dataIndex, value);
       },
       // Dữ liệu
       render: (data, record, index) => {
-        // console.log("check", data);
+        // console.log("check", data, index);
+console.log("check item >>>", item);
+console.log("Check data >>>", data);
+console.log("Check data index >>>", item.dataIndex)
+// console.log("check data >>> ", data[item.dataIndex]);
         // Link default
         let linkRedirect = `#`;
         switch (item.key) {
@@ -277,9 +280,24 @@ console.log("check ", item, dataIndex, value);
                     data?.id_customer?._id ? data?.id_customer?._id : data?._id
                   }`}
                 >
-                  <p className={`text-name-customer ${item?.fontSize}`}>
-                    {data?.id_customer?.full_name || data?.full_name}
-                  </p>
+                  <div className="flex items-center gap-1">
+                    <p className={`text-name-customer ${item?.fontSize}`}>
+                      {data?.id_customer?.full_name || data?.full_name}
+                    </p>
+                    <Image
+                      preview={false}
+                      src={
+                        data?.rank_point < 100
+                          ? member
+                          : data?.rank_point >= 100 && data?.rank_point < 300
+                          ? silver
+                          : data?.rank_point >= 300 && data?.rank_point < 1500
+                          ? gold
+                          : platinum
+                      }
+                      style={{ width: 20, height: 20 }}
+                    />
+                  </div>
                 </Link>
                 <p className={`text-phone-customer ${item?.fontSize}`}>
                   {data?.id_customer?.phone || data?.phone}
@@ -769,11 +787,13 @@ console.log("check ", item, dataIndex, value);
             const viewAddress =
               indexSlice > 0 ? getData.slice(0, 75) + "..." : getData;
             return (
-              <p className={`text-address-order ${item?.fontSize}`}>
-                {getData !== ""
-                  ? viewAddress
-                  : `${i18n.t("not_available", { lng: lang })}`}
-              </p>
+              <Tooltip placement="top" title={getData}>
+                <p className={`text-address-order ${item?.fontSize}`}>
+                  {getData !== ""
+                    ? viewAddress
+                    : `${i18n.t("not_available", { lng: lang })}`}
+                </p>
+              </Tooltip>
             );
             break;
           case "phone_action_hide":
