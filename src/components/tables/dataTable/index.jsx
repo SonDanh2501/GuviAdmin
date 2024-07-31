@@ -31,7 +31,7 @@ import platinum from "../../../assets/images/iconPlatinum.svg";
 import silver from "../../../assets/images/iconSilver.svg";
 import { useNavigate } from "react-router-dom";
 import SelectDefault from "../../Select/SelectDefault";
-import { IoHelpCircleOutline } from "react-icons/io5";
+import { IoAlertCircleOutline, IoHelpCircleOutline } from "react-icons/io5";
 
 const DataTable = (props) => {
   const {
@@ -91,6 +91,16 @@ const DataTable = (props) => {
     { value: 50, label: "50 dòng/trang" },
     { value: 100, label: "100 dòng/trang" },
   ];
+  let locale = {
+    emptyText: (
+      <div className="flex flex-col items-center justify-center gap-2">
+        <IoAlertCircleOutline size={35} color="#d1d5db" />
+        <span className="text-gray-300 text-lg">
+          Không có dữ liệu để hiển thị
+        </span>
+      </div>
+    ),
+  };
   // let flag = false;
   // pageSizeOptions.map((el) => {
   //   if (el.value === pageSizeOption.value) flag = true;
@@ -186,10 +196,10 @@ const DataTable = (props) => {
       // Dữ liệu
       render: (data, record, index) => {
         // console.log("check", data, index);
-console.log("check item >>>", item);
-console.log("Check data >>>", data);
-console.log("Check data index >>>", item.dataIndex)
-// console.log("check data >>> ", data[item.dataIndex]);
+        // console.log("check item >>>", item);
+        // console.log("Check data >>>", data);
+        // console.log("Check data index >>>", item.dataIndex);
+        // console.log("check data >>> ", data[item.dataIndex]);
         // Link default
         let linkRedirect = `#`;
         switch (item.key) {
@@ -1658,9 +1668,9 @@ console.log("Check data index >>>", item.dataIndex)
     );
   };
 
-  scroll.y =
-    JSON.parse(localStorage.getItem("tableHeight")).y ?
-    JSON.parse(localStorage.getItem("tableHeight")).y : [];
+  scroll.y = JSON.parse(localStorage.getItem("tableHeight")).y
+    ? JSON.parse(localStorage.getItem("tableHeight")).y
+    : [];
   scroll.x = scrollX ? scrollX : widthPage;
 
   return (
@@ -1679,7 +1689,9 @@ console.log("Check data index >>>", item.dataIndex)
           }}
         >
           <Table
+            // loading={isLoading}
             // size="small"
+            locale={locale}
             bordered
             // rowSelection={rowSelection}
             columns={headerTable}
