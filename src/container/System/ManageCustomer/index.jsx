@@ -1,4 +1,4 @@
-import { SearchOutlined } from "@ant-design/icons";
+import { PlusCircleOutlined, SearchOutlined } from "@ant-design/icons";
 import {
   Button,
   DatePicker,
@@ -32,8 +32,10 @@ import Tabs from "../../../components/tabs/tabs1";
 import { getGroupCustomerApi } from "../../../api/promotion";
 import ModalCustom from "../../../components/modalCustom";
 import { errorNotify } from "../../../helper/toast";
+import { useNavigate } from "react-router-dom";
 
 const ManageCustomer = () => {
+  const navigate = useNavigate();
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
   const [isLoading, setIsLoading] = useState(false);
@@ -271,7 +273,6 @@ const ManageCustomer = () => {
               lng: lang,
             })}`}</h4>
           </div>
-
           <div className="btn-action-header">
             {checkElement?.includes("create_customer") && (
               <AddCustomer
@@ -284,6 +285,15 @@ const ManageCustomer = () => {
               />
             )}
           </div>
+          {/*Button tạo đơn*/}
+          <Button
+            className="bg-[#9e68df] text-white hover:text-black ml-2"
+            icon={<PlusCircleOutlined />}
+            onClick={() => navigate("/group-order/manage-order/create-order")}
+          >
+            {/* <i class="uil uil-plus-circle"></i> */}
+            {`${i18n.t("create_order", { lng: lang })}`}
+          </Button>
         </div>
 
         <div className="div-flex-row">
