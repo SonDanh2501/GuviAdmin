@@ -1857,8 +1857,8 @@ export default function Home() {
                     <Area
                       type="monotone"
                       dataKey="total_gross_income"
-                      stroke="#00CF3A"
-                      fill="#00CF3A"
+                      stroke="#7e53b2"
+                      fill="#b186e5"
                       name="GMV"
                     />
                   </AreaChart>

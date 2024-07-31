@@ -44,23 +44,23 @@ const RangeDatePicker = (props) => {
         return (num < 10 ? "0" : "") + num;
       };
   
-    return (
-      date?.getFullYear() +
-      "-" +
-      pad(date?.getMonth() + 1) +
-      "-" +
-      pad(date?.getDate()) +
-      "T" +
-      pad(date?.getHours()) +
-      ":" +
-      pad(date?.getMinutes()) +
-      ":" +
-      pad(date?.getSeconds()) +
-      dif +
-      pad(Math.floor(Math.abs(tzo) / 60)) +
-      ":" +
-      pad(Math.abs(tzo) % 60)
-    );
+    console.log("CHECK TZO", tzo);
+    return date.toISOString();
+    // date?.getFullYear() +
+    // "-" +
+    // pad(date?.getMonth() + 1) +
+    // "-" +
+    // pad(date?.getDate()) +
+    // "T" +
+    // pad(date?.getHours()) +
+    // ":" +
+    // pad(date?.getMinutes()) +
+    // ":" +
+    // pad(date?.getSeconds())
+    //  + dif +
+    // pad(Math.floor(Math.abs(tzo) / 60)) +
+    // ":" +
+    // pad(Math.abs(tzo) % 60)
   }
   
   const toEndOfDayIsoString = (date) => {
@@ -76,23 +76,22 @@ const RangeDatePicker = (props) => {
     date?.setSeconds(59);
     date?.setMilliseconds(999);
 
-    return (
-      date?.getFullYear() +
-      "-" +
-      pad(date?.getMonth() + 1) +
-      "-" +
-      pad(date?.getDate()) +
-      "T" +
-      pad(date?.getHours()) +
-      ":" +
-      pad(date?.getMinutes()) +
-      ":" +
-      pad(date?.getSeconds()) +
-      dif +
-      pad(Math.floor(Math.abs(tzo) / 60)) +
-      ":" +
-      pad(Math.abs(tzo) % 60)
-    );
+    return date.toISOString();
+    // date?.getFullYear() +
+    // "-" +
+    // pad(date?.getMonth() + 1) +
+    // "-" +
+    // pad(date?.getDate()) +
+    // "T" +
+    // pad(date?.getHours()) +
+    // ":" +
+    // pad(date?.getMinutes()) +
+    // ":" +
+    // pad(date?.getSeconds())
+    // + dif +
+    // pad(Math.floor(Math.abs(tzo) / 60)) +
+    // ":" +
+    // pad(Math.abs(tzo) % 60)
   };
   useEffect(() => {
     // var lenghtDaySelectedConvert;
@@ -125,8 +124,8 @@ const RangeDatePicker = (props) => {
           setEndCalendar(endDate);
           // setStartDate(startDate.toISOString());
           // setEndDate(endDate.toISOString());
-          setStartDate(toIsoString(startDate._d));
-          setEndDate(toEndOfDayIsoString(endDate._d));
+          // setStartDate(toIsoString(startDate._d));
+          // setEndDate(toEndOfDayIsoString(endDate._d));
           setTitle(`${i18n.t(item.title, { lng: lang })}`);
           setValueTab(item.value);
           calculateRangeDateLastTerm(
