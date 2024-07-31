@@ -128,7 +128,7 @@ const ManageCustomer = () => {
       title: "STT",
       dataIndex: "",
       key: "ordinal",
-      width: 60,
+      width: 50,
       fontSize: "text-size-M",
     },
     {
@@ -136,7 +136,7 @@ const ManageCustomer = () => {
       dataIndex: "id_view",
       key: "code_customer",
       fontSize: "text-size-L",
-      width: 110,
+      width: 100,
     },
     {
       i18n_title: "date_create",
@@ -163,7 +163,7 @@ const ManageCustomer = () => {
       dataIndex: "default_address.address",
       key: "address",
       fontSize: "text-size-L",
-      width: 220,
+      width: 200,
     },
 
     {
@@ -171,7 +171,7 @@ const ManageCustomer = () => {
       dataIndex: "total_order",
       key: "total_order",
       fontSize: "text-size-L",
-      width: 110,
+      width: 100,
     },
     {
       i18n_title: "nearest_order",
@@ -182,7 +182,7 @@ const ManageCustomer = () => {
     },
     {
       i18n_title: "total",
-      dataIndex: "total",
+      dataIndex: "total_price",
       key: "money",
       fontSize: "text-size-L",
       width: 100,
