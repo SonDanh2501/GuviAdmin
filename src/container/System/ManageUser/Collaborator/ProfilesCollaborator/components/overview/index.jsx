@@ -203,7 +203,7 @@ const Overview = ({ id, star }) => {
           {totalCountRating === 0 ? 0 : payload.value} đánh giá
         </text>
         <text x={cx} y={cy + 20} dy={8} textAnchor="middle" fill={fill}>
-          {`(${(percent * 100).toFixed(2)}%)`}
+          {`(${(totalCountRating === 0 ? 0 : percent * 100).toFixed(2)}%)`}
         </text>
         <Sector
           cx={cx}
@@ -521,8 +521,7 @@ const Overview = ({ id, star }) => {
               </div>
             </div>
           </div>
-          <div className="bg-white rounded-xl card-shadow">
-            {/* Header Label */}
+          {/* <div className="bg-white rounded-xl card-shadow">
             <div className="flex items-center gap-2 border-b-2 border-gray-200 py-2.5 px-3">
               <span className="font-bold text-sm">Tiêu chí đánh giá</span>
               <Tooltip placement="top" title="Tính năng chưa hoàn thiện">
@@ -537,11 +536,8 @@ const Overview = ({ id, star }) => {
                 // className={"bg-black"}
               >
                 <RadarChart outerRadius={120} data={dataAreaChart}>
-                  {/* Biểu đồ bên trong */}
                   <PolarGrid opacity={0.9} stroke="#e5e7eb" />
-                  {/* Các trường giá trị*/}
                   <PolarAngleAxis tick={{ fontSize: 12 }} dataKey="subject" />
-                  {/* Các mốc giá trị */}
                   <PolarRadiusAxis angle={0} domain={[0, 10]} />
                   <Radar
                     dot={<CustomDot />}
@@ -558,20 +554,17 @@ const Overview = ({ id, star }) => {
                 </RadarChart>
               </ResponsiveContainer>
             </div>
-          </div>
-          <div className="bg-white rounded-xl card-shadow">
-            {/* Header Label */}
+          </div> */}
+          {/* <div className="bg-white rounded-xl card-shadow">
             <div className="flex items-center gap-2 border-b-2 border-gray-200 py-2.5 px-3">
               <span className="font-bold text-sm">Khen thưởng, kỷ luật</span>
               <Tooltip placement="top" title="Tính năng chưa hoàn thiện">
                 <IoHelpCircleOutline size={16} color="#9ca3af" />
               </Tooltip>
             </div>
-            {/* Container Information*/}
             <div className="flex flex-col pt-2.5 pb-4 px-3 gap-6 mt-3">
               <div className="flex gap-4">
                 <div className="w-1/2 flex items-center p-2.5 border rounded-xl gap-2">
-                  {/*Icon*/}
                   <IoMedalOutline
                     className="bg-green-100 p-2.5 w-11 h-11 rounded-xl"
                     color="green"
@@ -586,7 +579,6 @@ const Overview = ({ id, star }) => {
                   </div>
                 </div>
                 <div className="w-1/2 flex items-center p-2.5 border rounded-xl gap-2">
-                  {/*Icon*/}
                   <IoThumbsDownOutline
                     className="bg-red-100 p-2.5 w-11 h-11 rounded-xl"
                     color="red"
@@ -640,7 +632,7 @@ const Overview = ({ id, star }) => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
           {/*Thực hiện bài kiểm tra*/}
           <div className="bg-white rounded-xl card-shadow">
             <div className="border-b-2 border-gray-200 py-2.5 px-3">
@@ -682,7 +674,7 @@ const Overview = ({ id, star }) => {
           </div>
         </div>
         <div class="w-1/3 flex flex-col gap-4">
-          <div className="bg-white rounded-xl card-shadow">
+          {/* <div className="bg-white rounded-xl card-shadow">
             <div className="flex items-center gap-2 border-b-2 border-gray-200 py-2.5 px-3">
               <span className="font-bold text-sm">Tài chính</span>
               <Tooltip placement="top" title="Tính năng chưa hoàn thiện">
@@ -699,7 +691,6 @@ const Overview = ({ id, star }) => {
                 </div>
                 <img className=" h-full" src={moneyLogo}></img>
               </div>
-              {/*Container các mốc tài chính */}
               <div className="flex flex-col justify-center gap-4 mt-4">
                 <div className="flex justify-between items-center border-b-[1px] border-gray-300/70 pb-3">
                   <div className="flex items-center gap-2">
@@ -763,7 +754,7 @@ const Overview = ({ id, star }) => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
           <div className="bg-white rounded-xl card-shadow">
             <div className="flex items-center gap-2 border-b-2 border-gray-200 py-2.5 px-3">
               <span className="font-bold text-sm">Hiệu quả công việc</span>
