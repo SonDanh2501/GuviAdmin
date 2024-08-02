@@ -124,8 +124,8 @@ const RangeDatePicker = (props) => {
           setEndCalendar(endDate);
           // setStartDate(startDate.toISOString());
           // setEndDate(endDate.toISOString());
-          // setStartDate(toIsoString(startDate._d));
-          // setEndDate(toEndOfDayIsoString(endDate._d));
+          setStartDate(toIsoString(startDate._d));
+          setEndDate(toEndOfDayIsoString(endDate._d));
           setTitle(`${i18n.t(item.title, { lng: lang })}`);
           setValueTab(item.value);
           calculateRangeDateLastTerm(
