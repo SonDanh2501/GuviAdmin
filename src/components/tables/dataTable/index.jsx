@@ -46,14 +46,23 @@ const DataTable = (props) => {
     setOpenModalCancel,
     scrollX,
     setLengthPage,
+    emptyText,
   } = props;
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
   const [saveToCookie] = useCookies();
   const { width } = useWindowDimensions();
   const timeWork = (data) => {
-    const start = moment(new Date(data.date_work)).format("HH:mm");
-    const timeEnd = moment(new Date(data.date_work))
+    const start = moment(
+      new Date(
+        data.date_work ? data.date_work : data.date_work_schedule[0].date
+      )
+    ).format("HH:mm");
+    const timeEnd = moment(
+      new Date(
+        data.date_work ? data.date_work : data.date_work_schedule[0].date
+      )
+    )
       .add(data?.total_estimate, "hours")
       .format("HH:mm");
     return start + " - " + timeEnd;
@@ -96,7 +105,7 @@ const DataTable = (props) => {
       <div className="flex flex-col items-center justify-center gap-2">
         <IoAlertCircleOutline size={35} color="#d1d5db" />
         <span className="text-gray-300 text-lg">
-          Không có dữ liệu để hiển thị
+          {emptyText ? emptyText : "Không có dữ liệu để hiển thị"}
         </span>
       </div>
     ),
@@ -147,7 +156,7 @@ const DataTable = (props) => {
       </React.Fragment>
     );
   };
-  // console.log("check ", data);
+
   const onChangeValue = (item, dataIndex, value) => {
     // item: phan tu trong mang data
     // dataIndex: ten field thay doi
@@ -195,11 +204,6 @@ const DataTable = (props) => {
       },
       // Dữ liệu
       render: (data, record, index) => {
-        // console.log("check", data, index);
-        // console.log("check item >>>", item);
-        // console.log("Check data >>>", data);
-        // console.log("Check data index >>>", item.dataIndex);
-        // console.log("check data >>> ", data[item.dataIndex]);
         // Link default
         let linkRedirect = `#`;
         switch (item.key) {
@@ -359,10 +363,22 @@ const DataTable = (props) => {
             return (
               <div className="div-date-work">
                 <p className={`text-worktime ${item?.fontSize}`}>
-                  {moment(new Date(data?.date_work)).format("DD/MM/YYYY")}
+                  {moment(
+                    new Date(
+                      data?.date_work
+                        ? data?.date_work
+                        : data?.date_work_schedule[0].date
+                    )
+                  ).format("DD/MM/YYYY")}
                 </p>
                 <p className={`text-worktime ${item?.fontSize}`}>
-                  {moment(new Date(data?.date_work))
+                  {moment(
+                    new Date(
+                      data?.date_work
+                        ? data?.date_work
+                        : data?.date_work_schedule[0].date
+                    )
+                  )
                     .locale(lang)
                     .format("dddd")}
                 </p>
@@ -382,17 +398,25 @@ const DataTable = (props) => {
                   ) : (
                     <>
                       <Link
-                        to={`/details-collaborator/${data?.id_collaborator?._id}`}
+                        to={`/details-collaborator/${
+                          data?.id_collaborator?._id
+                            ? data?.id_collaborator?._id
+                            : data?.id_collaborator
+                        }`}
                         className="div-name-star"
                       >
                         <div className="div-name">
                           <p className={`${item?.fontSize}`}>
-                            {data?.id_collaborator?.full_name}
+                            {data?.id_collaborator?.full_name
+                              ? data?.id_collaborator?.full_name
+                              : data?.name_collaborator}
                           </p>
                         </div>
                         <div className="div-phone-star">
                           <p className={`${item?.fontSize}`}>
-                            {data?.id_collaborator?.phone}
+                            {data?.id_collaborator?.phone
+                              ? data?.id_collaborator?.phone
+                              : data?.phone_collaborator}
                           </p>
                           {data?.id_collaborator?.star && (
                             <div className="div-star">

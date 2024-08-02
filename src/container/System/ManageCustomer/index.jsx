@@ -326,6 +326,7 @@ const ManageCustomer = () => {
             detectLoading={detectLoading}
             getItemRow={setItem}
             onCurrentPageChange={onChangePage}
+            // emptyText={"Không có khách hàng để "}
           />
         </div>
 
