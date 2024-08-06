@@ -502,13 +502,7 @@ const Overview = ({ id, star }) => {
             {/*Header thẻ tổng quan đánh giá*/}
             <div className="flex justify-between items-center gap-2 border-b-2 border-gray-200 py-2.5 px-3">
               <span className="font-bold text-sm">Tổng quan đánh giá</span>
-              <Select
-                defaultValue="1"
-                // style={{
-                //   width: 120,
-                // }}
-                options={dateOption}
-              />
+
             </div>
             {/*Nội dung thẻ tổng quan đánh giá*/}
             <div className="flex flex-col justify-center p-3.5">
@@ -596,13 +590,7 @@ const Overview = ({ id, star }) => {
                   <IoHelpCircleOutline size={16} color="#9ca3af" />
                 </Tooltip>
               </div>
-              <Select
-                defaultValue="1"
-                // style={{
-                //   width: 120,
-                // }}
-                options={dateOption}
-              />
+
             </div>
             {/* Nội dung thẻ tiêu chí đánh giá */}
             <div className="flex flex-col items-center justify-center p-3.5">
@@ -642,13 +630,7 @@ const Overview = ({ id, star }) => {
                   <IoHelpCircleOutline size={16} color="#9ca3af" />
                 </Tooltip>
               </div>
-              <Select
-                defaultValue="1"
-                // style={{
-                //   width: 120,
-                // }}
-                options={dateOption}
-              />
+
             </div>
             {/* Nội dung thẻ khen thưởng và vi phạm*/}
             <div className="flex flex-col p-3.5 gap-4">
@@ -781,13 +763,7 @@ const Overview = ({ id, star }) => {
                   <IoHelpCircleOutline size={16} color="#9ca3af" />
                 </Tooltip>
               </div>
-              <Select
-                defaultValue="1"
-                // style={{
-                //   width: 120,
-                // }}
-                options={dateOption}
-              />
+
             </div>
             {/* Nội dung thẻ tài chính */}
             <div className="p-3.5">
@@ -873,13 +849,7 @@ const Overview = ({ id, star }) => {
               <div className="flex items-center gap-1">
                 <span className="font-bold text-sm">Hiểu quả công việc</span>
               </div>
-              <Select
-                defaultValue="1"
-                // style={{
-                //   width: 120,
-                // }}
-                options={dateOption}
-              />
+
             </div>
             {/* Nội dung thẻ hiệu quả công việc */}
             <div className="p-3.5">
@@ -999,13 +969,7 @@ const Overview = ({ id, star }) => {
               <div className="flex items-center gap-1">
                 <span className="font-bold text-sm">Hoạt động gần đây</span>
               </div>
-              <Select
-                defaultValue="1"
-                // style={{
-                //   width: 120,
-                // }}
-                options={dateOption}
-              />
+
             </div>
             {/* Nội dung thẻ hoạt động gần đây */}
             {dataActivity.length > 0 ? (
