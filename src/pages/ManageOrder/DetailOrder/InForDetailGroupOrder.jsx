@@ -86,6 +86,7 @@ const InForDetailGroupOrder = (props) => {
   const onChangePage = (value) => {
     setStartPage(value);
   };
+  const [isPunishCollaborator, setIsPunishCollaborator] = useState(false);
   useEffect(() => {
     getListReasonCancel("vi")
       .then((res) => {
@@ -360,6 +361,7 @@ const InForDetailGroupOrder = (props) => {
     setIsOpenModalCancel(false);
   };
 
+  // console.log("check data >>> ", collaborator);
   const onChangeStatus = (_id, data) => {
     dispatch(loadingAction.loadingRequest(true));
     changeStatusOrderApi(_id, data)
@@ -388,15 +390,18 @@ const InForDetailGroupOrder = (props) => {
     setIsOpenModalChangeStatus(false);
   };
   const handleUnassignCollaborator = (id) => {
-    unAssignCollaborator(id)
+
+    unAssignCollaborator(id, { is_punish_collaborator: isPunishCollaborator })
       .then((res) => {
         // console.log("check response", res);
+        setCollaborator(); // Xóa data collaborator
       })
       .catch((err) => {
         // console.log("err", err);
       });
-  }
-  console.log("data ", collaborator);
+    setModalCancelCollaborator(false);
+  };
+  console.log("check isPunishCollaborator", isPunishCollaborator);
   return (
     <div className="info-detail-order_container ">
       <div className="info-detail-order_header">
@@ -619,7 +624,11 @@ const InForDetailGroupOrder = (props) => {
               sẽ đẩy cộng tác viên ra khỏi tất cả các ca làm
             </p>
             <div>
-              <Checkbox>Phạt CTV theo chính sách hủy ca</Checkbox>
+              <Checkbox
+                onChange={(e) => setIsPunishCollaborator(e.target.checked)}
+              >
+                Phạt CTV theo chính sách hủy ca
+              </Checkbox>
             </div>
           </>
         }

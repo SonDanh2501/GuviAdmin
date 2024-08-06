@@ -297,11 +297,11 @@ const DataTable = (props) => {
                     data?.id_customer?._id ? data?.id_customer?._id : data?._id
                   }`}
                 >
-                  <div className="flex items-center gap-1">
+                  <div className="flex items-center gap-2">
                     <p className={`text-name-customer ${item?.fontSize}`}>
                       {data?.id_customer?.full_name || data?.full_name}
                     </p>
-                    <Image
+                    {/* <Image
                       preview={false}
                       src={
                         data?.rank_point < 100
@@ -313,12 +313,37 @@ const DataTable = (props) => {
                           : platinum
                       }
                       style={{ width: 20, height: 20 }}
-                    />
+                    /> */}
                   </div>
                 </Link>
                 <p className={`text-phone-customer ${item?.fontSize}`}>
                   {data?.id_customer?.phone || data?.phone}
                 </p>
+                <div className="flex items-center gap-1">
+                  <span className="font-normal">Hạng:</span>
+                  {/* < 100 đồng, >= 100 and < 300 silver, >= 300 && < 1500 gold, platinum */}
+                  <span
+                    className={`${
+                      data?.rank_point < 100
+                        ? "bg-orange-100 text-orange-500 border-orange-500" // Copper
+                        : data?.rank_point >= 100 && data?.rank_point < 300
+                        ? "bg-stone-100 text-stone-500 border-stone-500" // Silver
+                        : data?.rank_point >= 300 && data?.rank_point < 1500
+                        ? "bg-yellow-100 text-amber-500 border-yellow-500" // Gold
+                        : "bg-cyan-100 text-sky-500 border-cyan-500" // Platium
+                    } px-1 py-[1px] border-[1px] rounded-lg`}
+                  >
+                    {
+                      data?.rank_point < 100
+                        ? "Đồng" // Copper
+                        : data?.rank_point >= 100 && data?.rank_point < 300
+                        ? "Bạc" // Silver
+                        : data?.rank_point >= 300 && data?.rank_point < 1500
+                        ? "Vàng" // Gold
+                        : "Bạch kim" // Platium
+                    }
+                  </span>
+                </div>
               </div>
             );
             break;
@@ -1579,6 +1604,7 @@ const DataTable = (props) => {
             );
             break;
           }
+          // case :
           default: {
             const dataView = data[item.dataIndex] || "";
             return <p className={`${item?.fontSize}`}> {dataView}</p>;
