@@ -177,7 +177,7 @@ const CollaboratorNotVerify = () => {
   const [data, setData] = useState([]);
   const [startPage, setStartPage] = useState(0);
   const [lengthPage, setLengthPage] = useState(
-    JSON.parse(localStorage.getItem("linePerPage")).value
+    JSON.parse(localStorage.getItem("linePerPage"))
       ? JSON.parse(localStorage.getItem("linePerPage")).value
       : 20
   );

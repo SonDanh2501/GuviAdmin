@@ -8,7 +8,7 @@
   height: 100%;
 
   .menu-icon {
-    color: #9e68df;
+    color: #475569;
     cursor: pointer;
     // background-color: #f5f6fb;
     padding: 0.6rem;
@@ -17,7 +17,8 @@
   }
 
   .menu-icon:hover {
-    background-color: #dcdde1;
+    color: #9e68df;
+    background-color: #f4f4f6;
   }
 
   .img-user {
@@ -33,7 +34,7 @@
     justify-content: space-between;
     width: auto;
     height: auto;
-    gap: 4px;
+    gap: 8px;
 
     .text-name {
       font-family: "Roboto";
@@ -53,7 +54,7 @@
 
     .div-noti {
       position: relative;
-      color: #9e68df;
+      color: #475569;
       // background-color: #F5F6FB;
       // border-radius: 100%;
       cursor: pointer;
@@ -77,8 +78,9 @@
     }
 
     .div-noti:hover {
-      background-color: #dcdde1;
-    }
+      color: #9e68df;
+      background-color: #f4f4f6;
+      }
 
     .div-language {
       display: flex;

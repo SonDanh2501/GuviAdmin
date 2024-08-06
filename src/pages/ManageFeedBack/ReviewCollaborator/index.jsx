@@ -42,7 +42,7 @@ const ReviewCollaborator = () => {
   });
 
   const [lengthPage, setLengthPage] = useState(
-    JSON.parse(localStorage.getItem("linePerPage")).value
+    JSON.parse(localStorage.getItem("linePerPage"))
       ? JSON.parse(localStorage.getItem("linePerPage")).value
       : 20
   );

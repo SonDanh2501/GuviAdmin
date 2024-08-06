@@ -87,11 +87,13 @@ const HistoryActivity = (props) => {
       </div>
     );
   };
+  // console.log("check data >>>", data[id_collaborator]);
   return (
     <div className="history-activity_container">
       {data.map((item, index) => {
+        console.log("check data >>> ", item);
+        console.log("check data lenght >>> ", item.id_customer?.length);
         const { title, body, date_create, id_admin_action, title_admin } = item;
-        console.log("item ", item);
         return (
           <div className="history-activity_item-container">
             {/* Line Horizontal*/}
@@ -143,7 +145,8 @@ const HistoryActivity = (props) => {
                     {width > 490 && (
                       <div className="container-wallet ">
                         {/*Wallet*/}
-                        {item?.id_collaborator && (
+                        {/* trường trả bị giống nhau, đang fix tạm rồi đợi backend sửa lại trường */}
+                        {item?.id_collaborator?._id && (
                           <>
                             {/*Tiền ví nạp sau giao dịch CTV*/}
                             <p style={{ width: "50%" }}>
@@ -201,7 +204,7 @@ const HistoryActivity = (props) => {
                             </p>
                           </>
                         )}
-                        {item?.id_customer && (
+                        {item?.id_customer?.length > 0 && (
                           <>
                             {/*Tiền ví nạp sau giao dịch CTV*/}
                             <p className="" style={{ width: "100%" }}>

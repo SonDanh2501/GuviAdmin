@@ -6,6 +6,7 @@ import { Table } from "antd";
 import moment from "moment";
 import { Link } from "react-router-dom";
 import useWindowDimensions from "../../../../../helper/useWindowDimensions";
+import DataTable from "../../../../../components/tables/dataTable";
 
 const UsedPromotion = ({ id }) => {
   const [data, setData] = useState([]);
@@ -20,7 +21,7 @@ const UsedPromotion = ({ id }) => {
       .catch((err) => {});
   }, [id]);
 
-  const columns = [
+  const columns1 = [
     {
       title: () => {
         return <p className="title-column">Ngày sử dụng</p>;
@@ -103,6 +104,44 @@ const UsedPromotion = ({ id }) => {
       },
     },
   ];
+  const columns = [
+    {
+      i18n_title: "Ngày sử dụng",
+      dataIndex: "date_create",
+      key: "date_create",
+      width: 100,
+      fontSize: "text-size-M",
+    },
+    {
+      i18n_title: "Mã khuyến mãi",
+      dataIndex: "text-discount",
+      key: "text-discount",
+      width: 100,
+      fontSize: "text-size-M",
+    },
+    {
+      i18n_title: "Giá giảm",
+      dataIndex: "discount_money",
+      key: "discount_money",
+      width: 100,
+      fontSize: "text-size-M",
+    },
+    {
+      i18n_title: "Mã đơn",
+      dataIndex: "",
+      key: "",
+      width: 100,
+      fontSize: "text-size-M",
+    },
+    {
+      i18n_title: "Trạng thái",
+      dataIndex: "",
+      key: "",
+      width: 100,
+      fontSize: "text-size-M",
+    },
+  ];
+  console.log("check data promotion >>>", data);
   return (
     <div>
       {total.length > 0 && (
@@ -141,10 +180,11 @@ const UsedPromotion = ({ id }) => {
       <div className="mt-5">
         <Table
           dataSource={data}
-          columns={columns}
+          columns={columns1}
           scroll={{ x: width < 900 ? 900 : 0 }}
           pagination={false}
         />
+        <DataTable columns={columns} data={data}></DataTable>
       </div>
     </div>
   );

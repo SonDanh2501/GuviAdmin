@@ -1,5 +1,5 @@
 import { HeartFilled } from "@ant-design/icons";
-import { Progress, Switch, Tooltip } from "antd";
+import { Progress, Select, Switch, Tooltip } from "antd";
 import moment from "moment";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -66,7 +66,10 @@ import { loadingAction } from "../../../../../../../redux/actions/loading";
 import testLogo from "../../../../../../../assets/images/testLogo.svg";
 import moneyLogo from "../../../../../../../assets/images/moneyLogo.svg";
 import jobLogo from "../../../../../../../assets/images/jobLogo.svg";
-import { calculateNumberPercent, renderStarFromNumber } from "../../../../../../../utils/contant";
+import {
+  calculateNumberPercent,
+  renderStarFromNumber,
+} from "../../../../../../../utils/contant";
 // import RangeDatePicker from "../../../../../../../components/datePicker/RangeDatePicker";
 
 const Overview = ({ id, star }) => {
@@ -387,6 +390,12 @@ const Overview = ({ id, star }) => {
       });
   }, []);
 
+  const capitalizeWords = (str) => {
+    return str
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  };
   const getStar = (totalRating, dataReview) => {
     if (totalRating.length > 0 && dataReview.totalItem > 0) {
       let fiveStar = 0;
@@ -422,7 +431,58 @@ const Overview = ({ id, star }) => {
       setTotalCountRating(fiveStar + fourStar + threeStar + twoStar + oneStar);
     }
   };
-  console.log("dataDetail", dataDetail);
+  const MAX_LINE_WIDTH = 120;
+  // Hàm tính toán độ dài của văn bản và xuống dòng khi cần thiết
+  const getMultiLineText = (text, maxLineWidth) => {
+    const words = text.split(" ");
+    const lines = [];
+    let currentLine = words[0];
+
+    words.slice(1).forEach((word) => {
+      const width = (currentLine + " " + word).length * 7; // Tạm tính chiều rộng bằng cách nhân số ký tự
+      if (width <= maxLineWidth) {
+        currentLine += " " + word;
+      } else {
+        lines.push(currentLine);
+        currentLine = word;
+      }
+    });
+
+    lines.push(currentLine);
+    return lines;
+  };
+
+  const renderCustomTick = (props) => {
+    const { payload, x, y, textAnchor } = props;
+    const lines = getMultiLineText(payload.value, MAX_LINE_WIDTH);
+
+    return (
+      <text x={x} y={y} textAnchor={textAnchor} fill="#666">
+        {lines.map((line, index) => (
+          <tspan x={x} dy={index === 0 ? 0 : 12} key={index}>
+            {line}
+          </tspan>
+        ))}
+      </text>
+    );
+  };
+  const dateOption = [
+    {
+      value: "1",
+      label: "Từ trước đến nay",
+    },
+    {
+      value: "2",
+      label: "Tháng nay",
+      // disabled: true,
+    },
+    {
+      value: "3",
+      label: "Năm nay",
+    },
+  ];
+
+  // console.log("dataDetail", dataDetail);
   return (
     <div className="pb-4">
       <div className="flex w-fit bg-white rounded-lg">
@@ -435,107 +495,127 @@ const Overview = ({ id, star }) => {
         /> */}
       </div>
       <div class="flex md:flex-row flex-col-reverse w-full gap-4 mt-3">
+        {/* Container trái */}
         <div class="w-full md:w-1/3 md:flex flex-col gap-4">
+          {/* Thẻ tổng quan đánh giá */}
           <div className="bg-white rounded-xl card-shadow">
-            <div className="flex items-center gap-2 border-b-2 border-gray-200 py-2.5 px-3">
-              <span className="font-bold text-sm">Thống kê đánh giá</span>
+            {/*Header thẻ tổng quan đánh giá*/}
+            <div className="flex justify-between items-center gap-2 border-b-2 border-gray-200 py-2.5 px-3">
+              <span className="font-bold text-sm">Tổng quan đánh giá</span>
+              <Select
+                defaultValue="1"
+                // style={{
+                //   width: 120,
+                // }}
+                options={dateOption}
+              />
             </div>
-            <div className="py-2.5 px-3">
-              {/*Container hiệu quả công việc */}
-              <div className="flex flex-col justify-center mt-4">
-                <div className="flex flex-col items-center justify-center pb-2">
-                  <div className="flex py-2.5 px-4 rounded-full w-fit items-center justify-center bg-indigo-50 gap-1">
-                    {renderStarFromNumber(star).map((el, index) => (
-                      <span>{el}</span>
-                    ))}
-                    <span className="text-xs font-normal pt-1 ml-2">
-                      {star} trên 5
-                    </span>
-                  </div>
-                  <div className="text-xs text-center mt-1">
-                    <span>{dataReview.totalItem} khách hàng đã đánh giá</span>
-                  </div>
+            {/*Nội dung thẻ tổng quan đánh giá*/}
+            <div className="flex flex-col justify-center p-3.5">
+              <div className="flex flex-col items-center justify-center pb-2">
+                <div className="flex py-2.5 px-4 rounded-full w-fit items-center justify-center bg-indigo-50 gap-1">
+                  {renderStarFromNumber(star).map((el, index) => (
+                    <span>{el}</span>
+                  ))}
+                  <span className="text-base font-medium pt-1 ml-2">
+                    {star ? star?.toFixed(1) : 5}
+                  </span>
                 </div>
-                {/* const COLORS = ["#008000", "#2fc22f", "#FFD700", "#FFA500", "#FF0000"]; */}
-
-                <div className="flex flex-col items-center justify-center gap-2">
-                  <ResponsiveContainer width="100%" height={250}>
-                    <PieChart>
-                      <Pie
-                        activeIndex={activeIndex}
-                        activeShape={renderActiveShape}
-                        data={totalRating}
-                        dataKey="value"
-                        nameKey="name"
-                        cx="50%"
-                        cy="50%"
-                        innerRadius={80}
-                        outerRadius={110}
-                        paddingAngle={7}
-                        fill="#8884d8"
-                        // label={renderCustomizedLabel}
-                        // labelLine={false}
-                        onMouseEnter={onPieEnter}
-                      >
-                        {totalRating.map((entry, index) => (
-                          <Cell
-                            key={`cell-${index}`}
-                            fill={COLORS[index % COLORS.length]}
-                          />
-                        ))}
-                      </Pie>
-                    </PieChart>
-                  </ResponsiveContainer>
-                  <div className="flex flex-col items-center gap-2">
-                    <div className="flex items-center justify-center gap-2">
-                      <div className="flex gap-1 items-center">
-                        <div className="w-4 h-4 bg-[#008000]"></div>
-                        <span className="text-sm text-color-[#008000]">
-                          5 sao
-                        </span>
-                      </div>
-                      <div className="flex gap-1 items-center">
-                        <div className="w-4 h-4 bg-[#2fc22f]"></div>
-                        <span className="text-sm">4 sao</span>
-                      </div>
-                      <div className="flex gap-1 items-center">
-                        <div className="w-4 h-4 bg-[#FFD700]"></div>
-                        <span className="text-sm">3 sao</span>
-                      </div>
+                <div className="flex items-center gap-1">
+                  <span className="italic font-medium">
+                    {dataReview.totalItem}
+                  </span>
+                  <span className="italic font-normal">
+                    khách hàng đã đánh giá
+                  </span>
+                </div>
+              </div>
+              {/* const COLORS = ["#008000", "#2fc22f", "#FFD700", "#FFA500", "#FF0000"]; */}
+              <div className="flex flex-col items-center justify-center gap-2">
+                <ResponsiveContainer width="100%" height={250}>
+                  <PieChart>
+                    <Pie
+                      activeIndex={activeIndex}
+                      activeShape={renderActiveShape}
+                      data={totalRating}
+                      dataKey="value"
+                      nameKey="name"
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={80}
+                      outerRadius={110}
+                      paddingAngle={7}
+                      fill="#8884d8"
+                      // label={renderCustomizedLabel}
+                      // labelLine={false}
+                      onMouseEnter={onPieEnter}
+                    >
+                      {totalRating.map((entry, index) => (
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={COLORS[index % COLORS.length]}
+                        />
+                      ))}
+                    </Pie>
+                  </PieChart>
+                </ResponsiveContainer>
+                <div className="flex flex-col items-center gap-2">
+                  <div className="flex items-center justify-center gap-3">
+                    <div className="flex gap-1 items-center">
+                      <div className="w-3 h-3 rounded-full bg-[#008000]"></div>
+                      <span className="text-sm">5 sao</span>
                     </div>
-                    <div className="flex items-center justify-center gap-2">
-                      <div className="flex gap-1 items-center">
-                        <div className="w-4 h-4 bg-[#FFA500]"></div>
-                        <span className="text-sm">2 sao</span>
-                      </div>
-                      <div className="flex gap-1 items-center">
-                        <div className="w-4 h-4 bg-[#FF0000]"></div>
-                        <span className="text-sm">1 sao</span>
-                      </div>
+                    <div className="flex gap-1 items-center">
+                      <div className="w-3 h-3 rounded-full bg-[#2fc22f]"></div>
+                      <span className="text-sm">4 sao</span>
+                    </div>
+                    <div className="flex gap-1 items-center">
+                      <div className="w-3 h-3 rounded-full bg-[#FFD700]"></div>
+                      <span className="text-sm">3 sao</span>
+                    </div>
+                    <div className="flex gap-1 items-center">
+                      <div className="w-3 h-3 rounded-full bg-[#FFA500]"></div>
+                      <span className="text-sm">2 sao</span>
+                    </div>
+                    <div className="flex gap-1 items-center">
+                      <div className="w-3 h-3 rounded-full bg-[#FF0000]"></div>
+                      <span className="text-sm">1 sao</span>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          {/* <div className="bg-white rounded-xl card-shadow">
-            <div className="flex items-center gap-2 border-b-2 border-gray-200 py-2.5 px-3">
-              <span className="font-bold text-sm">Tiêu chí đánh giá</span>
-              <Tooltip placement="top" title="Tính năng chưa hoàn thiện">
-                <IoHelpCircleOutline size={16} color="#9ca3af" />
-              </Tooltip>
+          {/* Thẻ tiêu chí đánh giá */}
+          <div className="bg-white rounded-xl card-shadow">
+            {/* Header thẻ tổng quan đánh giá */}
+            <div className="flex justify-between items-center gap-2 border-b-2 border-gray-200 py-2.5 px-3">
+              <div className="flex items-center gap-1">
+                <span className="font-bold text-sm">Tiêu chí đánh giá</span>
+                <Tooltip placement="top" title="Tính năng chưa hoàn thiện">
+                  <IoHelpCircleOutline size={16} color="#9ca3af" />
+                </Tooltip>
+              </div>
+              <Select
+                defaultValue="1"
+                // style={{
+                //   width: 120,
+                // }}
+                options={dateOption}
+              />
             </div>
-            <div className="flex py-3 justify-center items-center text-center">
+            {/* Nội dung thẻ tiêu chí đánh giá */}
+            <div className="flex flex-col items-center justify-center p-3.5">
               <ResponsiveContainer
                 height={300}
-                width={"95%"}
+                width={"100%"}
                 // min-width={350}
                 // className={"bg-black"}
               >
-                <RadarChart outerRadius={120} data={dataAreaChart}>
-                  <PolarGrid opacity={0.9} stroke="#e5e7eb" />
-                  <PolarAngleAxis tick={{ fontSize: 12 }} dataKey="subject" />
-                  <PolarRadiusAxis angle={0} domain={[0, 10]} />
+                <RadarChart outerRadius={110} data={dataAreaChart}>
+                  <PolarGrid opacity={0.8} stroke="#e5e7eb" />
+                  <PolarAngleAxis tick={renderCustomTick} dataKey="subject" />
+                  <PolarRadiusAxis angle={45} domain={[0, 10]} />
                   <Radar
                     dot={<CustomDot />}
                     label={false}
@@ -551,39 +631,55 @@ const Overview = ({ id, star }) => {
                 </RadarChart>
               </ResponsiveContainer>
             </div>
-          </div> */}
-          {/* <div className="bg-white rounded-xl card-shadow">
-            <div className="flex items-center gap-2 border-b-2 border-gray-200 py-2.5 px-3">
-              <span className="font-bold text-sm">Khen thưởng, kỷ luật</span>
-              <Tooltip placement="top" title="Tính năng chưa hoàn thiện">
-                <IoHelpCircleOutline size={16} color="#9ca3af" />
-              </Tooltip>
+          </div>
+          {/* Thẻ khen thưởng, vi phạm */}
+          <div className="bg-white rounded-xl card-shadow">
+            {/* Header thẻ khen thưởng và vi phạm */}
+            <div className="flex items-center justify-between  gap-2 border-b-2 border-gray-200 py-2.5 px-3">
+              <div className="flex items-center gap-1">
+                <span className="font-bold text-sm">Khen thưởng, vi phạm</span>
+                <Tooltip placement="top" title="Tính năng chưa hoàn thiện">
+                  <IoHelpCircleOutline size={16} color="#9ca3af" />
+                </Tooltip>
+              </div>
+              <Select
+                defaultValue="1"
+                // style={{
+                //   width: 120,
+                // }}
+                options={dateOption}
+              />
             </div>
-            <div className="flex flex-col pt-2.5 pb-4 px-3 gap-6 mt-3">
+            {/* Nội dung thẻ khen thưởng và vi phạm*/}
+            <div className="flex flex-col p-3.5 gap-4">
               <div className="flex gap-4">
-                <div className="w-1/2 flex items-center p-2.5 border rounded-xl gap-2">
+                <div className="w-1/2 flex items-center p-2.5 border-[2px] border-gray-300 rounded-xl gap-2">
                   <IoMedalOutline
                     className="bg-green-100 p-2.5 w-11 h-11 rounded-xl"
                     color="green"
                   />
                   <div className="flex flex-col">
-                    <span className="text-sm text-gray-700/50">
+                    <span className="text-sm font-normal text-gray-500/70">
                       Khen thưởng
                     </span>
-                    <span className="font-bold text-lg">
-                      15 <span className="uppercase text-xs">lần</span>
+                    <span className="font-medium text-lg">
+                      15{" "}
+                      <span className="uppercase text-xs font-normal">lần</span>
                     </span>
                   </div>
                 </div>
-                <div className="w-1/2 flex items-center p-2.5 border rounded-xl gap-2">
+                <div className="w-1/2 flex items-center p-2.5 border-[2px] border-gray-300  rounded-xl gap-2">
                   <IoThumbsDownOutline
                     className="bg-red-100 p-2.5 w-11 h-11 rounded-xl"
                     color="red"
                   />
                   <div className="flex flex-col">
-                    <span className="text-sm text-gray-700/50">Kỷ luật</span>
-                    <span className="font-bold text-lg">
-                      4 <span className="uppercase text-xs">lần</span>
+                    <span className="text-sm font-normal text-gray-500/70">
+                      Kỷ luật
+                    </span>
+                    <span className="font-medium text-lg">
+                      4{" "}
+                      <span className="uppercase text-xs font-normal">lần</span>
                     </span>
                   </div>
                 </div>
@@ -594,12 +690,12 @@ const Overview = ({ id, star }) => {
                     className="bg-green-100 p-2.5 w-11 h-11 rounded-xl"
                     color="green"
                   />
-                  <div className="flex flex-col">
-                    <span className="font-bold text-sm">
+                  <div className="flex flex-col gap-0.5">
+                    <span className="font-medium text-sm">
                       Quyết định khen thưởng
                     </span>
-                    <span className="text-xs text-gray-700/50">
-                      Quyết định: 10 thg 02, 2023
+                    <span className="text-sm font-normal text-gray-500/70">
+                      10 thg 02, 2023
                     </span>
                   </div>
                 </div>
@@ -615,10 +711,10 @@ const Overview = ({ id, star }) => {
                     className="bg-red-100 p-2.5 w-11 h-11 rounded-xl"
                     color="red"
                   />
-                  <div className="flex flex-col">
-                    <span className="font-bold text-sm">Quyết định phạt</span>
-                    <span className="text-xs text-gray-700/50">
-                      Quyết định: 10 thg 02, 2023
+                  <div className="flex flex-col gap-0.5">
+                    <span className="font-medium text-sm">Quyết định phạt</span>
+                    <span className="text-sm font-normal text-gray-500/70">
+                      10 thg 02, 2023
                     </span>
                   </div>
                 </div>
@@ -629,18 +725,21 @@ const Overview = ({ id, star }) => {
                 </div>
               </div>
             </div>
-          </div> */}
-          {/*Thực hiện bài kiểm tra*/}
+          </div>
+          {/* Thẻ thực hiện bài kiểm tra */}
           <div className="bg-white rounded-xl card-shadow">
+            {/* Header thẻ thực hiện bài kiểm tra */}
             <div className="border-b-2 border-gray-200 py-2.5 px-3">
               <span className="font-bold text-sm">Kiểm tra</span>
             </div>
-            <div className="py-2.5 px-3 mt-3">
+            {/* Nội dung thẻ thực hiện bài kiểm tra */}
+            <div className="p-3.5">
               <div className="w-full h-24 bg-violet-100 rounded-xl flex justify-between items-center">
-                <span className="px-4 text-lg font-bold">Các bài kiểm tra</span>
+                <span className="px-4 text-lg font-medium">
+                  Các bài kiểm tra
+                </span>
                 <img className=" h-full" src={testLogo}></img>
               </div>
-              {/*Container các bài kiểm tra */}
               {dataLesson.map((lesson, index) => (
                 <div
                   className={`flex justify-between items-center py-4 ${
@@ -649,10 +748,10 @@ const Overview = ({ id, star }) => {
                   }`}
                 >
                   <div className="flex flex-col gap-1">
-                    <span className="text-sm font-bold">
+                    <span className="text-sm font-medium">
                       {lesson?.title?.vi}
                     </span>
-                    <span className="text-sm text-gray-500/50">
+                    <span className="text-sm font-normal text-gray-500/70">
                       {lesson?.description?.vi}
                     </span>
                   </div>
@@ -662,7 +761,7 @@ const Overview = ({ id, star }) => {
                     </div>
                   ) : (
                     <div className="bg-gray-50 py-1 px-3 text-center border-[1px] border-gray-500 rounded-full">
-                      <span className="text-gray-500/50">Chưa hoàn thành</span>
+                      <span className="text-gray-500/70">Chưa hoàn thành</span>
                     </div>
                   )}
                 </div>
@@ -670,21 +769,36 @@ const Overview = ({ id, star }) => {
             </div>
           </div>
         </div>
+        {/* Middle container */}
         <div class="w-full md:w-1/3 flex flex-col gap-4">
-          {/* <div className="bg-white rounded-xl card-shadow">
-            <div className="flex items-center gap-2 border-b-2 border-gray-200 py-2.5 px-3">
-              <span className="font-bold text-sm">Tài chính</span>
-              <Tooltip placement="top" title="Tính năng chưa hoàn thiện">
-                <IoHelpCircleOutline size={16} color="#9ca3af" />
-              </Tooltip>
+          {/* Thẻ tài chính */}
+          <div className="bg-white rounded-xl card-shadow">
+            {/* Header thẻ tài chính */}
+            <div className="flex justify-between items-center gap-2 border-b-2 border-gray-200 py-2.5 px-3">
+              <div className="flex items-center gap-1">
+                <span className="font-bold text-sm">Tài chính</span>
+                <Tooltip placement="top" title="Tính năng chưa hoàn thiện">
+                  <IoHelpCircleOutline size={16} color="#9ca3af" />
+                </Tooltip>
+              </div>
+              <Select
+                defaultValue="1"
+                // style={{
+                //   width: 120,
+                // }}
+                options={dateOption}
+              />
             </div>
-            <div className="py-2.5 px-3 mt-3">
+            {/* Nội dung thẻ tài chính */}
+            <div className="p-3.5">
               <div className="w-full h-24 bg-amber-100 rounded-xl flex justify-between items-center">
                 <div className="flex flex-col">
-                  <span className="px-4 text-base font-bold text-gray-500/70">
+                  <span className="px-4 text-base font-medium text-gray-500/70">
                     Tổng tiền thu được
                   </span>
-                  <span className="px-4 text-2xl font-bold">100.000.000đ</span>
+                  <span className="px-4 text-2xl font-medium">
+                    100.000.000đ
+                  </span>
                 </div>
                 <img className=" h-full" src={moneyLogo}></img>
               </div>
@@ -698,13 +812,13 @@ const Overview = ({ id, star }) => {
                       />
                     </div>
                     <div>
-                      <span className="text-sm font-medium text-gray-500/70">
+                      <span className="text-sm font-normal text-gray-500/70">
                         Thu nhập/tháng
                       </span>
                     </div>
                   </div>
                   <div>
-                    <span className="text-sm bg-green-100 p-2 rounded-md">
+                    <span className="text-sm font-medium bg-green-100 p-2 rounded-md">
                       10.000.000đ
                     </span>
                   </div>
@@ -718,13 +832,13 @@ const Overview = ({ id, star }) => {
                       />
                     </div>
                     <div>
-                      <span className="text-sm font-medium text-gray-500/70">
+                      <span className="text-sm font-normal text-gray-500/70">
                         Thu nhập/năm
                       </span>
                     </div>
                   </div>
                   <div>
-                    <span className="text-sm bg-yellow-100 p-2 rounded-md">
+                    <span className="text-sm font-medium bg-yellow-100 p-2 rounded-md">
                       100.000.000đ
                     </span>
                   </div>
@@ -738,28 +852,40 @@ const Overview = ({ id, star }) => {
                       />
                     </div>
                     <div>
-                      <span className="text-sm font-medium text-gray-500/70">
+                      <span className="text-sm font-normal text-gray-500/70">
                         Tổng doanh thu
                       </span>
                     </div>
                   </div>
                   <div>
-                    <span className="text-sm bg-blue-100 p-2 rounded-md">
+                    <span className="text-sm font-medium bg-blue-100 p-2 rounded-md">
                       300.000.000đ
                     </span>
                   </div>
                 </div>
               </div>
             </div>
-          </div> */}
+          </div>
+          {/* Thẻ hiệu quả công việc */}
           <div className="bg-white rounded-xl card-shadow">
-            <div className="flex items-center gap-2 border-b-2 border-gray-200 py-2.5 px-3">
-              <span className="font-bold text-sm">Hiệu quả công việc</span>
+            {/* Header thẻ hiệu quả công việc */}
+            <div className="flex justify-between items-center gap-2 border-b-2 border-gray-200 py-2.5 px-3">
+              <div className="flex items-center gap-1">
+                <span className="font-bold text-sm">Hiểu quả công việc</span>
+              </div>
+              <Select
+                defaultValue="1"
+                // style={{
+                //   width: 120,
+                // }}
+                options={dateOption}
+              />
             </div>
-            <div className="py-2.5 px-3 mt-3">
+            {/* Nội dung thẻ hiệu quả công việc */}
+            <div className="p-3.5">
               <div className="w-full h-24 bg-blue-100 rounded-xl flex justify-between items-center">
                 <div className="flex flex-col">
-                  <span className="px-4 text-base font-bold text-gray-500">
+                  <span className="px-4 text-base font-medium text-gray-500/70">
                     Tổng số công việc
                   </span>
                   <div className="flex px-4 gap-1 items-center">
@@ -768,7 +894,7 @@ const Overview = ({ id, star }) => {
                         totalSuccessActivity +
                         totalOtherActivity}
                     </span>
-                    <span className="text-base font-bold uppercase">việc</span>
+                    <span className="text-sm font-bold uppercase">việc</span>
                   </div>
                 </div>
                 <img className="h-full" src={jobLogo}></img>
@@ -783,36 +909,43 @@ const Overview = ({ id, star }) => {
                     />
                   </div>
                   <div className="w-full">
-                    <div className="flex justify-between items-center ">
-                      <span className="text-sm font-medium text-gray-500/70">
+                    <div className="flex justify-between items-center mb-0.5">
+                      <span className="text-sm font-normal text-gray-500/70">
                         Đơn đã hoàn thành
                       </span>
-                      <span className="text-sm font-medium ">
+                      <span className="text-sm font-medium">
                         {totalSuccessActivity + totalOtherActivity} đơn
                       </span>
                     </div>
-                    <div className="w-full rounded-full bg-gray-100 ">
+                    <div className="w-full relative rounded-full bg-gray-100 text-center">
+                      {/* <span className="text-black italic text-xs">
+                        {calculateNumberPercent(
+                          totalDataActivity,
+                          totalSuccessActivity + totalOtherActivity
+                        )}
+                        %
+                      </span> */}
+                      <span className="text-black italic text-xs absolute mt-0.5">
+                        {calculateNumberPercent(
+                          totalDataActivity,
+                          totalSuccessActivity + totalOtherActivity
+                        )}
+                        %
+                      </span>
                       <div
-                        className="bg-green-500 p-0.5 rounded-full flex justify-center items-center leading-none text-xs font-medium progress-bar-success"
+                        className="bg-green-500 h-5 rounded-full flex justify-center items-center leading-none text-xs font-normal progress-bar-success"
                         style={{
                           width: `${calculateNumberPercent(
                             totalDataActivity,
                             totalSuccessActivity + totalOtherActivity
                           )}%`,
                         }}
-                      >
-                        <span className="text-black italic text-xs">
-                          {calculateNumberPercent(
-                            totalDataActivity,
-                            totalSuccessActivity + totalOtherActivity
-                          )}
-                          %
-                        </span>
-                      </div>
+                        // style={{ width: "60%" }}
+                      ></div>
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-4 border-gray-300/70 pb-3">
+                <div className="flex items-center gap-4 pb-3">
                   <div>
                     <IoCloseCircleOutline
                       className="bg-red-100 p-2.5 w-11 h-11 rounded-xl"
@@ -820,32 +953,31 @@ const Overview = ({ id, star }) => {
                     />
                   </div>
                   <div className="w-full">
-                    <div className="flex justify-between items-center ">
-                      <span className="text-sm font-medium text-gray-500/70">
+                    <div className="flex justify-between items-center mb-0.5">
+                      <span className="text-sm font-normal text-gray-500/70">
                         Đơn đã hủy
                       </span>
-                      <span className="text-sm font-medium ">
+                      <span className="text-sm font-medium">
                         {totalCancelActivity} đơn
                       </span>
                     </div>
-                    <div className="w-full rounded-full bg-gray-100 ">
+                    <div className="w-full relative rounded-full bg-gray-100 text-center">
+                      <span className="text-black italic text-xs absolute mt-0.5">
+                        {calculateNumberPercent(
+                          totalDataActivity,
+                          totalCancelActivity
+                        )}
+                        %
+                      </span>
                       <div
-                        className="bg-red-500 p-0.5 rounded-full flex justify-center items-center leading-none text-xs font-medium progress-bar-cancel"
+                        className="bg-red-500 h-5 rounded-full flex justify-center items-center leading-none text-xs font-normal progress-bar-cancel"
                         style={{
                           width: `${calculateNumberPercent(
                             totalDataActivity,
                             totalCancelActivity
                           )}%`,
                         }}
-                      >
-                        <span className="text-black italic text-xs">
-                          {calculateNumberPercent(
-                            totalDataActivity,
-                            totalCancelActivity
-                          )}
-                          %
-                        </span>
-                      </div>
+                      ></div>
                     </div>
                     {/* <div class="w3-light-grey">
                       <div
@@ -860,31 +992,46 @@ const Overview = ({ id, star }) => {
               </div>
             </div>
           </div>
-          {/*Hoạt động gần đây*/}
+          {/*Thẻ hoạt động gần đây*/}
           <div className="bg-white rounded-xl card-shadow">
-            <div className="border-b-2 border-gray-200 py-2.5 px-3">
-              <span className="font-bold text-sm">Hoạt động gần đây</span>
+            {/* Header thẻ hoạt động gần đây */}
+            <div className="flex justify-between items-center gap-2 border-b-2 border-gray-200 py-2.5 px-3">
+              <div className="flex items-center gap-1">
+                <span className="font-bold text-sm">Hoạt động gần đây</span>
+              </div>
+              <Select
+                defaultValue="1"
+                // style={{
+                //   width: 120,
+                // }}
+                options={dateOption}
+              />
             </div>
+            {/* Nội dung thẻ hoạt động gần đây */}
             {dataActivity.length > 0 ? (
               <div className="flex flex-col py-2.5 px-3 mt-3 mb-2">
                 {dataActivity?.map((activity, index) => (
                   <div className="flex pb-4">
+                    {/* Ngày tháng năm */}
                     <div className="w-3/12 flex flex-col items-center ">
                       <div>
-                        <span className="text-sm font-bold">
+                        <span className="text-sm font-medium">
                           {moment(new Date(activity?.date_work)).format(
                             "DD/MM/YYYY"
                           )}
                         </span>
                       </div>
                       <div>
-                        <span className="text-sm text-gray-500/50">
-                          {moment(new Date(activity?.date_work))
-                            .locale(lang)
-                            .format("dddd")}
+                        <span className="text-sm font-normal text-gray-500/70">
+                          {capitalizeWords(
+                            moment(new Date(activity?.date_work))
+                              .locale(lang)
+                              .format("dddd")
+                          )}
                         </span>
                       </div>
                     </div>
+                    {/* Icon và line ở giữa */}
                     <div className="w-2/12 items-center flex flex-col -mb-[24px]">
                       <div
                         className={`p-2 w-fit h-fit rounded-full ${
@@ -913,9 +1060,10 @@ const Overview = ({ id, star }) => {
                       </div>
                       <div className="w-[2px] h-[100%] bg-gray-300/50"></div>
                     </div>
+                    {/* Nội dung dịch vụ và địa chỉ */}
                     <div className="w-7/12">
                       <div>
-                        <span className="font-bold text-sm">
+                        <span className="font-medium text-sm">
                           {activity?.type === "loop" && activity?.is_auto_order
                             ? `${i18n.t("repeat", { lng: lang })}`
                             : activity?.service?._id?.kind ===
@@ -935,7 +1083,7 @@ const Overview = ({ id, star }) => {
                       </div>
                       <div>
                         <Tooltip placement="top" title={activity?.address}>
-                          <span className="text-sm text-gray-500/50 line-clamp-2">
+                          <span className="text-sm font-normal text-gray-500/70 line-clamp-2">
                             {activity?.address}
                           </span>
                         </Tooltip>
@@ -971,43 +1119,44 @@ const Overview = ({ id, star }) => {
               </div>
             ) : (
               <div className="flex justify-center items-center p-4">
-                <span className="text-sm text-gray-500/50 italic">
+                <span className="text-sm text-gray-500/70 italic">
                   Cộng tác viên chưa có hoạt động nào
                 </span>
               </div>
             )}
           </div>
         </div>
+        {/* Right container */}
         <div class="w-full md:w-1/3 flex flex-col gap-4">
-          {/*Thông tin CTV*/}
+          {/* Thẻ thông tin CTV */}
           <div className="bg-white rounded-xl card-shadow">
-            {/* Container avatar */}
+            {/* Avatar và thông tin liên quan */}
             <div
               style={{ backgroundColor: "#ebe0f8" }}
               className="rounded-xl m-3 p-4 flex justify-center"
             >
               <div className="flex flex-col items-center justify-center">
-                {/* Avatar */}
                 <img
                   class="h-[150px] w-[150px] p-2 bg-white rounded-full shadow-lg"
                   src={dataDetail?.avatar ? dataDetail?.avatar : avatarDefault}
                   alt=""
                 />
-                {/* Tên, Mã nhân vien, Khu vực, Trạng thái*/}
-                <div className="flex flex-col items-center mt-3 gap-4">
-                  {/* Tên*/}
+                <div className="flex flex-col items-center mt-3 gap-2.5">
                   <span className="font-bold text-xl">{dataDetail?.name}</span>
-                  {/* Mã giới thiệu*/}
-                  <div className="text-center">
-                    <span style={{ fontWeight: "500" }} className="text-sm ">
-                      Mã giới thiệu: {dataDetail?.invite_code} /
+                  <div className="flex items-center gap-1">
+                    <span className="font-normal text-sm text-gray-500/70">
+                      Mã giới thiệu:
                     </span>
-                    <span style={{ fontWeight: "500" }} className="text-sm">
-                      {" "}
-                      Khu vực: {city?.name}
+                    <span className="font-medium text-sm">
+                      {dataDetail?.invite_code}
                     </span>
                   </div>
-                  {/* Trạng thái hoạt động*/}
+                  <div className="flex items-center gap-1">
+                    <span className="font-normal text-sm text-gray-500/70">
+                      Khu vực:
+                    </span>
+                    <span className="font-medium text-sm">{city?.name}</span>
+                  </div>
                   <Tooltip
                     placement="bottom"
                     title={
@@ -1037,7 +1186,7 @@ const Overview = ({ id, star }) => {
             </div>
             {/* Container thông tin*/}
             <div className="flex flex-col gap-6 mx-3 my-4">
-              <span className="font-bold text-sm">Thông tin nhân sự</span>
+              <span className="font-medium text-sm">Thông tin nhân sự</span>
               {/* Thông tin thứ nhất*/}
               <div className="flex gap-3 items-center">
                 {/*Icon*/}
@@ -1046,10 +1195,7 @@ const Overview = ({ id, star }) => {
                   color="DodgerBlue"
                 />
                 <div className="flex flex-col gap-0.5">
-                  <span
-                    style={{ fontWeight: "500" }}
-                    className="text-sm text-gray-500/70"
-                  >
+                  <span className="text-sm font-normal text-gray-500/70">
                     Giới tính
                   </span>
                   <span style={{ fontWeight: "500" }} className="text-sm">
@@ -1065,10 +1211,7 @@ const Overview = ({ id, star }) => {
                   color="green"
                 />
                 <div className="flex flex-col gap-0.5">
-                  <span
-                    style={{ fontWeight: "500" }}
-                    className="text-sm text-gray-500/70"
-                  >
+                  <span className="text-sm font-normal text-gray-500/70">
                     Ngày kích hoạt
                   </span>
                   <span style={{ fontWeight: "500" }} className="text-sm">
@@ -1084,10 +1227,7 @@ const Overview = ({ id, star }) => {
                   color="orange"
                 />
                 <div className="flex flex-col gap-0.5">
-                  <span
-                    style={{ fontWeight: "500" }}
-                    className="text-sm text-gray-500/70"
-                  >
+                  <span className="text-sm font-normal text-gray-500/70">
                     Ngày sinh
                   </span>
                   <span style={{ fontWeight: "500" }} className="text-sm">
@@ -1103,10 +1243,7 @@ const Overview = ({ id, star }) => {
                   color="red"
                 />
                 <div className="flex flex-col gap-0.5">
-                  <span
-                    style={{ fontWeight: "500" }}
-                    className="text-sm text-gray-500/70"
-                  >
+                  <span className="text-sm font-normal text-gray-500/70">
                     Số điện thoại
                   </span>
                   <span style={{ fontWeight: "500" }} className="text-sm">
@@ -1122,10 +1259,7 @@ const Overview = ({ id, star }) => {
                   color="DodgerBlue"
                 />
                 <div className="flex flex-col gap-0.5">
-                  <span
-                    style={{ fontWeight: "500" }}
-                    className="text-sm text-gray-500/70"
-                  >
+                  <span className="text-sm font-normal text-gray-500/70">
                     Tổng số đơn
                   </span>
                   <span style={{ fontWeight: "500" }} className="text-sm">
@@ -1141,10 +1275,7 @@ const Overview = ({ id, star }) => {
                   color="green"
                 />
                 <div className="flex flex-col gap-0.5">
-                  <span
-                    style={{ fontWeight: "500" }}
-                    className="text-sm text-gray-500/70"
-                  >
+                  <span className="text-sm font-normal text-gray-500/70">
                     Tổng số giờ làm
                   </span>
                   <span style={{ fontWeight: "500" }} className="text-sm">
@@ -1160,10 +1291,7 @@ const Overview = ({ id, star }) => {
                   color="orange"
                 />
                 <div className="flex flex-col gap-0.5">
-                  <span
-                    style={{ fontWeight: "500" }}
-                    className="text-sm text-gray-500/70"
-                  >
+                  <span className="text-sm font-normal text-gray-500/70">
                     Ngày đăng ký
                   </span>
                   <span style={{ fontWeight: "500" }} className="text-sm">
@@ -1179,10 +1307,7 @@ const Overview = ({ id, star }) => {
                   color="red"
                 />
                 <div className="flex flex-col gap-0.5">
-                  <span
-                    style={{ fontWeight: "500" }}
-                    className="text-sm text-gray-500/70"
-                  >
+                  <span className="text-sm font-normal text-gray-500/70">
                     Tổng lượt yêu thích
                   </span>
                   <span style={{ fontWeight: "500" }} className="text-sm">
@@ -1220,16 +1345,15 @@ const Overview = ({ id, star }) => {
                     )}
                   </div>
                   <span
-                    style={{ fontWeight: "500" }}
-                    className={`text-sm ${
-                      !dataDetail?.is_document_code && "text-gray-500/50"
+                    className={`text-sm font-normal ${
+                      !dataDetail?.is_document_code && "text-gray-500/70"
                     } `}
                   >
                     Thỏa thuận hợp tác
                   </span>
                 </div>
                 <div>
-                  <span className="text-gray-500/50 italic text-sm">
+                  <span className="text-gray-500/70 italic text-sm">
                     {dataDetail?.document_code ? dataDetail?.document_code : ""}
                   </span>
                 </div>
@@ -1252,9 +1376,8 @@ const Overview = ({ id, star }) => {
                   )}
                 </div>
                 <span
-                  style={{ fontWeight: "500" }}
-                  className={`text-sm ${
-                    !dataDetail?.is_identity && "text-gray-500/50"
+                  className={`text-sm font-normal ${
+                    !dataDetail?.is_identity && "text-gray-500/70"
                   } `}
                 >
                   {" "}
@@ -1279,9 +1402,8 @@ const Overview = ({ id, star }) => {
                   )}
                 </div>
                 <span
-                  style={{ fontWeight: "500" }}
-                  className={`text-sm ${
-                    !dataDetail?.is_personal_infor && "text-gray-500/50"
+                  className={`text-sm font-normal ${
+                    !dataDetail?.is_personal_infor && "text-gray-500/70"
                   } `}
                 >
                   {" "}
@@ -1306,9 +1428,8 @@ const Overview = ({ id, star }) => {
                   )}
                 </div>
                 <span
-                  style={{ fontWeight: "500" }}
-                  className={`text-sm ${
-                    !dataDetail?.is_household_book && "text-gray-500/50"
+                  className={`text-sm font-normal ${
+                    !dataDetail?.is_household_book && "text-gray-500/70"
                   } `}
                 >
                   Sổ hộ khẩu
@@ -1332,9 +1453,8 @@ const Overview = ({ id, star }) => {
                   )}
                 </div>
                 <span
-                  style={{ fontWeight: "500" }}
-                  className={`text-sm ${
-                    !dataDetail?.is_behaviour && "text-gray-500/50 "
+                  className={`text-sm font-normal ${
+                    !dataDetail?.is_behaviour && "text-gray-500/70 "
                   } `}
                 >
                   Giấy xác nhận hạnh kiểm

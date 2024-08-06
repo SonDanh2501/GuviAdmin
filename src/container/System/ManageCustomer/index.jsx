@@ -40,7 +40,7 @@ const ManageCustomer = () => {
   const lang = useSelector(getLanguageState);
   const [isLoading, setIsLoading] = useState(false);
   const [lengthPage, setLengthPage] = useState(
-    JSON.parse(localStorage.getItem("linePerPage")).value
+    JSON.parse(localStorage.getItem("linePerPage"))
       ? JSON.parse(localStorage.getItem("linePerPage")).value
       : 20
   );

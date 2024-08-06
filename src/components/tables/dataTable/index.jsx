@@ -87,10 +87,10 @@ const DataTable = (props) => {
 
   const [scroll, setScroll] = useState([]);
   const [pageSizeOption, setPageSizeOption] = useState({
-    value: JSON.parse(localStorage.getItem("linePerPage")).value
+    value: JSON.parse(localStorage.getItem("linePerPage"))
       ? JSON.parse(localStorage.getItem("linePerPage")).value
       : pageSize,
-    label: JSON.parse(localStorage.getItem("linePerPage")).label
+    label: JSON.parse(localStorage.getItem("linePerPage"))
       ? JSON.parse(localStorage.getItem("linePerPage")).label
       : `${pageSize} dòng/trang`,
   });
@@ -1105,25 +1105,6 @@ const DataTable = (props) => {
             );
             break;
           }
-          case "text_link": {
-            linkRedirect = `/details-order/${data?.id_group_order}`;
-            const max = item.maxLength || 75;
-            let getDataView = data[item.dataIndex] || "";
-            const indexSlice = getDataView.length - max;
-            const sliceData =
-              indexSlice > 0 ? getDataView.slice(0, max) + "..." : getDataView;
-            return (
-              <Link target="_blank" to={linkRedirect}>
-                <Tooltip placement="topRight" title={getDataView}>
-                  <span className={`${item?.fontSize} text-id-code-order`}>
-                    {" "}
-                    {sliceData}
-                  </span>
-                </Tooltip>
-              </Link>
-            );
-            break;
-          }
           case "status_handle_review": {
             const getItemStatus = item.selectOptions.filter(
               (a) => a.value === data[item.dataIndex]
@@ -1579,6 +1560,22 @@ const DataTable = (props) => {
             );
             break;
           }
+          case "text-discount": {
+            return (
+              <span className={`${item?.fontSize} `}>
+                {data?.code_promotion?._id?.title?.vi}
+              </span>
+            );
+            break;
+          }
+          case "discount_money": {
+            return (
+              <span className={`${item?.fontSize} `}>
+                {formatMoney(data?.code_promotion?.discount)}
+              </span>
+            );
+            break;
+          }
           default: {
             const dataView = data[item.dataIndex] || "";
             return <p className={`${item?.fontSize}`}> {dataView}</p>;
@@ -1692,7 +1689,7 @@ const DataTable = (props) => {
     );
   };
 
-  scroll.y = JSON.parse(localStorage.getItem("tableHeight")).y
+  scroll.y = JSON.parse(localStorage.getItem("tableHeight"))
     ? JSON.parse(localStorage.getItem("tableHeight")).y
     : [];
   scroll.x = scrollX ? scrollX : widthPage;
