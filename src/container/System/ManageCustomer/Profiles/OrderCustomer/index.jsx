@@ -51,27 +51,27 @@ const OrderCustomer = ({ id }) => {
     return start + " - " + timeEnd;
   };
 
-  //   const items = [
-  //     {
-  //       key: "1",
-  //       label:
-  //         item?.status === "cancel" ? <></> : <EditOrder idOrder={item?._id} />,
-  //     },
-  //     {
-  //       key: "2",
-  //       label: (
-  //         <a
-  //           onClick={() =>
-  //             navigate("/details-order", {
-  //               state: { id: item?._id },
-  //             })
-  //           }
-  //         >
-  //           Xem chi tiết
-  //         </a>
-  //       ),
-  //     },
-  //   ];
+    // const items = [
+    //   {
+    //     key: "1",
+    //     label:
+    //       item?.status === "cancel" ? <></> : <EditOrder idOrder={item?._id} />,
+    //   },
+    //   {
+    //     key: "2",
+    //     label: (
+    //       <a
+    //         onClick={() =>
+    //           navigate("/details-order", {
+    //             state: { id: item?._id },
+    //           })
+    //         }
+    //       >
+    //         Xem chi tiết
+    //       </a>
+    //     ),
+    //   },
+    // ];
 
   // const columns1 = [
   //   {

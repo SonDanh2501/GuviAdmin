@@ -48,6 +48,7 @@ const DataTable = (props) => {
     setLengthPage,
     emptyText,
   } = props;
+  console.log("check >>> ", data);
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
   const [saveToCookie] = useCookies();
@@ -211,7 +212,9 @@ const DataTable = (props) => {
             return <p>{data[item.dataIndex]}</p>;
             break;
           case "code_order":
-            linkRedirect = `/details-order/${data?.id_group_order}`;
+            linkRedirect = `/details-order/${
+              data?.id_group_order ? data?.id_group_order : data?._id
+            }`;
             return (
               <Link
                 target="_blank"

@@ -418,23 +418,25 @@ const InForDetailGroupOrder = (props) => {
           <p className={`info-detail-order_status-${statusGroupOrder.status}`}>
             {statusGroupOrder.title}
           </p>
-          <div className="flex items-center ">
-            <button
-              className="text-purple-500 border-[1px] border-purple-500 bg-purple-50 hover:bg-purple-300 hover:text-purple-700 hover:border-purple-300 duration-500"
-              style={{
-                cursor: "pointer",
-                marginLeft: "4px",
-                fontWeight: "500",
-                fontSize: "12px",
-                padding: "8px",
-                // border: "1px solid purple",
-                borderRadius: "6px",
-              }}
-              onClick={() => setModalCancelCollaborator(true)}
-            >
-              Đẩy CTV khỏi đơn hàng
-            </button>
-          </div>
+          {collaborator && (
+            <div className="flex items-center">
+              <button
+                className="text-purple-500 border-[1px] border-purple-500 bg-purple-50 hover:bg-purple-300 hover:text-purple-700 hover:border-purple-300 duration-500"
+                style={{
+                  cursor: "pointer",
+                  marginLeft: "4px",
+                  fontWeight: "500",
+                  fontSize: "12px",
+                  padding: "8px",
+                  // border: "1px solid purple",
+                  borderRadius: "6px",
+                }}
+                onClick={() => setModalCancelCollaborator(true)}
+              >
+                Đẩy CTV khỏi đơn hàng
+              </button>
+            </div>
+          )}
         </div>
       </div>
       <div className="info-detail-order_detail">
