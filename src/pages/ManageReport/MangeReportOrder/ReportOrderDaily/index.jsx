@@ -47,7 +47,11 @@ const ReportOrderDaily = () => {
       ? "date_work"
       : "date_create";
   const [startDate, setStartDate] = useState("");
-  const [lengthPage, setLengthPage] = useState(20);
+  const [lengthPage, setLengthPage] = useState(
+    JSON.parse(localStorage.getItem("linePerPage"))
+      ? JSON.parse(localStorage.getItem("linePerPage")).value
+      : 20
+  );
   const [endDate, setEndDate] = useState("");
   const [sameStartDate, setSameStartDate] = useState("");
   const [sameEndDate, setSameEndDate] = useState("");

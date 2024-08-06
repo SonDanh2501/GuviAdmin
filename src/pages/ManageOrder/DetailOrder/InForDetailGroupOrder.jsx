@@ -22,7 +22,7 @@ import { UilCalender, UilClock } from "@iconscout/react-unicons";
 import CollaboratorInfo from "../components/OrderComponents/CollaboratorInfo";
 import InfoBill from "../components/OrderComponents/InfoBill";
 import DetailBill from "../components/OrderComponents/DetailBill";
-import { Dropdown, FloatButton, Input, Space } from "antd";
+import { Checkbox, Dropdown, FloatButton, Input, Space } from "antd";
 import DataTable from "../../../components/tables/dataTable";
 import { UilEllipsisV } from "@iconscout/react-unicons";
 import i18n from "../../../i18n";
@@ -37,6 +37,7 @@ import moment from "moment";
 import { getListReasonCancel } from "../../../api/reasons";
 import InputCustom from "../../../components/textInputCustom";
 import LoadingPagination from "../../../components/paginationLoading";
+import { unAssignCollaborator } from "../../../api/groupOrder";
 const { TextArea } = Input;
 const InForDetailGroupOrder = (props) => {
   const { id } = props;
@@ -68,6 +69,7 @@ const InForDetailGroupOrder = (props) => {
   const [serviceFee, setServiceFee] = useState(0);
   const [modalFavourite, setModalFavourite] = useState(false);
   const [modalLock, setModalLock] = useState(false);
+  const [modalCancelCollaborator, setModalCancelCollaborator] = useState(false);
   const [isChangeCollaborator, setIsChangeCollaborator] = useState(false);
   const [modalCancel, setModalCancel] = useState(false);
   const [isOpenModalCancel, setIsOpenModalCancel] = useState(false);
@@ -385,7 +387,16 @@ const InForDetailGroupOrder = (props) => {
     onChangeStatus(item?._id, { status: "next" });
     setIsOpenModalChangeStatus(false);
   };
-  console.log("data ", dataGroup);
+  const handleUnassignCollaborator = (id) => {
+    unAssignCollaborator(id)
+      .then((res) => {
+        // console.log("check response", res);
+      })
+      .catch((err) => {
+        // console.log("err", err);
+      });
+  }
+  console.log("data ", collaborator);
   return (
     <div className="info-detail-order_container ">
       <div className="info-detail-order_header">
@@ -407,6 +418,23 @@ const InForDetailGroupOrder = (props) => {
           <p className={`info-detail-order_status-${statusGroupOrder.status}`}>
             {statusGroupOrder.title}
           </p>
+          <div className="flex items-center ">
+            <button
+              className="text-purple-500 border-[1px] border-purple-500 bg-purple-50 hover:bg-purple-300 hover:text-purple-700 hover:border-purple-300 duration-500"
+              style={{
+                cursor: "pointer",
+                marginLeft: "4px",
+                fontWeight: "500",
+                fontSize: "12px",
+                padding: "8px",
+                // border: "1px solid purple",
+                borderRadius: "6px",
+              }}
+              onClick={() => setModalCancelCollaborator(true)}
+            >
+              Đẩy CTV khỏi đơn hàng
+            </button>
+          </div>
         </div>
       </div>
       <div className="info-detail-order_detail">
@@ -573,6 +601,25 @@ const InForDetailGroupOrder = (props) => {
               item?.status === "confirm" ? "ĐANG LÀM" : "HOÀN THÀNH"
             }`}
           </p>
+        }
+      />
+      {/*Đẩy CTV ra khỏi đơn hàng  */}
+      <ModalCustom
+        isOpen={modalCancelCollaborator}
+        title={"Đẩy cộng tác viên ra khỏi đơn hàng"}
+        textOk={"Xác nhận"}
+        handleOk={() => handleUnassignCollaborator(id)}
+        handleCancel={() => setModalCancelCollaborator(false)}
+        body={
+          <>
+            <p>
+              Bạn có chắc muốn đẩy cộng tác viên ra khỏi đơn hàng? Hành động này
+              sẽ đẩy cộng tác viên ra khỏi tất cả các ca làm
+            </p>
+            <div>
+              <Checkbox>Phạt CTV theo chính sách hủy ca</Checkbox>
+            </div>
+          </>
         }
       />
       {isLoading && <LoadingPagination />}

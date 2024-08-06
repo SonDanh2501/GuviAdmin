@@ -8,15 +8,17 @@
   height: 100%;
 
   .menu-icon {
-    color: #9e68df;
+    color: #475569;
     cursor: pointer;
-    padding: 0.5rem;
-    border-radius: 6px;
+    // background-color: #f5f6fb;
+    padding: 0.6rem;
+    border-radius: 100%;
     transition-duration: 300ms;
   }
 
   .menu-icon:hover {
-    background-color: #ebe0f8;
+    color: #9e68df;
+    background-color: #f4f4f6;
   }
 
   .img-user {
@@ -32,7 +34,7 @@
     justify-content: space-between;
     width: auto;
     height: auto;
-    gap: 4px;
+    gap: 8px;
 
     .text-name {
       font-family: "Roboto";
@@ -52,11 +54,12 @@
 
     .div-noti {
       position: relative;
-      color: #9e68df;
-      // background-color: rgb(156 163 175 / 0.3);
+      color: #475569;
+      // background-color: #F5F6FB;
+      // border-radius: 100%;
       cursor: pointer;
       padding: 0.6rem;
-      border-radius: 6px;
+      border-radius: 100%;
       transition-duration: 300ms;
 
       .icon {
@@ -75,24 +78,26 @@
     }
 
     .div-noti:hover {
-      background-color: #ebe0f8;
-    }
+      color: #9e68df;
+      background-color: #f4f4f6;
+      }
 
     .div-language {
       display: flex;
       color: #9e68df;
+      // background-color: #F5F6FB;
       justify-content: center;
       align-items: center;
       gap: 6px;
       height: 40px;
       padding: 0.375rem;
-      border-radius: 7px;
+      border-radius: 100%;
       transition-duration: 300ms;
       cursor: pointer;
     }
 
     .div-language:hover {
-      background-color: #ebe0f8;
+      background-color: #dcdde1;
     }
 
     .list {

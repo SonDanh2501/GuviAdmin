@@ -7,7 +7,7 @@ import {
   MenuUnfoldOutlined,
   SmileOutlined,
 } from "@ant-design/icons";
-import { Dropdown, List, Select, Space, Opti, Tooltip, Drawer } from "antd";
+import { Dropdown, List, Select, Space, Opti, Tooltip, Drawer, Popover, Button } from "antd";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -25,7 +25,9 @@ import {
   IoSunnyOutline,
   IoGlobeOutline,
   IoCaretForwardOutline,
-  IoPersonCircle ,
+  IoPersonCircle, 
+  IoPersonCircleOutline,
+  IoLanguage,
 } from "react-icons/io5";
 
 import logoVN from "../../assets/images/vn.svg";
@@ -55,10 +57,10 @@ const Header = ({ onClick, hide }) => {
       label: (
         <div
           onClick={() => handleChange("vi")}
-          className="flex gap-2 items-center cursor-pointer hover:bg-blue-200 p-2 rounded-md duration-300"
+          className="flex gap-2 items-center cursor-pointer py-1 rounded-md duration-300 hover:text-violet-500"
         >
-          <img className="h-[30px]" src={logoVN}></img>
-          <span className="font-bold">Vietnamese</span>
+          <img className="h-[25px]" src={logoVN}></img>
+          <span className="font-medium">Vietnamese</span>
         </div>
       ),
     },
@@ -67,10 +69,10 @@ const Header = ({ onClick, hide }) => {
       label: (
         <div
           onClick={() => handleChange("en")}
-          className="flex gap-2 items-center cursor-pointer hover:bg-blue-200 p-2 rounded-md duration-300"
+          className="flex gap-2 items-center cursor-pointer py-1 rounded-md duration-300 hover:text-violet-500 mt-1"
         >
-          <img className="h-[30px]" src={logoUS}></img>
-          <span className="font-bold">English</span>
+          <img className="h-[25px]" src={logoUS}></img>
+          <span className="font-medium">English</span>
         </div>
       ),
     },
@@ -90,22 +92,28 @@ const Header = ({ onClick, hide }) => {
 
   return (
     <div className="div-container-header">
-      {hide ? (
-        <Tooltip placement="bottom" title="Mở thanh điều hướng">
-          <div className="menu-icon" onClick={onClick}>
-            <IoCaretForwardOutline size={"1.4rem"} />
-          </div>
-        </Tooltip>
-      ) : (
-        <Tooltip placement="bottom" title="Thu nhỏ">
-          <div className="menu-icon" onClick={onClick}>
-            <IoMenu size={"1.4rem"} />
-          </div>
-        </Tooltip>
-      )}
+      <div className="menu-icon" onClick={onClick}>
+        <IoMenu size={"1.5rem"} />
+      </div>
       <div className="nav-header">
-        {/*Language change*/}
-        <Tooltip placement="bottom" title="Chuyển đổi ngôn ngữ">
+        <Popover
+          content={
+            <div className="list">
+              <List
+                itemLayout="horizontal"
+                dataSource={languageItems}
+                renderItem={(item) => {
+                  return (
+                    <div className="">
+                      <a>{item.label}</a>
+                    </div>
+                  );
+                }}
+              />
+            </div>
+          }
+          title="Ngôn ngữ"
+        >
           <div
             onMouseEnter={() => {
               setIsHover(true);
@@ -113,36 +121,11 @@ const Header = ({ onClick, hide }) => {
             onMouseLeave={() => {
               setIsHover(false);
             }}
-            className="div-language"
-            onClick={() => {
-              setIsSelectLanguage(!isSelectLanguage);
-            }}
+            className="div-noti"
           >
-            <IoGlobeOutline size={"1.3rem"} />
-            <span style={{ fontWeight: "bold", fontSize: "1rem" }}>
-              {selectedLanguage === "vi"
-                ? "VN"
-                : selectedLanguage === "en"
-                ? "EN"
-                : "VN"}
-            </span>
+            <IoLanguage size={"1.5rem"} />
           </div>
-        </Tooltip>
-        {isSelectLanguage && (
-          <div className="list">
-            <List
-              itemLayout="horizontal"
-              dataSource={languageItems}
-              renderItem={(item) => {
-                return (
-                  <div>
-                    <a>{item.label}</a>
-                  </div>
-                );
-              }}
-            />
-          </div>
-        )}
+        </Popover>
         {/*Darkmode, lightmode*/}
         {/* <Tooltip placement="bottom" title="Bật/tắt chế độ tối">
           <div
@@ -163,7 +146,7 @@ const Header = ({ onClick, hide }) => {
           </div>
         </Tooltip> */}
         {/*Notification Drop Down Menu*/}
-        <Tooltip placement="bottom" title="Thông báo ">
+        <Tooltip placement="bottom" title="Thông báo">
           <div
             onMouseEnter={() => {
               setIsHover(true);
@@ -174,7 +157,7 @@ const Header = ({ onClick, hide }) => {
             className="div-noti"
             onClick={() => setStatus(!status)}
           >
-            <IoNotifications size={"1.4rem"} />
+            <IoNotifications size={"1.5rem"} />
           </div>
         </Tooltip>
         {/* {status && (
@@ -209,17 +192,19 @@ const Header = ({ onClick, hide }) => {
         </div> */}
         {/*Sign Out Drop Down Menu*/}
         <Dropdown
+          arrow={true}
+          placement="bottomCenter"
           menu={{
             items,
           }}
           trigger={["click"]}
         >
           <span
-            className=" flex items-center justify-center gap-2"
+            className="flex items-center justify-center gap-2"
             onClick={(e) => e.preventDefault()}
           >
             {/* <img style={{ height: "26px" }} src={defaultAvatar}></img> */}
-            <IoPersonCircle size="1.5rem" color="#9e68df" />
+            <IoPersonCircle size="1.6rem" color="#475569" />
             <a className="text-name">{user?.full_name}</a>
             <CaretDownOutlined className="icon-down" />
           </span>

@@ -151,7 +151,11 @@ const CollaboratorVerify = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState([]);
   const [startPage, setStartPage] = useState(0);
-  const [lengthPage, setLengthPage] = useState(20);
+  const [lengthPage, setLengthPage] = useState(
+    JSON.parse(localStorage.getItem("linePerPage"))
+      ? JSON.parse(localStorage.getItem("linePerPage")).value
+      : 20
+  );
   const [city, setCity] = useState("");
 
   const [totalItem, setTotalItem] = useState(0);
@@ -186,7 +190,7 @@ const CollaboratorVerify = () => {
     setCity(value);
     // saveToCookie("ctv-city", value);
   };
-
+  console.log("check data ở bảng ctv", data);
   const getListCollaborator = async () => {
     const res = await getListDataCollaborator(
       lang,
@@ -196,7 +200,7 @@ const CollaboratorVerify = () => {
       city,
       tabStatus
     );
-
+    console.log("check getListDataCollaborator", res);
     for (let i = 0; i < res.data.length; i++) {
       const tempCity = province.filter((x) => x.code === res.data[i].city);
 
@@ -207,6 +211,8 @@ const CollaboratorVerify = () => {
         tempCity.length > 0
           ? tempCity[0].name.replace(new RegExp(`${"Thành phố"}|${"Tỉnh"}`), "")
           : "Khác";
+          console.log("check getListDataCollaborator after ", res);
+
       res.data[i]["name_service_apply"] = "";
       for (const item of tempService) {
         res.data[i]["name_service_apply"] +=
@@ -426,7 +432,7 @@ const CollaboratorVerify = () => {
     setModal("");
   };
 
-  const changeStatusOrder = (value: string) => {
+  const changeStatusOrder = (value) => {
     setSelectStatus(value);
   };
 
@@ -489,7 +495,6 @@ const CollaboratorVerify = () => {
   //     },
   //     [startPage, status, idGroup, lang]
   //   );
-
   return (
     <>
       <div className="div-container-content">

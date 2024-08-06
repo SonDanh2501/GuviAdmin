@@ -31,7 +31,7 @@ import platinum from "../../../assets/images/iconPlatinum.svg";
 import silver from "../../../assets/images/iconSilver.svg";
 import { useNavigate } from "react-router-dom";
 import SelectDefault from "../../Select/SelectDefault";
-import { IoHelpCircleOutline } from "react-icons/io5";
+import { IoAlertCircleOutline, IoHelpCircleOutline } from "react-icons/io5";
 
 const DataTable = (props) => {
   const {
@@ -46,14 +46,23 @@ const DataTable = (props) => {
     setOpenModalCancel,
     scrollX,
     setLengthPage,
+    emptyText,
   } = props;
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
   const [saveToCookie] = useCookies();
   const { width } = useWindowDimensions();
   const timeWork = (data) => {
-    const start = moment(new Date(data.date_work)).format("HH:mm");
-    const timeEnd = moment(new Date(data.date_work))
+    const start = moment(
+      new Date(
+        data.date_work ? data.date_work : data.date_work_schedule[0].date
+      )
+    ).format("HH:mm");
+    const timeEnd = moment(
+      new Date(
+        data.date_work ? data.date_work : data.date_work_schedule[0].date
+      )
+    )
       .add(data?.total_estimate, "hours")
       .format("HH:mm");
     return start + " - " + timeEnd;
@@ -64,11 +73,26 @@ const DataTable = (props) => {
   const [item, setItem] = useState(data[0]);
   const [currentPage, setCurrentPage] = useState(1);
   const [ordinalNumber, setOrdinalNumber] = useState(1);
-  const [scrollYValue, setScrollYValue] = useState(0);
+  const [scrollYValue, setScrollYValue] = useState(
+    JSON.parse(localStorage.getItem("tableHeight"))?.y === 700
+      ? 1
+      : JSON.parse(localStorage.getItem("tableHeight"))?.y === 500
+      ? 2
+      : JSON.parse(localStorage.getItem("tableHeight"))?.y === 300
+      ? 3
+      : JSON.parse(localStorage.getItem("tableHeight"))?.y
+      ? JSON.parse(localStorage.getItem("tableHeight"))?.y
+      : 0
+  );
+
   const [scroll, setScroll] = useState([]);
   const [pageSizeOption, setPageSizeOption] = useState({
-    value: pageSize,
-    label: `${pageSize} dòng/trang`,
+    value: JSON.parse(localStorage.getItem("linePerPage"))
+      ? JSON.parse(localStorage.getItem("linePerPage")).value
+      : pageSize,
+    label: JSON.parse(localStorage.getItem("linePerPage"))
+      ? JSON.parse(localStorage.getItem("linePerPage")).label
+      : `${pageSize} dòng/trang`,
   });
   let pageSizeOptions = [
     { value: 10, label: "10 dòng/trang" },
@@ -76,6 +100,16 @@ const DataTable = (props) => {
     { value: 50, label: "50 dòng/trang" },
     { value: 100, label: "100 dòng/trang" },
   ];
+  let locale = {
+    emptyText: (
+      <div className="flex flex-col items-center justify-center gap-2">
+        <IoAlertCircleOutline size={35} color="#d1d5db" />
+        <span className="text-gray-300 text-lg">
+          {emptyText ? emptyText : "Không có dữ liệu để hiển thị"}
+        </span>
+      </div>
+    ),
+  };
   // let flag = false;
   // pageSizeOptions.map((el) => {
   //   if (el.value === pageSizeOption.value) flag = true;
@@ -86,9 +120,9 @@ const DataTable = (props) => {
   //     label: pageSizeOption.label,
   //   });
   // }
-  // console.log(pageSizeOptions);
+  //
   // setPageSizeOptions(tempOptions)
-  // console.log(tempOptions);
+  //
   // scroll.x = "100vw";
   // scroll.y = 240;
   let widthPage = 0;
@@ -97,7 +131,6 @@ const DataTable = (props) => {
   const [rowIndex, setRowIndex] = useState(0);
   const navigate = useNavigate();
   const onSelectChange = (newSelectedRowKeys) => {
-    console.log("selectedRowKeys changed: ", newSelectedRowKeys);
     setSelectedRowKeys(newSelectedRowKeys);
   };
   const rowSelection = {
@@ -128,7 +161,6 @@ const DataTable = (props) => {
     // item: phan tu trong mang data
     // dataIndex: ten field thay doi
     // value: gia tri moi da thay doi
-
     if (props.onChangeValue) {
       const data = {
         item,
@@ -144,7 +176,7 @@ const DataTable = (props) => {
     const numStars = Math.floor(length / 2);
     const halfIndex = Math.floor((length - numStars) / 2);
 
-    const stars = '*'.repeat(numStars);
+    const stars = "*".repeat(numStars);
 
     return str.slice(0, halfIndex) + stars + str.slice(halfIndex + numStars);
   };
@@ -257,10 +289,29 @@ const DataTable = (props) => {
           case "customer-name-phone":
             return (
               <div className="div-customer-name-phone">
-                <Link to={`/profile-customer/${data?.id_customer?._id}`}>
-                  <p className={`text-name-customer ${item?.fontSize}`}>
-                    {data?.id_customer?.full_name || data?.full_name}
-                  </p>
+                <Link
+                  to={`/profile-customer/${
+                    data?.id_customer?._id ? data?.id_customer?._id : data?._id
+                  }`}
+                >
+                  <div className="flex items-center gap-1">
+                    <p className={`text-name-customer ${item?.fontSize}`}>
+                      {data?.id_customer?.full_name || data?.full_name}
+                    </p>
+                    <Image
+                      preview={false}
+                      src={
+                        data?.rank_point < 100
+                          ? member
+                          : data?.rank_point >= 100 && data?.rank_point < 300
+                          ? silver
+                          : data?.rank_point >= 300 && data?.rank_point < 1500
+                          ? gold
+                          : platinum
+                      }
+                      style={{ width: 20, height: 20 }}
+                    />
+                  </div>
                 </Link>
                 <p className={`text-phone-customer ${item?.fontSize}`}>
                   {data?.id_customer?.phone || data?.phone}
@@ -277,8 +328,7 @@ const DataTable = (props) => {
                   }`}
                 >
                   <p className={`text-name-customer ${item?.fontSize}`}>
-                    {hideMiddleChars(data?.id_customer?.full_name) ||
-                      hideMiddleChars(data?.full_name)}
+                    {data?.id_customer?.full_name || data?.full_name}
                   </p>
                 </Link>
               </div>
@@ -313,10 +363,22 @@ const DataTable = (props) => {
             return (
               <div className="div-date-work">
                 <p className={`text-worktime ${item?.fontSize}`}>
-                  {moment(new Date(data?.date_work)).format("DD/MM/YYYY")}
+                  {moment(
+                    new Date(
+                      data?.date_work
+                        ? data?.date_work
+                        : data?.date_work_schedule[0].date
+                    )
+                  ).format("DD/MM/YYYY")}
                 </p>
                 <p className={`text-worktime ${item?.fontSize}`}>
-                  {moment(new Date(data?.date_work))
+                  {moment(
+                    new Date(
+                      data?.date_work
+                        ? data?.date_work
+                        : data?.date_work_schedule[0].date
+                    )
+                  )
                     .locale(lang)
                     .format("dddd")}
                 </p>
@@ -336,17 +398,25 @@ const DataTable = (props) => {
                   ) : (
                     <>
                       <Link
-                        to={`/details-collaborator/${data?.id_collaborator?._id}`}
+                        to={`/details-collaborator/${
+                          data?.id_collaborator?._id
+                            ? data?.id_collaborator?._id
+                            : data?.id_collaborator
+                        }`}
                         className="div-name-star"
                       >
                         <div className="div-name">
                           <p className={`${item?.fontSize}`}>
-                            {data?.id_collaborator?.full_name}
+                            {data?.id_collaborator?.full_name
+                              ? data?.id_collaborator?.full_name
+                              : data?.name_collaborator}
                           </p>
                         </div>
                         <div className="div-phone-star">
                           <p className={`${item?.fontSize}`}>
-                            {data?.id_collaborator?.phone}
+                            {data?.id_collaborator?.phone
+                              ? data?.id_collaborator?.phone
+                              : data?.phone_collaborator}
                           </p>
                           {data?.id_collaborator?.star && (
                             <div className="div-star">
@@ -751,11 +821,13 @@ const DataTable = (props) => {
             const viewAddress =
               indexSlice > 0 ? getData.slice(0, 75) + "..." : getData;
             return (
-              <p className={`text-address-order ${item?.fontSize}`}>
-                {getData !== ""
-                  ? viewAddress
-                  : `${i18n.t("not_available", { lng: lang })}`}
-              </p>
+              <Tooltip placement="top" title={getData}>
+                <p className={`text-address-order ${item?.fontSize}`}>
+                  {getData !== ""
+                    ? viewAddress
+                    : `${i18n.t("not_available", { lng: lang })}`}
+                </p>
+              </Tooltip>
             );
             break;
           case "phone_action_hide":
@@ -1033,30 +1105,10 @@ const DataTable = (props) => {
             );
             break;
           }
-          case "text_link": {
-            linkRedirect = `/details-order/${data?.id_group_order}`;
-            const max = item.maxLength || 75;
-            let getDataView = data[item.dataIndex] || "";
-            const indexSlice = getDataView.length - max;
-            const sliceData =
-              indexSlice > 0 ? getDataView.slice(0, max) + "..." : getDataView;
-            return (
-              <Link target="_blank" to={linkRedirect}>
-                <Tooltip placement="topRight" title={getDataView}>
-                  <span className={`${item?.fontSize} text-id-code-order`}>
-                    {" "}
-                    {sliceData}
-                  </span>
-                </Tooltip>
-              </Link>
-            );
-            break;
-          }
           case "status_handle_review": {
             const getItemStatus = item.selectOptions.filter(
               (a) => a.value === data[item.dataIndex]
             );
-
             return (
               <div
                 className={`current-status-handle ${getItemStatus[0]?.className}`}
@@ -1508,6 +1560,22 @@ const DataTable = (props) => {
             );
             break;
           }
+          case "text-discount": {
+            return (
+              <span className={`${item?.fontSize} `}>
+                {data?.code_promotion?._id?.title?.vi}
+              </span>
+            );
+            break;
+          }
+          case "discount_money": {
+            return (
+              <span className={`${item?.fontSize} `}>
+                {formatMoney(data?.code_promotion?.discount)}
+              </span>
+            );
+            break;
+          }
           default: {
             const dataView = data[item.dataIndex] || "";
             return <p className={`${item?.fontSize}`}> {dataView}</p>;
@@ -1523,7 +1591,7 @@ const DataTable = (props) => {
   // Nếu có actionColumn thì đẩy vào table
   if (actionColumn) headerTable.push(actionColumn);
   const calculateCurrentPage = (event) => {
-    // console.log("evet", event);
+    //
     setCurrentPage(event);
     if (props.onCurrentPageChange) {
       setIsLoading(true);
@@ -1535,17 +1603,31 @@ const DataTable = (props) => {
     if (props.onToggleModal) props.onToggleModal(true);
   };
   const handleSelectScrollY = (e) => {
+    let myObj_serialized;
     if (e === 0) {
-      setScroll([]);
+      myObj_serialized = JSON.stringify([]);
+      setScrollYValue(0);
     } else if (e === 1) {
-      setScroll({ y: 700 });
+      myObj_serialized = JSON.stringify({ y: 700 });
     } else if (e === 2) {
-      setScroll({ y: 500 });
+      myObj_serialized = JSON.stringify({ y: 500 });
     } else if (e === 3) {
-      setScroll({ y: 300 });
+      myObj_serialized = JSON.stringify({ y: 300 });
     }
+    localStorage.setItem("tableHeight", myObj_serialized);
     setScrollYValue(e);
   };
+
+  const handleSelectPagination = (e) => {
+    const tempPageSizeOption = { value: e, label: `${e} dòng/trang` };
+    let myObj_serialized = JSON.stringify(tempPageSizeOption);
+    localStorage.setItem("linePerPage", myObj_serialized);
+    setPageSizeOption(tempPageSizeOption);
+    if (setLengthPage) {
+      setLengthPage(e);
+    }
+  };
+  //
   const footerRender = () => {
     return (
       <div className="flex gap-4">
@@ -1606,15 +1688,15 @@ const DataTable = (props) => {
       </div>
     );
   };
-  const handleSelectPagination = (e) => {
-    const tempPageSizeOption = { value: e, label: `${e} dòng/trang` };
-    setPageSizeOption(tempPageSizeOption);
-    if (setLengthPage) setLengthPage(e);
-  };
+
+  scroll.y = JSON.parse(localStorage.getItem("tableHeight"))
+    ? JSON.parse(localStorage.getItem("tableHeight")).y
+    : [];
   scroll.x = scrollX ? scrollX : widthPage;
+
   return (
     <React.Fragment>
-      <div className="mr-t">
+      <div className="mr-t ">
         <ConfigProvider
           theme={{
             components: {
@@ -1628,6 +1710,9 @@ const DataTable = (props) => {
           }}
         >
           <Table
+            // loading={isLoading}
+            // size="small"
+            locale={locale}
             bordered
             // rowSelection={rowSelection}
             columns={headerTable}

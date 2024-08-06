@@ -50,21 +50,24 @@ const Sidebar = ({ hide }) => {
         theme={{
           components: {
             Menu: {
+              itemHeight: 45,
               iconMarginInlineEnd: 12, // Space between icon and text {default 10}
-              iconSize: 22, // Icon size {default 14}
-              collapsedIconSize: 22, // Icon size when collapse
-              itemBorderRadius: 6, // Border của item
-              itemMarginInline: hide ? 8 : 12, // Margin của item
+              iconSize: 20, // Icon size {default 14}
+              collapsedIconSize: 20, // Icon size when collapse
+              itemBorderRadius: 4, // Border của item
+              itemMarginInline: 12, // Margin của item
+              // itemPaddingInline: 20,
+
               /* ~~~ Only color ~~~ */
-              itemColor: "#000000", // Màu của item
+              itemColor: "#475569", // Màu của item
               /* Color hover*/
               itemHoverColor: "#000000", // Màu của icon và text
               itemHoverBg: "#ebe0f8", // Màu của background
               /* Color for active (khi đè chuột xuống)*/
               itemActiveBg: "#ebe0f8", // Màu background
               /* Color for selected item */
-              itemSelectedBg: "#d8c2f2", // Màu của item
-              itemSelectedColor: "#000000", // Màu của icon và text
+              itemSelectedBg: "#9e68df", // Màu của item
+              itemSelectedColor: "#F4F5FE", // Màu của icon và text
             },
           },
         }}

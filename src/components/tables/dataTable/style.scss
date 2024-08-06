@@ -46,8 +46,8 @@ span {
 
 .div-date-create {
   display: flex;
-  align-items: center;
-  justify-items: center;
+  // align-items: center;
+  // justify-items: center;
   flex-direction: column;
   button {
     margin-bottom: 5px;
@@ -90,7 +90,7 @@ span {
   .div-name-star {
     .div-name {
       p {
-        text-decoration-line: underline;
+        // text-decoration-line: underline;
         color: $color1;
         margin: 0;
       }

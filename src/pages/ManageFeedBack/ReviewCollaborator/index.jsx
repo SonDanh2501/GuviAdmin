@@ -21,9 +21,11 @@ import { OPTIONS_SELECT_STATUS_HANDLE_REVIEW } from "../../../@core/constant/con
 
 import "./index.scss";
 import DeleteModal from "./components/DeleteModal";
-import { IoStar } from "react-icons/io5";
 import LoadingPagination from "../../../components/paginationLoading";
 import CustomHeaderDatatable from "../../../components/tables/tableHeader";
+import CardStatistical from "../../../components/card/cardStatistical";
+import { IoStar } from "react-icons/io5";
+import { calculateNumberPercent } from "../../../utils/contant";
 
 const ReviewCollaborator = () => {
   const checkElement = useSelector(getElementState);
@@ -38,7 +40,12 @@ const ReviewCollaborator = () => {
     totalTwoStar: 0,
     totalOneStar: 0,
   });
-  const [lengthPage, setLengthPage] = useState(20);
+
+  const [lengthPage, setLengthPage] = useState(
+    JSON.parse(localStorage.getItem("linePerPage"))
+      ? JSON.parse(localStorage.getItem("linePerPage")).value
+      : 20
+  );
   const [valueSearch, setValueSearch] = useState("");
   const [detectLoading, setDetectLoading] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -54,7 +61,7 @@ const ReviewCollaborator = () => {
     if (startDate !== "") {
       getReviewCollaborator();
     }
-  }, [valueSearch, startPage, startDate, lengthPage ]);
+  }, [valueSearch, startPage, startDate, lengthPage]);
 
   const handleSearch = useCallback(
     _debounce((value) => {
@@ -100,7 +107,7 @@ const ReviewCollaborator = () => {
 
       // res.data[i]["name_service"] = res.data[i].service._id.title.vi
     }
-    // console.log(res?.data, 'res?.data');
+    //
     getAllReviewCollaborator(res?.totalItem);
     setData(res?.data);
     setTotalItem(res?.totalItem);
@@ -122,7 +129,7 @@ const ReviewCollaborator = () => {
       note_admin: dataChange.note_admin,
       status_handle_review: dataChange.status_handle_review,
     };
-    // console.log(payload, 'payload');
+    //
     await updateProcessHandleReview(payload);
     getReviewCollaborator();
     setModal("");
@@ -205,17 +212,33 @@ const ReviewCollaborator = () => {
       // maxLength: 35,
       fontSize: "text-size-M",
     },
-    // {
-    //   // i18n_title: 'customer',
-    //   title: "Cộng tác viên",
-    //   dataIndex: "id_collaborator",
-    //   key: "collaborator_no_star",
-    //   width: 190,
-    //   fontSize: "text-size-M",
-    // },
+    {
+      // i18n_title: 'customer',
+      title: "Cộng tác viên",
+      dataIndex: "id_collaborator",
+      key: "collaborator_no_star",
+      width: 190,
+      fontSize: "text-size-M",
+    },
+    {
+      // i18n_title: "status",
+      customTitle: (
+        <CustomHeaderDatatable
+          title="Trạng Thái"
+          textToolTip="Trạng thái của đánh giá được duyệt bởi nhân viên chăm sóc khách hàng"
+        />
+      ),
+      // title: "Trạng Thái",
+      dataIndex: "status_handle_review",
+      key: "status_handle_review",
+      selectOptions: OPTIONS_SELECT_STATUS_HANDLE_REVIEW,
+      width: 140,
+      fontSize: "text-size-M",
+    },
+
     {
       // i18n_title: 'address',
-      
+
       // title: "Đánh Giá",
       customTitle: (
         <CustomHeaderDatatable
@@ -243,21 +266,11 @@ const ReviewCollaborator = () => {
       // maxLength: 90,
       fontSize: "text-size-M",
     },
-    {
-      // i18n_title: "status",
-      customTitle: (
-        <CustomHeaderDatatable
-          title="Trạng Thái"
-          textToolTip="Trạng thái của đánh giá được duyệt bởi bình luận viên"
-        />
-      ),
-      // title: "Trạng Thái",
-      dataIndex: "status_handle_review",
-      key: "status_handle_review",
-      selectOptions: OPTIONS_SELECT_STATUS_HANDLE_REVIEW,
-      width: 150,
-      fontSize: "text-size-M",
-    },
+
+
+
+
+
     // {
     //   title: "NV liên hệ",
     //   dataIndex: "full_name_user_system_handle_review",
@@ -277,7 +290,7 @@ const ReviewCollaborator = () => {
 
   const showModal = (key) => {
     setModal(key);
-    // console.log(modal, "modal");
+    //
   };
 
   let items = [
@@ -285,7 +298,7 @@ const ReviewCollaborator = () => {
     //   key: "0",
     //   label: checkElement?.includes("delete_request_service") &&
     //     (<p className="m-0" onClick={()=>showModal("delete")}>{`${i18n.t("delete", { lng: lang })}`}</p>)
-    // }, 
+    // },
     {
       key: "0",
       label: checkElement?.includes("delete_request_service") && (
@@ -313,6 +326,7 @@ const ReviewCollaborator = () => {
         </Dropdown>
       </Space>
     ),
+    
   };
 
   const calculateRating = (data) => {
@@ -330,7 +344,7 @@ const ReviewCollaborator = () => {
       if (rating.star === 1) totalOneStarTemp += 1;
     });
     setTotalRating({
-      ...totalRating,
+      // ...totalRating,
       totalFiveStar: totalFiveStarTemp,
       totalFourStar: totalFourStarTemp,
       totalThreeStar: totalThreeStarTemp,
@@ -338,26 +352,35 @@ const ReviewCollaborator = () => {
       totalOneStar: totalOneStarTemp,
     });
   };
-  const calculateRatingPercent = (total, child) => {
-    let percent = (child / total) * 100;
-    return percent ? Math.round((percent + Number.EPSILON) * 100) / 100 : 0;
-  };
+
   const handleFilter = useCallback(
     (star) => {
+      // setTotalRating({
+      //   totalFiveStar: 0,
+      //   totalFourStar: 0,
+      //   totalThreeStar: 0,
+      //   totalTwoStar: 0,
+      //   totalOneStar: 0,
+      // });
+
       setStar(star);
+
       getDataReviewCollaborator(
         startPage,
-        lengthPage,
+        totalItem,
         startDate,
         endDate,
         star
       ).then((res) => {
         setData(res?.data);
+        calculateRating(res);
         setTotalItem(res?.totalItem);
       });
     },
     [startPage, lengthPage, startDate, endDate, star]
   );
+  //
+  //
   return (
     <>
       <div className="div-container-content">
@@ -370,7 +393,52 @@ const ReviewCollaborator = () => {
         </div>
         {/* Container cho total đánh giá */}
         <div className="flex flex-row gap-8">
-          <div className="w-1/5 rounded-xl bg-white boxcss flex flex-col px-2 py-2.5">
+          <CardStatistical
+            totalStar={totalRating.totalFiveStar}
+            totalPercent={calculateNumberPercent(
+              totalItem,
+              totalRating.totalFiveStar
+            )}
+            color={"rgb(34 197 94 / 0.25)"}
+            icon_color={"#008000"}
+          />
+          <CardStatistical
+            totalStar={totalRating.totalFourStar}
+            totalPercent={calculateNumberPercent(
+              totalItem,
+              totalRating.totalFourStar
+            )}
+            color={"rgb(132 204 22 / 0.25)"}
+            icon_color={"#2fc22f"}
+          />
+          <CardStatistical
+            totalStar={totalRating.totalThreeStar}
+            totalPercent={calculateNumberPercent(
+              totalItem,
+              totalRating.totalThreeStar
+            )}
+            color={"rgb(234 179 8 / 0.25)"}
+            icon_color={"#FFD700"}
+          />
+          <CardStatistical
+            totalStar={totalRating.totalTwoStar}
+            totalPercent={calculateNumberPercent(
+              totalItem,
+              totalRating.totalTwoStar
+            )}
+            color={"rgb(249 115 22 / 0.25)"}
+            icon_color={"#FFA500"}
+          />
+          <CardStatistical
+            totalStar={totalRating.totalOneStar}
+            totalPercent={calculateNumberPercent(
+              totalItem,
+              totalRating.totalOneStar
+            )}
+            color={"rgb(239 68 68 / 0.25)"}
+            icon_color={"#FF0000"}
+          />
+          {/*<div className="w-1/5 rounded-xl bg-white card-shadow flex flex-col px-2 py-2.5">
             <div className="flex px-2 py-3 items-center gap-2 h-1/3 bg-green-500/25 rounded-lg">
               <IoStar
                 size="1.2rem"
@@ -387,13 +455,13 @@ const ReviewCollaborator = () => {
               <span className="w-1/2 flex flex-col items-center justify-center">
                 <span>Chiếm</span>
                 <span className="font-bold">
-                  {calculateRatingPercent(totalItem, totalRating.totalFiveStar)}{" "}
+                  {calculateNumberPercent(totalItem, totalRating.totalFiveStar)}{" "}
                   %
                 </span>
               </span>
             </div>
           </div>
-          <div className="w-1/5 rounded-xl bg-white boxcss flex flex-col px-2 py-2.5">
+           <div className="w-1/5 rounded-xl bg-white card-shadow flex flex-col px-2 py-2.5">
             <div className="flex px-2 py-3 items-center gap-2 h-1/3 bg-lime-500/25 rounded-lg">
               <IoStar
                 size="1.2rem"
@@ -410,13 +478,13 @@ const ReviewCollaborator = () => {
               <span className="w-1/2 flex flex-col items-center justify-center">
                 <span>Chiếm</span>
                 <span className="font-bold">
-                  {calculateRatingPercent(totalItem, totalRating.totalFourStar)}{" "}
+                  {calculateNumberPercent(totalItem, totalRating.totalFourStar)}{" "}
                   %
                 </span>
               </span>
             </div>
           </div>
-          <div className="w-1/5 rounded-xl bg-white boxcss flex flex-col px-2 py-2.5">
+          <div className="w-1/5 rounded-xl bg-white card-shadow flex flex-col px-2 py-2.5">
             <div className="flex px-2 py-3 items-center gap-2 h-1/3 bg-yellow-500/25 rounded-lg">
               <IoStar
                 size="1.2rem"
@@ -433,7 +501,7 @@ const ReviewCollaborator = () => {
               <span className="w-1/2 flex flex-col items-center justify-center">
                 <span>Chiếm</span>
                 <span className="font-bold">
-                  {calculateRatingPercent(
+                  {calculateNumberPercent(
                     totalItem,
                     totalRating.totalThreeStar
                   )}{" "}
@@ -442,7 +510,7 @@ const ReviewCollaborator = () => {
               </span>
             </div>
           </div>
-          <div className="w-1/5 rounded-xl bg-white boxcss flex flex-col px-2 py-2.5">
+          <div className="w-1/5 rounded-xl bg-white card-shadow flex flex-col px-2 py-2.5">
             <div className="flex px-2 py-3 items-center gap-2 h-1/3 bg-orange-500/25 rounded-lg">
               <IoStar
                 size="1.2rem"
@@ -459,13 +527,13 @@ const ReviewCollaborator = () => {
               <span className="w-1/2 flex flex-col items-center justify-center">
                 <span>Chiếm</span>
                 <span className="font-bold">
-                  {calculateRatingPercent(totalItem, totalRating.totalTwoStar)}{" "}
+                  {calculateNumberPercent(totalItem, totalRating.totalTwoStar)}{" "}
                   %
                 </span>
               </span>
             </div>
           </div>
-          <div className="w-1/5 rounded-xl bg-white boxcss flex flex-col px-2 py-2.5">
+          <div className="w-1/5 rounded-xl bg-white card-shadow flex flex-col px-2 py-2.5">
             <div className="flex px-2 py-3 items-center gap-2 h-1/3 bg-red-500/25 rounded-lg">
               <IoStar
                 size="1.2rem"
@@ -482,14 +550,14 @@ const ReviewCollaborator = () => {
               <span className="w-1/2 flex flex-col items-center justify-center">
                 <span>Chiếm</span>
                 <span className="font-bold">
-                  {calculateRatingPercent(totalItem, totalRating.totalOneStar)}{" "}
+                  {calculateNumberPercent(totalItem, totalRating.totalOneStar)}{" "}
                   %
                 </span>
               </span>
             </div>
-          </div>
+          </div> */}
         </div>
-        <div className="bg-white rounded-xl my-4 p-4 boxcss border-gray-300 border">
+        <div className="bg-white rounded-xl my-4 p-4 card-shadow border-gray-300 border">
           <div className="flex gap-6">
             <div className="w-3/4 flex gap-4">
               {/* Lịch */}
@@ -506,7 +574,7 @@ const ReviewCollaborator = () => {
                   />
                   <div className="border rounded-md flex justify-center items-center px-[10px] py-[6.4px]">
                     <p className="m-0 text-date-same">
-                      Kỳ này: {moment(startDate).format("DD/MM/YYYY")}-
+                      Khoảng ngày: {moment(startDate).format("DD/MM/YYYY")}-
                       {moment(endDate).format("DD/MM/YYYY")}
                     </p>
                   </div>
@@ -525,11 +593,11 @@ const ReviewCollaborator = () => {
                     style={{ width: "100%" }}
                     options={[
                       { value: 0, label: `${i18n.t("Tất cả", { lng: lang })}` },
-                      { value: 1, label: `1 ${i18n.t("star", { lng: lang })}` },
-                      { value: 2, label: `2 ${i18n.t("star", { lng: lang })}` },
-                      { value: 3, label: `3 ${i18n.t("star", { lng: lang })}` },
-                      { value: 4, label: `4 ${i18n.t("star", { lng: lang })}` },
                       { value: 5, label: `5 ${i18n.t("star", { lng: lang })}` },
+                      { value: 4, label: `4 ${i18n.t("star", { lng: lang })}` },
+                      { value: 3, label: `3 ${i18n.t("star", { lng: lang })}` },
+                      { value: 2, label: `2 ${i18n.t("star", { lng: lang })}` },
+                      { value: 1, label: `1 ${i18n.t("star", { lng: lang })}` },
                     ]}
                     defaultValue={"Tất cả"}
                   />
@@ -567,7 +635,7 @@ const ReviewCollaborator = () => {
               onCurrentPageChange={onChangePage}
               detectLoading={detectLoading}
               onChangeValue={onChangePropsValue}
-              setLengthPage = {setLengthPage}
+              setLengthPage={setLengthPage}
               // onShowModal={onShowModal}
               getItemRow={setItem}
             />
