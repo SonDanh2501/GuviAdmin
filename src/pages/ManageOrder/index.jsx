@@ -201,14 +201,14 @@ const ManageOrder = () => {
       i18n_title: "customer",
       dataIndex: "customer",
       key: "customer-name-phone",
-      width: 140,
+      width: 150,
       fontSize: "text-size-M",
     },
     {
       i18n_title: "service",
       dataIndex: "service._id.title.vi",
       key: "service",
-      width: 130,
+      width: 110,
       fontSize: "text-size-M",
     },
     {
