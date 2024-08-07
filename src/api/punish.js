@@ -49,6 +49,8 @@ export const cancelPunishTicketApi = (idPunishTicket) => {
 
 export const revokePunishTicketApi = (idPunishTicket) => {
   return axiosClient.post(
-    `/admin/punish_ticket_manage/revoke_item/${idPunishTicket}?lang=vi`
+    // `/admin/punish_ticket_manage/revoke_item/${idPunishTicket}?lang=vi`
+    `/api/admin/punish_ticket_manager/revoke_item/${idPunishTicket}?lang=vi`
+
   );
 };
