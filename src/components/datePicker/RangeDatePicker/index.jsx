@@ -37,14 +37,13 @@ const RangeDatePicker = (props) => {
 
   const timeZone = 0;
 
-  const toIsoString = (date)  => {
+  const toIsoString = (date) => {
     var tzo = -date?.getTimezoneOffset(),
       dif = tzo >= 0 ? "+" : "-",
       pad = function (num) {
         return (num < 10 ? "0" : "") + num;
       };
-  
-    console.log("CHECK TZO", tzo);
+
     return date.toISOString();
     // date?.getFullYear() +
     // "-" +
@@ -61,8 +60,8 @@ const RangeDatePicker = (props) => {
     // pad(Math.floor(Math.abs(tzo) / 60)) +
     // ":" +
     // pad(Math.abs(tzo) % 60)
-  }
-  
+  };
+
   const toEndOfDayIsoString = (date) => {
     var tzo = -date?.getTimezoneOffset(),
       dif = tzo >= 0 ? "+" : "-",
@@ -147,10 +146,10 @@ const RangeDatePicker = (props) => {
       setEnd(endDate);
       setStartCalendar(startDate);
       setEndCalendar(endDate);
-          // setStartDate(startDate.toISOString());
-          // setEndDate(endDate.toISOString());
-          setStartDate(toIsoString(startDate._d));
-          setEndDate(toEndOfDayIsoString(endDate._d));
+      // setStartDate(startDate.toISOString());
+      // setEndDate(endDate.toISOString());
+      setStartDate(toIsoString(startDate._d));
+      setEndDate(toEndOfDayIsoString(endDate._d));
 
       setTitle(`${i18n.t(item.title, { lng: lang })}`);
       setValueTab(item.value);
@@ -330,7 +329,6 @@ const RangeDatePicker = (props) => {
       } else {
         lengthDaySelectedConvert = lengthDaySelected + 1;
       }
-      console.log("lengthDaySelectedConvert", lengthDaySelectedConvert);
     } else if (item.type_range === "months" && selectedMonths?.length < 2) {
       if (lengthDaySelected < 0) {
         lengthDaySelectedConvert = (-lengthDaySelected + 1) * 2;
@@ -406,10 +404,10 @@ const RangeDatePicker = (props) => {
       } else {
         // General case for day-wise calculations
         const start = lengthDayToCurrent
-          ? lengthDayToCurrent + lengthDaySelectedConvert / 2 
-          : lengthDaySelectedConvert / 2 ;
+          ? lengthDayToCurrent + lengthDaySelectedConvert / 2
+          : lengthDaySelectedConvert / 2;
         //
-        console.log("check start", start);
+
         for (let i = start; i <= lengthDayFinal - 1; i++) {
           var previousDay = moment()
             .subtract(i, item.type_range)
@@ -684,14 +682,15 @@ const RangeDatePicker = (props) => {
     setSelectedMonths(sortedMonths);
   };
 
-// console.log("check started date", sta)
-// console.log("check started date")
+  //
+  //
 
   return (
     <div>
       <div>
         <div className="btn-date-picker" onClick={() => setOpen(!open)}>
-          <p>Thời gian: {title}</p>
+          <p className="text-gray-700/80 mr-1">Thời gian:</p>
+          <p className="font-medium">{title}</p>
         </div>
       </div>
       {open && (
@@ -880,7 +879,6 @@ const RangeDatePicker = (props) => {
                   }}
                   maxDate={disableFutureDay ? new Date() : ""} // Disabled all futured day
                 />
-
               </div>
             </div>
           </div>

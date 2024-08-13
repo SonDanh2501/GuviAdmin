@@ -118,3 +118,13 @@ export const calculateNumberPercent = (total, child) => {
   let percent = (child / total) * 100;
   return percent ? Math.round((percent + Number.EPSILON) * 100) / 100 : 0;
 };
+
+export const moveElement = (array, position, conditionFind) => {
+  let newArray = [...array]; // Temp array
+  const index = newArray.findIndex(conditionFind); // Check if having data or not
+  if (index !== -1) {
+    const [element] = newArray.splice(index, 1); // Get the element
+    newArray.splice(position, 0, element); // Insert into array
+    return newArray;
+  }
+};

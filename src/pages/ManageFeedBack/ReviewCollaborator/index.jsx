@@ -394,6 +394,7 @@ const ReviewCollaborator = () => {
         {/* Container cho total đánh giá */}
         <div className="flex flex-row gap-8">
           <CardStatistical
+            label="Đánh giá 5 sao"
             totalStar={totalRating.totalFiveStar}
             totalPercent={calculateNumberPercent(
               totalItem,
@@ -403,6 +404,7 @@ const ReviewCollaborator = () => {
             icon_color={"#008000"}
           />
           <CardStatistical
+            label="Đánh giá 4 sao"
             totalStar={totalRating.totalFourStar}
             totalPercent={calculateNumberPercent(
               totalItem,
@@ -412,6 +414,7 @@ const ReviewCollaborator = () => {
             icon_color={"#2fc22f"}
           />
           <CardStatistical
+            label="Đánh giá 3 sao"
             totalStar={totalRating.totalThreeStar}
             totalPercent={calculateNumberPercent(
               totalItem,
@@ -421,6 +424,7 @@ const ReviewCollaborator = () => {
             icon_color={"#FFD700"}
           />
           <CardStatistical
+            label="Đánh giá 2 sao"
             totalStar={totalRating.totalTwoStar}
             totalPercent={calculateNumberPercent(
               totalItem,
@@ -430,6 +434,7 @@ const ReviewCollaborator = () => {
             icon_color={"#FFA500"}
           />
           <CardStatistical
+            label="Đánh giá 1 sao"
             totalStar={totalRating.totalOneStar}
             totalPercent={calculateNumberPercent(
               totalItem,

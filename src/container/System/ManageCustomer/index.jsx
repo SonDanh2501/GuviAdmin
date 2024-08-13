@@ -148,7 +148,7 @@ const ManageCustomer = () => {
     {
       i18n_title: "customer",
       dataIndex: "customer",
-      key: "customer-name-phone",
+      key: "customer_name_phone_rank",
       fontSize: "text-size-L",
       width: 140,
     },

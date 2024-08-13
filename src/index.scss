@@ -255,11 +255,9 @@
   display: none;
 }
 
-.ant-layout-sider-children {
-  background-color: #FCFEFF;
-}
+// Ant Design Menu
 
-/*~~~ Ant desgin menu css ~~~*/
+
 .ant-menu {
   background-color: #FCFEFF;
   border: 0px solid black !important;
@@ -366,6 +364,10 @@
   }
 }
 
+.ant-layout-sider-children {
+  background-color: #FCFEFF;
+}
+
 .ant-layout-sider-collapsed {
 
   // background-color: red;
@@ -392,7 +394,7 @@
   }
 }
 
-/*~~~ Ant desgin dropdown css ~~~*/
+// Ant Design Dropdown
 .ant-dropdown-menu {
   box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px !important;
   max-height: 300px;
@@ -405,6 +407,8 @@
 //   overflow-y: auto;
 // }
 
+
+// Ant Design Table
 
 .ant-table-thead p {
   color: white;
@@ -452,20 +456,28 @@
   background-color: #7e53b2;
 }
 
+// Ant Design Progress
 .ant-progress-text {
   font-weight: bold;
   font-size: 14px;
 }
 
+// Ant Design Tab
 .ant-tabs-tab {
-  font-size: 18px !important;
+  font-size: $textFontSizeL !important;
   // border-bottom: 2px solid black !important;
   font-weight: 500 !important;
   color: #8AA3CD !important;
 }
+
 .ant-tabs-tab-selected {
     border-bottom: 2px solid black !important;
 }
-// .ant-tabs-tab-btn {
-//   color: red !important;
-// }
+
+// Ant Design Tab
+.ant-popover-inner {
+  // border-radius: 8px;
+  // box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px !important;
+  max-height: 350px !important;
+  overflow: auto;
+}
