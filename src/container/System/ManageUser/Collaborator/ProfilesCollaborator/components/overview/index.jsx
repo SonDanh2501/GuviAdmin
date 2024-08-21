@@ -5,8 +5,8 @@ import "./styles.scss";
 const Overview = ({ id, star }) => {
   return (
     <div className="pb-4">
-      <HeaderCard calendar={true} />
-      <div class="flex md:flex-row flex-col-reverse w-full gap-6 mt-6">
+      {/* <HeaderCard calendar={true} /> */}
+      <div class="flex md:flex-row flex-col-reverse w-full gap-6">
         {/* Left container */}
         <div class="w-full md:w-1/3 md:flex flex-col gap-6">
           <CardInfo
@@ -37,6 +37,7 @@ const Overview = ({ id, star }) => {
             collaboratorFinance={true}
             headerLabel="Tài chính"
             supportIcon={true}
+            timeFilter={true}
           />
           <CardInfo
             collaboratorJobs={true}

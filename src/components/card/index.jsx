@@ -32,7 +32,7 @@ import {
   ResponsiveContainer,
   Sector,
 } from "recharts";
-import { Image, Tooltip } from "antd";
+import { ConfigProvider, Image, Popover, Select, Tooltip } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { loadingAction } from "../../redux/actions/loading";
 import { errorNotify } from "../../helper/toast";
@@ -41,6 +41,8 @@ import { getLanguageState } from "../../redux/selectors/auth";
 import i18n from "../../i18n";
 import { getProvince } from "../../redux/selectors/service";
 // Icon
+import ButtonCustom from "../button";
+import { CaretDownOutlined } from "@ant-design/icons";
 import icons from "../../utils/icons";
 const {
   IoAlertOutline,
@@ -65,6 +67,7 @@ const {
   IoThumbsDownOutline,
   IoTimeOutline,
   IoWalletOutline,
+  IoCaretDown,
 } = icons;
 
 const CardInfo = (props) => {
@@ -74,6 +77,7 @@ const CardInfo = (props) => {
     supportText,
     collaboratorId,
     collaboratorStar,
+    timeFilter,
     // Condition props
     collaboratorRatingOverview,
     collaboratorCriteria,
@@ -151,7 +155,6 @@ const CardInfo = (props) => {
         if (el.star === 2) twoStar += 1;
         if (el.star === 1) oneStar += 1;
       });
-
       totalRating?.forEach((element) => {
         if (element.name === "5 sao") {
           element.value = fiveStar;
@@ -172,63 +175,89 @@ const CardInfo = (props) => {
       setTotalCountRating(fiveStar + fourStar + threeStar + twoStar + oneStar);
     }
   };
-  const renderActiveShape = (props) => {
+  const renderCustomizedLabel = ({
+    cx,
+    cy,
+    midAngle,
+    innerRadius,
+    outerRadius,
+    percent,
+    index,
+  }) => {
     const RADIAN = Math.PI / 180;
-    const {
-      cx,
-      cy,
-      midAngle,
-      innerRadius,
-      outerRadius,
-      startAngle,
-      endAngle,
-      fill,
-      payload,
-      percent,
-      value,
-    } = props;
+    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+    const x = cx + radius * Math.cos(-midAngle * RADIAN);
+    const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
-    const sin = Math.sin(-RADIAN * midAngle);
-    const cos = Math.cos(-RADIAN * midAngle);
-    const sx = cx + (outerRadius + 10) * cos;
-    const sy = cy + (outerRadius + 10) * sin;
-    const mx = cx + (outerRadius + 30) * cos;
-    const my = cy + (outerRadius + 30) * sin;
-    const ex = mx + (cos >= 0 ? 1 : -1) * 22;
-    const ey = my;
-    const textAnchor = cos >= 0 ? "start" : "end";
     return (
-      <g>
-        <text x={cx} y={cy} dy={1} textAnchor="middle" fill={fill}>
-          {totalCountRating === 0 ? 0 : payload.value} đánh giá
-        </text>
-        <text x={cx} y={cy + 20} dy={3} textAnchor="middle" fill={fill}>
-          {`(${(totalCountRating === 0 ? 0 : percent * 100).toFixed(2)}%)`}
-        </text>
-        <Sector
-          cx={cx}
-          cy={cy}
-          innerRadius={innerRadius}
-          outerRadius={outerRadius}
-          startAngle={startAngle}
-          endAngle={endAngle}
-          fill={fill}
-        />
-        <Sector
-          cx={cx}
-          cy={cy}
-          startAngle={startAngle}
-          endAngle={endAngle}
-          innerRadius={outerRadius + 6}
-          outerRadius={outerRadius + 10}
-          fill={fill}
-        />
-      </g>
+      <text
+        x={x}
+        y={y}
+        fill="white"
+        textAnchor={x > cx ? "start" : "end"}
+        dominantBaseline="central"
+      >
+        {percent > 0 && `${(percent * 100).toFixed(0)}%`}
+      </text>
     );
   };
-  const onPieEnter = (_, index) => {
-    setActiveIndex(index);
-  };
+  // const renderActiveShape = (props) => {
+  //   const RADIAN = Math.PI / 180;
+  //   const {
+  //     cx,
+  //     cy,
+  //     midAngle,
+  //     innerRadius,
+  //     outerRadius,
+  //     startAngle,
+  //     endAngle,
+  //     fill,
+  //     payload,
+  //     percent,
+  //     value,
+  //   } = props;
+
+  //   const sin = Math.sin(-RADIAN * midAngle);
+  //   const cos = Math.cos(-RADIAN * midAngle);
+  //   const sx = cx + (outerRadius + 10) * cos;
+  //   const sy = cy + (outerRadius + 10) * sin;
+  //   const mx = cx + (outerRadius + 30) * cos;
+  //   const my = cy + (outerRadius + 30) * sin;
+  //   const ex = mx + (cos >= 0 ? 1 : -1) * 22;
+  //   const ey = my;
+  //   const textAnchor = cos >= 0 ? "start" : "end";
+  //   return (
+  //     <g>
+  //       <text x={cx} y={cy} dy={1} textAnchor="middle" fill={fill}>
+  //         {totalCountRating === 0 ? 0 : payload.value} đánh giá
+  //       </text>
+  //       <text x={cx} y={cy + 20} dy={3} textAnchor="middle" fill={fill}>
+  //         {`(${(totalCountRating === 0 ? 0 : percent * 100).toFixed(2)}%)`}
+  //       </text>
+  //       <Sector
+  //         cx={cx}
+  //         cy={cy}
+  //         innerRadius={innerRadius}
+  //         outerRadius={outerRadius}
+  //         startAngle={startAngle}
+  //         endAngle={endAngle}
+  //         fill={fill}
+  //       />
+  //       <Sector
+  //         cx={cx}
+  //         cy={cy}
+  //         startAngle={startAngle}
+  //         endAngle={endAngle}
+  //         innerRadius={outerRadius + 6}
+  //         outerRadius={outerRadius + 10}
+  //         fill={fill}
+  //       />
+  //     </g>
+  //   );
+  // };
+  // const onPieEnter = (_, index) => {
+  //   setActiveIndex(index);
+  // };
   // Support function cho thẻ tiêu chí đánh giá
   const MAX_LINE_WIDTH = 120;
   // Hàm tính toán độ dài của văn bản và xuống dòng khi cần thiết
@@ -418,20 +447,71 @@ const CardInfo = (props) => {
       </div>
     );
   };
+  const timeFilterOptions = [
+    {
+      label: "Tháng nay",
+      value: 1,
+    },
+    {
+      label: "Tháng trước",
+      value: 2,
+    },
+    {
+      label: "3 tháng trước",
+      value: 3,
+    },
+    {
+      label: "Năm nay",
+      value: 4,
+    },
+  ];
+  // if (collaboratorRatingOverview ) {
+  //   console.log("totalRating >>>", totalRating);
+  // }
   return (
     <div style={{ borderRadius: "6px" }} className="bg-white card-shadow">
       {/* Header */}
       {headerLabel && (
-        <div className="flex items-center justify-between gap-2 border-b-2 border-gray-200 p-3">
-          <div className="flex items-center gap-1">
-            <span className="font-medium text-sm">{headerLabel}</span>
-            {supportIcon && (
-              <Tooltip
-                placement="top"
-                title={supportText ? supportText : "Tính năng chưa hoàn thiện"}
-              >
-                <IoHelpCircleOutline size={16} color="#9ca3af" />
-              </Tooltip>
+        <div className="flex items-center justify-between gap-2 border-b-2 border-gray-200 p-3.5">
+          <div className="w-full flex justify-between items-center">
+            <div className="flex items-center gap-1">
+              <span className="font-medium text-sm">{headerLabel}</span>
+              {supportIcon && (
+                <Tooltip
+                  placement="top"
+                  title={
+                    supportText ? supportText : "Tính năng chưa hoàn thiện"
+                  }
+                >
+                  <IoHelpCircleOutline size={16} color="#9ca3af" />
+                </Tooltip>
+              )}
+            </div>
+            {timeFilter && (
+              <div className="flex items-center gap-1">
+                <Popover
+                  content={
+                    <div className="flex flex-col">
+                      {timeFilterOptions.map((el) => (
+                        <span
+                          style={{ borderRadius: "6px" }}
+                          className="hover:bg-violet-500 hover:text-white cursor-pointer p-2 my-0.5 font-normal duration-300 flex items-center justify-between"
+                        >
+                          {el.label}
+                        </span>
+                      ))}
+                    </div>
+                  }
+                  title=" "
+                  className="flex items-center gap-1 cursor-pointer"
+                  trigger={"click"}
+                >
+                  <span className="text-gray-500/70 font-normal text-sm">
+                    Tháng nay
+                  </span>
+                  <IoCaretDown color="#9ca3af" />
+                </Popover>
+              </div>
             )}
           </div>
         </div>
@@ -461,20 +541,29 @@ const CardInfo = (props) => {
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
                 <Pie
-                  activeIndex={activeIndex}
-                  activeShape={renderActiveShape}
+                  // activeIndex={activeIndex}
+                  // activeShape={renderActiveShape}
                   data={totalRating}
-                  dataKey="value"
-                  nameKey="name"
                   cx="50%"
                   cy="50%"
-                  innerRadius={90}
+                  labelLine={false}
+                  label={renderCustomizedLabel}
                   outerRadius={120}
-                  paddingAngle={7}
                   fill="#8884d8"
+                  dataKey="value"
+                  // data={totalRating}
+                  // dataKey="value"
+                  // nameKey="name"
+                  // cx="50%"
+                  // cy="50%"
                   // label={renderCustomizedLabel}
+                  // // innerRadius={90}
+                  // outerRadius={120}
+                  // // paddingAngle={7}
+                  // fill="#8884d8"
+                  // // label={renderCustomizedLabel}
                   // labelLine={false}
-                  onMouseEnter={onPieEnter}
+                  // // onMouseEnter={onPieEnter}
                 >
                   {totalRating.map((entry, index) => (
                     <Cell
@@ -975,12 +1064,6 @@ const CardInfo = (props) => {
                 </span>
                 <div className="flex items-center gap-1">
                   <span className="font-normal text-sm text-gray-500/60">
-                    Số điện thoại:
-                  </span>
-                  <span className="font-medium text-sm">{dataDetail?.phone}</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <span className="font-normal text-sm text-gray-500/60">
                     Mã giới thiệu:
                   </span>
                   <span className="font-medium text-sm">
@@ -1021,106 +1104,92 @@ const CardInfo = (props) => {
               </div>
             </div>
           </div>
-          <div className="flex flex-col gap-6 mx-3 my-4">
+          <div className="flex flex-col gap-5 mx-3 my-4">
             <span className="font-medium text-sm">Thông tin nhân sự</span>
-            <div className="flex gap-3 items-center">
-              <IconTextCustom
-                icon={
-                  <IoPersonOutline
-                    className="bg-blue-100 p-2.5 w-11 h-11 rounded-xl"
-                    color="DodgerBlue"
-                  />
-                }
-                label="Giới tính"
-                content={dataDetail.gender === "male" ? "Nam" : "Nữ"}
-              ></IconTextCustom>
-            </div>
-            <div className="flex gap-3 items-center">
-              <IconTextCustom
-                icon={
-                  <IoShieldCheckmarkOutline
-                    className="bg-green-100 p-2.5 w-11 h-11 rounded-xl"
-                    color="green"
-                  />
-                }
-                label="Ngày kích hoạt"
-                content={moment(dataDetail?.date_create).format("DD/MM/YYYY")}
-              ></IconTextCustom>
-            </div>
-            <div className="flex gap-3 items-center">
-              <IconTextCustom
-                icon={
-                  <IoCalendarOutline
-                    className="bg-yellow-100 p-2.5 w-11 h-11 rounded-xl"
-                    color="orange"
-                  />
-                }
-                label="Ngày sinh"
-                content={moment(dataDetail?.birthday).format("DD/MM/YYYY")}
-              ></IconTextCustom>
-            </div>
-            {/* <div className="flex gap-3 items-center">
-              <IconTextCustom
-                icon={
-                  <IoCallOutline
-                    className="bg-red-100 p-2.5 w-11 h-11 rounded-xl"
-                    color="red"
-                  />
-                }
-                label="Điện thoại"
-                content={dataDetail?.phone}
-              ></IconTextCustom>
-            </div> */}
-            <div className="flex gap-3 items-center">
-              <IconTextCustom
-                icon={
-                  <IoNewspaperOutline
-                    className="bg-red-100 p-2.5 w-11 h-11 rounded-xl"
-                    color="red"
-                  />
-                }
-                label="Tổng số đơn"
-                content={total?.total_order}
-                subcontent="đơn"
-              ></IconTextCustom>
-            </div>
-            <div className="flex gap-3 items-center">
-              <IconTextCustom
-                icon={
-                  <IoTimeOutline
-                    className="bg-blue-100 p-2.5 w-11 h-11 rounded-xl"
-                    color="DodgerBlue"
-                  />
-                }
-                label="Tổng số giờ làm"
-                content={total?.total_hour}
-                subcontent="giờ"
-              ></IconTextCustom>
-            </div>
-            <div className="flex gap-3 items-center">
-              <IconTextCustom
-                icon={
-                  <IoCalendarNumberOutline
-                    className="bg-green-100 p-2.5 w-11 h-11 rounded-xl"
-                    color="green"
-                  />
-                }
-                label="Ngày đăng ký"
-                content={moment(dataDetail?.date_create).format("DD/MM/YYYY")}
-              ></IconTextCustom>
-            </div>
-            <div className="flex gap-3 items-center">
-              <IconTextCustom
-                icon={
-                  <IoHeartOutline
-                    className="bg-red-100 p-2.5 w-11 h-11 rounded-xl"
-                    color="red"
-                  />
-                }
-                label="Tổng lượt yêu thích"
-                content={total?.total_favourite}
-              ></IconTextCustom>
-            </div>
+            <IconTextCustom
+              icon={
+                <IoCallOutline
+                  className="bg-green-100 p-2.5 w-11 h-11 rounded-xl"
+                  color="green"
+                />
+              }
+              label="Điện thoại"
+              content={dataDetail?.phone}
+            />
+            <IconTextCustom
+              icon={
+                <IoPersonOutline
+                  className="bg-blue-100 p-2.5 w-11 h-11 rounded-xl"
+                  color="DodgerBlue"
+                />
+              }
+              label="Giới tính"
+              content={dataDetail.gender === "male" ? "Nam" : "Nữ"}
+            />
+            <IconTextCustom
+              icon={
+                <IoCalendarOutline
+                  className="bg-yellow-100 p-2.5 w-11 h-11 rounded-xl"
+                  color="orange"
+                />
+              }
+              label="Ngày sinh"
+              content={moment(dataDetail?.birthday).format("DD/MM/YYYY")}
+            />
+
+            <IconTextCustom
+              icon={
+                <IoNewspaperOutline
+                  className="bg-red-100 p-2.5 w-11 h-11 rounded-xl"
+                  color="red"
+                />
+              }
+              label="Tổng số đơn"
+              content={total?.total_order}
+              subcontent="đơn"
+            />
+            <IconTextCustom
+              icon={
+                <IoTimeOutline
+                  className="bg-green-100 p-2.5 w-11 h-11 rounded-xl"
+                  color="green"
+                />
+              }
+              label="Tổng số giờ làm"
+              content={total?.total_hour}
+              subcontent="giờ"
+            />
+
+            <IconTextCustom
+              icon={
+                <IoHeartOutline
+                  className="bg-blue-100 p-2.5 w-11 h-11 rounded-xl"
+                  color="blue"
+                />
+              }
+              label="Tổng lượt yêu thích"
+              content={total?.total_favourite}
+            />
+            <IconTextCustom
+              icon={
+                <IoShieldCheckmarkOutline
+                  className="bg-yellow-100 p-2.5 w-11 h-11 rounded-xl"
+                  color="orange"
+                />
+              }
+              label="Ngày kích hoạt"
+              content={moment(dataDetail?.date_create).format("DD/MM/YYYY")}
+            />
+            <IconTextCustom
+              icon={
+                <IoCalendarNumberOutline
+                  className="bg-red-100 p-2.5 w-11 h-11 rounded-xl"
+                  color="red"
+                />
+              }
+              label="Ngày đăng ký"
+              content={moment(dataDetail?.date_create).format("DD/MM/YYYY")}
+            />
           </div>
         </>
       )}

@@ -40,7 +40,8 @@ export const deleteCustomer = (id, payload) => {
 
 export const getOrderByCustomers = (id, start, length) => {
   return axiosClient.get(
-    `/admin/order_manager/get_order_by_customer/${id}?start=${start}&length=${length}`
+    `api/admin/group_order_manager/get_group_order_by_customer/${id}?start=${start}&length=${length}?typeSort=date_create&valueSort=-1`
+    // `/admin/order_manager/get_order_by_customer/${id}?start=${start}&length=${length}`
   );
 };
 

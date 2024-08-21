@@ -124,7 +124,13 @@ const ProfileCollaborator = () => {
             <Overview id={id} star={data?.star} />
           </Tabs.TabPane>
           <Tabs.TabPane tab={`${i18n.t("info", { lng: lang })}`} key="2">
-            <Information data={data} image={img} idCTV={id} setData={setData} />
+            <Information
+              data={data}
+              image={img}
+              idCTV={id}
+              id={id}
+              setData={setData}
+            />
           </Tabs.TabPane>
           <Tabs.TabPane tab={`${i18n.t("document", { lng: lang })}`} key="3">
             <Document id={id} />
@@ -162,7 +168,7 @@ const ProfileCollaborator = () => {
         </Tabs>
       </div>
       {/*Card Profile*/}
-      {/* {activeKey === "2" && (
+      {activeKey === "2" && (
         <div className="">
           <div className=" ">
             <Image
@@ -237,7 +243,7 @@ const ProfileCollaborator = () => {
             </div>
           </div>
         </div>
-      )} */}
+      )}
       <FloatButton.BackTop />
     </div>
   );

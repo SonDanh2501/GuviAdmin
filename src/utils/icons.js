@@ -21,7 +21,17 @@ import {
   IoThumbsDownOutline,
   IoTimeOutline,
   IoWalletOutline,
-  IoCheckmarkCircleSharp ,
+  IoCheckmarkCircleSharp,
+  IoChevronDownOutline,
+  IoEyeOutline,
+  IoClose,
+  IoStar,
+  IoStarHalf,
+  IoStarOutline,
+  IoCaretDown,
+  IoSearchCircle,
+  IoCaretDownOutline,
+  IoSearch,
 } from "react-icons/io5";
 
 const icons = {
@@ -48,6 +58,16 @@ const icons = {
   IoTimeOutline,
   IoWalletOutline,
   IoCheckmarkCircleSharp,
+  IoChevronDownOutline,
+  IoEyeOutline,
+  IoClose,
+  IoStar,
+  IoStarHalf,
+  IoStarOutline,
+  IoCaretDown,
+  IoSearchCircle,
+  IoCaretDownOutline,
+  IoSearch,
 };
-  
-  export default icons;
+
+export default icons;

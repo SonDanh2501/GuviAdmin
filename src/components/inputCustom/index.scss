@@ -7,7 +7,7 @@
     font-size: $textFontSizeL;
     line-height: $lineHeightL;
     // height: 50px;
-    padding: 10px 20px;
+    padding: 9px 20px;
     transition: 0.25s ease;
     outline: none;
 }
@@ -31,7 +31,7 @@
     transition: 0.25s ease;
 }
 
-.form-input:not(:placeholder-shown)+.form-label,    
+.form-input:not(:placeholder-shown)+.form-label,
 
 .form-input:focus+.form-label {
     top: 0;
@@ -43,10 +43,26 @@
     // bor
 }
 
-.icon-dropdown {
+// .icon-dropdown {
 
+// }
+
+// .icon-dropdown:focus {
+//     rotate: 180deg;
+// }
+
+input[type=file]::file-selector-button {
+    margin-right: 10px;
+    margin-top: 2px;
+    border: none;
+    background: #8b5cf6;
+    padding: 3.5px 8px;
+    border-radius: 6px;
+    color: #fff;
+    cursor: pointer;
+    transition: .2s ease-in-out;
 }
-  
-.icon-dropdown:focus {
-    rotate: 180deg;
+
+input[type=file]::file-selector-button:hover {
+    background: #c4b5fd;
 }

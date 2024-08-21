@@ -4,11 +4,13 @@ import _debounce from "lodash/debounce";
 import moment from "moment";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Col, Form, Row } from "reactstrap";
+// import { Button, Col, Form, Row } from "reactstrap";
+import { Col, Form, Row } from "reactstrap";
 import {
   fetchCollaborators,
   getCollaboratorsById,
   updateInformationCollaboratorApi,
+  updateDocumentCollaboratorApi,
 } from "../../../../../../../api/collaborator";
 import {
   getDetailBusiness,
@@ -26,7 +28,32 @@ import {
 import "./index.scss";
 import InputTextCustom from "../../../../../../../components/inputCustom";
 
-const Information = ({ data, image, idCTV, setData }) => {
+//Import của document
+import { Button, Checkbox, Image, Input } from "antd";
+import { saveAs } from "file-saver";
+import JSZip from "jszip";
+import JSZipUtils from "jszip-utils";
+// import { useCallback, useEffect, useState } from "react";
+// import { useDispatch, useSelector } from "react-redux";
+// import {
+//   getCollaboratorsById,
+//   updateDocumentCollaboratorApi,
+// } from "../../../../../../../api/collaborator";
+import { postFile } from "../../../../../../../api/file";
+// import InputCustom from "../../../../../../../components/textInputCustom";
+import resizeFile from "../../../../../../../helper/resizer";
+import icons from "../../../../../../../utils/icons";
+import ButtonCustom from "../../../../../../../components/button";
+import { bankList } from "../../../../../../../utils/contant";
+import user from "../../../../../../../assets/images/user.png";
+
+// import { errorNotify, successNotify } from "../../../../../../../helper/toast";
+// import i18n from "../../../../../../../i18n";
+// import { loadingAction } from "../../../../../../../redux/actions/loading";
+// import { getLanguageState } from "../../../../../../../redux/selectors/auth";
+const { IoClose, IoEyeOutline } = icons;
+
+const Information = ({ data, image, idCTV, setData, id }) => {
   const [resident, setResident] = useState("");
   const [staying, setStaying] = useState("");
   const [imgUrl, setImgUrl] = useState("");
@@ -38,7 +65,6 @@ const Information = ({ data, image, idCTV, setData }) => {
   const [dataBusiness, setDataBusiness] = useState([]);
   const [idBusiness, setIdBusiness] = useState("");
   const [dataDistrict, setDataDistrict] = useState([]);
-  const [codeDistrict, setCodeDistrict] = useState([]);
   const dispatch = useDispatch();
   const service = useSelector(getService);
   const province = useSelector(getProvince);
@@ -49,7 +75,13 @@ const Information = ({ data, image, idCTV, setData }) => {
   const dateFormat = "YYYY-MM-DD";
   const lang = useSelector(getLanguageState);
 
+  const [accountNumber, setAccountNumber] = useState("");
+  const [bankName, setBankName] = useState("");
+  const [accountName, setAccountName] = useState("");
+
+  const [img, setImg] = useState(""); // Giá trị ảnh avatar
   const [name, setName] = useState(""); // Giá trị tên
+  const [email, setEmail] = useState(""); // Giá trị tên
   const [gender, setGender] = useState("other"); // Giá trị giới tính lựa chọn
   const [birthday, setBirthday] = useState("2022-01-20T00:00:00.000Z"); // Giá trị ngày sinh
   const [phone, setPhone] = useState(""); // Giá trị số điện thoại
@@ -61,6 +93,12 @@ const Information = ({ data, image, idCTV, setData }) => {
   const [issued, setIssued] = useState(""); // Giá trị nơi cấp CCCD/CMND
   const [issuedDay, setIssuedDay] = useState(""); // Giá trị ngày cấp CCCD/CMND
 
+  const [selectService, setSelectService] = useState([]); // Giá trị service lựa chọn
+  const [selectBank, setSelectBank] = useState([]); // Giá trị bank lựa chọn
+
+  const [codeCity, setCodeCity] = useState(""); // Giá trị tỉnh, thành phố làm việc
+  const [codeDistrict, setCodeDistrict] = useState([]); // Giá trị quận/ huyện làm việc
+
   const [selectProvinceLive, setSelectProvinceLive] = useState(""); // Giá trị province (tỉnh/thành phố) thường trú lựa chọn
   const [selectDistrictLive, setSelectDistrictLive] = useState(""); // Giá trị district (quận/huyện) thường trú lựa chọn
   const [districtArrayLive, setDistrictArrayLive] = useState([]); // Giá trị mảng gồm các district (quận/huyện) của province (tỉnh/thành phố) đã chọn (thường trú)
@@ -71,13 +109,10 @@ const Information = ({ data, image, idCTV, setData }) => {
   const [districtArrayTemp, setDistrictArrayTemp] = useState([]); // Giá trị mảng gồm các district (quận/huyện) của province (tỉnh/thành phố) đã chọn (thường trú)
   const [addressTemp, setAddressTemp] = useState(""); // Giá trị địa chỉ thường trú cụ thể
 
-  const [codeCity, setCodeCity] = useState(""); // Giá trị tỉnh, thành phố làm việc
   const [selectProvinceWork, setSelectProvinceWork] = useState(""); // Giá trị province (tỉnh/thành phố) làm việc lựa chọn
   const [selectDistrictWork, setSelectDistrictWork] = useState([]); // Giá trị district (quận/huyện) làm việc lựa chọn
   const [districtArrayWork, setDistrictArrayWork] = useState([]); // Giá trị mảng gồm các district (quận/huyện) của province (tỉnh/thành phố) đã chọn (làm việc)
-  const [addressWork, setAddressWork] = useState(""); // Giá trị địa chỉ làm việc cụ thể
 
-  const [selectService, setSelectService] = useState([]); // Giá trị service lựa chọn
   useEffect(() => {
     province.forEach((item) => {
       if (item?.code === data?.city) {
@@ -105,18 +140,19 @@ const Information = ({ data, image, idCTV, setData }) => {
     setPhone(data?.phone);
     setCodeInvite(data?.invite_code);
     setType(data?.type);
+    setIdBusiness(data?.id_business);
+
+    // Giá trị default (nếu có) của Quận/Huyện làm việc
+    setCodeDistrict(data?.district); // Giá trị cũ
+    setSelectDistrictWork(data?.district);
 
     // Giá trị default (nếu có) của service
     setServiceApply(data?.service_apply); // setServiceApply // Giá trị cũ (xóa sau này)
     setSelectService(data?.service_apply ? data?.service_apply : [""]);
 
-    setIdBusiness(data?.id_business);
-
     // Giá trị default (nếu có) của province làm việc
     setCodeCity(data?.city); // Giá trị cũ (xóa sau này)
-    // setSelectProvinceWork(data?.city);
-
-    setCodeDistrict(data?.district);
+    setSelectProvinceWork(data?.city);
   }, [data]);
 
   useEffect(() => {
@@ -137,6 +173,23 @@ const Information = ({ data, image, idCTV, setData }) => {
         .catch((err) => {});
     }
   }, [idBusiness]);
+
+  // useEffect(() => {
+  //   dispatch(loadingAction.loadingRequest(true));
+  //   getCollaboratorsById(id)
+  //     .then((res) => {
+  //       setAccountNumber(res?.account_number);
+  //       setBankName(res?.bank_name);
+  //       setAccountName(res?.account_name);
+  //       dispatch(loadingAction.loadingRequest(false));
+  //     })
+  //     .catch((err) => {
+  //       errorNotify({
+  //         message: err?.message,
+  //       });
+  //       dispatch(loadingAction.loadingRequest(false));
+  //     });
+  // }, [id, dispatch]);
 
   service.map((item) => {
     return serviceOption.push({
@@ -207,14 +260,15 @@ const Information = ({ data, image, idCTV, setData }) => {
   }, 500);
 
   const updateInformation = useCallback(() => {
-    dispatch(loadingAction.loadingRequest(true));
-    const day = moment(new Date(birthday)).toISOString();
-    const indentityDay = moment(new Date(issuedDay)).toISOString();
-
-    updateInformationCollaboratorApi(data?._id, {
-      gender: gender,
-      full_name: name,
-      birthday: day,
+    // dispatch(loadingAction.loadingRequest(true));
+    const birthDayFormat = moment(new Date(birthday)).toISOString(); // Format lại dữ liệu ngày sinh nhật (birthday)
+    const indentityDay = moment(new Date(issuedDay)).toISOString(); // Format lại dữ liệu ngày cấp (issuedDay)
+    const dataPost = {
+      full_name: name, // Họ và tên CTV
+      email: email, // Email CTV
+      gender: gender, // Giới tính CTV
+      birthday: birthDayFormat,
+      // phone: phone, // Điện thoại CTV (không được quyền thay đổi) 
       permanent_address: resident,
       temporary_address: staying,
       folk: ethnic,
@@ -230,26 +284,47 @@ const Information = ({ data, image, idCTV, setData }) => {
       district: codeDistrict,
       city: !codeCity ? -1 : codeCity,
       id_business: idBusiness,
-    })
-      .then((res) => {
-        dispatch(loadingAction.loadingRequest(false));
-        setServiceApply([]);
-        successNotify({
-          message: `${i18n.t("update_success_info", { lng: lang })}`,
-        });
-        getCollaboratorsById(idCTV)
-          .then((res) => {
-            setData(res);
-          })
-          .catch((err) => {});
-        dispatch(loadingAction.loadingRequest(false));
-      })
-      .catch((err) => {
-        errorNotify({
-          message: err?.message,
-        });
-        dispatch(loadingAction.loadingRequest(false));
-      });
+    };
+    console.log("Check data upload >>>", dataPost);
+    // updateInformationCollaboratorApi(data?._id, {
+    //   gender: gender,
+    //   full_name: name,
+    //   birthday: day,
+    //   permanent_address: resident,
+    //   temporary_address: staying,
+    //   folk: ethnic,
+    //   religion: religion,
+    //   edu_level: level,
+    //   identity_number: number,
+    //   identity_place: issued,
+    //   identity_date: indentityDay,
+    //   avatar: image ? image : imgUrl,
+    //   id_inviter: idCollaborator,
+    //   type: type,
+    //   service_apply: serviceApply,
+    //   district: codeDistrict,
+    //   city: !codeCity ? -1 : codeCity,
+    //   id_business: idBusiness,
+    // })
+    //   .then((res) => {
+    //     dispatch(loadingAction.loadingRequest(false));
+    //     setServiceApply([]);
+    //     successNotify({
+    //       message: `${i18n.t("update_success_info", { lng: lang })}`,
+    //     });
+    //     getCollaboratorsById(idCTV)
+    //       .then((res) => {
+    //         setData(res);
+    //       })
+    //       .catch((err) => {});
+    //     dispatch(loadingAction.loadingRequest(false));
+    //   })
+    //   .catch((err) => {
+    //     errorNotify({
+    //       message: err?.message,
+    //     });
+    //     dispatch(loadingAction.loadingRequest(false));
+    //   });
   }, [
     gender,
     name,
@@ -276,310 +351,1471 @@ const Information = ({ data, image, idCTV, setData }) => {
     lang,
   ]);
 
-  // console.log("selectDistrictWork", selectDistrictWork);
+  // Document data
+  const [deal, setDeal] = useState(false);
+  const [identify, setIdentify] = useState(false);
+  const [information, setInformation] = useState(false);
+  const [certification, setCertification] = useState(false);
+  const [registration, setRegistration] = useState(false);
+  const [valueDeal, setSetValueDeal] = useState("");
+  const [imgIdentifyFronsite, setImgIdentifyFronsite] = useState("");
+  const [imgIdentifyBacksite, setImgIdentifyBacksite] = useState("");
+  const [imgInformation, setImgInformation] = useState([]);
+  const [imgCertification, setImgCertification] = useState([]);
+  const [imgRegistration, setImgRegistration] = useState([]);
+  // const dispatch = useDispatch();
+  // const lang = useSelector(getLanguageState);
+
+  useEffect(() => {
+    dispatch(loadingAction.loadingRequest(true));
+
+    getCollaboratorsById(id)
+      .then((res) => {
+        setAccountNumber(res?.account_number);
+        setBankName(res?.bank_name);
+        setAccountName(res?.account_name);
+        // console.log("check res document >>>", res.identity_frontside.split('/').pop());
+        setDeal(res?.is_document_code);
+        setSetValueDeal(res?.document_code);
+        setIdentify(res?.is_identity);
+        setImgIdentifyFronsite(res?.identity_frontside);
+        setImgIdentifyBacksite(res?.identity_backside);
+        setInformation(res?.is_personal_infor);
+        setImgInformation(res?.personal_infor_image);
+        setRegistration(res?.is_household_book);
+        setImgRegistration(res?.household_book_image);
+        setCertification(res?.is_behaviour);
+        setImgCertification(res?.behaviour_image);
+        dispatch(loadingAction.loadingRequest(false));
+      })
+      .catch((err) => {
+        errorNotify({
+          message: err?.message,
+        });
+        dispatch(loadingAction.loadingRequest(false));
+      });
+  }, [id, dispatch, lang]);
+
+  const onChangeIdentifyBefore = async (e) => {
+    dispatch(loadingAction.loadingRequest(true));
+    const extend = e.target.files[0].type.slice(
+      e.target.files[0].type.indexOf("/") + 1
+    );
+    if (e.target.files[0]) {
+      const reader = new FileReader();
+      reader.addEventListener("load", () => {
+        setImgIdentifyFronsite(reader.result);
+      });
+      reader.readAsDataURL(e.target.files[0]);
+    }
+    const formData = new FormData();
+    const image = await resizeFile(e.target.files[0], extend);
+
+    formData.append("multi-files", image);
+    postFile(formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+      .then((res) => {
+        setImgIdentifyFronsite(res[0]);
+        dispatch(loadingAction.loadingRequest(false));
+      })
+      .catch((err) => {
+        errorNotify({
+          message: err?.message,
+        });
+        dispatch(loadingAction.loadingRequest(false));
+      });
+  };
+  const onChangeIdentifyAfter = async (e) => {
+    dispatch(loadingAction.loadingRequest(true));
+    const extend = e.target.files[0].type.slice(
+      e.target.files[0].type.indexOf("/") + 1
+    );
+    if (e.target.files[0]) {
+      const reader = new FileReader();
+      reader.addEventListener("load", () => {
+        setImgIdentifyBacksite(reader.result);
+      });
+      reader.readAsDataURL(e.target.files[0]);
+    }
+    const formData = new FormData();
+    const image = await resizeFile(e.target.files[0], extend);
+
+    formData.append("multi-files", image);
+    postFile(formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+      .then((res) => {
+        setImgIdentifyBacksite(res[0]);
+        dispatch(loadingAction.loadingRequest(false));
+      })
+      .catch((err) => {
+        errorNotify({
+          message: err?.message,
+        });
+        dispatch(loadingAction.loadingRequest(false));
+      });
+  };
+
+  const onChangeInformation = async (e) => {
+    dispatch(loadingAction.loadingRequest(true));
+    const fileLength = e.target.files.length;
+    const formData = new FormData();
+    for (var i = 0; i < fileLength; i++) {
+      const image = await resizeFile(e.target.files[i], "png");
+      formData.append("multi-files", image);
+    }
+    postFile(formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+      .then((res) => {
+        setImgInformation(res);
+        dispatch(loadingAction.loadingRequest(false));
+      })
+      .catch((err) => {
+        errorNotify({
+          message: err?.message,
+        });
+        dispatch(loadingAction.loadingRequest(false));
+      });
+  };
+
+  const onChangeRegistration = async (e) => {
+    dispatch(loadingAction.loadingRequest(true));
+    const fileLength = e.target.files.length;
+    const formData = new FormData();
+    for (var i = 0; i < fileLength; i++) {
+      const image = await resizeFile(e.target.files[i], "png");
+      formData.append("multi-files", image);
+    }
+    postFile(formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+      .then((res) => {
+        // if (imgRegistration.length > 0) {
+        //   const newImg = imgRegistration.concat(res);
+        //   setImgRegistration(newImg);
+        // } else {
+        //   setImgRegistration(res);
+        // }
+        setImgRegistration(res);
+        dispatch(loadingAction.loadingRequest(false));
+      })
+      .catch((err) => {
+        errorNotify({
+          message: err?.message,
+        });
+        dispatch(loadingAction.loadingRequest(false));
+      });
+  };
+
+  const onChangeCertification = async (e) => {
+    dispatch(loadingAction.loadingRequest(true));
+    const fileLength = e.target.files.length;
+    const formData = new FormData();
+    for (var i = 0; i < fileLength; i++) {
+      const image = await resizeFile(e.target.files[i], "png");
+      formData.append("multi-files", image);
+    }
+    postFile(formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+      .then((res) => {
+        // if (imgCertification.length > 0) {
+        //   const newImg = imgCertification.concat(res);
+        //   setImgCertification(newImg);
+        // } else {
+        //   setImgCertification(res);
+        // }
+        setImgCertification(res);
+        dispatch(loadingAction.loadingRequest(false));
+      })
+      .catch((err) => {
+        errorNotify({
+          message: err?.message,
+        });
+        dispatch(loadingAction.loadingRequest(false));
+      });
+  };
+
+  const onUpdateDocument = useCallback(() => {
+    dispatch(loadingAction.loadingRequest(true));
+    updateDocumentCollaboratorApi(id, {
+      is_document_code: deal,
+      document_code: valueDeal,
+      is_identity: identify,
+      identity_frontside: imgIdentifyFronsite,
+      identity_backside: imgIdentifyBacksite,
+      is_personal_infor: information,
+      personal_infor_image: imgInformation,
+      is_household_book: registration,
+      household_book_image: imgRegistration,
+      is_behaviour: certification,
+      behaviour_image: imgCertification,
+    })
+      .then((res) => {
+        dispatch(loadingAction.loadingRequest(false));
+        successNotify({
+          message: `${i18n.t("update_success_info", { lng: lang })}`,
+        });
+        getCollaboratorsById(id)
+          .then((res) => {
+            setDeal(res?.is_document_code);
+            setSetValueDeal(res?.document_code);
+            setIdentify(res?.is_identity);
+            setImgIdentifyFronsite(res?.identity_frontside);
+            setImgIdentifyBacksite(res?.identity_backside);
+            setInformation(res?.is_personal_infor);
+            setImgInformation(res?.personal_infor_image);
+            setRegistration(res?.is_household_book);
+            setImgRegistration(res?.household_book_image);
+            setCertification(res?.is_behaviour);
+            setImgCertification(res?.behaviour_image);
+          })
+          .catch((e) => console.log(e));
+      })
+      .catch((err) => {
+        errorNotify({
+          message: err?.message,
+        });
+        dispatch(loadingAction.loadingRequest(false));
+      });
+  }, [
+    id,
+    deal,
+    valueDeal,
+    identify,
+    imgIdentifyFronsite,
+    imgIdentifyBacksite,
+    information,
+    imgInformation,
+    registration,
+    imgRegistration,
+    certification,
+    imgCertification,
+    dispatch,
+    lang,
+  ]);
+
+  const removeItemInfomation = (item) => {
+    const newArray = imgInformation.filter((i) => i !== item);
+
+    return setImgInformation(newArray);
+  };
+
+  const removeItemRegistration = (item) => {
+    const newArray = imgRegistration.filter((i) => i !== item);
+    return setImgRegistration(newArray);
+  };
+
+  const removeItemCertification = (item) => {
+    const newArray = imgCertification.filter((i) => i !== item);
+    return setImgCertification(newArray);
+  };
+
+  const downloadImageIdentify = () => {
+    saveAs(imgIdentifyFronsite, "identifyFronsite.png"); // Put your image url here.
+    saveAs(imgIdentifyBacksite, "identifyBacksite.png"); // Put your image url here.
+  };
+
+  const downloadImageInformation = () => {
+    var zip = new JSZip();
+    var count = 0;
+    var zipFilename = "Infomation.zip";
+    imgInformation.forEach(function (url, i) {
+      var filename = imgInformation[i];
+      filename = filename
+        .replace(/[\/\*\|\:\<\>\?\"\\]/gi, "")
+        .replace("infomation", "");
+      JSZipUtils.getBinaryContent(url, function (err, data) {
+        if (err) {
+          throw err;
+        }
+        zip.file(filename, data, { binary: true });
+        count++;
+        if (count === imgInformation.length) {
+          zip.generateAsync({ type: "blob" }).then(function (content) {
+            saveAs(content, zipFilename);
+          });
+        }
+      });
+    });
+  };
+
+  const downloadImageRegistration = () => {
+    var zip = new JSZip();
+    var count = 0;
+    var zipFilename = "Registration.zip";
+    imgRegistration.forEach(function (url, i) {
+      var filename = imgRegistration[i];
+      filename = filename
+        .replace(/[\/\*\|\:\<\>\?\"\\]/gi, "")
+        .replace("registration", "");
+      JSZipUtils.getBinaryContent(url, function (err, data) {
+        if (err) {
+          throw err;
+        }
+        zip.file(filename, data, { binary: true });
+        count++;
+        if (count === imgRegistration.length) {
+          zip.generateAsync({ type: "blob" }).then(function (content) {
+            saveAs(content, zipFilename);
+          });
+        }
+      });
+    });
+  };
+
+  const downloadImageCertification = () => {
+    var zip = new JSZip();
+    var count = 0;
+    var zipFilename = "Certification.zip";
+    imgCertification.forEach(function (url, i) {
+      var filename = imgCertification[i];
+      filename = filename
+        .replace(/[\/\*\|\:\<\>\?\"\\]/gi, "")
+        .replace("registration", "");
+      JSZipUtils.getBinaryContent(url, function (err, data) {
+        if (err) {
+          throw err;
+        }
+        zip.file(filename, data, { binary: true });
+        count++;
+        if (count === imgCertification.length) {
+          zip.generateAsync({ type: "blob" }).then(function (content) {
+            saveAs(content, zipFilename);
+          });
+        }
+      });
+    });
+  };
+
   return (
     <>
       <div className="pb-4">
         <div className="flex gap-6">
-          <div
-            style={{ borderRadius: "6px" }}
-            className="w-3/5 bg-white card-shadow"
-          >
-            {/* Header */}
-            <div className="flex items-center justify-between gap-2 border-b-2 border-gray-200 p-3.5">
-              <div className="flex items-center gap-1">
-                <span className="font-medium text-sm">
-                  Thông tin cộng tác viên
-                </span>
-              </div>
-            </div>
-            {/* Content */}
-            <div style={{ gap: "2.5px" }} className="flex flex-col p-3.5">
-              {/* Họ và tên */}
-              <div className="flex gap-4">
-                <div className="w-full">
-                  <InputTextCustom
-                    type="text"
-                    value={name}
-                    placeHolder="Họ và tên"
-                    onChange={(e) => setName(e.target.value)}
-                  />
+          {/* Container 1 */}
+          <div className="flex flex-col w-3/5 gap-6">
+            <div
+              style={{ borderRadius: "6px" }}
+              className="w-full h-fit bg-white card-shadow"
+            >
+              {/* Header */}
+              <div className="flex items-center justify-between gap-2 border-b-2 border-gray-200 p-3.5">
+                <div className="flex w-full items-center">
+                  <span className="font-medium text-sm">
+                    Thông tin cộng tác viên
+                  </span>
+                  {/* <div className="bg-black"> */}
+                  {/* <Image
+                    style={{
+                      width: 25,
+                      height: 25,
+                      // backgroundColor: "black",
+                      borderRadius: "100%",
+                    }}
+                    src={img ? img : data?.avatar ? data?.avatar : user}
+                  /> */}
+                  {/* </div> */}
                 </div>
               </div>
-              {/* Ngày sinh, số điện thoại, giới tính */}
-              <div className="flex gap-4">
-                <div className="w-1/3">
-                  <InputTextCustom
-                    type="select"
-                    value={gender}
-                    placeHolder="Giới tính"
-                    setValueSelectedProps={setGender}
-                    options={[
-                      {
-                        value: "other",
-                        label: `${i18n.t("other", { lng: lang })}`,
-                      },
-                      {
-                        value: "male",
-                        label: `${i18n.t("male", { lng: lang })}`,
-                      },
-                      {
-                        value: "female",
-                        label: `${i18n.t("female", { lng: lang })}`,
-                      },
-                    ]}
-                  />
-                </div>
-                <div className="w-1/3">
-                  <InputTextCustom
-                    type="date"
-                    value={birthday}
-                    placeHolder="Ngày sinh"
-                    birthday={
-                      birthday ? dayjs(birthday.slice(0, 1), dateFormat) : ""
-                    }
-                    setValueSelectedProps={setBirthday}
-                  />
-                </div>
-                <div className="w-1/3">
-                  <InputTextCustom
-                    type="text"
-                    disable={true}
-                    value={phone}
-                    placeHolder="Số điện thoại"
-                  />
-                </div>
-              </div>
-              {/* Tỉnh/Thành phố thường trú, Quận/Huyện thường trú*/}
-              <div className="flex gap-4">
-                <div className="w-1/2">
-                  <InputTextCustom
-                    type="province"
-                    value={selectProvinceLive}
-                    placeHolder="Tỉnh/Thành phố (thường trú)"
-                    province={province}
-                    setValueSelectedProps={setSelectProvinceLive}
-                    setValueSelectedPropsSupport={setSelectDistrictLive}
-                    setValueArrayProps={setDistrictArrayLive}
-                  />
-                </div>
-                <div className="w-1/2">
-                  <InputTextCustom
-                    type="district"
-                    disable={selectProvinceLive ? false : true}
-                    value={selectDistrictLive}
-                    placeHolder="Quận/Huyện (thường trú)"
-                    district={districtArrayLive}
-                    setValueSelectedProps={setSelectDistrictLive}
-                  />
-                </div>
-              </div>
-              {/* Địa chỉ cụ thể thường trú */}
-              <div className="flex gap-4">
-                <div className="w-full">
-                  <InputTextCustom
-                    type="text"
-                    disable={selectDistrictLive ? false : true}
-                    value={addressResidentLive}
-                    placeHolder="Số nhà, Tên đường (thường trú)"
-                    onChange={(e) => setAddressResidentLive(e.target.value)}
-                  />
-                </div>
-              </div>
-              {/* Tỉnh/Thành phố tạm trú, Quận/Huyện tạm trú*/}
-              <div className="flex gap-4">
-                <div className="w-1/2">
-                  <InputTextCustom
-                    type="province"
-                    value={selectProvinceTemp}
-                    placeHolder="Tỉnh/Thành phố (tạm trú)"
-                    province={province}
-                    setValueSelectedProps={setSelectProvinceTemp}
-                    setValueSelectedPropsSupport={setSelectDistrictTemp}
-                    setValueArrayProps={setDistrictArrayTemp}
-                  />
-                </div>
-                <div className="w-1/2">
-                  <InputTextCustom
-                    type="district"
-                    disable={selectProvinceTemp ? false : true}
-                    value={selectDistrictTemp}
-                    placeHolder="Quận/Huyện (tạm trú)"
-                    district={districtArrayTemp}
-                    setValueSelectedProps={setSelectDistrictTemp}
-                  />
-                </div>
-              </div>
-              {/* Địa chỉ cụ thể tạm trú */}
-              <div className="flex gap-4">
-                <div className="w-full">
-                  <InputTextCustom
-                    type="text"
-                    disable={selectDistrictTemp ? false : true}
-                    value={addressTemp}
-                    placeHolder="Số nhà, Tên đường (tạm trú)"
-                    onChange={(e) => setAddressTemp(e.target.value)}
-                  />
-                </div>
-              </div>
-              {/* Loại dịch vụ */}
-              <div className="flex gap-4">
-                <div className="w-full">
-                  <InputTextCustom
-                    type="service"
-                    value={selectService}
-                    multiSelectOptions={service}
-                    placeHolder="Loại dịch vụ"
-                    setValueSelectedProps={setSelectService}
-                  />
-                </div>
-              </div>
-              {/* Dân tộc, Tôn giáo, Trình độ văn hóa */}
-              <div className="flex gap-4">
-                <div className="w-1/3">
-                  <InputTextCustom
-                    type="text"
-                    value={ethnic}
-                    placeHolder="Dân tộc"
-                    onChange={(e) => setEthnic(e.target.value)}
-                  />
-                </div>
-                <div className="w-1/3">
-                  <InputTextCustom
-                    type="text"
-                    value={religion}
-                    placeHolder="Tôn giáo"
-                    onChange={(e) => setReligion(e.target.value)}
-                  />
-                </div>
-                <div className="w-1/3">
-                  <InputTextCustom
-                    type="select"
-                    value={level}
-                    placeHolder="Trình độ"
-                    setValueSelectedProps={setLevel}
-                    options={[
-                      { value: "5/12", label: "5/12" },
-                      { value: "9/12", label: "9/12" },
-                      { value: "12/12", label: "12/12" },
-                      {
-                        value: "Cao đẳng",
-                        label: `${i18n.t("college", { lng: lang })}`,
-                      },
-                      {
-                        value: "Đại học",
-                        label: `${i18n.t("university", { lng: lang })}`,
-                      },
-                      {
-                        value: "Thạc sĩ",
-                        label: `${i18n.t("master", { lng: lang })}`,
-                      },
-                      {
-                        value: "Tiến sĩ",
-                        label: `${i18n.t("doctor_philosophy", {
-                          lng: lang,
-                        })}`,
-                      },
-                    ]}
-                  />
-                </div>
-              </div>
-              {/* Mã giới thiệu */}
-              <div className="flex gap-4">
-                <div className="w-full">
-                  <InputTextCustom
-                    type="text"
-                    disable={true}
-                    value={codeInvite}
-                    // multiSelectOptions={service}
-                    placeHolder="Mã giới thiệu"
-                    // setValueSelectedProps={setSelectService}
-                  />
-                </div>
-              </div>
-              {/* Tỉnh/Thành phố làm việc, Quận/Huyện làm việc*/}
-              <div className="flex gap-4">
-                <div className="w-1/2">
-                  <InputTextCustom
-                    type="province"
-                    value={selectProvinceWork}
-                    placeHolder="Tỉnh/Thành phố làm việc"
-                    province={province}
-                    setValueSelectedProps={setSelectProvinceWork}
-                    setValueSelectedPropsSupport={setSelectDistrictWork}
-                    setValueArrayProps={setDistrictArrayWork}
-                  />
-                </div>
-                <div className="w-1/2">
-                  <InputTextCustom
-                    type="multiDistrict"
-                    disable={selectProvinceWork ? false : true}
-                    value={selectDistrictWork}
-                    multiSelectOptions={districtArrayWork}
-                    placeHolder="Quận/Huyện làm việc"
-                    // district={districtArrayWork}
-                    setValueSelectedProps={setSelectDistrictWork}
-                  />
-                </div>
-              </div>
-              {/* CCCD, Nơi cấp, Ngày cấp */}
-              <div className="flex gap-4">
-                <div className="w-1/3">
-                  <InputTextCustom
-                    type="text"
-                    // disable={true}
-                    value={number}
-                    placeHolder="CCCD"
-                  />
-                </div>
-                <div className="w-1/3">
-                  <InputTextCustom
-                    type="text"
-                    // disable={true}
-                    value={issued}
-                    placeHolder="Nơi cấp"
-                  />
-                </div>
-                <div className="w-1/3">
-                  <InputTextCustom
-                    type="date"
-                    value={birthday}
-                    placeHolder="Ngày cấp"
-                    birthday={
-                      issuedDay ? dayjs(issuedDay.slice(0, 11), dateFormat) : ""
-                    }
-                    setValueSelectedProps={setBirthday}
-                  />
-                </div>
-              </div>
-            </div>
-            {/* Button submit */}
-            <div className="flex items-center justify-between p-3.5">
-              <div className="w-0 h-0"></div>
-              <button
-                style={{ borderRadius: "6px" }}
-                className="bg-violet-500 px-3 py-2 text-white font-medium hover:bg-violet-400 duration-300"
+              {/* Content */}
+              <div
+                style={{ gap: "1px", padding: "12px 18px" }}
+                className="flex flex-col"
               >
-                Cập nhật
-              </button>
+                {/* Họ và tên */}
+                <div className="flex gap-4">
+                  <div className="w-full">
+                    <InputTextCustom
+                      type="text"
+                      value={name}
+                      required
+                      placeHolder="Họ và tên"
+                      onChange={(e) => setName(e.target.value)}
+                    />
+                  </div>
+                  <div className="w-full">
+                    <InputTextCustom
+                      type="text"
+                      value={email}
+                      placeHolder="Email"
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                  </div>
+                </div>
+                {/* Ngày sinh, số điện thoại, giới tính */}
+                <div className="flex gap-4">
+                  <div className="w-1/3">
+                    <InputTextCustom
+                      type="select"
+                      value={gender}
+                      placeHolder="Giới tính"
+                      setValueSelectedProps={setGender}
+                      options={[
+                        {
+                          value: "other",
+                          label: `${i18n.t("other", { lng: lang })}`,
+                        },
+                        {
+                          value: "male",
+                          label: `${i18n.t("male", { lng: lang })}`,
+                        },
+                        {
+                          value: "female",
+                          label: `${i18n.t("female", { lng: lang })}`,
+                        },
+                      ]}
+                    />
+                  </div>
+                  <div className="w-1/3">
+                    <InputTextCustom
+                      type="date"
+                      value={birthday}
+                      placeHolder="Ngày sinh"
+                      birthday={
+                        birthday ? dayjs(birthday.slice(0, 1), dateFormat) : ""
+                      }
+                      setValueSelectedProps={setBirthday}
+                    />
+                  </div>
+                  <div className="w-1/3">
+                    <InputTextCustom
+                      type="text"
+                      disable={true}
+                      value={phone}
+                      required
+                      placeHolder="Số điện thoại"
+                    />
+                  </div>
+                </div>
+                {/* CCCD, Nơi cấp, Ngày cấp */}
+                <div className="flex gap-4">
+                  <div className="w-1/3">
+                    <InputTextCustom
+                      type="text"
+                      // disable={true}
+                      value={number}
+                      number
+                      placeHolder="CCCD/CMND"
+                      onChange={(e) => setNumber(e.target.value)}
+                    />
+                  </div>
+                  <div className="w-1/3">
+                    <InputTextCustom
+                      type="text"
+                      // disable={true}
+                      value={issued}
+                      placeHolder="Nơi cấp"
+                      onChange={(e) => setIssued(e.target.value)}
+                    />
+                  </div>
+                  <div className="w-1/3">
+                    <InputTextCustom
+                      type="date"
+                      value={issuedDay}
+                      placeHolder="Ngày cấp"
+                      birthday={
+                        issuedDay
+                          ? dayjs(issuedDay.slice(0, 11), dateFormat)
+                          : ""
+                      }
+                      setValueSelectedProps={setIssuedDay}
+                    />
+                  </div>
+                </div>
+                {/* Tỉnh/Thành phố thường trú, Quận/Huyện thường trú*/}
+                <div className="flex gap-4">
+                  <div className="w-1/2">
+                    <InputTextCustom
+                      type="province"
+                      value={selectProvinceLive}
+                      placeHolder="Tỉnh/Thành phố (thường trú)"
+                      province={province}
+                      setValueSelectedProps={setSelectProvinceLive}
+                      setValueSelectedPropsSupport={setSelectDistrictLive}
+                      setValueArrayProps={setDistrictArrayLive}
+                    />
+                  </div>
+                  <div className="w-1/2">
+                    <InputTextCustom
+                      type="district"
+                      disable={selectProvinceLive ? false : true}
+                      value={selectDistrictLive}
+                      placeHolder="Quận/Huyện (thường trú)"
+                      district={districtArrayLive}
+                      setValueSelectedProps={setSelectDistrictLive}
+                    />
+                  </div>
+                </div>
+                {/* Địa chỉ cụ thể thường trú */}
+                <div className="flex gap-4">
+                  <div className="w-full">
+                    <InputTextCustom
+                      type="text"
+                      disable={selectDistrictLive ? false : true}
+                      value={addressResidentLive}
+                      placeHolder="Số nhà, Tên đường (thường trú)"
+                      onChange={(e) => setAddressResidentLive(e.target.value)}
+                    />
+                  </div>
+                </div>
+                {/* Tỉnh/Thành phố tạm trú, Quận/Huyện tạm trú*/}
+                <div className="flex gap-4">
+                  <div className="w-1/2">
+                    <InputTextCustom
+                      type="province"
+                      value={selectProvinceTemp}
+                      placeHolder="Tỉnh/Thành phố (tạm trú)"
+                      province={province}
+                      setValueSelectedProps={setSelectProvinceTemp}
+                      setValueSelectedPropsSupport={setSelectDistrictTemp}
+                      setValueArrayProps={setDistrictArrayTemp}
+                    />
+                  </div>
+                  <div className="w-1/2">
+                    <InputTextCustom
+                      type="district"
+                      disable={selectProvinceTemp ? false : true}
+                      value={selectDistrictTemp}
+                      placeHolder="Quận/Huyện (tạm trú)"
+                      district={districtArrayTemp}
+                      setValueSelectedProps={setSelectDistrictTemp}
+                    />
+                  </div>
+                </div>
+                {/* Địa chỉ cụ thể tạm trú */}
+                <div className="flex gap-4">
+                  <div className="w-full">
+                    <InputTextCustom
+                      type="text"
+                      disable={selectDistrictTemp ? false : true}
+                      value={addressTemp}
+                      placeHolder="Số nhà, Tên đường (tạm trú)"
+                      onChange={(e) => setAddressTemp(e.target.value)}
+                    />
+                  </div>
+                </div>
+                {/* Dân tộc, Tôn giáo, Trình độ văn hóa */}
+                <div className="flex gap-4">
+                  <div className="w-1/3">
+                    <InputTextCustom
+                      type="text"
+                      value={ethnic}
+                      placeHolder="Dân tộc"
+                      onChange={(e) => setEthnic(e.target.value)}
+                    />
+                  </div>
+                  <div className="w-1/3">
+                    <InputTextCustom
+                      type="text"
+                      value={religion}
+                      placeHolder="Tôn giáo"
+                      onChange={(e) => setReligion(e.target.value)}
+                    />
+                  </div>
+                  <div className="w-1/3">
+                    <InputTextCustom
+                      type="select"
+                      value={level}
+                      placeHolder="Trình độ"
+                      setValueSelectedProps={setLevel}
+                      options={[
+                        { value: "5/12", label: "5/12" },
+                        { value: "9/12", label: "9/12" },
+                        { value: "12/12", label: "12/12" },
+                        {
+                          value: "Cao đẳng",
+                          label: `${i18n.t("college", { lng: lang })}`,
+                        },
+                        {
+                          value: "Đại học",
+                          label: `${i18n.t("university", { lng: lang })}`,
+                        },
+                        {
+                          value: "Thạc sĩ",
+                          label: `${i18n.t("master", { lng: lang })}`,
+                        },
+                        {
+                          value: "Tiến sĩ",
+                          label: `${i18n.t("doctor_philosophy", {
+                            lng: lang,
+                          })}`,
+                        },
+                      ]}
+                    />
+                  </div>
+                </div>
+                {/* Loại dịch vụ */}
+                <div className="flex gap-4">
+                  <div className="w-full">
+                    <InputTextCustom
+                      type="service"
+                      value={selectService}
+                      multiSelectOptions={service}
+                      placeHolder="Loại dịch vụ"
+                      setValueSelectedProps={setSelectService}
+                    />
+                  </div>
+                </div>
+                {/* Tỉnh/Thành phố làm việc, Quận/Huyện làm việc*/}
+                <div className="flex gap-4">
+                  <div className="w-1/2">
+                    <InputTextCustom
+                      type="province"
+                      value={selectProvinceWork}
+                      placeHolder="Tỉnh/Thành phố (làm việc)"
+                      province={province}
+                      setValueSelectedProps={setSelectProvinceWork}
+                      setValueSelectedPropsSupport={setSelectDistrictWork}
+                      setValueArrayProps={setDistrictArrayWork}
+                    />
+                  </div>
+                  <div className="w-1/2">
+                    <InputTextCustom
+                      type="multiDistrict"
+                      disable={selectProvinceWork ? false : true}
+                      value={selectDistrictWork}
+                      multiSelectOptions={districtArrayWork}
+                      placeHolder="Quận/Huyện (làm việc)"
+                      // district={districtArrayWork}
+                      setValueSelectedProps={setSelectDistrictWork}
+                    />
+                  </div>
+                </div>
+                {/* Mã giới thiệu */}
+                <div className="flex gap-4">
+                  <div className="w-full">
+                    <InputTextCustom
+                      type="text"
+                      disable={true}
+                      value={codeInvite}
+                      // multiSelectOptions={service}
+                      placeHolder="Mã giới thiệu"
+                      // setValueSelectedProps={setSelectService}
+                    />
+                  </div>
+                </div>
+              </div>
+              {/* Button submit */}
+              <div
+                style={{ padding: "0px 18px 12px 18px" }}
+                className="flex items-center justify-between "
+              >
+                <div className="w-0 h-0"></div>
+                <ButtonCustom label="Cập nhật" onClick={updateInformation} />
+              </div>
+            </div>
+            <div
+              style={{ borderRadius: "6px" }}
+              className="w-full h-fit bg-white card-shadow"
+            >
+              {/* Header */}
+              <div className="flex items-center justify-between gap-2 border-b-2 border-gray-200 p-3.5">
+                <div className="flex items-center gap-1">
+                  <span className="font-medium text-sm">
+                    Thông tin ngân hàng
+                  </span>
+                </div>
+              </div>
+              {/* Content */}
+              <div
+                style={{ gap: "1px", padding: "12px 18px" }}
+                className="flex flex-col p-3.5"
+              >
+                {/* Số tài khoản, Tên chủ thẻ */}
+                <div className="flex gap-4">
+                  <div className="w-1/2">
+                    <InputTextCustom
+                      type="text"
+                      value={accountName}
+                      placeHolder="Tên chủ thẻ"
+                      onChange={(e) => setAccountName(e.target.value)}
+                    />
+                  </div>
+                  <div className="w-1/2">
+                    <InputTextCustom
+                      type="text"
+                      value={accountNumber}
+                      placeHolder="Số tài khoản"
+                      onChange={(e) => setAccountNumber(e.target.value)}
+                    />
+                  </div>
+                </div>
+                {/* Tên ngân hàng, tên chi nhánh */}
+                <div className="flex gap-4">
+                  <div className="w-full">
+                    <InputTextCustom
+                      type="select"
+                      value={selectBank}
+                      placeHolder="Tên ngân hàng"
+                      setValueSelectedProps={setSelectBank}
+                      options={bankList}
+                      // onChange={(e) => setName(e.target.value)}
+                    />
+                  </div>
+                </div>
+                <div className="flex gap-4">
+                  <div className="w-full">
+                    <InputTextCustom
+                      type="text"
+                      // value={accountNumber}
+                      placeHolder="Tên chi nhánh"
+                      // onChange={(e) => setName(e.target.value)}
+                    />
+                  </div>
+                </div>
+              </div>
+              {/* Button submit */}
+              <div
+                style={{ padding: "0px 18px 12px 18px" }}
+                className="flex items-center justify-between "
+              >
+                <div className="w-0 h-0"></div>
+                <ButtonCustom label="Cập nhật" />
+              </div>
             </div>
           </div>
+          {/* Container 2 */}
           <div
             style={{ borderRadius: "6px" }}
             className="w-2/5 bg-white card-shadow"
           >
             {/* Header */}
-            <div className="flex items-center justify-between gap-2 border-b-2 border-gray-200 p-3">
+            <div className="flex items-center justify-between gap-2 border-b-2 border-gray-200 p-3.5">
               <div className="flex items-center gap-1">
-                <span className="font-medium text-sm">Tài liệu</span>
+                <span className="font-medium text-sm">Thông tin tài liệu</span>
               </div>
             </div>
             {/* Content */}
-            <div style={{ gap: "2.5px" }} className="flex flex-col p-3.5"></div>
+            <div
+              style={{
+                gap: "1px",
+                padding: "12px 4px",
+              }}
+              className="flex flex-col"
+            >
+              {/* Thông tin tổng quan tài liệu */}
+              <div
+                style={{
+                  // gap: "2px",
+                  padding: "0px 0px 12px 0px",
+                  margin: "0px 13px 0px 13px",
+                }}
+                className="border-b-[2px] border-[#eee]"
+              >
+                <div className="pb-2">
+                  <span className="font-medium text-gray-500/70 text-sm">
+                    Tổng quan
+                  </span>
+                </div>
+                {/* Checkbox */}
+                <div className="flex flex-col gap-2">
+                  {/* Thỏa thuận hợp tác */}
+                  <div
+                    style={{ borderRadius: "6px" }}
+                    onClick={() => setDeal(!deal)}
+                    className={`flex justify-between items-center ${
+                      deal ? "bg-violet-500/80" : "bg-gray-100"
+                    } p-2 cursor-pointer duration-300 ease-out`}
+                  >
+                    <span
+                      className={`${
+                        deal ? "text-white" : "text-gray-500/60"
+                      } font-normal text-sm`}
+                    >
+                      {`${i18n.t("cooperation_agreement", { lng: lang })}`}
+                    </span>
+                    <Checkbox
+                      checked={deal}
+                      onChange={(e) => setDeal(e.target.checked)}
+                      style={{
+                        borderRadius: "6px",
+                      }}
+                    >
+                      {/* <span className="">123</span> */}
+                      {/* <span className="text-black">
+                    {`${i18n.t("cooperation_agreement", { lng: lang })}`}
+                  </span> */}
+                    </Checkbox>
+                  </div>
+                  {/* CCCD/CMND */}
+                  <div
+                    style={{ borderRadius: "6px" }}
+                    onClick={() => setIdentify(!identify)}
+                    className={`flex justify-between items-center ${
+                      identify ? "bg-violet-500/80" : "bg-gray-100"
+                    } p-2 cursor-pointer duration-300 ease-out`}
+                  >
+                    <span
+                      className={`${
+                        identify ? "text-white" : "text-gray-500/60"
+                      } font-normal text-sm`}
+                    >
+                      {`${i18n.t("citizen_ID", { lng: lang })}`}
+                    </span>
+                    <Checkbox
+                      checked={identify}
+                      onChange={(e) => setIdentify(e.target.checked)}
+                      style={{
+                        borderRadius: "6px",
+                      }}
+                    >
+                      {/* <span className="">123</span> */}
+                      {/* <span className="text-black">
+                    {`${i18n.t("cooperation_agreement", { lng: lang })}`}
+                  </span> */}
+                    </Checkbox>
+                  </div>
+                  {/* Sơ yếu lí lịch */}
+                  <div
+                    style={{ borderRadius: "6px" }}
+                    onClick={() => setInformation(!information)}
+                    className={`flex justify-between items-center ${
+                      information ? "bg-violet-500/80" : "bg-gray-100"
+                    } p-2 cursor-pointer duration-300 ease-out`}
+                  >
+                    <span
+                      className={`${
+                        information ? "text-white" : "text-gray-500/60"
+                      } font-normal text-sm`}
+                    >
+                      {`${i18n.t("curriculum_vitae", { lng: lang })}`}
+                    </span>
+                    <Checkbox
+                      checked={information}
+                      onChange={(e) => setInformation(e.target.checked)}
+                      style={{
+                        borderRadius: "6px",
+                      }}
+                    >
+                      {/* <span className="">123</span> */}
+                      {/* <span className="text-black">
+                    {`${i18n.t("cooperation_agreement", { lng: lang })}`}
+                  </span> */}
+                    </Checkbox>
+                  </div>
+                  {/* Sổ hộ khẩu */}
+                  <div
+                    style={{ borderRadius: "6px" }}
+                    onClick={() => setRegistration(!registration)}
+                    className={`flex justify-between items-center ${
+                      registration ? "bg-violet-500/80" : "bg-gray-100"
+                    } p-2 cursor-pointer duration-300 ease-out`}
+                  >
+                    <span
+                      className={`${
+                        registration ? "text-white" : "text-gray-500/60"
+                      } font-normal text-sm`}
+                    >
+                      {`${i18n.t("household_book", { lng: lang })}`}
+                    </span>
+                    <Checkbox
+                      checked={registration}
+                      onChange={(e) => setRegistration(e.target.checked)}
+                      style={{
+                        borderRadius: "6px",
+                      }}
+                    >
+                      {/* <span className="">123</span> */}
+                      {/* <span className="text-black">
+                    {`${i18n.t("cooperation_agreement", { lng: lang })}`}
+                  </span> */}
+                    </Checkbox>
+                  </div>
+                  {/* Giấy xác nhận hạnh kiểm */}
+                  <div
+                    style={{ borderRadius: "6px" }}
+                    onClick={() => setCertification(!certification)}
+                    className={`flex justify-between items-center ${
+                      certification ? "bg-violet-500/80" : "bg-gray-100"
+                    } p-2 cursor-pointer duration-300 ease-out`}
+                  >
+                    <span
+                      className={`${
+                        certification ? "text-white" : "text-gray-500/60"
+                      } font-normal text-sm`}
+                    >
+                      {`${i18n.t("certificate_conduct", { lng: lang })}`}
+                    </span>
+                    <Checkbox
+                      checked={certification}
+                      onChange={(e) => setCertification(e.target.checked)}
+                      style={{
+                        borderRadius: "6px",
+                      }}
+                    >
+                      {/* <span className="">123</span> */}
+                      {/* <span className="text-black">
+                    {`${i18n.t("cooperation_agreement", { lng: lang })}`}
+                  </span> */}
+                    </Checkbox>
+                  </div>
+                </div>
+              </div>
+              {/* Thông tin chi tiết tài liệu */}
+              <div
+                className="document-content"
+                style={{
+                  maxHeight: "803px",
+                  padding: "0px 6px",
+                  scrollbarGutter: "stable both-edges",
+                }}
+              >
+                {/* Mã hồ sơ */}
+                <div className="w-full">
+                  <InputTextCustom
+                    type="text"
+                    placeHolder={`${i18n.t("profile_ID", { lng: lang })}`}
+                    value={valueDeal}
+                    onChange={(e) => setSetValueDeal(e.target.value)}
+                  />
+                </div>
+                {/* CCCD/CMND */}
+                <div className="w-full">
+                  {/* Mặt trước */}
+                  <InputTextCustom
+                    type="file"
+                    placeHolder="CCCD/CMND (mặt trước)"
+                    imgIdentifyFronsite={imgIdentifyFronsite}
+                  />
+                  {imgIdentifyFronsite && (
+                    <div
+                      style={{ borderRadius: "6px", border: "2px dashed	#eee" }}
+                      className="flex items-center justify-between mt-2 p-2 border-2 gap-2"
+                    >
+                      {/* <i
+                        class="uil uil-times-circle"
+                        onClick={() => setImgIdentifyFronsite("")}
+                      /> */}
+                      <div
+                        style={{ gap: "10px" }}
+                        className="flex items-center"
+                      >
+                        <Image
+                          height={40}
+                          width={60}
+                          src={imgIdentifyFronsite}
+                        />
+                        {/* Tách chuỗi string thành những chuỗi string nhỏ hơn với điều kiện là có ký tự "/" và sau đó lấy ra giá trị cuối cùng */}
+                        <span style={{ maxWidth: "280px", overflow: "hidden" }}>
+                          {imgIdentifyFronsite.split("/").pop()}
+                        </span>
+                      </div>
+                      <div className="flex gap-2">
+                        {/* <button
+                          style={{ borderRadius: "100%" }}
+                          className="p-2 hover:bg-blue-500 hover:text-white bg-gray-50 text-blue-500 duration-300 ease-out"
+                        >
+                          <IoEyeOutline size="16px" />
+                        </button> */}
+                        <button
+                          style={{ borderRadius: "100%" }}
+                          className="p-2 hover:bg-red-500 hover:text-white text-red-500 duration-300 ease-out"
+                        >
+                          <IoClose size="16px" />
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                  {/* Mặt sau */}
+                  <InputTextCustom
+                    type="file"
+                    placeHolder="CCCD/CMND (mặt sau)"
+                  />
+                  {imgIdentifyBacksite && (
+                    <div
+                      style={{ borderRadius: "6px", border: "2px dashed	 #eee" }}
+                      className="flex items-center justify-between mt-2 p-2 border-2 gap-2"
+                    >
+                      {/* <i
+                        class="uil uil-times-circle"
+                        onClick={() => setImgIdentifyFronsite("")}
+                      /> */}
+                      <div
+                        style={{ gap: "10px" }}
+                        className="flex items-center"
+                      >
+                        <Image
+                          height={40}
+                          width={60}
+                          src={imgIdentifyBacksite}
+                        />
+                        {/* Tách chuỗi string thành những chuỗi string nhỏ hơn với điều kiện là có ký tự "/" và sau đó lấy ra giá trị cuối cùng */}
+                        <span style={{ maxWidth: "280px", overflow: "hidden" }}>
+                          {imgIdentifyBacksite.split("/").pop()}
+                        </span>
+                      </div>
+                      <div className="flex gap-2">
+                        {/* <button
+                          style={{ borderRadius: "100%" }}
+                          className="p-2 hover:bg-blue-500 hover:text-white bg-gray-50 text-blue-500 duration-300 ease-out"
+                        >
+                          <IoEyeOutline size="16px" />
+                        </button> */}
+                        <button
+                          style={{ borderRadius: "100%" }}
+                          className="p-2 hover:bg-red-500 hover:text-white text-red-500 duration-300 ease-out"
+                        >
+                          <IoClose size="16px" />
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                {/* Sơ yếu lí lịch */}
+                <div className="w-full">
+                  <InputTextCustom
+                    type="file"
+                    placeHolder="Sơ yếu lí lịch"
+                    multiple
+                  />
+                  {imgInformation.length > 0 &&
+                    imgInformation.map((item, index) => {
+                      return (
+                        <div
+                          style={{
+                            borderRadius: "6px",
+                            border: "2px dashed	 #eee",
+                          }}
+                          className="flex items-center justify-between mt-2 p-2 border-2 gap-2"
+                        >
+                          {/* <i
+                          class="uil uil-times-circle"
+                          onClick={() => setImgIdentifyFronsite("")}
+                        /> */}
+                          <div
+                            style={{ gap: "10px" }}
+                            className="flex items-center"
+                          >
+                            <Image height={40} width={60} src={item} />
+                            {/* Tách chuỗi string thành những chuỗi string nhỏ hơn với điều kiện là có ký tự "/" và sau đó lấy ra giá trị cuối cùng */}
+                            <span
+                              style={{ maxWidth: "280px", overflow: "hidden" }}
+                            >
+                              {item.split("/").pop()}
+                            </span>
+                          </div>
+                          <div className="flex gap-2">
+                            {/* <button
+                            style={{ borderRadius: "100%" }}
+                            className="p-2 hover:bg-blue-500 hover:text-white bg-gray-50 text-blue-500 duration-300 ease-out"
+                          >
+                            <IoEyeOutline size="16px" />
+                          </button> */}
+                            <button
+                              style={{ borderRadius: "100%" }}
+                              className="p-2 hover:bg-red-500 hover:text-white text-red-500 duration-300 ease-out"
+                            >
+                              <IoClose size="16px" />
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    })}
+                </div>
+                {/* Sổ hộ khẩu */}
+                <div className="w-full">
+                  <InputTextCustom
+                    type="file"
+                    placeHolder="Sổ hộ khẩu"
+                    multiple
+                  />
+                  {imgRegistration.length > 0 &&
+                    imgRegistration.map((item, index) => {
+                      return (
+                        <div
+                          style={{
+                            borderRadius: "6px",
+                            border: "2px dashed #eee",
+                          }}
+                          className="flex items-center justify-between mt-2 p-2 border-2 gap-2"
+                        >
+                          {/* <i
+                          class="uil uil-times-circle"
+                          onClick={() => setImgIdentifyFronsite("")}
+                        /> */}
+                          <div
+                            style={{ gap: "10px" }}
+                            className="flex items-center"
+                          >
+                            <Image height={40} width={60} src={item} />
+                            {/* Tách chuỗi string thành những chuỗi string nhỏ hơn với điều kiện là có ký tự "/" và sau đó lấy ra giá trị cuối cùng */}
+                            <span
+                              style={{ maxWidth: "280px", overflow: "hidden" }}
+                            >
+                              {item.split("/").pop()}
+                            </span>
+                          </div>
+                          <div className="flex gap-2">
+                            {/* <button
+                            style={{ borderRadius: "100%" }}
+                            className="p-2 hover:bg-blue-500 hover:text-white bg-gray-50 text-blue-500 duration-300 ease-out"
+                          >
+                            <IoEyeOutline size="16px" />
+                          </button> */}
+                            <button
+                              style={{ borderRadius: "100%" }}
+                              className="p-2 hover:bg-red-500 hover:text-white text-red-500 duration-300 ease-out"
+                            >
+                              <IoClose size="16px" />
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    })}
+                </div>
+                {/* Giấy xác nhận hạnh kiểm */}
+                <div className="w-full">
+                  <InputTextCustom
+                    type="file"
+                    placeHolder="Giấy xác nhận hạnh kiểm"
+                    multiple
+                  />
+                  {imgCertification.length > 0 &&
+                    imgCertification.map((item, index) => {
+                      return (
+                        <div
+                          style={{
+                            borderRadius: "6px",
+                            border: "2px dashed #eee",
+                          }}
+                          className="flex items-center justify-between mt-2 p-2 border-2 gap-2"
+                        >
+                          {/* <i
+                          class="uil uil-times-circle"
+                          onClick={() => setImgIdentifyFronsite("")}
+                        /> */}
+                          <div
+                            style={{ gap: "10px" }}
+                            className="flex items-center"
+                          >
+                            <Image height={40} width={60} src={item} />
+                            {/* Tách chuỗi string thành những chuỗi string nhỏ hơn với điều kiện là có ký tự "/" và sau đó lấy ra giá trị cuối cùng */}
+                            <span
+                              style={{ maxWidth: "280px", overflow: "hidden" }}
+                            >
+                              {item.split("/").pop()}
+                            </span>
+                          </div>
+                          <div className="flex gap-2">
+                            {/* <button
+                            style={{ borderRadius: "100%" }}
+                            className="p-2 hover:bg-blue-500 hover:text-white bg-gray-50 text-blue-500 duration-300 ease-out"
+                          >
+                            <IoEyeOutline size="16px" />
+                          </button> */}
+                            <button
+                              style={{ borderRadius: "100%" }}
+                              className="p-2 hover:bg-red-500 hover:text-white text-red-500 duration-300 ease-out"
+                            >
+                              <IoClose size="16px" />
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    })}
+                </div>
+                <div
+                  style={{ padding: "14px 0px 0px 0px" }}
+                  className="flex items-center justify-between "
+                >
+                  <div className="w-0 h-0"></div>
+                  <ButtonCustom label="Cập nhật" />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
+      {/* Code tài liệu cũ */}
+      {/* <>
+        <div className="pl-lg-5">
+          <div className="div-check-document">
+            <Checkbox
+              checked={deal}
+              onChange={(e) => setDeal(e.target.checked)}
+              className="check-document"
+            >
+              {`${i18n.t("cooperation_agreement", { lng: lang })}`}
+            </Checkbox>
+
+            <div className="form-input">
+              <InputCustom
+                title={`${i18n.t("profile_ID", { lng: lang })}`}
+                value={valueDeal}
+                onChange={(e) => setSetValueDeal(e.target.value)}
+              />
+            </div>
+          </div>
+          <hr />
+          <div className="div-check-document">
+            <Checkbox
+              checked={identify}
+              onChange={(e) => setIdentify(e.target.checked)}
+              className="check-document"
+            >
+              {`${i18n.t("citizen_ID", { lng: lang })}`}
+            </Checkbox>
+
+            <div className="form-input">
+              <div>
+                <p className="label-input">{`${i18n.t("citizen_ID_front", {
+                  lng: lang,
+                })}`}</p>
+                <div className="col-img">
+                  <Input
+                    id="exampleThumbnail"
+                    type="file"
+                    className="input-file"
+                    accept={".jpg,.png,.jpeg"}
+                    name="thumbnail"
+                    onChange={onChangeIdentifyBefore}
+                  />
+                  {imgIdentifyFronsite && (
+                    <div className="div-img-thumbnail">
+                      <i
+                        class="uil uil-times-circle"
+                        onClick={() => setImgIdentifyFronsite("")}
+                      />
+                      <Image
+                        width={150}
+                        src={imgIdentifyFronsite}
+                        className={"img-thumbnail"}
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div>
+                <p className="label-input">{`${i18n.t("citizen_ID_back", {
+                  lng: lang,
+                })}`}</p>
+                <div className="col-img">
+                  <Input
+                    id="exampleThumbnail"
+                    type="file"
+                    className="input-file"
+                    accept={".jpg,.png,.jpeg"}
+                    name="thumbnail"
+                    onChange={onChangeIdentifyAfter}
+                  />
+                  {imgIdentifyBacksite && (
+                    <div className="div-img-thumbnail">
+                      <i
+                        class="uil uil-times-circle"
+                        onClick={() => setImgIdentifyBacksite("")}
+                      />
+                      <Image
+                        width={150}
+                        src={imgIdentifyBacksite}
+                        className={"img-thumbnail"}
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+            {imgIdentifyFronsite && (
+              <div className="div-col-download">
+                <Button
+                  className="btn-download"
+                  onClick={downloadImageIdentify}
+                >
+                  <i class="uil uil-image-download"></i>
+                </Button>
+              </div>
+            )}
+          </div>
+          <hr />
+          <div className="div-check-document">
+            <Checkbox
+              checked={information}
+              onChange={(e) => setInformation(e.target.checked)}
+              className="check-document"
+            >
+              {`${i18n.t("curriculum_vitae", { lng: lang })}`}
+            </Checkbox>
+
+            <div className="form-input">
+              <div className="div-infomation">
+                <p className="label-input">{`${i18n.t("image", {
+                  lng: lang,
+                })}`}</p>
+                <div className="col-img">
+                  <input
+                    type="file"
+                    id="files"
+                    name="files"
+                    accept=".jpg, .jpeg, .png"
+                    multiple
+                    onChange={onChangeInformation}
+                  />
+                  <div className="div-thumbnail-infomation">
+                    {imgInformation.length > 0 &&
+                      imgInformation.map((item, index) => {
+                        return (
+                          <div
+                            className="div-item-thumbnail-infomation"
+                            key={index}
+                          >
+                            <i
+                              class="uil uil-times-circle"
+                              onClick={() => removeItemInfomation(item)}
+                            ></i>
+                            <Image
+                              src={item}
+                              className="img-thumbnail-infomation"
+                            />
+                          </div>
+                        );
+                      })}
+                  </div>
+                </div>
+              </div>
+            </div>
+            {imgInformation.length > 0 && (
+              <div className="div-col-download">
+                <Button
+                  className="btn-download"
+                  onClick={downloadImageInformation}
+                >
+                  <i class="uil uil-image-download"></i>
+                </Button>
+              </div>
+            )}
+          </div>
+          <hr />
+          <div className="div-check-document">
+            <Checkbox
+              checked={registration}
+              onChange={(e) => setRegistration(e.target.checked)}
+              className="check-document"
+            >
+              {`${i18n.t("household_book", { lng: lang })}`}
+            </Checkbox>
+
+            <div className="form-input">
+              <div className="div-infomation">
+                <p className="label-input">{`${i18n.t("image", {
+                  lng: lang,
+                })}`}</p>
+                <div className="col-img">
+                  <input
+                    type="file"
+                    id="files"
+                    name="files"
+                    accept=".jpg, .jpeg, .png"
+                    multiple
+                    onChange={onChangeRegistration}
+                  />
+                  <div className="div-thumbnail-infomation">
+                    {imgRegistration.length > 0 &&
+                      imgRegistration.map((item, index) => {
+                        return (
+                          <div
+                            className="div-item-thumbnail-infomation"
+                            key={index}
+                          >
+                            <i
+                              class="uil uil-times-circle"
+                              onClick={() => removeItemRegistration(item)}
+                            ></i>
+                            <Image
+                              src={item}
+                              className="img-thumbnail-infomation"
+                            />
+                          </div>
+                        );
+                      })}
+                  </div>
+                </div>
+              </div>
+            </div>
+            {imgRegistration.length > 0 && (
+              <div span="2" className="div-col-download">
+                <Button
+                  className="btn-download"
+                  onClick={downloadImageRegistration}
+                >
+                  <i class="uil uil-image-download"></i>
+                </Button>
+              </div>
+            )}
+          </div>
+          <hr />
+          <div className="div-check-document">
+            <Checkbox
+              checked={certification}
+              onChange={(e) => setCertification(e.target.checked)}
+              className="check-document"
+            >
+              {`${i18n.t("certificate_conduct", { lng: lang })}`}
+            </Checkbox>
+            <div className="form-input">
+              <div className="div-infomation">
+                <p className="label-input">{`${i18n.t("image", {
+                  lng: lang,
+                })}`}</p>
+                <div className="col-img">
+                  <input
+                    type="file"
+                    id="files"
+                    name="files"
+                    accept=".jpg, .jpeg, .png"
+                    multiple
+                    onChange={onChangeCertification}
+                  />
+                  <div className="div-thumbnail-infomation">
+                    <div className="div-thumbnail-infomation">
+                      {imgCertification.length > 0 &&
+                        imgCertification.map((item, index) => {
+                          return (
+                            <div
+                              className="div-item-thumbnail-infomation"
+                              key={index}
+                            >
+                              <i
+                                class="uil uil-times-circle"
+                                onClick={() => removeItemCertification(item)}
+                              ></i>
+                              <Image
+                                src={item}
+                                className="img-thumbnail-infomation"
+                              />
+                            </div>
+                          );
+                        })}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {imgCertification.length > 0 && (
+              <div className="div-col-download">
+                <Button
+                  className="btn-download"
+                  onClick={downloadImageCertification}
+                >
+                  <i class="uil uil-image-download"></i>
+                </Button>
+              </div>
+            )}
+          </div>
+        </div>
+      </> */}
+      {/* Form cũ */}
       {/* <>
         <Form>
           <div className="pl-lg-4">

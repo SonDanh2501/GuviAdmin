@@ -1,4 +1,18 @@
-import { IoStar, IoStarHalf, IoStarOutline } from "react-icons/io5";
+import icons from "./icons";
+import MB_BANK from "../assets/images/bank_mb.svg";
+import VIETCOM_BANK from "../assets/images/bank_vietcom.svg";
+import VIETIN_BANK from "../assets/images/bank_vietin.svg";
+import TECHCOM_BANK from "../assets/images/bank_techcom.svg";
+import ARGI_BANK from "../assets/images/bank_agri.svg";
+import BIDV_BANK from "../assets/images/bank_bidv.svg";
+import SACOM_BANK from "../assets/images/bank_sacombank.svg";
+import ACB_BANK from "../assets/images/bank_acb.svg";
+import VP_BANK from "../assets/images/bank_vp.svg";
+import TP_BANK from "../assets/images/bank_tp.svg";
+import VIB_BANK from "../assets/images/bank_vib.svg";
+import SHB_BANK from "../assets/images/bank_shb.svg";
+
+const { IoStar, IoStarHalf, IoStarOutline } = icons;
 
 export const INIT_STATE = {
   customers: {
@@ -86,6 +100,143 @@ export const path = {
   SYSTEM: "/system",
 };
 
+// Danh sách ngân hàng
+export const bankList = [
+  {
+    value: "vietcom_bank",
+    label: (
+      <div style={{ gap: "12px" }} className="flex items-center">
+        {/* <IoStar /> */}
+        <img className="w-full h-6" src={VIETCOM_BANK}></img>
+        <span className="text-sm font-normal">Vietcombank</span>
+      </div>
+    ),
+    name: "Ngân hàng Thương mại cổ phần Ngoại thương Việt Nam",
+  },
+  {
+    value: "mb_bank",
+    label: (
+      <div style={{ gap: "12px" }} className="flex items-center">
+        {/* <IoStar /> */}
+        <img className="w-full h-6" src={MB_BANK}></img>
+        <span className="text-sm font-normal">MBBank</span>
+      </div>
+    ),
+    name: "Ngân hàng Quân đội",
+  },
+  {
+    value: "vietin_bank",
+    label: (
+      <div style={{ gap: "12px" }} className="flex items-center">
+        {/* <IoStar /> */}
+        <img className="w-full h-6" src={VIETIN_BANK}></img>
+        <span className="text-sm font-normal">Vietinbank</span>
+      </div>
+    ),
+    name: "Ngân hàng Thương mại cổ phần Công Thương Việt Nam",
+  },
+  {
+    value: "techcom_bank",
+    label: (
+      <div style={{ gap: "12px" }} className="flex items-center">
+        {/* <IoStar /> */}
+        <img className="w-full h-6" src={TECHCOM_BANK}></img>
+        <span className="text-sm font-normal">Techcombank</span>
+      </div>
+    ),
+    name: "Ngân hàng Thương mại cổ phần Kỹ Thương Việt Nam",
+  },
+  {
+    value: "agri_bank",
+    label: (
+      <div style={{ gap: "12px" }} className="flex items-center">
+        {/* <IoStar /> */}
+        <img className="w-full h-6" src={ARGI_BANK}></img>
+        <span className="text-sm font-normal">Agribank</span>
+      </div>
+    ),
+    name: "Ngân hàng Nông nghiệp và Phát triển Nông thôn Việt Nam",
+  },
+  {
+    value: "bidv_bank",
+    label: (
+      <div style={{ gap: "12px" }} className="flex items-center">
+        {/* <IoStar /> */}
+        <img className="w-full h-6" src={BIDV_BANK}></img>
+        <span className="text-sm font-normal">BIDV</span>
+      </div>
+    ),
+    name: "Ngân hàng Thương mại cổ phần Đầu tư và Phát triển Việt Nam",
+  },
+  {
+    value: "sacom_bank",
+    label: (
+      <div style={{ gap: "12px" }} className="flex items-center">
+        {/* <IoStar /> */}
+        <img className="w-full h-6" src={SACOM_BANK}></img>
+        <span className="text-sm font-normal">Sacombank</span>
+      </div>
+    ),
+    name: "Ngân hàng Thương mại cổ phần Sài Gòn Thương Tín",
+  },
+  {
+    value: "acb_bank",
+    label: (
+      <div style={{ gap: "12px" }} className="flex items-center">
+        {/* <IoStar /> */}
+        <img className="w-full h-6" src={ACB_BANK}></img>
+        <span className="text-sm font-normal">ACB</span>
+      </div>
+    ),
+    name: "Ngân hàng Thương mại cổ phần Á Châu",
+  },
+  {
+    value: "vp_bank",
+    label: (
+      <div style={{ gap: "12px" }} className="flex items-center">
+        {/* <IoStar /> */}
+        <img className="w-full h-6" src={VP_BANK}></img>
+        <span className="text-sm font-normal">VPBank</span>
+      </div>
+    ),
+    name: "Ngân hàng Thương mại cổ phần Việt Nam Thịnh Vượng",
+  },
+  {
+    value: "tp_bank",
+    label: (
+      <div style={{ gap: "12px" }} className="flex items-center">
+        {/* <IoStar /> */}
+        <img className="w-full h-6" src={TP_BANK}></img>
+        <span className="text-sm font-normal">TPBank</span>
+      </div>
+    ),
+    name: "Ngân hàng Thương mại cổ phần Tiên Phong",
+  },
+  {
+    value: "vib_bank",
+    label: (
+      <div style={{ gap: "12px" }} className="flex items-center">
+        {/* <IoStar /> */}
+        <img className="w-full h-6" src={VIB_BANK}></img>
+        <span className="text-sm font-normal">VIB</span>
+      </div>
+    ),
+    name: "Ngân hàng Thương mại cổ phần Quốc tế Việt Nam",
+  },
+  {
+    value: "shb_bank",
+    label: (
+      <div style={{ gap: "12px" }} className="flex items-center">
+        {/* <IoStar /> */}
+        <img className="w-full h-6" src={SHB_BANK}></img>
+        <span className="text-sm font-normal">SHB</span>
+      </div>
+    ),
+    name: "Ngân hàng Thương mại cổ phần Sài Gòn-Hà Nội",
+  },
+];
+
+// Hàm render sao từ giá trị đánh giá (number) truyền vào
 export const renderStarFromNumber = (number, color, size) => {
   const integerPart = Math.floor(number);
   const decimalPart = number - integerPart;
@@ -99,7 +250,9 @@ export const renderStarFromNumber = (number, color, size) => {
 
   for (let i = 0; i < 5; i++) {
     if (i < integerPart) {
-      stars.push(<IoStar key={i} color={color || "orange"} size={size || 16} />);
+      stars.push(
+        <IoStar key={i} color={color || "orange"} size={size || 16} />
+      );
     } else if (i === integerPart && decimalPart > 0) {
       // In ra ngôi sao có phần thập phân
       stars.push(
@@ -114,11 +267,14 @@ export const renderStarFromNumber = (number, color, size) => {
   return stars;
 };
 
+// Hàm tính phần trăm của giá trị con (child) trên tổng (total)
 export const calculateNumberPercent = (total, child) => {
   let percent = (child / total) * 100;
   return percent ? Math.round((percent + Number.EPSILON) * 100) / 100 : 0;
 };
 
+// Hàm dời phần từ trong mảng (array) từ vị trí hiện tại thành vị trí truyền vào (position)
+// conditionFind là điều kiện để tìm ra phần tử cần đổi vị trí trong mảng array
 export const moveElement = (array, position, conditionFind) => {
   let newArray = [...array]; // Temp array
   const index = newArray.findIndex(conditionFind); // Check if having data or not
