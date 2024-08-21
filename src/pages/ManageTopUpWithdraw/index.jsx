@@ -52,7 +52,7 @@ import {
 import { LENGTH_ITEM } from "../../constants";
 import { errorNotify, successNotify } from "../../helper/toast";
 import CommonFilter from "../../components/commonFilter";
-import { getElementState, getLanguageState } from "../../redux/selectors/auth";
+import { getElementState, getLanguageState, getPermissionState } from "../../redux/selectors/auth";
 import TransactionDrawer from "../../components/transactionDrawer";
 import DataTable from "../../components/tables/dataTable";
 import ModalCustom from "../../components/modalCustom";
@@ -65,6 +65,12 @@ import i18n from "../../i18n";
 const ManageTopUpWithdraw = () => {
   let { width } = useWindowDimensions();
   const lang = useSelector(getLanguageState);
+  const permission = useSelector(getPermissionState);
+  console.log("check permission array", permission)
+  console.log(
+    "check permission find >>>",
+    permission.find((el) => el.name_api === "Duyệt/huỷ lệnh nạp CTV")
+  );
   const [tab, setTab] = useState(itemTabStatus[0].value);
   const checkElement = useSelector(getElementState);
   const [data, setData] = useState([]);
@@ -151,7 +157,8 @@ const ManageTopUpWithdraw = () => {
         record?.status === "revoke" ||
         record?.status === "waiting" ||
         record?.status === "doing" ||
-        record?.status === "processing";
+        record?.status === "processing" ||
+        !permission.find((el) => el.name_api === "Duyệt/huỷ lệnh nạp CTV");
       // Set disabled = true nếu status là một trong các trường hợp trên
       if (_isDisableVerify) {
         items?.map((el) => {

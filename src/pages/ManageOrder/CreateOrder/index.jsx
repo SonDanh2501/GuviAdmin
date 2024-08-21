@@ -705,7 +705,7 @@ const CreateOrder = () => {
                   defaultValue={0}
                   onChange={onBonusTipCollaborator}
                   formatter={(value) =>
-                    `${value}đ`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                    `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                   }
                   parser={(value) => value.replace(/\đ\s?|(,*)/g, "")}
                   style={{ width: 150, marginBottom: 15 }}

@@ -25,7 +25,6 @@ const Sidebar = ({ hide }) => {
   const navigate = useNavigate();
   const checkElement = useSelector(getElementState);
   const permission = useSelector(getPermissionState);
-
   let menuItem = [];
   for (const item of router) {
     const havePermission = permission.filter(
