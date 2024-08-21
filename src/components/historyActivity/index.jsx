@@ -26,7 +26,7 @@ const HistoryActivity = (props) => {
       id_transaction,
       id_punish_ticket,
     } = detailHistoryActivity;
-    console.log("detailHistoryActivity ", detailHistoryActivity);
+    // console.log("detailHistoryActivity ", detailHistoryActivity);
     return (
       <div className="detail-history-activity_confirm-order_container">
         <div className="item-left">
@@ -91,8 +91,8 @@ const HistoryActivity = (props) => {
   return (
     <div className="history-activity_container">
       {data.map((item, index) => {
-        console.log("check data >>> ", item);
-        console.log("check data lenght >>> ", item.id_customer?.length);
+        // console.log("check data >>> ", item);
+        // console.log("check data lenght >>> ", item.id_customer?.length);
         const { title, body, date_create, id_admin_action, title_admin } = item;
         return (
           <div className="history-activity_item-container">

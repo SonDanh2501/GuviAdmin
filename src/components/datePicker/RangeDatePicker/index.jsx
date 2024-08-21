@@ -44,7 +44,7 @@ const RangeDatePicker = (props) => {
         return (num < 10 ? "0" : "") + num;
       };
   
-    console.log("CHECK TZO", tzo);
+    // console.log("CHECK TZO", tzo);
     return date.toISOString();
     // date?.getFullYear() +
     // "-" +
@@ -330,7 +330,7 @@ const RangeDatePicker = (props) => {
       } else {
         lengthDaySelectedConvert = lengthDaySelected + 1;
       }
-      console.log("lengthDaySelectedConvert", lengthDaySelectedConvert);
+      // console.log("lengthDaySelectedConvert", lengthDaySelectedConvert);
     } else if (item.type_range === "months" && selectedMonths?.length < 2) {
       if (lengthDaySelected < 0) {
         lengthDaySelectedConvert = (-lengthDaySelected + 1) * 2;
@@ -409,7 +409,7 @@ const RangeDatePicker = (props) => {
           ? lengthDayToCurrent + lengthDaySelectedConvert / 2 
           : lengthDaySelectedConvert / 2 ;
         //
-        console.log("check start", start);
+        // console.log("check start", start);
         for (let i = start; i <= lengthDayFinal - 1; i++) {
           var previousDay = moment()
             .subtract(i, item.type_range)
