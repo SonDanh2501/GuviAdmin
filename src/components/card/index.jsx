@@ -538,7 +538,7 @@ const CardInfo = (props) => {
           </div>
           {/* const COLORS = ["#008000", "#2fc22f", "#FFD700", "#FFA500", "#FF0000"]; */}
           <div className="flex flex-col items-center justify-center gap-2">
-            <ResponsiveContainer width="100%" height={300}>
+            <ResponsiveContainer width="100%" height={231}>
               <PieChart>
                 <Pie
                   // activeIndex={activeIndex}
@@ -548,7 +548,7 @@ const CardInfo = (props) => {
                   cy="50%"
                   labelLine={false}
                   label={renderCustomizedLabel}
-                  outerRadius={120}
+                  outerRadius={110}
                   fill="#8884d8"
                   dataKey="value"
                   // data={totalRating}

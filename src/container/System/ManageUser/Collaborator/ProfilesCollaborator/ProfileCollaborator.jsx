@@ -111,6 +111,8 @@ const ProfileCollaborator = () => {
       return hidePhone;
     }
   };
+  
+  // console.log("check img", img);
   return (
     <div className="">
       <div className="">
@@ -174,7 +176,7 @@ const ProfileCollaborator = () => {
             <Image
               style={{
                 width: 100,
-                height: 100,
+                height: 100,  
                 backgroundColor: "transparent",
                 borderRadius: 10,
               }}

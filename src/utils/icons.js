@@ -32,6 +32,10 @@ import {
   IoSearchCircle,
   IoCaretDownOutline,
   IoSearch,
+  IoCalendar,
+  IoCloudUploadOutline,
+  IoRemoveCircle,
+  IoRemove,
 } from "react-icons/io5";
 
 const icons = {
@@ -68,6 +72,9 @@ const icons = {
   IoSearchCircle,
   IoCaretDownOutline,
   IoSearch,
+  IoCalendar,
+  IoCloudUploadOutline,
+  IoRemoveCircle,IoRemove 
 };
 
 export default icons;

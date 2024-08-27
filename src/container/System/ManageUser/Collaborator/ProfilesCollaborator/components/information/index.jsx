@@ -2,7 +2,7 @@ import { DatePicker, List } from "antd";
 import dayjs from "dayjs";
 import _debounce from "lodash/debounce";
 import moment from "moment";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 // import { Button, Col, Form, Row } from "reactstrap";
 import { Col, Form, Row } from "reactstrap";
@@ -51,7 +51,13 @@ import user from "../../../../../../../assets/images/user.png";
 // import i18n from "../../../../../../../i18n";
 // import { loadingAction } from "../../../../../../../redux/actions/loading";
 // import { getLanguageState } from "../../../../../../../redux/selectors/auth";
-const { IoClose, IoEyeOutline } = icons;
+const {
+  IoClose,
+  IoEyeOutline,
+  IoCloudUploadOutline,
+  IoRemoveCircle,
+  IoRemove,
+} = icons;
 
 const Information = ({ data, image, idCTV, setData, id }) => {
   const [resident, setResident] = useState("");
@@ -112,6 +118,8 @@ const Information = ({ data, image, idCTV, setData, id }) => {
   const [selectProvinceWork, setSelectProvinceWork] = useState(""); // Giá trị province (tỉnh/thành phố) làm việc lựa chọn
   const [selectDistrictWork, setSelectDistrictWork] = useState([]); // Giá trị district (quận/huyện) làm việc lựa chọn
   const [districtArrayWork, setDistrictArrayWork] = useState([]); // Giá trị mảng gồm các district (quận/huyện) của province (tỉnh/thành phố) đã chọn (làm việc)
+
+  const [contactPersons, setContactPersons] = useState([]);
 
   useEffect(() => {
     province.forEach((item) => {
@@ -264,26 +272,26 @@ const Information = ({ data, image, idCTV, setData, id }) => {
     const birthDayFormat = moment(new Date(birthday)).toISOString(); // Format lại dữ liệu ngày sinh nhật (birthday)
     const indentityDay = moment(new Date(issuedDay)).toISOString(); // Format lại dữ liệu ngày cấp (issuedDay)
     const dataPost = {
-      full_name: name, // Họ và tên CTV
-      email: email, // Email CTV
-      gender: gender, // Giới tính CTV
-      birthday: birthDayFormat,
-      // phone: phone, // Điện thoại CTV (không được quyền thay đổi) 
-      permanent_address: resident,
-      temporary_address: staying,
-      folk: ethnic,
-      religion: religion,
-      edu_level: level,
-      identity_number: number,
-      identity_place: issued,
-      identity_date: indentityDay,
-      avatar: image ? image : imgUrl,
-      id_inviter: idCollaborator,
-      type: type,
-      service_apply: serviceApply,
-      district: codeDistrict,
-      city: !codeCity ? -1 : codeCity,
-      id_business: idBusiness,
+      full_name: name, // Họ và tên của CTV (Đã check )
+      email: email, // Email của CTV
+      gender: gender, // Giới tính của CTV
+      birthday: birthDayFormat, // Ngày sinh của CTV
+      // phone: phone, // Điện thoại của CTV (không được quyền thay đổi)
+      permanent_address: resident, // Địa chỉ thường trú của CTV (dữ liệu cũ)
+      temporary_address: staying, //  Địa chỉ tạm trú của CTV (dữ liệu cũ)
+      folk: ethnic, // Dân tộc của CTV
+      religion: religion, // Tôn giáo của CTV
+      edu_level: level, // Trình độ học vấn của CTV
+      identity_number: number, // Căn cước công dân/ chứng minh nhân dân của CTV
+      identity_place: issued, // Nơi cấp của CCCD/CMND của CTV
+      identity_date: indentityDay, // Ngày cấp của CCCD/CMND của CTV
+      avatar: image ? image : imgUrl, // Ảnh đại diện của CTV
+      id_inviter: idCollaborator, // Mã giới thiệu của CTV
+      type: type, // Kiểu thông tin của đối tượng hiện đang chỉnh sửa (để nguyên là được)
+      service_apply: serviceApply, // Loại dịch vụ thực hiện của CTV
+      district: codeDistrict, // Quận/Huyện làm việc của CTV
+      city: !codeCity ? -1 : codeCity, // Tỉnh/Thành phố làm việc của CTV
+      id_business: idBusiness, // Đối tác (dữ liệu cũ)
     };
     console.log("Check data upload >>>", dataPost);
     // updateInformationCollaboratorApi(data?._id, {
@@ -351,6 +359,33 @@ const Information = ({ data, image, idCTV, setData, id }) => {
     lang,
   ]);
 
+  const handleChangeContact = (e, index) => {
+    const { name, value } = e.target;
+    const onChangeValue = [...contactPersons];
+    onChangeValue[index][name] = value;
+    setContactPersons(onChangeValue);
+  };
+
+  const handleAddingContact = () => {
+    // Giới hạn số người liên hệ tối đa là 3 người
+    if (contactPersons.length < 3) {
+      setContactPersons([
+        ...contactPersons,
+        {
+          nameCollaborator: "",
+          phoneCollaborator: "",
+          relationWithCollaborator: "",
+        },
+      ]);
+    }
+  };
+  const handleDeleteContact = (index) => {
+    console.log("running ");
+    const deleteContact = [...contactPersons]
+    // console.log("check deleteContact", deleteContact);
+    deleteContact.splice(index, 1);
+    setContactPersons(deleteContact);
+  }
   // Document data
   const [deal, setDeal] = useState(false);
   const [identify, setIdentify] = useState(false);
@@ -428,6 +463,7 @@ const Information = ({ data, image, idCTV, setData, id }) => {
         dispatch(loadingAction.loadingRequest(false));
       });
   };
+
   const onChangeIdentifyAfter = async (e) => {
     dispatch(loadingAction.loadingRequest(true));
     const extend = e.target.files[0].type.slice(
@@ -700,6 +736,13 @@ const Information = ({ data, image, idCTV, setData, id }) => {
     });
   };
 
+  // ~~~ CONSOLE LOG HERE ~~~
+  const inputFile = useRef(null); 
+  // console.log("Check inputFile", inputFile);
+  const onButtonClick = () => {
+    // `current` points to the mounted file input element
+    inputFile.current.click();
+  };
   return (
     <>
       <div className="pb-4">
@@ -711,29 +754,41 @@ const Information = ({ data, image, idCTV, setData, id }) => {
               className="w-full h-fit bg-white card-shadow"
             >
               {/* Header */}
-              <div className="flex items-center justify-between gap-2 border-b-2 border-gray-200 p-3.5">
+              <div
+                style={{ padding: "9px 14px" }}
+                className="flex items-center justify-between gap-2 border-b-2 border-gray-200"
+              >
                 <div className="flex w-full items-center">
                   <span className="font-medium text-sm">
                     Thông tin cộng tác viên
                   </span>
-                  {/* <div className="bg-black"> */}
-                  {/* <Image
+                </div>
+                <div className="flex items-center gap-2 px-1">
+                  <div className="bg-violet-500 px-1.5 py-1 rounded-lg cursor-pointer hover:bg-violet-400 duration-300 ease-out">
+                    <input
+                      type="file"
+                      id="file"
+                      ref={inputFile}
+                      style={{ display: "none" }}
+                    />
+                    <IoCloudUploadOutline
+                      onClick={onButtonClick}
+                      // onClick={() => inputReference.current.click()}
+                      color="white"
+                    />
+                  </div>
+                  <Image
                     style={{
-                      width: 25,
+                      width: 30,
                       height: 25,
-                      // backgroundColor: "black",
                       borderRadius: "100%",
                     }}
                     src={img ? img : data?.avatar ? data?.avatar : user}
-                  /> */}
-                  {/* </div> */}
+                  />
                 </div>
               </div>
               {/* Content */}
-              <div
-                style={{ gap: "1px", padding: "12px 18px" }}
-                className="flex flex-col"
-              >
+              <div style={{ padding: "12px 18px" }} className="flex flex-col">
                 {/* Họ và tên */}
                 <div className="flex gap-4">
                   <div className="w-full">
@@ -745,6 +800,18 @@ const Information = ({ data, image, idCTV, setData, id }) => {
                       onChange={(e) => setName(e.target.value)}
                     />
                   </div>
+                </div>
+                {/* Số điện thoại, email */}
+                <div className="flex gap-4">
+                  <div className="w-full">
+                    <InputTextCustom
+                      type="textValue"
+                      // disable={true}
+                      value={phone}
+                      required
+                      placeHolder="Số điện thoại"
+                    />
+                  </div>
                   <div className="w-full">
                     <InputTextCustom
                       type="text"
@@ -754,9 +821,58 @@ const Information = ({ data, image, idCTV, setData, id }) => {
                     />
                   </div>
                 </div>
-                {/* Ngày sinh, số điện thoại, giới tính */}
+                {/* Căn cước công dân, ngày sinh */}
                 <div className="flex gap-4">
-                  <div className="w-1/3">
+                  <div className="w-full">
+                    <InputTextCustom
+                      type="text"
+                      // disable={true}
+                      value={number}
+                      number
+                      placeHolder="CCCD/CMND"
+                      onChange={(e) => setNumber(e.target.value)}
+                    />
+                  </div>
+                  <div className="w-full">
+                    <InputTextCustom
+                      type="date"
+                      value={birthday}
+                      placeHolder="Ngày sinh"
+                      birthday={
+                        birthday ? dayjs(birthday.slice(0, 1), dateFormat) : ""
+                      }
+                      setValueSelectedProps={setBirthday}
+                    />
+                  </div>
+                </div>
+                {/* Nơi cấp, ngày cấp */}
+                <div className="flex gap-4">
+                  <div className="w-full">
+                    <InputTextCustom
+                      type="text"
+                      // disable={true}
+                      value={issued}
+                      placeHolder="Nơi cấp"
+                      onChange={(e) => setIssued(e.target.value)}
+                    />
+                  </div>
+                  <div className="w-full">
+                    <InputTextCustom
+                      type="date"
+                      value={issuedDay}
+                      placeHolder="Ngày cấp"
+                      birthday={
+                        issuedDay
+                          ? dayjs(issuedDay.slice(0, 11), dateFormat)
+                          : ""
+                      }
+                      setValueSelectedProps={setIssuedDay}
+                    />
+                  </div>
+                </div>
+                {/* Quốc tịch, giới tính, quê quán */}
+                <div className="flex gap-4">
+                  <div className="w-full">
                     <InputTextCustom
                       type="select"
                       value={gender}
@@ -778,59 +894,28 @@ const Information = ({ data, image, idCTV, setData, id }) => {
                       ]}
                     />
                   </div>
-                  <div className="w-1/3">
+                  <div className="w-full">
                     <InputTextCustom
-                      type="date"
-                      value={birthday}
-                      placeHolder="Ngày sinh"
-                      birthday={
-                        birthday ? dayjs(birthday.slice(0, 1), dateFormat) : ""
-                      }
-                      setValueSelectedProps={setBirthday}
+                      type="province"
+                      searchField={true}
+                      // value={selectProvinceLive}
+                      placeHolder="Quốc tịch"
+                      province={province}
+                      // setValueSelectedProps={setSelectProvinceLive}
+                      // setValueSelectedPropsSupport={setSelectDistrictLive}
+                      // setValueArrayProps={setDistrictArrayLive}
                     />
                   </div>
-                  <div className="w-1/3">
+                  <div className="w-full">
                     <InputTextCustom
-                      type="text"
-                      disable={true}
-                      value={phone}
-                      required
-                      placeHolder="Số điện thoại"
-                    />
-                  </div>
-                </div>
-                {/* CCCD, Nơi cấp, Ngày cấp */}
-                <div className="flex gap-4">
-                  <div className="w-1/3">
-                    <InputTextCustom
-                      type="text"
-                      // disable={true}
-                      value={number}
-                      number
-                      placeHolder="CCCD/CMND"
-                      onChange={(e) => setNumber(e.target.value)}
-                    />
-                  </div>
-                  <div className="w-1/3">
-                    <InputTextCustom
-                      type="text"
-                      // disable={true}
-                      value={issued}
-                      placeHolder="Nơi cấp"
-                      onChange={(e) => setIssued(e.target.value)}
-                    />
-                  </div>
-                  <div className="w-1/3">
-                    <InputTextCustom
-                      type="date"
-                      value={issuedDay}
-                      placeHolder="Ngày cấp"
-                      birthday={
-                        issuedDay
-                          ? dayjs(issuedDay.slice(0, 11), dateFormat)
-                          : ""
-                      }
-                      setValueSelectedProps={setIssuedDay}
+                      type="province"
+                      searchField={true}
+                      // value={selectProvinceLive}
+                      placeHolder="Quê quán"
+                      province={province}
+                      // setValueSelectedProps={setSelectProvinceLive}
+                      // setValueSelectedPropsSupport={setSelectDistrictLive}
+                      // setValueArrayProps={setDistrictArrayLive}
                     />
                   </div>
                 </div>
@@ -839,6 +924,7 @@ const Information = ({ data, image, idCTV, setData, id }) => {
                   <div className="w-1/2">
                     <InputTextCustom
                       type="province"
+                      searchField={true}
                       value={selectProvinceLive}
                       placeHolder="Tỉnh/Thành phố (thường trú)"
                       province={province}
@@ -850,6 +936,7 @@ const Information = ({ data, image, idCTV, setData, id }) => {
                   <div className="w-1/2">
                     <InputTextCustom
                       type="district"
+                      searchField={true}
                       disable={selectProvinceLive ? false : true}
                       value={selectDistrictLive}
                       placeHolder="Quận/Huyện (thường trú)"
@@ -875,6 +962,7 @@ const Information = ({ data, image, idCTV, setData, id }) => {
                   <div className="w-1/2">
                     <InputTextCustom
                       type="province"
+                      searchField={true}
                       value={selectProvinceTemp}
                       placeHolder="Tỉnh/Thành phố (tạm trú)"
                       province={province}
@@ -886,6 +974,7 @@ const Information = ({ data, image, idCTV, setData, id }) => {
                   <div className="w-1/2">
                     <InputTextCustom
                       type="district"
+                      searchField={true}
                       disable={selectProvinceTemp ? false : true}
                       value={selectDistrictTemp}
                       placeHolder="Quận/Huyện (tạm trú)"
@@ -906,7 +995,7 @@ const Information = ({ data, image, idCTV, setData, id }) => {
                     />
                   </div>
                 </div>
-                {/* Dân tộc, Tôn giáo, Trình độ văn hóa */}
+                {/* Dân tộc, tôn giáo, trình độ văn hóa */}
                 <div className="flex gap-4">
                   <div className="w-1/3">
                     <InputTextCustom
@@ -973,21 +1062,24 @@ const Information = ({ data, image, idCTV, setData, id }) => {
                   <div className="w-1/2">
                     <InputTextCustom
                       type="province"
+                      searchField={true}
                       value={selectProvinceWork}
-                      placeHolder="Tỉnh/Thành phố (làm việc)"
+                      placeHolder="Nơi làm việc (tỉnh/thành phố)"
                       province={province}
                       setValueSelectedProps={setSelectProvinceWork}
                       setValueSelectedPropsSupport={setSelectDistrictWork}
                       setValueArrayProps={setDistrictArrayWork}
+                      testing
                     />
                   </div>
                   <div className="w-1/2">
                     <InputTextCustom
                       type="multiDistrict"
+                      searchField={true}
                       disable={selectProvinceWork ? false : true}
                       value={selectDistrictWork}
                       multiSelectOptions={districtArrayWork}
-                      placeHolder="Quận/Huyện (làm việc)"
+                      placeHolder="Nơi làm việc (quận/huyện)"
                       // district={districtArrayWork}
                       setValueSelectedProps={setSelectDistrictWork}
                     />
@@ -1005,6 +1097,58 @@ const Information = ({ data, image, idCTV, setData, id }) => {
                       // setValueSelectedProps={setSelectService}
                     />
                   </div>
+                </div>
+                {/* Tên, số điện thoại, mối quan hệ với CTV*/}
+                {contactPersons?.map((inputField, index) => (
+                  <div className="flex items-center gap-4">
+                    <div className="w-1/3">
+                      <InputTextCustom
+                        type="text"
+                        name="nameCollaborator"
+                        value={inputField.nameCollaborator}
+                        placeHolder={`Người liên hệ ${index + 1}`}
+                        onChange={(e) => handleChangeContact(e, index)}
+                      />
+                    </div>
+                    <div className="w-1/3">
+                      <InputTextCustom
+                        type="text"
+                        name="phoneCollaborator"
+                        value={inputField.phoneCollaborator}
+                        placeHolder={`Số điện thoại`}
+                        onChange={(e) => handleChangeContact(e, index)}
+                      />
+                    </div>
+                    <div className="w-1/3">
+                      <InputTextCustom
+                        type="text"
+                        name="relationWithCollaborator"
+                        value={inputField.relationWithCollaborator}
+                        placeHolder={`Quan hệ`}
+                        onChange={(e) => handleChangeContact(e, index)}
+                      />
+                    </div>
+                    <div
+                      onClick={() => handleDeleteContact(index)}
+                      style={{ margin: "18px 0px 0px 0px", padding: "2px" }}
+                      className="w-fit bg-red-500 rounded-full hover:bg-red-300 duration-300 cursor-pointer text-white"
+                    >
+                      <IoRemove />
+                    </div>
+                  </div>
+                ))}
+                {/* Thêm người liên hệ */}
+                <div style={{ padding: "4px 0px 0px 4px" }}>
+                  <span
+                    onClick={() => handleAddingContact()}
+                    className={` ${
+                      contactPersons.length >= 3
+                        ? "text-gray-500/60 cursor-not-allowed"
+                        : "text-violet-500 cursor-pointer"
+                    } duration-300`}
+                  >
+                    Thêm người liên hệ
+                  </span>
                 </div>
               </div>
               {/* Button submit */}
@@ -1142,12 +1286,7 @@ const Information = ({ data, image, idCTV, setData, id }) => {
                       style={{
                         borderRadius: "6px",
                       }}
-                    >
-                      {/* <span className="">123</span> */}
-                      {/* <span className="text-black">
-                    {`${i18n.t("cooperation_agreement", { lng: lang })}`}
-                  </span> */}
-                    </Checkbox>
+                    ></Checkbox>
                   </div>
                   {/* CCCD/CMND */}
                   <div
@@ -1170,12 +1309,7 @@ const Information = ({ data, image, idCTV, setData, id }) => {
                       style={{
                         borderRadius: "6px",
                       }}
-                    >
-                      {/* <span className="">123</span> */}
-                      {/* <span className="text-black">
-                    {`${i18n.t("cooperation_agreement", { lng: lang })}`}
-                  </span> */}
-                    </Checkbox>
+                    ></Checkbox>
                   </div>
                   {/* Sơ yếu lí lịch */}
                   <div
@@ -1198,12 +1332,7 @@ const Information = ({ data, image, idCTV, setData, id }) => {
                       style={{
                         borderRadius: "6px",
                       }}
-                    >
-                      {/* <span className="">123</span> */}
-                      {/* <span className="text-black">
-                    {`${i18n.t("cooperation_agreement", { lng: lang })}`}
-                  </span> */}
-                    </Checkbox>
+                    ></Checkbox>
                   </div>
                   {/* Sổ hộ khẩu */}
                   <div
@@ -1226,12 +1355,7 @@ const Information = ({ data, image, idCTV, setData, id }) => {
                       style={{
                         borderRadius: "6px",
                       }}
-                    >
-                      {/* <span className="">123</span> */}
-                      {/* <span className="text-black">
-                    {`${i18n.t("cooperation_agreement", { lng: lang })}`}
-                  </span> */}
-                    </Checkbox>
+                    ></Checkbox>
                   </div>
                   {/* Giấy xác nhận hạnh kiểm */}
                   <div
@@ -1254,12 +1378,7 @@ const Information = ({ data, image, idCTV, setData, id }) => {
                       style={{
                         borderRadius: "6px",
                       }}
-                    >
-                      {/* <span className="">123</span> */}
-                      {/* <span className="text-black">
-                    {`${i18n.t("cooperation_agreement", { lng: lang })}`}
-                  </span> */}
-                    </Checkbox>
+                    ></Checkbox>
                   </div>
                 </div>
               </div>
@@ -1267,7 +1386,15 @@ const Information = ({ data, image, idCTV, setData, id }) => {
               <div
                 className="document-content"
                 style={{
-                  maxHeight: "803px",
+                  maxHeight: `${
+                    contactPersons.length === 3
+                      ? "none"
+                      : contactPersons.length === 2
+                      ? "950px"
+                      : contactPersons.length === 1
+                      ? "870px"
+                      : "790px"
+                  }`,
                   padding: "0px 6px",
                   scrollbarGutter: "stable both-edges",
                 }}
@@ -1287,91 +1414,16 @@ const Information = ({ data, image, idCTV, setData, id }) => {
                   <InputTextCustom
                     type="file"
                     placeHolder="CCCD/CMND (mặt trước)"
-                    imgIdentifyFronsite={imgIdentifyFronsite}
+                    value={imgIdentifyFronsite}
+                    setValueSelectedProps={setImgIdentifyFronsite}
                   />
-                  {imgIdentifyFronsite && (
-                    <div
-                      style={{ borderRadius: "6px", border: "2px dashed	#eee" }}
-                      className="flex items-center justify-between mt-2 p-2 border-2 gap-2"
-                    >
-                      {/* <i
-                        class="uil uil-times-circle"
-                        onClick={() => setImgIdentifyFronsite("")}
-                      /> */}
-                      <div
-                        style={{ gap: "10px" }}
-                        className="flex items-center"
-                      >
-                        <Image
-                          height={40}
-                          width={60}
-                          src={imgIdentifyFronsite}
-                        />
-                        {/* Tách chuỗi string thành những chuỗi string nhỏ hơn với điều kiện là có ký tự "/" và sau đó lấy ra giá trị cuối cùng */}
-                        <span style={{ maxWidth: "280px", overflow: "hidden" }}>
-                          {imgIdentifyFronsite.split("/").pop()}
-                        </span>
-                      </div>
-                      <div className="flex gap-2">
-                        {/* <button
-                          style={{ borderRadius: "100%" }}
-                          className="p-2 hover:bg-blue-500 hover:text-white bg-gray-50 text-blue-500 duration-300 ease-out"
-                        >
-                          <IoEyeOutline size="16px" />
-                        </button> */}
-                        <button
-                          style={{ borderRadius: "100%" }}
-                          className="p-2 hover:bg-red-500 hover:text-white text-red-500 duration-300 ease-out"
-                        >
-                          <IoClose size="16px" />
-                        </button>
-                      </div>
-                    </div>
-                  )}
                   {/* Mặt sau */}
                   <InputTextCustom
                     type="file"
                     placeHolder="CCCD/CMND (mặt sau)"
+                    value={imgIdentifyBacksite}
+                    setValueSelectedProps={setImgIdentifyBacksite}
                   />
-                  {imgIdentifyBacksite && (
-                    <div
-                      style={{ borderRadius: "6px", border: "2px dashed	 #eee" }}
-                      className="flex items-center justify-between mt-2 p-2 border-2 gap-2"
-                    >
-                      {/* <i
-                        class="uil uil-times-circle"
-                        onClick={() => setImgIdentifyFronsite("")}
-                      /> */}
-                      <div
-                        style={{ gap: "10px" }}
-                        className="flex items-center"
-                      >
-                        <Image
-                          height={40}
-                          width={60}
-                          src={imgIdentifyBacksite}
-                        />
-                        {/* Tách chuỗi string thành những chuỗi string nhỏ hơn với điều kiện là có ký tự "/" và sau đó lấy ra giá trị cuối cùng */}
-                        <span style={{ maxWidth: "280px", overflow: "hidden" }}>
-                          {imgIdentifyBacksite.split("/").pop()}
-                        </span>
-                      </div>
-                      <div className="flex gap-2">
-                        {/* <button
-                          style={{ borderRadius: "100%" }}
-                          className="p-2 hover:bg-blue-500 hover:text-white bg-gray-50 text-blue-500 duration-300 ease-out"
-                        >
-                          <IoEyeOutline size="16px" />
-                        </button> */}
-                        <button
-                          style={{ borderRadius: "100%" }}
-                          className="p-2 hover:bg-red-500 hover:text-white text-red-500 duration-300 ease-out"
-                        >
-                          <IoClose size="16px" />
-                        </button>
-                      </div>
-                    </div>
-                  )}
                 </div>
                 {/* Sơ yếu lí lịch */}
                 <div className="w-full">
@@ -1379,50 +1431,9 @@ const Information = ({ data, image, idCTV, setData, id }) => {
                     type="file"
                     placeHolder="Sơ yếu lí lịch"
                     multiple
+                    value={imgInformation}
+                    setValueSelectedProps={setImgInformation}
                   />
-                  {imgInformation.length > 0 &&
-                    imgInformation.map((item, index) => {
-                      return (
-                        <div
-                          style={{
-                            borderRadius: "6px",
-                            border: "2px dashed	 #eee",
-                          }}
-                          className="flex items-center justify-between mt-2 p-2 border-2 gap-2"
-                        >
-                          {/* <i
-                          class="uil uil-times-circle"
-                          onClick={() => setImgIdentifyFronsite("")}
-                        /> */}
-                          <div
-                            style={{ gap: "10px" }}
-                            className="flex items-center"
-                          >
-                            <Image height={40} width={60} src={item} />
-                            {/* Tách chuỗi string thành những chuỗi string nhỏ hơn với điều kiện là có ký tự "/" và sau đó lấy ra giá trị cuối cùng */}
-                            <span
-                              style={{ maxWidth: "280px", overflow: "hidden" }}
-                            >
-                              {item.split("/").pop()}
-                            </span>
-                          </div>
-                          <div className="flex gap-2">
-                            {/* <button
-                            style={{ borderRadius: "100%" }}
-                            className="p-2 hover:bg-blue-500 hover:text-white bg-gray-50 text-blue-500 duration-300 ease-out"
-                          >
-                            <IoEyeOutline size="16px" />
-                          </button> */}
-                            <button
-                              style={{ borderRadius: "100%" }}
-                              className="p-2 hover:bg-red-500 hover:text-white text-red-500 duration-300 ease-out"
-                            >
-                              <IoClose size="16px" />
-                            </button>
-                          </div>
-                        </div>
-                      );
-                    })}
                 </div>
                 {/* Sổ hộ khẩu */}
                 <div className="w-full">
@@ -1430,50 +1441,9 @@ const Information = ({ data, image, idCTV, setData, id }) => {
                     type="file"
                     placeHolder="Sổ hộ khẩu"
                     multiple
+                    value={imgRegistration}
+                    setValueSelectedProps={setImgRegistration}
                   />
-                  {imgRegistration.length > 0 &&
-                    imgRegistration.map((item, index) => {
-                      return (
-                        <div
-                          style={{
-                            borderRadius: "6px",
-                            border: "2px dashed #eee",
-                          }}
-                          className="flex items-center justify-between mt-2 p-2 border-2 gap-2"
-                        >
-                          {/* <i
-                          class="uil uil-times-circle"
-                          onClick={() => setImgIdentifyFronsite("")}
-                        /> */}
-                          <div
-                            style={{ gap: "10px" }}
-                            className="flex items-center"
-                          >
-                            <Image height={40} width={60} src={item} />
-                            {/* Tách chuỗi string thành những chuỗi string nhỏ hơn với điều kiện là có ký tự "/" và sau đó lấy ra giá trị cuối cùng */}
-                            <span
-                              style={{ maxWidth: "280px", overflow: "hidden" }}
-                            >
-                              {item.split("/").pop()}
-                            </span>
-                          </div>
-                          <div className="flex gap-2">
-                            {/* <button
-                            style={{ borderRadius: "100%" }}
-                            className="p-2 hover:bg-blue-500 hover:text-white bg-gray-50 text-blue-500 duration-300 ease-out"
-                          >
-                            <IoEyeOutline size="16px" />
-                          </button> */}
-                            <button
-                              style={{ borderRadius: "100%" }}
-                              className="p-2 hover:bg-red-500 hover:text-white text-red-500 duration-300 ease-out"
-                            >
-                              <IoClose size="16px" />
-                            </button>
-                          </div>
-                        </div>
-                      );
-                    })}
                 </div>
                 {/* Giấy xác nhận hạnh kiểm */}
                 <div className="w-full">
@@ -1481,58 +1451,17 @@ const Information = ({ data, image, idCTV, setData, id }) => {
                     type="file"
                     placeHolder="Giấy xác nhận hạnh kiểm"
                     multiple
+                    value={imgCertification}
+                    setValueSelectedProps={setImgCertification}
                   />
-                  {imgCertification.length > 0 &&
-                    imgCertification.map((item, index) => {
-                      return (
-                        <div
-                          style={{
-                            borderRadius: "6px",
-                            border: "2px dashed #eee",
-                          }}
-                          className="flex items-center justify-between mt-2 p-2 border-2 gap-2"
-                        >
-                          {/* <i
-                          class="uil uil-times-circle"
-                          onClick={() => setImgIdentifyFronsite("")}
-                        /> */}
-                          <div
-                            style={{ gap: "10px" }}
-                            className="flex items-center"
-                          >
-                            <Image height={40} width={60} src={item} />
-                            {/* Tách chuỗi string thành những chuỗi string nhỏ hơn với điều kiện là có ký tự "/" và sau đó lấy ra giá trị cuối cùng */}
-                            <span
-                              style={{ maxWidth: "280px", overflow: "hidden" }}
-                            >
-                              {item.split("/").pop()}
-                            </span>
-                          </div>
-                          <div className="flex gap-2">
-                            {/* <button
-                            style={{ borderRadius: "100%" }}
-                            className="p-2 hover:bg-blue-500 hover:text-white bg-gray-50 text-blue-500 duration-300 ease-out"
-                          >
-                            <IoEyeOutline size="16px" />
-                          </button> */}
-                            <button
-                              style={{ borderRadius: "100%" }}
-                              className="p-2 hover:bg-red-500 hover:text-white text-red-500 duration-300 ease-out"
-                            >
-                              <IoClose size="16px" />
-                            </button>
-                          </div>
-                        </div>
-                      );
-                    })}
                 </div>
-                <div
-                  style={{ padding: "14px 0px 0px 0px" }}
-                  className="flex items-center justify-between "
-                >
-                  <div className="w-0 h-0"></div>
-                  <ButtonCustom label="Cập nhật" />
-                </div>
+              </div>
+              <div
+                style={{ padding: "14px 14px 0px 0px" }}
+                className="flex items-center justify-between "
+              >
+                <div className="w-0 h-0"></div>
+                <ButtonCustom label="Cập nhật" />
               </div>
             </div>
           </div>
@@ -1816,7 +1745,7 @@ const Information = ({ data, image, idCTV, setData, id }) => {
         </div>
       </> */}
       {/* Form cũ */}
-      {/* <>
+      <>
         <Form>
           <div className="pl-lg-4">
             <h5>{`${i18n.t("info", { lng: lang })}`}</h5>
@@ -2087,7 +2016,7 @@ const Information = ({ data, image, idCTV, setData, id }) => {
             {`${i18n.t("update", { lng: lang })}`}
           </Button>
         </Form>
-      </> */}
+      </>
     </>
   );
 };

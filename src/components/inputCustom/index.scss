@@ -1,5 +1,10 @@
 @import "../../@theme/style.scss";
 
+
+.form-field {
+    position: relative;
+}
+
 .form-input {
     border: 2px solid #eee;
     border-radius: 4px;
@@ -16,10 +21,6 @@
     border-color: #6a5af9;
 }
 
-.form-field {
-    position: relative;
-}
-
 .form-label {
     position: absolute;
     top: 50%;
@@ -29,6 +30,27 @@
     color: #999;
     pointer-events: none;
     transition: 0.25s ease;
+
+    .required-label {
+        color: #EF4444;
+    }
+}
+
+.form-label-unit {
+    display: flex;
+    gap: 4px;
+    cursor: pointer;
+    align-items: center;
+    height: 100%;
+    position: absolute;
+    padding-left: 8px;
+    top: 0px;
+    right: 12px;
+    border-left: 2px solid #eee;
+    .unit {
+        color: #6b7280;
+        opacity: 0.6;
+    }
 }
 
 .form-input:not(:placeholder-shown)+.form-label,
@@ -42,14 +64,6 @@
     color: #6a5af9;
     // bor
 }
-
-// .icon-dropdown {
-
-// }
-
-// .icon-dropdown:focus {
-//     rotate: 180deg;
-// }
 
 input[type=file]::file-selector-button {
     margin-right: 10px;
