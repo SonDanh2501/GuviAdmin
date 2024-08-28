@@ -37,7 +37,7 @@ const DateWorkComponent = (props) => {
     const tempListSchedule = [];
     const dateNow = new Date();
     const oneDay = 1000 * 60 * 60 * 24;
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < 8; i++) {
       const dateStartMonth = new Date(
         dateNow.getFullYear(),
         dateNow.getMonth() + i,
