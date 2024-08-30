@@ -86,9 +86,6 @@ const ManageOrder = () => {
       : 20
   );
 
-
-
-
   // const [lengthPage, setLengthPage] = useState(20);
   const lang = useSelector(getLanguageState);
   const service = useSelector(getService);
@@ -200,7 +197,7 @@ const ManageOrder = () => {
     {
       i18n_title: "customer",
       dataIndex: "customer",
-      key: "customer-name-phone",
+      key: "customer_name_phone_rank",
       width: 150,
       fontSize: "text-size-M",
     },

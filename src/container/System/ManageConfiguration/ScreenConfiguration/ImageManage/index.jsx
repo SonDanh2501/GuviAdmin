@@ -31,6 +31,7 @@ const ImageManage = () => {
   useEffect(() => {
     getListImageApi(0, 50)
       .then((res) => {
+        // console.log("check res >>>", res);
         setData(res?.data);
         setTotal(res?.totalItem);
       })
