@@ -4,13 +4,13 @@ import _debounce from "lodash/debounce";
 import moment from "moment";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-// import { Button, Col, Form, Row } from "reactstrap";
 import { Col, Form, Row } from "reactstrap";
 import {
   fetchCollaborators,
   getCollaboratorsById,
   updateInformationCollaboratorApi,
   updateDocumentCollaboratorApi,
+  editAccountBankCollaborator,
 } from "../../../../../../../api/collaborator";
 import {
   getDetailBusiness,
@@ -33,24 +33,17 @@ import { Button, Checkbox, Image, Input } from "antd";
 import { saveAs } from "file-saver";
 import JSZip from "jszip";
 import JSZipUtils from "jszip-utils";
-// import { useCallback, useEffect, useState } from "react";
-// import { useDispatch, useSelector } from "react-redux";
-// import {
-//   getCollaboratorsById,
-//   updateDocumentCollaboratorApi,
-// } from "../../../../../../../api/collaborator";
 import { postFile } from "../../../../../../../api/file";
-// import InputCustom from "../../../../../../../components/textInputCustom";
 import resizeFile from "../../../../../../../helper/resizer";
 import icons from "../../../../../../../utils/icons";
 import ButtonCustom from "../../../../../../../components/button";
-import { bankList } from "../../../../../../../utils/contant";
+import {
+  bankList,
+  countryList,
+  listSkills,
+  listLanguages,
+} from "../../../../../../../utils/contant";
 import user from "../../../../../../../assets/images/user.png";
-
-// import { errorNotify, successNotify } from "../../../../../../../helper/toast";
-// import i18n from "../../../../../../../i18n";
-// import { loadingAction } from "../../../../../../../redux/actions/loading";
-// import { getLanguageState } from "../../../../../../../redux/selectors/auth";
 const {
   IoClose,
   IoEyeOutline,
@@ -59,7 +52,7 @@ const {
   IoRemove,
 } = icons;
 
-const Information = ({ data, image, idCTV, setData, id }) => {
+const Information = ({ data, idCTV, setData, id }) => {
   const [resident, setResident] = useState("");
   const [staying, setStaying] = useState("");
   const [imgUrl, setImgUrl] = useState("");
@@ -81,88 +74,121 @@ const Information = ({ data, image, idCTV, setData, id }) => {
   const dateFormat = "YYYY-MM-DD";
   const lang = useSelector(getLanguageState);
 
-  const [accountNumber, setAccountNumber] = useState("");
-  const [bankName, setBankName] = useState("");
-  const [accountName, setAccountName] = useState("");
-
+  // Thông tin cộng tác viên
   const [img, setImg] = useState(""); // Giá trị ảnh avatar
   const [name, setName] = useState(""); // Giá trị tên
-  const [email, setEmail] = useState(""); // Giá trị tên
+  const [email, setEmail] = useState(""); // Giá trị email
   const [gender, setGender] = useState("other"); // Giá trị giới tính lựa chọn
   const [birthday, setBirthday] = useState("2022-01-20T00:00:00.000Z"); // Giá trị ngày sinh
+  const [selectcountry, setSelectCountry] = useState("vn"); // Giá trị quốc tịch
+  const [selectHomeTown, setSelectHomeTown] = useState(""); // Giá trị quê quán
   const [phone, setPhone] = useState(""); // Giá trị số điện thoại
-  const [ethnic, setEthnic] = useState(""); // Giá trị dân tộc
-  const [religion, setReligion] = useState(""); // Giá trị tôn giáo
-  const [level, setLevel] = useState(""); // Giá trị trình độ
+  const [ethnic, setEthnic] = useState("Kinh"); // Giá trị dân tộc
+  const [religion, setReligion] = useState("Không"); // Giá trị tôn giáo
+  const [level, setLevel] = useState("12/12"); // Giá trị trình độ
   const [codeInvite, setCodeInvite] = useState(""); // Giá trị mã giới thiệu
   const [number, setNumber] = useState(""); // Giá trị CCCD
-  const [issued, setIssued] = useState(""); // Giá trị nơi cấp CCCD/CMND
-  const [issuedDay, setIssuedDay] = useState(""); // Giá trị ngày cấp CCCD/CMND
-
+  const [issued, setIssued] = useState("Cục cảnh sát"); // Giá trị nơi cấp CCCD/CMND
+  const [issuedDay, setIssuedDay] = useState("2024-01-01:00:00.000Z"); // Giá trị ngày cấp CCCD/CMND
   const [selectService, setSelectService] = useState([]); // Giá trị service lựa chọn
-  const [selectBank, setSelectBank] = useState([]); // Giá trị bank lựa chọn
-
   const [codeCity, setCodeCity] = useState(""); // Giá trị tỉnh, thành phố làm việc
   const [codeDistrict, setCodeDistrict] = useState([]); // Giá trị quận/ huyện làm việc
-
   const [selectProvinceLive, setSelectProvinceLive] = useState(""); // Giá trị province (tỉnh/thành phố) thường trú lựa chọn
   const [selectDistrictLive, setSelectDistrictLive] = useState(""); // Giá trị district (quận/huyện) thường trú lựa chọn
   const [districtArrayLive, setDistrictArrayLive] = useState([]); // Giá trị mảng gồm các district (quận/huyện) của province (tỉnh/thành phố) đã chọn (thường trú)
   const [addressResidentLive, setAddressResidentLive] = useState(""); // Giá trị địa chỉ thường trú cụ thể
-
-  const [selectProvinceTemp, setSelectProvinceTemp] = useState(""); // Giá trị province (tỉnh/thành phố) thường trú lựa chọn
-  const [selectDistrictTemp, setSelectDistrictTemp] = useState(""); // Giá trị district (quận/huyện) thường trú lựa chọn
-  const [districtArrayTemp, setDistrictArrayTemp] = useState([]); // Giá trị mảng gồm các district (quận/huyện) của province (tỉnh/thành phố) đã chọn (thường trú)
-  const [addressTemp, setAddressTemp] = useState(""); // Giá trị địa chỉ thường trú cụ thể
-
+  const [selectProvinceTemp, setSelectProvinceTemp] = useState(""); // Giá trị province (tỉnh/thành phố) tạm trú lựa chọn
+  const [selectDistrictTemp, setSelectDistrictTemp] = useState(""); // Giá trị district (quận/huyện) tạm trú lựa chọn
+  const [districtArrayTemp, setDistrictArrayTemp] = useState([]); // Giá trị mảng gồm các district (quận/huyện) của province (tỉnh/thành phố) đã chọn (tạm trú)
+  const [addressResidentTemp, setAddressResidentTemp] = useState(""); // Giá trị địa chỉ tạm trú cụ thể
   const [selectProvinceWork, setSelectProvinceWork] = useState(""); // Giá trị province (tỉnh/thành phố) làm việc lựa chọn
   const [selectDistrictWork, setSelectDistrictWork] = useState([]); // Giá trị district (quận/huyện) làm việc lựa chọn
   const [districtArrayWork, setDistrictArrayWork] = useState([]); // Giá trị mảng gồm các district (quận/huyện) của province (tỉnh/thành phố) đã chọn (làm việc)
+  const [contactPersons, setContactPersons] = useState([]); // Giá trị người liên hệ (array)
+  const [selectSkills, setSelectSkills] = useState([]); // Giá trị kỹ năng của CTV
+  const [selectLanguages, setSelectLanguages] = useState([]); // Giá trị ngôn ngữ của CTV
 
-  const [contactPersons, setContactPersons] = useState([]);
+  // Thông tin tài khoản
+  const [accountNumber, setAccountNumber] = useState("");
+  const [bankName, setBankName] = useState("");
+  const [accountName, setAccountName] = useState("");
+  const [selectBankName, setSelectBankName] = useState("vietcom_bank"); // Giá trị bank lựa chọn thay cho tên bankName
+  const [bankBrand, setBankBrand] = useState(""); // Giá trị tên chi nhánh ngân hàng
+  // Thông tin tài liệu
+  const [deal, setDeal] = useState(false);
+  const [identify, setIdentify] = useState(false);
+  const [information, setInformation] = useState(false);
+  const [certification, setCertification] = useState(false);
+  const [registration, setRegistration] = useState(false);
+  const [valueDeal, setSetValueDeal] = useState("");
+  const [imgIdentifyFronsite, setImgIdentifyFronsite] = useState("");
+  const [imgIdentifyBacksite, setImgIdentifyBacksite] = useState("");
+  const [imgInformation, setImgInformation] = useState([]);
+  const [imgCertification, setImgCertification] = useState([]);
+  const [imgRegistration, setImgRegistration] = useState([]);
 
+  // ~~~ useEffect ~~~
+  // 1. Lấy giá trị và gán cho các trường thông tin cộng tác viên
   useEffect(() => {
+    // Code Cũ
     province.forEach((item) => {
       if (item?.code === data?.city) {
         setDataDistrict(item?.districts);
         return;
       }
     });
+    // Lấy danh sách đối tác (chưa làm lại)
     getListBusiness(0, 100, "")
       .then((res) => {
         setDataBusiness(res?.data);
       })
       .catch((err) => {});
+    // Trường nếu chưa có giá trị sẽ có giá trị default sẵn nên cần phải check lenght để set giá trị
     setName(data?.full_name);
-    setGender(data?.gender);
-    setBirthday(data?.birthday);
-    setResident(data?.permanent_address);
-    setStaying(data?.temporary_address);
-    setEthnic(data?.folk); // Dân tộc
-    setReligion(data?.religion); // Tôn giáo
-    setLevel(data?.edu_level); // Trình độ
-    setNumber(data?.identity_number);
-    setIssued(data?.identity_place);
-    setIssuedDay(data?.identity_date);
-    setImgUrl(data?.avatar);
+    if (data?.gender?.length > 0) setGender(data?.gender);
+    // setGender(data?.gender?.length > 0 && data?.gender);
+    setEmail(data?.email);
     setPhone(data?.phone);
+    if (data?.birthday?.length > 0) setBirthday(data?.birthday);
+    setNumber(data?.identity_number);
+    if (data?.identity_place?.length > 0) setIssued(data?.identity_place);
+    if (data?.identity_date?.length > 0) setIssuedDay(data?.identity_date);
+    if (data?.country?.length > 0) setSelectCountry(data?.country);
+    setSelectHomeTown(data?.home_town);
+    setSelectProvinceLive(data?.province_live);
+    setSelectDistrictLive(data?.district_live);
+    setAddressResidentLive(data?.address_live);
+    setSelectProvinceTemp(data?.province_temp);
+    setSelectDistrictTemp(data?.district_temp);
+    setAddressResidentTemp(data?.address_temp);
+    if (data?.folk?.length > 0) setEthnic(data?.folk);
+    if (data?.religion?.length > 0) setReligion(data?.religion);
+    if (data?.edu_level?.length > 0) setLevel(data?.edu_level);
+    // Code cũ không đụng
     setCodeInvite(data?.invite_code);
     setType(data?.type);
     setIdBusiness(data?.id_business);
-
-    // Giá trị default (nếu có) của Quận/Huyện làm việc
-    setCodeDistrict(data?.district); // Giá trị cũ
-    setSelectDistrictWork(data?.district);
-
-    // Giá trị default (nếu có) của service
+    // Gán giá trị default (nếu có) cho service
     setServiceApply(data?.service_apply); // setServiceApply // Giá trị cũ (xóa sau này)
-    setSelectService(data?.service_apply ? data?.service_apply : [""]);
-
-    // Giá trị default (nếu có) của province làm việc
+    if (data?.service_apply?.length > 0) setSelectService(data?.service_apply);
+    if (data?.languages_list?.length > 0)
+      setSelectLanguages(data?.languages_list);
+    if (data?.skills_list?.length > 0) setSelectSkills(data?.skills_list);
+    // Gán giá trị default (nếu có) cho province làm việc
     setCodeCity(data?.city); // Giá trị cũ (xóa sau này)
-    setSelectProvinceWork(data?.city);
+    setSelectProvinceWork(data?.province_work);
+    // Gán giá trị default (nếu có) của Quận/Huyện làm việc
+    setCodeDistrict(data?.district); // Giá trị cũ (xóa sau này)
+    setSelectDistrictWork(data?.district_work);
+    // Gán giá trị default (nếu có) cho avatar
+    setImgUrl(data?.avatar); // Giá trị cũ
+    setImg(data?.avatar);
+    // Giá trị địa chỉ thường trú và tạm trú cũ
+    setResident(data?.permanent_address);
+    setStaying(data?.temporary_address);
+    setContactPersons(data?.contact_persons);
   }, [data]);
-
+  // 2. Code cũ
   useEffect(() => {
     if (idBusiness) {
       getDetailBusiness(idBusiness)
@@ -181,235 +207,19 @@ const Information = ({ data, image, idCTV, setData, id }) => {
         .catch((err) => {});
     }
   }, [idBusiness]);
-
-  // useEffect(() => {
-  //   dispatch(loadingAction.loadingRequest(true));
-  //   getCollaboratorsById(id)
-  //     .then((res) => {
-  //       setAccountNumber(res?.account_number);
-  //       setBankName(res?.bank_name);
-  //       setAccountName(res?.account_name);
-  //       dispatch(loadingAction.loadingRequest(false));
-  //     })
-  //     .catch((err) => {
-  //       errorNotify({
-  //         message: err?.message,
-  //       });
-  //       dispatch(loadingAction.loadingRequest(false));
-  //     });
-  // }, [id, dispatch]);
-
-  service.map((item) => {
-    return serviceOption.push({
-      label: item?.title?.[lang],
-      value: item?._id,
-    });
-  });
-
-  province?.map((item) => {
-    return cityOption.push({
-      label: item?.name,
-      value: item?.code,
-      district: item?.districts,
-    });
-  });
-
-  dataDistrict?.map((item) => {
-    return districtsOption.push({
-      label: item?.name,
-      value: item?.code,
-    });
-  });
-
-  dataBusiness?.map((item) => {
-    return businessOption.push({
-      value: item?._id,
-      label: item?.full_name,
-    });
-  });
-
-  const onChangeCity = (value, label) => {
-    setCodeCity(value);
-    setDataDistrict(label?.district);
-  };
-
-  const onChangeDistrict = (value) => {
-    setCodeDistrict(value);
-  };
-
-  const onChangeNumberIndentity = (value) => {
-    if (value.target.value <= 999999999990) {
-      setNumber(value.target.value);
-    }
-  };
-
-  const searchValue = (value) => {
-    setNameCollaborator(value);
-  };
-
-  const searchCollaborator = _debounce((value) => {
-    setNameCollaborator(value);
-    if (value) {
-      fetchCollaborators(lang, 0, 100, "", value, "")
-        .then((res) => {
-          if (value === "") {
-            setDataCollaborator([]);
-          } else {
-            setDataCollaborator(res.data);
-          }
-        })
-        .catch((err) => console.log(err));
-    } else if (idCollaborator) {
-      setDataCollaborator([]);
-    } else {
-      setDataCollaborator([]);
-    }
-    setIdCollaborator("");
-  }, 500);
-
-  const updateInformation = useCallback(() => {
-    // dispatch(loadingAction.loadingRequest(true));
-    const birthDayFormat = moment(new Date(birthday)).toISOString(); // Format lại dữ liệu ngày sinh nhật (birthday)
-    const indentityDay = moment(new Date(issuedDay)).toISOString(); // Format lại dữ liệu ngày cấp (issuedDay)
-    const dataPost = {
-      full_name: name, // Họ và tên của CTV (Đã check )
-      email: email, // Email của CTV
-      gender: gender, // Giới tính của CTV
-      birthday: birthDayFormat, // Ngày sinh của CTV
-      // phone: phone, // Điện thoại của CTV (không được quyền thay đổi)
-      permanent_address: resident, // Địa chỉ thường trú của CTV (dữ liệu cũ)
-      temporary_address: staying, //  Địa chỉ tạm trú của CTV (dữ liệu cũ)
-      folk: ethnic, // Dân tộc của CTV
-      religion: religion, // Tôn giáo của CTV
-      edu_level: level, // Trình độ học vấn của CTV
-      identity_number: number, // Căn cước công dân/ chứng minh nhân dân của CTV
-      identity_place: issued, // Nơi cấp của CCCD/CMND của CTV
-      identity_date: indentityDay, // Ngày cấp của CCCD/CMND của CTV
-      avatar: image ? image : imgUrl, // Ảnh đại diện của CTV
-      id_inviter: idCollaborator, // Mã giới thiệu của CTV
-      type: type, // Kiểu thông tin của đối tượng hiện đang chỉnh sửa (để nguyên là được)
-      service_apply: serviceApply, // Loại dịch vụ thực hiện của CTV
-      district: codeDistrict, // Quận/Huyện làm việc của CTV
-      city: !codeCity ? -1 : codeCity, // Tỉnh/Thành phố làm việc của CTV
-      id_business: idBusiness, // Đối tác (dữ liệu cũ)
-    };
-    console.log("Check data upload >>>", dataPost);
-    // updateInformationCollaboratorApi(data?._id, {
-    //   gender: gender,
-    //   full_name: name,
-    //   birthday: day,
-    //   permanent_address: resident,
-    //   temporary_address: staying,
-    //   folk: ethnic,
-    //   religion: religion,
-    //   edu_level: level,
-    //   identity_number: number,
-    //   identity_place: issued,
-    //   identity_date: indentityDay,
-    //   avatar: image ? image : imgUrl,
-    //   id_inviter: idCollaborator,
-    //   type: type,
-    //   service_apply: serviceApply,
-    //   district: codeDistrict,
-    //   city: !codeCity ? -1 : codeCity,
-    //   id_business: idBusiness,
-    // })
-    //   .then((res) => {
-    //     dispatch(loadingAction.loadingRequest(false));
-    //     setServiceApply([]);
-    //     successNotify({
-    //       message: `${i18n.t("update_success_info", { lng: lang })}`,
-    //     });
-    //     getCollaboratorsById(idCTV)
-    //       .then((res) => {
-    //         setData(res);
-    //       })
-    //       .catch((err) => {});
-    //     dispatch(loadingAction.loadingRequest(false));
-    //   })
-    //   .catch((err) => {
-    //     errorNotify({
-    //       message: err?.message,
-    //     });
-    //     dispatch(loadingAction.loadingRequest(false));
-    //   });
-  }, [
-    gender,
-    name,
-    resident,
-    staying,
-    ethnic,
-    religion,
-    level,
-    number,
-    issued,
-    issuedDay,
-    data,
-    birthday,
-    image,
-    imgUrl,
-    idCollaborator,
-    type,
-    idCTV,
-    serviceApply,
-    codeDistrict,
-    codeCity,
-    idBusiness,
-    dispatch,
-    lang,
-  ]);
-
-  const handleChangeContact = (e, index) => {
-    const { name, value } = e.target;
-    const onChangeValue = [...contactPersons];
-    onChangeValue[index][name] = value;
-    setContactPersons(onChangeValue);
-  };
-
-  const handleAddingContact = () => {
-    // Giới hạn số người liên hệ tối đa là 3 người
-    if (contactPersons.length < 3) {
-      setContactPersons([
-        ...contactPersons,
-        {
-          nameCollaborator: "",
-          phoneCollaborator: "",
-          relationWithCollaborator: "",
-        },
-      ]);
-    }
-  };
-  const handleDeleteContact = (index) => {
-    console.log("running ");
-    const deleteContact = [...contactPersons]
-    // console.log("check deleteContact", deleteContact);
-    deleteContact.splice(index, 1);
-    setContactPersons(deleteContact);
-  }
-  // Document data
-  const [deal, setDeal] = useState(false);
-  const [identify, setIdentify] = useState(false);
-  const [information, setInformation] = useState(false);
-  const [certification, setCertification] = useState(false);
-  const [registration, setRegistration] = useState(false);
-  const [valueDeal, setSetValueDeal] = useState("");
-  const [imgIdentifyFronsite, setImgIdentifyFronsite] = useState("");
-  const [imgIdentifyBacksite, setImgIdentifyBacksite] = useState("");
-  const [imgInformation, setImgInformation] = useState([]);
-  const [imgCertification, setImgCertification] = useState([]);
-  const [imgRegistration, setImgRegistration] = useState([]);
-  // const dispatch = useDispatch();
-  // const lang = useSelector(getLanguageState);
-
+  // 3.Lấy giá trị và gán cho các trường thông tin ngân hàng và thông tin tài liệu
   useEffect(() => {
     dispatch(loadingAction.loadingRequest(true));
 
     getCollaboratorsById(id)
       .then((res) => {
-        setAccountNumber(res?.account_number);
-        setBankName(res?.bank_name);
-        setAccountName(res?.account_name);
-        // console.log("check res document >>>", res.identity_frontside.split('/').pop());
+        console.log("checking res", res);
+        if (res?.account_number)setAccountNumber(res?.account_number);
+        if (res?.bank_name) setBankName(res?.bank_name);
+        if (res?.bank_name) setSelectBankName(res?.bank_name);
+        if (res?.account_name)setAccountName(res?.account_name);
+        if (res?.bank_brand) setBankBrand(res?.bank_brand);
+
         setDeal(res?.is_document_code);
         setSetValueDeal(res?.document_code);
         setIdentify(res?.is_identity);
@@ -431,6 +241,69 @@ const Information = ({ data, image, idCTV, setData, id }) => {
       });
   }, [id, dispatch, lang]);
 
+  // ~~~ Handle fucntion ~~~
+  // 1. Handle thay đổi thông tin người liên hệ
+  const handleChangeContact = (e, index) => {
+    const { name, value } = e.target;
+    const onChangeValue = [...contactPersons];
+    onChangeValue[index][name] = value;
+    setContactPersons(onChangeValue);
+  };
+  // 2. Handle thêm người liên hệ mới
+  const handleAddingContact = () => {
+    // Giới hạn số người liên hệ tối đa là 3 người
+    if (contactPersons?.length < 3) {
+      setContactPersons([
+        ...contactPersons,
+        {
+          name_relative: "",
+          phone_relative: "",
+          relation_relative: "",
+        },
+      ]);
+    }
+  };
+  // 3. Handle xóa người liên hệ
+  const handleDeleteContact = (index) => {
+    const deleteContact = [...contactPersons];
+    deleteContact.splice(index, 1);
+    setContactPersons(deleteContact);
+  };
+  // 4. Handle thay đổi ảnh avatar
+  const onChangeThumbnail = async (e) => {
+    const extend = e.target.files[0].type.slice(
+      e.target.files[0].type.indexOf("/") + 1
+    );
+    if (e.target.files[0]) {
+      const reader = new FileReader();
+      reader.addEventListener("load", () => {
+        setImg(reader.result);
+      });
+      reader.readAsDataURL(e.target.files[0]);
+    }
+    const file = e.target.files[0];
+    const image = await resizeFile(file, extend);
+    const formData = new FormData();
+    formData.append("multi-files", image);
+    dispatch(loadingAction.loadingRequest(true));
+    postFile(formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+      .then((res) => {
+        setImg(res[0]);
+        dispatch(loadingAction.loadingRequest(false));
+      })
+      .catch((err) => {
+        setImg("");
+        errorNotify({
+          message: err?.message,
+        });
+        dispatch(loadingAction.loadingRequest(false));
+      });
+  };
+  // 5. Handle thay đổi ảnh cccd mặt trước
   const onChangeIdentifyBefore = async (e) => {
     dispatch(loadingAction.loadingRequest(true));
     const extend = e.target.files[0].type.slice(
@@ -463,7 +336,7 @@ const Information = ({ data, image, idCTV, setData, id }) => {
         dispatch(loadingAction.loadingRequest(false));
       });
   };
-
+  // 6. Handle thay đổi ảnh cccd mặt sau
   const onChangeIdentifyAfter = async (e) => {
     dispatch(loadingAction.loadingRequest(true));
     const extend = e.target.files[0].type.slice(
@@ -496,7 +369,7 @@ const Information = ({ data, image, idCTV, setData, id }) => {
         dispatch(loadingAction.loadingRequest(false));
       });
   };
-
+  // 7. Handle thay đổi ảnh sơ yêu lí lịch
   const onChangeInformation = async (e) => {
     dispatch(loadingAction.loadingRequest(true));
     const fileLength = e.target.files.length;
@@ -521,7 +394,7 @@ const Information = ({ data, image, idCTV, setData, id }) => {
         dispatch(loadingAction.loadingRequest(false));
       });
   };
-
+  // 8. Handle thay đổi ảnh sổ hộ khẩu
   const onChangeRegistration = async (e) => {
     dispatch(loadingAction.loadingRequest(true));
     const fileLength = e.target.files.length;
@@ -552,7 +425,7 @@ const Information = ({ data, image, idCTV, setData, id }) => {
         dispatch(loadingAction.loadingRequest(false));
       });
   };
-
+  // 9. Handle thay đổi ảnh xác nhận hạnh kiểm
   const onChangeCertification = async (e) => {
     dispatch(loadingAction.loadingRequest(true));
     const fileLength = e.target.files.length;
@@ -583,8 +456,123 @@ const Information = ({ data, image, idCTV, setData, id }) => {
         dispatch(loadingAction.loadingRequest(false));
       });
   };
+  // ~~~ Update information fucntion ~~~
+  // 1. Cập nhật thông tin cộng tác viên
+  const handleUpdateCollaboratorInfo = useCallback(() => {
+    dispatch(loadingAction.loadingRequest(true));
+    const birthDayFormat = moment(new Date(birthday)).toISOString(); // Format lại dữ liệu ngày sinh nhật (birthday)
+    const indentityDay = moment(new Date(issuedDay)).toISOString(); // Format lại dữ liệu ngày cấp (issuedDay)
+    updateInformationCollaboratorApi(data?._id, {
+      // Tất cả các giá trị distict hay province đều sẽ có dạng {name: ..., code: ...})
+      full_name: name.trim(), // Họ và tên của CTV [✓]
+      gender: gender, // Giới tính của CTV [✓]
+      email: email.trim(), // Email của CTV [✓]
+      phone: phone.trim(), // Điện thoại của CTV [✓] (không được quyền thay đổi)
+      birthday: birthDayFormat, // Ngày sinh của CTV [✓]
+      identity_number: number.trim(), //  CCCD/CMND của CTV [✓]
+      identity_place: issued.trim(), // Nơi cấp của CCCD/CMND của CTV [✓]
+      identity_date: indentityDay, // Ngày cấp của CCCD/CMND của CTV [✓]
+      country: selectcountry, // Quốc tịch của CTV [✓]
+      home_town: selectHomeTown.code, // Quê quán của CTV [✓]
+      province_live: selectProvinceLive.code, // Tỉnh/Thành phố thường trú của CTV [✓]
+      district_live: selectDistrictLive.code, // Quận/Huyện thường trú của CTV [✓]
+      address_live: addressResidentLive.trim(), // Số nhà, tên đường thường trú của CTV [✓]
+      province_temp: selectProvinceTemp.code, // Tỉnh/Thành phố tạm trú của CTV [✓]
+      district_temp: selectDistrictTemp.code, // Quận/Huyện tạm trú của CTV [✓]
+      address_temp: addressResidentTemp.trim(), // Số nhà, tên đường tạm trú của CTV [✓]
+      folk: ethnic.trim(), // Dân tộc của CTV [✓]
+      religion: religion.trim(), // Tôn giáo của CTV [✓]
+      edu_level: level, // Trình độ học vấn của CTV [✓]
+      service_apply: selectService, // Loại dịch vụ thực hiện của CTV [✓]
+      skills_list: selectSkills, // Loại kỹ năng của CTV [✓]
+      languages_list: selectLanguages, // Loại ngôn ngữ giao tiếp được của CTV [✓]
+      province_work: selectProvinceWork.code, // Tỉnh/Thành phố làm việc của CTV [✓]
+      district_work: selectDistrictWork, // Quận/Huyện làm việc của CTV [✓] (Trả về theo kiểu array gồm các phần tử là code của tỉnh)
+      codeInvite: codeInvite, // Mã giới thiệu của CTV [✓] (không được quyền thay đổi)
+      contact_persons: contactPersons, // Người liên hệ của CTV [✓]
+      avatar: img, // Ảnh đại diện của CTV [✓]
+      type: type, // Kiểu đối tượng hiện đang chỉnh sửa [✓] (Để nguyên không cần chỉnh sửa)
+      id_inviter: idCollaborator, // [✓] (Không rõ => để nguyên)
 
-  const onUpdateDocument = useCallback(() => {
+      //   // permanent_address: resident, // Địa chỉ thường trú của CTV (dữ liệu cũ)
+      //   // temporary_address: staying, //  Địa chỉ tạm trú của CTV (dữ liệu cũ)
+      //   // district: codeDistrict, // Quận/Huyện làm việc của CTV
+      //   // city: !codeCity ? -1 : codeCity, // Tỉnh/Thành phố làm việc của CTV
+      //   // id_business: idBusiness, // Đối tác (dữ liệu cũ)
+    })
+      .then((res) => {
+        dispatch(loadingAction.loadingRequest(false));
+        setServiceApply([]);
+        successNotify({
+          message: `${i18n.t("update_success_info", { lng: lang })}`,
+        });
+        getCollaboratorsById(idCTV)
+          .then((res) => {
+            setData(res);
+          })
+          .catch((err) => {});
+        dispatch(loadingAction.loadingRequest(false));
+      })
+      .catch((err) => {
+        errorNotify({
+          message: err?.message,
+        });
+        dispatch(loadingAction.loadingRequest(false));
+      });
+  }, [
+    name,
+    gender,
+    email,
+    phone,
+    birthday,
+    number,
+    issued,
+    issuedDay,
+    selectcountry,
+    selectHomeTown,
+    selectProvinceLive,
+    selectDistrictLive,
+    addressResidentLive,
+    selectProvinceTemp,
+    selectDistrictTemp,
+    addressResidentTemp,
+    ethnic,
+    religion,
+    level,
+    selectService,
+    selectSkills,
+    selectLanguages,
+    selectProvinceWork,
+    selectDistrictWork,
+    idCollaborator,
+    codeInvite,
+    contactPersons,
+    img,
+    // name,
+    // resident,
+    // staying,
+    // ethnic,
+    // religion,
+    // level,
+    // number,
+    // issued,
+    // issuedDay,
+    // data,
+    // birthday,
+    // image,
+    // imgUrl,
+    // idCollaborator,
+    type,
+    // idCTV,
+    // serviceApply,
+    // codeDistrict,
+    // codeCity,
+    // idBusiness,
+    dispatch,
+    lang,
+  ]);
+  // 2. Cập nhật thông tin tài liệu cộng tác viên
+  const handleUpdateCollaboratorDocument = useCallback(() => {
     dispatch(loadingAction.loadingRequest(true));
     updateDocumentCollaboratorApi(id, {
       is_document_code: deal,
@@ -642,7 +630,38 @@ const Information = ({ data, image, idCTV, setData, id }) => {
     dispatch,
     lang,
   ]);
+  // 3. Cập nhật thông tài tài khoản ngân hàng
+  const handleUpdateAccountBankInfo = useCallback(() => {
+    dispatch(loadingAction.loadingRequest(true));
+    editAccountBankCollaborator(id, {
+      account_number: accountNumber,
+      bank_name: selectBankName,
+      account_name: accountName,
+      bank_brand: bankBrand,
+    })
+      .then((res) => {
+        dispatch(loadingAction.loadingRequest(false));
+        successNotify({
+          message: `${i18n.t("update_success_info", { lng: lang })}`,
+        });
+      })
+      .catch((err) => {
+        errorNotify({
+          message: err?.message,
+        });
+        dispatch(loadingAction.loadingRequest(false));
+      });
+  }, [
+    id,
+    accountNumber,
+    bankName,
+    accountName,
+    selectBankName,
+    bankBrand,
+    dispatch,
+  ]);
 
+  // Xóa ảnh
   const removeItemInfomation = (item) => {
     const newArray = imgInformation.filter((i) => i !== item);
 
@@ -658,7 +677,7 @@ const Information = ({ data, image, idCTV, setData, id }) => {
     const newArray = imgCertification.filter((i) => i !== item);
     return setImgCertification(newArray);
   };
-
+  // Tải ảnh
   const downloadImageIdentify = () => {
     saveAs(imgIdentifyFronsite, "identifyFronsite.png"); // Put your image url here.
     saveAs(imgIdentifyBacksite, "identifyBacksite.png"); // Put your image url here.
@@ -736,13 +755,95 @@ const Information = ({ data, image, idCTV, setData, id }) => {
     });
   };
 
-  // ~~~ CONSOLE LOG HERE ~~~
-  const inputFile = useRef(null); 
-  // console.log("Check inputFile", inputFile);
-  const onButtonClick = () => {
-    // `current` points to the mounted file input element
-    inputFile.current.click();
+  // ↓ code cũ không quan tâm
+  // 3. Lấy giá trị và gán cho các trường thông tin ngân hàng
+  // useEffect(() => {
+  //   dispatch(loadingAction.loadingRequest(true));
+  //   getCollaboratorsById(id)
+  //     .then((res) => {
+  //       setAccountNumber(res?.account_number);
+  //       setBankName(res?.bank_name);
+  //       setAccountName(res?.account_name);
+  //       dispatch(loadingAction.loadingRequest(false));
+  //     })
+  //     .catch((err) => {
+  //       errorNotify({
+  //         message: err?.message,
+  //       });
+  //       dispatch(loadingAction.loadingRequest(false));
+  //     });
+  // }, [id, dispatch]);
+  service.map((item) => {
+    return serviceOption.push({
+      label: item?.title?.[lang],
+      value: item?._id,
+    });
+  });
+
+  province?.map((item) => {
+    return cityOption.push({
+      label: item?.name,
+      value: item?.code,
+      district: item?.districts,
+    });
+  });
+
+  dataDistrict?.map((item) => {
+    return districtsOption.push({
+      label: item?.name,
+      value: item?.code,
+    });
+  });
+
+  dataBusiness?.map((item) => {
+    return businessOption.push({
+      value: item?._id,
+      label: item?.full_name,
+    });
+  });
+
+  const onChangeCity = (value, label) => {
+    setCodeCity(value);
+    setDataDistrict(label?.district);
   };
+
+  const onChangeDistrict = (value) => {
+    setCodeDistrict(value);
+  };
+
+  const onChangeNumberIndentity = (value) => {
+    if (value.target.value <= 999999999990) {
+      setNumber(value.target.value);
+    }
+  };
+
+  const searchValue = (value) => {
+    setNameCollaborator(value);
+  };
+
+  const searchCollaborator = _debounce((value) => {
+    setNameCollaborator(value);
+    if (value) {
+      fetchCollaborators(lang, 0, 100, "", value, "")
+        .then((res) => {
+          if (value === "") {
+            setDataCollaborator([]);
+          } else {
+            setDataCollaborator(res.data);
+          }
+        })
+        .catch((err) => console.log(err));
+    } else if (idCollaborator) {
+      setDataCollaborator([]);
+    } else {
+      setDataCollaborator([]);
+    }
+    setIdCollaborator("");
+  }, 500);
+  // ↑ trở lên là code cũ không cần quan tâm
+
+
+  console.log("selectBankName", selectBankName);
   return (
     <>
       <div className="pb-4">
@@ -754,42 +855,28 @@ const Information = ({ data, image, idCTV, setData, id }) => {
               className="w-full h-fit bg-white card-shadow"
             >
               {/* Header */}
-              <div
-                style={{ padding: "9px 14px" }}
-                className="flex items-center justify-between gap-2 border-b-2 border-gray-200"
-              >
-                <div className="flex w-full items-center">
+              <div className="flex items-center justify-between gap-2 border-b-2 border-gray-200 p-3.5">
+                <div className="flex items-center gap-1">
                   <span className="font-medium text-sm">
                     Thông tin cộng tác viên
                   </span>
                 </div>
-                <div className="flex items-center gap-2 px-1">
-                  <div className="bg-violet-500 px-1.5 py-1 rounded-lg cursor-pointer hover:bg-violet-400 duration-300 ease-out">
-                    <input
-                      type="file"
-                      id="file"
-                      ref={inputFile}
-                      style={{ display: "none" }}
-                    />
-                    <IoCloudUploadOutline
-                      onClick={onButtonClick}
-                      // onClick={() => inputReference.current.click()}
-                      color="white"
-                    />
-                  </div>
-                  <Image
-                    style={{
-                      width: 30,
-                      height: 25,
-                      borderRadius: "100%",
-                    }}
-                    src={img ? img : data?.avatar ? data?.avatar : user}
-                  />
-                </div>
               </div>
               {/* Content */}
               <div style={{ padding: "12px 18px" }} className="flex flex-col">
-                {/* Họ và tên */}
+                {/* Avatar */}
+                <div className="flex gap-4 items-center justify-center">
+                  <div className="w-full">
+                    <InputTextCustom
+                      type="file"
+                      placeHolder="Ảnh đại diện"
+                      value={img ? img : data?.avatar ? data?.avatar : user}
+                      notShowPreviewImage={true}
+                      onChangeImage={onChangeThumbnail}
+                    />
+                  </div>
+                </div>
+                {/* Họ và tên, giới tính */}
                 <div className="flex gap-4">
                   <div className="w-full">
                     <InputTextCustom
@@ -800,18 +887,31 @@ const Information = ({ data, image, idCTV, setData, id }) => {
                       onChange={(e) => setName(e.target.value)}
                     />
                   </div>
-                </div>
-                {/* Số điện thoại, email */}
-                <div className="flex gap-4">
                   <div className="w-full">
                     <InputTextCustom
-                      type="textValue"
-                      // disable={true}
-                      value={phone}
-                      required
-                      placeHolder="Số điện thoại"
+                      type="select"
+                      value={gender}
+                      placeHolder="Giới tính"
+                      setValueSelectedProps={setGender}
+                      options={[
+                        {
+                          value: "other",
+                          label: `${i18n.t("other", { lng: lang })}`,
+                        },
+                        {
+                          value: "male",
+                          label: `${i18n.t("male", { lng: lang })}`,
+                        },
+                        {
+                          value: "female",
+                          label: `${i18n.t("female", { lng: lang })}`,
+                        },
+                      ]}
                     />
                   </div>
+                </div>
+                {/* Email */}
+                <div className="flex gap-4">
                   <div className="w-full">
                     <InputTextCustom
                       type="text"
@@ -821,18 +921,18 @@ const Information = ({ data, image, idCTV, setData, id }) => {
                     />
                   </div>
                 </div>
-                {/* Căn cước công dân, ngày sinh */}
+                {/* Số điện thoại, ngày sinh */}
                 <div className="flex gap-4">
                   <div className="w-full">
                     <InputTextCustom
-                      type="text"
-                      // disable={true}
-                      value={number}
-                      number
-                      placeHolder="CCCD/CMND"
-                      onChange={(e) => setNumber(e.target.value)}
+                      type="textValue"
+                      disable={true}
+                      value={phone}
+                      required
+                      placeHolder="Số điện thoại"
                     />
                   </div>
+
                   <div className="w-full">
                     <InputTextCustom
                       type="date"
@@ -845,8 +945,18 @@ const Information = ({ data, image, idCTV, setData, id }) => {
                     />
                   </div>
                 </div>
-                {/* Nơi cấp, ngày cấp */}
+                {/* CCCD/CMND, nơi cấp, ngày cấp */}
                 <div className="flex gap-4">
+                  <div className="w-full">
+                    <InputTextCustom
+                      type="text"
+                      // disable={true}
+                      value={number}
+                      number
+                      placeHolder="CCCD/CMND"
+                      onChange={(e) => setNumber(e.target.value)}
+                    />
+                  </div>
                   <div className="w-full">
                     <InputTextCustom
                       type="text"
@@ -870,50 +980,26 @@ const Information = ({ data, image, idCTV, setData, id }) => {
                     />
                   </div>
                 </div>
-                {/* Quốc tịch, giới tính, quê quán */}
+                {/* Quốc tịch, quê quán */}
                 <div className="flex gap-4">
                   <div className="w-full">
                     <InputTextCustom
                       type="select"
-                      value={gender}
-                      placeHolder="Giới tính"
-                      setValueSelectedProps={setGender}
-                      options={[
-                        {
-                          value: "other",
-                          label: `${i18n.t("other", { lng: lang })}`,
-                        },
-                        {
-                          value: "male",
-                          label: `${i18n.t("male", { lng: lang })}`,
-                        },
-                        {
-                          value: "female",
-                          label: `${i18n.t("female", { lng: lang })}`,
-                        },
-                      ]}
-                    />
-                  </div>
-                  <div className="w-full">
-                    <InputTextCustom
-                      type="province"
-                      searchField={true}
-                      // value={selectProvinceLive}
+                      value={selectcountry}
                       placeHolder="Quốc tịch"
-                      province={province}
-                      // setValueSelectedProps={setSelectProvinceLive}
-                      // setValueSelectedPropsSupport={setSelectDistrictLive}
-                      // setValueArrayProps={setDistrictArrayLive}
+                      setValueSelectedProps={setSelectCountry}
+                      options={countryList}
+                      previewImage={true}
                     />
                   </div>
                   <div className="w-full">
                     <InputTextCustom
                       type="province"
                       searchField={true}
-                      // value={selectProvinceLive}
+                      value={selectHomeTown}
                       placeHolder="Quê quán"
                       province={province}
-                      // setValueSelectedProps={setSelectProvinceLive}
+                      setValueSelectedProps={setSelectHomeTown}
                       // setValueSelectedPropsSupport={setSelectDistrictLive}
                       // setValueArrayProps={setDistrictArrayLive}
                     />
@@ -937,7 +1023,7 @@ const Information = ({ data, image, idCTV, setData, id }) => {
                     <InputTextCustom
                       type="district"
                       searchField={true}
-                      disable={selectProvinceLive ? false : true}
+                      disable={selectProvinceLive?.code >= 0 ? false : true}
                       value={selectDistrictLive}
                       placeHolder="Quận/Huyện (thường trú)"
                       district={districtArrayLive}
@@ -950,7 +1036,7 @@ const Information = ({ data, image, idCTV, setData, id }) => {
                   <div className="w-full">
                     <InputTextCustom
                       type="text"
-                      disable={selectDistrictLive ? false : true}
+                      disable={selectDistrictLive?.code >= 0 ? false : true}
                       value={addressResidentLive}
                       placeHolder="Số nhà, Tên đường (thường trú)"
                       onChange={(e) => setAddressResidentLive(e.target.value)}
@@ -975,7 +1061,7 @@ const Information = ({ data, image, idCTV, setData, id }) => {
                     <InputTextCustom
                       type="district"
                       searchField={true}
-                      disable={selectProvinceTemp ? false : true}
+                      disable={selectProvinceTemp?.code >= 0 ? false : true}
                       value={selectDistrictTemp}
                       placeHolder="Quận/Huyện (tạm trú)"
                       district={districtArrayTemp}
@@ -988,10 +1074,10 @@ const Information = ({ data, image, idCTV, setData, id }) => {
                   <div className="w-full">
                     <InputTextCustom
                       type="text"
-                      disable={selectDistrictTemp ? false : true}
-                      value={addressTemp}
+                      disable={selectDistrictTemp?.code >= 0 ? false : true}
+                      value={addressResidentTemp}
                       placeHolder="Số nhà, Tên đường (tạm trú)"
-                      onChange={(e) => setAddressTemp(e.target.value)}
+                      onChange={(e) => setAddressResidentTemp(e.target.value)}
                     />
                   </div>
                 </div>
@@ -1045,6 +1131,29 @@ const Information = ({ data, image, idCTV, setData, id }) => {
                     />
                   </div>
                 </div>
+                {/* Ngoại ngữ, kỹ năng */}
+                <div className="flex gap-4">
+                  <div className="w-full">
+                    <InputTextCustom
+                      type="multiSelect"
+                      value={selectLanguages}
+                      multiSelectOptions={listLanguages}
+                      placeHolder="Ngoại ngữ"
+                      limitShows={2}
+                      setValueSelectedProps={setSelectLanguages}
+                    />
+                  </div>
+                  <div className="w-full">
+                    <InputTextCustom
+                      type="multiSelect"
+                      value={selectSkills}
+                      multiSelectOptions={listSkills}
+                      placeHolder="Kỹ năng"
+                      limitShows={2}
+                      setValueSelectedProps={setSelectSkills}
+                    />
+                  </div>
+                </div>
                 {/* Loại dịch vụ */}
                 <div className="flex gap-4">
                   <div className="w-full">
@@ -1085,7 +1194,7 @@ const Information = ({ data, image, idCTV, setData, id }) => {
                     />
                   </div>
                 </div>
-                {/* Mã giới thiệu */}
+                {/* Mã giới thiệu, đối tác */}
                 <div className="flex gap-4">
                   <div className="w-full">
                     <InputTextCustom
@@ -1097,15 +1206,26 @@ const Information = ({ data, image, idCTV, setData, id }) => {
                       // setValueSelectedProps={setSelectService}
                     />
                   </div>
+                  <div className="w-full">
+                    <InputTextCustom
+                      type="select"
+                      disable={true}
+                      // value={codeInvite}
+                      // multiSelectOptions={service}
+                      placeHolder="Đối tác"
+                      // setValueSelectedProps={setSelectService}
+                    />
+                  </div>
                 </div>
+
                 {/* Tên, số điện thoại, mối quan hệ với CTV*/}
                 {contactPersons?.map((inputField, index) => (
                   <div className="flex items-center gap-4">
                     <div className="w-1/3">
                       <InputTextCustom
                         type="text"
-                        name="nameCollaborator"
-                        value={inputField.nameCollaborator}
+                        name="name_relative"
+                        value={inputField.name_relative}
                         placeHolder={`Người liên hệ ${index + 1}`}
                         onChange={(e) => handleChangeContact(e, index)}
                       />
@@ -1113,8 +1233,8 @@ const Information = ({ data, image, idCTV, setData, id }) => {
                     <div className="w-1/3">
                       <InputTextCustom
                         type="text"
-                        name="phoneCollaborator"
-                        value={inputField.phoneCollaborator}
+                        name="phone_relative"
+                        value={inputField.phone_relative}
                         placeHolder={`Số điện thoại`}
                         onChange={(e) => handleChangeContact(e, index)}
                       />
@@ -1122,8 +1242,8 @@ const Information = ({ data, image, idCTV, setData, id }) => {
                     <div className="w-1/3">
                       <InputTextCustom
                         type="text"
-                        name="relationWithCollaborator"
-                        value={inputField.relationWithCollaborator}
+                        name="relation_relative"
+                        value={inputField.relation_relative}
                         placeHolder={`Quan hệ`}
                         onChange={(e) => handleChangeContact(e, index)}
                       />
@@ -1142,7 +1262,7 @@ const Information = ({ data, image, idCTV, setData, id }) => {
                   <span
                     onClick={() => handleAddingContact()}
                     className={` ${
-                      contactPersons.length >= 3
+                      contactPersons?.length >= 3
                         ? "text-gray-500/60 cursor-not-allowed"
                         : "text-violet-500 cursor-pointer"
                     } duration-300`}
@@ -1151,13 +1271,16 @@ const Information = ({ data, image, idCTV, setData, id }) => {
                   </span>
                 </div>
               </div>
-              {/* Button submit */}
+              {/* Cập nhật thông tin cộng tác viên */}
               <div
                 style={{ padding: "0px 18px 12px 18px" }}
                 className="flex items-center justify-between "
               >
                 <div className="w-0 h-0"></div>
-                <ButtonCustom label="Cập nhật" onClick={updateInformation} />
+                <ButtonCustom
+                  label="Cập nhật"
+                  onClick={handleUpdateCollaboratorInfo}
+                />
               </div>
             </div>
             <div
@@ -1201,11 +1324,11 @@ const Information = ({ data, image, idCTV, setData, id }) => {
                   <div className="w-full">
                     <InputTextCustom
                       type="select"
-                      value={selectBank}
+                      value={selectBankName}
                       placeHolder="Tên ngân hàng"
-                      setValueSelectedProps={setSelectBank}
+                      setValueSelectedProps={setSelectBankName}
                       options={bankList}
-                      // onChange={(e) => setName(e.target.value)}
+                      previewImage={true}
                     />
                   </div>
                 </div>
@@ -1213,20 +1336,23 @@ const Information = ({ data, image, idCTV, setData, id }) => {
                   <div className="w-full">
                     <InputTextCustom
                       type="text"
-                      // value={accountNumber}
+                      value={bankBrand}
                       placeHolder="Tên chi nhánh"
-                      // onChange={(e) => setName(e.target.value)}
+                      onChange={(e) => setBankBrand(e.target.value)}
                     />
                   </div>
                 </div>
               </div>
-              {/* Button submit */}
+              {/* Cập nhật tài khoản ngân hàng */}
               <div
                 style={{ padding: "0px 18px 12px 18px" }}
                 className="flex items-center justify-between "
               >
                 <div className="w-0 h-0"></div>
-                <ButtonCustom label="Cập nhật" />
+                <ButtonCustom
+                  label="Cập nhật"
+                  onClick={handleUpdateAccountBankInfo}
+                />
               </div>
             </div>
           </div>
@@ -1387,14 +1513,15 @@ const Information = ({ data, image, idCTV, setData, id }) => {
                 className="document-content"
                 style={{
                   maxHeight: `${
-                    contactPersons.length === 3
-                      ? "none"
-                      : contactPersons.length === 2
-                      ? "950px"
-                      : contactPersons.length === 1
-                      ? "870px"
-                      : "790px"
+                    contactPersons?.length === 3
+                      ? "1270px"
+                      : contactPersons?.length === 2
+                      ? "1220px"
+                      : contactPersons?.length === 1
+                      ? "1170px"
+                      : "1100px"
                   }`,
+                  // maxHeight: "",
                   padding: "0px 6px",
                   scrollbarGutter: "stable both-edges",
                 }}
@@ -1415,14 +1542,14 @@ const Information = ({ data, image, idCTV, setData, id }) => {
                     type="file"
                     placeHolder="CCCD/CMND (mặt trước)"
                     value={imgIdentifyFronsite}
-                    setValueSelectedProps={setImgIdentifyFronsite}
+                    onChangeImage={onChangeIdentifyBefore}
                   />
                   {/* Mặt sau */}
                   <InputTextCustom
                     type="file"
                     placeHolder="CCCD/CMND (mặt sau)"
                     value={imgIdentifyBacksite}
-                    setValueSelectedProps={setImgIdentifyBacksite}
+                    onChangeImage={onChangeIdentifyAfter}
                   />
                 </div>
                 {/* Sơ yếu lí lịch */}
@@ -1432,7 +1559,7 @@ const Information = ({ data, image, idCTV, setData, id }) => {
                     placeHolder="Sơ yếu lí lịch"
                     multiple
                     value={imgInformation}
-                    setValueSelectedProps={setImgInformation}
+                    onChangeImage={onChangeInformation}
                   />
                 </div>
                 {/* Sổ hộ khẩu */}
@@ -1442,7 +1569,7 @@ const Information = ({ data, image, idCTV, setData, id }) => {
                     placeHolder="Sổ hộ khẩu"
                     multiple
                     value={imgRegistration}
-                    setValueSelectedProps={setImgRegistration}
+                    onChangeImage={onChangeRegistration}
                   />
                 </div>
                 {/* Giấy xác nhận hạnh kiểm */}
@@ -1452,298 +1579,33 @@ const Information = ({ data, image, idCTV, setData, id }) => {
                     placeHolder="Giấy xác nhận hạnh kiểm"
                     multiple
                     value={imgCertification}
-                    setValueSelectedProps={setImgCertification}
+                    onChangeImage={onChangeCertification}
                   />
                 </div>
               </div>
+              {/* Cập nhật thông tin tài liệu */}
               <div
+                style={{ padding: "8px 18px 12px 18px" }}
+                className="flex items-center justify-between "
+              >
+                <div className="w-0 h-0"></div>
+                <ButtonCustom
+                  label="Cập nhật"
+                  onClick={handleUpdateCollaboratorDocument}
+                />
+              </div>
+              {/* <div
                 style={{ padding: "14px 14px 0px 0px" }}
                 className="flex items-center justify-between "
               >
                 <div className="w-0 h-0"></div>
                 <ButtonCustom label="Cập nhật" />
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
       </div>
 
-      {/* Code tài liệu cũ */}
-      {/* <>
-        <div className="pl-lg-5">
-          <div className="div-check-document">
-            <Checkbox
-              checked={deal}
-              onChange={(e) => setDeal(e.target.checked)}
-              className="check-document"
-            >
-              {`${i18n.t("cooperation_agreement", { lng: lang })}`}
-            </Checkbox>
-
-            <div className="form-input">
-              <InputCustom
-                title={`${i18n.t("profile_ID", { lng: lang })}`}
-                value={valueDeal}
-                onChange={(e) => setSetValueDeal(e.target.value)}
-              />
-            </div>
-          </div>
-          <hr />
-          <div className="div-check-document">
-            <Checkbox
-              checked={identify}
-              onChange={(e) => setIdentify(e.target.checked)}
-              className="check-document"
-            >
-              {`${i18n.t("citizen_ID", { lng: lang })}`}
-            </Checkbox>
-
-            <div className="form-input">
-              <div>
-                <p className="label-input">{`${i18n.t("citizen_ID_front", {
-                  lng: lang,
-                })}`}</p>
-                <div className="col-img">
-                  <Input
-                    id="exampleThumbnail"
-                    type="file"
-                    className="input-file"
-                    accept={".jpg,.png,.jpeg"}
-                    name="thumbnail"
-                    onChange={onChangeIdentifyBefore}
-                  />
-                  {imgIdentifyFronsite && (
-                    <div className="div-img-thumbnail">
-                      <i
-                        class="uil uil-times-circle"
-                        onClick={() => setImgIdentifyFronsite("")}
-                      />
-                      <Image
-                        width={150}
-                        src={imgIdentifyFronsite}
-                        className={"img-thumbnail"}
-                      />
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div>
-                <p className="label-input">{`${i18n.t("citizen_ID_back", {
-                  lng: lang,
-                })}`}</p>
-                <div className="col-img">
-                  <Input
-                    id="exampleThumbnail"
-                    type="file"
-                    className="input-file"
-                    accept={".jpg,.png,.jpeg"}
-                    name="thumbnail"
-                    onChange={onChangeIdentifyAfter}
-                  />
-                  {imgIdentifyBacksite && (
-                    <div className="div-img-thumbnail">
-                      <i
-                        class="uil uil-times-circle"
-                        onClick={() => setImgIdentifyBacksite("")}
-                      />
-                      <Image
-                        width={150}
-                        src={imgIdentifyBacksite}
-                        className={"img-thumbnail"}
-                      />
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-            {imgIdentifyFronsite && (
-              <div className="div-col-download">
-                <Button
-                  className="btn-download"
-                  onClick={downloadImageIdentify}
-                >
-                  <i class="uil uil-image-download"></i>
-                </Button>
-              </div>
-            )}
-          </div>
-          <hr />
-          <div className="div-check-document">
-            <Checkbox
-              checked={information}
-              onChange={(e) => setInformation(e.target.checked)}
-              className="check-document"
-            >
-              {`${i18n.t("curriculum_vitae", { lng: lang })}`}
-            </Checkbox>
-
-            <div className="form-input">
-              <div className="div-infomation">
-                <p className="label-input">{`${i18n.t("image", {
-                  lng: lang,
-                })}`}</p>
-                <div className="col-img">
-                  <input
-                    type="file"
-                    id="files"
-                    name="files"
-                    accept=".jpg, .jpeg, .png"
-                    multiple
-                    onChange={onChangeInformation}
-                  />
-                  <div className="div-thumbnail-infomation">
-                    {imgInformation.length > 0 &&
-                      imgInformation.map((item, index) => {
-                        return (
-                          <div
-                            className="div-item-thumbnail-infomation"
-                            key={index}
-                          >
-                            <i
-                              class="uil uil-times-circle"
-                              onClick={() => removeItemInfomation(item)}
-                            ></i>
-                            <Image
-                              src={item}
-                              className="img-thumbnail-infomation"
-                            />
-                          </div>
-                        );
-                      })}
-                  </div>
-                </div>
-              </div>
-            </div>
-            {imgInformation.length > 0 && (
-              <div className="div-col-download">
-                <Button
-                  className="btn-download"
-                  onClick={downloadImageInformation}
-                >
-                  <i class="uil uil-image-download"></i>
-                </Button>
-              </div>
-            )}
-          </div>
-          <hr />
-          <div className="div-check-document">
-            <Checkbox
-              checked={registration}
-              onChange={(e) => setRegistration(e.target.checked)}
-              className="check-document"
-            >
-              {`${i18n.t("household_book", { lng: lang })}`}
-            </Checkbox>
-
-            <div className="form-input">
-              <div className="div-infomation">
-                <p className="label-input">{`${i18n.t("image", {
-                  lng: lang,
-                })}`}</p>
-                <div className="col-img">
-                  <input
-                    type="file"
-                    id="files"
-                    name="files"
-                    accept=".jpg, .jpeg, .png"
-                    multiple
-                    onChange={onChangeRegistration}
-                  />
-                  <div className="div-thumbnail-infomation">
-                    {imgRegistration.length > 0 &&
-                      imgRegistration.map((item, index) => {
-                        return (
-                          <div
-                            className="div-item-thumbnail-infomation"
-                            key={index}
-                          >
-                            <i
-                              class="uil uil-times-circle"
-                              onClick={() => removeItemRegistration(item)}
-                            ></i>
-                            <Image
-                              src={item}
-                              className="img-thumbnail-infomation"
-                            />
-                          </div>
-                        );
-                      })}
-                  </div>
-                </div>
-              </div>
-            </div>
-            {imgRegistration.length > 0 && (
-              <div span="2" className="div-col-download">
-                <Button
-                  className="btn-download"
-                  onClick={downloadImageRegistration}
-                >
-                  <i class="uil uil-image-download"></i>
-                </Button>
-              </div>
-            )}
-          </div>
-          <hr />
-          <div className="div-check-document">
-            <Checkbox
-              checked={certification}
-              onChange={(e) => setCertification(e.target.checked)}
-              className="check-document"
-            >
-              {`${i18n.t("certificate_conduct", { lng: lang })}`}
-            </Checkbox>
-            <div className="form-input">
-              <div className="div-infomation">
-                <p className="label-input">{`${i18n.t("image", {
-                  lng: lang,
-                })}`}</p>
-                <div className="col-img">
-                  <input
-                    type="file"
-                    id="files"
-                    name="files"
-                    accept=".jpg, .jpeg, .png"
-                    multiple
-                    onChange={onChangeCertification}
-                  />
-                  <div className="div-thumbnail-infomation">
-                    <div className="div-thumbnail-infomation">
-                      {imgCertification.length > 0 &&
-                        imgCertification.map((item, index) => {
-                          return (
-                            <div
-                              className="div-item-thumbnail-infomation"
-                              key={index}
-                            >
-                              <i
-                                class="uil uil-times-circle"
-                                onClick={() => removeItemCertification(item)}
-                              ></i>
-                              <Image
-                                src={item}
-                                className="img-thumbnail-infomation"
-                              />
-                            </div>
-                          );
-                        })}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            {imgCertification.length > 0 && (
-              <div className="div-col-download">
-                <Button
-                  className="btn-download"
-                  onClick={downloadImageCertification}
-                >
-                  <i class="uil uil-image-download"></i>
-                </Button>
-              </div>
-            )}
-          </div>
-        </div>
-      </> */}
       {/* Form cũ */}
       <>
         <Form>
@@ -2012,7 +1874,10 @@ const Information = ({ data, image, idCTV, setData, id }) => {
               </Col>
             </Row>
           </div>
-          <Button className="btn-update mt-3" onClick={updateInformation}>
+          <Button
+            className="btn-update mt-3"
+            onClick={handleUpdateCollaboratorInfo}
+          >
             {`${i18n.t("update", { lng: lang })}`}
           </Button>
         </Form>

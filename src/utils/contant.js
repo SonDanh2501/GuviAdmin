@@ -1,4 +1,5 @@
 import icons from "./icons";
+// Bank list
 import MB_BANK from "../assets/images/bank_mb.svg";
 import VIETCOM_BANK from "../assets/images/bank_vietcom.svg";
 import VIETIN_BANK from "../assets/images/bank_vietin.svg";
@@ -11,6 +12,9 @@ import VP_BANK from "../assets/images/bank_vp.svg";
 import TP_BANK from "../assets/images/bank_tp.svg";
 import VIB_BANK from "../assets/images/bank_vib.svg";
 import SHB_BANK from "../assets/images/bank_shb.svg";
+// Flag list
+import VN_FLAG from "../assets/images/flag_vn.svg";
+import US_FLAG from "../assets/images/flag_us.svg";
 
 const { IoStar, IoStarHalf, IoStarOutline } = icons;
 
@@ -111,6 +115,7 @@ export const bankList = [
         <span className="text-sm font-normal">Vietcombank</span>
       </div>
     ),
+    image: VIETCOM_BANK,
     name: "Ngân hàng Thương mại cổ phần Ngoại thương Việt Nam",
   },
   {
@@ -122,6 +127,7 @@ export const bankList = [
         <span className="text-sm font-normal">MBBank</span>
       </div>
     ),
+    image: MB_BANK,
     name: "Ngân hàng Quân đội",
   },
   {
@@ -133,6 +139,7 @@ export const bankList = [
         <span className="text-sm font-normal">Vietinbank</span>
       </div>
     ),
+    image: VIETIN_BANK,
     name: "Ngân hàng Thương mại cổ phần Công Thương Việt Nam",
   },
   {
@@ -144,6 +151,7 @@ export const bankList = [
         <span className="text-sm font-normal">Techcombank</span>
       </div>
     ),
+    image: TECHCOM_BANK,
     name: "Ngân hàng Thương mại cổ phần Kỹ Thương Việt Nam",
   },
   {
@@ -155,6 +163,7 @@ export const bankList = [
         <span className="text-sm font-normal">Agribank</span>
       </div>
     ),
+    image: ARGI_BANK,
     name: "Ngân hàng Nông nghiệp và Phát triển Nông thôn Việt Nam",
   },
   {
@@ -166,6 +175,7 @@ export const bankList = [
         <span className="text-sm font-normal">BIDV</span>
       </div>
     ),
+    image: BIDV_BANK,
     name: "Ngân hàng Thương mại cổ phần Đầu tư và Phát triển Việt Nam",
   },
   {
@@ -177,6 +187,7 @@ export const bankList = [
         <span className="text-sm font-normal">Sacombank</span>
       </div>
     ),
+    image: SACOM_BANK,
     name: "Ngân hàng Thương mại cổ phần Sài Gòn Thương Tín",
   },
   {
@@ -188,6 +199,7 @@ export const bankList = [
         <span className="text-sm font-normal">ACB</span>
       </div>
     ),
+    image: ACB_BANK,
     name: "Ngân hàng Thương mại cổ phần Á Châu",
   },
   {
@@ -199,6 +211,7 @@ export const bankList = [
         <span className="text-sm font-normal">VPBank</span>
       </div>
     ),
+    image: VP_BANK,
     name: "Ngân hàng Thương mại cổ phần Việt Nam Thịnh Vượng",
   },
   {
@@ -210,6 +223,7 @@ export const bankList = [
         <span className="text-sm font-normal">TPBank</span>
       </div>
     ),
+    image: TP_BANK,
     name: "Ngân hàng Thương mại cổ phần Tiên Phong",
   },
   {
@@ -221,6 +235,7 @@ export const bankList = [
         <span className="text-sm font-normal">VIB</span>
       </div>
     ),
+    image: VIB_BANK,
     name: "Ngân hàng Thương mại cổ phần Quốc tế Việt Nam",
   },
   {
@@ -232,10 +247,59 @@ export const bankList = [
         <span className="text-sm font-normal">SHB</span>
       </div>
     ),
+    image: SHB_BANK,
     name: "Ngân hàng Thương mại cổ phần Sài Gòn-Hà Nội",
   },
 ];
 
+// Danh sách các nước
+export const countryList = [
+  {
+    value: "vn",
+    label: (
+      <div style={{ gap: "12px" }} className="flex items-center">
+        <div>
+          <img className="w-full h-6" src={VN_FLAG}></img>
+        </div>
+        <div>
+          <span className="text-sm font-normal">Việt Nam</span>
+        </div>
+      </div>
+    ),
+    image: VN_FLAG,
+    name: "Việt Nam",
+  },
+  {
+    value: "us",
+    label: (
+      <div style={{ gap: "12px" }} className="flex items-center">
+        <div>
+          <img className="w-full h-6" src={US_FLAG}></img>
+        </div>
+        <div>
+          <span className="text-sm font-normal">Mỹ</span>
+        </div>
+      </div>
+    ),
+    image: US_FLAG,
+    name: "Mỹ",
+  },
+];
+
+// Nên đưa vào redux để sau này gọi ở chỗ khác (các trường hợp cần filter)
+// Danh sách các kỹ năng của cộng tác viên
+export const listSkills = [
+  { value: 1, label: "Vệ sinh nhà cửa" },
+  { value: 2, label: "Giúp việc nhà" },
+  { value: 3, label: "Nấu ăn" },
+  { value: 4, label: "Chăm em bé" },
+];
+// Danh sách các ngôn ngữ
+export const listLanguages = [
+  { value: 1, label: "Tiếng Anh" },
+  { value: 2, label: "Tiếng Hàn" },
+  { value: 3, label: "Tiếng Trung" },
+];
 // Hàm render sao từ giá trị đánh giá (number) truyền vào
 export const renderStarFromNumber = (number, color, size) => {
   const integerPart = Math.floor(number);

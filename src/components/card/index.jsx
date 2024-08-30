@@ -1060,7 +1060,7 @@ const CardInfo = (props) => {
               />
               <div className="flex flex-col items-center mt-3 gap-2.5">
                 <span className="font-medium text-xl text-center">
-                  {dataDetail?.name}
+                  {dataDetail?.full_name}
                 </span>
                 <div className="flex items-center gap-1">
                   <span className="font-normal text-sm text-gray-500/60">

@@ -69,7 +69,7 @@ export const lockTimeCollaborator = (id, data) => {
 
 export const updateInformationCollaboratorApi = (id, data) => {
   return axiosClient.post(
-    `/admin/collaborator_manager/edit_personal_information/${id}`,
+    `api/admin/collaborator_manager/edit_personal_information/${id}`,
     data
   );
 };
@@ -120,7 +120,7 @@ export const getHistoryCollaboratorRemainder = (id, start, length) => {
 
 export const editAccountBankCollaborator = (id, data) => {
   return axiosClient.post(
-    `/admin/collaborator_manager/edit_account_bank/${id}?lang=vi`,
+    `api/admin/collaborator_manager/edit_account_bank/${id}?lang=vi`,
     data
   );
 };

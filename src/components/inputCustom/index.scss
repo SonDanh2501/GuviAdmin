@@ -27,7 +27,7 @@
     transform: translateY(-50%);
     left: 21px;
     user-select: none;
-    color: #999;
+    color: #d6d6d6;
     pointer-events: none;
     transition: 0.25s ease;
 
@@ -38,18 +38,25 @@
 
 .form-label-unit {
     display: flex;
-    gap: 4px;
+    gap: 6px;
     cursor: pointer;
     align-items: center;
-    height: 100%;
+    // height: 100%;
+    padding: 12px 10px;
     position: absolute;
-    padding-left: 8px;
-    top: 0px;
-    right: 12px;
+    // padding-left: 8px;
+    top: 1.5px;
+    right: 1.5px;
+    border-top-right-radius: 2.5px;
+    border-bottom-right-radius: 2.5px;
     border-left: 2px solid #eee;
     .unit {
         color: #6b7280;
         opacity: 0.6;
+    }
+    .image-unit {
+        width: 18px;
+        height: 18px;
     }
 }
 
@@ -62,7 +69,6 @@
     display: inline-block;
     background-color: white;
     color: #6a5af9;
-    // bor
 }
 
 input[type=file]::file-selector-button {

@@ -17,6 +17,7 @@ import { useSelector } from "react-redux";
 import { moveElement } from "../../utils/contant";
 import icons from "../../utils/icons";
 
+import secretImage from "../../assets/images/preview_image.png";
 const {
   IoCheckmarkCircleSharp,
   IoChevronDownOutline,
@@ -40,19 +41,22 @@ const InputTextCustom = (props) => {
     province, // Giá trị (array) mảng gồm 63 tỉnh thành
     district, // Giá trị (array) mảng gồm các quận/huyện tương ứng với tỉnh thành đã chọn
     multiSelectOptions, // Giá trị (array) mảng dùng cho multi select
-    birthday,
-    setBirthday,
+    // birthday,
+    // setBirthday,
     multiple, // Giá trị (boolean) chọn việc upload file lên là 1 file hay nhiều file
-    previewImage,
-    imgIdentifyFronsite,
+    previewImage, // Giá trị (boolean) hiển thị ảnh bên phải của select options (chỉ dành cho type === "select")
+    // imgIdentifyFronsite,
     required, // Giá trị (boolean) chọn việc input text là bắt buộc hay không
-    number,
-    minLength,
-    maxLength,
+    // number,
+    // minLength,
+    // maxLength,
     searchField, // Giá trị (boolean) chọn việc hiển thị hay không hiển thị thanh tìm kiếm
     onChange, // Hàm thay đổi giá trị cho value khi tyle là "text"
     testing,
     name, // Giá trị tên cho dynamic input field
+    onChangeImage, // Hàm xử lí cho thay đổi hình ảnh
+    notShowPreviewImage, // Giá trị (boolean) hiển thị hay không preview image
+    limitShows, // Hiển thị max là bao nhiêu lựa chọn
   } = props;
 
   // Lấy district (quận/huyện) từ giá trị province có được
@@ -102,17 +106,18 @@ const InputTextCustom = (props) => {
       (el) => el?.code === valueSelect.code
     ).districts;
     // 2. Gắn giá trị mới cho input
-
     setValueSelectedProps(valueSelect);
     // 1. Check nếu select province mới thì phải reset lại giá trị district
     // 1.1 nếu selected province = province current thì ko reset
 
-    if (testing) {
-      setValueSelectedPropsSupport([]);
-    } else {
-      setValueSelectedPropsSupport("");
+    if (setValueSelectedPropsSupport) {
+      if (testing) {
+        setValueSelectedPropsSupport([]);
+      } else {
+        setValueSelectedPropsSupport("");
+      }
+      setValueArrayProps(tempDistrictArray);
     }
-    setValueArrayProps(tempDistrictArray);
     // Close
     handleClose();
   };
@@ -123,7 +128,6 @@ const InputTextCustom = (props) => {
   };
   // 5. Hàm xử lí khi type === "service"
   const handleSelectService = (valueSelect) => {
-    // valueSelect : {name, code}
     if (value?.length === 0) {
       setValueSelectedProps([valueSelect.code]);
     } else {
@@ -139,7 +143,6 @@ const InputTextCustom = (props) => {
         setValueSelectedProps([...value, valueSelect.code]);
       }
     }
-    // handleClose();
   };
   // 6. Hàm xử lí khi type === "multiDistrict"
   const handleSelectMultiDistric = (valueSelect) => {
@@ -160,7 +163,24 @@ const InputTextCustom = (props) => {
         setValueSelectedProps([...value, valueSelect.code]);
       }
     }
-    // handleClose();
+  };
+  // 7. Hàm xử lí khi type === "multiSelect"
+  const handleSelectMulti = (valueSelect) => {
+    if (value?.length === 0) {
+      setValueSelectedProps([valueSelect.code]);
+    } else {
+      // Kiểm tra trong mảng truyền vào (value)
+      // có giá trị nào giống giá trị được chọn hiện tại
+      const found = value.find((el) => el === valueSelect?.code);
+      if (found) {
+        // Nếu có thì bỏ chọn
+        const result = value.filter((el) => el !== found);
+        setValueSelectedProps(result);
+      } else {
+        // Nếu không có thì thêm vào giá trị value
+        setValueSelectedProps([...value, valueSelect.code]);
+      }
+    }
   };
 
   // ~~~ Content for input !=== "text" ~~~
@@ -478,6 +498,30 @@ const InputTextCustom = (props) => {
           ))}
     </div>
   );
+  // 7. Content khi type === "multiSelect"
+  const contentMultiSelect = (
+    <div className="flex flex-col">
+      {multiSelectDataArray?.map((item, index) => (
+        <div
+          onClick={() => {
+            handleSelectMulti({ name: item?.label, code: item?.value });
+          }}
+          style={{ borderRadius: "6px" }}
+          className={`${
+            item?.is_select === true && "bg-violet-500 text-white font-bold"
+          } hover:bg-violet-500 hover:text-white duration-300 p-2 my-0.5 cursor-pointer font-normal flex items-center justify-between`}
+          // className={`${value.forEach((element) => {
+          //   element.code === item._id ? "bg-black" : "bg-yellow-500";
+          // })}`}
+        >
+          <span className="text-sm font-normal" key={index}>
+            {item?.label}
+          </span>
+          {item?.is_select === true && <IoCheckmarkCircleSharp size={"20px"} />}
+        </div>
+      ))}
+    </div>
+  );
 
   // ~~~ useEffect ~~~
   // 1. Lấy giá trị width cho component theo container cha
@@ -493,7 +537,11 @@ const InputTextCustom = (props) => {
   }, [refContainer?.current?.offsetWidth]);
   // 2. Lấy giá trị từ component cha hiển thị trên component con
   useEffect(() => {
-    if (type === "service" || type === "multiDistrict") {
+    if (
+      type === "service" ||
+      type === "multiDistrict" ||
+      type === "multiSelect"
+    ) {
       // Lọc ra những phần tử (item) trong multiSelectOptions mà có _id tồn tại trong value
       // Hàm này có tác dụng là tạo ra một chỗ string gồm tất cả các label của các giá trị được chọn gộp lại với nhau và ngăn cách bởi dấu phẩy
       let matchedItemsTemp =
@@ -501,29 +549,35 @@ const InputTextCustom = (props) => {
           ? multiSelectOptions?.filter((item) => value.includes(item._id))
           : type === "multiDistrict"
           ? multiSelectOptions?.filter((item) => value.includes(item.code))
+          : type === "multiSelect"
+          ? multiSelectOptions?.filter((item) => value.includes(item.value))
           : [];
       if (matchedItemsTemp) {
         setMatchedItems(matchedItemsTemp);
       }
       // Hàm viết ở đây chỉ đúng cho trường hợp là đã chọn giá trị (value) rồi,
       // Hàm này sẽ tạo ra một mảng mới gồm những giá trị được chọn sẽ thêm trường is_select là true
-
-      const multiSelecDataOptions = multiSelectOptions?.map((serviceItem) => {
+      const multiSelecDataOptions = multiSelectOptions?.map((itemOption) => {
         // phải bằng 0 vì nếu không có giá trị nào được chọn thì cũng phải hiển thị
         // if (value && value?.length >= 0) {
         if (type === "service") {
           const isSelected = value?.some(
-            (valueItem) => valueItem === serviceItem._id
+            (valueItem) => valueItem === itemOption._id
           );
-          return { ...serviceItem, is_select: isSelected };
+          return { ...itemOption, is_select: isSelected };
         }
         if (type === "multiDistrict") {
           const isSelected = value?.some(
-            (valueItem) => valueItem === serviceItem.code
+            (valueItem) => valueItem === itemOption.code
           );
-          return { ...serviceItem, is_select: isSelected };
+          return { ...itemOption, is_select: isSelected };
         }
-        // }
+        if (type === "multiSelect") {
+          const isSelected = value?.some(
+            (valueItem) => valueItem === itemOption.value
+          );
+          return { ...itemOption, is_select: isSelected };
+        }
       });
       if (multiSelecDataOptions?.length) {
         setMultiSelectDataArray(multiSelecDataOptions);
@@ -532,14 +586,25 @@ const InputTextCustom = (props) => {
   }, [multiSelectOptions, value]);
   // 3. Lấy giá trị cho district array nếu province có giá trị default
   useEffect(() => {
-    if (type === "province" && tempDistrictArray?.length > 0) {
+    if (
+      type === "province" &&
+      tempDistrictArray?.length > 0 &&
+      setValueSelectedPropsSupport
+    ) {
       setValueArrayProps(tempDistrictArray);
     }
   }, [tempDistrictArray]);
 
-  // if (type === "file" && multiple) {
-  //   console.log("Checking value >>>", value);
-  // }
+if (type === "select") {
+  console.log("check value >>> ", value);
+  console.log(
+    "check value",
+    options?.find((el) => el.value === value)?.name
+      ? options?.find((el) => el.value === value)?.name
+      : options?.find((el) => el.value === value)?.label
+  );
+}
+
   return (
     <div className="form-field" ref={refContainer}>
       {/* Input Field  */}
@@ -572,6 +637,8 @@ const InputTextCustom = (props) => {
             type="file"
             className="form-input"
             placeholder=" "
+            accept={".jpg,.png,.jpeg"}
+            onChange={onChangeImage}
           />
           <label htmlFor=" " className="form-label">
             {placeHolder}
@@ -591,7 +658,145 @@ const InputTextCustom = (props) => {
             <IoChevronDownOutline color="#999" />
           </div>
           {/* Preview image  */}
-          {multiple ? (
+          {value?.length > 0 ? (
+            multiple ? (
+              value?.map((item, index) => {
+                return (
+                  <div
+                    style={{ borderRadius: "6px", border: "2px dashed	#eee" }}
+                    className={`${
+                      hideImage ? "hidden" : "flex"
+                    } items-center justify-between mt-2 p-2 border-2 gap-2`}
+                  >
+                    <div style={{ gap: "10px" }} className="flex items-center">
+                      <Image
+                        height={40}
+                        width={40}
+                        src={secretImage}
+                        preview={{
+                          src: `${item}`,
+                        }}
+                      />
+                      <span style={{ maxWidth: "280px", overflow: "hidden" }}>
+                        {item?.split("/").pop()}
+                      </span>
+                    </div>
+                    <div className="flex gap-2">
+                      <button
+                        style={{ borderRadius: "100%" }}
+                        className="p-2 hover:bg-red-500 hover:text-white text-red-500 duration-300 ease-out"
+                      >
+                        <IoClose
+                          onClick={() =>
+                            setValueSelectedProps(
+                              value?.filter((el) => el !== item)
+                            )
+                          }
+                          size="16px"
+                        />
+                      </button>
+                    </div>
+                  </div>
+                );
+              })
+            ) : (
+              <div
+                style={{ borderRadius: "6px", border: "2px dashed	#eee" }}
+                className={`${
+                  hideImage ? "hidden" : "flex"
+                } items-center justify-between mt-2 p-2 border-2 gap-2`}
+              >
+                <div style={{ gap: "10px" }} className="flex items-center">
+                  <Image
+                    height={40}
+                    width={40}
+                    src={notShowPreviewImage ? value : secretImage}
+                    preview={{
+                      src: `${value}`,
+                    }}
+                  />
+                  <span style={{ maxWidth: "280px", overflow: "hidden" }}>
+                    {value?.split("/").pop()}
+                  </span>
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    style={{ borderRadius: "100%" }}
+                    className="p-2 hover:bg-red-500 hover:text-white text-red-500 duration-300 ease-out"
+                  >
+                    <IoClose
+                      onClick={() => setValueSelectedProps("")}
+                      size="16px"
+                    />
+                  </button>
+                </div>
+              </div>
+            )
+          ) : (
+            ""
+          )}
+          {/* {value?.length > 0 && multiple 
+          ? 
+          (value?.map((item, index) => {
+              return (
+                <div
+                  style={{ borderRadius: "6px", border: "2px dashed	#eee" }}
+                  className={`${
+                    hideImage ? "hidden" : "flex"
+                  } items-center justify-between mt-2 p-2 border-2 gap-2`}
+                >
+                  <div style={{ gap: "10px" }} className="flex items-center">
+                    <Image height={60} width={60} src={item} />
+                    <span style={{ maxWidth: "280px", overflow: "hidden" }}>
+                      {item?.split("/").pop()}
+                    </span>
+                  </div>
+                  <div className="flex gap-2">
+                    <button
+                      style={{ borderRadius: "100%" }}
+                      className="p-2 hover:bg-red-500 hover:text-white text-red-500 duration-300 ease-out"
+                    >
+                      <IoClose
+                        // onClick={() =>
+                        //   setValueSelectedProps([
+                        //     value.filter((el, index) => el !== index)[0],
+                        //   ])
+                        // }
+                        size="16px"
+                      />
+                    </button>
+                  </div>
+                </div>
+              );
+            })
+          ) 
+          : 
+          (<div
+              style={{ borderRadius: "6px", border: "2px dashed	#eee" }}
+              className={`${
+                hideImage ? "hidden" : "flex"
+              } items-center justify-between mt-2 p-2 border-2 gap-2`}
+            >
+              <div style={{ gap: "10px" }} className="flex items-center">
+                <Image height={60} width={60} src={value} />
+                <span style={{ maxWidth: "280px", overflow: "hidden" }}>
+                  {value?.split("/").pop()}
+                </span>
+              </div>
+              <div className="flex gap-2">
+                <button
+                  style={{ borderRadius: "100%" }}
+                  className="p-2 hover:bg-red-500 hover:text-white text-red-500 duration-300 ease-out"
+                >
+                  <IoClose
+                    onClick={() => setValueSelectedProps("")}
+                    size="16px"
+                  />
+                </button>
+              </div>
+            </div>
+          )} */}
+          {/* {multiple ? (
             value?.length > 0 &&
             value?.map((item, index) => {
               return (
@@ -602,7 +807,7 @@ const InputTextCustom = (props) => {
                   } items-center justify-between mt-2 p-2 border-2 gap-2`}
                 >
                   <div style={{ gap: "10px" }} className="flex items-center">
-                    <Image height={40} width={60} src={item} />
+                    <Image height={60} width={60} src={item} />
                     <span style={{ maxWidth: "280px", overflow: "hidden" }}>
                       {item?.split("/").pop()}
                     </span>
@@ -633,7 +838,7 @@ const InputTextCustom = (props) => {
               } items-center justify-between mt-2 p-2 border-2 gap-2`}
             >
               <div style={{ gap: "10px" }} className="flex items-center">
-                <Image height={40} width={60} src={value} />
+                <Image height={60} width={60} src={value} />
                 <span style={{ maxWidth: "280px", overflow: "hidden" }}>
                   {value?.split("/").pop()}
                 </span>
@@ -650,7 +855,7 @@ const InputTextCustom = (props) => {
                 </button>
               </div>
             </div>
-          )}
+          )} */}
         </div>
       )}
       {/* Select Field */}
@@ -676,6 +881,7 @@ const InputTextCustom = (props) => {
           >
             <div>
               <input
+                disabled={disable}
                 // style={{ pointerEvents: "none" }}
                 type="text"
                 className="form-input"
@@ -692,11 +898,25 @@ const InputTextCustom = (props) => {
               <label htmlFor=" " className="form-label">
                 {placeHolder}
               </label>
+            </div>
+            {previewImage ? (
+              <div className="form-label-unit">
+                <img
+                  className="image-unit"
+                  src={
+                    options?.find((el) => el.value === value)?.image
+                      ? options?.find((el) => el.value === value)?.image
+                      : ""
+                  }
+                />
+                <IoCaretDownOutline color="#999" />
+              </div>
+            ) : (
               <IoCaretDownOutline
                 className="absolute top-4 right-3"
                 color="#999"
               />
-            </div>
+            )}
           </Popover>
         </ConfigProvider>
       )}
@@ -813,7 +1033,16 @@ const InputTextCustom = (props) => {
                 className="form-input"
                 placeholder=" "
                 // disabled={selectProvince?.code ? false : true}
-                value={value?.name ? value?.name : ""}
+                // value={
+                //   value?.code
+                //     ? province.find((el) => el.code === value?.code)?.name
+                //     : province.find((el) => el.code === value)?.name
+                // }
+                value={
+                  district.find((el) => el.code === value)
+                    ? district.find((el) => el.code === value)?.name
+                    : district.find((el) => el.code === value?.code)?.name
+                }
                 // onChange={(el) => printData(el)}
                 readOnly
               />
@@ -950,16 +1179,10 @@ const InputTextCustom = (props) => {
             onChange={onChange}
           />
           <label htmlFor=" " className="form-label">
-            {placeHolder}
+            {placeHolder}{" "}
+            {required && <span className="required-label">*</span>}
           </label>
-          <Popover
-            trigger="click"
-            content={
-              <div>
-                <span>hello</span>
-              </div>
-            }
-          >
+          <Popover trigger="click" content={""}>
             <div
               // style={{
               //   position: "absolute",
@@ -977,6 +1200,60 @@ const InputTextCustom = (props) => {
             </div>
           </Popover>
         </div>
+      )}
+      {/* Multi Select Field */}
+      {type === "multiSelect" && (
+        <ConfigProvider
+          theme={{
+            components: {
+              Popover: {
+                titleMinWidth: dimensions?.width && dimensions?.width - 35,
+              },
+            },
+          }}
+        >
+          <Popover
+            trigger="click"
+            placement="bottom"
+            title={" "}
+            open={open}
+            content={contentMultiSelect}
+            arrow={false}
+            onOpenChange={handleOpen}
+          >
+            <div>
+              <input
+                // style={{ pointerEvents: "none" }}
+                disabled={disable}
+                type="text"
+                className="form-input"
+                placeholder=" "
+                value={
+                  matchedItems &&
+                  matchedItems?.length >= 0 &&
+                  matchedItems?.length <= limitShows
+                    ? matchedItems
+                        ?.slice(0, limitShows)
+                        ?.map((item) => item?.label)
+                        ?.join(", ")
+                    : matchedItems
+                        ?.slice(0, limitShows)
+                        ?.map((item) => item?.label)
+                        ?.join(", ") + " ..."
+                }
+                // onChange={(el) => printData(el)}
+                readOnly
+              />
+              <label htmlFor=" " className="form-label">
+                {placeHolder}
+              </label>
+              <IoCaretDownOutline
+                className="absolute top-4 right-3"
+                color="#999"
+              />
+            </div>
+          </Popover>
+        </ConfigProvider>
       )}
     </div>
   );
