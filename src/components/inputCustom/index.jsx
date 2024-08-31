@@ -103,7 +103,7 @@ const InputTextCustom = (props) => {
   const handleSelectProvince = (valueSelect) => {
     // 1. Lấy data district (quận/huyện) sau khi chọn được province (tỉnh/thành phố)
     const tempDistrictArray = province?.find(
-      (el) => el?.code === valueSelect.code
+      (el) => el?.code === valueSelect?.code
     ).districts;
     // 2. Gắn giá trị mới cho input
     setValueSelectedProps(valueSelect);
@@ -129,7 +129,7 @@ const InputTextCustom = (props) => {
   // 5. Hàm xử lí khi type === "service"
   const handleSelectService = (valueSelect) => {
     if (value?.length === 0) {
-      setValueSelectedProps([valueSelect.code]);
+      setValueSelectedProps([valueSelect?.code]);
     } else {
       // Kiểm tra trong mảng truyền vào (value)
       // có giá trị nào giống giá trị được chọn hiện tại
@@ -140,7 +140,7 @@ const InputTextCustom = (props) => {
         setValueSelectedProps(result);
       } else {
         // Nếu không có thì thêm vào giá trị value
-        setValueSelectedProps([...value, valueSelect.code]);
+        setValueSelectedProps([...value, valueSelect?.code]);
       }
     }
   };
@@ -148,7 +148,7 @@ const InputTextCustom = (props) => {
   const handleSelectMultiDistric = (valueSelect) => {
     let found = [];
     if (value?.length === 0) {
-      setValueSelectedProps([valueSelect.code]);
+      setValueSelectedProps([valueSelect?.code]);
     } else {
       // Kiểm tra trong mảng truyền vào (value)
       // có giá trị nào giống giá trị được chọn hiện tại
@@ -160,14 +160,14 @@ const InputTextCustom = (props) => {
         setValueSelectedProps(result);
       } else {
         // Nếu không có thì thêm vào giá trị value
-        setValueSelectedProps([...value, valueSelect.code]);
+        setValueSelectedProps([...value, valueSelect?.code]);
       }
     }
   };
   // 7. Hàm xử lí khi type === "multiSelect"
   const handleSelectMulti = (valueSelect) => {
     if (value?.length === 0) {
-      setValueSelectedProps([valueSelect.code]);
+      setValueSelectedProps([valueSelect?.code]);
     } else {
       // Kiểm tra trong mảng truyền vào (value)
       // có giá trị nào giống giá trị được chọn hiện tại
@@ -178,7 +178,7 @@ const InputTextCustom = (props) => {
         setValueSelectedProps(result);
       } else {
         // Nếu không có thì thêm vào giá trị value
-        setValueSelectedProps([...value, valueSelect.code]);
+        setValueSelectedProps([...value, valueSelect?.code]);
       }
     }
   };
@@ -276,7 +276,7 @@ const InputTextCustom = (props) => {
             ))
         : province &&
           province.length > 0 &&
-          moveElement(province, 2, (obj) => obj.code === 48)?.map(
+          moveElement(province, 2, (obj) => obj?.code === 48)?.map(
             (province, index) => (
               <div
                 onClick={() => {
@@ -398,7 +398,7 @@ const InputTextCustom = (props) => {
             item?.is_select === true && "bg-violet-500 text-white font-bold"
           } hover:bg-violet-500 hover:text-white duration-300 p-2 my-0.5 cursor-pointer font-normal flex items-center justify-between`}
           // className={`${value.forEach((element) => {
-          //   element.code === item._id ? "bg-black" : "bg-yellow-500";
+          //   element?.code === item._id ? "bg-black" : "bg-yellow-500";
           // })}`}
         >
           <span className="text-sm font-normal" key={index}>
@@ -485,7 +485,7 @@ const InputTextCustom = (props) => {
                 item?.is_select === true && "bg-violet-500 text-white font-bold"
               } hover:bg-violet-500 hover:text-white duration-300 p-2 my-0.5 cursor-pointer font-normal flex items-center justify-between`}
               // className={`${value.forEach((element) => {
-              //   element.code === item._id ? "bg-black" : "bg-yellow-500";
+              //   element?.code === item._id ? "bg-black" : "bg-yellow-500";
               // })}`}
             >
               <span className="text-sm font-normal" key={index}>
@@ -511,7 +511,7 @@ const InputTextCustom = (props) => {
             item?.is_select === true && "bg-violet-500 text-white font-bold"
           } hover:bg-violet-500 hover:text-white duration-300 p-2 my-0.5 cursor-pointer font-normal flex items-center justify-between`}
           // className={`${value.forEach((element) => {
-          //   element.code === item._id ? "bg-black" : "bg-yellow-500";
+          //   element?.code === item._id ? "bg-black" : "bg-yellow-500";
           // })}`}
         >
           <span className="text-sm font-normal" key={index}>
@@ -548,7 +548,7 @@ const InputTextCustom = (props) => {
         type === "service"
           ? multiSelectOptions?.filter((item) => value.includes(item._id))
           : type === "multiDistrict"
-          ? multiSelectOptions?.filter((item) => value.includes(item.code))
+          ? multiSelectOptions?.filter((item) => value.includes(item?.code))
           : type === "multiSelect"
           ? multiSelectOptions?.filter((item) => value.includes(item.value))
           : [];
@@ -568,7 +568,7 @@ const InputTextCustom = (props) => {
         }
         if (type === "multiDistrict") {
           const isSelected = value?.some(
-            (valueItem) => valueItem === itemOption.code
+            (valueItem) => valueItem === itemOption?.code
           );
           return { ...itemOption, is_select: isSelected };
         }
@@ -988,8 +988,8 @@ if (type === "select") {
                 // value={province.find((el))}
                 value={
                   value?.code
-                    ? province.find((el) => el.code === value?.code)?.name
-                    : province.find((el) => el.code === value)?.name
+                    ? province.find((el) => el?.code === value?.code)?.name
+                    : province.find((el) => el?.code === value)?.name
                 }
                 readOnly
               />
@@ -1035,13 +1035,13 @@ if (type === "select") {
                 // disabled={selectProvince?.code ? false : true}
                 // value={
                 //   value?.code
-                //     ? province.find((el) => el.code === value?.code)?.name
-                //     : province.find((el) => el.code === value)?.name
+                //     ? province.find((el) => el?.code === value?.code)?.name
+                //     : province.find((el) => el?.code === value)?.name
                 // }
                 value={
-                  district.find((el) => el.code === value)
-                    ? district.find((el) => el.code === value)?.name
-                    : district.find((el) => el.code === value?.code)?.name
+                  district.find((el) => el?.code === value)
+                    ? district.find((el) => el?.code === value)?.name
+                    : district.find((el) => el?.code === value?.code)?.name
                 }
                 // onChange={(el) => printData(el)}
                 readOnly
