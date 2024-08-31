@@ -17,7 +17,7 @@ import { loadingAction } from "../../../../../../../redux/actions/loading";
 import { getLanguageState } from "../../../../../../../redux/selectors/auth";
 import "./index.scss";
 
-const Document = ({ id }) => {
+const   Document = ({ id }) => {
   const [deal, setDeal] = useState(false);
   const [identify, setIdentify] = useState(false);
   const [information, setInformation] = useState(false);

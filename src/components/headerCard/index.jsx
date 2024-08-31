@@ -16,10 +16,11 @@ const HeaderCard = (props) => {
             setEndDate={setEndDate}
           />
           <div className="div-same">
-            <p className="text-date-same">
-              Mốc thời gian: {moment(startDate).format("DD/MM/YYYY")}-
+            <span className="text-date-same mr-1 text-gray-700/80">Mốc thời gian:</span>
+            <span className='font-medium'>
+              {moment(startDate).format("DD/MM/YYYY")}-
               {moment(endDate).format("DD/MM/YYYY")}
-            </p>
+            </span>
           </div>
         </>
       )}

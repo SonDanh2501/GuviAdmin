@@ -2,13 +2,15 @@ import { DatePicker, List } from "antd";
 import dayjs from "dayjs";
 import _debounce from "lodash/debounce";
 import moment from "moment";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Col, Form, Row } from "reactstrap";
+import { Col, Form, Row } from "reactstrap";
 import {
   fetchCollaborators,
   getCollaboratorsById,
   updateInformationCollaboratorApi,
+  updateDocumentCollaboratorApi,
+  editAccountBankCollaborator,
 } from "../../../../../../../api/collaborator";
 import {
   getDetailBusiness,
@@ -24,22 +26,36 @@ import {
   getService,
 } from "../../../../../../../redux/selectors/service";
 import "./index.scss";
+import InputTextCustom from "../../../../../../../components/inputCustom";
 
-const Information = ({ data, image, idCTV, setData }) => {
-  const [name, setName] = useState("");
-  const [gender, setGender] = useState("other");
-  const [birthday, setBirthday] = useState("2022-01-20T00:00:00.000Z");
+//Import của document
+import { Button, Checkbox, Image, Input } from "antd";
+import { saveAs } from "file-saver";
+import JSZip from "jszip";
+import JSZipUtils from "jszip-utils";
+import { postFile } from "../../../../../../../api/file";
+import resizeFile from "../../../../../../../helper/resizer";
+import icons from "../../../../../../../utils/icons";
+import ButtonCustom from "../../../../../../../components/button";
+import {
+  bankList,
+  countryList,
+  listSkills,
+  listLanguages,
+} from "../../../../../../../utils/contant";
+import user from "../../../../../../../assets/images/user.png";
+const {
+  IoClose,
+  IoEyeOutline,
+  IoCloudUploadOutline,
+  IoRemoveCircle,
+  IoRemove,
+} = icons;
+
+const Information = ({ data, idCTV, setData, id }) => {
   const [resident, setResident] = useState("");
   const [staying, setStaying] = useState("");
-  const [ethnic, setEthnic] = useState("");
-  const [religion, setReligion] = useState("");
-  const [level, setLevel] = useState("");
-  const [number, setNumber] = useState("");
-  const [issued, setIssued] = useState("");
-  const [issuedDay, setIssuedDay] = useState("");
   const [imgUrl, setImgUrl] = useState("");
-  const [phone, setPhone] = useState("");
-  const [codeInvite, setCodeInvite] = useState("");
   const [type, setType] = useState("");
   const [serviceApply, setServiceApply] = useState([]);
   const [dataCollaborator, setDataCollaborator] = useState([]);
@@ -47,9 +63,7 @@ const Information = ({ data, image, idCTV, setData }) => {
   const [idCollaborator, setIdCollaborator] = useState("");
   const [dataBusiness, setDataBusiness] = useState([]);
   const [idBusiness, setIdBusiness] = useState("");
-  const [codeCity, setCodeCity] = useState("");
   const [dataDistrict, setDataDistrict] = useState([]);
-  const [codeDistrict, setCodeDistrict] = useState([]);
   const dispatch = useDispatch();
   const service = useSelector(getService);
   const province = useSelector(getProvince);
@@ -59,39 +73,122 @@ const Information = ({ data, image, idCTV, setData }) => {
   const businessOption = [];
   const dateFormat = "YYYY-MM-DD";
   const lang = useSelector(getLanguageState);
+
+  // Thông tin cộng tác viên
+  const [img, setImg] = useState(""); // Giá trị ảnh avatar
+  const [name, setName] = useState(""); // Giá trị tên
+  const [email, setEmail] = useState(""); // Giá trị email
+  const [gender, setGender] = useState("other"); // Giá trị giới tính lựa chọn
+  const [birthday, setBirthday] = useState("2022-01-20T00:00:00.000Z"); // Giá trị ngày sinh
+  const [selectcountry, setSelectCountry] = useState("vn"); // Giá trị quốc tịch
+  const [selectHomeTown, setSelectHomeTown] = useState(""); // Giá trị quê quán
+  const [phone, setPhone] = useState(""); // Giá trị số điện thoại
+  const [ethnic, setEthnic] = useState("Kinh"); // Giá trị dân tộc
+  const [religion, setReligion] = useState("Không"); // Giá trị tôn giáo
+  const [level, setLevel] = useState("12/12"); // Giá trị trình độ
+  const [codeInvite, setCodeInvite] = useState(""); // Giá trị mã giới thiệu
+  const [number, setNumber] = useState(""); // Giá trị CCCD
+  const [issued, setIssued] = useState("Cục cảnh sát"); // Giá trị nơi cấp CCCD/CMND
+  const [issuedDay, setIssuedDay] = useState("2024-01-01:00:00.000Z"); // Giá trị ngày cấp CCCD/CMND
+  const [selectService, setSelectService] = useState([]); // Giá trị service lựa chọn
+  const [codeCity, setCodeCity] = useState(""); // Giá trị tỉnh, thành phố làm việc
+  const [codeDistrict, setCodeDistrict] = useState([]); // Giá trị quận/ huyện làm việc
+  const [selectProvinceLive, setSelectProvinceLive] = useState(""); // Giá trị province (tỉnh/thành phố) thường trú lựa chọn
+  const [selectDistrictLive, setSelectDistrictLive] = useState(""); // Giá trị district (quận/huyện) thường trú lựa chọn
+  const [districtArrayLive, setDistrictArrayLive] = useState([]); // Giá trị mảng gồm các district (quận/huyện) của province (tỉnh/thành phố) đã chọn (thường trú)
+  const [addressResidentLive, setAddressResidentLive] = useState(""); // Giá trị địa chỉ thường trú cụ thể
+  const [selectProvinceTemp, setSelectProvinceTemp] = useState(""); // Giá trị province (tỉnh/thành phố) tạm trú lựa chọn
+  const [selectDistrictTemp, setSelectDistrictTemp] = useState(""); // Giá trị district (quận/huyện) tạm trú lựa chọn
+  const [districtArrayTemp, setDistrictArrayTemp] = useState([]); // Giá trị mảng gồm các district (quận/huyện) của province (tỉnh/thành phố) đã chọn (tạm trú)
+  const [addressResidentTemp, setAddressResidentTemp] = useState(""); // Giá trị địa chỉ tạm trú cụ thể
+  const [selectProvinceWork, setSelectProvinceWork] = useState(""); // Giá trị province (tỉnh/thành phố) làm việc lựa chọn
+  const [selectDistrictWork, setSelectDistrictWork] = useState([]); // Giá trị district (quận/huyện) làm việc lựa chọn
+  const [districtArrayWork, setDistrictArrayWork] = useState([]); // Giá trị mảng gồm các district (quận/huyện) của province (tỉnh/thành phố) đã chọn (làm việc)
+  const [contactPersons, setContactPersons] = useState([]); // Giá trị người liên hệ (array)
+  const [selectSkills, setSelectSkills] = useState([]); // Giá trị kỹ năng của CTV
+  const [selectLanguages, setSelectLanguages] = useState([]); // Giá trị ngôn ngữ của CTV
+
+  // Thông tin tài khoản
+  const [accountNumber, setAccountNumber] = useState("");
+  const [bankName, setBankName] = useState("");
+  const [accountName, setAccountName] = useState("");
+  const [selectBankName, setSelectBankName] = useState("vietcom_bank"); // Giá trị bank lựa chọn thay cho tên bankName
+  const [bankBrand, setBankBrand] = useState(""); // Giá trị tên chi nhánh ngân hàng
+  // Thông tin tài liệu
+  const [deal, setDeal] = useState(false);
+  const [identify, setIdentify] = useState(false);
+  const [information, setInformation] = useState(false);
+  const [certification, setCertification] = useState(false);
+  const [registration, setRegistration] = useState(false);
+  const [valueDeal, setSetValueDeal] = useState("");
+  const [imgIdentifyFronsite, setImgIdentifyFronsite] = useState("");
+  const [imgIdentifyBacksite, setImgIdentifyBacksite] = useState("");
+  const [imgInformation, setImgInformation] = useState([]);
+  const [imgCertification, setImgCertification] = useState([]);
+  const [imgRegistration, setImgRegistration] = useState([]);
+
+  // ~~~ useEffect ~~~
+  // 1. Lấy giá trị và gán cho các trường thông tin cộng tác viên
   useEffect(() => {
+    // Code Cũ
     province.forEach((item) => {
       if (item?.code === data?.city) {
         setDataDistrict(item?.districts);
         return;
       }
     });
+    // Lấy danh sách đối tác (chưa làm lại)
     getListBusiness(0, 100, "")
       .then((res) => {
         setDataBusiness(res?.data);
       })
       .catch((err) => {});
+    // Trường nếu chưa có giá trị sẽ có giá trị default sẵn nên cần phải check lenght để set giá trị
     setName(data?.full_name);
-    setGender(data?.gender);
-    setBirthday(data?.birthday);
-    setResident(data?.permanent_address);
-    setStaying(data?.temporary_address);
-    setEthnic(data?.folk);
-    setReligion(data?.religion);
-    setLevel(data?.edu_level);
-    setNumber(data?.identity_number);
-    setIssued(data?.identity_place);
-    setIssuedDay(data?.identity_date);
-    setImgUrl(data?.avatar);
+    if (data?.gender?.length > 0) setGender(data?.gender);
+    // setGender(data?.gender?.length > 0 && data?.gender);
+    setEmail(data?.email);
     setPhone(data?.phone);
+    if (data?.birthday?.length > 0) setBirthday(data?.birthday);
+    setNumber(data?.identity_number);
+    if (data?.identity_place?.length > 0) setIssued(data?.identity_place);
+    if (data?.identity_date?.length > 0) setIssuedDay(data?.identity_date);
+    if (data?.country?.length > 0) setSelectCountry(data?.country);
+    setSelectHomeTown(data?.home_town);
+    setSelectProvinceLive(data?.province_live);
+    setSelectDistrictLive(data?.district_live);
+    setAddressResidentLive(data?.address_live);
+    setSelectProvinceTemp(data?.province_temp);
+    setSelectDistrictTemp(data?.district_temp);
+    setAddressResidentTemp(data?.address_temp);
+    if (data?.folk?.length > 0) setEthnic(data?.folk);
+    if (data?.religion?.length > 0) setReligion(data?.religion);
+    if (data?.edu_level?.length > 0) setLevel(data?.edu_level);
+    // Code cũ không đụng
     setCodeInvite(data?.invite_code);
     setType(data?.type);
-    setServiceApply(data?.service_apply);
     setIdBusiness(data?.id_business);
-    setCodeCity(data?.city);
-    setCodeDistrict(data?.district);
+    // Gán giá trị default (nếu có) cho service
+    setServiceApply(data?.service_apply); // setServiceApply // Giá trị cũ (xóa sau này)
+    if (data?.service_apply?.length > 0) setSelectService(data?.service_apply);
+    if (data?.languages_list?.length > 0)
+      setSelectLanguages(data?.languages_list);
+    if (data?.skills_list?.length > 0) setSelectSkills(data?.skills_list);
+    // Gán giá trị default (nếu có) cho province làm việc
+    setCodeCity(data?.city); // Giá trị cũ (xóa sau này)
+    setSelectProvinceWork(data?.province_work);
+    // Gán giá trị default (nếu có) của Quận/Huyện làm việc
+    setCodeDistrict(data?.district); // Giá trị cũ (xóa sau này)
+    setSelectDistrictWork(data?.district_work);
+    // Gán giá trị default (nếu có) cho avatar
+    setImgUrl(data?.avatar); // Giá trị cũ
+    setImg(data?.avatar);
+    // Giá trị địa chỉ thường trú và tạm trú cũ
+    setResident(data?.permanent_address);
+    setStaying(data?.temporary_address);
+    setContactPersons(data?.contact_persons);
   }, [data]);
-
+  // 2. Code cũ
   useEffect(() => {
     if (idBusiness) {
       getDetailBusiness(idBusiness)
@@ -110,7 +207,572 @@ const Information = ({ data, image, idCTV, setData }) => {
         .catch((err) => {});
     }
   }, [idBusiness]);
+  // 3.Lấy giá trị và gán cho các trường thông tin ngân hàng và thông tin tài liệu
+  useEffect(() => {
+    dispatch(loadingAction.loadingRequest(true));
 
+    getCollaboratorsById(id)
+      .then((res) => {
+        console.log("checking res", res);
+        if (res?.account_number)setAccountNumber(res?.account_number);
+        if (res?.bank_name) setBankName(res?.bank_name);
+        if (res?.bank_name) setSelectBankName(res?.bank_name);
+        if (res?.account_name)setAccountName(res?.account_name);
+        if (res?.bank_brand) setBankBrand(res?.bank_brand);
+
+        setDeal(res?.is_document_code);
+        setSetValueDeal(res?.document_code);
+        setIdentify(res?.is_identity);
+        setImgIdentifyFronsite(res?.identity_frontside);
+        setImgIdentifyBacksite(res?.identity_backside);
+        setInformation(res?.is_personal_infor);
+        setImgInformation(res?.personal_infor_image);
+        setRegistration(res?.is_household_book);
+        setImgRegistration(res?.household_book_image);
+        setCertification(res?.is_behaviour);
+        setImgCertification(res?.behaviour_image);
+        dispatch(loadingAction.loadingRequest(false));
+      })
+      .catch((err) => {
+        errorNotify({
+          message: err?.message,
+        });
+        dispatch(loadingAction.loadingRequest(false));
+      });
+  }, [id, dispatch, lang]);
+
+  // ~~~ Handle fucntion ~~~
+  // 1. Handle thay đổi thông tin người liên hệ
+  const handleChangeContact = (e, index) => {
+    const { name, value } = e.target;
+    const onChangeValue = [...contactPersons];
+    onChangeValue[index][name] = value;
+    setContactPersons(onChangeValue);
+  };
+  // 2. Handle thêm người liên hệ mới
+  const handleAddingContact = () => {
+    // Giới hạn số người liên hệ tối đa là 3 người
+    if (contactPersons?.length < 3) {
+      setContactPersons([
+        ...contactPersons,
+        {
+          name_relative: "",
+          phone_relative: "",
+          relation_relative: "",
+        },
+      ]);
+    }
+  };
+  // 3. Handle xóa người liên hệ
+  const handleDeleteContact = (index) => {
+    const deleteContact = [...contactPersons];
+    deleteContact.splice(index, 1);
+    setContactPersons(deleteContact);
+  };
+  // 4. Handle thay đổi ảnh avatar
+  const onChangeThumbnail = async (e) => {
+    const extend = e.target.files[0].type.slice(
+      e.target.files[0].type.indexOf("/") + 1
+    );
+    if (e.target.files[0]) {
+      const reader = new FileReader();
+      reader.addEventListener("load", () => {
+        setImg(reader.result);
+      });
+      reader.readAsDataURL(e.target.files[0]);
+    }
+    const file = e.target.files[0];
+    const image = await resizeFile(file, extend);
+    const formData = new FormData();
+    formData.append("multi-files", image);
+    dispatch(loadingAction.loadingRequest(true));
+    postFile(formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+      .then((res) => {
+        setImg(res[0]);
+        dispatch(loadingAction.loadingRequest(false));
+      })
+      .catch((err) => {
+        setImg("");
+        errorNotify({
+          message: err?.message,
+        });
+        dispatch(loadingAction.loadingRequest(false));
+      });
+  };
+  // 5. Handle thay đổi ảnh cccd mặt trước
+  const onChangeIdentifyBefore = async (e) => {
+    dispatch(loadingAction.loadingRequest(true));
+    const extend = e.target.files[0].type.slice(
+      e.target.files[0].type.indexOf("/") + 1
+    );
+    if (e.target.files[0]) {
+      const reader = new FileReader();
+      reader.addEventListener("load", () => {
+        setImgIdentifyFronsite(reader.result);
+      });
+      reader.readAsDataURL(e.target.files[0]);
+    }
+    const formData = new FormData();
+    const image = await resizeFile(e.target.files[0], extend);
+
+    formData.append("multi-files", image);
+    postFile(formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+      .then((res) => {
+        setImgIdentifyFronsite(res[0]);
+        dispatch(loadingAction.loadingRequest(false));
+      })
+      .catch((err) => {
+        errorNotify({
+          message: err?.message,
+        });
+        dispatch(loadingAction.loadingRequest(false));
+      });
+  };
+  // 6. Handle thay đổi ảnh cccd mặt sau
+  const onChangeIdentifyAfter = async (e) => {
+    dispatch(loadingAction.loadingRequest(true));
+    const extend = e.target.files[0].type.slice(
+      e.target.files[0].type.indexOf("/") + 1
+    );
+    if (e.target.files[0]) {
+      const reader = new FileReader();
+      reader.addEventListener("load", () => {
+        setImgIdentifyBacksite(reader.result);
+      });
+      reader.readAsDataURL(e.target.files[0]);
+    }
+    const formData = new FormData();
+    const image = await resizeFile(e.target.files[0], extend);
+
+    formData.append("multi-files", image);
+    postFile(formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+      .then((res) => {
+        setImgIdentifyBacksite(res[0]);
+        dispatch(loadingAction.loadingRequest(false));
+      })
+      .catch((err) => {
+        errorNotify({
+          message: err?.message,
+        });
+        dispatch(loadingAction.loadingRequest(false));
+      });
+  };
+  // 7. Handle thay đổi ảnh sơ yêu lí lịch
+  const onChangeInformation = async (e) => {
+    dispatch(loadingAction.loadingRequest(true));
+    const fileLength = e.target.files.length;
+    const formData = new FormData();
+    for (var i = 0; i < fileLength; i++) {
+      const image = await resizeFile(e.target.files[i], "png");
+      formData.append("multi-files", image);
+    }
+    postFile(formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+      .then((res) => {
+        setImgInformation(res);
+        dispatch(loadingAction.loadingRequest(false));
+      })
+      .catch((err) => {
+        errorNotify({
+          message: err?.message,
+        });
+        dispatch(loadingAction.loadingRequest(false));
+      });
+  };
+  // 8. Handle thay đổi ảnh sổ hộ khẩu
+  const onChangeRegistration = async (e) => {
+    dispatch(loadingAction.loadingRequest(true));
+    const fileLength = e.target.files.length;
+    const formData = new FormData();
+    for (var i = 0; i < fileLength; i++) {
+      const image = await resizeFile(e.target.files[i], "png");
+      formData.append("multi-files", image);
+    }
+    postFile(formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+      .then((res) => {
+        // if (imgRegistration.length > 0) {
+        //   const newImg = imgRegistration.concat(res);
+        //   setImgRegistration(newImg);
+        // } else {
+        //   setImgRegistration(res);
+        // }
+        setImgRegistration(res);
+        dispatch(loadingAction.loadingRequest(false));
+      })
+      .catch((err) => {
+        errorNotify({
+          message: err?.message,
+        });
+        dispatch(loadingAction.loadingRequest(false));
+      });
+  };
+  // 9. Handle thay đổi ảnh xác nhận hạnh kiểm
+  const onChangeCertification = async (e) => {
+    dispatch(loadingAction.loadingRequest(true));
+    const fileLength = e.target.files.length;
+    const formData = new FormData();
+    for (var i = 0; i < fileLength; i++) {
+      const image = await resizeFile(e.target.files[i], "png");
+      formData.append("multi-files", image);
+    }
+    postFile(formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+      .then((res) => {
+        // if (imgCertification.length > 0) {
+        //   const newImg = imgCertification.concat(res);
+        //   setImgCertification(newImg);
+        // } else {
+        //   setImgCertification(res);
+        // }
+        setImgCertification(res);
+        dispatch(loadingAction.loadingRequest(false));
+      })
+      .catch((err) => {
+        errorNotify({
+          message: err?.message,
+        });
+        dispatch(loadingAction.loadingRequest(false));
+      });
+  };
+  // ~~~ Update information fucntion ~~~
+  // 1. Cập nhật thông tin cộng tác viên
+  const handleUpdateCollaboratorInfo = useCallback(() => {
+    dispatch(loadingAction.loadingRequest(true));
+    const birthDayFormat = moment(new Date(birthday)).toISOString(); // Format lại dữ liệu ngày sinh nhật (birthday)
+    const indentityDay = moment(new Date(issuedDay)).toISOString(); // Format lại dữ liệu ngày cấp (issuedDay)
+    updateInformationCollaboratorApi(data?._id, {
+      // Tất cả các giá trị distict hay province đều sẽ có dạng {name: ..., code: ...})
+      full_name: name.trim(), // Họ và tên của CTV [✓]
+      gender: gender, // Giới tính của CTV [✓]
+      email: email.trim(), // Email của CTV [✓]
+      phone: phone.trim(), // Điện thoại của CTV [✓] (không được quyền thay đổi)
+      birthday: birthDayFormat, // Ngày sinh của CTV [✓]
+      identity_number: number.trim(), //  CCCD/CMND của CTV [✓]
+      identity_place: issued.trim(), // Nơi cấp của CCCD/CMND của CTV [✓]
+      identity_date: indentityDay, // Ngày cấp của CCCD/CMND czủa CTV [✓]
+      country: selectcountry, // Quốc tịch của CTV [✓]
+      home_town: selectHomeTown?.code, // Quê quán của CTV [✓]
+      province_live: selectProvinceLive?.code, // Tỉnh/Thành phố thường trú của CTV [✓]
+      district_live: selectDistrictLive?.code, // Quận/Huyện thường trú của CTV [✓]
+      address_live: addressResidentLive.trim(), // Số nhà, tên đường thường trú của CTV [✓]
+      province_temp: selectProvinceTemp?.code, // Tỉnh/Thành phố tạm trú của CTV [✓]
+      district_temp: selectDistrictTemp?.code, // Quận/Huyện tạm trú của CTV [✓]
+      address_temp: addressResidentTemp.trim(), // Số nhà, tên đường tạm trú của CTV [✓]
+      folk: ethnic.trim(), // Dân tộc của CTV [✓]
+      religion: religion.trim(), // Tôn giáo của CTV [✓]
+      edu_level: level, // Trình độ học vấn của CTV [✓]
+      service_apply: selectService, // Loại dịch vụ thực hiện của CTV [✓]
+      skills_list: selectSkills, // Loại kỹ năng của CTV [✓]
+      languages_list: selectLanguages, // Loại ngôn ngữ giao tiếp được của CTV [✓]
+      province_work: selectProvinceWork?.code, // Tỉnh/Thành phố làm việc của CTV [✓]
+      district_work: selectDistrictWork, // Quận/Huyện làm việc của CTV [✓] (Trả về theo kiểu array gồm các phần tử là code của tỉnh)
+      codeInvite: codeInvite, // Mã giới thiệu của CTV [✓] (không được quyền thay đổi)
+      contact_persons: contactPersons, // Người liên hệ của CTV [✓]
+      avatar: img, // Ảnh đại diện của CTV [✓]
+      type: type, // Kiểu đối tượng hiện đang chỉnh sửa [✓] (Để nguyên không cần chỉnh sửa)
+      id_inviter: idCollaborator, // [✓] (Không rõ => để nguyên)
+
+      //   // permanent_address: resident, // Địa chỉ thường trú của CTV (dữ liệu cũ)
+      //   // temporary_address: staying, //  Địa chỉ tạm trú của CTV (dữ liệu cũ)
+      //   // district: codeDistrict, // Quận/Huyện làm việc của CTV
+      //   // city: !codeCity ? -1 : codeCity, // Tỉnh/Thành phố làm việc của CTV
+      //   // id_business: idBusiness, // Đối tác (dữ liệu cũ)
+    })
+      .then((res) => {
+        dispatch(loadingAction.loadingRequest(false));
+        setServiceApply([]);
+        successNotify({
+          message: `${i18n.t("update_success_info", { lng: lang })}`,
+        });
+        getCollaboratorsById(idCTV)
+          .then((res) => {
+            setData(res);
+          })
+          .catch((err) => {});
+        dispatch(loadingAction.loadingRequest(false));
+      })
+      .catch((err) => {
+        errorNotify({
+          message: err?.message,
+        });
+        dispatch(loadingAction.loadingRequest(false));
+      });
+  }, [
+    name,
+    gender,
+    email,
+    phone,
+    birthday,
+    number,
+    issued,
+    issuedDay,
+    selectcountry,
+    selectHomeTown,
+    selectProvinceLive,
+    selectDistrictLive,
+    addressResidentLive,
+    selectProvinceTemp,
+    selectDistrictTemp,
+    addressResidentTemp,
+    ethnic,
+    religion,
+    level,
+    selectService,
+    selectSkills,
+    selectLanguages,
+    selectProvinceWork,
+    selectDistrictWork,
+    idCollaborator,
+    codeInvite,
+    contactPersons,
+    img,
+    // name,
+    // resident,
+    // staying,
+    // ethnic,
+    // religion,
+    // level,
+    // number,
+    // issued,
+    // issuedDay,
+    // data,
+    // birthday,
+    // image,
+    // imgUrl,
+    // idCollaborator,
+    type,
+    // idCTV,
+    // serviceApply,
+    // codeDistrict,
+    // codeCity,
+    // idBusiness,
+    dispatch,
+    lang,
+  ]);
+  // 2. Cập nhật thông tin tài liệu cộng tác viên
+  const handleUpdateCollaboratorDocument = useCallback(() => {
+    dispatch(loadingAction.loadingRequest(true));
+    updateDocumentCollaboratorApi(id, {
+      is_document_code: deal,
+      document_code: valueDeal,
+      is_identity: identify,
+      identity_frontside: imgIdentifyFronsite,
+      identity_backside: imgIdentifyBacksite,
+      is_personal_infor: information,
+      personal_infor_image: imgInformation,
+      is_household_book: registration,
+      household_book_image: imgRegistration,
+      is_behaviour: certification,
+      behaviour_image: imgCertification,
+    })
+      .then((res) => {
+        dispatch(loadingAction.loadingRequest(false));
+        successNotify({
+          message: `${i18n.t("update_success_info", { lng: lang })}`,
+        });
+        getCollaboratorsById(id)
+          .then((res) => {
+            setDeal(res?.is_document_code);
+            setSetValueDeal(res?.document_code);
+            setIdentify(res?.is_identity);
+            setImgIdentifyFronsite(res?.identity_frontside);
+            setImgIdentifyBacksite(res?.identity_backside);
+            setInformation(res?.is_personal_infor);
+            setImgInformation(res?.personal_infor_image);
+            setRegistration(res?.is_household_book);
+            setImgRegistration(res?.household_book_image);
+            setCertification(res?.is_behaviour);
+            setImgCertification(res?.behaviour_image);
+          })
+          .catch((e) => console.log(e));
+      })
+      .catch((err) => {
+        errorNotify({
+          message: err?.message,
+        });
+        dispatch(loadingAction.loadingRequest(false));
+      });
+  }, [
+    id,
+    deal,
+    valueDeal,
+    identify,
+    imgIdentifyFronsite,
+    imgIdentifyBacksite,
+    information,
+    imgInformation,
+    registration,
+    imgRegistration,
+    certification,
+    imgCertification,
+    dispatch,
+    lang,
+  ]);
+  // 3. Cập nhật thông tài tài khoản ngân hàng
+  const handleUpdateAccountBankInfo = useCallback(() => {
+    dispatch(loadingAction.loadingRequest(true));
+    editAccountBankCollaborator(id, {
+      account_number: accountNumber,
+      bank_name: selectBankName,
+      account_name: accountName,
+      bank_brand: bankBrand,
+    })
+      .then((res) => {
+        dispatch(loadingAction.loadingRequest(false));
+        successNotify({
+          message: `${i18n.t("update_success_info", { lng: lang })}`,
+        });
+      })
+      .catch((err) => {
+        errorNotify({
+          message: err?.message,
+        });
+        dispatch(loadingAction.loadingRequest(false));
+      });
+  }, [
+    id,
+    accountNumber,
+    bankName,
+    accountName,
+    selectBankName,
+    bankBrand,
+    dispatch,
+  ]);
+
+  // Xóa ảnh
+  const removeItemInfomation = (item) => {
+    const newArray = imgInformation.filter((i) => i !== item);
+
+    return setImgInformation(newArray);
+  };
+
+  const removeItemRegistration = (item) => {
+    const newArray = imgRegistration.filter((i) => i !== item);
+    return setImgRegistration(newArray);
+  };
+
+  const removeItemCertification = (item) => {
+    const newArray = imgCertification.filter((i) => i !== item);
+    return setImgCertification(newArray);
+  };
+  // Tải ảnh
+  const downloadImageIdentify = () => {
+    saveAs(imgIdentifyFronsite, "identifyFronsite.png"); // Put your image url here.
+    saveAs(imgIdentifyBacksite, "identifyBacksite.png"); // Put your image url here.
+  };
+
+  const downloadImageInformation = () => {
+    var zip = new JSZip();
+    var count = 0;
+    var zipFilename = "Infomation.zip";
+    imgInformation.forEach(function (url, i) {
+      var filename = imgInformation[i];
+      filename = filename
+        .replace(/[\/\*\|\:\<\>\?\"\\]/gi, "")
+        .replace("infomation", "");
+      JSZipUtils.getBinaryContent(url, function (err, data) {
+        if (err) {
+          throw err;
+        }
+        zip.file(filename, data, { binary: true });
+        count++;
+        if (count === imgInformation.length) {
+          zip.generateAsync({ type: "blob" }).then(function (content) {
+            saveAs(content, zipFilename);
+          });
+        }
+      });
+    });
+  };
+
+  const downloadImageRegistration = () => {
+    var zip = new JSZip();
+    var count = 0;
+    var zipFilename = "Registration.zip";
+    imgRegistration.forEach(function (url, i) {
+      var filename = imgRegistration[i];
+      filename = filename
+        .replace(/[\/\*\|\:\<\>\?\"\\]/gi, "")
+        .replace("registration", "");
+      JSZipUtils.getBinaryContent(url, function (err, data) {
+        if (err) {
+          throw err;
+        }
+        zip.file(filename, data, { binary: true });
+        count++;
+        if (count === imgRegistration.length) {
+          zip.generateAsync({ type: "blob" }).then(function (content) {
+            saveAs(content, zipFilename);
+          });
+        }
+      });
+    });
+  };
+
+  const downloadImageCertification = () => {
+    var zip = new JSZip();
+    var count = 0;
+    var zipFilename = "Certification.zip";
+    imgCertification.forEach(function (url, i) {
+      var filename = imgCertification[i];
+      filename = filename
+        .replace(/[\/\*\|\:\<\>\?\"\\]/gi, "")
+        .replace("registration", "");
+      JSZipUtils.getBinaryContent(url, function (err, data) {
+        if (err) {
+          throw err;
+        }
+        zip.file(filename, data, { binary: true });
+        count++;
+        if (count === imgCertification.length) {
+          zip.generateAsync({ type: "blob" }).then(function (content) {
+            saveAs(content, zipFilename);
+          });
+        }
+      });
+    });
+  };
+
+  // ↓ code cũ không quan tâm
+  // 3. Lấy giá trị và gán cho các trường thông tin ngân hàng
+  // useEffect(() => {
+  //   dispatch(loadingAction.loadingRequest(true));
+  //   getCollaboratorsById(id)
+  //     .then((res) => {
+  //       setAccountNumber(res?.account_number);
+  //       setBankName(res?.bank_name);
+  //       setAccountName(res?.account_name);
+  //       dispatch(loadingAction.loadingRequest(false));
+  //     })
+  //     .catch((err) => {
+  //       errorNotify({
+  //         message: err?.message,
+  //       });
+  //       dispatch(loadingAction.loadingRequest(false));
+  //     });
+  // }, [id, dispatch]);
   service.map((item) => {
     return serviceOption.push({
       label: item?.title?.[lang],
@@ -178,349 +840,1048 @@ const Information = ({ data, image, idCTV, setData }) => {
     }
     setIdCollaborator("");
   }, 500);
+  // ↑ trở lên là code cũ không cần quan tâm
 
-  const updateInformation = useCallback(() => {
-    dispatch(loadingAction.loadingRequest(true));
-    const day = moment(new Date(birthday)).toISOString();
-    const indentityDay = moment(new Date(issuedDay)).toISOString();
 
-    updateInformationCollaboratorApi(data?._id, {
-      gender: gender,
-      full_name: name,
-      birthday: day,
-      permanent_address: resident,
-      temporary_address: staying,
-      folk: ethnic,
-      religion: religion,
-      edu_level: level,
-      identity_number: number,
-      identity_place: issued,
-      identity_date: indentityDay,
-      avatar: image ? image : imgUrl,
-      id_inviter: idCollaborator,
-      type: type,
-      service_apply: serviceApply,
-      district: codeDistrict,
-      city: !codeCity ? -1 : codeCity,
-      id_business: idBusiness,
-    })
-      .then((res) => {
-        dispatch(loadingAction.loadingRequest(false));
-        setServiceApply([]);
-        successNotify({
-          message: `${i18n.t("update_success_info", { lng: lang })}`,
-        });
-        getCollaboratorsById(idCTV)
-          .then((res) => {
-            setData(res);
-          })
-          .catch((err) => {});
-        dispatch(loadingAction.loadingRequest(false));
-      })
-      .catch((err) => {
-        errorNotify({
-          message: err?.message,
-        });
-        dispatch(loadingAction.loadingRequest(false));
-      });
-  }, [
-    gender,
-    name,
-    resident,
-    staying,
-    ethnic,
-    religion,
-    level,
-    number,
-    issued,
-    issuedDay,
-    data,
-    birthday,
-    image,
-    imgUrl,
-    idCollaborator,
-    type,
-    idCTV,
-    serviceApply,
-    codeDistrict,
-    codeCity,
-    idBusiness,
-    dispatch,
-    lang,
-  ]);
-  console.log("serviceApply ", serviceApply);
+  console.log("selectBankName", selectBankName);
   return (
     <>
-      <Form>
-        <div className="pl-lg-4">
-          <h5>{`${i18n.t("info", { lng: lang })}`}</h5>
-          <Row>
-            <Col lg="6">
-              <InputCustom
-                title={`${i18n.t("full_name", { lng: lang })}`}
-                placeholder={`${i18n.t("placeholder", { lng: lang })}`}
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-            </Col>
-            <Col lg="6" className="gender">
-              <InputCustom
-                title={`${i18n.t("gender", { lng: lang })}`}
-                value={gender}
-                onChange={(e) => setGender(e)}
-                select={true}
-                options={[
-                  {
-                    value: "other",
-                    label: `${i18n.t("other", { lng: lang })}`,
-                  },
-                  {
-                    value: "male",
-                    label: `${i18n.t("male", { lng: lang })}`,
-                  },
-                  {
-                    value: "female",
-                    label: `${i18n.t("female", { lng: lang })}`,
-                  },
-                ]}
-              />
-            </Col>
-          </Row>
-          <Row className="mt-2">
-            <Col lg="6">
-              <div>
-                <p className="label-birthday-info">{`${i18n.t("birthday", {
-                  lng: lang,
-                })}`}</p>
-                <DatePicker
-                  onChange={(date, dateString) => setBirthday(dateString)}
-                  style={{ width: "100%" }}
-                  format={dateFormat}
-                  value={
-                    birthday ? dayjs(birthday.slice(0, 11), dateFormat) : ""
-                  }
+      <div className="pb-4">
+        <div className="flex gap-6">
+          {/* Container 1 */}
+          <div className="flex flex-col w-3/5 gap-6">
+            <div
+              style={{ borderRadius: "6px" }}
+              className="w-full h-fit bg-white card-shadow"
+            >
+              {/* Header */}
+              <div className="flex items-center justify-between gap-2 border-b-2 border-gray-200 p-3.5">
+                <div className="flex items-center gap-1">
+                  <span className="font-medium text-sm">
+                    Thông tin cộng tác viên
+                  </span>
+                </div>
+              </div>
+              {/* Content */}
+              <div style={{ padding: "12px 18px" }} className="flex flex-col">
+                {/* Avatar */}
+                <div className="flex gap-4 items-center justify-center">
+                  <div className="w-full">
+                    <InputTextCustom
+                      type="file"
+                      placeHolder="Ảnh đại diện"
+                      value={img ? img : data?.avatar ? data?.avatar : user}
+                      notShowPreviewImage={true}
+                      onChangeImage={onChangeThumbnail}
+                    />
+                  </div>
+                </div>
+                {/* Họ và tên, giới tính */}
+                <div className="flex gap-4">
+                  <div className="w-full">
+                    <InputTextCustom
+                      type="text"
+                      value={name}
+                      required
+                      placeHolder="Họ và tên"
+                      onChange={(e) => setName(e.target.value)}
+                    />
+                  </div>
+                  <div className="w-full">
+                    <InputTextCustom
+                      type="select"
+                      value={gender}
+                      placeHolder="Giới tính"
+                      setValueSelectedProps={setGender}
+                      options={[
+                        {
+                          value: "other",
+                          label: `${i18n.t("other", { lng: lang })}`,
+                        },
+                        {
+                          value: "male",
+                          label: `${i18n.t("male", { lng: lang })}`,
+                        },
+                        {
+                          value: "female",
+                          label: `${i18n.t("female", { lng: lang })}`,
+                        },
+                      ]}
+                    />
+                  </div>
+                </div>
+                {/* Email */}
+                <div className="flex gap-4">
+                  <div className="w-full">
+                    <InputTextCustom
+                      type="text"
+                      value={email}
+                      placeHolder="Email"
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                  </div>
+                </div>
+                {/* Số điện thoại, ngày sinh */}
+                <div className="flex gap-4">
+                  <div className="w-full">
+                    <InputTextCustom
+                      type="textValue"
+                      disable={true}
+                      value={phone}
+                      required
+                      placeHolder="Số điện thoại"
+                    />
+                  </div>
+
+                  <div className="w-full">
+                    <InputTextCustom
+                      type="date"
+                      value={birthday}
+                      placeHolder="Ngày sinh"
+                      birthday={
+                        birthday ? dayjs(birthday.slice(0, 1), dateFormat) : ""
+                      }
+                      setValueSelectedProps={setBirthday}
+                    />
+                  </div>
+                </div>
+                {/* CCCD/CMND, nơi cấp, ngày cấp */}
+                <div className="flex gap-4">
+                  <div className="w-full">
+                    <InputTextCustom
+                      type="text"
+                      // disable={true}
+                      value={number}
+                      number
+                      placeHolder="CCCD/CMND"
+                      onChange={(e) => setNumber(e.target.value)}
+                    />
+                  </div>
+                  <div className="w-full">
+                    <InputTextCustom
+                      type="text"
+                      // disable={true}
+                      value={issued}
+                      placeHolder="Nơi cấp"
+                      onChange={(e) => setIssued(e.target.value)}
+                    />
+                  </div>
+                  <div className="w-full">
+                    <InputTextCustom
+                      type="date"
+                      value={issuedDay}
+                      placeHolder="Ngày cấp"
+                      birthday={
+                        issuedDay
+                          ? dayjs(issuedDay.slice(0, 11), dateFormat)
+                          : ""
+                      }
+                      setValueSelectedProps={setIssuedDay}
+                    />
+                  </div>
+                </div>
+                {/* Quốc tịch, quê quán */}
+                <div className="flex gap-4">
+                  <div className="w-full">
+                    <InputTextCustom
+                      type="select"
+                      value={selectcountry}
+                      placeHolder="Quốc tịch"
+                      setValueSelectedProps={setSelectCountry}
+                      options={countryList}
+                      previewImage={true}
+                    />
+                  </div>
+                  <div className="w-full">
+                    <InputTextCustom
+                      type="province"
+                      searchField={true}
+                      value={selectHomeTown}
+                      placeHolder="Quê quán"
+                      province={province}
+                      setValueSelectedProps={setSelectHomeTown}
+                      // setValueSelectedPropsSupport={setSelectDistrictLive}
+                      // setValueArrayProps={setDistrictArrayLive}
+                    />
+                  </div>
+                </div>
+                {/* Tỉnh/Thành phố thường trú, Quận/Huyện thường trú*/}
+                <div className="flex gap-4">
+                  <div className="w-1/2">
+                    <InputTextCustom
+                      type="province"
+                      searchField={true}
+                      value={selectProvinceLive}
+                      placeHolder="Tỉnh/Thành phố (thường trú)"
+                      province={province}
+                      setValueSelectedProps={setSelectProvinceLive}
+                      setValueSelectedPropsSupport={setSelectDistrictLive}
+                      setValueArrayProps={setDistrictArrayLive}
+                    />
+                  </div>
+                  <div className="w-1/2">
+                    <InputTextCustom
+                      type="district"
+                      searchField={true}
+                      disable={selectProvinceLive?.code >= 0 ? false : true}
+                      value={selectDistrictLive}
+                      placeHolder="Quận/Huyện (thường trú)"
+                      district={districtArrayLive}
+                      setValueSelectedProps={setSelectDistrictLive}
+                    />
+                  </div>
+                </div>
+                {/* Địa chỉ cụ thể thường trú */}
+                <div className="flex gap-4">
+                  <div className="w-full">
+                    <InputTextCustom
+                      type="text"
+                      disable={selectDistrictLive?.code >= 0 ? false : true}
+                      value={addressResidentLive}
+                      placeHolder="Số nhà, Tên đường (thường trú)"
+                      onChange={(e) => setAddressResidentLive(e.target.value)}
+                    />
+                  </div>
+                </div>
+                {/* Tỉnh/Thành phố tạm trú, Quận/Huyện tạm trú*/}
+                <div className="flex gap-4">
+                  <div className="w-1/2">
+                    <InputTextCustom
+                      type="province"
+                      searchField={true}
+                      value={selectProvinceTemp}
+                      placeHolder="Tỉnh/Thành phố (tạm trú)"
+                      province={province}
+                      setValueSelectedProps={setSelectProvinceTemp}
+                      setValueSelectedPropsSupport={setSelectDistrictTemp}
+                      setValueArrayProps={setDistrictArrayTemp}
+                    />
+                  </div>
+                  <div className="w-1/2">
+                    <InputTextCustom
+                      type="district"
+                      searchField={true}
+                      disable={selectProvinceTemp?.code >= 0 ? false : true}
+                      value={selectDistrictTemp}
+                      placeHolder="Quận/Huyện (tạm trú)"
+                      district={districtArrayTemp}
+                      setValueSelectedProps={setSelectDistrictTemp}
+                    />
+                  </div>
+                </div>
+                {/* Địa chỉ cụ thể tạm trú */}
+                <div className="flex gap-4">
+                  <div className="w-full">
+                    <InputTextCustom
+                      type="text"
+                      disable={selectDistrictTemp?.code >= 0 ? false : true}
+                      value={addressResidentTemp}
+                      placeHolder="Số nhà, Tên đường (tạm trú)"
+                      onChange={(e) => setAddressResidentTemp(e.target.value)}
+                    />
+                  </div>
+                </div>
+                {/* Dân tộc, tôn giáo, trình độ văn hóa */}
+                <div className="flex gap-4">
+                  <div className="w-1/3">
+                    <InputTextCustom
+                      type="text"
+                      value={ethnic}
+                      placeHolder="Dân tộc"
+                      onChange={(e) => setEthnic(e.target.value)}
+                    />
+                  </div>
+                  <div className="w-1/3">
+                    <InputTextCustom
+                      type="text"
+                      value={religion}
+                      placeHolder="Tôn giáo"
+                      onChange={(e) => setReligion(e.target.value)}
+                    />
+                  </div>
+                  <div className="w-1/3">
+                    <InputTextCustom
+                      type="select"
+                      value={level}
+                      placeHolder="Trình độ"
+                      setValueSelectedProps={setLevel}
+                      options={[
+                        { value: "5/12", label: "5/12" },
+                        { value: "9/12", label: "9/12" },
+                        { value: "12/12", label: "12/12" },
+                        {
+                          value: "Cao đẳng",
+                          label: `${i18n.t("college", { lng: lang })}`,
+                        },
+                        {
+                          value: "Đại học",
+                          label: `${i18n.t("university", { lng: lang })}`,
+                        },
+                        {
+                          value: "Thạc sĩ",
+                          label: `${i18n.t("master", { lng: lang })}`,
+                        },
+                        {
+                          value: "Tiến sĩ",
+                          label: `${i18n.t("doctor_philosophy", {
+                            lng: lang,
+                          })}`,
+                        },
+                      ]}
+                    />
+                  </div>
+                </div>
+                {/* Ngoại ngữ, kỹ năng */}
+                <div className="flex gap-4">
+                  <div className="w-full">
+                    <InputTextCustom
+                      type="multiSelect"
+                      value={selectLanguages}
+                      multiSelectOptions={listLanguages}
+                      placeHolder="Ngoại ngữ"
+                      limitShows={2}
+                      setValueSelectedProps={setSelectLanguages}
+                    />
+                  </div>
+                  <div className="w-full">
+                    <InputTextCustom
+                      type="multiSelect"
+                      value={selectSkills}
+                      multiSelectOptions={listSkills}
+                      placeHolder="Kỹ năng"
+                      limitShows={2}
+                      setValueSelectedProps={setSelectSkills}
+                    />
+                  </div>
+                </div>
+                {/* Loại dịch vụ */}
+                <div className="flex gap-4">
+                  <div className="w-full">
+                    <InputTextCustom
+                      type="service"
+                      value={selectService}
+                      multiSelectOptions={service}
+                      placeHolder="Loại dịch vụ"
+                      setValueSelectedProps={setSelectService}
+                    />
+                  </div>
+                </div>
+                {/* Tỉnh/Thành phố làm việc, Quận/Huyện làm việc*/}
+                <div className="flex gap-4">
+                  <div className="w-1/2">
+                    <InputTextCustom
+                      type="province"
+                      searchField={true}
+                      value={selectProvinceWork}
+                      placeHolder="Nơi làm việc (tỉnh/thành phố)"
+                      province={province}
+                      setValueSelectedProps={setSelectProvinceWork}
+                      setValueSelectedPropsSupport={setSelectDistrictWork}
+                      setValueArrayProps={setDistrictArrayWork}
+                      testing
+                    />
+                  </div>
+                  <div className="w-1/2">
+                    <InputTextCustom
+                      type="multiDistrict"
+                      searchField={true}
+                      disable={selectProvinceWork ? false : true}
+                      value={selectDistrictWork}
+                      multiSelectOptions={districtArrayWork}
+                      placeHolder="Nơi làm việc (quận/huyện)"
+                      // district={districtArrayWork}
+                      setValueSelectedProps={setSelectDistrictWork}
+                    />
+                  </div>
+                </div>
+                {/* Mã giới thiệu, đối tác */}
+                <div className="flex gap-4">
+                  <div className="w-full">
+                    <InputTextCustom
+                      type="text"
+                      disable={true}
+                      value={codeInvite}
+                      // multiSelectOptions={service}
+                      placeHolder="Mã giới thiệu"
+                      // setValueSelectedProps={setSelectService}
+                    />
+                  </div>
+                  <div className="w-full">
+                    <InputTextCustom
+                      type="select"
+                      disable={true}
+                      // value={codeInvite}
+                      // multiSelectOptions={service}
+                      placeHolder="Đối tác"
+                      // setValueSelectedProps={setSelectService}
+                    />
+                  </div>
+                </div>
+
+                {/* Tên, số điện thoại, mối quan hệ với CTV*/}
+                {contactPersons?.map((inputField, index) => (
+                  <div className="flex items-center gap-4">
+                    <div className="w-1/3">
+                      <InputTextCustom
+                        type="text"
+                        name="name_relative"
+                        value={inputField.name_relative}
+                        placeHolder={`Người liên hệ ${index + 1}`}
+                        onChange={(e) => handleChangeContact(e, index)}
+                      />
+                    </div>
+                    <div className="w-1/3">
+                      <InputTextCustom
+                        type="text"
+                        name="phone_relative"
+                        value={inputField.phone_relative}
+                        placeHolder={`Số điện thoại`}
+                        onChange={(e) => handleChangeContact(e, index)}
+                      />
+                    </div>
+                    <div className="w-1/3">
+                      <InputTextCustom
+                        type="text"
+                        name="relation_relative"
+                        value={inputField.relation_relative}
+                        placeHolder={`Quan hệ`}
+                        onChange={(e) => handleChangeContact(e, index)}
+                      />
+                    </div>
+                    <div
+                      onClick={() => handleDeleteContact(index)}
+                      style={{ margin: "18px 0px 0px 0px", padding: "2px" }}
+                      className="w-fit bg-red-500 rounded-full hover:bg-red-300 duration-300 cursor-pointer text-white"
+                    >
+                      <IoRemove />
+                    </div>
+                  </div>
+                ))}
+                {/* Thêm người liên hệ */}
+                <div style={{ padding: "4px 0px 0px 4px" }}>
+                  <span
+                    onClick={() => handleAddingContact()}
+                    className={` ${
+                      contactPersons?.length >= 3
+                        ? "text-gray-500/60 cursor-not-allowed"
+                        : "text-violet-500 cursor-pointer"
+                    } duration-300`}
+                  >
+                    Thêm người liên hệ
+                  </span>
+                </div>
+              </div>
+              {/* Cập nhật thông tin cộng tác viên */}
+              <div
+                style={{ padding: "0px 18px 12px 18px" }}
+                className="flex items-center justify-between "
+              >
+                <div className="w-0 h-0"></div>
+                <ButtonCustom
+                  label="Cập nhật"
+                  onClick={handleUpdateCollaboratorInfo}
                 />
               </div>
-            </Col>
-            <Col lg="6">
-              <InputCustom
-                title={`${i18n.t("phone", { lng: lang })}`}
-                type="number"
-                value={phone}
-                disabled={true}
-              />
-            </Col>
-          </Row>
-          <Row className="mt-2">
-            <Col lg="6">
-              <InputCustom
-                title={`${i18n.t("permanent_address", { lng: lang })}`}
-                type="text"
-                value={resident}
-                onChange={(e) => setResident(e.target.value)}
-              />
-            </Col>
-            <Col lg="6">
-              <InputCustom
-                title={`${i18n.t("Đối tác", { lng: lang })}`}
-                value={idBusiness}
-                options={businessOption}
-                select={true}
-                onChange={(e) => setIdBusiness(e)}
-              />
-            </Col>
-          </Row>
-          <Row className="mt-2">
-            <Col lg="6">
-              <InputCustom
-                title={`${i18n.t("temporary_address", { lng: lang })}`}
-                type="text"
-                value={staying}
-                onChange={(e) => setStaying(e.target.value)}
-              />
-            </Col>
-            <Col lg="6">
-              <InputCustom
-                title={`${i18n.t("type_service", { lng: lang })}`}
-                style={{ width: "100%" }}
-                mode="multiple"
-                allowClear
-                value={serviceApply}
-                onChange={(e) => {
-                  setServiceApply(e);
+            </div>
+            <div
+              style={{ borderRadius: "6px" }}
+              className="w-full h-fit bg-white card-shadow"
+            >
+              {/* Header */}
+              <div className="flex items-center justify-between gap-2 border-b-2 border-gray-200 p-3.5">
+                <div className="flex items-center gap-1">
+                  <span className="font-medium text-sm">
+                    Thông tin ngân hàng
+                  </span>
+                </div>
+              </div>
+              {/* Content */}
+              <div
+                style={{ gap: "1px", padding: "12px 18px" }}
+                className="flex flex-col p-3.5"
+              >
+                {/* Số tài khoản, Tên chủ thẻ */}
+                <div className="flex gap-4">
+                  <div className="w-1/2">
+                    <InputTextCustom
+                      type="text"
+                      value={accountName}
+                      placeHolder="Tên chủ thẻ"
+                      onChange={(e) => setAccountName(e.target.value)}
+                    />
+                  </div>
+                  <div className="w-1/2">
+                    <InputTextCustom
+                      type="text"
+                      value={accountNumber}
+                      placeHolder="Số tài khoản"
+                      onChange={(e) => setAccountNumber(e.target.value)}
+                    />
+                  </div>
+                </div>
+                {/* Tên ngân hàng, tên chi nhánh */}
+                <div className="flex gap-4">
+                  <div className="w-full">
+                    <InputTextCustom
+                      type="select"
+                      value={selectBankName}
+                      placeHolder="Tên ngân hàng"
+                      setValueSelectedProps={setSelectBankName}
+                      options={bankList}
+                      previewImage={true}
+                    />
+                  </div>
+                </div>
+                <div className="flex gap-4">
+                  <div className="w-full">
+                    <InputTextCustom
+                      type="text"
+                      value={bankBrand}
+                      placeHolder="Tên chi nhánh"
+                      onChange={(e) => setBankBrand(e.target.value)}
+                    />
+                  </div>
+                </div>
+              </div>
+              {/* Cập nhật tài khoản ngân hàng */}
+              <div
+                style={{ padding: "0px 18px 12px 18px" }}
+                className="flex items-center justify-between "
+              >
+                <div className="w-0 h-0"></div>
+                <ButtonCustom
+                  label="Cập nhật"
+                  onClick={handleUpdateAccountBankInfo}
+                />
+              </div>
+            </div>
+          </div>
+          {/* Container 2 */}
+          <div
+            style={{ borderRadius: "6px" }}
+            className="w-2/5 bg-white card-shadow"
+          >
+            {/* Header */}
+            <div className="flex items-center justify-between gap-2 border-b-2 border-gray-200 p-3.5">
+              <div className="flex items-center gap-1">
+                <span className="font-medium text-sm">Thông tin tài liệu</span>
+              </div>
+            </div>
+            {/* Content */}
+            <div
+              style={{
+                gap: "1px",
+                padding: "12px 4px",
+              }}
+              className="flex flex-col"
+            >
+              {/* Thông tin tổng quan tài liệu */}
+              <div
+                style={{
+                  // gap: "2px",
+                  padding: "0px 0px 12px 0px",
+                  margin: "0px 13px 0px 13px",
                 }}
-                options={serviceOption}
-                select={true}
-              />
-            </Col>
-          </Row>
-          <Row className="mt-2">
-            <Col lg="6">
-              <InputCustom
-                title={`${i18n.t("nation", { lng: lang })}`}
-                type="text"
-                value={ethnic}
-                onChange={(e) => setEthnic(e.target.value)}
-              />
-            </Col>
-            <Col lg="6">
-              <InputCustom
-                title={`${i18n.t("religion", { lng: lang })}`}
-                type="text"
-                value={religion}
-                onChange={(e) => setReligion(e.target.value)}
-              />
-            </Col>
-          </Row>
-          <Row className="mt-2">
-            <Col lg="6">
-              <InputCustom
-                title={`${i18n.t("cultural_level", { lng: lang })}`}
-                style={{ width: "100%" }}
-                value={level}
-                onChange={(e) => setLevel(e)}
-                options={[
-                  { value: "5/12", label: "5/12" },
-                  { value: "9/12", label: "9/12" },
-                  { value: "12/12", label: "12/12" },
-                  {
-                    value: "Cao đẳng",
-                    label: `${i18n.t("college", { lng: lang })}`,
-                  },
-                  {
-                    value: "Đại học",
-                    label: `${i18n.t("university", { lng: lang })}`,
-                  },
-                  {
-                    value: "Thạc sĩ",
-                    label: `${i18n.t("master", { lng: lang })}`,
-                  },
-                  {
-                    value: "Tiến sĩ",
-                    label: `${i18n.t("doctor_philosophy", { lng: lang })}`,
-                  },
-                ]}
-                select={true}
-              />
-            </Col>
-            <Col lg="6">
-              <InputCustom
-                title={`${i18n.t("code_invite", { lng: lang })}`}
-                type="text"
-                value={codeInvite}
-                disabled={true}
-              />
-            </Col>
-          </Row>
-          <Row className="mt-2">
-            <Col lg="6">
-              <InputCustom
-                title={`${i18n.t("Tỉnh/Thành phố làm việc", { lng: lang })}`}
-                value={codeCity}
-                select={true}
-                options={cityOption}
-                style={{ width: "100%" }}
-                onChange={onChangeCity}
-              />
-            </Col>
-            <Col lg="6">
-              <InputCustom
-                title={`${i18n.t("Quận/huyện làm việc", { lng: lang })}`}
-                value={codeDistrict}
-                options={districtsOption}
-                style={{ width: "100%" }}
-                onChange={onChangeDistrict}
-                mode="multiple"
-                allowClear
-                select={true}
-              />
-            </Col>
-          </Row>
-          <hr />
-          <h5>{`${i18n.t("citizen_ID", { lng: lang })}`}</h5>
-          <Row>
-            <Col lg="6">
-              <InputCustom
-                title={`${i18n.t("citizen_ID", { lng: lang })}`}
-                type="number"
-                value={number}
-                min={0}
-                onChange={(e) => onChangeNumberIndentity(e)}
-              />
-            </Col>
-          </Row>
-          <Row>
-            <Col lg="6">
-              <InputCustom
-                title={`${i18n.t("issued_by", { lng: lang })}`}
-                type="text"
-                value={issued}
-                onChange={(e) => setIssued(e.target.value)}
-              />
-            </Col>
-            <Col lg="6">
-              <div>
-                <p className="label-birthday-info">{`${i18n.t("issue_date", {
-                  lng: lang,
-                })}`}</p>
-                <DatePicker
-                  onChange={(date, dateString) => setIssuedDay(dateString)}
-                  style={{ width: "100%" }}
-                  format={dateFormat}
-                  value={
-                    issuedDay ? dayjs(issuedDay.slice(0, 11), dateFormat) : ""
-                  }
+                className="border-b-[2px] border-[#eee]"
+              >
+                <div className="pb-2">
+                  <span className="font-medium text-gray-500/70 text-sm">
+                    Tổng quan
+                  </span>
+                </div>
+                {/* Checkbox */}
+                <div className="flex flex-col gap-2">
+                  {/* Thỏa thuận hợp tác */}
+                  <div
+                    style={{ borderRadius: "6px" }}
+                    onClick={() => setDeal(!deal)}
+                    className={`flex justify-between items-center ${
+                      deal ? "bg-violet-500/80" : "bg-gray-100"
+                    } p-2 cursor-pointer duration-300 ease-out`}
+                  >
+                    <span
+                      className={`${
+                        deal ? "text-white" : "text-gray-500/60"
+                      } font-normal text-sm`}
+                    >
+                      {`${i18n.t("cooperation_agreement", { lng: lang })}`}
+                    </span>
+                    <Checkbox
+                      checked={deal}
+                      onChange={(e) => setDeal(e.target.checked)}
+                      style={{
+                        borderRadius: "6px",
+                      }}
+                    ></Checkbox>
+                  </div>
+                  {/* CCCD/CMND */}
+                  <div
+                    style={{ borderRadius: "6px" }}
+                    onClick={() => setIdentify(!identify)}
+                    className={`flex justify-between items-center ${
+                      identify ? "bg-violet-500/80" : "bg-gray-100"
+                    } p-2 cursor-pointer duration-300 ease-out`}
+                  >
+                    <span
+                      className={`${
+                        identify ? "text-white" : "text-gray-500/60"
+                      } font-normal text-sm`}
+                    >
+                      {`${i18n.t("citizen_ID", { lng: lang })}`}
+                    </span>
+                    <Checkbox
+                      checked={identify}
+                      onChange={(e) => setIdentify(e.target.checked)}
+                      style={{
+                        borderRadius: "6px",
+                      }}
+                    ></Checkbox>
+                  </div>
+                  {/* Sơ yếu lí lịch */}
+                  <div
+                    style={{ borderRadius: "6px" }}
+                    onClick={() => setInformation(!information)}
+                    className={`flex justify-between items-center ${
+                      information ? "bg-violet-500/80" : "bg-gray-100"
+                    } p-2 cursor-pointer duration-300 ease-out`}
+                  >
+                    <span
+                      className={`${
+                        information ? "text-white" : "text-gray-500/60"
+                      } font-normal text-sm`}
+                    >
+                      {`${i18n.t("curriculum_vitae", { lng: lang })}`}
+                    </span>
+                    <Checkbox
+                      checked={information}
+                      onChange={(e) => setInformation(e.target.checked)}
+                      style={{
+                        borderRadius: "6px",
+                      }}
+                    ></Checkbox>
+                  </div>
+                  {/* Sổ hộ khẩu */}
+                  <div
+                    style={{ borderRadius: "6px" }}
+                    onClick={() => setRegistration(!registration)}
+                    className={`flex justify-between items-center ${
+                      registration ? "bg-violet-500/80" : "bg-gray-100"
+                    } p-2 cursor-pointer duration-300 ease-out`}
+                  >
+                    <span
+                      className={`${
+                        registration ? "text-white" : "text-gray-500/60"
+                      } font-normal text-sm`}
+                    >
+                      {`${i18n.t("household_book", { lng: lang })}`}
+                    </span>
+                    <Checkbox
+                      checked={registration}
+                      onChange={(e) => setRegistration(e.target.checked)}
+                      style={{
+                        borderRadius: "6px",
+                      }}
+                    ></Checkbox>
+                  </div>
+                  {/* Giấy xác nhận hạnh kiểm */}
+                  <div
+                    style={{ borderRadius: "6px" }}
+                    onClick={() => setCertification(!certification)}
+                    className={`flex justify-between items-center ${
+                      certification ? "bg-violet-500/80" : "bg-gray-100"
+                    } p-2 cursor-pointer duration-300 ease-out`}
+                  >
+                    <span
+                      className={`${
+                        certification ? "text-white" : "text-gray-500/60"
+                      } font-normal text-sm`}
+                    >
+                      {`${i18n.t("certificate_conduct", { lng: lang })}`}
+                    </span>
+                    <Checkbox
+                      checked={certification}
+                      onChange={(e) => setCertification(e.target.checked)}
+                      style={{
+                        borderRadius: "6px",
+                      }}
+                    ></Checkbox>
+                  </div>
+                </div>
+              </div>
+              {/* Thông tin chi tiết tài liệu */}
+              <div
+                className="document-content"
+                style={{
+                  maxHeight: `${
+                    contactPersons?.length === 3
+                      ? "1270px"
+                      : contactPersons?.length === 2
+                      ? "1220px"
+                      : contactPersons?.length === 1
+                      ? "1170px"
+                      : "1100px"
+                  }`,
+                  // maxHeight: "",
+                  padding: "0px 6px",
+                  scrollbarGutter: "stable both-edges",
+                }}
+              >
+                {/* Mã hồ sơ */}
+                <div className="w-full">
+                  <InputTextCustom
+                    type="text"
+                    placeHolder={`${i18n.t("profile_ID", { lng: lang })}`}
+                    value={valueDeal}
+                    onChange={(e) => setSetValueDeal(e.target.value)}
+                  />
+                </div>
+                {/* CCCD/CMND */}
+                <div className="w-full">
+                  {/* Mặt trước */}
+                  <InputTextCustom
+                    type="file"
+                    placeHolder="CCCD/CMND (mặt trước)"
+                    value={imgIdentifyFronsite}
+                    onChangeImage={onChangeIdentifyBefore}
+                  />
+                  {/* Mặt sau */}
+                  <InputTextCustom
+                    type="file"
+                    placeHolder="CCCD/CMND (mặt sau)"
+                    value={imgIdentifyBacksite}
+                    onChangeImage={onChangeIdentifyAfter}
+                  />
+                </div>
+                {/* Sơ yếu lí lịch */}
+                <div className="w-full">
+                  <InputTextCustom
+                    type="file"
+                    placeHolder="Sơ yếu lí lịch"
+                    multiple
+                    value={imgInformation}
+                    onChangeImage={onChangeInformation}
+                  />
+                </div>
+                {/* Sổ hộ khẩu */}
+                <div className="w-full">
+                  <InputTextCustom
+                    type="file"
+                    placeHolder="Sổ hộ khẩu"
+                    multiple
+                    value={imgRegistration}
+                    onChangeImage={onChangeRegistration}
+                  />
+                </div>
+                {/* Giấy xác nhận hạnh kiểm */}
+                <div className="w-full">
+                  <InputTextCustom
+                    type="file"
+                    placeHolder="Giấy xác nhận hạnh kiểm"
+                    multiple
+                    value={imgCertification}
+                    onChangeImage={onChangeCertification}
+                  />
+                </div>
+              </div>
+              {/* Cập nhật thông tin tài liệu */}
+              <div
+                style={{ padding: "8px 18px 12px 18px" }}
+                className="flex items-center justify-between "
+              >
+                <div className="w-0 h-0"></div>
+                <ButtonCustom
+                  label="Cập nhật"
+                  onClick={handleUpdateCollaboratorDocument}
                 />
               </div>
-            </Col>
-          </Row>
-          <hr />
-          <h5>{`${i18n.t("introduce", { lng: lang })}`}</h5>
-          <Row>
-            <Col lg="12">
-              <div>
+              {/* <div
+                style={{ padding: "14px 14px 0px 0px" }}
+                className="flex items-center justify-between "
+              >
+                <div className="w-0 h-0"></div>
+                <ButtonCustom label="Cập nhật" />
+              </div> */}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Form cũ */}
+      <>
+        <Form>
+          <div className="pl-lg-4">
+            <h5>{`${i18n.t("info", { lng: lang })}`}</h5>
+            <Row>
+              <Col lg="6">
+                <InputCustom
+                  title={`${i18n.t("full_name", { lng: lang })}`}
+                  placeholder={`${i18n.t("placeholder", { lng: lang })}`}
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </Col>
+              <Col lg="6" className="gender">
+                <InputCustom
+                  title={`${i18n.t("gender", { lng: lang })}`}
+                  value={gender}
+                  onChange={(e) => setGender(e)}
+                  select={true}
+                  options={[
+                    {
+                      value: "other",
+                      label: `${i18n.t("other", { lng: lang })}`,
+                    },
+                    {
+                      value: "male",
+                      label: `${i18n.t("male", { lng: lang })}`,
+                    },
+                    {
+                      value: "female",
+                      label: `${i18n.t("female", { lng: lang })}`,
+                    },
+                  ]}
+                />
+              </Col>
+            </Row>
+            <Row className="mt-2">
+              <Col lg="6">
+                <div>
+                  <p className="label-birthday-info">{`${i18n.t("birthday", {
+                    lng: lang,
+                  })}`}</p>
+                  <DatePicker
+                    onChange={(date, dateString) => setBirthday(dateString)}
+                    style={{ width: "100%" }}
+                    format={dateFormat}
+                    value={
+                      birthday ? dayjs(birthday.slice(0, 11), dateFormat) : ""
+                    }
+                  />
+                </div>
+              </Col>
+              <Col lg="6">
+                <InputCustom
+                  title={`${i18n.t("phone", { lng: lang })}`}
+                  type="number"
+                  value={phone}
+                  disabled={true}
+                />
+              </Col>
+            </Row>
+            <Row className="mt-2">
+              <Col lg="6">
+                <InputCustom
+                  title={`${i18n.t("permanent_address", { lng: lang })}`}
+                  type="text"
+                  value={resident}
+                  onChange={(e) => setResident(e.target.value)}
+                />
+              </Col>
+              <Col lg="6">
+                <InputCustom
+                  title={`${i18n.t("Đối tác", { lng: lang })}`}
+                  value={idBusiness}
+                  options={businessOption}
+                  select={true}
+                  onChange={(e) => setIdBusiness(e)}
+                />
+              </Col>
+            </Row>
+            <Row className="mt-2">
+              <Col lg="6">
+                <InputCustom
+                  title={`${i18n.t("temporary_address", { lng: lang })}`}
+                  type="text"
+                  value={staying}
+                  onChange={(e) => setStaying(e.target.value)}
+                />
+              </Col>
+              <Col lg="6">
+                <InputCustom
+                  title={`${i18n.t("type_service", { lng: lang })}`}
+                  style={{ width: "100%" }}
+                  mode="multiple"
+                  allowClear
+                  value={serviceApply}
+                  onChange={(e) => {
+                    setServiceApply(e);
+                  }}
+                  options={serviceOption}
+                  select={true}
+                />
+              </Col>
+            </Row>
+            <Row className="mt-2">
+              <Col lg="6">
+                <InputCustom
+                  title={`${i18n.t("nation", { lng: lang })}`}
+                  type="text"
+                  value={ethnic}
+                  onChange={(e) => setEthnic(e.target.value)}
+                />
+              </Col>
+              <Col lg="6">
+                <InputCustom
+                  title={`${i18n.t("religion", { lng: lang })}`}
+                  type="text"
+                  value={religion}
+                  onChange={(e) => setReligion(e.target.value)}
+                />
+              </Col>
+            </Row>
+            <Row className="mt-2">
+              <Col lg="6">
+                <InputCustom
+                  title={`${i18n.t("cultural_level", { lng: lang })}`}
+                  style={{ width: "100%" }}
+                  value={level}
+                  onChange={(e) => setLevel(e)}
+                  options={[
+                    { value: "5/12", label: "5/12" },
+                    { value: "9/12", label: "9/12" },
+                    { value: "12/12", label: "12/12" },
+                    {
+                      value: "Cao đẳng",
+                      label: `${i18n.t("college", { lng: lang })}`,
+                    },
+                    {
+                      value: "Đại học",
+                      label: `${i18n.t("university", { lng: lang })}`,
+                    },
+                    {
+                      value: "Thạc sĩ",
+                      label: `${i18n.t("master", { lng: lang })}`,
+                    },
+                    {
+                      value: "Tiến sĩ",
+                      label: `${i18n.t("doctor_philosophy", { lng: lang })}`,
+                    },
+                  ]}
+                  select={true}
+                />
+              </Col>
+              <Col lg="6">
                 <InputCustom
                   title={`${i18n.t("code_invite", { lng: lang })}`}
-                  value={nameCollaborator}
-                  disabled={data?.is_verify ? true : false}
-                  className="input-seach-collaborator"
-                  onChange={(e) => {
-                    searchCollaborator(e.target.value);
-                    searchValue(e.target.value);
-                  }}
+                  type="text"
+                  value={codeInvite}
+                  disabled={true}
                 />
+              </Col>
+            </Row>
+            <Row className="mt-2">
+              <Col lg="6">
+                <InputCustom
+                  title={`${i18n.t("Tỉnh/Thành phố làm việc", { lng: lang })}`}
+                  value={codeCity}
+                  select={true}
+                  options={cityOption}
+                  style={{ width: "100%" }}
+                  onChange={onChangeCity}
+                />
+              </Col>
+              <Col lg="6">
+                <InputCustom
+                  title={`${i18n.t("Quận/huyện làm việc", { lng: lang })}`}
+                  value={codeDistrict}
+                  options={districtsOption}
+                  style={{ width: "100%" }}
+                  onChange={onChangeDistrict}
+                  mode="multiple"
+                  allowClear
+                  select={true}
+                />
+              </Col>
+            </Row>
+            <hr />
+            <h5>{`${i18n.t("citizen_ID", { lng: lang })}`}</h5>
+            <Row>
+              <Col lg="6">
+                <InputCustom
+                  title={`${i18n.t("citizen_ID", { lng: lang })}`}
+                  type="number"
+                  value={number}
+                  min={0}
+                  onChange={(e) => onChangeNumberIndentity(e)}
+                />
+              </Col>
+            </Row>
+            <Row>
+              <Col lg="6">
+                <InputCustom
+                  title={`${i18n.t("issued_by", { lng: lang })}`}
+                  type="text"
+                  value={issued}
+                  onChange={(e) => setIssued(e.target.value)}
+                />
+              </Col>
+              <Col lg="6">
+                <div>
+                  <p className="label-birthday-info">{`${i18n.t("issue_date", {
+                    lng: lang,
+                  })}`}</p>
+                  <DatePicker
+                    onChange={(date, dateString) => setIssuedDay(dateString)}
+                    style={{ width: "100%" }}
+                    format={dateFormat}
+                    value={
+                      issuedDay ? dayjs(issuedDay.slice(0, 11), dateFormat) : ""
+                    }
+                  />
+                </div>
+              </Col>
+            </Row>
+            <hr />
+            <h5>{`${i18n.t("introduce", { lng: lang })}`}</h5>
+            <Row>
+              <Col lg="12">
+                <div>
+                  <InputCustom
+                    title={`${i18n.t("code_invite", { lng: lang })}`}
+                    value={nameCollaborator}
+                    disabled={data?.is_verify ? true : false}
+                    className="input-seach-collaborator"
+                    onChange={(e) => {
+                      searchCollaborator(e.target.value);
+                      searchValue(e.target.value);
+                    }}
+                  />
 
-                {dataCollaborator.length > 0 && (
-                  <List type={"unstyled"} className="list-item">
-                    {dataCollaborator?.map((item, index) => {
-                      return (
-                        <div
-                          key={index}
-                          onClick={(e) => {
-                            setIdCollaborator(item?._id);
-                            setCodeInvite(item?.invite_code);
-                            setNameCollaborator(item?.full_name);
-                            setDataCollaborator([]);
-                          }}
-                        >
-                          <p className="text-name">
-                            {item?.full_name} - {item?.phone} - {item?.id_view}{" "}
-                            - {item?.invite_code}
-                          </p>
-                        </div>
-                      );
-                    })}
-                  </List>
-                )}
-              </div>
-            </Col>
-          </Row>
-        </div>
-        <Button className="btn-update mt-3" onClick={updateInformation}>
-          {`${i18n.t("update", { lng: lang })}`}
-        </Button>
-      </Form>
+                  {dataCollaborator.length > 0 && (
+                    <List type={"unstyled"} className="list-item">
+                      {dataCollaborator?.map((item, index) => {
+                        return (
+                          <div
+                            key={index}
+                            onClick={(e) => {
+                              setIdCollaborator(item?._id);
+                              setCodeInvite(item?.invite_code);
+                              setNameCollaborator(item?.full_name);
+                              setDataCollaborator([]);
+                            }}
+                          >
+                            <p className="text-name">
+                              {item?.full_name} - {item?.phone} -{" "}
+                              {item?.id_view} - {item?.invite_code}
+                            </p>
+                          </div>
+                        );
+                      })}
+                    </List>
+                  )}
+                </div>
+              </Col>
+            </Row>
+          </div>
+          <Button
+            className="btn-update mt-3"
+            onClick={handleUpdateCollaboratorInfo}
+          >
+            {`${i18n.t("update", { lng: lang })}`}
+          </Button>
+        </Form>
+      </>
     </>
   );
 };

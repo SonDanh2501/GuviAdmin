@@ -60,7 +60,6 @@ export const OPTIONS_SELECT_STATUS_HANDLE_FEEDBACK = [
     }
 ]
 
-
 export const OPTIONS_SELECT_STATUS_COLLABORATOR = [
     {
         label: "Chưa xử lý",
@@ -155,7 +154,6 @@ export const OPTIONS_SELECT_STATUS_COLLABORATOR_NOT_VERIFY = [
         className: 'status-done',
     },
 ]
-
 
 export const COUNTRY = [
     {

@@ -48,7 +48,7 @@ const DataTable = (props) => {
     setLengthPage,
     emptyText,
   } = props;
-  console.log("check >>> ", data);
+  console.log("check data >>> ", data);
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
   const [saveToCookie] = useCookies();
@@ -319,9 +319,8 @@ const DataTable = (props) => {
                 <p className={`text-phone-customer ${item?.fontSize}`}>
                   {data?.id_customer?.phone || data?.phone}
                 </p>
-                <div className="flex items-center gap-1">
+                {/* <div className="flex items-center gap-1">
                   <span className="font-normal">Hạng:</span>
-                  {/* < 100 đồng, >= 100 and < 300 silver, >= 300 && < 1500 gold, platinum */}
                   <span
                     className={`${
                       data?.rank_point < 100
@@ -343,6 +342,73 @@ const DataTable = (props) => {
                         : "Bạch kim" // Platium
                     }
                   </span>
+                </div> */}
+              </div>
+            );
+            break;
+          case "customer_name_phone_rank":
+            return (
+              <div className="div-customer-name-phone">
+                <Link
+                  to={`/profile-customer/${
+                    data?.id_customer?._id ? data?.id_customer?._id : data?._id
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
+                    <p className={`text-name-customer ${item?.fontSize}`}>
+                      {data?.id_customer?.full_name || data?.full_name}
+                    </p>
+                  </div>
+                </Link>
+                <p className={`text-phone-customer ${item?.fontSize}`}>
+                  {data?.id_customer?.phone || data?.phone}
+                </p>
+                <div className="flex items-center gap-1">
+                  <span className="font-normal">Hạng:</span>
+                  {/* Trường hợp có id_customer */}
+                  {data?.id_customer?.rank === "member" ? (
+                    <span className="bg-orange-100 text-orange-500 border-orange-500 px-1 py-[1px] border-[1px] rounded-lg">
+                      Đồng
+                    </span>
+                  ) : data?.id_customer?.rank === "silver" ? (
+                    <span className="bg-stone-100 text-stone-500 border-stone-500 px-1 py-[1px] border-[1px] rounded-lg">
+                      Bạc
+                    </span>
+                  ) : data?.id_customer?.rank === "gold" ? (
+                    <span className="bg-yellow-100 text-amber-500 border-yellow-500 px-1 py-[1px] border-[1px] rounded-lg">
+                      Vàng
+                    </span>
+                  ) : data?.id_customer?.rank === "platinum" ? (
+                    <span className="bg-cyan-100 text-sky-500 border-cyan-500 px-1 py-[1px] border-[1px] rounded-lg">
+                      Bạch kim
+                    </span>
+                  ) : (
+                    ""
+                  )}
+                  {/* Trường hợp không có id_cusomter */}
+                  {data.rank ? (
+                    data?.rank === "member" ? (
+                      <span className="bg-orange-100 text-orange-500 border-orange-500 px-1 py-[1px] border-[1px] rounded-lg">
+                        Đồng
+                      </span>
+                    ) : data?.rank === "silver" ? (
+                      <span className="bg-stone-100 text-stone-500 border-stone-500 px-1 py-[1px] border-[1px] rounded-lg">
+                        Bạc
+                      </span>
+                    ) : data?.rank === "gold" ? (
+                      <span className="bg-yellow-100 text-amber-500 border-yellow-500 px-1 py-[1px] border-[1px] rounded-lg">
+                        Vàng
+                      </span>
+                    ) : data?.rank === "platinum" ? (
+                      <span className="bg-cyan-100 text-sky-500 border-cyan-500 px-1 py-[1px] border-[1px] rounded-lg">
+                        Bạch kim
+                      </span>
+                    ) : (
+                      ""
+                    )
+                  ) : (
+                    ""
+                  )}
                 </div>
               </div>
             );
