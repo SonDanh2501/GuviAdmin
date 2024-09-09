@@ -30,8 +30,8 @@ import {
   IoLanguage,
 } from "react-icons/io5";
 
-import logoVN from "../../assets/images/vn.svg";
-import logoUS from "../../assets/images/en.svg";
+import logoVN from "../../assets/images/flag_vietnam.svg";
+import logoUS from "../../assets/images/flag_american.svg";
 import Sidebar from "../../layout/Slidebar";
 const { Option } = Select;
 
@@ -93,7 +93,7 @@ const Header = ({ onClick, hide }) => {
   return (
     <div className="div-container-header">
       <div className="menu-icon" onClick={onClick}>
-        <IoMenu size={"1.5rem"} />
+        <IoMenu size={"18px"} />
       </div>
       <div className="nav-header">
         <Popover
@@ -123,7 +123,7 @@ const Header = ({ onClick, hide }) => {
             }}
             className="div-noti"
           >
-            <IoLanguage size={"1.5rem"} />
+            <IoLanguage size={"18px"} />
           </div>
         </Popover>
         {/*Darkmode, lightmode*/}
@@ -157,7 +157,7 @@ const Header = ({ onClick, hide }) => {
             className="div-noti"
             onClick={() => setStatus(!status)}
           >
-            <IoNotifications size={"1.5rem"} />
+            <IoNotifications size={"18px"} />
           </div>
         </Tooltip>
         {/* {status && (
@@ -204,7 +204,7 @@ const Header = ({ onClick, hide }) => {
             onClick={(e) => e.preventDefault()}
           >
             {/* <img style={{ height: "26px" }} src={defaultAvatar}></img> */}
-            <IoPersonCircle size="1.6rem" color="#475569" />
+            <IoPersonCircle size="18px" color="#475569" />
             <a className="text-name">{user?.full_name}</a>
             <CaretDownOutlined className="icon-down" />
           </span>

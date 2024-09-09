@@ -148,7 +148,7 @@
     width: 140px;
 
     p {
-      font-size: $textFontSizeL;
+      font-size: $textFontSizeM;
     }
   }
 }
@@ -265,7 +265,7 @@
 
   /* ~~~ Css của một item ~~~ */
   .ant-menu-item {
-    margin-bottom: 8px !important;
+    // margin-bottom: 4px !important;
     // color: #909FAB;
     // height: fit-content !important;
     // padding-top: 14px !important;
@@ -276,7 +276,8 @@
       font-family: $fontFamily;
       font-style: $fontStyleNormal;
       font-weight: $fontWeightXL;
-      font-size: $textFontSizeL;
+      font-size: $textFontSizeM;
+      // font-size: 20px;
     }
 
     // Icon
@@ -296,7 +297,7 @@
       font-family: $fontFamily;
       font-style: $fontStyleNormal;
       font-weight: $fontWeightXL;
-      font-size: $textFontSizeL;
+      font-size: $textFontSizeM;
     }
 
     // Icon
@@ -307,7 +308,7 @@
 
   /* ~~~ Css của item là submenu ~~~ */
   .ant-menu-submenu {
-    margin-bottom: 8px !important;
+    // margin-bottom: 4px !important;
 
     // Label và cả icon
     .ant-menu-submenu-title {
@@ -321,7 +322,7 @@
         font-family: $fontFamily;
         font-style: $fontStyleNormal;
         font-weight: $fontWeightXL;
-        font-size: $textFontSizeL;
+        font-size: $textFontSizeM;
       }
 
       // icon
@@ -349,7 +350,7 @@
         font-family: $fontFamily;
         font-style: $fontStyleNormal;
         font-weight: $fontWeightXL;
-        font-size: $textFontSizeL;
+        font-size: $textFontSizeM;
       }
 
       // icon
@@ -382,7 +383,7 @@
       font-family: $fontFamily;
       font-style: $fontStyleNormal;
       font-weight: $fontWeightXL;
-      font-size: $textFontSizeL;
+      font-size: $textFontSizeM;
     }
 
     // Icon
@@ -462,7 +463,7 @@
 
 // Ant Design Tab
 .ant-tabs-tab {
-  font-size: $textFontSizeL !important;
+  font-size: $textFontSizeM !important;
   // border-bottom: 2px solid black !important;
   font-weight: 500 !important;
   color: #8AA3CD !important;

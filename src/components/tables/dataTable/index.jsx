@@ -48,7 +48,6 @@ const DataTable = (props) => {
     setLengthPage,
     emptyText,
   } = props;
-  console.log("check data >>> ", data);
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
   const [saveToCookie] = useCookies();
@@ -451,7 +450,13 @@ const DataTable = (props) => {
             );
             break;
           case "service_customer":
-            return <p>{data?.service_title}</p>;
+            return (
+              <p>
+                {data?.service_title
+                  ? data?.service_title
+                  : data?.service?._id?.title?.vi}
+              </p>
+            );
             break;
           case "date_work":
             return (
@@ -1700,7 +1705,7 @@ const DataTable = (props) => {
   const handleSelectScrollY = (e) => {
     let myObj_serialized;
     if (e === 0) {
-      myObj_serialized = JSON.stringify([]);
+      myObj_serialized = JSON.stringify({ y: "" });
       setScrollYValue(0);
     } else if (e === 1) {
       myObj_serialized = JSON.stringify({ y: 700 });

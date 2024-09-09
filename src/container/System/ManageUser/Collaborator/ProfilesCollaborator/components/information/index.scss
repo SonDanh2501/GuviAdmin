@@ -1,3 +1,116 @@
+@import "../../../../../../../../src/@theme/style.scss";
+
+.div-collaborator-information {
+  display: flex;
+  padding-bottom: 16px;
+  gap: $gapL;
+
+  // .header-label-card {
+  //   font-weight: $fontWeightL;
+  //   font-size: $textFontSizeM;
+  //   font-family: $fontFamily;
+  // }
+
+  .div-left-collaborator-information {
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+    gap: $gapL;
+
+    .div-left-collaborator-information-card {
+      width: 100%;
+      height: fit-content;
+      background-color: white;
+      border-radius: $borderRadiusM;
+
+      .div-left-collaborator-information-card-header {
+        display: flex;
+        padding: 10px 14px;
+        border-bottom: 2px solid $colorLightGray;
+        span {
+          font-weight: $fontWeightXL;
+        }
+      }
+
+      .div-left-collaborator-information-card-content {
+        padding: 2px 12px;
+      }
+    }
+  }
+
+  .div-right-collaborator-information {
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    gap: 24px;
+
+    .div-right-collaborator-information-card {
+      width: 100%;
+      height: fit-content;
+      background-color: white;
+      border-radius: $borderRadiusM;
+
+      .div-right-collaborator-information-card-header {
+        display: flex;
+        padding: 10px 14px;
+        border-bottom: 2px solid $colorLightGray;
+        span {
+          font-weight: $fontWeightXL;
+        }
+      }
+
+      .div-right-collaborator-information-card-content {
+        padding: 2px 12px;
+
+        .div-overview-content {
+          border-bottom: 2px solid $colorLightGray;
+          padding-bottom: 12px;
+
+          .overview-content-label {
+            padding: 4px 0px;
+
+            span {
+              color: $colorGray
+            }
+          }
+
+          .overview-content-checklist {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+
+            .overview-content-checklist-checkbox {
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              padding: 6px 12px;
+              background-color: $colorLightGray;
+              border-radius: $borderRadiusS;
+              transition: 0.3s ease-in;
+              cursor: not-allowed;
+
+              &.unchecked {
+                color: white;
+                background-color: $colorViolet;
+              }
+            }
+          }
+        }
+
+      }
+    }
+  }
+}
+
+.div-input-filed {
+  display: flex;
+  gap: $gapL;
+
+  .div-input-filed-child {
+    width: 100%;
+  }
+}
+
 .btn-update {
   width: auto;
   float: right;
@@ -54,33 +167,18 @@
   width: 100%;
 }
 
-
-
-// .document-content::-webkit-scrollbar {
-//   display: none
-// }
-
 .document-content {
-  // padding: 0;
-  // transition-duration: 1s; 
-   overflow: hidden;
-
+  overflow: hidden;
 }
 
 .document-content:hover,
 .document-content:active,
 .document-content:focus {
-  // scrollbar-gutter: stable;
   overflow-y: auto;
-  // padding: 0 5px 0 0px;
-  // transition-duration: 0.3s;
 }
-
 
 .document-content::-webkit-scrollbar {
   width: 0.6em;
-  // margin: 10px 10px;
-
 }
 
 .document-content::-webkit-scrollbar-track {
@@ -98,44 +196,3 @@
 .document-content::-webkit-scrollbar-thumb:hover {
   background-color: #7e53b2;
 }
-
-// .mockup-font p:first-child {
-//   font-size: 1.5em;
-//   font-weight: 700;
-// }
-
-// .mockup-font p:not(:first-child) {
-//   font-family: 'Flow Block', sans-serif;
-// }
-
-// .mockup-font p:not(:first-child):nth-child(2n) {
-//   color: hsl(250 40% 75%);
-// }
-
-// .mockup-font p:not(:first-child):nth-child(2n+1) {
-//   color: hsl(280 40% 75%);
-// }
-
-// custom scrollbar
-// .document-content::-webkit-scrollbar {
-//   width: 5px;
-//   height: 12px;
-//   visibility: hidden;
-//   overflow: hidden;
-//   overflow-y: hidden;
-
-//   // border-radius: 8px;
-// }
-// // .document-content:active::-webkit-scrollbar-thumb {
-// //   visibility: visible;
-// // }
-
-// .document-content::-webkit-scrollbar-track {
-// background-color:#ebe0f8;
-// }
-
-// .document-content::-webkit-scrollbar-thumb {
-// border-radius: 8px;
-// // border: 3px solid #ebe0f8;
-// background-color: #9e68df;
-// }

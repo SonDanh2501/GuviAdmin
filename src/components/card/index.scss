@@ -1,0 +1,158 @@
+@import "../../../src/@theme/style.scss";
+
+
+.div-card-container {
+    background-color: white;
+    border-radius: $borderRadiusM;
+
+    .div-icon {
+        padding: 8px;
+        width: 36px;
+        height: 36px;
+        border-radius: $borderRadiusL;
+    }
+
+    .div-header {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 14px;
+        border-bottom: 2px solid $colorLightGray;
+
+        .div-header-right-info {
+            display: flex;
+            align-items: center;
+            gap: $gapXS;
+
+        }
+
+        .div-header-left-info {
+            .time-filter {
+                display: flex;
+                align-items: center;
+                gap: $gapXS;
+            }
+        }
+
+        span {
+            font-weight: $fontWeightXL;
+            font-size: $textFontSizeM;
+            font-family: $fontFamily;
+        }
+    }
+
+    .div-card-overview {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 12px 12px;
+        gap: $gapS;
+
+        .div-star {
+            display: flex;
+            border-radius: $borderRadiusXL;
+            padding: 8px 16px;
+            align-items: center;
+            justify-content: center;
+            background-color: $bgStarCard;
+            gap: $gapXS;
+
+            .overview-star {
+                padding-top: 3px;
+                margin-left: 3px;
+                font-weight: $fontWeightXL;
+                font-size: $textFontSizeL;
+                font-family: $fontFamily;
+            }
+        }
+
+        .div-total-rating {
+            display: flex;
+            align-items: center;
+            gap: $gapXS;
+
+            .text-highlight {
+                font-weight: $fontWeightXL;
+            }
+
+            span {
+                font-style: italic;
+            }
+        }
+
+        .div-rating-kind {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: $gapM;
+
+            .star-label {
+                display: flex;
+                gap: $gapXS;
+                align-items: center;
+
+                .circle-star {
+                    width: 12px;
+                    height: 12px;
+                    border-radius: $borderRadiusFull;
+                    // background-color: black;
+                }
+            }
+        }
+
+    }
+
+    .div-card-bonus-punish {
+        display: flex;
+        flex-direction: column;
+        padding: 12px 12px;
+        gap: $gapL;
+
+        .div-total {
+            display: flex;
+            flex-direction: row;
+            gap: $gapM;
+
+            .div-total-bonus {
+                width: 50%;
+                display: flex;
+                align-items: center;
+                padding: 10px;
+                border: 2px solid #e5e7eb;
+                border-radius: $borderRadiusM;
+                gap: $gapM;
+
+                .div-total-bonus-number {
+                    display: flex;
+                    flex-direction: column;
+
+                    .total-label {
+                        font-weight: $fontWeightL;
+                        font-size: $textFontSizeM;
+                        font-family: $fontFamily;
+                        color: $colorGray;
+                    }
+
+                    .total-number {
+                        font-weight: $fontWeightXL;
+                        font-size: $textFontSizeXL;
+
+                        .total-number-sub {
+                            font-weight: $textFontSizeM;
+                            font-size: $textFontSizeM;
+                            text-transform: uppercase;
+                        }
+                    }
+
+                }
+            }
+        }
+        .div-bonus-recent {
+
+        }
+        .div-punish-recent {
+
+        }
+    }
+
+}

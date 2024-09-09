@@ -144,7 +144,6 @@ const ReviewCollaborator = () => {
       fontSize: "text-size-M",
     },
     {
-      // title: "Mã Đơn Hàng",
       customTitle: (
         <CustomHeaderDatatable
           title="Mã đơn hàng"
@@ -153,12 +152,10 @@ const ReviewCollaborator = () => {
       ),
       dataIndex: "id_view",
       key: "code_order_name_service",
-      width: 140,
+      width: 145,
       fontSize: "text-size-M",
     },
     {
-      // i18n_title: 'date_create',
-      // title: "Thời Gian",
       customTitle: (
         <CustomHeaderDatatable
           title="Thời Gian"
@@ -167,12 +164,10 @@ const ReviewCollaborator = () => {
       ),
       dataIndex: "date_create_review",
       key: "date_time",
-      width: 110,
+      width: 120,
       fontSize: "text-size-M",
     },
     {
-      // i18n_title: "customer",
-      // title: "Khách Hàng",
       customTitle: (
         <CustomHeaderDatatable
           title="Khách Hàng"
@@ -180,13 +175,11 @@ const ReviewCollaborator = () => {
         />
       ),
       dataIndex: "id_customer",
-      key: "customer_full_name",
+      key: "customer-name-phone",
       width: 140,
       fontSize: "text-size-M",
     },
     {
-      // i18n_title: "service",
-      // title: "Dịch vụ",\
       customTitle: (
         <CustomHeaderDatatable
           title="Dịch Vụ"
@@ -199,7 +192,6 @@ const ReviewCollaborator = () => {
       fontSize: "text-size-M",
     },
     {
-      // title: "Số Sao",
       customTitle: (
         <CustomHeaderDatatable
           title="Số Sao"
@@ -208,38 +200,31 @@ const ReviewCollaborator = () => {
       ),
       dataIndex: "service_title",
       key: "id_view_name_service",
-      width: 130,
-      // maxLength: 35,
+      width: 125,
       fontSize: "text-size-M",
     },
     {
-      // i18n_title: 'customer',
       title: "Cộng tác viên",
       dataIndex: "id_collaborator",
       key: "collaborator_no_star",
-      width: 190,
+      width: 145,
       fontSize: "text-size-M",
     },
     {
-      // i18n_title: "status",
       customTitle: (
         <CustomHeaderDatatable
           title="Trạng Thái"
           textToolTip="Trạng thái của đánh giá được duyệt bởi nhân viên chăm sóc khách hàng"
         />
       ),
-      // title: "Trạng Thái",
       dataIndex: "status_handle_review",
       key: "status_handle_review",
       selectOptions: OPTIONS_SELECT_STATUS_HANDLE_REVIEW,
-      width: 140,
+      width: 150,
       fontSize: "text-size-M",
     },
 
     {
-      // i18n_title: 'address',
-
-      // title: "Đánh Giá",
       customTitle: (
         <CustomHeaderDatatable
           title="Đánh Giá"
@@ -248,12 +233,10 @@ const ReviewCollaborator = () => {
       ),
       dataIndex: "short_review",
       key: "text",
-      width: 200,
-      // maxLength: 90,
+      width: 190,
       fontSize: "text-size-M",
     },
     {
-      // title: "Chi Tiết",
       customTitle: (
         <CustomHeaderDatatable
           title="Chi Tiết"
@@ -262,8 +245,7 @@ const ReviewCollaborator = () => {
       ),
       dataIndex: "review",
       key: "text",
-      width: 200,
-      // maxLength: 90,
+      width: 190,
       fontSize: "text-size-M",
     },
 
@@ -379,8 +361,8 @@ const ReviewCollaborator = () => {
     },
     [startPage, lengthPage, startDate, endDate, star]
   );
-  //
-  //
+
+  console.log("check data >>>", data, data?.service?._id?.title?.vi);
   return (
     <>
       <div className="div-container-content">

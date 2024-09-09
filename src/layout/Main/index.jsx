@@ -168,7 +168,7 @@ const Main = ({ hide }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleClickSideBar = () => {
-    if (width > 900 ) {
+    if (width > 1280 ) {
       setCollapsed(!collapsed)
     }
     else {
@@ -182,7 +182,7 @@ const Main = ({ hide }) => {
   }, [dispatch, navigate]);
   useEffect(() => {
     // Auto close sidebar
-    if (width > 900) {
+    if (width > 1280) {
       setCollapsed(false);
     } else {
       setCollapsed(true);
@@ -194,18 +194,18 @@ const Main = ({ hide }) => {
         components: {
           Layout: {
             bodyBg: "#EEF0F8",
-            headerHeight: 70,
+            headerHeight: 55,
           },
         },
       }}
     >
       <Layout hasSider style={{ overflowX: "hidden" }}>
-        {width > 900 ? (
+        {width > 1280 ? (
           <Sider
             trigger={null}
             collapsible
             collapsed={collapsed}
-            width={210}
+            width={200}
             // breakpoint="sm"
             collapsedWidth={80}
             style={{
@@ -215,7 +215,7 @@ const Main = ({ hide }) => {
               left: 0,
               top: 0,
               bottom: 0,
-              borderRight: "1.5px solid #E2E9F1",
+              borderRight: "2px solid #E2E9F1",
               // boxShadow: "0 3px 4px rgba(57, 63, 72, 0.3)",
             }}
           >
@@ -225,7 +225,7 @@ const Main = ({ hide }) => {
         ) : (
           <Drawer
             open={isOpenDrawler}
-            width={250}
+            width={260}
             onClose={() => setIsOpenDrawler(false)}
             placement="left"
             headerStyle={{
@@ -241,7 +241,7 @@ const Main = ({ hide }) => {
         )}
         <Layout
           style={{
-            marginLeft: width > 900 ? (collapsed ? 80 : 210) : 0,
+            marginLeft: width > 1280 ? (collapsed ? 80 : 200) : 0,
             transitionDuration: "100ms",
             height: "100vh",
           }}
@@ -250,10 +250,7 @@ const Main = ({ hide }) => {
             style={{
               padding: 0,
               background: "#FCFEFF",
-              // borderBottom: "2px solid #ececec",
-              // borderBottom: "2px solid silver",
-              borderBottom: "1.5px solid #E2E9F1",
-              // boxShadow: "0 3px 10px rgba(57, 63, 72, 0.3)",
+              borderBottom: "2px solid #E2E9F1",
             }}
           >
             {/*Component for header*/}

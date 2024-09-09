@@ -13,8 +13,17 @@ import TP_BANK from "../assets/images/bank_tp.svg";
 import VIB_BANK from "../assets/images/bank_vib.svg";
 import SHB_BANK from "../assets/images/bank_shb.svg";
 // Flag list
-import VN_FLAG from "../assets/images/flag_vn.svg";
-import US_FLAG from "../assets/images/flag_us.svg";
+import CHINA_FLAG from "../assets/images/flag_china.svg";
+import VIETNAM_FLAG from "../assets/images/flag_vietnam.svg";
+import AMERICAN_FLAG from "../assets/images/flag_american.svg";
+import BRUNEI_FLAG from "../assets/images/flag_brunei.svg";
+import INDONESIA_FLAG from "../assets/images/flag_indonesia.svg";
+import LAOS_FLAG from "../assets/images/flag_laos.svg";
+import MALAYSIA_FLAG from "../assets/images/flag_malaysia.svg";
+import PHILIPPINES_FLAG from "../assets/images/flag_philippines.svg";
+import SINGAPO_FLAG from "../assets/images/flag_singapo.svg";
+import THAILAND_FLAG from "../assets/images/flag_thailand.svg";
+import TIMOR_FLAG from "../assets/images/flag_timor.svg";
 
 const { IoStar, IoStarHalf, IoStarOutline } = icons;
 
@@ -107,7 +116,7 @@ export const path = {
 // Danh sách ngân hàng
 export const bankList = [
   {
-    value: "vietcom_bank",
+    code: "vietcom_bank",
     label: (
       <div style={{ gap: "12px" }} className="flex items-center">
         {/* <IoStar /> */}
@@ -116,10 +125,10 @@ export const bankList = [
       </div>
     ),
     image: VIETCOM_BANK,
-    name: "Ngân hàng Thương mại cổ phần Ngoại thương Việt Nam",
+    name: "Ngân hàng Thương mại cổ phần Ngoại thương Việt Nam (VCB)",
   },
   {
-    value: "mb_bank",
+    code: "mb_bank",
     label: (
       <div style={{ gap: "12px" }} className="flex items-center">
         {/* <IoStar /> */}
@@ -128,10 +137,10 @@ export const bankList = [
       </div>
     ),
     image: MB_BANK,
-    name: "Ngân hàng Quân đội",
+    name: "Ngân hàng Quân đội (MBB)",
   },
   {
-    value: "vietin_bank",
+    code: "vietin_bank",
     label: (
       <div style={{ gap: "12px" }} className="flex items-center">
         {/* <IoStar /> */}
@@ -140,10 +149,10 @@ export const bankList = [
       </div>
     ),
     image: VIETIN_BANK,
-    name: "Ngân hàng Thương mại cổ phần Công Thương Việt Nam",
+    name: "Ngân hàng Thương mại cổ phần Công Thương Việt Nam (VTB)",
   },
   {
-    value: "techcom_bank",
+    code: "techcom_bank",
     label: (
       <div style={{ gap: "12px" }} className="flex items-center">
         {/* <IoStar /> */}
@@ -152,10 +161,10 @@ export const bankList = [
       </div>
     ),
     image: TECHCOM_BANK,
-    name: "Ngân hàng Thương mại cổ phần Kỹ Thương Việt Nam",
+    name: "Ngân hàng Thương mại cổ phần Kỹ Thương Việt Nam (TCB)",
   },
   {
-    value: "agri_bank",
+    code: "agri_bank",
     label: (
       <div style={{ gap: "12px" }} className="flex items-center">
         {/* <IoStar /> */}
@@ -164,10 +173,10 @@ export const bankList = [
       </div>
     ),
     image: ARGI_BANK,
-    name: "Ngân hàng Nông nghiệp và Phát triển Nông thôn Việt Nam",
+    name: "Ngân hàng Nông nghiệp và Phát triển Nông thôn Việt Nam (AGRI)",
   },
   {
-    value: "bidv_bank",
+    code: "bidv_bank",
     label: (
       <div style={{ gap: "12px" }} className="flex items-center">
         {/* <IoStar /> */}
@@ -176,10 +185,10 @@ export const bankList = [
       </div>
     ),
     image: BIDV_BANK,
-    name: "Ngân hàng Thương mại cổ phần Đầu tư và Phát triển Việt Nam",
+    name: "Ngân hàng Thương mại cổ phần Đầu tư và Phát triển Việt Nam (BIDV)",
   },
   {
-    value: "sacom_bank",
+    code: "sacom_bank",
     label: (
       <div style={{ gap: "12px" }} className="flex items-center">
         {/* <IoStar /> */}
@@ -188,10 +197,10 @@ export const bankList = [
       </div>
     ),
     image: SACOM_BANK,
-    name: "Ngân hàng Thương mại cổ phần Sài Gòn Thương Tín",
+    name: "Ngân hàng Thương mại cổ phần Sài Gòn Thương Tín (SACOMBANK)",
   },
   {
-    value: "acb_bank",
+    code: "acb_bank",
     label: (
       <div style={{ gap: "12px" }} className="flex items-center">
         {/* <IoStar /> */}
@@ -200,10 +209,10 @@ export const bankList = [
       </div>
     ),
     image: ACB_BANK,
-    name: "Ngân hàng Thương mại cổ phần Á Châu",
+    name: "Ngân hàng Thương mại cổ phần Á Châu (ACB)",
   },
   {
-    value: "vp_bank",
+    code: "vp_bank",
     label: (
       <div style={{ gap: "12px" }} className="flex items-center">
         {/* <IoStar /> */}
@@ -212,10 +221,10 @@ export const bankList = [
       </div>
     ),
     image: VP_BANK,
-    name: "Ngân hàng Thương mại cổ phần Việt Nam Thịnh Vượng",
+    name: "Ngân hàng Thương mại cổ phần Việt Nam Thịnh Vượng (VPB)",
   },
   {
-    value: "tp_bank",
+    code: "tp_bank",
     label: (
       <div style={{ gap: "12px" }} className="flex items-center">
         {/* <IoStar /> */}
@@ -224,10 +233,10 @@ export const bankList = [
       </div>
     ),
     image: TP_BANK,
-    name: "Ngân hàng Thương mại cổ phần Tiên Phong",
+    name: "Ngân hàng Thương mại cổ phần Tiên Phong (TPB)",
   },
   {
-    value: "vib_bank",
+    code: "vib_bank",
     label: (
       <div style={{ gap: "12px" }} className="flex items-center">
         {/* <IoStar /> */}
@@ -236,10 +245,10 @@ export const bankList = [
       </div>
     ),
     image: VIB_BANK,
-    name: "Ngân hàng Thương mại cổ phần Quốc tế Việt Nam",
+    name: "Ngân hàng Thương mại cổ phần Quốc tế Việt Nam (VIB)",
   },
   {
-    value: "shb_bank",
+    code: "shb_bank",
     label: (
       <div style={{ gap: "12px" }} className="flex items-center">
         {/* <IoStar /> */}
@@ -248,57 +257,196 @@ export const bankList = [
       </div>
     ),
     image: SHB_BANK,
-    name: "Ngân hàng Thương mại cổ phần Sài Gòn-Hà Nội",
+    name: "Ngân hàng Thương mại cổ phần Sài Gòn-Hà Nội (SHB)",
   },
 ];
 
 // Danh sách các nước
 export const countryList = [
   {
-    value: "vn",
+    code: "vietnam",
     label: (
       <div style={{ gap: "12px" }} className="flex items-center">
         <div>
-          <img className="w-full h-6" src={VN_FLAG}></img>
+          <img className="w-full h-7" src={VIETNAM_FLAG}></img>
         </div>
         <div>
           <span className="text-sm font-normal">Việt Nam</span>
         </div>
       </div>
     ),
-    image: VN_FLAG,
+    image: VIETNAM_FLAG,
     name: "Việt Nam",
   },
   {
-    value: "us",
+    code: "american",
     label: (
       <div style={{ gap: "12px" }} className="flex items-center">
         <div>
-          <img className="w-full h-6" src={US_FLAG}></img>
+          <img className="w-full h-7" src={AMERICAN_FLAG}></img>
         </div>
         <div>
-          <span className="text-sm font-normal">Mỹ</span>
+          <span className="text-sm font-normal">Hoa Kì</span>
         </div>
       </div>
     ),
-    image: US_FLAG,
-    name: "Mỹ",
+    image: AMERICAN_FLAG,
+    name: "Hoa Kì",
+  },
+  {
+    code: "china",
+    label: (
+      <div style={{ gap: "12px" }} className="flex items-center">
+        <div>
+          <img className="w-full h-7" src={CHINA_FLAG}></img>
+        </div>
+        <div>
+          <span className="text-sm font-normal">Trung Quốc</span>
+        </div>
+      </div>
+    ),
+    image: CHINA_FLAG,
+    name: "Trung Quốc",
+  },
+  {
+    code: "singapore",
+    label: (
+      <div style={{ gap: "12px" }} className="flex items-center">
+        <div>
+          <img className="w-full h-7" src={SINGAPO_FLAG}></img>
+        </div>
+        <div>
+          <span className="text-sm font-normal">Singapore</span>
+        </div>
+      </div>
+    ),
+    image: SINGAPO_FLAG,
+    name: "Singapore",
+  },
+
+  {
+    code: "philippines",
+    label: (
+      <div style={{ gap: "12px" }} className="flex items-center">
+        <div>
+          <img className="w-full h-7" src={PHILIPPINES_FLAG}></img>
+        </div>
+        <div>
+          <span className="text-sm font-normal">Philippines</span>
+        </div>
+      </div>
+    ),
+    image: PHILIPPINES_FLAG,
+    name: "Philippines",
+  },
+  {
+    code: "malaysia",
+    label: (
+      <div style={{ gap: "12px" }} className="flex items-center">
+        <div>
+          <img className="w-full h-7" src={MALAYSIA_FLAG}></img>
+        </div>
+        <div>
+          <span className="text-sm font-normal">Malaysia</span>
+        </div>
+      </div>
+    ),
+    image: MALAYSIA_FLAG,
+    name: "Malaysia",
+  },
+  {
+    code: "thailand",
+    label: (
+      <div style={{ gap: "12px" }} className="flex items-center">
+        <div>
+          <img className="w-full h-7" src={THAILAND_FLAG}></img>
+        </div>
+        <div>
+          <span className="text-sm font-normal">Thái Lan</span>
+        </div>
+      </div>
+    ),
+    image: CHINA_FLAG,
+    name: "Thái Lan",
+  },
+  {
+    code: "indonesia",
+    label: (
+      <div style={{ gap: "12px" }} className="flex items-center">
+        <div>
+          <img className="w-full h-7" src={INDONESIA_FLAG}></img>
+        </div>
+        <div>
+          <span className="text-sm font-normal">Indonesia</span>
+        </div>
+      </div>
+    ),
+    image: INDONESIA_FLAG,
+    name: "Indonesia",
+  },
+  {
+    code: "timor",
+    label: (
+      <div style={{ gap: "12px" }} className="flex items-center">
+        <div>
+          <img className="w-full h-7" src={TIMOR_FLAG}></img>
+        </div>
+        <div>
+          <span className="text-sm font-normal">Đông Timor</span>
+        </div>
+      </div>
+    ),
+    image: TIMOR_FLAG,
+    name: "Đông Timor",
+  },
+  {
+    code: "brunei",
+    label: (
+      <div style={{ gap: "12px" }} className="flex items-center">
+        <div>
+          <img className="w-full h-7" src={BRUNEI_FLAG}></img>
+        </div>
+        <div>
+          <span className="text-sm font-normal">Brunei</span>
+        </div>
+      </div>
+    ),
+    image: BRUNEI_FLAG,
+    name: "Brunei",
+  },
+
+  {
+    code: "laos",
+    label: (
+      <div style={{ gap: "12px" }} className="flex items-center">
+        <div>
+          <img className="w-full h-7" src={LAOS_FLAG}></img>
+        </div>
+        <div>
+          <span className="text-sm font-normal">Lào</span>
+        </div>
+      </div>
+    ),
+    image: LAOS_FLAG,
+    name: "Lào",
   },
 ];
 
 // Nên đưa vào redux để sau này gọi ở chỗ khác (các trường hợp cần filter)
 // Danh sách các kỹ năng của cộng tác viên
 export const listSkills = [
-  { value: 1, label: "Vệ sinh nhà cửa" },
-  { value: 2, label: "Giúp việc nhà" },
-  { value: 3, label: "Nấu ăn" },
-  { value: 4, label: "Chăm em bé" },
+  { code: 1, label: "Vệ sinh nhà cửa" },
+  { code: 2, label: "Giúp việc nhà" },
+  { code: 3, label: "Nấu ăn" },
+  { code: 4, label: "Chăm em bé" },
 ];
 // Danh sách các ngôn ngữ
 export const listLanguages = [
-  { value: 1, label: "Tiếng Anh" },
-  { value: 2, label: "Tiếng Hàn" },
-  { value: 3, label: "Tiếng Trung" },
+  { code: 1, label: "Tiếng Việt" },
+  { code: 2, label: "Tiếng Anh" },
+  { code: 3, label: "Tiếng Hàn" },
+  { code: 4, label: "Tiếng Trung" },
+  { code: 5, label: "Tiếng Nhật" },
 ];
 // Hàm render sao từ giá trị đánh giá (number) truyền vào
 export const renderStarFromNumber = (number, color, size) => {

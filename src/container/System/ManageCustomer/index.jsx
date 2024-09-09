@@ -58,7 +58,6 @@ const ManageCustomer = () => {
   const [dataTab, setDataTab] = useState([{ label: "Tất cả", value: "all" }]);
   const [detectLoading, setDetectLoading] = useState(null);
   const [saveToCookie, readCookie] = useCookies();
-
   const getListCustomerByType = () => {
     fetchCustomers(lang, startPage, lengthPage, status, idGroup, valueSearch)
       .then((res) => {
@@ -67,7 +66,6 @@ const ManageCustomer = () => {
       })
       .catch((err) => {});
   };
-
   useEffect(() => {
     getGroupCustomerApi(0, 20)
       .then((res) => {
@@ -82,11 +80,9 @@ const ManageCustomer = () => {
       })
       .catch((err) => {});
   }, [lengthPage]);
-
   useEffect(() => {
     getListCustomerByType();
   }, [valueSearch, startPage, idGroup, lengthPage]);
-
   const handleSearch = useCallback(
     _debounce((value) => {
       setValueSearch(value);
@@ -94,11 +90,9 @@ const ManageCustomer = () => {
     }, 1000),
     []
   );
-
   const onChangePage = (value) => {
     setStartPage(value);
   };
-
   let items = [
     {
       key: "1",
@@ -120,9 +114,7 @@ const ManageCustomer = () => {
       ),
     },
   ];
-
   items = items.filter((x) => x.label !== false);
-
   const columns = [
     {
       title: "STT",
@@ -188,7 +180,6 @@ const ManageCustomer = () => {
       width: 100,
     },
   ];
-
   const addActionColumn = {
     i18n_title: "",
     dataIndex: "action",
@@ -205,7 +196,6 @@ const ManageCustomer = () => {
       </Space>
     ),
   };
-
   const onChangeTab = (item) => {
     setIdGroup(item.value);
     setStartPage(0);
@@ -216,7 +206,6 @@ const ManageCustomer = () => {
     saveToCookie("start_order", 0);
     saveToCookie("page_order", 1);
   };
-
   const onDelete = useCallback(
     (id) => {
       setIsLoading(true);
@@ -240,7 +229,6 @@ const ManageCustomer = () => {
     },
     [status, startPage, idGroup, lang, lengthPage]
   );
-
   const blockCustomer = useCallback(
     (id, active) => {
       setIsLoading(true);
@@ -264,6 +252,7 @@ const ManageCustomer = () => {
     },
     [startPage, status, idGroup, lang, lengthPage]
   );
+  console.log("check data >>>", data);
   return (
     <>
       <div className="div-container-content">
@@ -295,11 +284,9 @@ const ManageCustomer = () => {
             {`${i18n.t("create_order", { lng: lang })}`}
           </Button>
         </div>
-
         <div className="div-flex-row">
           <Tabs itemTab={dataTab} onValueChangeTab={onChangeTab} />
         </div>
-
         <div className="div-flex-row">
           <div></div>
           <div className="div-search">
@@ -313,7 +300,6 @@ const ManageCustomer = () => {
             />
           </div>
         </div>
-
         <div>
           <DataTable
             columns={columns}
@@ -329,7 +315,6 @@ const ManageCustomer = () => {
             // emptyText={"Không có khách hàng để "}
           />
         </div>
-
         <div>
           <ModalCustom
             isOpen={modal}
@@ -370,7 +355,6 @@ const ManageCustomer = () => {
             }
           />
         </div>
-
         <FloatButton.BackTop />
       </div>
     </>

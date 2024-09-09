@@ -49,14 +49,12 @@ const Sidebar = ({ hide }) => {
         theme={{
           components: {
             Menu: {
-              itemHeight: 45,
+              itemHeight: 35,
               iconMarginInlineEnd: 12, // Space between icon and text {default 10}
-              iconSize: 20, // Icon size {default 14}
-              collapsedIconSize: 20, // Icon size when collapse
+              iconSize: 18, // Icon size {default 14}
+              collapsedIconSize: 18, // Icon size when collapse
               itemBorderRadius: 4, // Border của item
               itemMarginInline: 12, // Margin của item
-              // itemPaddingInline: 20,
-
               /* ~~~ Only color ~~~ */
               itemColor: "#475569", // Màu của item
               /* Color hover*/

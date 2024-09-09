@@ -134,39 +134,39 @@ const ProfileCollaborator = () => {
               setData={setData}
             />
           </Tabs.TabPane>
-          <Tabs.TabPane tab={`${i18n.t("document", { lng: lang })}`} key="3">
+          {/* <Tabs.TabPane tab={`${i18n.t("document", { lng: lang })}`} key="3">
             <Document id={id} />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab={`${i18n.t("activity", { lng: lang })}`} key="4">
+          </Tabs.TabPane> */}
+          <Tabs.TabPane tab={`${i18n.t("activity", { lng: lang })}`} key="3">
             <Activity id={id} />
           </Tabs.TabPane>
           <Tabs.TabPane
             tab={`${i18n.t("account_history", { lng: lang })}`}
-            key="5"
+            key="4"
           >
             <History id={id} />
           </Tabs.TabPane>
           <Tabs.TabPane
             tab={`${i18n.t("topup_withdraw", { lng: lang })}`}
-            key="6"
+            key="5"
           >
             <WithdrawTopup id={id} />
           </Tabs.TabPane>
-          <Tabs.TabPane tab={`${i18n.t("review", { lng: lang })}`} key="7">
+          <Tabs.TabPane tab={`${i18n.t("review", { lng: lang })}`} key="6">
             <Review id={id} totalReview={data?.star} />
           </Tabs.TabPane>
-          <Tabs.TabPane tab={`${i18n.t("test", { lng: lang })}`} key="8">
+          <Tabs.TabPane tab={`${i18n.t("test", { lng: lang })}`} key="7">
             <TestExam id={data?._id} />
           </Tabs.TabPane>
-          <Tabs.TabPane tab={`${i18n.t("referrals", { lng: lang })}`} key="9">
+          <Tabs.TabPane tab={`${i18n.t("referrals", { lng: lang })}`} key="8">
             <InviteCollaborator id={data?._id} />
           </Tabs.TabPane>
-          <Tabs.TabPane
+          {/* <Tabs.TabPane
             tab={`${i18n.t("bank_account", { lng: lang })}`}
             key="10"
           >
             <BankAccount id={data?._id} />
-          </Tabs.TabPane>
+          </Tabs.TabPane> */}
         </Tabs>
       </div>
       <FloatButton.BackTop />

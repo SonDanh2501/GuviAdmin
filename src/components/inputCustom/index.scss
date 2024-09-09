@@ -1,26 +1,31 @@
 @import "../../@theme/style.scss";
 
-
+// Container chứa input
 .form-field {
     position: relative;
+
 }
 
+// Input css
 .form-input {
     border: 2px solid #eee;
     border-radius: 4px;
     width: 100%;
     font-size: $textFontSizeL;
     line-height: $lineHeightL;
-    // height: 50px;
-    padding: 9px 20px;
+    padding: 6px 20px;
     transition: 0.25s ease;
     outline: none;
+    font-weight: $fontWeightL;
+    font-size: $textFontSizeM;
+    font-family: $fontFamily;
 }
 
 .form-input:focus {
     border-color: #6a5af9;
 }
 
+// Label cho input css
 .form-label {
     position: absolute;
     top: 50%;
@@ -29,35 +34,64 @@
     user-select: none;
     color: #d6d6d6;
     pointer-events: none;
-    transition: 0.25s ease;
+    transition: 0.3s ease;
+    font-weight: $fontWeightL;
+    font-size: $textFontSizeM;
+    font-family: $fontFamily;
 
     .required-label {
         color: #EF4444;
     }
 }
 
-.form-label-unit {
+// Icon ẩn ảnh css
+.form-hide-image {
+    position: absolute;
+    top: 1.5px;
+    right: 1.5px;
+    padding: 13.5px 16px;
+    background-color: #f1f5f9;
+    border-left: 2px solid #eee;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
+// Ảnh hoặc giá trị đơn vị css
+.form-label-image {
     display: flex;
     gap: 6px;
     cursor: pointer;
     align-items: center;
-    // height: 100%;
-    padding: 12px 10px;
+    padding: 0px 12px;
     position: absolute;
     // padding-left: 8px;
-    top: 1.5px;
+    top: 4.5px;
     right: 1.5px;
     border-top-right-radius: 2.5px;
     border-bottom-right-radius: 2.5px;
     border-left: 2px solid #eee;
+
     .unit {
         color: #6b7280;
         opacity: 0.6;
     }
+
     .image-unit {
-        width: 18px;
-        height: 18px;
+        width: 28px;
+        height: 28px;
     }
+}
+
+.form-label-dropdown-icon {
+    position: absolute;
+    top: 12px;
+    right: 18px;
+}
+
+.form-label-unit {
+    position: absolute;
+    top: 14px;
+    left: 12px;
 }
 
 .form-input:not(:placeholder-shown)+.form-label,
@@ -71,18 +105,24 @@
     color: #6a5af9;
 }
 
+// ~~~ Input có type là file
 input[type=file]::file-selector-button {
     margin-right: 10px;
     margin-top: 2px;
     border: none;
     background: #8b5cf6;
-    padding: 3.5px 8px;
-    border-radius: 6px;
+    padding: 3px 8px;
+    border-radius: $borderRadiusS;
     color: #fff;
     cursor: pointer;
     transition: .2s ease-in-out;
+    // display: none;
 }
 
 input[type=file]::file-selector-button:hover {
     background: #c4b5fd;
+}
+
+.form-previews-image {
+    
 }

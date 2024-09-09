@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from "react";
-// Support function
 import {
   renderStarFromNumber,
   calculateNumberPercent,
-  moveElement,
 } from "../../utils/contant";
-// API
 import {
   getCollaboratorsById,
   getHistoryActivityCollaborator,
@@ -13,12 +10,10 @@ import {
   getOverviewCollaborator,
   getReviewCollaborator,
 } from "../../api/collaborator";
-// Image
 import testLogo from "../../assets/images/testLogo.svg";
 import moneyLogo from "../../assets/images/moneyLogo.svg";
 import jobLogo from "../../assets/images/jobLogo.svg";
 import avatarDefault from "../../assets/images/user.png";
-// Other
 import {
   Cell,
   Legend,
@@ -30,9 +25,8 @@ import {
   Radar,
   RadarChart,
   ResponsiveContainer,
-  Sector,
 } from "recharts";
-import { ConfigProvider, Image, Popover, Select, Tooltip } from "antd";
+import { Image, Popover, Select, Tooltip } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { loadingAction } from "../../redux/actions/loading";
 import { errorNotify } from "../../helper/toast";
@@ -40,10 +34,8 @@ import moment from "moment";
 import { getLanguageState } from "../../redux/selectors/auth";
 import i18n from "../../i18n";
 import { getProvince } from "../../redux/selectors/service";
-// Icon
-import ButtonCustom from "../button";
-import { CaretDownOutlined } from "@ant-design/icons";
 import icons from "../../utils/icons";
+import "./index.scss";
 const {
   IoAlertOutline,
   IoCalendarNumberOutline,
@@ -70,32 +62,72 @@ const {
   IoCaretDown,
 } = icons;
 
+const IconTextCustom = (props) => {
+  const { icon, label, content, subcontent } = props;
+  return (
+    <div className="flex gap-3 items-center">
+      {icon}
+      <div className="flex flex-col gap-0.5">
+        <span className="text-xs font-normal text-gray-500/60">{label}</span>
+        <span style={{ fontWeight: "500" }} className="text-xs">
+          {content} {subcontent}
+        </span>
+      </div>
+    </div>
+  );
+};
+const timeFilterOptions = [
+  {
+    label: "Tháng nay",
+    value: 1,
+  },
+  {
+    label: "Tháng trước",
+    value: 2,
+  },
+  {
+    label: "3 tháng trước",
+    value: 3,
+  },
+  {
+    label: "Năm nay",
+    value: 4,
+  },
+];
+const COLORS = ["#008000", "#2fc22f", "#FFD700", "#FFA500", "#FF0000"];
+const MAX_LINE_WIDTH = 110;
+
 const CardInfo = (props) => {
   const {
-    headerLabel,
-    supportIcon,
-    supportText,
-    collaboratorId,
-    collaboratorStar,
-    timeFilter,
-    // Condition props
-    collaboratorRatingOverview,
-    collaboratorCriteria,
-    collaboratorBonusAndPunish,
-    collaboratorTest,
-    collaboratorFinance,
-    collaboratorJobs,
-    collaboratorActivitys,
-    collaboratorInformation,
-    collaboratorDocument,
+    headerLabel, // Tiêu đề của thẻ
+    supportIcon, // Hiển thị icon bên cạnh tiêu đề
+    supportText, // Chữ muốn hiển thị khi hover icon
+    collaboratorId, // Id của cộng tác viên (dùng để lấy thông tin)
+    collaboratorStar, // Số sao của cộng tác viên
+    timeFilter, // Hiển thị bộ lọc thời gian
+    collaboratorRatingOverview, // Thẻ tổng quan đánh giá
+    collaboratorCriteria, // Thẻ tiêu chí đánh giá
+    collaboratorBonusAndPunish, // Thẻ khen thưởng, vi phạm
+    collaboratorTest, // Thẻ bài kiểm tra
+    collaboratorFinance, // Thẻ tài chính
+    collaboratorJobs, // Thẻ hiệu quả công việc
+    collaboratorActivitys, // Thẻ hoạt động gần đây
+    collaboratorInformation, // Thẻ thông tin cộng tác viên
+    collaboratorDocument, // Thẻ tiến hành hồ sơ
   } = props;
   const dispatch = useDispatch();
   const lang = useSelector(getLanguageState);
-  // For tổng quan đánh giá
-  const COLORS = ["#008000", "#2fc22f", "#FFD700", "#FFA500", "#FF0000"];
   const [dataReview, setDataReview] = useState([]);
-  const [activeIndex, setActiveIndex] = useState(0);
   const [totalCountRating, setTotalCountRating] = useState(0);
+  const [dataDetail, setDataDetail] = useState([]);
+  const province = useSelector(getProvince);
+  const [data, setData] = useState([]);
+  const [dataLesson, setDataLesson] = useState([]);
+  const [dataRecentActivities, setDataRecentActivities] = useState([]);
+  const [totalJobs, setTotalJobs] = useState(0);
+  const [totalJobsSuccess, setTotalJobsSuccess] = useState(0);
+  const [totalJobsCancel, setTotalJobsCancel] = useState(0);
+  const [totalJobsOther, setTotalJobsOther] = useState(0);
   const [totalRating, setTotalRating] = useState([
     {
       name: "5 sao",
@@ -118,10 +150,6 @@ const CardInfo = (props) => {
       value: 1,
     },
   ]);
-  // For thông tin cá nhân
-  const [dataDetail, setDataDetail] = useState([]);
-  const province = useSelector(getProvince);
-  const city = province.filter((x) => x.code === dataDetail.city)[0];
   const [total, setTotal] = useState({
     total_favourite: 0,
     total_order: 0,
@@ -129,18 +157,9 @@ const CardInfo = (props) => {
     remainder: 0,
     gift_remainder: 0,
   });
-  const [data, setData] = useState([]);
-  // For bài kiểm tra
-  const [dataLesson, setDataLesson] = useState([]);
-  // For hoạt động gần đây
-  const [dataRecentActivities, setDataRecentActivities] = useState([]);
-  // For hiểu quả công việc
-  const [totalJobs, setTotalJobs] = useState(0);
-  const [totalJobsSuccess, setTotalJobsSuccess] = useState(0);
-  const [totalJobsCancel, setTotalJobsCancel] = useState(0);
-  const [totalJobsOther, setTotalJobsOther] = useState(0);
-
-  // Support function cho thẻ tổng quan đánh giá
+  const city = province.filter((x) => x.code === dataDetail.city)[0];
+  // ~~~ Function ~~~
+  // 1. Tổng quan đánh giá
   const getStar = (totalRating, dataReview) => {
     if (totalRating.length > 0 && dataReview.totalItem > 0) {
       let fiveStar = 0;
@@ -201,66 +220,7 @@ const CardInfo = (props) => {
       </text>
     );
   };
-  // const renderActiveShape = (props) => {
-  //   const RADIAN = Math.PI / 180;
-  //   const {
-  //     cx,
-  //     cy,
-  //     midAngle,
-  //     innerRadius,
-  //     outerRadius,
-  //     startAngle,
-  //     endAngle,
-  //     fill,
-  //     payload,
-  //     percent,
-  //     value,
-  //   } = props;
-
-  //   const sin = Math.sin(-RADIAN * midAngle);
-  //   const cos = Math.cos(-RADIAN * midAngle);
-  //   const sx = cx + (outerRadius + 10) * cos;
-  //   const sy = cy + (outerRadius + 10) * sin;
-  //   const mx = cx + (outerRadius + 30) * cos;
-  //   const my = cy + (outerRadius + 30) * sin;
-  //   const ex = mx + (cos >= 0 ? 1 : -1) * 22;
-  //   const ey = my;
-  //   const textAnchor = cos >= 0 ? "start" : "end";
-  //   return (
-  //     <g>
-  //       <text x={cx} y={cy} dy={1} textAnchor="middle" fill={fill}>
-  //         {totalCountRating === 0 ? 0 : payload.value} đánh giá
-  //       </text>
-  //       <text x={cx} y={cy + 20} dy={3} textAnchor="middle" fill={fill}>
-  //         {`(${(totalCountRating === 0 ? 0 : percent * 100).toFixed(2)}%)`}
-  //       </text>
-  //       <Sector
-  //         cx={cx}
-  //         cy={cy}
-  //         innerRadius={innerRadius}
-  //         outerRadius={outerRadius}
-  //         startAngle={startAngle}
-  //         endAngle={endAngle}
-  //         fill={fill}
-  //       />
-  //       <Sector
-  //         cx={cx}
-  //         cy={cy}
-  //         startAngle={startAngle}
-  //         endAngle={endAngle}
-  //         innerRadius={outerRadius + 6}
-  //         outerRadius={outerRadius + 10}
-  //         fill={fill}
-  //       />
-  //     </g>
-  //   );
-  // };
-  // const onPieEnter = (_, index) => {
-  //   setActiveIndex(index);
-  // };
-  // Support function cho thẻ tiêu chí đánh giá
-  const MAX_LINE_WIDTH = 120;
-  // Hàm tính toán độ dài của văn bản và xuống dòng khi cần thiết
+  // 2. Tiêu chí đánh giá
   const getMultiLineText = (text, maxLineWidth) => {
     const words = text.split(" ");
     const lines = [];
@@ -334,7 +294,7 @@ const CardInfo = (props) => {
       fullMark: 5,
     },
   ];
-  // Support function cho thẻ hoạt động gần đây
+  // 3. Hoạt động gần đây
   const capitalizeWords = (str) => {
     return str
       .split(" ")
@@ -349,169 +309,134 @@ const CardInfo = (props) => {
     return start + " - " + timeEnd;
   };
 
+  // ~~~ useEffect ~~~
   useEffect(() => {
-    if (collaboratorRatingOverview) {
-      let tempTotalDataReview = 0;
-      getReviewCollaborator(collaboratorId, 0, 1)
-        .then((res) => {
-          tempTotalDataReview = res.totalItem;
-        })
-        .catch((err) => {});
-      getReviewCollaborator(collaboratorId, 0, tempTotalDataReview)
-        .then((res) => {
-          getStar(totalRating, res);
-          setDataReview(res);
-        })
-        .catch((err) => {});
-    }
-    if (collaboratorTest) {
-      getListTrainingLessonByCollaboratorApi(collaboratorId, 0, 20, "all")
-        .then((res) => {
-          setDataLesson(res?.data);
-        })
-        .catch((err) => {});
-    }
-    if (collaboratorJobs || collaboratorActivitys) {
-      let tempTotalActivity = 0;
-      dispatch(loadingAction.loadingRequest(true));
-      getHistoryActivityCollaborator(collaboratorId, 0, 5)
-        .then((res) => {
-          tempTotalActivity = res.totalItem;
-          setTotalJobs(res?.totalItem);
-          setDataRecentActivities(res?.data);
-          dispatch(loadingAction.loadingRequest(false));
-        })
-        .catch((err) => {
-          errorNotify({
-            message: err?.message,
+    if (collaboratorId) {
+      if (collaboratorRatingOverview) {
+        let tempTotalDataReview = 0;
+        getReviewCollaborator(collaboratorId, 0, 1)
+          .then((res) => {
+            tempTotalDataReview = res.totalItem;
+          })
+          .catch((err) => {});
+        getReviewCollaborator(collaboratorId, 0, tempTotalDataReview)
+          .then((res) => {
+            getStar(totalRating, res);
+            setDataReview(res);
+          })
+          .catch((err) => {});
+      }
+      if (collaboratorTest) {
+        getListTrainingLessonByCollaboratorApi(collaboratorId, 0, 20, "all")
+          .then((res) => {
+            setDataLesson(res?.data);
+          })
+          .catch((err) => {});
+      }
+      if (collaboratorJobs || collaboratorActivitys) {
+        let tempTotalActivity = 0;
+        dispatch(loadingAction.loadingRequest(true));
+        getHistoryActivityCollaborator(collaboratorId, 0, 5)
+          .then((res) => {
+            tempTotalActivity = res.totalItem;
+            setTotalJobs(res?.totalItem);
+            setDataRecentActivities(res?.data);
+            dispatch(loadingAction.loadingRequest(false));
+          })
+          .catch((err) => {
+            errorNotify({
+              message: err?.message,
+            });
+            dispatch(loadingAction.loadingRequest(false));
           });
-          dispatch(loadingAction.loadingRequest(false));
-        });
 
-      let tempTotalDoneActivity = 0;
-      let tempTotalCancelActivity = 0;
-      let tempTotalOtherActivity = 0;
-      getHistoryActivityCollaborator(collaboratorId, 0, tempTotalActivity)
-        .then((res) => {
-          // console.log("res", res);
-          res?.data?.forEach((el) => {
-            if (el.status === "done") tempTotalDoneActivity += 1;
-            else if (el.status === "cancel") tempTotalCancelActivity += 1;
-            else tempTotalOtherActivity += 1;
+        let tempTotalDoneActivity = 0;
+        let tempTotalCancelActivity = 0;
+        let tempTotalOtherActivity = 0;
+        getHistoryActivityCollaborator(collaboratorId, 0, tempTotalActivity)
+          .then((res) => {
+            // console.log("res", res);
+            res?.data?.forEach((el) => {
+              if (el.status === "done") tempTotalDoneActivity += 1;
+              else if (el.status === "cancel") tempTotalCancelActivity += 1;
+              else tempTotalOtherActivity += 1;
+            });
+            setTotalJobsSuccess(tempTotalDoneActivity);
+            setTotalJobsCancel(tempTotalCancelActivity);
+            setTotalJobsOther(tempTotalOtherActivity);
+          })
+          .catch((err) => {});
+      }
+      if (collaboratorInformation || collaboratorDocument) {
+        getOverviewCollaborator(collaboratorId)
+          .then((res) => {
+            setData(res?.arr_order?.reverse());
+            setTotal({
+              ...total,
+              total_favourite: res?.total_favourite.length,
+              total_hour: res?.total_hour,
+              total_order: res?.total_order,
+              remainder: res?.remainder,
+              gift_remainder: res?.gift_remainder,
+              work_wallet: res?.work_wallet,
+              collaborator_wallet: res?.collaborator_wallet,
+            });
+          })
+          .catch((err) => {});
+        getCollaboratorsById(collaboratorId)
+          .then((res) => {
+            setDataDetail(res);
+          })
+          .catch((err) => {
+            errorNotify({
+              message: err?.message,
+            });
           });
-          setTotalJobsSuccess(tempTotalDoneActivity);
-          setTotalJobsCancel(tempTotalCancelActivity);
-          setTotalJobsOther(tempTotalOtherActivity);
-        })
-        .catch((err) => {});
-    }
-    if (collaboratorInformation || collaboratorDocument) {
-      getOverviewCollaborator(collaboratorId)
-        .then((res) => {
-          setData(res?.arr_order?.reverse());
-          setTotal({
-            ...total,
-            total_favourite: res?.total_favourite.length,
-            total_hour: res?.total_hour,
-            total_order: res?.total_order,
-            remainder: res?.remainder,
-            gift_remainder: res?.gift_remainder,
-            work_wallet: res?.work_wallet,
-            collaborator_wallet: res?.collaborator_wallet,
-          });
-        })
-        .catch((err) => {});
-      getCollaboratorsById(collaboratorId)
-        .then((res) => {
-          setDataDetail(res);
-        })
-        .catch((err) => {
-          errorNotify({
-            message: err?.message,
-          });
-        });
+      }
     }
   }, [collaboratorId, dispatch]);
 
-  const IconTextCustom = (props) => {
-    const { icon, label, content, subcontent } = props;
-    return (
-      <div className="flex gap-3 items-center">
-        {icon}
-        <div className="flex flex-col gap-0.5">
-          <span className="text-sm font-normal text-gray-500/60">{label}</span>
-          <span style={{ fontWeight: "500" }} className="text-sm">
-            {content} {subcontent}
-          </span>
-        </div>
-      </div>
-    );
-  };
-  const timeFilterOptions = [
-    {
-      label: "Tháng nay",
-      value: 1,
-    },
-    {
-      label: "Tháng trước",
-      value: 2,
-    },
-    {
-      label: "3 tháng trước",
-      value: 3,
-    },
-    {
-      label: "Năm nay",
-      value: 4,
-    },
-  ];
-  // if (collaboratorRatingOverview ) {
-  //   console.log("totalRating >>>", totalRating);
-  // }
   return (
-    <div style={{ borderRadius: "6px" }} className="bg-white card-shadow">
+    <div className="div-card-container card-shadow">
       {/* Header */}
       {headerLabel && (
-        <div className="flex items-center justify-between gap-2 border-b-2 border-gray-200 p-3.5">
-          <div className="w-full flex justify-between items-center">
-            <div className="flex items-center gap-1">
-              <span className="font-medium text-sm">{headerLabel}</span>
-              {supportIcon && (
-                <Tooltip
-                  placement="top"
-                  title={
-                    supportText ? supportText : "Tính năng chưa hoàn thiện"
-                  }
-                >
-                  <IoHelpCircleOutline size={16} color="#9ca3af" />
-                </Tooltip>
-              )}
-            </div>
+        <div className="div-header">
+          <div className="div-header-right-info">
+            <span>{headerLabel}</span>
+            {supportIcon && (
+              <Tooltip
+                placement="top"
+                title={supportText ? supportText : "Tính năng chưa hoàn thiện"}
+              >
+                <IoHelpCircleOutline size={16} color="#9ca3af" />
+              </Tooltip>
+            )}
+          </div>
+          <div className="div-header-left-info">
             {timeFilter && (
-              <div className="flex items-center gap-1">
-                <Popover
-                  content={
-                    <div className="flex flex-col">
-                      {timeFilterOptions.map((el) => (
-                        <span
-                          style={{ borderRadius: "6px" }}
-                          className="hover:bg-violet-500 hover:text-white cursor-pointer p-2 my-0.5 font-normal duration-300 flex items-center justify-between"
-                        >
-                          {el.label}
-                        </span>
-                      ))}
-                    </div>
-                  }
-                  title=" "
-                  className="flex items-center gap-1 cursor-pointer"
-                  trigger={"click"}
-                >
-                  <span className="text-gray-500/70 font-normal text-sm">
-                    Tháng nay
-                  </span>
+              // <div className="">
+              <Popover
+                content={
+                  <div className="flex flex-col">
+                    {timeFilterOptions.map((el) => (
+                      <span
+                        style={{ borderRadius: "6px" }}
+                        className="hover:bg-violet-500 hover:text-white cursor-pointer p-2 my-0.5 font-normal duration-300 flex items-center justify-between"
+                      >
+                        {el.label}
+                      </span>
+                    ))}
+                  </div>
+                }
+                title=""
+                trigger={"click"}
+              >
+                <div className="time-filter">
+                  <span className="text-gray">Tháng nay</span>
                   <IoCaretDown color="#9ca3af" />
-                </Popover>
-              </div>
+                </div>
+              </Popover>
+              // </div>
             )}
           </div>
         </div>
@@ -519,98 +444,84 @@ const CardInfo = (props) => {
       {/* Content */}
       {/* Thẻ tổng quan đánh giá */}
       {collaboratorRatingOverview && (
-        <div className="flex flex-col justify-center p-3.5">
-          <div className="flex flex-col items-center justify-center pb-2">
-            <div className="flex py-2.5 px-4 rounded-full w-fit items-center justify-center bg-indigo-50 gap-1">
-              {renderStarFromNumber(collaboratorStar).map((el, index) => (
-                <span>{el}</span>
-              ))}
-              <span className="text-base font-medium pt-1 ml-2">
-                {collaboratorStar ? collaboratorStar?.toFixed(1) : 5}
-              </span>
-            </div>
-            <div className="flex items-center gap-1">
-              <span className="italic font-medium">{dataReview.totalItem}</span>
-              <span className="italic font-normal text-gray-700/80">
-                khách hàng đã đánh giá
-              </span>
-            </div>
+        <div className="div-card-overview">
+          <div className="div-star">
+            {renderStarFromNumber(collaboratorStar).map((el, index) => (
+              <span>{el}</span>
+            ))}
+            <span className="overview-star">
+              {collaboratorStar ? collaboratorStar?.toFixed(1) : 5}
+            </span>
           </div>
-          {/* const COLORS = ["#008000", "#2fc22f", "#FFD700", "#FFA500", "#FF0000"]; */}
-          <div className="flex flex-col items-center justify-center gap-2">
-            <ResponsiveContainer width="100%" height={231}>
-              <PieChart>
-                <Pie
-                  // activeIndex={activeIndex}
-                  // activeShape={renderActiveShape}
-                  data={totalRating}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={false}
-                  label={renderCustomizedLabel}
-                  outerRadius={110}
-                  fill="#8884d8"
-                  dataKey="value"
-                  // data={totalRating}
-                  // dataKey="value"
-                  // nameKey="name"
-                  // cx="50%"
-                  // cy="50%"
-                  // label={renderCustomizedLabel}
-                  // // innerRadius={90}
-                  // outerRadius={120}
-                  // // paddingAngle={7}
-                  // fill="#8884d8"
-                  // // label={renderCustomizedLabel}
-                  // labelLine={false}
-                  // // onMouseEnter={onPieEnter}
-                >
-                  {totalRating.map((entry, index) => (
-                    <Cell
-                      key={`cell-${index}`}
-                      fill={COLORS[index % COLORS.length]}
-                    />
-                  ))}
-                </Pie>
-              </PieChart>
-            </ResponsiveContainer>
-            <div className="flex flex-col items-center gap-2">
-              <div className="flex items-center justify-center gap-3">
-                <div className="flex gap-1 items-center">
-                  <div className="w-4 h-4 rounded-full bg-[#008000]"></div>
-                  <span className="text-sm">5 sao</span>
-                </div>
-                <div className="flex gap-1 items-center">
-                  <div className="w-4 h-4 rounded-full bg-[#2fc22f]"></div>
-                  <span className="text-sm">4 sao</span>
-                </div>
-                <div className="flex gap-1 items-center">
-                  <div className="w-4 h-4 rounded-full bg-[#FFD700]"></div>
-                  <span className="text-sm">3 sao</span>
-                </div>
-                <div className="flex gap-1 items-center">
-                  <div className="w-4 h-4 rounded-full bg-[#FFA500]"></div>
-                  <span className="text-sm">2 sao</span>
-                </div>
-                <div className="flex gap-1 items-center">
-                  <div className="w-4 h-4 rounded-full bg-[#FF0000]"></div>
-                  <span className="text-sm">1 sao</span>
-                </div>
-              </div>
+          <div className="div-total-rating">
+            <span className="text-highlight">{dataReview.totalItem}</span>
+            <span>khách hàng đã đánh giá</span>
+          </div>
+          <ResponsiveContainer width="100%" height={230}>
+            <PieChart>
+              <Pie
+                data={totalRating}
+                cx="50%"
+                cy="50%"
+                labelLine={false}
+                label={renderCustomizedLabel}
+                outerRadius={100}
+                fill="#8884d8"
+                dataKey="value"
+              >
+                {totalRating.map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={COLORS[index % COLORS.length]}
+                  />
+                ))}
+              </Pie>
+            </PieChart>
+          </ResponsiveContainer>
+          <div className="div-rating-kind">
+            <div className="star-label">
+              <div
+                style={{ backgroundColor: "#008000" }}
+                className="circle-star"
+              ></div>
+              <span>5 sao</span>
+            </div>
+            <div className="star-label">
+              <div
+                style={{ backgroundColor: "#2fc22f" }}
+                className="circle-star"
+              ></div>
+              <span>4 sao</span>
+            </div>
+            <div className="star-label">
+              <div
+                style={{ backgroundColor: "#FFD700" }}
+                className="circle-star"
+              ></div>
+              <span>3 sao</span>
+            </div>
+            <div className="star-label">
+              <div
+                style={{ backgroundColor: "#FFA500" }}
+                className="circle-star"
+              ></div>
+              <span>2 sao</span>
+            </div>
+            <div className="star-label">
+              <div
+                style={{ backgroundColor: "#FF0000" }}
+                className="circle-star"
+              ></div>
+              <span>1 sao</span>
             </div>
           </div>
         </div>
       )}
       {/* Thẻ tiêu chí đánh giá */}
       {collaboratorCriteria && (
-        <div className="flex flex-col items-center justify-center p-3.5">
-          <ResponsiveContainer
-            height={300}
-            width={"100%"}
-            // min-width={350}
-            // className={"bg-black"}
-          >
-            <RadarChart outerRadius={110} data={dataAreaChart}>
+        <div className="div-card-overview">
+          <ResponsiveContainer height={250} width={"100%"}>
+            <RadarChart outerRadius={100} data={dataAreaChart}>
               <PolarGrid opacity={0.8} stroke="#e5e7eb" />
               <PolarAngleAxis tick={renderCustomTick} dataKey="subject" />
               <PolarRadiusAxis angle={90} domain={[0, 5]} />
@@ -632,48 +543,49 @@ const CardInfo = (props) => {
       )}
       {/* Thẻ khen thưởng, vi phạm */}
       {collaboratorBonusAndPunish && (
-        <div className="flex flex-col p-3.5 gap-4">
-          <div className="flex gap-4">
-            <div className="w-1/2 flex items-center p-2.5 border-[2px] border-gray-300 rounded-xl gap-2">
+        <div className="div-card-bonus-punish">
+          {/* Số lần khen thưởng và phạt */}
+          <div className="div-total">
+            <div className="div-total-bonus">
               <IoMedalOutline
-                className="bg-green-100 p-2.5 w-11 h-11 rounded-xl"
+                style={{ backgroundColor: "#dcfce7" }}
+                className="div-icon"
                 color="green"
               />
-              <div className="flex flex-col">
-                <span className="text-sm font-normal text-gray-500/60">
-                  Khen thưởng
-                </span>
-                <span className="font-medium text-lg">
-                  15 <span className="uppercase text-xs font-normal">lần</span>
+              <div className="div-total-bonus-number">
+                <span className="total-label">Khen thưởng</span>
+                <span className="total-number">
+                  15 <span className="total-number-sub">lần</span>
                 </span>
               </div>
             </div>
-            <div className="w-1/2 flex items-center p-2.5 border-[2px] border-gray-300  rounded-xl gap-2">
+            <div className="div-total-bonus">
               <IoThumbsDownOutline
-                className="bg-red-100 p-2.5 w-11 h-11 rounded-xl"
+                style={{ backgroundColor: "#fee2e2" }}
+                className="div-icon"
                 color="red"
               />
-              <div className="flex flex-col">
-                <span className="text-sm font-normal text-gray-500/60">
-                  Kỷ luật
-                </span>
-                <span className="font-medium text-lg">
-                  4 <span className="uppercase text-xs font-normal">lần</span>
+              <div className="div-total-bonus-number">
+                <span className="total-label">Kỷ luật</span>
+                <span className="total-number">
+                  4 <span className="total-number-sub">lần</span>
                 </span>
               </div>
             </div>
           </div>
+          {/* Khen thưởng gần nhất */}
           <div className="flex justify-between items-center p-3 rounded-xl gap-3 border-[2px] border-green-500">
             <div className="flex gap-3">
               <IoReceiptOutline
-                className="bg-green-100 p-2.5 w-11 h-11 rounded-xl"
+                style={{ backgroundColor: "#dcfce7" }}
+                className="div-icon"
                 color="green"
               />
               <div className="flex flex-col gap-0.5">
-                <span className="font-medium text-sm">
+                <span className="font-medium text-xs">
                   Quyết định khen thưởng
                 </span>
-                <span className="text-sm font-normal text-gray-500/60">
+                <span className="text-xs font-normal text-gray-500/60">
                   10 thg 02, 2023
                 </span>
               </div>
@@ -684,15 +596,17 @@ const CardInfo = (props) => {
               </span>
             </div>
           </div>
+          {/* Vi phạm gần nhất */}
           <div className="flex justify-between items-center p-3 rounded-xl gap-3 border-[2px] border-red-500">
             <div className="flex gap-3">
               <IoReceiptOutline
-                className="bg-red-100 p-2.5 w-11 h-11 rounded-xl"
+                style={{ backgroundColor: "#fee2e2" }}
+                className="div-icon"
                 color="red"
               />
               <div className="flex flex-col gap-0.5">
-                <span className="font-medium text-sm">Quyết định phạt</span>
-                <span className="text-sm font-normal text-gray-500/60">
+                <span className="font-medium text-xs">Quyết định phạt</span>
+                <span className="text-xs font-normal text-gray-500/60">
                   10 thg 02, 2023
                 </span>
               </div>
@@ -720,8 +634,8 @@ const CardInfo = (props) => {
               }`}
             >
               <div className="flex flex-col gap-1">
-                <span className="text-sm font-medium">{lesson?.title?.vi}</span>
-                <span className="text-sm font-normal text-gray-500/60">
+                <span className="text-xs font-medium">{lesson?.title?.vi}</span>
+                <span className="text-xs font-normal text-gray-500/60">
                   {lesson?.description?.vi}
                 </span>
               </div>
@@ -755,18 +669,18 @@ const CardInfo = (props) => {
               <div className="flex items-center gap-2">
                 <div>
                   <IoLogoUsd
-                    className="bg-green-100 p-2.5 w-11 h-11 rounded-xl"
+                    className="bg-green-100 p-2.5 w-9 h-9 rounded-xl"
                     color="green"
                   />
                 </div>
                 <div>
-                  <span className="text-sm font-normal text-gray-500/60">
+                  <span className="text-xs font-normal text-gray-500/60">
                     Thu nhập/tháng
                   </span>
                 </div>
               </div>
               <div>
-                <span className="text-sm font-medium bg-green-100 p-2 rounded-md">
+                <span className="text-xs font-medium bg-green-100 p-2 rounded-md">
                   10.000.000đ
                 </span>
               </div>
@@ -775,18 +689,18 @@ const CardInfo = (props) => {
               <div className="flex items-center gap-2">
                 <div>
                   <IoCashOutline
-                    className="bg-yellow-100 p-2.5 w-11 h-11 rounded-xl"
+                    className="bg-yellow-100 p-2.5 w-9 h-9 rounded-xl"
                     color="orange"
                   />
                 </div>
                 <div>
-                  <span className="text-sm font-normal text-gray-500/60">
+                  <span className="text-xs font-normal text-gray-500/60">
                     Thu nhập/năm
                   </span>
                 </div>
               </div>
               <div>
-                <span className="text-sm font-medium bg-yellow-100 p-2 rounded-md">
+                <span className="text-xs font-medium bg-yellow-100 p-2 rounded-md">
                   100.000.000đ
                 </span>
               </div>
@@ -795,18 +709,18 @@ const CardInfo = (props) => {
               <div className="flex items-center gap-2">
                 <div>
                   <IoWalletOutline
-                    className="bg-blue-100 p-2.5 w-11 h-11 rounded-xl"
+                    className="bg-blue-100 p-2.5 w-9 h-9 rounded-xl"
                     color="blue"
                   />
                 </div>
                 <div>
-                  <span className="text-sm font-normal text-gray-500/60">
+                  <span className="text-xs font-normal text-gray-500/60">
                     Tổng doanh thu
                   </span>
                 </div>
               </div>
               <div>
-                <span className="text-sm font-medium bg-blue-100 p-2 rounded-md">
+                <span className="text-xs font-medium bg-blue-100 p-2 rounded-md">
                   300.000.000đ
                 </span>
               </div>
@@ -814,7 +728,7 @@ const CardInfo = (props) => {
           </div>
         </div>
       )}
-      {/* Thẻ hiệu quả công việc  */}
+      {/* Thẻ hiệu quả công việc*/}
       {collaboratorJobs && (
         <div className="p-3.5">
           <div className="w-full h-24 bg-blue-100 rounded-xl flex justify-between items-center">
@@ -826,7 +740,7 @@ const CardInfo = (props) => {
                 <span className="text-2xl font-medium">
                   {totalJobsCancel + totalJobsSuccess + totalJobsOther}
                 </span>
-                <span className="text-sm font-medium uppercase">việc</span>
+                <span className="text-xs font-medium uppercase">việc</span>
               </div>
             </div>
             <img className="h-full" src={jobLogo}></img>
@@ -836,27 +750,27 @@ const CardInfo = (props) => {
             <div className="flex items-center gap-4 border-b-[1px] border-gray-300/70 pb-3">
               <div>
                 <IoCheckmarkCircleOutline
-                  className="bg-green-100 p-2.5 w-11 h-11 rounded-xl"
+                  className="bg-green-100 p-2.5 w-9 h-9 rounded-xl"
                   color="green"
                 />
               </div>
               <div className="w-full">
                 <div className="flex justify-between items-center mb-0.5">
-                  <span className="text-sm font-normal text-gray-500/60">
+                  <span className="text-xs font-normal text-gray-500/60">
                     Đơn đã hoàn thành
                   </span>
-                  <span className="text-sm font-medium">
+                  <span className="text-xs font-medium">
                     {totalJobsSuccess + totalJobsOther} đơn
                   </span>
                 </div>
                 <div className="w-full relative rounded-full bg-gray-100 text-center">
                   {/* <span className="text-black italic text-xs">
-                  {calculateNumberPercent(
-                    totalJobs,
-                    totalJobsSuccess + totalJobsOther
-                  )}
-                  %
-                </span> */}
+{calculateNumberPercent(
+totalJobs,
+totalJobsSuccess + totalJobsOther
+)}
+%
+</span> */}
                   <span className="text-black italic text-xs absolute mt-0.5">
                     {calculateNumberPercent(
                       totalJobs,
@@ -880,16 +794,16 @@ const CardInfo = (props) => {
             <div className="flex items-center gap-4 pb-3">
               <div>
                 <IoCloseCircleOutline
-                  className="bg-red-100 p-2.5 w-11 h-11 rounded-xl"
+                  className="bg-red-100 p-2.5 w-9 h-9 rounded-xl"
                   color="red"
                 />
               </div>
               <div className="w-full">
                 <div className="flex justify-between items-center mb-0.5">
-                  <span className="text-sm font-normal text-gray-500/60">
+                  <span className="text-xs font-normal text-gray-500/60">
                     Đơn đã hủy
                   </span>
-                  <span className="text-sm font-medium">
+                  <span className="text-xs font-medium">
                     {totalJobsCancel} đơn
                   </span>
                 </div>
@@ -908,13 +822,13 @@ const CardInfo = (props) => {
                   ></div>
                 </div>
                 {/* <div class="w3-light-grey">
-                <div
-                  class="w3-container w3-green w3-center"
-                  style={{ width: "25%" }}
-                >
-                  25%
-                </div>
-              </div> */}
+<div
+class="w3-container w3-green w3-center"
+style={{ width: "25%" }}
+>
+25%
+</div>
+</div> */}
               </div>
             </div>
           </div>
@@ -929,14 +843,14 @@ const CardInfo = (props) => {
                 {/* Ngày tháng năm */}
                 <div className="w-3/12 flex flex-col items-center ">
                   <div>
-                    <span className="text-sm font-medium">
+                    <span className="text-xs font-medium">
                       {moment(new Date(activity?.date_work)).format(
                         "DD/MM/YYYY"
                       )}
                     </span>
                   </div>
                   <div>
-                    <span className="text-sm font-normal text-gray-500/60">
+                    <span className="text-xs font-normal text-gray-500/60">
                       {capitalizeWords(
                         moment(new Date(activity?.date_work))
                           .locale(lang)
@@ -977,7 +891,7 @@ const CardInfo = (props) => {
                 {/* Nội dung dịch vụ và địa chỉ */}
                 <div className="w-7/12">
                   <div>
-                    <span className="font-medium text-sm">
+                    <span className="font-medium text-xs">
                       {activity?.type === "loop" && activity?.is_auto_order
                         ? `${i18n.t("repeat", { lng: lang })}`
                         : activity?.service?._id?.kind === "giup_viec_theo_gio"
@@ -994,7 +908,7 @@ const CardInfo = (props) => {
                   </div>
                   <div>
                     <Tooltip placement="top" title={activity?.address}>
-                      <span className="text-sm font-normal text-gray-500/60 line-clamp-2">
+                      <span className="text-xs font-normal text-gray-500/60 line-clamp-2">
                         {activity?.address}
                       </span>
                     </Tooltip>
@@ -1012,7 +926,7 @@ const CardInfo = (props) => {
                         : "bg-red-50 border-red-500 text-red-500"
                     }`}
                   >
-                    <span className="text-sm ">
+                    <span className="text-xs ">
                       {activity?.status === "pending"
                         ? `${i18n.t("pending", { lng: lang })}`
                         : activity?.status === "confirm"
@@ -1030,7 +944,7 @@ const CardInfo = (props) => {
           </div>
         ) : (
           <div className="flex justify-center items-center p-4">
-            <span className="text-sm text-gray-500/60 italic">
+            <span className="text-xs text-gray-500/60 italic">
               Cộng tác viên chưa có hoạt động nào
             </span>
           </div>
@@ -1063,18 +977,18 @@ const CardInfo = (props) => {
                   {dataDetail?.full_name}
                 </span>
                 <div className="flex items-center gap-1">
-                  <span className="font-normal text-sm text-gray-500/60">
+                  <span className="font-normal text-xs text-gray-500/60">
                     Mã giới thiệu:
                   </span>
-                  <span className="font-medium text-sm">
+                  <span className="font-medium text-xs">
                     {dataDetail?.invite_code}
                   </span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <span className="font-normal text-sm text-gray-500/60">
+                  <span className="font-normal text-xs text-gray-500/60">
                     Khu vực:
                   </span>
-                  <span className="font-medium text-sm">{city?.name}</span>
+                  <span className="font-medium text-xs">{city?.name}</span>
                 </div>
 
                 <Tooltip
@@ -1105,11 +1019,11 @@ const CardInfo = (props) => {
             </div>
           </div>
           <div className="flex flex-col gap-5 mx-3 my-4">
-            <span className="font-medium text-sm">Thông tin nhân sự</span>
+            <span className="font-medium text-xs">Thông tin nhân sự</span>
             <IconTextCustom
               icon={
                 <IoCallOutline
-                  className="bg-green-100 p-2.5 w-11 h-11 rounded-xl"
+                  className="bg-green-100 p-2.5 w-9 h-9 rounded-xl"
                   color="green"
                 />
               }
@@ -1119,7 +1033,7 @@ const CardInfo = (props) => {
             <IconTextCustom
               icon={
                 <IoPersonOutline
-                  className="bg-blue-100 p-2.5 w-11 h-11 rounded-xl"
+                  className="bg-blue-100 p-2.5 w-9 h-9 rounded-xl"
                   color="DodgerBlue"
                 />
               }
@@ -1129,7 +1043,7 @@ const CardInfo = (props) => {
             <IconTextCustom
               icon={
                 <IoCalendarOutline
-                  className="bg-yellow-100 p-2.5 w-11 h-11 rounded-xl"
+                  className="bg-yellow-100 p-2.5 w-9 h-9 rounded-xl"
                   color="orange"
                 />
               }
@@ -1140,7 +1054,7 @@ const CardInfo = (props) => {
             <IconTextCustom
               icon={
                 <IoNewspaperOutline
-                  className="bg-red-100 p-2.5 w-11 h-11 rounded-xl"
+                  className="bg-red-100 p-2.5 w-9 h-9 rounded-xl"
                   color="red"
                 />
               }
@@ -1151,7 +1065,7 @@ const CardInfo = (props) => {
             <IconTextCustom
               icon={
                 <IoTimeOutline
-                  className="bg-green-100 p-2.5 w-11 h-11 rounded-xl"
+                  className="bg-green-100 p-2.5 w-9 h-9 rounded-xl"
                   color="green"
                 />
               }
@@ -1163,7 +1077,7 @@ const CardInfo = (props) => {
             <IconTextCustom
               icon={
                 <IoHeartOutline
-                  className="bg-blue-100 p-2.5 w-11 h-11 rounded-xl"
+                  className="bg-blue-100 p-2.5 w-9 h-9 rounded-xl"
                   color="blue"
                 />
               }
@@ -1173,7 +1087,7 @@ const CardInfo = (props) => {
             <IconTextCustom
               icon={
                 <IoShieldCheckmarkOutline
-                  className="bg-yellow-100 p-2.5 w-11 h-11 rounded-xl"
+                  className="bg-yellow-100 p-2.5 w-9 h-9 rounded-xl"
                   color="orange"
                 />
               }
@@ -1183,7 +1097,7 @@ const CardInfo = (props) => {
             <IconTextCustom
               icon={
                 <IoCalendarNumberOutline
-                  className="bg-red-100 p-2.5 w-11 h-11 rounded-xl"
+                  className="bg-red-100 p-2.5 w-9 h-9 rounded-xl"
                   color="red"
                 />
               }
@@ -1193,7 +1107,7 @@ const CardInfo = (props) => {
           </div>
         </>
       )}
-      {/* Thẻ tiến hành hồ sơ  */}
+      {/* Thẻ tiến hành hồ sơ*/}
       {collaboratorDocument && (
         <div className="flex flex-col pt-2.5 pb-4 px-3 gap-6 mt-3">
           <div className="flex justify-between">
@@ -1210,7 +1124,7 @@ const CardInfo = (props) => {
                 )}
               </div>
               <span
-                className={`text-sm font-normal ${
+                className={`text-xs font-normal ${
                   !dataDetail?.is_document_code && "text-gray-500/60"
                 } `}
               >
@@ -1218,7 +1132,7 @@ const CardInfo = (props) => {
               </span>
             </div>
             <div>
-              <span className="text-gray-500/60 italic text-sm">
+              <span className="text-gray-500/60 italic text-xs">
                 {dataDetail?.document_code ? dataDetail?.document_code : ""}
               </span>
             </div>
@@ -1236,7 +1150,7 @@ const CardInfo = (props) => {
               )}
             </div>
             <span
-              className={`text-sm font-normal ${
+              className={`text-xs font-normal ${
                 !dataDetail?.is_identity && "text-gray-500/60"
               } `}
             >
@@ -1259,7 +1173,7 @@ const CardInfo = (props) => {
               )}
             </div>
             <span
-              className={`text-sm font-normal ${
+              className={`text-xs font-normal ${
                 !dataDetail?.is_personal_infor && "text-gray-500/60"
               } `}
             >
@@ -1282,7 +1196,7 @@ const CardInfo = (props) => {
               )}
             </div>
             <span
-              className={`text-sm font-normal ${
+              className={`text-xs font-normal ${
                 !dataDetail?.is_household_book && "text-gray-500/60"
               } `}
             >
@@ -1302,7 +1216,7 @@ const CardInfo = (props) => {
               )}
             </div>
             <span
-              className={`text-sm font-normal ${
+              className={`text-xs font-normal ${
                 !dataDetail?.is_behaviour && "text-gray-500/60 "
               } `}
             >

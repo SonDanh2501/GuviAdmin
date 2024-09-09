@@ -1,18 +1,25 @@
-$textFontSizeS: 12px;
-$textFontSizeM: 14px;
-$textFontSizeL: 16px;
-$textFontSizeXL: 18px;
-$textFontSize2XL: 20px;
-$textFontSize3XL: 22px;
-$textFontSize4XL: 24px;
+$textFontSizeS: 10px;
+$textFontSizeM: 12px;
+$textFontSizeL: 14px;
+$textFontSizeXL: 16px;
+$textFontSize2XL: 18px;
+$textFontSize3XL: 20px;
+$textFontSize4XL: 22px;
 
-$lineHeightS: 16px;
-$lineHeightM: 20px;
-$lineHeightL: 24px;
-$lineHeightXL: 28px;
-$lineHeight2XL: 32px;
-$lineHeight3XL: 36px;
-$lineHeight4XL: 40px;
+$gapXS: 4px; // Các trường hợp nên xài (cho các item như text và icon nằm cùng một hàng)
+$gapS: 8px;
+$gapM: 12px;
+$gapL: 16px; // Các trường hợp nên xài (cho các item lớn: card)
+$gapXL: 20px;
+$gap2XL: 24px;
+
+$lineHeightS: 12px;
+$lineHeightM: 16px;
+$lineHeightL: 20px;
+$lineHeightXL: 24px;
+$lineHeight2XL: 28px;
+$lineHeight3XL: 32px;
+$lineHeight4XL: 36px;
 
 $fontFamily: "Roboto";
 $fontWeightM: 300;
@@ -22,6 +29,7 @@ $fontWeightXL: 500;
 $fontStyleNormal: normal;
 $fontStyleItalic: italic;
 
+// Son Color 
 $colorWhite: #ffffff;
 $colorBackgroundWhite: #ffffff1f;
 $colorBlack: #212121;
@@ -34,7 +42,10 @@ $colorSuccess: #00cf3a;
 $backGroundColorSuccess: #f2fdf5;
 $colorError: #dc2828;
 $backGroundColorError: #fef1f1;
-$colorLightGray: #8d8d8d;
+$colorLightGray: #e7ecf3;
+$colorViolet: #8b5cf6;
+$colorGray: #9ca3af;
+$bgStarCard : #eef2ff;
 
 $colorPending: #c88a04;
 $backGroundPending: #fefce7;
@@ -44,6 +55,12 @@ $backGroundConfirmDoing: #f0f6ff;
 
 $colorDiscount: #dc2828;
 $backGroundDiscount: #fef1f1;
+
+$borderRadiusS: 4px;
+$borderRadiusM: 6px;
+$borderRadiusL: 8px;
+$borderRadiusXL: 10px;
+$borderRadiusFull: 100%;
 
 h3 {
   font-family: $fontFamily;
@@ -91,4 +108,9 @@ span {
   color: $colorWhite;
   background-color: $colorError;
   width: 100%;
+}
+
+
+.text-gray {
+  color: $colorGray;
 }
