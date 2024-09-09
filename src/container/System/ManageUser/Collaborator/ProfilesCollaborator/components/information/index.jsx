@@ -1616,7 +1616,7 @@ const Information = ({ data, idCTV, setData, id }) => {
                   value={codeDistrict}
                   options={districtsOption}
                   style={{ width: "100%" }}
-                  onChange={onChangeDistrict}
+                  // onChange={onChangeDistrict}
                   mode="multiple"
                   allowClear
                   select={true}
