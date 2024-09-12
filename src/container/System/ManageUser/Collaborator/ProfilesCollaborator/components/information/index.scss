@@ -1,90 +1,103 @@
 @import "../../../../../../../../src/@theme/style.scss";
 
-.div-collaborator-information {
+.collaborator-information {
   display: flex;
   padding-bottom: 16px;
   gap: $gapL;
 
-  // .header-label-card {
-  //   font-weight: $fontWeightL;
-  //   font-size: $textFontSizeM;
-  //   font-family: $fontFamily;
-  // }
+  .collaborator-information__input-field {
+    display: flex;
+    gap: $gapL;
 
-  .div-left-collaborator-information {
+    .collaborator-information__input-field--child {
+      width: 100%;
+    }
+  }
+
+  .collaborator-information__left {
     display: flex;
     flex-direction: column;
     width: 60%;
     gap: $gapL;
 
-    .div-left-collaborator-information-card {
+    .collaborator-information__left--card {
       width: 100%;
       height: fit-content;
       background-color: white;
       border-radius: $borderRadiusM;
+      padding-bottom: 8px;
 
-      .div-left-collaborator-information-card-header {
+      .collaborator-information__left--card-header {
         display: flex;
         padding: 10px 14px;
-        border-bottom: 2px solid $colorLightGray;
+        border-bottom: 2px solid $colorExtraLightGray;
+
         span {
           font-weight: $fontWeightXL;
         }
       }
 
-      .div-left-collaborator-information-card-content {
-        padding: 2px 12px;
+      .collaborator-information__left--card-body {
+        display: flex;
+        flex-direction: column;
+        gap: $gapL;
+        padding: 16px 14px 0px 14px;
+
       }
     }
   }
 
-  .div-right-collaborator-information {
+  .collaborator-information__right {
     display: flex;
     flex-direction: column;
     width: 40%;
-    gap: 24px;
+    gap: $gapL;
 
-    .div-right-collaborator-information-card {
+    .collaborator-information__right--card {
       width: 100%;
       height: fit-content;
       background-color: white;
       border-radius: $borderRadiusM;
 
-      .div-right-collaborator-information-card-header {
+      .collaborator-information__right--card-header {
         display: flex;
         padding: 10px 14px;
-        border-bottom: 2px solid $colorLightGray;
+        border-bottom: 2px solid $colorExtraLightGray;
+
         span {
           font-weight: $fontWeightXL;
         }
       }
 
-      .div-right-collaborator-information-card-content {
-        padding: 2px 12px;
+      .collaborator-information__right--card-body {
+        display: flex;
+        flex-direction: column;
+        gap: $gapL;
+        padding: 16px 14px 0px 14px;
 
-        .div-overview-content {
-          border-bottom: 2px solid $colorLightGray;
-          padding-bottom: 12px;
 
-          .overview-content-label {
-            padding: 4px 0px;
+        .collaborator-information__right--card-body-overview {
+          padding-bottom: 16px;
+          border-bottom: 2px solid $colorExtraLightGray;
 
+          .collaborator-information__right--card-body-overview-label {
             span {
               color: $colorGray
             }
           }
 
-          .overview-content-checklist {
+          .collaborator-information__right--card-body-overview-checklist {
             display: flex;
             flex-direction: column;
             gap: 4px;
 
-            .overview-content-checklist-checkbox {
+            .collaborator-information__right--card-body-overview-checklist-checkbox {
               display: flex;
               align-items: center;
               justify-content: space-between;
               padding: 6px 12px;
-              background-color: $colorLightGray;
+              
+              background-color: $colorExtraLightGray;
               border-radius: $borderRadiusS;
               transition: 0.3s ease-in;
               cursor: not-allowed;
@@ -97,19 +110,47 @@
           }
         }
 
+        .collaborator-information__right--card-body-upload {
+          display: flex;
+          flex-direction: column;
+          gap: $gapL;
+          padding-top: 8px;
+          overflow-y: hidden;
+          scrollbar-gutter: stable both-edges;
+          padding-right: 4px;
+        }
+
+        .collaborator-information__right--card-body-upload:hover,
+        .collaborator-information__right--card-body-upload:active,
+        .collaborator-information__right--card-body-upload:focus {
+          overflow-y: auto;
+        }
+
+        .collaborator-information__right--card-body-upload::-webkit-scrollbar {
+          width: 0.6em;
+        }
+
+        .collaborator-information__right--card-body-upload::-webkit-scrollbar-track {
+          background-color: #ebe0f8;
+          margin-block: 1em;
+          border-radius: 8px;
+        }
+
+        .collaborator-information__right--card-body-upload::-webkit-scrollbar-thumb {
+          border-radius: 8px;
+          border: 3px solid #ebe0f8;
+          background-color: #9e68df;
+        }
+
+        .collaborator-information__right--card-body-upload::-webkit-scrollbar-thumb:hover {
+          background-color: #7e53b2;
+        }
       }
     }
   }
 }
 
-.div-input-filed {
-  display: flex;
-  gap: $gapL;
 
-  .div-input-filed-child {
-    width: 100%;
-  }
-}
 
 .btn-update {
   width: auto;

@@ -60,6 +60,8 @@ const {
   IoTimeOutline,
   IoWalletOutline,
   IoCaretDown,
+  IoTrendingUp,
+  IoTrendingDown,
 } = icons;
 
 const IconTextCustom = (props) => {
@@ -94,7 +96,7 @@ const timeFilterOptions = [
     value: 4,
   },
 ];
-const COLORS = ["#008000", "#2fc22f", "#FFD700", "#FFA500", "#FF0000"];
+const COLORS = ["#2fc22f", "#3b82f6", "#FFD700", "#FFA500", "#dc2626"];
 const MAX_LINE_WIDTH = 110;
 
 const CardInfo = (props) => {
@@ -255,7 +257,7 @@ const CardInfo = (props) => {
     return (
       <text x={x} y={y} textAnchor={textAnchor} fill="#666">
         {lines.map((line, index) => (
-          <tspan x={x} dy={index === 0 ? 0 : 12} key={index}>
+          <tspan x={x} dy={index === 0 ? 0 : 14} key={index}>
             {line}
           </tspan>
         ))}
@@ -397,11 +399,11 @@ const CardInfo = (props) => {
   }, [collaboratorId, dispatch]);
 
   return (
-    <div className="div-card-container card-shadow">
+    <div className="card-statistics card-shadow">
       {/* Header */}
       {headerLabel && (
-        <div className="div-header">
-          <div className="div-header-right-info">
+        <div className="card-statistics__header">
+          <div className="card-statistics__header--right">
             <span>{headerLabel}</span>
             {supportIcon && (
               <Tooltip
@@ -412,9 +414,8 @@ const CardInfo = (props) => {
               </Tooltip>
             )}
           </div>
-          <div className="div-header-left-info">
+          <div className="card-statistics__header--left">
             {timeFilter && (
-              // <div className="">
               <Popover
                 content={
                   <div className="flex flex-col">
@@ -431,800 +432,845 @@ const CardInfo = (props) => {
                 title=""
                 trigger={"click"}
               >
-                <div className="time-filter">
-                  <span className="text-gray">Tháng nay</span>
+                <div className="card-statistics__header--left-time">
+                  <span
+                    style={{ fontSizeL: 400, color: "#6b7280", opacity: "0.7" }}
+                  >
+                    Tháng nay
+                  </span>
                   <IoCaretDown color="#9ca3af" />
                 </div>
               </Popover>
-              // </div>
             )}
           </div>
         </div>
       )}
       {/* Content */}
-      {/* Thẻ tổng quan đánh giá */}
-      {collaboratorRatingOverview && (
-        <div className="div-card-overview">
-          <div className="div-star">
-            {renderStarFromNumber(collaboratorStar).map((el, index) => (
-              <span>{el}</span>
-            ))}
-            <span className="overview-star">
-              {collaboratorStar ? collaboratorStar?.toFixed(1) : 5}
-            </span>
+      <div>
+        {/* Thẻ tổng quan đánh giá */}
+        {collaboratorRatingOverview && (
+          <div className="card-statistics__overview-rating">
+            <div className="card-statistics__overview-rating--star">
+              {renderStarFromNumber(collaboratorStar).map((el, index) => (
+                <span>{el}</span>
+              ))}
+              <span className="card-statistics__overview-rating--star-avg">
+                {collaboratorStar ? collaboratorStar?.toFixed(1) : 5}
+              </span>
+            </div>
+            <div className="card-statistics__overview-rating--total">
+              <span className="card-statistics__overview-rating--total-number">
+                {dataReview.totalItem}
+              </span>
+              <span>khách hàng đã đánh giá</span>
+            </div>
+            <ResponsiveContainer width="100%" height={230}>
+              <PieChart>
+                <Pie
+                  data={totalRating}
+                  cx="50%"
+                  cy="50%"
+                  labelLine={false}
+                  label={renderCustomizedLabel}
+                  outerRadius={100}
+                  fill="#8884d8"
+                  dataKey="value"
+                >
+                  {totalRating.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
+                  ))}
+                </Pie>
+              </PieChart>
+            </ResponsiveContainer>
+            <div className="card-statistics__overview-rating--kind">
+              <div className="card-statistics__overview-rating--kind-label">
+                <div
+                  style={{ backgroundColor: "#2fc22f" }}
+                  className="card-statistics__overview-rating--kind-label-circle"
+                ></div>
+                <span>5 sao</span>
+              </div>
+              <div className="card-statistics__overview-rating--kind-label">
+                <div
+                  style={{ backgroundColor: "#3b82f6" }}
+                  className="card-statistics__overview-rating--kind-label-circle"
+                ></div>
+                <span>4 sao</span>
+              </div>
+              <div className="card-statistics__overview-rating--kind-label">
+                <div
+                  style={{ backgroundColor: "#FFD700" }}
+                  className="card-statistics__overview-rating--kind-label-circle"
+                ></div>
+                <span>3 sao</span>
+              </div>
+              <div className="card-statistics__overview-rating--kind-label">
+                <div
+                  style={{ backgroundColor: "#FFA500" }}
+                  className="card-statistics__overview-rating--kind-label-circle"
+                ></div>
+                <span>2 sao</span>
+              </div>
+              <div className="card-statistics__overview-rating--kind-label">
+                <div
+                  style={{ backgroundColor: "#dc2626" }}
+                  className="card-statistics__overview-rating--kind-label-circle"
+                ></div>
+                <span>1 sao</span>
+              </div>
+            </div>
           </div>
-          <div className="div-total-rating">
-            <span className="text-highlight">{dataReview.totalItem}</span>
-            <span>khách hàng đã đánh giá</span>
+        )}
+        {/* Thẻ tiêu chí đánh giá */}
+        {collaboratorCriteria && (
+          <div className="card-statistics__overview-criteria">
+            <ResponsiveContainer height={250} width={"100%"}>
+              <RadarChart outerRadius={80} data={dataAreaChart}>
+                <PolarGrid opacity={1} stroke="#e5e7eb" />
+                <PolarAngleAxis tick={renderCustomTick} dataKey="subject" />
+                <PolarRadiusAxis angle={90} domain={[0, 5]} />
+                <Radar
+                  dot={<CustomDot />}
+                  label={false}
+                  legendType="square"
+                  name="Mục đánh giá"
+                  dataKey="B"
+                  stroke="#9e68df"
+                  strokeWidth={3}
+                  fill="transparent"
+                  fillOpacity={0.6}
+                />
+                <Legend />
+              </RadarChart>
+            </ResponsiveContainer>
           </div>
-          <ResponsiveContainer width="100%" height={230}>
-            <PieChart>
-              <Pie
-                data={totalRating}
-                cx="50%"
-                cy="50%"
-                labelLine={false}
-                label={renderCustomizedLabel}
-                outerRadius={100}
-                fill="#8884d8"
-                dataKey="value"
+        )}
+        {/* Thẻ khen thưởng, vi phạm */}
+        {collaboratorBonusAndPunish && (
+          <div className="card-statistics__overview-bonus-punish">
+            {/* Số lần khen thưởng và phạt */}
+            <div className="card-statistics__overview-bonus-punish--total">
+              <div className="card-statistics__overview-bonus-punish--total-container">
+                <IoMedalOutline
+                  style={{ backgroundColor: "#dcfce7" }}
+                  className="card-statistics__icon"
+                  color="green"
+                />
+                <div className="card-statistics__overview-bonus-punish--total-container-number">
+                  <span className="card-statistics__overview-bonus-punish--total-container-number-label">
+                    Khen thưởng
+                  </span>
+                  <span className="card-statistics__overview-bonus-punish--total-container-number-number">
+                    15{" "}
+                    <span className="card-statistics__overview-bonus-punish--total-container-number-number-sub">
+                      lần
+                    </span>
+                  </span>
+                </div>
+              </div>
+              <div className="card-statistics__overview-bonus-punish--total-container">
+                <IoThumbsDownOutline
+                  style={{ backgroundColor: "#fee2e2" }}
+                  className="card-statistics__icon"
+                  color="red"
+                />
+                <div className="card-statistics__overview-bonus-punish--total-container-number">
+                  <span className="card-statistics__overview-bonus-punish--total-container-number-label">
+                    Kỷ luật
+                  </span>
+                  <span className="card-statistics__overview-bonus-punish--total-container-number-number">
+                    4{" "}
+                    <span className="card-statistics__overview-bonus-punish--total-container-number-number-sub">
+                      lần
+                    </span>
+                  </span>
+                </div>
+              </div>
+            </div>
+            {/* Khen thưởng gần nhất */}
+            <div className="card-statistics__overview-bonus-punish--recent card-statistics__overview-bonus-punish--recent-success">
+              <div className="card-statistics__overview-bonus-punish--recent-icon">
+                <IoReceiptOutline
+                  style={{ backgroundColor: "#dcfce7" }}
+                  className="card-statistics__icon"
+                  color="green"
+                />
+                <div className="card-statistics__overview-bonus-punish--recent-icon-label">
+                  <span>Quyết định khen thưởng</span>
+                  <span className="card-statistics__overview-bonus-punish--recent-icon-label-time">
+                    10 thg 02, 2023
+                  </span>
+                </div>
+              </div>
+              <div className="card-statistics__overview-bonus-punish--recent-status">
+                <span>Chờ duyệt</span>
+              </div>
+            </div>
+            {/* Vi phạm gần nhất */}
+            <div className="card-statistics__overview-bonus-punish--recent card-statistics__overview-bonus-punish--recent-punish">
+              <div className="card-statistics__overview-bonus-punish--recent-icon">
+                <IoReceiptOutline
+                  style={{ backgroundColor: "#fee2e2" }}
+                  className="card-statistics__icon"
+                  color="red"
+                />
+                <div className="card-statistics__overview-bonus-punish--recent-icon-label">
+                  <span>Quyết định phạt</span>
+                  <span className="card-statistics__overview-bonus-punish--recent-icon-label-time">
+                    10 thg 02, 2023
+                  </span>
+                </div>
+              </div>
+              <div className="card-statistics__overview-bonus-punish--recent-status">
+                <span>Đã duyệt</span>
+              </div>
+            </div>
+          </div>
+        )}
+        {/* Thẻ thực hiện bài kiểm tra */}
+        {collaboratorTest && (
+          <div className="card-statistics__overview-examination">
+            <div className="card-statistics__overview-examination--image">
+              <span className="card-statistics__overview-examination--image-label">
+                Các bài kiểm tra
+              </span>
+              <img
+                className="card-statistics__overview-examination--image-image"
+                src={testLogo}
+              />
+            </div>
+            {dataLesson.map((lesson, index) => (
+              <div
+                className={`card-statistics__overview-examination--exam ${
+                  index !== dataLesson.length - 1 && "not-last-exam"
+                }`}
               >
-                {totalRating.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={COLORS[index % COLORS.length]}
-                  />
-                ))}
-              </Pie>
-            </PieChart>
-          </ResponsiveContainer>
-          <div className="div-rating-kind">
-            <div className="star-label">
-              <div
-                style={{ backgroundColor: "#008000" }}
-                className="circle-star"
-              ></div>
-              <span>5 sao</span>
-            </div>
-            <div className="star-label">
-              <div
-                style={{ backgroundColor: "#2fc22f" }}
-                className="circle-star"
-              ></div>
-              <span>4 sao</span>
-            </div>
-            <div className="star-label">
-              <div
-                style={{ backgroundColor: "#FFD700" }}
-                className="circle-star"
-              ></div>
-              <span>3 sao</span>
-            </div>
-            <div className="star-label">
-              <div
-                style={{ backgroundColor: "#FFA500" }}
-                className="circle-star"
-              ></div>
-              <span>2 sao</span>
-            </div>
-            <div className="star-label">
-              <div
-                style={{ backgroundColor: "#FF0000" }}
-                className="circle-star"
-              ></div>
-              <span>1 sao</span>
-            </div>
-          </div>
-        </div>
-      )}
-      {/* Thẻ tiêu chí đánh giá */}
-      {collaboratorCriteria && (
-        <div className="div-card-overview">
-          <ResponsiveContainer height={250} width={"100%"}>
-            <RadarChart outerRadius={100} data={dataAreaChart}>
-              <PolarGrid opacity={0.8} stroke="#e5e7eb" />
-              <PolarAngleAxis tick={renderCustomTick} dataKey="subject" />
-              <PolarRadiusAxis angle={90} domain={[0, 5]} />
-              <Radar
-                dot={<CustomDot />}
-                label={false}
-                legendType="square"
-                name="Mục đánh giá"
-                dataKey="B"
-                stroke="#9e68df"
-                strokeWidth={3}
-                fill="transparent"
-                fillOpacity={0.6}
-              />
-              <Legend />
-            </RadarChart>
-          </ResponsiveContainer>
-        </div>
-      )}
-      {/* Thẻ khen thưởng, vi phạm */}
-      {collaboratorBonusAndPunish && (
-        <div className="div-card-bonus-punish">
-          {/* Số lần khen thưởng và phạt */}
-          <div className="div-total">
-            <div className="div-total-bonus">
-              <IoMedalOutline
-                style={{ backgroundColor: "#dcfce7" }}
-                className="div-icon"
-                color="green"
-              />
-              <div className="div-total-bonus-number">
-                <span className="total-label">Khen thưởng</span>
-                <span className="total-number">
-                  15 <span className="total-number-sub">lần</span>
-                </span>
-              </div>
-            </div>
-            <div className="div-total-bonus">
-              <IoThumbsDownOutline
-                style={{ backgroundColor: "#fee2e2" }}
-                className="div-icon"
-                color="red"
-              />
-              <div className="div-total-bonus-number">
-                <span className="total-label">Kỷ luật</span>
-                <span className="total-number">
-                  4 <span className="total-number-sub">lần</span>
-                </span>
-              </div>
-            </div>
-          </div>
-          {/* Khen thưởng gần nhất */}
-          <div className="flex justify-between items-center p-3 rounded-xl gap-3 border-[2px] border-green-500">
-            <div className="flex gap-3">
-              <IoReceiptOutline
-                style={{ backgroundColor: "#dcfce7" }}
-                className="div-icon"
-                color="green"
-              />
-              <div className="flex flex-col gap-0.5">
-                <span className="font-medium text-xs">
-                  Quyết định khen thưởng
-                </span>
-                <span className="text-xs font-normal text-gray-500/60">
-                  10 thg 02, 2023
-                </span>
-              </div>
-            </div>
-            <div>
-              <span className="py-1 px-2 bg-yellow-500 rounded-full text-white">
-                Chờ duyệt
-              </span>
-            </div>
-          </div>
-          {/* Vi phạm gần nhất */}
-          <div className="flex justify-between items-center p-3 rounded-xl gap-3 border-[2px] border-red-500">
-            <div className="flex gap-3">
-              <IoReceiptOutline
-                style={{ backgroundColor: "#fee2e2" }}
-                className="div-icon"
-                color="red"
-              />
-              <div className="flex flex-col gap-0.5">
-                <span className="font-medium text-xs">Quyết định phạt</span>
-                <span className="text-xs font-normal text-gray-500/60">
-                  10 thg 02, 2023
-                </span>
-              </div>
-            </div>
-            <div>
-              <span className="py-1 px-2 bg-green-500 rounded-full text-white">
-                Đã duyệt
-              </span>
-            </div>
-          </div>
-        </div>
-      )}
-      {/* Thẻ thực hiện bài kiểm tra */}
-      {collaboratorTest && (
-        <div className="p-3.5">
-          <div className="w-full h-24 bg-violet-100 rounded-xl flex justify-between items-center">
-            <span className="px-4 text-lg font-medium">Các bài kiểm tra</span>
-            <img className=" h-full" src={testLogo}></img>
-          </div>
-          {dataLesson.map((lesson, index) => (
-            <div
-              className={`flex justify-between items-center py-4 ${
-                index !== dataLesson.length - 1 &&
-                "border-b-[1px] border-gray-300/70"
-              }`}
-            >
-              <div className="flex flex-col gap-1">
-                <span className="text-xs font-medium">{lesson?.title?.vi}</span>
-                <span className="text-xs font-normal text-gray-500/60">
-                  {lesson?.description?.vi}
-                </span>
-              </div>
-              {lesson?.is_pass ? (
-                <div className="bg-green-50 py-1 px-3 text-center border-[1px] border-green-500 rounded-full">
-                  <span className="text-green-500">Hoàn thành</span>
+                <div className="card-statistics__overview-examination--exam-content">
+                  <span className="card-statistics__overview-examination--exam-content-header">
+                    {lesson?.title?.vi}
+                  </span>
+                  <span className="card-statistics__overview-examination--exam-content-subheader">
+                    {lesson?.description?.vi}
+                  </span>
                 </div>
-              ) : (
-                <div className="bg-gray-50 py-1 px-3 text-center border-[1px] border-gray-500 rounded-full">
-                  <span className="text-gray-500/60">Chưa hoàn thành</span>
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-      )}
-      {/* Thẻ tài chính */}
-      {collaboratorFinance && (
-        <div className="p-3.5">
-          <div className="w-full h-24 bg-amber-100 rounded-xl flex justify-between items-center">
-            <div className="flex flex-col">
-              <span className="px-4 text-base font-medium text-gray-500/60">
-                Tổng tiền thu được
-              </span>
-              <span className="px-4 text-2xl font-medium">100.000.000đ</span>
-            </div>
-            <img className=" h-full" src={moneyLogo}></img>
-          </div>
-          <div className="flex flex-col justify-center gap-4 mt-4">
-            <div className="flex justify-between items-center border-b-[1px] border-gray-300/70 pb-3">
-              <div className="flex items-center gap-2">
-                <div>
-                  <IoLogoUsd
-                    className="bg-green-100 p-2.5 w-9 h-9 rounded-xl"
-                    color="green"
-                  />
-                </div>
-                <div>
-                  <span className="text-xs font-normal text-gray-500/60">
-                    Thu nhập/tháng
+                <div
+                  className={`card-statistics__overview-examination--exam-status ${
+                    !lesson?.is_pass && "not-pass"
+                  }`}
+                >
+                  <span>
+                    {lesson?.is_pass ? "Hoàn thành" : "Chưa hoàn thành"}
                   </span>
                 </div>
               </div>
-              <div>
-                <span className="text-xs font-medium bg-green-100 p-2 rounded-md">
-                  10.000.000đ
+            ))}
+          </div>
+        )}
+        {/* Thẻ tài chính */}
+        {collaboratorFinance && (
+          <div className="card-statistics__overview-finance">
+            {/* Ảnh tài chính */}
+            <div className="card-statistics__overview-finance--image">
+              <div className="card-statistics__overview-finance--image-content">
+                <span className="card-statistics__overview-finance--image-content-subtext">
+                  Tổng tiền thu được
                 </span>
-              </div>
-            </div>
-            <div className="flex justify-between items-center border-b-[1px] border-gray-300/70 pb-3">
-              <div className="flex items-center gap-2">
-                <div>
-                  <IoCashOutline
-                    className="bg-yellow-100 p-2.5 w-9 h-9 rounded-xl"
-                    color="orange"
-                  />
-                </div>
-                <div>
-                  <span className="text-xs font-normal text-gray-500/60">
-                    Thu nhập/năm
-                  </span>
-                </div>
-              </div>
-              <div>
-                <span className="text-xs font-medium bg-yellow-100 p-2 rounded-md">
+                <span className="card-statistics__overview-finance--image-content-total">
                   100.000.000đ
                 </span>
               </div>
+              <img
+                className="card-statistics__overview-finance--image-image"
+                src={moneyLogo}
+              ></img>
             </div>
-            <div className="flex justify-between items-center border-gray-300/70 pb-3">
-              <div className="flex items-center gap-2">
+            {/* Thu nhập */}
+            <div className="card-statistics__overview-finance--content">
+              <div className="card-statistics__overview-finance--content-child not-last">
+                <div className="card-statistics__overview-finance--content-child-container">
+                  <div>
+                    <IoLogoUsd
+                      style={{ backgroundColor: "#dcfce7" }}
+                      className="card-statistics__icon"
+                      color="green"
+                    />
+                  </div>
+                  <div>
+                    <span>Thu nhập/tháng</span>
+                  </div>
+                </div>
+                <div className="card-statistics__overview-finance--content-child-money card-statistics__overview-finance--content-child-money-month">
+                  <span>10.000.000đ</span>
+                  <IoTrendingDown size="16px" color="red" />
+                </div>
+              </div>
+              <div className="card-statistics__overview-finance--content-child not-last">
+                <div className="card-statistics__overview-finance--content-child-container">
+                  <div>
+                    <IoCashOutline
+                      style={{ backgroundColor: "#fef9c3" }}
+                      className="card-statistics__icon"
+                      color="orange"
+                    />
+                  </div>
+                  <div>
+                    <span>Thu nhập/năm</span>
+                  </div>
+                </div>
+                <div className="card-statistics__overview-finance--content-child-money card-statistics__overview-finance--content-child-money-year">
+                  <span>100.000.000đ</span>
+                  <IoTrendingUp size="16px" color="green" />
+                </div>
+              </div>
+              <div className="card-statistics__overview-finance--content-child">
+                <div className="card-statistics__overview-finance--content-child-container">
+                  <div>
+                    <IoWalletOutline
+                      style={{ backgroundColor: "#dbeafe" }}
+                      className="card-statistics__icon"
+                      color="blue"
+                    />
+                  </div>
+                  <div>
+                    <span>Tổng doanh thu</span>
+                  </div>
+                </div>
+                <div className="card-statistics__overview-finance--content-child-money card-statistics__overview-finance--content-child-money-total">
+                  <span>300.000.000đ</span>
+                  <IoTrendingUp size="16px" color="green" />
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        {/* Thẻ hiệu quả công việc*/}
+        {collaboratorJobs && (
+          <div className="card-statistics__overview-jobs">
+            <div className="card-statistics__overview-jobs--image">
+              <div className="card-statistics__overview-jobs--image-content">
+                <span className="card-statistics__overview-jobs-image-content-subtext">
+                  Tổng số công việc
+                </span>
+                <div className="card-statistics__overview-jobs--image-content-total">
+                  <span className="card-statistics__overview-jobs--image-content-total-number">
+                    {totalJobsCancel + totalJobsSuccess + totalJobsOther}
+                  </span>
+                  <span className="card-statistics__overview-jobs--image-content-total-unit">
+                    việc
+                  </span>
+                </div>
+              </div>
+              <img
+                className="card-statistics__overview-jobs--image-image"
+                src={jobLogo}
+              ></img>
+            </div>
+            {/*Container hiệu quả công việc */}
+            <div className="card-statistics__overview-jobs--content">
+              <div className="card-statistics__overview-jobs--content-child">
                 <div>
-                  <IoWalletOutline
-                    className="bg-blue-100 p-2.5 w-9 h-9 rounded-xl"
-                    color="blue"
+                  <IoCheckmarkCircleOutline
+                    style={{ backgroundColor: "#dcfce7" }}
+                    className="card-statistics__icon"
+                    color="green"
                   />
                 </div>
-                <div>
-                  <span className="text-xs font-normal text-gray-500/60">
-                    Tổng doanh thu
-                  </span>
-                </div>
-              </div>
-              <div>
-                <span className="text-xs font-medium bg-blue-100 p-2 rounded-md">
-                  300.000.000đ
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-      {/* Thẻ hiệu quả công việc*/}
-      {collaboratorJobs && (
-        <div className="p-3.5">
-          <div className="w-full h-24 bg-blue-100 rounded-xl flex justify-between items-center">
-            <div className="flex flex-col">
-              <span className="px-4 text-base font-medium text-gray-500/60">
-                Tổng số công việc
-              </span>
-              <div className="flex px-4 gap-1 items-center">
-                <span className="text-2xl font-medium">
-                  {totalJobsCancel + totalJobsSuccess + totalJobsOther}
-                </span>
-                <span className="text-xs font-medium uppercase">việc</span>
-              </div>
-            </div>
-            <img className="h-full" src={jobLogo}></img>
-          </div>
-          {/*Container hiệu quả công việc */}
-          <div className="flex flex-col justify-center gap-4 mt-4">
-            <div className="flex items-center gap-4 border-b-[1px] border-gray-300/70 pb-3">
-              <div>
-                <IoCheckmarkCircleOutline
-                  className="bg-green-100 p-2.5 w-9 h-9 rounded-xl"
-                  color="green"
-                />
-              </div>
-              <div className="w-full">
-                <div className="flex justify-between items-center mb-0.5">
-                  <span className="text-xs font-normal text-gray-500/60">
-                    Đơn đã hoàn thành
-                  </span>
-                  <span className="text-xs font-medium">
-                    {totalJobsSuccess + totalJobsOther} đơn
-                  </span>
-                </div>
-                <div className="w-full relative rounded-full bg-gray-100 text-center">
-                  {/* <span className="text-black italic text-xs">
-{calculateNumberPercent(
-totalJobs,
-totalJobsSuccess + totalJobsOther
-)}
-%
-</span> */}
-                  <span className="text-black italic text-xs absolute mt-0.5">
-                    {calculateNumberPercent(
-                      totalJobs,
-                      totalJobsSuccess + totalJobsOther
-                    )}
-                    %
-                  </span>
-                  <div
-                    className="bg-green-500 h-5 rounded-full flex justify-center items-center leading-none text-xs font-normal progress-bar-success"
-                    style={{
-                      width: `${calculateNumberPercent(
+                <div className="card-statistics__overview-jobs--content-child-progress-bar">
+                  <div className="card-statistics__overview-jobs--content-child-progress-bar-number">
+                    <span className="card-statistics__overview-jobs--content-child-progress-bar-number-label">
+                      Đơn đã hoàn thành
+                    </span>
+                    <span className="card-statistics__overview-jobs--content-child-progress-bar-number-total">
+                      {totalJobsSuccess + totalJobsOther} đơn
+                    </span>
+                  </div>
+                  <div className="card-statistics__overview-jobs--content-child-progress-bar-container">
+                    <span
+                      className={`${
+                        calculateNumberPercent(
+                          totalJobs,
+                          totalJobsSuccess + totalJobsOther
+                        ) > 60 && "more-than-overal"
+                      }`}
+                      // className="text-white"
+                    >
+                      {calculateNumberPercent(
                         totalJobs,
                         totalJobsSuccess + totalJobsOther
-                      )}%`,
-                    }}
-                    // style={{ width: "60%" }}
-                  ></div>
+                      )}
+                      %
+                    </span>
+                    <div
+                      className="card-statistics__overview-jobs--content-child-progress-bar-contanier-bar 
+                      card-statistics__overview-jobs--content-child-progress-bar-contanier-bar-success"
+                      style={{
+                        width: `${calculateNumberPercent(
+                          totalJobs,
+                          totalJobsSuccess + totalJobsOther
+                        )}%`,
+                      }}
+                    ></div>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="flex items-center gap-4 pb-3">
-              <div>
-                <IoCloseCircleOutline
-                  className="bg-red-100 p-2.5 w-9 h-9 rounded-xl"
-                  color="red"
-                />
-              </div>
-              <div className="w-full">
-                <div className="flex justify-between items-center mb-0.5">
-                  <span className="text-xs font-normal text-gray-500/60">
-                    Đơn đã hủy
-                  </span>
-                  <span className="text-xs font-medium">
-                    {totalJobsCancel} đơn
-                  </span>
+              <div className="card-statistics__overview-jobs--content-child">
+                <div>
+                  <IoCloseCircleOutline
+                    style={{ backgroundColor: "#fee2e2" }}
+                    className="card-statistics__icon"
+                    color="red"
+                  />
                 </div>
-                <div className="w-full relative rounded-full bg-gray-100 text-center">
-                  <span className="text-black italic text-xs absolute mt-0.5">
-                    {calculateNumberPercent(totalJobs, totalJobsCancel)}%
-                  </span>
-                  <div
-                    className="bg-red-500 h-5 rounded-full flex justify-center items-center leading-none text-xs font-normal progress-bar-cancel"
-                    style={{
-                      width: `${calculateNumberPercent(
-                        totalJobs,
-                        totalJobsCancel
-                      )}%`,
-                    }}
-                  ></div>
+                <div className="card-statistics__overview-jobs--content-child-progress-bar">
+                  <div className="card-statistics__overview-jobs--content-child-progress-bar-number">
+                    <span className="card-statistics__overview-jobs--content-child-progress-bar-number-label">
+                      Đơn đã hủy
+                    </span>
+                    <span className="card-statistics__overview-jobs--content-child-progress-bar-number-total">
+                      {totalJobsCancel} đơn
+                    </span>
+                  </div>
+                  <div className="card-statistics__overview-jobs--content-child-progress-bar-container">
+                    <span
+                      className={`${
+                        calculateNumberPercent(totalJobs, totalJobsCancel) >
+                          60 && "more-than-overal"
+                      }`}
+                    >
+                      {calculateNumberPercent(totalJobs, totalJobsCancel)}%
+                    </span>
+                    <div
+                      className="card-statistics__overview-jobs--content-child-progress-bar-contanier-bar 
+                      card-statistics__overview-jobs--content-child-progress-bar-contanier-bar-cancel"
+                      style={{
+                        width: `${calculateNumberPercent(
+                          totalJobs,
+                          totalJobsCancel
+                        )}%`,
+                      }}
+                    ></div>
+                  </div>
                 </div>
-                {/* <div class="w3-light-grey">
-<div
-class="w3-container w3-green w3-center"
-style={{ width: "25%" }}
->
-25%
-</div>
-</div> */}
               </div>
             </div>
           </div>
-        </div>
-      )}
-      {/* Thẻ hoạt động gần đây */}
-      {collaboratorActivitys ? (
-        dataRecentActivities.length > 0 ? (
-          <div className="flex flex-col py-2.5 px-3 mt-3 mb-2">
-            {dataRecentActivities?.map((activity, index) => (
-              <div className="flex pb-4">
-                {/* Ngày tháng năm */}
-                <div className="w-3/12 flex flex-col items-center ">
-                  <div>
-                    <span className="text-xs font-medium">
-                      {moment(new Date(activity?.date_work)).format(
-                        "DD/MM/YYYY"
-                      )}
-                    </span>
-                  </div>
-                  <div>
-                    <span className="text-xs font-normal text-gray-500/60">
-                      {capitalizeWords(
-                        moment(new Date(activity?.date_work))
-                          .locale(lang)
-                          .format("dddd")
-                      )}
-                    </span>
-                  </div>
-                </div>
-                {/* Icon và line ở giữa */}
-                <div className="w-2/12 items-center flex flex-col -mb-[24px]">
-                  <div
-                    className={`p-2 w-fit h-fit rounded-full ${
-                      activity?.status === "pending"
-                        ? "bg-yellow-100"
-                        : activity?.status === "confirm"
-                        ? "bg-blue-100"
-                        : activity?.status === "doing"
-                        ? "bg-blue-100"
-                        : activity?.status === "done"
-                        ? "bg-green-100"
-                        : "bg-red-100"
-                    }`}
-                  >
-                    {activity?.status === "pending" ? (
-                      <IoAlertOutline size={15} color="orange" />
-                    ) : activity?.status === "confirm" ? (
-                      <IoFlagOutline size={15} color="blue" />
-                    ) : activity?.status === "doing" ? (
-                      <IoHourglassOutline size={15} color="blue" />
-                    ) : activity?.status === "done" ? (
-                      <IoCheckmarkDoneOutline size={15} color="green" />
-                    ) : (
-                      <IoCloseCircleOutline size={15} color="red" />
-                    )}
-                  </div>
-                  <div className="w-[2px] h-[100%] bg-gray-300/50"></div>
-                </div>
-                {/* Nội dung dịch vụ và địa chỉ */}
-                <div className="w-7/12">
-                  <div>
-                    <span className="font-medium text-xs">
-                      {activity?.type === "loop" && activity?.is_auto_order
-                        ? `${i18n.t("repeat", { lng: lang })}`
-                        : activity?.service?._id?.kind === "giup_viec_theo_gio"
-                        ? `${i18n.t("cleaning", { lng: lang })}`
-                        : activity?.service?._id?.kind === "giup_viec_co_dinh"
-                        ? `${i18n.t("cleaning_subscription", {
-                            lng: lang,
-                          })}`
-                        : activity?.service?._id?.kind === "phuc_vu_nha_hang"
-                        ? `${i18n.t("serve", { lng: lang })}`
-                        : ""}{" "}
-                      / {timeWork(activity)}
-                    </span>
-                  </div>
-                  <div>
-                    <Tooltip placement="top" title={activity?.address}>
-                      <span className="text-xs font-normal text-gray-500/60 line-clamp-2">
-                        {activity?.address}
+        )}
+        {/* Thẻ hoạt động gần đây */}
+        {collaboratorActivitys ? (
+          dataRecentActivities.length > 0 ? (
+            <div className="card-statistics__overview-activities">
+              {dataRecentActivities?.map((activity, index) => (
+                <div className="card-statistics__overview-activities--activity">
+                  {/* Ngày tháng năm */}
+                  <div className="card-statistics__overview-activities--activity-left">
+                    <div>
+                      <span className="card-statistics__overview-activities--activity-left-date">
+                        {moment(new Date(activity?.date_work)).format(
+                          "DD/MM/YYYY"
+                        )}
                       </span>
-                    </Tooltip>
+                    </div>
+                    <div>
+                      <span className="card-statistics__overview-activities--activity-left-day">
+                        {moment(new Date(activity?.date_work))
+                          .locale(lang)
+                          .format("dddd")}
+                      </span>
+                    </div>
                   </div>
-                  <div
-                    className={`w-fit px-1 py-0.5 rounded-lg border-[1px] mt-2 ${
-                      activity?.status === "pending"
-                        ? "bg-yellow-50 border-yellow-500 text-yellow-500"
-                        : activity?.status === "confirm"
-                        ? "bg-blue-50 border-blue-500 text-blue-500"
-                        : activity?.status === "doing"
-                        ? "bg-blue-50 border-blue-500 text-blue-500"
-                        : activity?.status === "done"
-                        ? "bg-green-50 border-green-500 text-green-500"
-                        : "bg-red-50 border-red-500 text-red-500"
-                    }`}
-                  >
-                    <span className="text-xs ">
-                      {activity?.status === "pending"
-                        ? `${i18n.t("pending", { lng: lang })}`
-                        : activity?.status === "confirm"
-                        ? `${i18n.t("confirm", { lng: lang })}`
-                        : activity?.status === "doing"
-                        ? `${i18n.t("doing", { lng: lang })}`
-                        : activity?.status === "done"
-                        ? `${i18n.t("complete", { lng: lang })}`
-                        : `${i18n.t("cancel", { lng: lang })}`}{" "}
+                  {/* Icon và line ở giữa */}
+                  <div className="card-statistics__overview-activities--activity-line">
+                    <div
+                      className={`card-statistics__overview-activities--activity-line-icon ${
+                        activity?.status === "pending"
+                          ? "pending"
+                          : activity?.status === "confirm"
+                          ? "confirm"
+                          : activity?.status === "doing"
+                          ? "doing"
+                          : activity?.status === "done"
+                          ? "done"
+                          : "cancel"
+                      }`}
+                    >
+                      {activity?.status === "pending" ? (
+                        <IoAlertOutline size={15} color="orange" />
+                      ) : activity?.status === "confirm" ? (
+                        <IoFlagOutline size={15} color="blue" />
+                      ) : activity?.status === "doing" ? (
+                        <IoHourglassOutline size={15} color="blue" />
+                      ) : activity?.status === "done" ? (
+                        <IoCheckmarkDoneOutline size={15} color="green" />
+                      ) : (
+                        <IoCloseCircleOutline size={15} color="red" />
+                      )}
+                    </div>
+                    <div className="card-statistics__overview-activities--activity-line-icon-line"></div>
+                  </div>
+                  {/* Nội dung dịch vụ và địa chỉ */}
+                  <div className="card-statistics__overview-activities--activity-right">
+                    <div>
+                      <span className="card-statistics__overview-activities--activity-right-time">
+                        {activity?.type === "loop" && activity?.is_auto_order
+                          ? `${i18n.t("repeat", { lng: lang })}`
+                          : activity?.service?._id?.kind ===
+                            "giup_viec_theo_gio"
+                          ? `${i18n.t("cleaning", { lng: lang })}`
+                          : activity?.service?._id?.kind === "giup_viec_co_dinh"
+                          ? `${i18n.t("cleaning_subscription", {
+                              lng: lang,
+                            })}`
+                          : activity?.service?._id?.kind === "phuc_vu_nha_hang"
+                          ? `${i18n.t("serve", { lng: lang })}`
+                          : ""}{" "}
+                        / {timeWork(activity)}
+                      </span>
+                    </div>
+                    <div>
+                      <Tooltip placement="top" title={activity?.address}>
+                        <span className="card-statistics__overview-activities--activity-right-address">
+                          {activity?.address}
+                        </span>
+                      </Tooltip>
+                    </div>
+                    <div
+                      className={`card-statistics__overview-activities--activity-right-status  ${
+                        activity?.status === "pending"
+                          ? "pending"
+                          : activity?.status === "confirm"
+                          ? "confirm"
+                          : activity?.status === "doing"
+                          ? "doing"
+                          : activity?.status === "done"
+                          ? "done"
+                          : "cancel"
+                      }`}
+                    >
+                      <span>
+                        {activity?.status === "pending"
+                          ? `${i18n.t("pending", { lng: lang })}`
+                          : activity?.status === "confirm"
+                          ? `${i18n.t("confirm", { lng: lang })}`
+                          : activity?.status === "doing"
+                          ? `${i18n.t("doing", { lng: lang })}`
+                          : activity?.status === "done"
+                          ? `${i18n.t("complete", { lng: lang })}`
+                          : `${i18n.t("cancel", { lng: lang })}`}{" "}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="flex justify-center items-center p-4">
+              <span className="text-xs text-gray-500/60 italic">
+                Cộng tác viên chưa có hoạt động nào
+              </span>
+            </div>
+          )
+        ) : (
+          ""
+        )}
+        {/* Thẻ thông tin cá nhân */}
+        {collaboratorInformation && (
+          <div className="card-statistics__overview-information">
+            <div className="card-statistics__overview-information--avatar">
+              <div className="card-statistics__overview-information--avatar-image">
+                <Image
+                  style={{
+                    padding: "4px",
+                    backgroundColor: "#FFFFFF",
+                    borderRadius: "100%",
+                  }}
+                  width={"150px"}
+                  height={"150px"}
+                  src={dataDetail?.avatar ? dataDetail?.avatar : avatarDefault}
+                  alt=""
+                />
+                <div className="card-statistics__overview-information--avatar-information">
+                  <span className="card-statistics__overview-information--avatar-information-name">
+                    {dataDetail?.full_name}
+                  </span>
+                  <div className="card-statistics__overview-information--avatar-information-other">
+                    <span className="card-statistics__overview-information--avatar-information-other-subtext-label">
+                      Mã giới thiệu:
+                    </span>
+                    <span className="card-statistics__overview-information--avatar-information-other-subtext">
+                      {dataDetail?.invite_code}
                     </span>
                   </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="flex justify-center items-center p-4">
-            <span className="text-xs text-gray-500/60 italic">
-              Cộng tác viên chưa có hoạt động nào
-            </span>
-          </div>
-        )
-      ) : (
-        ""
-      )}
-      {/* Thẻ thông tin cá nhân */}
-      {collaboratorInformation && (
-        <>
-          <div
-            style={{ backgroundColor: "#ebe0f8" }}
-            className="rounded-xl m-3 p-4 flex justify-center"
-          >
-            <div className="flex flex-col items-center justify-center">
-              <Image
-                style={{
-                  padding: "4px",
-                  backgroundColor: "#FFFFFF",
-                  borderRadius: "100%",
-                }}
-                width={"150px"}
-                height={"150px"}
-                // class="h-[150px] w-[150px] p-2 bg-white rounded-full shadow-lg"
-                src={dataDetail?.avatar ? dataDetail?.avatar : avatarDefault}
-                alt=""
-              />
-              <div className="flex flex-col items-center mt-3 gap-2.5">
-                <span className="font-medium text-xl text-center">
-                  {dataDetail?.full_name}
-                </span>
-                <div className="flex items-center gap-1">
-                  <span className="font-normal text-xs text-gray-500/60">
-                    Mã giới thiệu:
-                  </span>
-                  <span className="font-medium text-xs">
-                    {dataDetail?.invite_code}
-                  </span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <span className="font-normal text-xs text-gray-500/60">
-                    Khu vực:
-                  </span>
-                  <span className="font-medium text-xs">{city?.name}</span>
-                </div>
+                  <div className="card-statistics__overview-information--avatar-information-other">
+                    <span className="card-statistics__overview-information--avatar-information-other-subtext-label">
+                      Khu vực:
+                    </span>
+                    <span className="card-statistics__overview-information--avatar-information-other-subtext">
+                      {city?.name}
+                    </span>
+                  </div>
 
-                <Tooltip
-                  placement="bottom"
-                  title={
-                    dataDetail?.status === "locked"
-                      ? dataDetail?.note_handle_admin
+                  <Tooltip
+                    placement="bottom"
+                    title={
+                      dataDetail?.status === "locked"
                         ? dataDetail?.note_handle_admin
-                        : "Tài khoản đã bị khóa"
-                      : ""
-                  }
-                >
-                  <span
-                    className={`py-2 px-4 rounded-full ${
-                      dataDetail?.status === "actived"
-                        ? "status-done"
-                        : "status-not-contact"
-                    }`}
+                          ? dataDetail?.note_handle_admin
+                          : "Tài khoản đã bị khóa"
+                        : ""
+                    }
                   >
-                    {dataDetail?.status === "actived"
-                      ? "Đang hoạt động"
-                      : dataDetail?.status === "locked"
-                      ? "Đang khóa"
-                      : "Khác"}
-                  </span>
-                </Tooltip>
+                    <span
+                      className={`card-statistics__overview-information--avatar-information-status ${
+                        dataDetail?.status === "actived"
+                          ? "status-done"
+                          : "status-not-contact"
+                      }`}
+                    >
+                      {dataDetail?.status === "actived"
+                        ? "Đang hoạt động"
+                        : dataDetail?.status === "locked"
+                        ? "Đang khóa"
+                        : "Khác"}
+                    </span>
+                  </Tooltip>
+                </div>
+              </div>
+            </div>
+            <div className="card-statistics__overview-information--detail-info">
+              <span className="card-statistics__overview-information--detail-info-label">
+                Thông tin nhân sự
+              </span>
+              <IconTextCustom
+                icon={
+                  <IoCallOutline
+                    className="card-statistics__icon green"
+                    color="green"
+                  />
+                }
+                label="Điện thoại"
+                content={dataDetail?.phone}
+              />
+              <IconTextCustom
+                icon={
+                  <IoPersonOutline
+                    className="card-statistics__icon blue"
+                    color="blue"
+                  />
+                }
+                label="Giới tính"
+                content={dataDetail.gender === "male" ? "Nam" : "Nữ"}
+              />
+              <IconTextCustom
+                icon={
+                  <IoCalendarOutline
+                    className="card-statistics__icon yellow"
+                    color="orange"
+                  />
+                }
+                label="Ngày sinh"
+                content={moment(dataDetail?.birthday).format("DD/MM/YYYY")}
+              />
+
+              <IconTextCustom
+                icon={
+                  <IoNewspaperOutline
+                    className="card-statistics__icon red"
+                    color="red"
+                  />
+                }
+                label="Tổng số đơn"
+                content={total?.total_order}
+                subcontent="đơn"
+              />
+              <IconTextCustom
+                icon={
+                  <IoTimeOutline
+                    className="card-statistics__icon green"
+                    color="green"
+                  />
+                }
+                label="Tổng số giờ làm"
+                content={total?.total_hour}
+                subcontent="giờ"
+              />
+
+              <IconTextCustom
+                icon={
+                  <IoHeartOutline
+                    className="card-statistics__icon blue"
+                    color="blue"
+                  />
+                }
+                label="Tổng lượt yêu thích"
+                content={total?.total_favourite}
+              />
+              <IconTextCustom
+                icon={
+                  <IoShieldCheckmarkOutline
+                    className="card-statistics__icon yellow"
+                    color="orange"
+                  />
+                }
+                label="Ngày kích hoạt"
+                content={moment(dataDetail?.date_create).format("DD/MM/YYYY")}
+              />
+              <IconTextCustom
+                icon={
+                  <IoCalendarNumberOutline
+                    className="card-statistics__icon red"
+                    color="red"
+                  />
+                }
+                label="Ngày đăng ký"
+                content={moment(dataDetail?.date_create).format("DD/MM/YYYY")}
+              />
+            </div>
+          </div>
+        )}
+        {/* Thẻ tiến hành hồ sơ*/}
+        {collaboratorDocument && (
+          <div className="card-statistics__overview-document">
+            <div className="card-statistics__overview-document--child">
+              <div className="card-statistics__overview-document--child-left">
+                <div
+                  className={`p-1 ${
+                    dataDetail?.is_identity
+                      ? "status-done"
+                      : "status-not-process"
+                  } rounded-full`}
+                >
+                  {dataDetail?.is_document_code ? (
+                    <IoCheckmark color="green" />
+                  ) : (
+                    <IoCheckmark
+                      style={{ visibility: "hidden" }}
+                      color="gray"
+                    />
+                  )}
+                </div>
+                <span
+                  className={`card-statistics__overview-document--child-left-label ${
+                    !dataDetail?.is_document_code && "not-upload"
+                  } `}
+                >
+                  Thỏa thuận hợp tác
+                </span>
+              </div>
+            </div>
+            <div className="card-statistics__overview-document--child">
+              <div className="card-statistics__overview-document--child-left">
+                <div
+                  className={`p-1 ${
+                    dataDetail?.is_identity
+                      ? "status-done"
+                      : "status-not-process"
+                  } rounded-full`}
+                >
+                  {dataDetail?.is_identity ? (
+                    <IoCheckmark color="green" />
+                  ) : (
+                    <IoCheckmark
+                      style={{ visibility: "hidden" }}
+                      color="gray"
+                    />
+                  )}
+                </div>
+                <span
+                  className={`card-statistics__overview-document--child-left-label ${
+                    !dataDetail?.is_identity && "not-upload"
+                  } `}
+                >
+                  CCCD/CMND
+                </span>
+              </div>
+            </div>
+            <div className="card-statistics__overview-document--child">
+              <div className="card-statistics__overview-document--child-left">
+                <div
+                  className={`p-1 ${
+                    dataDetail?.is_personal_infor
+                      ? "status-done"
+                      : "status-not-process"
+                  } rounded-full`}
+                >
+                  {dataDetail?.is_personal_infor ? (
+                    <IoCheckmark color="green" />
+                  ) : (
+                    <IoCheckmark
+                      style={{ visibility: "hidden" }}
+                      color="gray"
+                    />
+                  )}
+                </div>
+                <span
+                  className={`card-statistics__overview-document--child-left-label ${
+                    !dataDetail?.is_personal_infor && "not-upload"
+                  } `}
+                >
+                  Sơ yếu lí lịch
+                </span>
+              </div>
+            </div>
+            <div className="card-statistics__overview-document--child">
+              <div className="card-statistics__overview-document--child-left">
+                <div
+                  className={`p-1 ${
+                    dataDetail?.is_household_book
+                      ? "status-done"
+                      : "status-not-process"
+                  } rounded-full`}
+                >
+                  {dataDetail?.is_household_book ? (
+                    <IoCheckmark color="green" />
+                  ) : (
+                    <IoCheckmark
+                      style={{ visibility: "hidden" }}
+                      color="gray"
+                    />
+                  )}
+                </div>
+                <span
+                  className={`card-statistics__overview-document--child-left-label ${
+                    !dataDetail?.is_household_book && "not-upload"
+                  } `}
+                >
+                  Sổ hộ khẩu{" "}
+                </span>
+              </div>
+            </div>
+            <div className="card-statistics__overview-document--child">
+              <div className="card-statistics__overview-document--child-left">
+                <div
+                  className={`p-1 ${
+                    dataDetail?.is_behaviour
+                      ? "status-done"
+                      : "status-not-process"
+                  } rounded-full`}
+                >
+                  {dataDetail?.is_behaviour ? (
+                    <IoCheckmark color="green" />
+                  ) : (
+                    <IoCheckmark
+                      style={{ visibility: "hidden" }}
+                      color="gray"
+                    />
+                  )}
+                </div>
+                <span
+                  className={`card-statistics__overview-document--child-left-label ${
+                    !dataDetail?.is_behaviour && "not-upload"
+                  } `}
+                >
+                  Giấy xác nhận hạnh kiểm
+                </span>
               </div>
             </div>
           </div>
-          <div className="flex flex-col gap-5 mx-3 my-4">
-            <span className="font-medium text-xs">Thông tin nhân sự</span>
-            <IconTextCustom
-              icon={
-                <IoCallOutline
-                  className="bg-green-100 p-2.5 w-9 h-9 rounded-xl"
-                  color="green"
-                />
-              }
-              label="Điện thoại"
-              content={dataDetail?.phone}
-            />
-            <IconTextCustom
-              icon={
-                <IoPersonOutline
-                  className="bg-blue-100 p-2.5 w-9 h-9 rounded-xl"
-                  color="DodgerBlue"
-                />
-              }
-              label="Giới tính"
-              content={dataDetail.gender === "male" ? "Nam" : "Nữ"}
-            />
-            <IconTextCustom
-              icon={
-                <IoCalendarOutline
-                  className="bg-yellow-100 p-2.5 w-9 h-9 rounded-xl"
-                  color="orange"
-                />
-              }
-              label="Ngày sinh"
-              content={moment(dataDetail?.birthday).format("DD/MM/YYYY")}
-            />
-
-            <IconTextCustom
-              icon={
-                <IoNewspaperOutline
-                  className="bg-red-100 p-2.5 w-9 h-9 rounded-xl"
-                  color="red"
-                />
-              }
-              label="Tổng số đơn"
-              content={total?.total_order}
-              subcontent="đơn"
-            />
-            <IconTextCustom
-              icon={
-                <IoTimeOutline
-                  className="bg-green-100 p-2.5 w-9 h-9 rounded-xl"
-                  color="green"
-                />
-              }
-              label="Tổng số giờ làm"
-              content={total?.total_hour}
-              subcontent="giờ"
-            />
-
-            <IconTextCustom
-              icon={
-                <IoHeartOutline
-                  className="bg-blue-100 p-2.5 w-9 h-9 rounded-xl"
-                  color="blue"
-                />
-              }
-              label="Tổng lượt yêu thích"
-              content={total?.total_favourite}
-            />
-            <IconTextCustom
-              icon={
-                <IoShieldCheckmarkOutline
-                  className="bg-yellow-100 p-2.5 w-9 h-9 rounded-xl"
-                  color="orange"
-                />
-              }
-              label="Ngày kích hoạt"
-              content={moment(dataDetail?.date_create).format("DD/MM/YYYY")}
-            />
-            <IconTextCustom
-              icon={
-                <IoCalendarNumberOutline
-                  className="bg-red-100 p-2.5 w-9 h-9 rounded-xl"
-                  color="red"
-                />
-              }
-              label="Ngày đăng ký"
-              content={moment(dataDetail?.date_create).format("DD/MM/YYYY")}
-            />
-          </div>
-        </>
-      )}
-      {/* Thẻ tiến hành hồ sơ*/}
-      {collaboratorDocument && (
-        <div className="flex flex-col pt-2.5 pb-4 px-3 gap-6 mt-3">
-          <div className="flex justify-between">
-            <div className="flex gap-4 items-center">
-              <div
-                className={`p-1 ${
-                  dataDetail?.is_identity ? "status-done" : "status-not-process"
-                } rounded-full`}
-              >
-                {dataDetail?.is_document_code ? (
-                  <IoCheckmark color="green" />
-                ) : (
-                  <IoCheckmark style={{ visibility: "hidden" }} color="gray" />
-                )}
-              </div>
-              <span
-                className={`text-xs font-normal ${
-                  !dataDetail?.is_document_code && "text-gray-500/60"
-                } `}
-              >
-                Thỏa thuận hợp tác
-              </span>
-            </div>
-            <div>
-              <span className="text-gray-500/60 italic text-xs">
-                {dataDetail?.document_code ? dataDetail?.document_code : ""}
-              </span>
-            </div>
-          </div>
-          <div className="flex items-center gap-4">
-            <div
-              className={`p-1 ${
-                dataDetail?.is_identity ? "status-done" : "status-not-process"
-              } rounded-full`}
-            >
-              {dataDetail?.is_identity ? (
-                <IoCheckmark color="green" />
-              ) : (
-                <IoCheckmark style={{ visibility: "hidden" }} color="gray" />
-              )}
-            </div>
-            <span
-              className={`text-xs font-normal ${
-                !dataDetail?.is_identity && "text-gray-500/60"
-              } `}
-            >
-              {" "}
-              CCCD/CMND
-            </span>
-          </div>
-          <div className="flex items-center gap-4">
-            <div
-              className={`p-1 ${
-                dataDetail?.is_personal_infor
-                  ? "status-done"
-                  : "status-not-process"
-              } rounded-full`}
-            >
-              {dataDetail?.is_personal_infor ? (
-                <IoCheckmark color="green" />
-              ) : (
-                <IoCheckmark style={{ visibility: "hidden" }} color="gray" />
-              )}
-            </div>
-            <span
-              className={`text-xs font-normal ${
-                !dataDetail?.is_personal_infor && "text-gray-500/60"
-              } `}
-            >
-              {" "}
-              Sơ yếu lí lịch
-            </span>
-          </div>
-          <div className="flex items-center gap-4">
-            <div
-              className={`p-1 ${
-                dataDetail?.is_household_book
-                  ? "status-done"
-                  : "status-not-process"
-              } rounded-full`}
-            >
-              {dataDetail?.is_household_book ? (
-                <IoCheckmark color="green" />
-              ) : (
-                <IoCheckmark style={{ visibility: "hidden" }} color="gray" />
-              )}
-            </div>
-            <span
-              className={`text-xs font-normal ${
-                !dataDetail?.is_household_book && "text-gray-500/60"
-              } `}
-            >
-              Sổ hộ khẩu
-            </span>
-          </div>
-          <div className="flex items-center gap-4">
-            <div
-              className={`p-1 ${
-                dataDetail?.is_behaviour ? "status-done" : "status-not-process"
-              } rounded-full`}
-            >
-              {dataDetail?.is_behaviour ? (
-                <IoCheckmark color="green" />
-              ) : (
-                <IoCheckmark style={{ visibility: "hidden" }} color="gray" />
-              )}
-            </div>
-            <span
-              className={`text-xs font-normal ${
-                !dataDetail?.is_behaviour && "text-gray-500/60 "
-              } `}
-            >
-              Giấy xác nhận hạnh kiểm
-            </span>
-          </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };

@@ -36,6 +36,8 @@ import {
   IoCloudUploadOutline,
   IoRemoveCircle,
   IoRemove,
+  IoTrendingUp,
+  IoTrendingDown,
 } from "react-icons/io5";
 
 const icons = {
@@ -74,7 +76,10 @@ const icons = {
   IoSearch,
   IoCalendar,
   IoCloudUploadOutline,
-  IoRemoveCircle,IoRemove 
+  IoRemoveCircle,
+  IoRemove,
+  IoTrendingUp,
+  IoTrendingDown,
 };
 
 export default icons;

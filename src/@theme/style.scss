@@ -6,12 +6,18 @@ $textFontSize2XL: 18px;
 $textFontSize3XL: 20px;
 $textFontSize4XL: 22px;
 
-$gapXS: 4px; // Các trường hợp nên xài (cho các item như text và icon nằm cùng một hàng)
+$gapXS: 4px;
 $gapS: 8px;
 $gapM: 12px;
-$gapL: 16px; // Các trường hợp nên xài (cho các item lớn: card)
+$gapL: 16px; // Các trường hợp nên xài (khoảng cách giữa các item theo chiều column)
 $gapXL: 20px;
 $gap2XL: 24px;
+
+$borderRadiusS: 4px;
+$borderRadiusM: 6px;
+$borderRadiusL: 8px;
+$borderRadiusXL: 10px;
+$borderRadiusFull: 9999px;
 
 $lineHeightS: 12px;
 $lineHeightM: 16px;
@@ -29,10 +35,35 @@ $fontWeightXL: 500;
 $fontStyleNormal: normal;
 $fontStyleItalic: italic;
 
-// Son Color 
+// Black Palette
+$colorBlack: #475569;
+// White Palette
 $colorWhite: #ffffff;
+// Violet Palette
+$colorViolet: #8b5cf6;
+$colorExtraLightViolet: #ede9fe;
+// Gray Palette
+$colorGray: #6b7280;
+$colorLightGray: #9ca3af;
+$colorExtraLightGray: #e7ecf3;
+// Green Palette
+$colorGreen: #22c55e;
+$colorExtraLightGreen: #dcfce7;
+// Amber Palette
+$colorExtraLightAmber: #fef3c7;
+// Red Palette
+$colorRed: #ef4444;
+$colorExtraLightRed: #fee2e2;
+// Yellow Palette
+$colorYellow: #eab308;
+$colorExtraLightYellow: #fef9c3;
+// Blue Palette
+$colorExtraLightBlue: #dbeafe;
+$colorBlue: #3b82f6;
+
+
+//
 $colorBackgroundWhite: #ffffff1f;
-$colorBlack: #212121;
 $colorBackgroundBlack: #21212125;
 $color1: #2463eb;
 $backGroundColor1: #f0f6ff;
@@ -42,9 +73,6 @@ $colorSuccess: #00cf3a;
 $backGroundColorSuccess: #f2fdf5;
 $colorError: #dc2828;
 $backGroundColorError: #fef1f1;
-$colorLightGray: #e7ecf3;
-$colorViolet: #8b5cf6;
-$colorGray: #9ca3af;
 $bgStarCard : #eef2ff;
 
 $colorPending: #c88a04;
@@ -56,11 +84,7 @@ $backGroundConfirmDoing: #f0f6ff;
 $colorDiscount: #dc2828;
 $backGroundDiscount: #fef1f1;
 
-$borderRadiusS: 4px;
-$borderRadiusM: 6px;
-$borderRadiusL: 8px;
-$borderRadiusXL: 10px;
-$borderRadiusFull: 100%;
+
 
 h3 {
   font-family: $fontFamily;
@@ -83,6 +107,7 @@ span {
   font-style: $fontStyleNormal;
   font-weight: $fontWeightL;
   font-size: $textFontSizeM;
+  // color: $colorBlack;
   line-height: 18px;
 }
 

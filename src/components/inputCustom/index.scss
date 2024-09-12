@@ -4,105 +4,107 @@
 .form-field {
     position: relative;
 
-}
+    .form-field__input {
+        border: 2px solid #eee;
+        border-radius: 4px;
+        width: 100%;
+        font-size: $textFontSizeL;
+        line-height: $lineHeightL;
+        padding: 6px 20px;
+        transition: 0.25s ease;
+        outline: none;
+        font-weight: $fontWeightL;
+        font-size: $textFontSizeM;
+        font-family: $fontFamily;
+    }
 
-// Input css
-.form-input {
-    border: 2px solid #eee;
-    border-radius: 4px;
-    width: 100%;
-    font-size: $textFontSizeL;
-    line-height: $lineHeightL;
-    padding: 6px 20px;
-    transition: 0.25s ease;
-    outline: none;
-    font-weight: $fontWeightL;
-    font-size: $textFontSizeM;
-    font-family: $fontFamily;
-}
+    .form-field__label {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        left: 21px;
+        user-select: none;
+        color: #d6d6d6;
+        pointer-events: none;
+        transition: 0.3s ease;
+        font-weight: $fontWeightL;
+        font-size: $textFontSizeM;
+        font-family: $fontFamily;
 
-.form-input:focus {
-    border-color: #6a5af9;
-}
+        .form-field__label--required {
+            color: #EF4444;
+        }
+    }
 
-// Label cho input css
-.form-label {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    left: 21px;
-    user-select: none;
-    color: #d6d6d6;
-    pointer-events: none;
-    transition: 0.3s ease;
-    font-weight: $fontWeightL;
-    font-size: $textFontSizeM;
-    font-family: $fontFamily;
+    .form-field__hide-image {
+        position: absolute;
+        top: 1.5px;
+        right: 1.5px;
+        padding: 13.5px 16px;
+        background-color: #f1f5f9;
+        border-left: 2px solid #eee;
+        border-top-right-radius: 3px;
+        border-bottom-right-radius: 3px;
+    }
 
-    .required-label {
-        color: #EF4444;
+    .form-field__image {
+        display: flex;
+        gap: 6px;
+        cursor: pointer;
+        align-items: center;
+        padding: 0px 12px;
+        position: absolute;
+        // padding-left: 8px;
+        top: 3.5px;
+        right: 1.5px;
+        border-top-right-radius: 2.5px;
+        border-bottom-right-radius: 2.5px;
+        border-left: 1.5px solid #eee;
+
+        .form-field__image--number {
+            color: #6b7280;
+            opacity: 0.6;
+        }
+
+        .form-field__image--img {
+            width: 28px;
+            height: 28px;
+        }
+
+
+  
+    }
+
+    .form-field__icon {
+        position: absolute;
+        top: 10px;
+        right: 18px;
+    }
+
+    .form-field__input:focus {
+        border-color: #6a5af9;
+    }
+
+    .form-field__input:not(:placeholder-shown)+.form-field__label,
+
+    .form-field__input:focus+.form-field__label {
+        top: 0;
+        left: 11px;
+        padding: 0 10px;
+        display: inline-block;
+        background-color: white;
+        color: #6a5af9;
     }
 }
 
-// Icon ẩn ảnh css
-.form-hide-image {
-    position: absolute;
-    top: 1.5px;
-    right: 1.5px;
-    padding: 13.5px 16px;
-    background-color: #f1f5f9;
-    border-left: 2px solid #eee;
-    border-top-right-radius: 3px;
-    border-bottom-right-radius: 3px;
-}
 
-// Ảnh hoặc giá trị đơn vị css
-.form-label-image {
-    display: flex;
-    gap: 6px;
-    cursor: pointer;
-    align-items: center;
-    padding: 0px 12px;
-    position: absolute;
-    // padding-left: 8px;
-    top: 4.5px;
-    right: 1.5px;
-    border-top-right-radius: 2.5px;
-    border-bottom-right-radius: 2.5px;
-    border-left: 2px solid #eee;
 
-    .unit {
-        color: #6b7280;
-        opacity: 0.6;
-    }
 
-    .image-unit {
-        width: 28px;
-        height: 28px;
-    }
-}
-
-.form-label-dropdown-icon {
-    position: absolute;
-    top: 12px;
-    right: 18px;
-}
 
 .form-label-unit {
     position: absolute;
     top: 14px;
     left: 12px;
-}
-
-.form-input:not(:placeholder-shown)+.form-label,
-
-.form-input:focus+.form-label {
-    top: 0;
-    left: 11px;
-    padding: 0 10px;
-    display: inline-block;
-    background-color: white;
-    color: #6a5af9;
 }
 
 // ~~~ Input có type là file
@@ -121,8 +123,4 @@ input[type=file]::file-selector-button {
 
 input[type=file]::file-selector-button:hover {
     background: #c4b5fd;
-}
-
-.form-previews-image {
-    
 }

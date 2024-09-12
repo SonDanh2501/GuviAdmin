@@ -248,6 +248,9 @@ const Information = ({ data, idCTV, setData, id }) => {
   }, [id, dispatch, lang]);
   // 4. Tự động check các giá trị checkbox nếu các biến img thay đổi
   useEffect(() => {
+    if (imgProfile === "") {
+      setDeal(false);
+    }
     if (imgIdentifyFronsite === "" && imgIdentifyBacksite === "") {
       setIdentify(false);
     }
@@ -262,6 +265,7 @@ const Information = ({ data, idCTV, setData, id }) => {
     imgIdentifyFronsite,
     imgCertification,
     imgInformation,
+    imgProfile,
   ]);
   // ~~~ Handle fucntion ~~~
   // 1. Handle thay đổi thông tin người liên hệ
@@ -702,27 +706,58 @@ const Information = ({ data, idCTV, setData, id }) => {
     dispatch,
   ]);
 
-  console.log("check avatar", img ? img : data?.avatar ? data?.avatar : user)
+  // ↓ code cũ không quan tâm (code này để hiển thị tên trong các select cũ khi nào nhập xong dữ liệu thì xóa)
+  service.map((item) => {
+    return serviceOption.push({
+      label: item?.title?.[lang],
+      value: item?._id,
+    });
+  });
+
+  province?.map((item) => {
+    return cityOption.push({
+      label: item?.name,
+      value: item?.code,
+      district: item?.districts,
+    });
+  });
+
+  dataDistrict?.map((item) => {
+    return districtsOption.push({
+      label: item?.name,
+      value: item?.code,
+    });
+  });
+
+  dataBusiness?.map((item) => {
+    return businessOption.push({
+      value: item?._id,
+      label: item?.full_name,
+    });
+  });
+  // ↑ trở lên là code cũ không cần quan tâm
+
   return (
     <>
       <div>
-        <div className="div-collaborator-information">
+        <div className="collaborator-information">
           {/* Container 1 */}
-          <div className="div-left-collaborator-information">
-            <div className="div-left-collaborator-information-card card-shadow">
+          <div className="collaborator-information__left">
+            <div className="collaborator-information__left--card card-shadow">
               {/* Header */}
-              <div className="div-left-collaborator-information-card-header">
+              <div className="collaborator-information__left--card-header">
                 <span>Thông tin cộng tác viên</span>
               </div>
               {/* Content */}
-              <div className="div-left-collaborator-information-card-content">
+              <div className="collaborator-information__left--card-body">
                 {/* Avatar */}
-                <div className="div-input-filed">
-                  <div className="div-input-filed-child">
+                <div className="collaborator-information__input-field">
+                  <div className="collaborator-information__input-field--child">
                     <InputTextCustom
                       type="file"
                       placeHolder="Ảnh đại diện"
-                      value={img ? img : data?.avatar ? data?.avatar : user}
+                      // value={img ? img : data?.avatar ? data?.avatar : user}
+                      value = {img}
                       notShowPreviewImage={true}
                       onChangeImage={onChangeThumbnail}
                       setValueSelectedProps={setImg}
@@ -730,8 +765,8 @@ const Information = ({ data, idCTV, setData, id }) => {
                   </div>
                 </div>
                 {/* Họ và tên, giới tính */}
-                <div className="div-input-filed">
-                  <div className="div-input-filed-child">
+                <div className="collaborator-information__input-field">
+                  <div className="collaborator-information__input-field--child">
                     <InputTextCustom
                       type="text"
                       value={name}
@@ -740,7 +775,7 @@ const Information = ({ data, idCTV, setData, id }) => {
                       onChange={(e) => setName(e.target.value)}
                     />
                   </div>
-                  <div className="div-input-filed-child">
+                  <div className="collaborator-information__input-field--child">
                     <InputTextCustom
                       type="select"
                       value={gender}
@@ -764,8 +799,8 @@ const Information = ({ data, idCTV, setData, id }) => {
                   </div>
                 </div>
                 {/* Email */}
-                <div className="div-input-filed">
-                  <div className="div-input-filed-child">
+                <div className="collaborator-information__input-field">
+                  <div className="collaborator-information__input-field--child">
                     <InputTextCustom
                       type="text"
                       value={email}
@@ -775,8 +810,8 @@ const Information = ({ data, idCTV, setData, id }) => {
                   </div>
                 </div>
                 {/* Số điện thoại, ngày sinh */}
-                <div className="div-input-filed">
-                  <div className="div-input-filed-child">
+                <div className="collaborator-information__input-field">
+                  <div className="collaborator-information__input-field--child">
                     <InputTextCustom
                       type="textValue"
                       valueUnit="(+84)"
@@ -787,7 +822,7 @@ const Information = ({ data, idCTV, setData, id }) => {
                       placeHolder="Số điện thoại"
                     />
                   </div>
-                  <div className="div-input-filed-child">
+                  <div className="collaborator-information__input-field--child">
                     <InputTextCustom
                       type="date"
                       value={birthday}
@@ -800,8 +835,8 @@ const Information = ({ data, idCTV, setData, id }) => {
                   </div>
                 </div>
                 {/* CCCD/CMND, nơi cấp, ngày cấp */}
-                <div className="div-input-filed">
-                  <div className="div-input-filed-child">
+                <div className="collaborator-information__input-field">
+                  <div className="collaborator-information__input-field--child">
                     <InputTextCustom
                       type="text"
                       // disable={true}
@@ -811,7 +846,7 @@ const Information = ({ data, idCTV, setData, id }) => {
                       onChange={(e) => setNumber(e.target.value)}
                     />
                   </div>
-                  <div className="div-input-filed-child">
+                  <div className="collaborator-information__input-field--child">
                     <InputTextCustom
                       type="text"
                       // disable={true}
@@ -820,7 +855,7 @@ const Information = ({ data, idCTV, setData, id }) => {
                       onChange={(e) => setIssued(e.target.value)}
                     />
                   </div>
-                  <div className="div-input-filed-child">
+                  <div className="collaborator-information__input-field--child">
                     <InputTextCustom
                       type="date"
                       value={issuedDay}
@@ -835,8 +870,8 @@ const Information = ({ data, idCTV, setData, id }) => {
                   </div>
                 </div>
                 {/* Quốc tịch, quê quán */}
-                <div className="div-input-filed">
-                  <div className="div-input-filed-child">
+                <div className="collaborator-information__input-field">
+                  <div className="collaborator-information__input-field--child">
                     <InputTextCustom
                       type="select"
                       searchField={true}
@@ -847,7 +882,7 @@ const Information = ({ data, idCTV, setData, id }) => {
                       previewImage={true}
                     />
                   </div>
-                  <div className="div-input-filed-child">
+                  <div className="collaborator-information__input-field--child">
                     <InputTextCustom
                       type="text"
                       value={selectHomeTown}
@@ -858,8 +893,8 @@ const Information = ({ data, idCTV, setData, id }) => {
                   </div>
                 </div>
                 {/* Tỉnh/Thành phố thường trú, Quận/Huyện thường trú*/}
-                <div className="div-input-filed">
-                  <div className="div-input-filed-child">
+                <div className="collaborator-information__input-field">
+                  <div className="collaborator-information__input-field--child">
                     <InputTextCustom
                       type="province"
                       searchField={true}
@@ -871,7 +906,7 @@ const Information = ({ data, idCTV, setData, id }) => {
                       setValueArrayProps={setDistrictArrayLive}
                     />
                   </div>
-                  <div className="div-input-filed-child">
+                  <div className="collaborator-information__input-field--child">
                     <InputTextCustom
                       type="district"
                       searchField={true}
@@ -892,8 +927,8 @@ const Information = ({ data, idCTV, setData, id }) => {
                   </div>
                 </div>
                 {/* Địa chỉ cụ thể thường trú */}
-                <div className="div-input-filed">
-                  <div className="div-input-filed-child">
+                <div className="collaborator-information__input-field">
+                  <div className="collaborator-information__input-field--child">
                     <InputTextCustom
                       type="text"
                       disable={
@@ -912,8 +947,8 @@ const Information = ({ data, idCTV, setData, id }) => {
                   </div>
                 </div>
                 {/* Tỉnh/Thành phố tạm trú, Quận/Huyện tạm trú*/}
-                <div className="div-input-filed">
-                  <div className="div-input-filed-child">
+                <div className="collaborator-information__input-field">
+                  <div className="collaborator-information__input-field--child">
                     <InputTextCustom
                       type="province"
                       searchField={true}
@@ -925,7 +960,7 @@ const Information = ({ data, idCTV, setData, id }) => {
                       setValueArrayProps={setDistrictArrayTemp}
                     />
                   </div>
-                  <div className="div-input-filed-child">
+                  <div className="collaborator-information__input-field--child">
                     <InputTextCustom
                       type="district"
                       searchField={true}
@@ -946,8 +981,8 @@ const Information = ({ data, idCTV, setData, id }) => {
                   </div>
                 </div>
                 {/* Địa chỉ cụ thể tạm trú */}
-                <div className="div-input-filed">
-                  <div className="div-input-filed-child">
+                <div className="collaborator-information__input-field">
+                  <div className="collaborator-information__input-field--child">
                     <InputTextCustom
                       type="text"
                       disable={
@@ -966,8 +1001,8 @@ const Information = ({ data, idCTV, setData, id }) => {
                   </div>
                 </div>
                 {/* Dân tộc, tôn giáo, trình độ văn hóa */}
-                <div className="div-input-filed">
-                  <div className="div-input-filed-child">
+                <div className="collaborator-information__input-field">
+                  <div className="collaborator-information__input-field--child">
                     <InputTextCustom
                       type="text"
                       value={ethnic}
@@ -975,7 +1010,7 @@ const Information = ({ data, idCTV, setData, id }) => {
                       onChange={(e) => setEthnic(e.target.value)}
                     />
                   </div>
-                  <div className="div-input-filed-child">
+                  <div className="collaborator-information__input-field--child">
                     <InputTextCustom
                       type="text"
                       value={religion}
@@ -983,7 +1018,7 @@ const Information = ({ data, idCTV, setData, id }) => {
                       onChange={(e) => setReligion(e.target.value)}
                     />
                   </div>
-                  <div className="div-input-filed-child">
+                  <div className="collaborator-information__input-field--child">
                     <InputTextCustom
                       type="select"
                       value={level}
@@ -1016,8 +1051,8 @@ const Information = ({ data, idCTV, setData, id }) => {
                   </div>
                 </div>
                 {/* Ngoại ngữ, kỹ năng */}
-                <div className="div-input-filed">
-                  <div className="div-input-filed-child">
+                <div className="collaborator-information__input-field">
+                  <div className="collaborator-information__input-field--child">
                     <InputTextCustom
                       type="multiSelect"
                       value={selectLanguages}
@@ -1027,7 +1062,7 @@ const Information = ({ data, idCTV, setData, id }) => {
                       setValueSelectedProps={setSelectLanguages}
                     />
                   </div>
-                  <div className="div-input-filed-child">
+                  <div className="collaborator-information__input-field--child">
                     <InputTextCustom
                       type="multiSelect"
                       value={selectSkills}
@@ -1039,8 +1074,8 @@ const Information = ({ data, idCTV, setData, id }) => {
                   </div>
                 </div>
                 {/* Loại dịch vụ */}
-                <div className="div-input-filed">
-                  <div className="div-input-filed-child">
+                <div className="collaborator-information__input-field">
+                  <div className="collaborator-information__input-field--child">
                     <InputTextCustom
                       type="service"
                       value={selectService}
@@ -1051,8 +1086,8 @@ const Information = ({ data, idCTV, setData, id }) => {
                   </div>
                 </div>
                 {/* Tỉnh/Thành phố làm việc, Quận/Huyện làm việc*/}
-                <div className="div-input-filed">
-                  <div className="div-input-filed-child">
+                <div className="collaborator-information__input-field">
+                  <div className="collaborator-information__input-field--child">
                     <InputTextCustom
                       type="province"
                       searchField={true}
@@ -1065,11 +1100,20 @@ const Information = ({ data, idCTV, setData, id }) => {
                       testing
                     />
                   </div>
-                  <div className="div-input-filed-child">
+                  <div className="collaborator-information__input-field--child">
                     <InputTextCustom
                       type="multiDistrict"
                       searchField={true}
-                      disable={selectProvinceWork ? false : true}
+                      // disable={selectProvinceWork ? false : true}
+                      disable={
+                        selectProvinceWork > 0
+                          ? false
+                          : selectProvinceWork?.code > 0
+                          ? false
+                          : selectProvinceWork?.length > 0
+                          ? false
+                          : true
+                      }
                       value={selectDistrictWork}
                       multiSelectOptions={districtArrayWork}
                       placeHolder="Nơi làm việc (quận/huyện)"
@@ -1079,8 +1123,8 @@ const Information = ({ data, idCTV, setData, id }) => {
                   </div>
                 </div>
                 {/* Mã giới thiệu, đối tác */}
-                <div className="div-input-filed">
-                  <div className="div-input-filed-child">
+                <div className="collaborator-information__input-field">
+                  <div className="collaborator-information__input-field--child">
                     <InputTextCustom
                       type="text"
                       disable={true}
@@ -1090,7 +1134,7 @@ const Information = ({ data, idCTV, setData, id }) => {
                       // setValueSelectedProps={setSelectService}
                     />
                   </div>
-                  <div className="div-input-filed-child">
+                  <div className="collaborator-information__input-field--child">
                     <InputTextCustom
                       type="select"
                       disable={true}
@@ -1105,9 +1149,9 @@ const Information = ({ data, idCTV, setData, id }) => {
                 {contactPersons?.map((inputField, index) => (
                   <div
                     style={{ alignItems: "center" }}
-                    className="div-input-filed"
+                    className="collaborator-information__input-field"
                   >
-                    <div className="div-input-filed-child">
+                    <div className="collaborator-information__input-field--child">
                       <InputTextCustom
                         type="text"
                         name="name_relative"
@@ -1116,7 +1160,7 @@ const Information = ({ data, idCTV, setData, id }) => {
                         onChange={(e) => handleChangeContact(e, index)}
                       />
                     </div>
-                    <div className="div-input-filed-child">
+                    <div className="collaborator-information__input-field--child">
                       <InputTextCustom
                         type="text"
                         name="phone_relative"
@@ -1125,7 +1169,7 @@ const Information = ({ data, idCTV, setData, id }) => {
                         onChange={(e) => handleChangeContact(e, index)}
                       />
                     </div>
-                    <div className="div-input-filed-child">
+                    <div className="collaborator-information__input-field--child">
                       <InputTextCustom
                         type="text"
                         name="relation_relative"
@@ -1143,38 +1187,38 @@ const Information = ({ data, idCTV, setData, id }) => {
                     </div>
                   </div>
                 ))}
-                {/* Thêm người liên hệ */}
-                <div style={{ padding: "0px 0px 0px 4px" }}>
-                  <span
-                    onClick={() => handleAddingContact()}
-                    className={` ${
-                      contactPersons?.length >= 3
-                        ? "text-gray-500/60 cursor-not-allowed"
-                        : "text-violet-500 cursor-pointer"
-                    } duration-300`}
-                  >
-                    Thêm người liên hệ
-                  </span>
-                </div>
+              </div>
+              {/* Thêm người liên hệ */}
+              <div style={{ padding: "2px 14px 0px 14px" }}>
+                <span
+                  onClick={() => handleAddingContact()}
+                  className={` ${
+                    contactPersons?.length >= 3
+                      ? "text-gray-500/60 cursor-not-allowed"
+                      : "text-violet-500 cursor-pointer"
+                  } duration-300`}
+                >
+                  Thêm người liên hệ
+                </span>
               </div>
               {/* Cập nhật thông tin cộng tác viên */}
-              <div style={{ padding: "8px 12px" }}>
+              <div style={{ padding: "4px 14px 0px 14px" }}>
                 <ButtonCustom
                   label="Cập nhật"
                   onClick={handleUpdateCollaboratorInfo}
                 />
               </div>
             </div>
-            <div className="div-left-collaborator-information-card card-shadow">
+            <div className="collaborator-information__left--card card-shadow">
               {/* Header */}
-              <div className="div-left-collaborator-information-card-header">
+              <div className="collaborator-information__left--card-header">
                 <span>Thông tin ngân hàng</span>
               </div>
               {/* Content */}
-              <div className="div-left-collaborator-information-card-content">
+              <div className="collaborator-information__left--card-body">
                 {/* Số tài khoản, Tên chủ thẻ */}
-                <div className="div-input-filed">
-                  <div className="div-input-filed-child">
+                <div className="collaborator-information__input-field">
+                  <div className="collaborator-information__input-field--child">
                     <InputTextCustom
                       type="text"
                       value={accountName}
@@ -1182,7 +1226,7 @@ const Information = ({ data, idCTV, setData, id }) => {
                       onChange={(e) => setAccountName(e.target.value)}
                     />
                   </div>
-                  <div className="div-input-filed-child">
+                  <div className="collaborator-information__input-field--child">
                     <InputTextCustom
                       type="text"
                       value={accountNumber}
@@ -1192,8 +1236,8 @@ const Information = ({ data, idCTV, setData, id }) => {
                   </div>
                 </div>
                 {/* Tên ngân hàng */}
-                <div className="div-input-filed">
-                  <div className="div-input-filed-child">
+                <div className="collaborator-information__input-field">
+                  <div className="collaborator-information__input-field--child">
                     <InputTextCustom
                       type="select"
                       value={selectBankName}
@@ -1205,8 +1249,8 @@ const Information = ({ data, idCTV, setData, id }) => {
                   </div>
                 </div>
                 {/* Tên chi nhánh */}
-                <div className="div-input-filed">
-                  <div className="div-input-filed-child">
+                <div className="collaborator-information__input-field">
+                  <div className="collaborator-information__input-field--child">
                     <InputTextCustom
                       type="text"
                       value={bankBrand}
@@ -1217,7 +1261,7 @@ const Information = ({ data, idCTV, setData, id }) => {
                 </div>
               </div>
               {/* Cập nhật tài khoản ngân hàng */}
-              <div style={{ padding: "8px 12px" }}>
+              <div style={{ padding: "8px 14px 0px 14px" }}>
                 <ButtonCustom
                   label="Cập nhật"
                   onClick={handleUpdateAccountBankInfo}
@@ -1226,24 +1270,24 @@ const Information = ({ data, idCTV, setData, id }) => {
             </div>
           </div>
           {/* Container 2 */}
-          <div className="div-right-collaborator-information">
-            <div className="div-right-collaborator-information-card card-shadow">
+          <div className="collaborator-information__right">
+            <div className="collaborator-information__right--card card-shadow">
               {/* Header */}
-              <div className="div-right-collaborator-information-card-header">
+              <div className="collaborator-information__right--card-header">
                 <span className="">Thông tin tài liệu</span>
               </div>
               {/* Content */}
-              <div className="div-right-collaborator-information-card-content">
+              <div className="collaborator-information__right--card-body">
                 {/* Thông tin tổng quan tài liệu */}
-                <div className="div-overview-content">
-                  <div className="overview-content-label">
+                <div className="collaborator-information__right--card-body-overview">
+                  <div className="collaborator-information__right--card-body-overview-label">
                     <span>Tổng quan</span>
                   </div>
                   {/* Checkbox */}
-                  <div className="overview-content-checklist">
+                  <div className="collaborator-information__right--card-body-overview-checklist">
                     {/* Thỏa thuận hợp tác */}
                     <div
-                      className={`overview-content-checklist-checkbox ${
+                      className={`collaborator-information__right--card-body-overview-checklist-checkbox ${
                         deal && "unchecked"
                       }`}
                     >
@@ -1262,7 +1306,7 @@ const Information = ({ data, idCTV, setData, id }) => {
                     </div>
                     {/* CCCD/CMND */}
                     <div
-                      className={`overview-content-checklist-checkbox ${
+                      className={`collaborator-information__right--card-body-overview-checklist-checkbox ${
                         identify && "unchecked"
                       }`}
                     >
@@ -1279,7 +1323,7 @@ const Information = ({ data, idCTV, setData, id }) => {
                     </div>
                     {/* Sơ yếu lí lịch */}
                     <div
-                      className={`overview-content-checklist-checkbox ${
+                      className={`collaborator-information__right--card-body-overview-checklist-checkbox ${
                         information && "unchecked"
                       }`}
                     >
@@ -1298,7 +1342,7 @@ const Information = ({ data, idCTV, setData, id }) => {
                     </div>
                     {/* Sổ hộ khẩu */}
                     <div
-                      className={`overview-content-checklist-checkbox ${
+                      className={`collaborator-information__right--card-body-overview-checklist-checkbox ${
                         registration && "unchecked"
                       }`}
                     >
@@ -1317,7 +1361,7 @@ const Information = ({ data, idCTV, setData, id }) => {
                     </div>
                     {/* Giấy xác nhận hạnh kiểm */}
                     <div
-                      className={`overview-content-checklist-checkbox ${
+                      className={`collaborator-information__right--card-body-overview-checklist-checkbox ${
                         certification && "unchecked"
                       }`}
                     >
@@ -1339,20 +1383,22 @@ const Information = ({ data, idCTV, setData, id }) => {
                 </div>
                 {/* Thông tin chi tiết tài liệu */}
                 <div
-                // style={{
-                //   maxHeight: `${
-                //     contactPersons?.length === 3
-                //       ? "1350px"
-                //       : contactPersons?.length === 2
-                //       ? "1300px"
-                //       : contactPersons?.length === 1
-                //       ? "1250px"
-                //       : "1155px"
-                //   }`,
-                //   // maxHeight: "",
-                //   padding: "0px 6px",
-                //   scrollbarGutter: "stable both-edges",
-                // }}
+                  className="collaborator-information__right--card-body-upload"
+                  style={{
+                    maxHeight: `${
+                      // Mỗi cái input có height là 52px
+                      contactPersons?.length === 3
+                        ? "772px"
+                        : contactPersons?.length === 2
+                        ? "720px"
+                        : contactPersons?.length === 1
+                        ? "668px"
+                        : "616px"
+                    }`,
+                    // maxHeight: "686px",
+                    // padding: "0px 6px",
+                    // scrollbarGutter: "stable both-edges",
+                  }}
                 >
                   {/* Mã hồ sơ */}
                   <div>
@@ -1370,9 +1416,8 @@ const Information = ({ data, idCTV, setData, id }) => {
                       setValueSelectedProps={setImgProfile}
                     />
                   </div>
-                  {/* CCCD/CMND */}
+                  {/* CCCD/CMND mặt trước*/}
                   <div>
-                    {/* Mặt trước */}
                     <InputTextCustom
                       type="file"
                       placeHolder="CCCD/CMND (mặt trước)"
@@ -1380,7 +1425,9 @@ const Information = ({ data, idCTV, setData, id }) => {
                       onChangeImage={onChangeIdentifyBefore}
                       setValueSelectedProps={setImgIdentifyFronsite}
                     />
-                    {/* Mặt sau */}
+                  </div>
+                  {/* CCCD/CMND mặt sau*/}
+                  <div>
                     <InputTextCustom
                       type="file"
                       placeHolder="CCCD/CMND (mặt sau)"
@@ -1425,7 +1472,7 @@ const Information = ({ data, idCTV, setData, id }) => {
                 </div>
               </div>
               {/* Cập nhật thông tin tài liệu */}
-              <div style={{ padding: "8px 12px" }}>
+              <div style={{ padding: "8px 22px" }}>
                 <ButtonCustom
                   label="Cập nhật"
                   onClick={handleUpdateCollaboratorDocument}
@@ -1435,10 +1482,9 @@ const Information = ({ data, idCTV, setData, id }) => {
           </div>
         </div>
       </div>
-
-     <>
+      <>
         <Form>
-          <div >
+          <div>
             <h5>{`${i18n.t("info", { lng: lang })}`}</h5>
             <Row>
               <Col lg="6">
@@ -1450,7 +1496,7 @@ const Information = ({ data, idCTV, setData, id }) => {
                   onChange={(e) => setName(e.target.value)}
                 />
               </Col>
-              <Col lg="6" >
+              <Col lg="6">
                 <InputCustom
                   title={`${i18n.t("gender", { lng: lang })}`}
                   value={gender}
@@ -1473,7 +1519,7 @@ const Information = ({ data, idCTV, setData, id }) => {
                 />
               </Col>
             </Row>
-            <Row >
+            <Row>
               {/* <Col lg="6">
                 <div>
                   <p , {
@@ -1498,7 +1544,7 @@ const Information = ({ data, idCTV, setData, id }) => {
                 />
               </Col>
             </Row>
-            <Row >
+            <Row>
               <Col lg="6">
                 <InputCustom
                   title={`${i18n.t("permanent_address", { lng: lang })}`}
@@ -1517,7 +1563,7 @@ const Information = ({ data, idCTV, setData, id }) => {
                 />
               </Col>
             </Row>
-            <Row >
+            <Row>
               <Col lg="6">
                 <InputCustom
                   title={`${i18n.t("temporary_address", { lng: lang })}`}
@@ -1541,7 +1587,7 @@ const Information = ({ data, idCTV, setData, id }) => {
                 />
               </Col>
             </Row>
-            <Row >
+            <Row>
               <Col lg="6">
                 <InputCustom
                   title={`${i18n.t("nation", { lng: lang })}`}
@@ -1559,7 +1605,7 @@ const Information = ({ data, idCTV, setData, id }) => {
                 />
               </Col>
             </Row>
-            <Row >
+            <Row>
               <Col lg="6">
                 <InputCustom
                   title={`${i18n.t("cultural_level", { lng: lang })}`}
@@ -1599,7 +1645,7 @@ const Information = ({ data, idCTV, setData, id }) => {
                 />
               </Col>
             </Row>
-            <Row >
+            <Row>
               <Col lg="6">
                 <InputCustom
                   title={`${i18n.t("Tỉnh/Thành phố làm việc", { lng: lang })}`}
@@ -1611,7 +1657,7 @@ const Information = ({ data, idCTV, setData, id }) => {
                 />
               </Col>
               <Col lg="6">
-              <InputCustom
+                <InputCustom
                   title={`${i18n.t("Quận/huyện làm việc", { lng: lang })}`}
                   value={codeDistrict}
                   options={districtsOption}
@@ -1670,7 +1716,7 @@ const Information = ({ data, idCTV, setData, id }) => {
                     title={`${i18n.t("code_invite", { lng: lang })}`}
                     value={nameCollaborator}
                     disabled={data?.is_verify ? true : false}
-                    
+
                     // onChange={(e) => {
                     //   searchCollaborator(e.target.value);
                     //   searchValue(e.target.value);
@@ -1678,7 +1724,7 @@ const Information = ({ data, idCTV, setData, id }) => {
                   />
 
                   {dataCollaborator.length > 0 && (
-                    <List type={"unstyled"} >
+                    <List type={"unstyled"}>
                       {dataCollaborator?.map((item, index) => {
                         return (
                           <div
@@ -1690,9 +1736,9 @@ const Information = ({ data, idCTV, setData, id }) => {
                               setDataCollaborator([]);
                             }}
                           >
-                            <p >
-                              {item?.full_name} - {item?.phone} -
-                              {item?.id_view} - {item?.invite_code}
+                            <p>
+                              {item?.full_name} - {item?.phone} -{item?.id_view}{" "}
+                              - {item?.invite_code}
                             </p>
                           </div>
                         );
@@ -1703,14 +1749,11 @@ const Information = ({ data, idCTV, setData, id }) => {
               </Col>
             </Row>
           </div>
-          <Button
-            
-            onClick={handleUpdateCollaboratorInfo}
-          >
+          <Button onClick={handleUpdateCollaboratorInfo}>
             {`${i18n.t("update", { lng: lang })}`}
           </Button>
         </Form>
-      </> 
+      </>
     </>
   );
 };

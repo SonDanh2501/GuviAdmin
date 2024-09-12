@@ -4,9 +4,9 @@ import "./styles.scss";
 
 const Overview = ({ id, star }) => {
   return (
-    <div class="div-overview">
+    <div class="collaborator-overview">
       {/* Left container */}
-      <div class="div-overview-left">
+      <div class="collaborator-overview__left">
         <CardInfo
           collaboratorRatingOverview={true}
           collaboratorId={id}
@@ -30,7 +30,7 @@ const Overview = ({ id, star }) => {
         />
       </div>
       {/* Middle container */}
-      <div class="div-overview-middle">
+      <div class="collaborator-overview__middle">
         <CardInfo
           collaboratorFinance={true}
           headerLabel="Tài chính"
@@ -49,7 +49,7 @@ const Overview = ({ id, star }) => {
         />
       </div>
       {/* Right container */}
-      <div class="div-overview-right">
+      <div class="collaborator-overview__right">
         <CardInfo collaboratorId={id} collaboratorInformation={true} />
         <CardInfo
           collaboratorDocument={true}

@@ -461,22 +461,30 @@
   font-size: 14px;
 }
 
-// Ant Design Tab
+// ~~~ Ant Design Tab Css ~~~
 .ant-tabs-tab {
   font-size: $textFontSizeM !important;
-  // border-bottom: 2px solid black !important;
-  font-weight: 500 !important;
-  color: #8AA3CD !important;
+  font-weight: $fontWeightXL !important;
+  color: #475569 !important;
+  padding: 16px 0px !important;
 }
 
-.ant-tabs-tab-selected {
-  border-bottom: 2px solid black !important;
+// Tab active bottom border
+.ant-tabs-ink-bar {
+  border-bottom: 5px solid $colorViolet;
+  border-top-left-radius: $borderRadiusFull;
+  border-top-right-radius: $borderRadiusFull;
 }
 
-// Ant Design Tab Header
+// Tab active text
+.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: $colorViolet !important;
+}
+
+// Tab background container
 .ant-tabs-nav-wrap {
   background-color: white;
-  padding: 6px 12px;
+  padding: 0px 12px;
   border-radius: 6px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 1px 3px;
 }

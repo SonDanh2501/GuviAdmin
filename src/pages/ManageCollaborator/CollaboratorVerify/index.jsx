@@ -190,7 +190,6 @@ const CollaboratorVerify = () => {
     setCity(value);
     // saveToCookie("ctv-city", value);
   };
-  console.log("check data ở bảng ctv", data);
   const getListCollaborator = async () => {
     const res = await getListDataCollaborator(
       lang,
@@ -200,7 +199,6 @@ const CollaboratorVerify = () => {
       city,
       tabStatus
     );
-    console.log("check getListDataCollaborator", res);
     for (let i = 0; i < res.data.length; i++) {
       const tempCity = province.filter((x) => x.code === res.data[i].city);
 

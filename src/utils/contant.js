@@ -121,7 +121,7 @@ export const bankList = [
       <div style={{ gap: "12px" }} className="flex items-center">
         {/* <IoStar /> */}
         <img className="w-full h-6" src={VIETCOM_BANK}></img>
-        <span className="text-sm font-normal">Vietcombank</span>
+        <span className="text-xs font-normal">Vietcombank</span>
       </div>
     ),
     image: VIETCOM_BANK,
@@ -133,7 +133,7 @@ export const bankList = [
       <div style={{ gap: "12px" }} className="flex items-center">
         {/* <IoStar /> */}
         <img className="w-full h-6" src={MB_BANK}></img>
-        <span className="text-sm font-normal">MBBank</span>
+        <span className="text-xs font-normal">MBBank</span>
       </div>
     ),
     image: MB_BANK,
@@ -145,7 +145,7 @@ export const bankList = [
       <div style={{ gap: "12px" }} className="flex items-center">
         {/* <IoStar /> */}
         <img className="w-full h-6" src={VIETIN_BANK}></img>
-        <span className="text-sm font-normal">Vietinbank</span>
+        <span className="text-xs font-normal">Vietinbank</span>
       </div>
     ),
     image: VIETIN_BANK,
@@ -157,7 +157,7 @@ export const bankList = [
       <div style={{ gap: "12px" }} className="flex items-center">
         {/* <IoStar /> */}
         <img className="w-full h-6" src={TECHCOM_BANK}></img>
-        <span className="text-sm font-normal">Techcombank</span>
+        <span className="text-xs font-normal">Techcombank</span>
       </div>
     ),
     image: TECHCOM_BANK,
@@ -169,7 +169,7 @@ export const bankList = [
       <div style={{ gap: "12px" }} className="flex items-center">
         {/* <IoStar /> */}
         <img className="w-full h-6" src={ARGI_BANK}></img>
-        <span className="text-sm font-normal">Agribank</span>
+        <span className="text-xs font-normal">Agribank</span>
       </div>
     ),
     image: ARGI_BANK,
@@ -181,7 +181,7 @@ export const bankList = [
       <div style={{ gap: "12px" }} className="flex items-center">
         {/* <IoStar /> */}
         <img className="w-full h-6" src={BIDV_BANK}></img>
-        <span className="text-sm font-normal">BIDV</span>
+        <span className="text-xs font-normal">BIDV</span>
       </div>
     ),
     image: BIDV_BANK,
@@ -193,7 +193,7 @@ export const bankList = [
       <div style={{ gap: "12px" }} className="flex items-center">
         {/* <IoStar /> */}
         <img className="w-full h-6" src={SACOM_BANK}></img>
-        <span className="text-sm font-normal">Sacombank</span>
+        <span className="text-xs font-normal">Sacombank</span>
       </div>
     ),
     image: SACOM_BANK,
@@ -205,7 +205,7 @@ export const bankList = [
       <div style={{ gap: "12px" }} className="flex items-center">
         {/* <IoStar /> */}
         <img className="w-full h-6" src={ACB_BANK}></img>
-        <span className="text-sm font-normal">ACB</span>
+        <span className="text-xs font-normal">ACB</span>
       </div>
     ),
     image: ACB_BANK,
@@ -217,7 +217,7 @@ export const bankList = [
       <div style={{ gap: "12px" }} className="flex items-center">
         {/* <IoStar /> */}
         <img className="w-full h-6" src={VP_BANK}></img>
-        <span className="text-sm font-normal">VPBank</span>
+        <span className="text-xs font-normal">VPBank</span>
       </div>
     ),
     image: VP_BANK,
@@ -229,7 +229,7 @@ export const bankList = [
       <div style={{ gap: "12px" }} className="flex items-center">
         {/* <IoStar /> */}
         <img className="w-full h-6" src={TP_BANK}></img>
-        <span className="text-sm font-normal">TPBank</span>
+        <span className="text-xs font-normal">TPBank</span>
       </div>
     ),
     image: TP_BANK,
@@ -241,7 +241,7 @@ export const bankList = [
       <div style={{ gap: "12px" }} className="flex items-center">
         {/* <IoStar /> */}
         <img className="w-full h-6" src={VIB_BANK}></img>
-        <span className="text-sm font-normal">VIB</span>
+        <span className="text-xs font-normal">VIB</span>
       </div>
     ),
     image: VIB_BANK,
@@ -253,7 +253,7 @@ export const bankList = [
       <div style={{ gap: "12px" }} className="flex items-center">
         {/* <IoStar /> */}
         <img className="w-full h-6" src={SHB_BANK}></img>
-        <span className="text-sm font-normal">SHB</span>
+        <span className="text-xs font-normal">SHB</span>
       </div>
     ),
     image: SHB_BANK,
@@ -271,7 +271,7 @@ export const countryList = [
           <img className="w-full h-7" src={VIETNAM_FLAG}></img>
         </div>
         <div>
-          <span className="text-sm font-normal">Việt Nam</span>
+          <span className="text-xs font-normal">Việt Nam</span>
         </div>
       </div>
     ),
@@ -286,7 +286,7 @@ export const countryList = [
           <img className="w-full h-7" src={AMERICAN_FLAG}></img>
         </div>
         <div>
-          <span className="text-sm font-normal">Hoa Kì</span>
+          <span className="text-xs font-normal">Hoa Kì</span>
         </div>
       </div>
     ),
@@ -301,7 +301,7 @@ export const countryList = [
           <img className="w-full h-7" src={CHINA_FLAG}></img>
         </div>
         <div>
-          <span className="text-sm font-normal">Trung Quốc</span>
+          <span className="text-xs font-normal">Trung Quốc</span>
         </div>
       </div>
     ),
@@ -316,7 +316,7 @@ export const countryList = [
           <img className="w-full h-7" src={SINGAPO_FLAG}></img>
         </div>
         <div>
-          <span className="text-sm font-normal">Singapore</span>
+          <span className="text-xs font-normal">Singapore</span>
         </div>
       </div>
     ),
@@ -332,7 +332,7 @@ export const countryList = [
           <img className="w-full h-7" src={PHILIPPINES_FLAG}></img>
         </div>
         <div>
-          <span className="text-sm font-normal">Philippines</span>
+          <span className="text-xs font-normal">Philippines</span>
         </div>
       </div>
     ),
@@ -347,7 +347,7 @@ export const countryList = [
           <img className="w-full h-7" src={MALAYSIA_FLAG}></img>
         </div>
         <div>
-          <span className="text-sm font-normal">Malaysia</span>
+          <span className="text-xs font-normal">Malaysia</span>
         </div>
       </div>
     ),
@@ -362,7 +362,7 @@ export const countryList = [
           <img className="w-full h-7" src={THAILAND_FLAG}></img>
         </div>
         <div>
-          <span className="text-sm font-normal">Thái Lan</span>
+          <span className="text-xs font-normal">Thái Lan</span>
         </div>
       </div>
     ),
@@ -377,7 +377,7 @@ export const countryList = [
           <img className="w-full h-7" src={INDONESIA_FLAG}></img>
         </div>
         <div>
-          <span className="text-sm font-normal">Indonesia</span>
+          <span className="text-xs font-normal">Indonesia</span>
         </div>
       </div>
     ),
@@ -392,7 +392,7 @@ export const countryList = [
           <img className="w-full h-7" src={TIMOR_FLAG}></img>
         </div>
         <div>
-          <span className="text-sm font-normal">Đông Timor</span>
+          <span className="text-xs font-normal">Đông Timor</span>
         </div>
       </div>
     ),
@@ -407,7 +407,7 @@ export const countryList = [
           <img className="w-full h-7" src={BRUNEI_FLAG}></img>
         </div>
         <div>
-          <span className="text-sm font-normal">Brunei</span>
+          <span className="text-xs font-normal">Brunei</span>
         </div>
       </div>
     ),
@@ -423,7 +423,7 @@ export const countryList = [
           <img className="w-full h-7" src={LAOS_FLAG}></img>
         </div>
         <div>
-          <span className="text-sm font-normal">Lào</span>
+          <span className="text-xs font-normal">Lào</span>
         </div>
       </div>
     ),

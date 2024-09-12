@@ -43,15 +43,9 @@ const InputTextCustom = (props) => {
     province, // Giá trị (array) mảng gồm 63 tỉnh thành
     district, // Giá trị (array) mảng gồm các quận/huyện tương ứng với tỉnh thành đã chọn
     multiSelectOptions, // Giá trị (array) mảng dùng cho multi select
-    // birthday,
-    // setBirthday,
     multiple, // Giá trị (boolean) chọn việc upload file lên là 1 file hay nhiều file
     previewImage, // Giá trị (boolean) hiển thị ảnh bên phải của select options (chỉ dành cho type === "select")
-    // imgIdentifyFronsite,
     required, // Giá trị (boolean) chọn việc input text là bắt buộc hay không
-    // number,
-    // minLength,
-    // maxLength,
     searchField, // Giá trị (boolean) chọn việc hiển thị hay không hiển thị thanh tìm kiếm
     onChange, // Hàm thay đổi giá trị cho value khi tyle là "text"
     testing,
@@ -60,7 +54,6 @@ const InputTextCustom = (props) => {
     notShowPreviewImage, // Giá trị (boolean) hiển thị hay không preview image
     limitShows, // Hiển thị max là bao nhiêu lựa chọn
     valueUnit, // Phân vùng điện thoại
-    checking, // Chỉ để test
   } = props;
   // Lấy district (quận/huyện) từ giá trị province có được
   const tempDistrictArray = province?.find(
@@ -79,8 +72,8 @@ const InputTextCustom = (props) => {
   const [hideImage, setHideImage] = useState(false);
   const [valueWithUnit, setValueWithUnit] = useState("");
   const [selectArea, setSelectArea] = useState("");
-  // ~~~ Support Handle fucntion ~~~
 
+  // ~~~ Support Handle fucntion ~~~
   // 1. Hàm đóng Popover
   const handleClose = () => {
     setSearchInput("");
@@ -92,7 +85,6 @@ const InputTextCustom = (props) => {
   };
 
   // ~~~ Handle fucntion ~~~
-
   // 1. Hàm xử lí khi type === "select"
   const handldeSelected = (valueSelect) => {
     // options.map((el) => {
@@ -662,14 +654,14 @@ const InputTextCustom = (props) => {
           <input
             disabled={disable}
             name={name ? name : ""}
-            className="form-input"
+            className="form-field__input"
             placeholder=" "
             value={value}
             onChange={onChange}
           />
-          <label htmlFor=" " className="form-label">
+          <label htmlFor=" " className="form-field__label">
             {placeHolder}{" "}
-            {required && <span className="required-label">*</span>}
+            {required && <span className="form-field__label--required">*</span>}
           </label>
         </>
       )}
@@ -680,19 +672,19 @@ const InputTextCustom = (props) => {
             multiple={multiple}
             disabled={disable}
             type="file"
-            className="form-input"
+            className="form-field__input"
             placeholder=" "
             accept={".jpg,.png,.jpeg"}
             onChange={onChangeImage}
           />
-          <label htmlFor=" " className="form-label">
+          <label htmlFor=" " className="form-field__label">
             {placeHolder}
           </label>
           <div
             onClick={() => {
               setHideImage(!hideImage);
             }}
-            className="form-hide-image"
+            className="form-field__hide-image"
           >
             <IoChevronDownOutline color="#999" />
           </div>
@@ -720,7 +712,8 @@ const InputTextCustom = (props) => {
                         }}
                       />
                       <span style={{ maxWidth: "280px", overflow: "hidden" }}>
-                        {item?.split("/").pop()}
+                        Định dạng file:{" "}
+                        {item?.split("/").pop().split(".").pop()}
                       </span>
                     </div>
                     <div className="flex gap-2">
@@ -758,7 +751,7 @@ const InputTextCustom = (props) => {
                     }}
                   />
                   <span style={{ maxWidth: "280px", overflow: "hidden" }}>
-                    {value?.split("/").pop()}
+                    Định dạng file:{" "}{value?.split("/").pop().split(".").pop()}
                   </span>
                 </div>
                 <div className="flex gap-2">
@@ -803,7 +796,7 @@ const InputTextCustom = (props) => {
               <input
                 disabled={disable}
                 type="text"
-                className="form-input"
+                className="form-field__input"
                 style={{ cursor: "pointer" }}
                 placeholder=" "
                 value={
@@ -813,14 +806,14 @@ const InputTextCustom = (props) => {
                 }
                 readOnly
               />
-              <label htmlFor=" " className="form-label">
+              <label htmlFor=" " className="form-field__label">
                 {placeHolder}
               </label>
             </div>
             {previewImage ? (
-              <div className="form-label-image">
+              <div className="form-field__image">
                 <img
-                  className="image-unit"
+                  className="form-field__image--img"
                   src={
                     options?.find((el) => el.code === value)?.image
                       ? options?.find((el) => el.code === value)?.image
@@ -830,7 +823,7 @@ const InputTextCustom = (props) => {
               </div>
             ) : (
               <IoCaretDownOutline
-                className="form-label-dropdown-icon"
+                className="form-field__icon"
                 size="14px"
                 color="#999"
               />
@@ -863,17 +856,17 @@ const InputTextCustom = (props) => {
               <input
                 style={{ cursor: "pointer" }}
                 type="text"
-                className="form-input"
+                className="form-field__input"
                 placeholder=" "
                 value={moment(value).format("DD/MM/YYYY")}
                 // onChange={(el) => printData(el)}
                 readOnly
               />
-              <label htmlFor=" " className="form-label">
+              <label htmlFor=" " className="form-field__label">
                 {placeHolder}
               </label>
               <IoCalendar
-                className="form-label-dropdown-icon"
+                className="form-field__icon"
                 size="14px"
                 color="#999"
               />
@@ -905,7 +898,7 @@ const InputTextCustom = (props) => {
               <input
                 style={{ cursor: "pointer" }}
                 type="text"
-                className="form-input"
+                className="form-field__input"
                 placeholder=" "
                 // value={province.find((el))}
                 value={
@@ -915,11 +908,11 @@ const InputTextCustom = (props) => {
                 }
                 readOnly
               />
-              <label htmlFor=" " className="form-label">
+              <label htmlFor=" " className="form-field__label">
                 {placeHolder}
               </label>
               <IoCaretDownOutline
-                className="form-label-dropdown-icon"
+                className="form-field__icon"
                 size="14px"
                 color="#999"
               />
@@ -953,7 +946,7 @@ const InputTextCustom = (props) => {
                 style={{ cursor: "pointer" }}
                 disabled={disable}
                 type="text"
-                className="form-input"
+                className="form-field__input"
                 placeholder=" "
                 // disabled={selectProvince?.code ? false : true}
                 // value={
@@ -969,11 +962,11 @@ const InputTextCustom = (props) => {
                 // onChange={(el) => printData(el)}
                 readOnly
               />
-              <label htmlFor=" " className="form-label">
+              <label htmlFor=" " className="form-field__label">
                 {placeHolder}
               </label>
               <IoCaretDownOutline
-                className="form-label-dropdown-icon"
+                className="form-field__icon"
                 size="14px"
                 color="#999"
               />
@@ -1004,7 +997,7 @@ const InputTextCustom = (props) => {
             <div>
               <input
                 type="text"
-                className="form-input"
+                className="form-field__input"
                 placeholder=" "
                 value={
                   matchedItems &&
@@ -1022,11 +1015,11 @@ const InputTextCustom = (props) => {
                 // onChange={(el) => printData(el)}
                 readOnly
               />
-              <label htmlFor=" " className="form-label">
+              <label htmlFor=" " className="form-field__label">
                 {placeHolder}
               </label>
               <IoCaretDownOutline
-                className="form-label-dropdown-icon"
+                className="form-field__icon"
                 size="14px"
                 color="#999"
               />
@@ -1059,7 +1052,7 @@ const InputTextCustom = (props) => {
                 // style={{ pointerEvents: "none" }}
                 disabled={disable}
                 type="text"
-                className="form-input"
+                className="form-field__input"
                 placeholder=" "
                 value={
                   matchedItems &&
@@ -1077,11 +1070,11 @@ const InputTextCustom = (props) => {
                 // onChange={(el) => printData(el)}
                 readOnly
               />
-              <label htmlFor=" " className="form-label">
+              <label htmlFor=" " className="form-field__label">
                 {placeHolder}
               </label>
               <IoCaretDownOutline
-                className="form-label-dropdown-icon"
+                className="form-field__icon"
                 size="14px"
                 color="#999"
               />
@@ -1094,14 +1087,14 @@ const InputTextCustom = (props) => {
         <>
           <input
             disabled={disable}
-            className="form-input"
+            className="form-field__input"
             placeholder=" "
             value={valueWithUnit}
             onChange={onChange}
           />
-          <label htmlFor=" " className="form-label">
+          <label htmlFor=" " className="form-field__label">
             {placeHolder}{" "}
-            {required && <span className="required-label">*</span>}
+            {required && <span className="form-field__label--required">*</span>}
           </label>
         </>
       )}
@@ -1130,7 +1123,7 @@ const InputTextCustom = (props) => {
                 // style={{ pointerEvents: "none" }}
                 disabled={disable}
                 type="text"
-                className="form-input"
+                className="form-field__input"
                 placeholder=" "
                 value={
                   matchedItems &&
@@ -1148,11 +1141,11 @@ const InputTextCustom = (props) => {
                 // onChange={(el) => printData(el)}
                 readOnly
               />
-              <label htmlFor=" " className="form-label">
+              <label htmlFor=" " className="form-field__label">
                 {placeHolder}
               </label>
               <IoCaretDownOutline
-                className="form-label-dropdown-icon"
+                className="form-field__icon"
                 size="14px"
                 color="#999"
               />

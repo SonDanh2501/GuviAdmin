@@ -1,32 +1,51 @@
 @import "../../../src/@theme/style.scss";
 
 
-.div-card-container {
+.card-statistics {
     background-color: white;
     border-radius: $borderRadiusM;
 
-    .div-icon {
+
+    // Icon sử dụng trong card
+    .card-statistics__icon {
         padding: 8px;
         width: 36px;
         height: 36px;
         border-radius: $borderRadiusL;
+
+        &.green {
+            background-color: $colorExtraLightGreen;
+        }
+
+        &.red {
+            background-color: $colorExtraLightRed;
+        }
+
+        &.blue {
+            background-color: $colorExtraLightBlue;
+        }
+
+        &.yellow {
+            background-color: $colorExtraLightYellow;
+        }
     }
 
-    .div-header {
+    // ~~~ Tiêu đề thẻ ~~~
+    .card-statistics__header {
         display: flex;
         justify-content: space-between;
-        padding: 10px 14px;
-        border-bottom: 2px solid $colorLightGray;
+        padding: 12px 12px;
+        border-bottom: 2px solid $colorExtraLightGray;
 
-        .div-header-right-info {
+        .card-statistics__header--right {
             display: flex;
             align-items: center;
             gap: $gapXS;
 
         }
 
-        .div-header-left-info {
-            .time-filter {
+        .card-statistics__header--left {
+            .card-statistics__header--left-time {
                 display: flex;
                 align-items: center;
                 gap: $gapXS;
@@ -37,10 +56,12 @@
             font-weight: $fontWeightXL;
             font-size: $textFontSizeM;
             font-family: $fontFamily;
+            color: $colorBlack;
         }
     }
 
-    .div-card-overview {
+    // ~~~ Thẻ tổng quan đánh giá ~~~
+    .card-statistics__overview-rating {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -48,7 +69,7 @@
         padding: 12px 12px;
         gap: $gapS;
 
-        .div-star {
+        .card-statistics__overview-rating--star {
             display: flex;
             border-radius: $borderRadiusXL;
             padding: 8px 16px;
@@ -57,101 +78,706 @@
             background-color: $bgStarCard;
             gap: $gapXS;
 
-            .overview-star {
+            .card-statistics__overview-rating--star-avg {
                 padding-top: 3px;
                 margin-left: 3px;
                 font-weight: $fontWeightXL;
                 font-size: $textFontSizeL;
                 font-family: $fontFamily;
+                color: $colorBlack;
             }
         }
 
-        .div-total-rating {
+        .card-statistics__overview-rating--total {
             display: flex;
             align-items: center;
             gap: $gapXS;
 
-            .text-highlight {
+            .card-statistics__overview-rating--total-number {
                 font-weight: $fontWeightXL;
+                color: $colorBlack;
             }
 
             span {
                 font-style: italic;
+                color: $colorBlack;
             }
         }
 
-        .div-rating-kind {
+        .card-statistics__overview-rating--kind {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: $gapM;
 
-            .star-label {
+            .card-statistics__overview-rating--kind-label {
                 display: flex;
                 gap: $gapXS;
                 align-items: center;
+                color: $colorBlack;
 
-                .circle-star {
+                .card-statistics__overview-rating--kind-label-circle {
                     width: 12px;
                     height: 12px;
                     border-radius: $borderRadiusFull;
-                    // background-color: black;
                 }
             }
         }
 
     }
 
-    .div-card-bonus-punish {
+    // ~~~ Thẻ tiêu chí đánh giá ~~~
+    .card-statistics__overview-criteria {
+        display: flex;
+        padding: 0px 12px 12px 12px;
+    }
+
+    // ~~~ Thẻ khen thưởng, vi phạm ~~~
+    .card-statistics__overview-bonus-punish {
         display: flex;
         flex-direction: column;
         padding: 12px 12px;
         gap: $gapL;
 
-        .div-total {
+        .card-statistics__overview-bonus-punish--total {
             display: flex;
             flex-direction: row;
-            gap: $gapM;
+            gap: $gapL;
 
-            .div-total-bonus {
+            .card-statistics__overview-bonus-punish--total-container {
                 width: 50%;
                 display: flex;
                 align-items: center;
                 padding: 10px;
                 border: 2px solid #e5e7eb;
-                border-radius: $borderRadiusM;
+                border-radius: $borderRadiusXL;
                 gap: $gapM;
 
-                .div-total-bonus-number {
+                .card-statistics__overview-bonus-punish--total-container-number {
                     display: flex;
                     flex-direction: column;
 
-                    .total-label {
+                    .card-statistics__overview-bonus-punish--total-container-number-label {
                         font-weight: $fontWeightL;
                         font-size: $textFontSizeM;
                         font-family: $fontFamily;
                         color: $colorGray;
+                        opacity: 0.6;
                     }
 
-                    .total-number {
+                    .card-statistics__overview-bonus-punish--total-container-number-number {
                         font-weight: $fontWeightXL;
                         font-size: $textFontSizeXL;
+                        color: $colorBlack;
 
-                        .total-number-sub {
+                        .card-statistics__overview-bonus-punish--total-container-number-number-sub {
                             font-weight: $textFontSizeM;
                             font-size: $textFontSizeM;
                             text-transform: uppercase;
+                            color: $colorBlack;
                         }
                     }
 
                 }
             }
         }
-        .div-bonus-recent {
+
+        .card-statistics__overview-bonus-punish--recent {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 10px;
+            border-radius: $borderRadiusXL;
+
+            .card-statistics__overview-bonus-punish--recent-icon {
+                display: flex;
+                gap: 12px;
+
+                .card-statistics__overview-bonus-punish--recent-icon-label {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 2px;
+                    color: $colorBlack;
+
+                    .card-statistics__overview-bonus-punish--recent-icon-label-time {
+                        color: $colorGray;
+                        opacity: 0.6;
+                    }
+                }
+            }
+
+            .card-statistics__overview-bonus-punish--recent-status {
+                padding: 1px 6px;
+                color: white;
+                background-color: $colorYellow;
+                border-radius: $borderRadiusXL;
+            }
+        }
+
+        .card-statistics__overview-bonus-punish--recent-success {
+            border: 2px solid $colorGreen;
+        }
+
+        .card-statistics__overview-bonus-punish--recent-punish {
+            border: 2px solid $colorRed;
+        }
+
+    }
+
+    // ~~~ Thẻ bài kiểm tra ~~~
+    .card-statistics__overview-examination {
+        display: flex;
+        flex-direction: column;
+        // padding: 12px 12px;
+        padding: 12px 12px 0px 12px;
+        gap: $gapL;
+
+        .card-statistics__overview-examination--image {
+            width: 100%;
+            height: 100px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: $colorExtraLightViolet;
+            border-radius: $borderRadiusXL;
+
+            .card-statistics__overview-examination--image-label {
+                padding-left: 24px;
+                font-size: $textFontSizeXL;
+                font-weight: $fontWeightXL;
+                color: $colorBlack;
+            }
+
+            .card-statistics__overview-examination--image-image {
+                height: 100%;
+            }
+        }
+
+        .card-statistics__overview-examination--exam {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 12px;
+
+            &.not-last-exam {
+                border-bottom: 1.5px solid $colorExtraLightGray;
+            }
+
+            .card-statistics__overview-examination--exam-content {
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
+
+                .card-statistics__overview-examination--exam-content-header {
+                    text-transform: uppercase;
+                    color: $colorBlack;
+                }
+
+                .card-statistics__overview-examination--exam-content-subheader {
+                    text-transform: lowercase;
+                    color: $colorGray;
+                    opacity: 0.6;
+                }
+
+                .card-statistics__overview-examination--exam-content-subheader::first-letter {
+                    text-transform: uppercase;
+                }
+            }
+
+            .card-statistics__overview-examination--exam-status {
+                background-color: $colorExtraLightGreen;
+                padding: 4px 12px;
+                border-radius: $borderRadiusFull;
+                border: 1px solid $colorGreen;
+                color: $colorGreen;
+
+                &.not-pass {
+                    background-color: $colorExtraLightGray;
+                    border: 1px solid $colorGray;
+                    color: $colorGray;
+                }
+            }
+        }
+    }
+
+    // ~~~ Thẻ tài chính ~~~
+    .card-statistics__overview-finance {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 12px 12px;
+        gap: $gapL;
+
+        .card-statistics__overview-finance--image {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            height: 100px;
+            background-color: $colorExtraLightAmber;
+            border-radius: $borderRadiusXL;
+
+            .card-statistics__overview-finance--image-content {
+                display: flex;
+                flex-direction: column;
+
+                .card-statistics__overview-finance--image-content-subtext {
+                    font-size: $textFontSizeXL;
+                    font-weight: $fontWeightXL;
+                    color: $colorGray;
+                    opacity: 0.6;
+                    padding: 2px 20px;
+                }
+
+                .card-statistics__overview-finance--image-content-total {
+                    font-size: $textFontSizeXL;
+                    font-weight: $fontWeightXL;
+                    padding: 2px 20px;
+                    color: $colorBlack;
+                }
+
+            }
+
+            .card-statistics__overview-finance--image-image {
+                height: 100%;
+            }
+        }
+
+        .card-statistics__overview-finance--content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            width: 100%;
+            gap: $gapL;
+
+            .card-statistics__overview-finance--content-child {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                // border-bottom: 1.5px solid $colorExtraLightGray;
+
+                &.not-last {
+                    padding-bottom: 12px;
+                    border-bottom: 1.5px solid $colorExtraLightGray;
+                }
+
+                .card-statistics__overview-finance--content-child-container {
+                    display: flex;
+                    align-items: center;
+                    gap: $gapS;
+
+                    span {
+                        font-size: $textFontSizeM;
+                        font-weight: $fontWeightL;
+                        color: $colorLightGray;
+                    }
+                }
+
+                .card-statistics__overview-finance--content-child-money {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: $gapXS;
+                    padding: 4px 12px;
+                    border-radius: $borderRadiusM;
+                    width: 35%;
+
+                    span {
+                        font-size: $textFontSizeM;
+                        font-weight: $fontWeightL;
+                        color: $colorBlack;
+                    }
+                }
+
+                .card-statistics__overview-finance--content-child-money-month {
+                    background-color: $colorExtraLightGreen;
+                }
+
+                .card-statistics__overview-finance--content-child-money-year {
+                    background-color: $colorExtraLightYellow;
+                }
+
+                .card-statistics__overview-finance--content-child-money-total {
+                    background-color: $colorExtraLightBlue;
+                }
+            }
+        }
+    }
+
+    // ~~~ Thẻ hiệu quả công việc ~~~
+    .card-statistics__overview-jobs {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 12px 12px;
+        gap: $gapL;
+
+        .card-statistics__overview-jobs--image {
+            width: 100%;
+            height: 100px;
+            background-color: $colorExtraLightBlue;
+            border-radius: $borderRadiusL;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            .card-statistics__overview-jobs--image-content {
+                display: flex;
+                flex-direction: column;
+                padding-left: 24px;
+
+                .card-statistics__overview-jobs-image-content-subtext {
+                    font-size: $textFontSizeXL;
+                    font-weight: $fontWeightXL;
+                    color: $colorGray;
+                    opacity: 0.6;
+                }
+
+                .card-statistics__overview-jobs--image-content-total {
+                    display: flex;
+                    gap: $gapXS;
+
+                    .card-statistics__overview-jobs--image-content-total-number {
+                        font-size: $textFontSizeXL;
+                        font-weight: $fontWeightXL;
+                        padding-top: 2px;
+                        color: $colorBlack;
+                    }
+
+                    .card-statistics__overview-jobs--image-content-total-unit {
+                        font-size: $textFontSizeM;
+                        font-weight: $fontWeightXL;
+                        text-transform: uppercase;
+                        padding-top: 2px;
+                        color: $colorBlack;
+
+                    }
+                }
+
+            }
+
+            .card-statistics__overview-jobs--image-image {
+                height: 100%;
+            }
+        }
+
+        .card-statistics__overview-jobs--content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: $gapL;
+            width: 100%;
+
+            .card-statistics__overview-jobs--content-child {
+                display: flex;
+                align-items: center;
+                gap: $gapL;
+                // padding-top: 8px;
+
+                .card-statistics__overview-jobs--content-child-progress-bar {
+                    width: 100%;
+
+                    .card-statistics__overview-jobs--content-child-progress-bar-number {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        margin-bottom: 2px;
+
+                        .card-statistics__overview-jobs--content-child-progress-bar-number-label {
+                            font-size: $textFontSizeM;
+                            font-weight: $fontWeightL;
+                            color: $colorGray;
+                            opacity: 0.6;
+                        }
+
+                        .card-statistics__overview-jobs--content-child-progress-bar-number-total {
+                            font-size: $textFontSizeM;
+                            font-weight: $fontWeightXL;
+                            color: $colorBlack;
+                        }
+                    }
+
+                    .card-statistics__overview-jobs--content-child-progress-bar-container {
+                        width: 100%;
+                        position: relative;
+                        border-radius: $borderRadiusFull;
+                        background-color: $colorExtraLightGray;
+                        text-align: center;
+
+                        span {
+                            position: absolute;
+                            font-style: italic;
+                            font-size: $fontWeightL;
+                            color: $colorBlack;
+
+                            &.more-than-overal {
+                                color: white;
+                            }
+                        }
+
+                        .card-statistics__overview-jobs--content-child-progress-bar-contanier-bar {
+                            height: 16px;
+                            border-radius: $borderRadiusFull;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        }
+
+                        .card-statistics__overview-jobs--content-child-progress-bar-contanier-bar-success {
+                            background-color: $colorGreen;
+                            box-shadow: rgba(81, 250, 55, 0.56) 0px 1px 8px 0px;
+                        }
+
+                        .card-statistics__overview-jobs--content-child-progress-bar-contanier-bar-cancel {
+                            background-color: $colorRed;
+                            box-shadow: rgba(247, 55, 55, 0.56) 0px 1px 8px 0px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // ~~~ Thẻ hoạt động gần đây ~~~
+    .card-statistics__overview-activities {
+        padding: 12px 12px;
+
+        // gap: $gapS;
+        .card-statistics__overview-activities--activity {
+            display: flex;
+            padding-bottom: 12px;
+
+            .card-statistics__overview-activities--activity-left {
+                width: 25%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+
+                .card-statistics__overview-activities--activity-left-date {
+                    font-size: $textFontSizeM;
+                    font-weight: $fontWeightXL;
+                    color: $colorBlack;
+                }
+
+                .card-statistics__overview-activities--activity-left-day {
+                    font-size: $textFontSizeM;
+                    font-weight: $fontWeightL;
+                    color: $colorGray;
+                    opacity: 0.6;
+                    text-transform: capitalize;
+                }
+            }
+
+            .card-statistics__overview-activities--activity-line {
+                width: 16.67%;
+                align-items: center;
+                display: flex;
+                flex-direction: column;
+                margin-bottom: -12px;
+
+                .card-statistics__overview-activities--activity-line-icon {
+                    padding: 8px 8px;
+                    width: fit-content;
+                    height: fit-content;
+                    border-radius: $borderRadiusFull;
+
+                    &.pending {
+                        background-color: $colorExtraLightYellow;
+                    }
+
+                    &.confirm {
+                        background-color: $colorExtraLightBlue;
+                    }
+
+                    &.doing {
+                        background-color: $colorExtraLightBlue;
+                    }
+
+                    &.done {
+                        background-color: $colorExtraLightGreen;
+                    }
+
+                    &.cancel {
+                        background-color: $colorExtraLightRed;
+                    }
+                }
+
+                .card-statistics__overview-activities--activity-line-icon-line {
+                    width: 2px;
+                    height: 100%;
+                    background-color: $colorExtraLightGray;
+                }
+            }
+
+            .card-statistics__overview-activities--activity-right {
+                width: 58.33%;
+
+                .card-statistics__overview-activities--activity-right-time {
+                    font-size: $textFontSizeM;
+                    font-weight: $fontWeightXL;
+                    color: $colorBlack;
+                }
+
+                .card-statistics__overview-activities--activity-right-address {
+                    font-size: $textFontSizeM;
+                    font-weight: $fontWeightL;
+                    color: $colorGray;
+                    opacity: 0.6;
+                    overflow: hidden;
+                    display: -webkit-box;
+                    -webkit-box-orient: vertical;
+                    -webkit-line-clamp: 3;
+                }
+
+                .card-statistics__overview-activities--activity-right-status {
+                    width: fit-content;
+                    padding: 3px 8px;
+                    border-radius: $borderRadiusL;
+                    // border: 1px solid;
+                    margin-top: 4px;
+
+                    &.pending {
+                        background-color: $colorExtraLightYellow;
+                        border: 1px solid $colorYellow;
+                        color: $colorYellow;
+                    }
+
+                    &.confirm {
+                        background-color: $colorExtraLightBlue;
+                        border: 1px solid $colorBlue;
+                        color: $colorBlue;
+                    }
+
+                    &.doing {
+                        background-color: $colorExtraLightBlue;
+                        border: 1px solid $colorBlue;
+                        color: $colorBlue;
+                    }
+
+                    &.done {
+                        background-color: $colorExtraLightGreen;
+                        border: 1px solid $colorGreen;
+                        color: $colorGreen;
+                    }
+
+                    &.cancel {
+                        background-color: $colorExtraLightRed;
+                        border: 1px solid $colorRed;
+                        color: $colorRed;
+                    }
+
+                    span {
+                        font-size: $textFontSizeM;
+                        font-weight: $fontWeightL;
+                    }
+                }
+            }
 
         }
-        .div-punish-recent {
+    }
 
+    // ~~~ Thẻ thông tin cá nhân ~~~
+    .card-statistics__overview-information {
+        display: flex;
+        flex-direction: column;
+        gap: $gapL;
+        padding: 12px 12px;
+
+        .card-statistics__overview-information--avatar {
+            background-color: $colorExtraLightViolet;
+            border-radius: $borderRadiusL;
+            // margin: 12px 12px;
+            padding: 16px 16px;
+            display: flex;
+            justify-content: center;
+
+            .card-statistics__overview-information--avatar-image {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .card-statistics__overview-information--avatar-information {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                margin-top: 12px;
+                gap: $gapS;
+
+                .card-statistics__overview-information--avatar-information-name {
+                    font-size: $textFontSizeXL;
+                    font-weight: $fontWeightXL;
+                    color: $colorBlack;
+                }
+
+                .card-statistics__overview-information--avatar-information-other {
+                    display: flex;
+                    align-items: center;
+                    gap: $gapXS;
+
+                    .card-statistics__overview-information--avatar-information-other-subtext {
+                        font-size: $textFontSizeM;
+                        font-weight: $fontWeightXL;
+                        color: $colorBlack;
+                    }
+
+                    .card-statistics__overview-information--avatar-information-other-subtext-label {
+                        font-size: $textFontSizeM;
+                        font-weight: $fontWeightL;
+                        color: $colorGray;
+                        opacity: 0.6;
+                    }
+                }
+
+                .card-statistics__overview-information--avatar-information-status {
+                    padding: 8px 16px;
+                    border-radius: $borderRadiusFull;
+                }
+            }
+        }
+
+        .card-statistics__overview-information--detail-info {
+            display: flex;
+            flex-direction: column;
+            gap: $gapL;
+
+            // margin: 16px 12px 16px 12px;
+            .card-statistics__overview-information--detail-info-label {
+                font-size: $textFontSizeM;
+                font-weight: $fontWeightXL;
+                color: $colorBlack;
+            }
+        }
+    }
+
+    // ~~~ Thẻ tiến hành hồ sơ ~~~ 
+    .card-statistics__overview-document {
+        display: flex;
+        flex-direction: column;
+        padding: 12px 12px;
+        gap: $gapM;
+        .card-statistics__overview-document--child {
+            display: flex;
+            align-items: center;
+            gap: $gapM;
+            .card-statistics__overview-document--child-left {
+                display: flex;
+                gap: $gapM;
+                align-items: center;
+                .card-statistics__overview-document--child-left-label {
+                    font-size: $textFontSizeM;
+                    font-weight: $fontWeightL;
+                    color: $colorBlack;
+                    &.not-upload {
+                        color: $colorGray;
+                        opacity: 0.6;
+                    }
+                }
+                
+            }
         }
     }
 
