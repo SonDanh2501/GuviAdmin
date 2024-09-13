@@ -29,11 +29,14 @@
 
       .collaborator-information__left--card-header {
         display: flex;
-        padding: 10px 14px;
+        padding: 12px 12px;
         border-bottom: 2px solid $colorExtraLightGray;
 
         span {
           font-weight: $fontWeightXL;
+          font-size: $textFontSizeM;
+          font-family: $fontFamily;
+          color: $colorBlack;
         }
       }
 
@@ -61,11 +64,14 @@
 
       .collaborator-information__right--card-header {
         display: flex;
-        padding: 10px 14px;
+        padding: 12px 12px;
         border-bottom: 2px solid $colorExtraLightGray;
 
         span {
           font-weight: $fontWeightXL;
+          font-size: $textFontSizeM;
+          font-family: $fontFamily;
+          color: $colorBlack;
         }
       }
 
@@ -96,7 +102,7 @@
               align-items: center;
               justify-content: space-between;
               padding: 6px 12px;
-              
+
               background-color: $colorExtraLightGray;
               border-radius: $borderRadiusS;
               transition: 0.3s ease-in;

@@ -16,6 +16,7 @@
         font-weight: $fontWeightL;
         font-size: $textFontSizeM;
         font-family: $fontFamily;
+        color: $colorBlack;
     }
 
     .form-field__label {
@@ -30,6 +31,7 @@
         font-weight: $fontWeightL;
         font-size: $textFontSizeM;
         font-family: $fontFamily;
+        
 
         .form-field__label--required {
             color: #EF4444;
