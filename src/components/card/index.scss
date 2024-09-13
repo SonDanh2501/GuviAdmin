@@ -5,7 +5,6 @@
     background-color: white;
     border-radius: $borderRadiusM;
 
-
     // Icon sử dụng trong card
     .card-statistics__icon {
         padding: 8px;
@@ -759,26 +758,55 @@
         flex-direction: column;
         padding: 12px 12px;
         gap: $gapM;
+
         .card-statistics__overview-document--child {
             display: flex;
             align-items: center;
             gap: $gapM;
+
             .card-statistics__overview-document--child-left {
                 display: flex;
                 gap: $gapM;
                 align-items: center;
+
                 .card-statistics__overview-document--child-left-label {
                     font-size: $textFontSizeM;
                     font-weight: $fontWeightL;
                     color: $colorBlack;
+
                     &.not-upload {
                         color: $colorGray;
                         opacity: 0.6;
                     }
                 }
-                
+
             }
         }
     }
 
+}
+
+.card-statistics__icon--layout {
+    display: flex;
+    gap: $gapS;
+    align-items: center;
+
+    .card-statistics__icon--layout-content {
+        display: flex;
+        flex-direction: column;
+        gap: $gapXS;
+
+        .card-statistics__icon--layout-content-sub {
+            font-size: $textFontSizeM;
+            font-weight: $fontWeightL;
+            color: $colorGray;
+            opacity: 0.7;
+        }
+
+        .card-statistics__icon--layout-content-main {
+            font-weight: $fontWeightL;
+            font-size: $textFontSizeM;
+            color: $colorBlack;
+        }
+    }
 }

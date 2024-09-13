@@ -81,7 +81,7 @@ const Information = ({ data, idCTV, setData, id }) => {
   const [gender, setGender] = useState("other"); // Giá trị giới tính lựa chọn
   const [birthday, setBirthday] = useState("2022-01-20T00:00:00.000Z"); // Giá trị ngày sinh
   const [selectcountry, setSelectCountry] = useState("vietnam"); // Giá trị quốc tịch
-  const [selectHomeTown, setSelectHomeTown] = useState(""); // Giá trị quê quán
+  const [homeTown, setHomeTown] = useState(""); // Giá trị quê quán
   const [phone, setPhone] = useState(""); // Giá trị số điện thoại
   const [ethnic, setEthnic] = useState("Kinh"); // Giá trị dân tộc
   const [religion, setReligion] = useState("Không"); // Giá trị tôn giáo
@@ -164,7 +164,7 @@ const Information = ({ data, idCTV, setData, id }) => {
     if (data?.country?.length > 0)
       setSelectCountry(data?.country === "vn" ? "vietnam" : data?.country);
     // Tương tự hàm trên hàm này viết để convert từ giá trị số của tỉnh (do lúc đầu để input là kiểu select nhưng đổi thành dạng text)
-    setSelectHomeTown(
+    setHomeTown(
       data?.home_town > 0
         ? province?.find((el) => +el?.code === +data?.home_town)?.name
         : data?.home_town
@@ -545,7 +545,7 @@ const Information = ({ data, idCTV, setData, id }) => {
       identity_place: issued.trim(), // Nơi cấp của CCCD/CMND của CTV [✓]
       identity_date: indentityDay, // Ngày cấp của CCCD/CMND czủa CTV [✓]
       country: selectcountry, // Quốc tịch của CTV [✓]
-      home_town: selectHomeTown, // Quê quán của CTV [✓]
+      home_town: homeTown, // Quê quán của CTV [✓]
       province_live: selectProvinceLive?.code, // Tỉnh/Thành phố thường trú của CTV [✓]
       district_live: selectDistrictLive?.code, // Quận/Huyện thường trú của CTV [✓]
       address_live: addressResidentLive.trim(), // Số nhà, tên đường thường trú của CTV [✓]
@@ -601,7 +601,7 @@ const Information = ({ data, idCTV, setData, id }) => {
     issued,
     issuedDay,
     selectcountry,
-    selectHomeTown,
+    homeTown,
     selectProvinceLive,
     selectDistrictLive,
     addressResidentLive,
@@ -904,9 +904,9 @@ const Information = ({ data, idCTV, setData, id }) => {
                   <div className="collaborator-information__input-field--child">
                     <InputTextCustom
                       type="text"
-                      value={selectHomeTown}
+                      value={homeTown}
                       placeHolder="Quê quán"
-                      setValueSelectedProps={setSelectHomeTown}
+                      setValueSelectedProps={setHomeTown}
                       // options={province}
                     />
                   </div>

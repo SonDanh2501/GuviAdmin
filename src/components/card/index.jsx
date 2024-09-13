@@ -67,11 +67,13 @@ const {
 const IconTextCustom = (props) => {
   const { icon, label, content, subcontent } = props;
   return (
-    <div className="flex gap-3 items-center">
+    <div className="card-statistics__icon--layout">
       {icon}
-      <div className="flex flex-col gap-0.5">
-        <span className="text-xs font-normal text-gray-500/60">{label}</span>
-        <span style={{ fontWeight: "500" }} className="text-xs">
+      <div className="card-statistics__icon--layout-content">
+        <span className="card-statistics__icon--layout-content-sub">
+          {label}
+        </span>
+        <span className="card-statistics__icon--layout-content-main">
           {content} {subcontent}
         </span>
       </div>
