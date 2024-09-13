@@ -45,6 +45,7 @@ const ManageCustomer = () => {
       : 20
   );
   const [data, setData] = useState([]);
+  const [dataFilter, setDataFilter] = useState([]);
   const [startPage, setStartPage] = useState(0);
   const [idGroup, setIdGroup] = useState("all");
   const [total, setTotal] = useState(0);
@@ -58,6 +59,7 @@ const ManageCustomer = () => {
   const [dataTab, setDataTab] = useState([{ label: "Tất cả", value: "all" }]);
   const [detectLoading, setDetectLoading] = useState(null);
   const [saveToCookie, readCookie] = useCookies();
+
   const getListCustomerByType = () => {
     fetchCustomers(lang, startPage, lengthPage, status, idGroup, valueSearch)
       .then((res) => {
@@ -83,6 +85,27 @@ const ManageCustomer = () => {
   useEffect(() => {
     getListCustomerByType();
   }, [valueSearch, startPage, idGroup, lengthPage]);
+  useEffect(() => {
+  
+    const updatedData = data.map(item => {
+      const newItem = { ...item }; // Tạo một bản sao của item gốc để không thay đổi mảng gốc
+      if (item.id_group_customer && item.id_group_customer.length > 0) {
+        // Tìm các label từ dataTab
+        const labels = item.id_group_customer.map(id => {
+          const found = dataTab.find(tabItem => tabItem.value === id);
+          return found ? found.label : null; // Trả về label nếu tìm thấy
+        }).filter(label => label !== null); // Lọc bỏ những giá trị null nếu không tìm thấy label
+        newItem.labels = labels; // Thêm labels vào newItem
+      } else {
+        newItem.labels = []; // Nếu không có id_group_customer, gán mảng rỗng
+      }
+      return newItem;
+    });
+    
+    // console.log("check updatedData", updatedData)
+    
+    setDataFilter(updatedData);
+  }, [data, dataTab]);
   const handleSearch = useCallback(
     _debounce((value) => {
       setValueSearch(value);
@@ -252,7 +275,7 @@ const ManageCustomer = () => {
     },
     [startPage, status, idGroup, lang, lengthPage]
   );
-  console.log("check data >>>", data);
+  console.log("tabs", dataTab);
   return (
     <>
       <div className="div-container-content">
@@ -303,7 +326,7 @@ const ManageCustomer = () => {
         <div>
           <DataTable
             columns={columns}
-            data={data}
+            data={dataFilter}
             actionColumn={addActionColumn}
             start={startPage}
             pageSize={lengthPage}
@@ -312,7 +335,6 @@ const ManageCustomer = () => {
             detectLoading={detectLoading}
             getItemRow={setItem}
             onCurrentPageChange={onChangePage}
-            // emptyText={"Không có khách hàng để "}
           />
         </div>
         <div>
