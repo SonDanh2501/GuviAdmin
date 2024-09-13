@@ -1,5 +1,5 @@
 import { CameraOutlined } from "@material-ui/icons";
-import { FloatButton, Image, Tabs } from "antd";
+import { ConfigProvider, FloatButton, Image, Tabs } from "antd";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -114,60 +114,60 @@ const ProfileCollaborator = () => {
   
   // console.log("check img", img);
   return (
-    <div className="">
-      <div className="">
-        <Tabs
-          // type="card"
-          defaultActiveKey="1"
-          activeKey={activeKey}
-          onChange={onChangeTab}
+    <div>
+      <div>
+        <ConfigProvider
+          theme={{
+            components: {
+              Tabs: {
+                // inkBarColor: "#a855f7", //
+              },
+            },
+          }}
         >
-          <Tabs.TabPane tab="Tổng quan" key="1">
-            <Overview id={id} star={data?.star} />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab={`${i18n.t("info", { lng: lang })}`} key="2">
-            <Information
-              data={data}
-              image={img}
-              idCTV={id}
-              id={id}
-              setData={setData}
-            />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab={`${i18n.t("document", { lng: lang })}`} key="3">
-            <Document id={id} />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab={`${i18n.t("activity", { lng: lang })}`} key="4">
-            <Activity id={id} />
-          </Tabs.TabPane>
-          <Tabs.TabPane
-            tab={`${i18n.t("account_history", { lng: lang })}`}
-            key="5"
+          <Tabs
+            defaultActiveKey="1"
+            activeKey={activeKey}
+            onChange={onChangeTab}
           >
-            <History id={id} />
-          </Tabs.TabPane>
-          <Tabs.TabPane
-            tab={`${i18n.t("topup_withdraw", { lng: lang })}`}
-            key="6"
-          >
-            <WithdrawTopup id={id} />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab={`${i18n.t("review", { lng: lang })}`} key="7">
-            <Review id={id} totalReview={data?.star} />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab={`${i18n.t("test", { lng: lang })}`} key="8">
-            <TestExam id={data?._id} />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab={`${i18n.t("referrals", { lng: lang })}`} key="9">
-            <InviteCollaborator id={data?._id} />
-          </Tabs.TabPane>
-          <Tabs.TabPane
-            tab={`${i18n.t("bank_account", { lng: lang })}`}
-            key="10"
-          >
-            <BankAccount id={data?._id} />
-          </Tabs.TabPane>
-        </Tabs>
+            <Tabs.TabPane tab="Tổng quan" key="1">
+              <Overview id={id} star={data?.star} />
+            </Tabs.TabPane>
+            <Tabs.TabPane tab={`${i18n.t("info", { lng: lang })}`} key="2">
+              <Information
+                data={data}
+                image={img}
+                idCTV={id}
+                id={id}
+                setData={setData}
+              />
+            </Tabs.TabPane>
+            <Tabs.TabPane tab={`${i18n.t("activity", { lng: lang })}`} key="3">
+              <Activity id={id} />
+            </Tabs.TabPane>
+            <Tabs.TabPane
+              tab={`${i18n.t("account_history", { lng: lang })}`}
+              key="4"
+            >
+              <History id={id} />
+            </Tabs.TabPane>
+            <Tabs.TabPane
+              tab={`${i18n.t("topup_withdraw", { lng: lang })}`}
+              key="5"
+            >
+              <WithdrawTopup id={id} />
+            </Tabs.TabPane>
+            <Tabs.TabPane tab={`${i18n.t("review", { lng: lang })}`} key="6">
+              <Review id={id} totalReview={data?.star} />
+            </Tabs.TabPane>
+            <Tabs.TabPane tab={`${i18n.t("test", { lng: lang })}`} key="7">
+              <TestExam id={data?._id} />
+            </Tabs.TabPane>
+            <Tabs.TabPane tab={`${i18n.t("referrals", { lng: lang })}`} key="8">
+              <InviteCollaborator id={data?._id} />
+            </Tabs.TabPane>
+          </Tabs>
+        </ConfigProvider>
       </div>
       <FloatButton.BackTop />
     </div>

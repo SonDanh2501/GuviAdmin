@@ -83,21 +83,21 @@ const CollaboratorVerify = () => {
       title: "Ngày kích hoạt",
       dataIndex: "date_actived",
       key: "hour_date",
-      width: 80,
+      width: 90,
       fontSize: "text-size-M",
     },
     {
       title: "Cộng tác viên",
       dataIndex: "custom",
       key: "collaborator_name_phone_avatar",
-      width: 150,
+      width: 160,
       fontSize: "text-size-M",
     },
     {
       title: "Khu vực",
       dataIndex: "name_level_1",
       key: "text",
-      width: 110,
+      width: 90,
       fontSize: "text-size-M",
     },
     //   {
@@ -111,7 +111,7 @@ const CollaboratorVerify = () => {
       dataIndex: "name_service_apply",
       key: "text",
       maxLength: 20,
-      width: 110,
+      width: 120,
       fontSize: "text-size-M",
     },
     // {
@@ -138,7 +138,7 @@ const CollaboratorVerify = () => {
       dataIndex: "status",
       key: "status_handle_collaborator",
       selectOptions: OPTIONS_SELECT_STATUS_COLLABORATOR_VERIFY,
-      width: 110,
+      width: 100,
       fontSize: "text-size-M",
     },
   ];
@@ -190,7 +190,6 @@ const CollaboratorVerify = () => {
     setCity(value);
     // saveToCookie("ctv-city", value);
   };
-  console.log("check data ở bảng ctv", data);
   const getListCollaborator = async () => {
     const res = await getListDataCollaborator(
       lang,
@@ -200,7 +199,6 @@ const CollaboratorVerify = () => {
       city,
       tabStatus
     );
-    console.log("check getListDataCollaborator", res);
     for (let i = 0; i < res.data.length; i++) {
       const tempCity = province.filter((x) => x.code === res.data[i].city);
 

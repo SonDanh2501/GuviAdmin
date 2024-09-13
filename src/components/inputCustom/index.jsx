@@ -18,6 +18,8 @@ import { moveElement } from "../../utils/contant";
 import icons from "../../utils/icons";
 
 import secretImage from "../../assets/images/preview_image.png";
+import emptyDataImage from "../../assets/images/empty_data.svg";
+
 const {
   IoCheckmarkCircleSharp,
   IoChevronDownOutline,
@@ -41,15 +43,9 @@ const InputTextCustom = (props) => {
     province, // Giá trị (array) mảng gồm 63 tỉnh thành
     district, // Giá trị (array) mảng gồm các quận/huyện tương ứng với tỉnh thành đã chọn
     multiSelectOptions, // Giá trị (array) mảng dùng cho multi select
-    // birthday,
-    // setBirthday,
     multiple, // Giá trị (boolean) chọn việc upload file lên là 1 file hay nhiều file
     previewImage, // Giá trị (boolean) hiển thị ảnh bên phải của select options (chỉ dành cho type === "select")
-    // imgIdentifyFronsite,
     required, // Giá trị (boolean) chọn việc input text là bắt buộc hay không
-    // number,
-    // minLength,
-    // maxLength,
     searchField, // Giá trị (boolean) chọn việc hiển thị hay không hiển thị thanh tìm kiếm
     onChange, // Hàm thay đổi giá trị cho value khi tyle là "text"
     testing,
@@ -57,8 +53,8 @@ const InputTextCustom = (props) => {
     onChangeImage, // Hàm xử lí cho thay đổi hình ảnh
     notShowPreviewImage, // Giá trị (boolean) hiển thị hay không preview image
     limitShows, // Hiển thị max là bao nhiêu lựa chọn
+    valueUnit, // Phân vùng điện thoại
   } = props;
-
   // Lấy district (quận/huyện) từ giá trị province có được
   const tempDistrictArray = province?.find(
     (el) => el?.code === value
@@ -74,6 +70,9 @@ const InputTextCustom = (props) => {
   });
   const [open, setOpen] = useState(false);
   const [hideImage, setHideImage] = useState(false);
+  const [valueWithUnit, setValueWithUnit] = useState("");
+  const [selectArea, setSelectArea] = useState("");
+
   // ~~~ Support Handle fucntion ~~~
   // 1. Hàm đóng Popover
   const handleClose = () => {
@@ -187,42 +186,12 @@ const InputTextCustom = (props) => {
   // 1. Content khi type === "select"
   const content = (
     <div className="flex flex-col">
-      {options &&
-        options.length > 0 &&
-        options?.map((item, index) => (
-          <div
-            onClick={() => {
-              handldeSelected(item.value);
-            }}
-            style={{ borderRadius: "6px" }}
-            className={`${
-              item?.value === value && "bg-violet-500 font-bold text-white"
-            } hover:bg-violet-500 hover:text-white cursor-pointer p-2 mb-0.5 font-normal duration-300 flex items-center justify-between`}
-          >
-            <span className="text-sm font-normal" key={index}>
-              {item.label}
-            </span>
-            {item?.value === value && <IoCheckmarkCircleSharp size={"20px"} />}
-          </div>
-        ))}
-    </div>
-  );
-  // 2. Content khi type === "calendar"
-  const contentCalendar = (
-    <Calendar value={value} onChange={handleChangeCalendar} />
-  );
-  // 3. Content khi type === "province"
-  const contentProvince = (
-    <div className="flex flex-col">
-      {/* searchInput field */}
       {searchField && (
         <div
           className="w-full"
           style={{ position: "relative", paddingBottom: "2px" }}
         >
           <input
-            // type="searchInput"
-            // autoFocus
             value={searchInput}
             onChange={(e) => {
               setSearchInput(e.target.value);
@@ -234,6 +203,99 @@ const InputTextCustom = (props) => {
             }}
             className="py-2 pr-[20px] pl-[28px] mb-0.5 duration-300 flex items-center justify-between w-full"
           />
+          {searchInput.length === 0 && (
+            <span
+              style={{ position: "absolute", top: 13, left: 30 }}
+              className="text-gray-500/60"
+            >
+              Nhập tìm kiếm
+            </span>
+          )}
+          <IoSearch style={{ position: "absolute", top: 14, left: 8 }} />
+          {searchInput.length > 0 && (
+            <IoClose
+              onClick={() => setSearchInput("")}
+              size="20px"
+              className="hover:bg-violet-500 hover:text-white p-0.5 rounded-full duration-300"
+              style={{ position: "absolute", top: 12, right: 8 }}
+            />
+          )}
+        </div>
+      )}
+      {searchInput.length > 0 && type === "select"
+        ? options
+            .filter((el) =>
+              el.name.toLowerCase().includes(searchInput.toLowerCase())
+            )
+            .map((itemFound, index) => (
+              <div
+                onClick={() => {
+                  handldeSelected(itemFound.value);
+                }}
+                style={{ borderRadius: "6px" }}
+                className={`${
+                  itemFound?.code === value &&
+                  "bg-violet-500 font-bold text-white"
+                } hover:bg-violet-500/50 hover:text-white cursor-pointer p-2 mb-0.5 font-normal duration-300 flex items-center justify-between`}
+              >
+                <span key={index}>
+                  {itemFound.label ? itemFound.label : itemFound.name}
+                </span>
+                {itemFound?.code === value && (
+                  <IoCheckmarkCircleSharp size={"20px"} />
+                )}
+              </div>
+            ))
+        : options &&
+          options.length > 0 &&
+          options.map((item, index) => (
+            <div
+              onClick={() => {
+                handldeSelected(item.code);
+              }}
+              style={{ borderRadius: "6px" }}
+              className={`${
+                item?.code === value && "bg-violet-500 font-bold text-white"
+              } hover:bg-violet-500/50 hover:text-white cursor-pointer p-2 mb-0.5 font-normal duration-300 flex items-center justify-between`}
+            >
+              <span key={index}>{item.label ? item.label : item.name}</span>
+              {item?.code === value && <IoCheckmarkCircleSharp size={"20px"} />}
+            </div>
+          ))}
+    </div>
+  );
+  // 2. Content khi type === "calendar"
+  const contentCalendar = (
+    <Calendar value={value} onChange={handleChangeCalendar} />
+  );
+  // 3. Content khi type === "province"
+  const contentProvince = (
+    <div className="flex flex-col">
+      {searchField && (
+        <div
+          className="w-full"
+          style={{ position: "relative", paddingBottom: "2px" }}
+        >
+          <input
+            value={searchInput}
+            onChange={(e) => {
+              setSearchInput(e.target.value);
+            }}
+            style={{
+              border: "2px solid #eee",
+              borderRadius: "4px",
+              outline: "none",
+            }}
+            className="py-2 pr-[20px] pl-[28px] mb-0.5 duration-300 flex items-center justify-between w-full"
+          />
+          {searchInput.length === 0 && (
+            <span
+              style={{ position: "absolute", top: 13, left: 30 }}
+              className="text-gray-500/60"
+            >
+              Nhập tìm kiếm
+            </span>
+          )}
           <IoSearch style={{ position: "absolute", top: 14, left: 8 }} />
           {searchInput.length > 0 && (
             <IoClose
@@ -265,9 +327,7 @@ const InputTextCustom = (props) => {
                   "bg-violet-500 text-white"
                 } hover:bg-violet-500 hover:text-white cursor-pointer p-2 mb-0.5 duration-300 flex items-center justify-between`}
               >
-                <span className="text-sm font-normal" key={index}>
-                  {province?.name}
-                </span>
+                <span key={index}>{province?.name}</span>
                 {(province?.code === value?.code ||
                   province?.code === value) && (
                   <IoCheckmarkCircleSharp size={"20px"} />
@@ -292,9 +352,7 @@ const InputTextCustom = (props) => {
                   "bg-violet-500 text-white"
                 } hover:bg-violet-500 hover:text-white cursor-pointer p-2 mb-0.5 duration-300 flex items-center justify-between`}
               >
-                <span className="text-sm font-normal" key={index}>
-                  {province?.name}
-                </span>
+                <span key={index}>{province?.name}</span>
                 {(province?.code === value?.code ||
                   province?.code === value) && (
                   <IoCheckmarkCircleSharp size={"20px"} />
@@ -307,15 +365,12 @@ const InputTextCustom = (props) => {
   // 4. Content khi type === "district"
   const contentDistrict = (
     <div className="flex flex-col">
-      {/* searchInput field */}
       {searchField && (
         <div
           className="w-full"
           style={{ position: "relative", paddingBottom: "2px" }}
         >
           <input
-            // type="searchInput"
-            // autoFocus
             value={searchInput}
             onChange={(e) => {
               setSearchInput(e.target.value);
@@ -354,9 +409,7 @@ const InputTextCustom = (props) => {
                   "bg-violet-500 font-bold text-white"
                 } hover:bg-violet-500 hover:text-white cursor-pointer p-2 mb-0.5 duration-300 flex items-center justify-between`}
               >
-                <span className="text-sm font-normal" key={index}>
-                  {item?.name}
-                </span>
+                <span key={index}>{item?.name}</span>
                 {item?.code === value?.code && (
                   <IoCheckmarkCircleSharp size={"20px"} />
                 )}
@@ -375,9 +428,7 @@ const InputTextCustom = (props) => {
                 "bg-violet-500 font-bold text-white"
               } hover:bg-violet-500 hover:text-white cursor-pointer p-2 mb-0.5 duration-300 flex items-center justify-between`}
             >
-              <span className="text-sm font-normal" key={index}>
-                {item?.name}
-              </span>
+              <span key={index}>{item?.name}</span>
               {item?.code === value?.code && (
                 <IoCheckmarkCircleSharp size={"20px"} />
               )}
@@ -401,9 +452,7 @@ const InputTextCustom = (props) => {
           //   element?.code === item._id ? "bg-black" : "bg-yellow-500";
           // })}`}
         >
-          <span className="text-sm font-normal" key={index}>
-            {item?.title?.vi}
-          </span>
+          <span key={index}>{item?.title?.vi}</span>
           {item?.is_select === true && <IoCheckmarkCircleSharp size={"20px"} />}
         </div>
       ))}
@@ -412,15 +461,12 @@ const InputTextCustom = (props) => {
   // 6. Content khi type === "multiDistrict"
   const contentDistrictMultiSelect = (
     <div className="flex flex-col">
-      {/* searchInput field */}
       {searchField && (
         <div
           className="w-full"
           style={{ position: "relative", paddingBottom: "2px" }}
         >
           <input
-            // type="searchInput"
-            // autoFocus
             value={searchInput}
             onChange={(e) => {
               setSearchInput(e.target.value);
@@ -462,9 +508,7 @@ const InputTextCustom = (props) => {
                   "bg-violet-500 text-white font-bold"
                 } hover:bg-violet-500 hover:text-white duration-300 p-2 my-0.5 cursor-pointer font-normal flex items-center justify-between`}
               >
-                <span className="text-sm font-normal" key={index}>
-                  {item?.name}
-                </span>
+                <span key={index}>{item?.name}</span>
                 {item?.is_select === true && (
                   <IoCheckmarkCircleSharp size={"20px"} />
                 )}
@@ -488,9 +532,7 @@ const InputTextCustom = (props) => {
               //   element?.code === item._id ? "bg-black" : "bg-yellow-500";
               // })}`}
             >
-              <span className="text-sm font-normal" key={index}>
-                {item?.name}
-              </span>
+              <span key={index}>{item?.name}</span>
               {item?.is_select === true && (
                 <IoCheckmarkCircleSharp size={"20px"} />
               )}
@@ -504,7 +546,7 @@ const InputTextCustom = (props) => {
       {multiSelectDataArray?.map((item, index) => (
         <div
           onClick={() => {
-            handleSelectMulti({ name: item?.label, code: item?.value });
+            handleSelectMulti({ name: item?.label, code: item?.code });
           }}
           style={{ borderRadius: "6px" }}
           className={`${
@@ -514,9 +556,7 @@ const InputTextCustom = (props) => {
           //   element?.code === item._id ? "bg-black" : "bg-yellow-500";
           // })}`}
         >
-          <span className="text-sm font-normal" key={index}>
-            {item?.label}
-          </span>
+          <span key={index}>{item?.label}</span>
           {item?.is_select === true && <IoCheckmarkCircleSharp size={"20px"} />}
         </div>
       ))}
@@ -550,7 +590,7 @@ const InputTextCustom = (props) => {
           : type === "multiDistrict"
           ? multiSelectOptions?.filter((item) => value.includes(item?.code))
           : type === "multiSelect"
-          ? multiSelectOptions?.filter((item) => value.includes(item.value))
+          ? multiSelectOptions?.filter((item) => value.includes(item.code))
           : [];
       if (matchedItemsTemp) {
         setMatchedItems(matchedItemsTemp);
@@ -574,7 +614,7 @@ const InputTextCustom = (props) => {
         }
         if (type === "multiSelect") {
           const isSelected = value?.some(
-            (valueItem) => valueItem === itemOption.value
+            (valueItem) => valueItem === itemOption.code
           );
           return { ...itemOption, is_select: isSelected };
         }
@@ -594,16 +634,17 @@ const InputTextCustom = (props) => {
       setValueArrayProps(tempDistrictArray);
     }
   }, [tempDistrictArray]);
-
-if (type === "select") {
-  console.log("check value >>> ", value);
-  console.log(
-    "check value",
-    options?.find((el) => el.value === value)?.name
-      ? options?.find((el) => el.value === value)?.name
-      : options?.find((el) => el.value === value)?.label
-  );
-}
+  // 4. Lấy giá trị điện thoại đúng khi phân vùng (sau này sẽ cần làm lại đúng hơn, đang làm đỡ cho một mã vùng duy nhất là +84)
+  useEffect(() => {
+    if (type === "textValue") {
+      if (valueWithUnit && valueWithUnit?.includes(valueUnit)) {
+        setValueWithUnit(value);
+      } else {
+        const tempValue = valueUnit + " " + value;
+        setValueWithUnit(tempValue);
+      }
+    }
+  }, [value]);
 
   return (
     <div className="form-field" ref={refContainer}>
@@ -613,18 +654,14 @@ if (type === "select") {
           <input
             disabled={disable}
             name={name ? name : ""}
-            // type={`${number ? "number" : "text"}`}
-            // pattern="[0-9]"
-            // minLength={minLength ? minLength : "0"}
-            // maxLength={maxLength ? maxLength : "100"}
-            className="form-input"
+            className="form-field__input"
             placeholder=" "
             value={value}
             onChange={onChange}
           />
-          <label htmlFor=" " className="form-label">
+          <label htmlFor=" " className="form-field__label">
             {placeHolder}{" "}
-            {required && <span className="required-label">*</span>}
+            {required && <span className="form-field__label--required">*</span>}
           </label>
         </>
       )}
@@ -635,25 +672,19 @@ if (type === "select") {
             multiple={multiple}
             disabled={disable}
             type="file"
-            className="form-input"
+            className="form-field__input"
             placeholder=" "
             accept={".jpg,.png,.jpeg"}
             onChange={onChangeImage}
           />
-          <label htmlFor=" " className="form-label">
+          <label htmlFor=" " className="form-field__label">
             {placeHolder}
           </label>
           <div
             onClick={() => {
               setHideImage(!hideImage);
             }}
-            style={{
-              position: "absolute",
-              top: "2px",
-              right: "1.5px",
-              padding: "18.5px 18px 18px 17.5px",
-            }}
-            className="bg-slate-100 border-l-2 border-[#eee] rounded-r-sm cursor-pointer"
+            className="form-field__hide-image"
           >
             <IoChevronDownOutline color="#999" />
           </div>
@@ -668,17 +699,21 @@ if (type === "select") {
                       hideImage ? "hidden" : "flex"
                     } items-center justify-between mt-2 p-2 border-2 gap-2`}
                   >
-                    <div style={{ gap: "10px" }} className="flex items-center">
+                    <div
+                      style={{ gap: "10px" }}
+                      className="flex items-center px-2"
+                    >
                       <Image
-                        height={40}
-                        width={40}
+                        height={35}
+                        width={35}
                         src={secretImage}
                         preview={{
                           src: `${item}`,
                         }}
                       />
                       <span style={{ maxWidth: "280px", overflow: "hidden" }}>
-                        {item?.split("/").pop()}
+                        Định dạng file:{" "}
+                        {item?.split("/").pop().split(".").pop()}
                       </span>
                     </div>
                     <div className="flex gap-2">
@@ -692,7 +727,7 @@ if (type === "select") {
                               value?.filter((el) => el !== item)
                             )
                           }
-                          size="16px"
+                          size="14px"
                         />
                       </button>
                     </div>
@@ -706,17 +741,17 @@ if (type === "select") {
                   hideImage ? "hidden" : "flex"
                 } items-center justify-between mt-2 p-2 border-2 gap-2`}
               >
-                <div style={{ gap: "10px" }} className="flex items-center">
+                <div style={{ gap: "10px" }} className="flex items-center px-2">
                   <Image
-                    height={40}
-                    width={40}
+                    height={35}
+                    width={35}
                     src={notShowPreviewImage ? value : secretImage}
                     preview={{
                       src: `${value}`,
                     }}
                   />
                   <span style={{ maxWidth: "280px", overflow: "hidden" }}>
-                    {value?.split("/").pop()}
+                    Định dạng file:{" "}{value?.split("/").pop().split(".").pop()}
                   </span>
                 </div>
                 <div className="flex gap-2">
@@ -726,7 +761,7 @@ if (type === "select") {
                   >
                     <IoClose
                       onClick={() => setValueSelectedProps("")}
-                      size="16px"
+                      size="14px"
                     />
                   </button>
                 </div>
@@ -735,127 +770,6 @@ if (type === "select") {
           ) : (
             ""
           )}
-          {/* {value?.length > 0 && multiple 
-          ? 
-          (value?.map((item, index) => {
-              return (
-                <div
-                  style={{ borderRadius: "6px", border: "2px dashed	#eee" }}
-                  className={`${
-                    hideImage ? "hidden" : "flex"
-                  } items-center justify-between mt-2 p-2 border-2 gap-2`}
-                >
-                  <div style={{ gap: "10px" }} className="flex items-center">
-                    <Image height={60} width={60} src={item} />
-                    <span style={{ maxWidth: "280px", overflow: "hidden" }}>
-                      {item?.split("/").pop()}
-                    </span>
-                  </div>
-                  <div className="flex gap-2">
-                    <button
-                      style={{ borderRadius: "100%" }}
-                      className="p-2 hover:bg-red-500 hover:text-white text-red-500 duration-300 ease-out"
-                    >
-                      <IoClose
-                        // onClick={() =>
-                        //   setValueSelectedProps([
-                        //     value.filter((el, index) => el !== index)[0],
-                        //   ])
-                        // }
-                        size="16px"
-                      />
-                    </button>
-                  </div>
-                </div>
-              );
-            })
-          ) 
-          : 
-          (<div
-              style={{ borderRadius: "6px", border: "2px dashed	#eee" }}
-              className={`${
-                hideImage ? "hidden" : "flex"
-              } items-center justify-between mt-2 p-2 border-2 gap-2`}
-            >
-              <div style={{ gap: "10px" }} className="flex items-center">
-                <Image height={60} width={60} src={value} />
-                <span style={{ maxWidth: "280px", overflow: "hidden" }}>
-                  {value?.split("/").pop()}
-                </span>
-              </div>
-              <div className="flex gap-2">
-                <button
-                  style={{ borderRadius: "100%" }}
-                  className="p-2 hover:bg-red-500 hover:text-white text-red-500 duration-300 ease-out"
-                >
-                  <IoClose
-                    onClick={() => setValueSelectedProps("")}
-                    size="16px"
-                  />
-                </button>
-              </div>
-            </div>
-          )} */}
-          {/* {multiple ? (
-            value?.length > 0 &&
-            value?.map((item, index) => {
-              return (
-                <div
-                  style={{ borderRadius: "6px", border: "2px dashed	#eee" }}
-                  className={`${
-                    hideImage ? "hidden" : "flex"
-                  } items-center justify-between mt-2 p-2 border-2 gap-2`}
-                >
-                  <div style={{ gap: "10px" }} className="flex items-center">
-                    <Image height={60} width={60} src={item} />
-                    <span style={{ maxWidth: "280px", overflow: "hidden" }}>
-                      {item?.split("/").pop()}
-                    </span>
-                  </div>
-                  <div className="flex gap-2">
-                    <button
-                      style={{ borderRadius: "100%" }}
-                      className="p-2 hover:bg-red-500 hover:text-white text-red-500 duration-300 ease-out"
-                    >
-                      <IoClose
-                        // onClick={() =>
-                        //   setValueSelectedProps([
-                        //     value.filter((el, index) => el !== index)[0],
-                        //   ])
-                        // }
-                        size="16px"
-                      />
-                    </button>
-                  </div>
-                </div>
-              );
-            })
-          ) : (
-            <div
-              style={{ borderRadius: "6px", border: "2px dashed	#eee" }}
-              className={`${
-                hideImage ? "hidden" : "flex"
-              } items-center justify-between mt-2 p-2 border-2 gap-2`}
-            >
-              <div style={{ gap: "10px" }} className="flex items-center">
-                <Image height={60} width={60} src={value} />
-                <span style={{ maxWidth: "280px", overflow: "hidden" }}>
-                  {value?.split("/").pop()}
-                </span>
-              </div>
-              <div className="flex gap-2">
-                <button
-                  style={{ borderRadius: "100%" }}
-                  className="p-2 hover:bg-red-500 hover:text-white text-red-500 duration-300 ease-out"
-                >
-                  <IoClose
-                    onClick={() => setValueSelectedProps("")}
-                    size="16px"
-                  />
-                </button>
-              </div>
-            </div>
-          )} */}
         </div>
       )}
       {/* Select Field */}
@@ -864,13 +778,12 @@ if (type === "select") {
           theme={{
             components: {
               Popover: {
-                titleMinWidth: dimensions?.width && dimensions?.width - 25,
+                titleMinWidth: dimensions?.width && dimensions?.width - 35,
               },
             },
           }}
         >
           <Popover
-            // className=" w-full"
             trigger="click"
             placement="bottom"
             title={" "}
@@ -882,38 +795,36 @@ if (type === "select") {
             <div>
               <input
                 disabled={disable}
-                // style={{ pointerEvents: "none" }}
                 type="text"
-                className="form-input"
+                className="form-field__input"
                 style={{ cursor: "pointer" }}
                 placeholder=" "
                 value={
-                  options?.find((el) => el.value === value)?.name
-                    ? options?.find((el) => el.value === value)?.name
-                    : options?.find((el) => el.value === value)?.label
+                  options?.find((el) => el.code === value)?.name
+                    ? options?.find((el) => el.code === value)?.name
+                    : options?.find((el) => el.code === value)?.label
                 }
-                // onChange={(el) => printData(el)}
                 readOnly
               />
-              <label htmlFor=" " className="form-label">
+              <label htmlFor=" " className="form-field__label">
                 {placeHolder}
               </label>
             </div>
             {previewImage ? (
-              <div className="form-label-unit">
+              <div className="form-field__image">
                 <img
-                  className="image-unit"
+                  className="form-field__image--img"
                   src={
-                    options?.find((el) => el.value === value)?.image
-                      ? options?.find((el) => el.value === value)?.image
-                      : ""
+                    options?.find((el) => el.code === value)?.image
+                      ? options?.find((el) => el.code === value)?.image
+                      : emptyDataImage
                   }
                 />
-                <IoCaretDownOutline color="#999" />
               </div>
             ) : (
               <IoCaretDownOutline
-                className="absolute top-4 right-3"
+                className="form-field__icon"
+                size="14px"
                 color="#999"
               />
             )}
@@ -926,7 +837,7 @@ if (type === "select") {
           theme={{
             components: {
               Popover: {
-                titleMinWidth: dimensions?.width && dimensions?.width - 25,
+                titleMinWidth: dimensions?.width && dimensions?.width - 35,
               },
             },
           }}
@@ -945,16 +856,20 @@ if (type === "select") {
               <input
                 style={{ cursor: "pointer" }}
                 type="text"
-                className="form-input"
+                className="form-field__input"
                 placeholder=" "
                 value={moment(value).format("DD/MM/YYYY")}
                 // onChange={(el) => printData(el)}
                 readOnly
               />
-              <label htmlFor=" " className="form-label">
+              <label htmlFor=" " className="form-field__label">
                 {placeHolder}
               </label>
-              <IoCalendar className="absolute top-4 right-3" color="#999" />
+              <IoCalendar
+                className="form-field__icon"
+                size="14px"
+                color="#999"
+              />
             </div>
           </Popover>
         </ConfigProvider>
@@ -983,7 +898,7 @@ if (type === "select") {
               <input
                 style={{ cursor: "pointer" }}
                 type="text"
-                className="form-input"
+                className="form-field__input"
                 placeholder=" "
                 // value={province.find((el))}
                 value={
@@ -993,11 +908,12 @@ if (type === "select") {
                 }
                 readOnly
               />
-              <label htmlFor=" " className="form-label">
+              <label htmlFor=" " className="form-field__label">
                 {placeHolder}
               </label>
               <IoCaretDownOutline
-                className="absolute top-4 right-3"
+                className="form-field__icon"
+                size="14px"
                 color="#999"
               />
             </div>
@@ -1030,7 +946,7 @@ if (type === "select") {
                 style={{ cursor: "pointer" }}
                 disabled={disable}
                 type="text"
-                className="form-input"
+                className="form-field__input"
                 placeholder=" "
                 // disabled={selectProvince?.code ? false : true}
                 // value={
@@ -1046,11 +962,12 @@ if (type === "select") {
                 // onChange={(el) => printData(el)}
                 readOnly
               />
-              <label htmlFor=" " className="form-label">
+              <label htmlFor=" " className="form-field__label">
                 {placeHolder}
               </label>
               <IoCaretDownOutline
-                className="absolute top-4 right-3"
+                className="form-field__icon"
+                size="14px"
                 color="#999"
               />
             </div>
@@ -1080,7 +997,7 @@ if (type === "select") {
             <div>
               <input
                 type="text"
-                className="form-input"
+                className="form-field__input"
                 placeholder=" "
                 value={
                   matchedItems &&
@@ -1098,11 +1015,12 @@ if (type === "select") {
                 // onChange={(el) => printData(el)}
                 readOnly
               />
-              <label htmlFor=" " className="form-label">
+              <label htmlFor=" " className="form-field__label">
                 {placeHolder}
               </label>
               <IoCaretDownOutline
-                className="absolute top-4 right-3"
+                className="form-field__icon"
+                size="14px"
                 color="#999"
               />
             </div>
@@ -1134,7 +1052,7 @@ if (type === "select") {
                 // style={{ pointerEvents: "none" }}
                 disabled={disable}
                 type="text"
-                className="form-input"
+                className="form-field__input"
                 placeholder=" "
                 value={
                   matchedItems &&
@@ -1152,11 +1070,12 @@ if (type === "select") {
                 // onChange={(el) => printData(el)}
                 readOnly
               />
-              <label htmlFor=" " className="form-label">
+              <label htmlFor=" " className="form-field__label">
                 {placeHolder}
               </label>
               <IoCaretDownOutline
-                className="absolute top-4 right-3"
+                className="form-field__icon"
+                size="14px"
                 color="#999"
               />
             </div>
@@ -1165,41 +1084,19 @@ if (type === "select") {
       )}
       {/* Text with unit */}
       {type === "textValue" && (
-        <div>
+        <>
           <input
             disabled={disable}
-            name={name ? name : ""}
-            // type={`${number ? "number" : "text"}`}
-            // pattern="[0-9]"
-            // minLength={minLength ? minLength : "0"}
-            // maxLength={maxLength ? maxLength : "100"}
-            className="form-input"
+            className="form-field__input"
             placeholder=" "
-            value={value}
+            value={valueWithUnit}
             onChange={onChange}
           />
-          <label htmlFor=" " className="form-label">
+          <label htmlFor=" " className="form-field__label">
             {placeHolder}{" "}
-            {required && <span className="required-label">*</span>}
+            {required && <span className="form-field__label--required">*</span>}
           </label>
-          <Popover trigger="click" content={""}>
-            <div
-              // style={{
-              //   position: "absolute",
-              //   paddingLeft: "8px",
-              //   top: "0px",
-              //   // bottom: "2px",
-              //   right: "12px",
-              //   borderLeft: "2px solid #eee",
-              // }}
-              // className="flex gap-2 items-center h-full justify-center cursor-pointer"
-              className="form-label-unit"
-            >
-              <span className="unit">+84</span>
-              <IoCaretDownOutline color="#999" />
-            </div>
-          </Popover>
-        </div>
+        </>
       )}
       {/* Multi Select Field */}
       {type === "multiSelect" && (
@@ -1226,7 +1123,7 @@ if (type === "select") {
                 // style={{ pointerEvents: "none" }}
                 disabled={disable}
                 type="text"
-                className="form-input"
+                className="form-field__input"
                 placeholder=" "
                 value={
                   matchedItems &&
@@ -1244,11 +1141,12 @@ if (type === "select") {
                 // onChange={(el) => printData(el)}
                 readOnly
               />
-              <label htmlFor=" " className="form-label">
+              <label htmlFor=" " className="form-field__label">
                 {placeHolder}
               </label>
               <IoCaretDownOutline
-                className="absolute top-4 right-3"
+                className="form-field__icon"
+                size="14px"
                 color="#999"
               />
             </div>

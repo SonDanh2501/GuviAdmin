@@ -48,7 +48,6 @@ const DataTable = (props) => {
     setLengthPage,
     emptyText,
   } = props;
-  console.log("check data >>> ", data);
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
   const [saveToCookie] = useCookies();
@@ -365,10 +364,9 @@ const DataTable = (props) => {
                 </p>
                 <div className="flex items-center gap-1">
                   <span className="font-normal">Hạng:</span>
-                  {/* Trường hợp có id_customer */}
                   {data?.id_customer?.rank === "member" ? (
                     <span className="bg-orange-100 text-orange-500 border-orange-500 px-1 py-[1px] border-[1px] rounded-lg">
-                      Đồng
+                      Thành viên
                     </span>
                   ) : data?.id_customer?.rank === "silver" ? (
                     <span className="bg-stone-100 text-stone-500 border-stone-500 px-1 py-[1px] border-[1px] rounded-lg">
@@ -382,32 +380,27 @@ const DataTable = (props) => {
                     <span className="bg-cyan-100 text-sky-500 border-cyan-500 px-1 py-[1px] border-[1px] rounded-lg">
                       Bạch kim
                     </span>
+                  ) : data?.rank === "member" &&
+                    data?.id_group_customer?.length > 1 ? (
+                    <span className="bg-orange-100 text-orange-500 border-orange-500 px-1 py-[1px] border-[1px] rounded-lg">
+                      Thành viên
+                    </span>
+                  ) : data?.rank === "silver" ? (
+                    <span className="bg-slate-100 text-slate-500 border-slate-500 px-1 py-[1px] border-[1px] rounded-lg">
+                      Bạc
+                    </span>
+                  ) : data?.rank === "gold" ? (
+                    <span className="bg-yellow-100 text-amber-500 border-yellow-500 px-1 py-[1px] border-[1px] rounded-lg">
+                      Vàng
+                    </span>
+                  ) : data?.rank === "platinum" ? (
+                    <span className="bg-cyan-100 text-sky-500 border-cyan-500 px-1 py-[1px] border-[1px] rounded-lg">
+                      Bạch kim
+                    </span>
                   ) : (
-                    ""
-                  )}
-                  {/* Trường hợp không có id_cusomter */}
-                  {data.rank ? (
-                    data?.rank === "member" ? (
-                      <span className="bg-orange-100 text-orange-500 border-orange-500 px-1 py-[1px] border-[1px] rounded-lg">
-                        Đồng
-                      </span>
-                    ) : data?.rank === "silver" ? (
-                      <span className="bg-stone-100 text-stone-500 border-stone-500 px-1 py-[1px] border-[1px] rounded-lg">
-                        Bạc
-                      </span>
-                    ) : data?.rank === "gold" ? (
-                      <span className="bg-yellow-100 text-amber-500 border-yellow-500 px-1 py-[1px] border-[1px] rounded-lg">
-                        Vàng
-                      </span>
-                    ) : data?.rank === "platinum" ? (
-                      <span className="bg-cyan-100 text-sky-500 border-cyan-500 px-1 py-[1px] border-[1px] rounded-lg">
-                        Bạch kim
-                      </span>
-                    ) : (
-                      ""
-                    )
-                  ) : (
-                    ""
+                    <span className="bg-stone-100 text-stone-500 border-stone-500 px-1 py-[1px] border-[1px] rounded-lg">
+                      Khách hàng mới
+                    </span>
                   )}
                 </div>
               </div>
@@ -451,7 +444,13 @@ const DataTable = (props) => {
             );
             break;
           case "service_customer":
-            return <p>{data?.service_title}</p>;
+            return (
+              <p>
+                {data?.service_title
+                  ? data?.service_title
+                  : data?.service?._id?.title?.vi}
+              </p>
+            );
             break;
           case "date_work":
             return (
@@ -1700,7 +1699,7 @@ const DataTable = (props) => {
   const handleSelectScrollY = (e) => {
     let myObj_serialized;
     if (e === 0) {
-      myObj_serialized = JSON.stringify([]);
+      myObj_serialized = JSON.stringify({ y: "" });
       setScrollYValue(0);
     } else if (e === 1) {
       myObj_serialized = JSON.stringify({ y: 700 });
@@ -1722,7 +1721,7 @@ const DataTable = (props) => {
       setLengthPage(e);
     }
   };
-  //
+
   const footerRender = () => {
     return (
       <div className="flex gap-4">
@@ -1789,6 +1788,7 @@ const DataTable = (props) => {
     : [];
   scroll.x = scrollX ? scrollX : widthPage;
 
+  console.log("check data ", data);
   return (
     <React.Fragment>
       <div className="mr-t ">

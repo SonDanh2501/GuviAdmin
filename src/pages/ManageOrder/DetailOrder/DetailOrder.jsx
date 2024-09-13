@@ -326,8 +326,8 @@ const DetailOrder = (props) => {
         body={
           <p>
             {isFavourite
-              ? `Bạn có chắc muốn loại bỏ ctv ${collaborator?.full_name} ra khỏi danh sách yêu thích của khách hàng ${collaborator?.full_name}`
-              : `Bạn có chắc muốn thêm ctv ${collaborator?.full_name} vào danh sách ctv yêu thích của khách hàng ${collaborator?.full_name}`}
+              ? `Bạn có chắc muốn loại bỏ ctv ${collaborator?.full_name} ra khỏi danh sách yêu thích của khách hàng ${customer?.full_name}`
+              : `Bạn có chắc muốn thêm ctv ${collaborator?.full_name} vào danh sách ctv yêu thích của khách hàng ${customer?.full_name}`}
           </p>
         }
       />
@@ -340,8 +340,8 @@ const DetailOrder = (props) => {
         body={
           <p>
             {isLock
-              ? `Bạn có chắc muốn bỏ chặn cộng tác viên ${collaborator?.full_name} cho khách hàng ${collaborator?.full_name}`
-              : `Bạn có chắc muốn chặn công tác viên ${collaborator?.full_name} cho khách hàng ${collaborator?.full_name}`}
+              ? `Bạn có chắc muốn bỏ chặn cộng tác viên ${collaborator?.full_name} cho khách hàng ${customer?.full_name}`
+              : `Bạn có chắc muốn chặn công tác viên ${collaborator?.full_name} cho khách hàng ${customer?.full_name}`}
           </p>
         }
       />
