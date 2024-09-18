@@ -1,3 +1,24 @@
+@import "../../../../../../../../src/@theme/style.scss";
+
+.collaborator-rating {
+  display: flex;
+  flex-direction: column;
+  gap: $gapL;
+  
+  .collaborator-rating__overview {
+    display: flex;
+    gap: $gapL;
+    .collaborator-rating__overview--total {
+      width: 35%;
+    }
+    .collaborator-rating__overview--statistic {
+      width: 65%;
+    }
+  }
+}
+
+
+
 .text-total-star {
   font-family: "Roboto";
   font-style: normal;

@@ -1173,8 +1173,8 @@ const DataTable = (props) => {
             const sliceData =
               indexSlice > 0 ? getDataView.slice(0, max) + "..." : getDataView;
             return (
-              <Tooltip placement="topRight" title={getDataView}>
-                <span className={`${item?.fontSize} `}> {sliceData}</span>
+              <Tooltip placement="top" title={getDataView}>
+                <span className={`${item?.fontSize} `}>{sliceData}</span>
               </Tooltip>
             );
             break;
@@ -1234,7 +1234,7 @@ const DataTable = (props) => {
           }
           case "id_view_name_service": {
             linkRedirect = `/details-order/${data?.id_group_order}`;
-            return (
+            return data?.id_group_order ? (
               <Link
                 className="id_order_start"
                 onClick={() => saveToCookie("order_scrolly", scrollY)}
@@ -1246,6 +1246,14 @@ const DataTable = (props) => {
                   disabled={true}
                 />
               </Link>
+            ) : (
+              <div>
+                <Rate
+                  value={data?.star}
+                  style={{ width: "100%" }}
+                  disabled={true}
+                />
+              </div>
             );
             break;
           }
@@ -1669,6 +1677,27 @@ const DataTable = (props) => {
             );
             break;
           }
+          case "rating_date": {
+            return (
+              <div className="data-table__date-time">
+                <span className={`${item?.fontSize} `}>
+                  {moment(new Date(data?.date_create_review)).format(
+                    "DD/MM/YYYY"
+                  )}
+                </span>
+                <span>
+                  {moment(new Date(data?.date_create_review)).format("HH:mm")}
+                </span>
+              </div>
+            );
+            break;
+          }
+          case "rating_content": {
+            return (
+              <span>{data?.review}</span>
+            );
+            break;
+          }
           // case :
           default: {
             const dataView = data[item.dataIndex] || "";
@@ -1788,7 +1817,8 @@ const DataTable = (props) => {
     : [];
   scroll.x = scrollX ? scrollX : widthPage;
 
-  console.log("check data ", data);
+
+  console.log("check data >>>", data);
   return (
     <React.Fragment>
       <div className="mr-t ">
