@@ -65,7 +65,7 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding: 12px 12px;
+        padding: 16px 20px;
         gap: $gapS;
 
         .card-statistics__overview-rating--star {
@@ -135,7 +135,7 @@
     .card-statistics__overview-bonus-punish {
         display: flex;
         flex-direction: column;
-        padding: 12px 12px;
+        padding: 16px 20px;
         gap: $gapL;
 
         .card-statistics__overview-bonus-punish--total {
@@ -161,7 +161,7 @@
                         font-size: $textFontSizeM;
                         font-family: $fontFamily;
                         color: $colorGray;
-                        opacity: 0.6;
+                        opacity: $opacityS;
                     }
 
                     .card-statistics__overview-bonus-punish--total-container-number-number {
@@ -200,7 +200,7 @@
 
                     .card-statistics__overview-bonus-punish--recent-icon-label-time {
                         color: $colorGray;
-                        opacity: 0.6;
+                        opacity: $opacityS;
                     }
                 }
             }
@@ -227,8 +227,8 @@
     .card-statistics__overview-examination {
         display: flex;
         flex-direction: column;
-        // padding: 12px 12px;
-        padding: 12px 12px 0px 12px;
+        // padding: 16px 20px;
+        padding: 16px 20px 0px 12px;
         gap: $gapL;
 
         .card-statistics__overview-examination--image {
@@ -275,7 +275,7 @@
                 .card-statistics__overview-examination--exam-content-subheader {
                     text-transform: lowercase;
                     color: $colorGray;
-                    opacity: 0.6;
+                    opacity: $opacityS;
                 }
 
                 .card-statistics__overview-examination--exam-content-subheader::first-letter {
@@ -305,7 +305,7 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding: 12px 12px;
+        padding: 16px 20px;
         gap: $gapL;
 
         .card-statistics__overview-finance--image {
@@ -325,7 +325,7 @@
                     font-size: $textFontSizeXL;
                     font-weight: $fontWeightXL;
                     color: $colorGray;
-                    opacity: 0.6;
+                    opacity: $opacityS;
                     padding: 2px 20px;
                 }
 
@@ -410,7 +410,7 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding: 12px 12px;
+        padding: 16px 20px;
         gap: $gapL;
 
         .card-statistics__overview-jobs--image {
@@ -431,7 +431,7 @@
                     font-size: $textFontSizeXL;
                     font-weight: $fontWeightXL;
                     color: $colorGray;
-                    opacity: 0.6;
+                    opacity: $opacityS;
                 }
 
                 .card-statistics__overview-jobs--image-content-total {
@@ -451,7 +451,6 @@
                         text-transform: uppercase;
                         padding-top: 2px;
                         color: $colorBlack;
-
                     }
                 }
 
@@ -488,7 +487,7 @@
                             font-size: $textFontSizeM;
                             font-weight: $fontWeightL;
                             color: $colorGray;
-                            opacity: 0.6;
+                            opacity: $opacityS;
                         }
 
                         .card-statistics__overview-jobs--content-child-progress-bar-number-total {
@@ -541,7 +540,7 @@
 
     // ~~~ Thẻ hoạt động gần đây ~~~
     .card-statistics__overview-activities {
-        padding: 12px 12px;
+        padding: 16px 20px;
 
         // gap: $gapS;
         .card-statistics__overview-activities--activity {
@@ -564,7 +563,7 @@
                     font-size: $textFontSizeM;
                     font-weight: $fontWeightL;
                     color: $colorGray;
-                    opacity: 0.6;
+                    opacity: $opacityS;
                     text-transform: capitalize;
                 }
             }
@@ -623,7 +622,7 @@
                     font-size: $textFontSizeM;
                     font-weight: $fontWeightL;
                     color: $colorGray;
-                    opacity: 0.6;
+                    opacity: $opacityS;
                     overflow: hidden;
                     display: -webkit-box;
                     -webkit-box-orient: vertical;
@@ -682,7 +681,7 @@
         display: flex;
         flex-direction: column;
         gap: $gapL;
-        padding: 12px 12px;
+        padding: 16px 20px;
 
         .card-statistics__overview-information--avatar {
             background-color: $colorExtraLightViolet;
@@ -727,7 +726,7 @@
                         font-size: $textFontSizeM;
                         font-weight: $fontWeightL;
                         color: $colorGray;
-                        opacity: 0.6;
+                        opacity: $opacityS;
                     }
                 }
 
@@ -756,7 +755,7 @@
     .card-statistics__overview-document {
         display: flex;
         flex-direction: column;
-        padding: 12px 12px;
+        padding: 16px 20px;
         gap: $gapM;
 
         .card-statistics__overview-document--child {
@@ -776,10 +775,287 @@
 
                     &.not-upload {
                         color: $colorGray;
-                        opacity: 0.6;
+                        opacity: $opacityS;
                     }
                 }
 
+            }
+        }
+    }
+
+    // ~~~ Thẻ thống kê chi tiết các loại đánh giá và số sao của CTV
+    .card-statistics__rating-overview {
+        
+    }
+    // ~~~ Thẻ thống kê số lần được đánh giá, khen thưởng, vi phạm ~~~
+    .card-statistics__rating-statistic {
+        display: flex;
+        flex-direction: column;
+        padding: 16px 20px;
+        gap: $gapL;
+
+        .card-statistics__rating-statistic--card {
+            display: flex;
+            gap: $gapL;
+
+            .card-statistics__rating-statistic--card-child {
+                display: flex;
+                align-items: center;
+                width: 33.3333%;
+                position: relative;
+                height: 80px;
+                border-radius: $borderRadiusL;
+                overflow: hidden;
+                transition: all 0.3s ease;
+                cursor: pointer;
+
+                &.card-child-blue {
+                    background-color: $colorExtraLightBlue;
+                }
+                &.card-child-red {
+                    background-color: $colorExtraLightRed;
+                }
+                &.card-child-green {
+                    background-color: $colorExtraLightGreen;
+                }
+
+                .card-statistics__rating-statistic--card-child-label {
+                    display: flex;
+                    flex-direction: column;
+                    gap: $gapS;
+                    padding-left: 16px;
+
+                    .card-statistics__rating-statistic--card-child-label-heading {
+                        font-size: $textFontSizeXL;
+                        font-weight: $fontWeightXL;
+                    }
+
+                    .card-statistics__rating-statistic--card-child-label-number {
+                        font-size: $textFontSizeXL;
+                        font-weight: $fontWeightXL;
+                        &.label-number-blue {
+                            color: $colorBlue;
+                        }
+                        &.label-number-red {
+                            color: $colorRed;
+                        }
+                        &.label-number-green {
+                            color: $colorGreen;
+                        }
+                    }
+                }
+
+                .card-statistics__rating-statistic--card-child-circle {
+                    width: 50px;
+                    height: 50px;
+                    position: absolute;
+                    top: -16px;
+                    right: -16px;
+                    border-radius: $borderRadiusFull;
+                    transition: transform 0.3s ease; // Thêm transition cho transform
+                    &.circle-blue {
+                        background-color: $colorLightBlue;
+                    }
+                    &.circle-red {
+                        background-color: $colorLightRed;
+                    }
+                    &.circle-green {
+                        background-color: $colorLightGreen;
+                    }
+
+                }
+
+                .card-statistics__rating-statistic--card-child-circle-outside {
+                    width: 70px;
+                    height: 70px;
+                    position: absolute;
+                    top: -24px;
+                    right: -24px;
+                    border-radius: $borderRadiusFull;
+                    transition: transform 0.3s ease;
+                    &.circle-outside-blue {
+                        background-color: $colorMoreLightBlue;
+                    }
+                    &.circle-outside-red {
+                        background-color: $colorMoreLightRed;
+                    }
+                    &.circle-outside-green {
+                        background-color: $colorMoreLightGreen;
+                    }
+                }
+
+                &:hover {
+                    .card-statistics__rating-statistic--card-child-circle {
+                        transform: scale(1.2);
+                    }
+
+                    .card-statistics__rating-statistic--card-child-circle-outside {
+                        transform: scale(1.2);
+                    }
+                }
+
+                .card-statistics__rating-statistic--card-child-line-bottom {
+                    width: 60px;
+                    height: 2px;
+                    position: absolute;
+                    bottom: 4px;
+                    left: 80px;
+                    border-radius: $borderRadiusFull;
+
+                    &.line-bottom-blue {
+                        background-color: $colorLightBlue;
+                    }
+                    &.line-bottom-red {
+                        background-color: $colorLightRed;
+                    }
+                    &.line-bottom-green {
+                        background-color: $colorLightGreen;
+                    }
+                }
+            }
+        }
+
+        .card-statistics__rating-statistic--number {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: $gapS;
+
+            .card-statistics__rating-statistic--number-subtext {
+                font-size: $textFontSizeM;
+                font-weight: $fontWeightL;
+                color: $colorGray;
+                opacity: $opacityS;
+                text-transform: uppercase;
+            }
+
+            .card-statistics__rating-statistic--number-average {
+                font-size: $textFontSize3XL;
+                font-weight: $fontWeightXL;
+            }
+
+            .card-statistics__rating-statistic--number-star {
+                display: flex;
+                gap: $gapS;
+            }
+        }
+
+        .card-statistics__rating-statistic--progress-bar {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: $gapL;
+
+            // padding-top: 8px;
+            .card-statistics__rating-statistic--progress-bar-child {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+
+                .card-statistics__rating-statistic--progress-bar-child-label {
+                    text-align: center;
+                    width: 25%;
+                    font-size: $textFontSizeM;
+                    font-weight: $fontWeightL;
+                    // color: $colorGray;
+                    // opacity: $opacityS;
+                }
+
+                .card-statistics__rating-statistic--progress-bar-child-container {
+                    width: 100%;
+                    height: fit-content;
+                    position: relative;
+                    border-radius: $borderRadiusFull;
+                    background-color: $colorExtraLightGray;
+                    text-align: center;
+
+                    span {
+                        top: -2px;
+                        position: absolute;
+                        font-style: italic;
+                        font-size: $fontWeightL;
+                        color: $colorBlack;
+
+                        &.more-than-overal {
+                            color: white;
+                        }
+                    }
+
+                    .card-statistics__rating-statistic--progress-bar-child-container-bar {
+                        height: 12px;
+                        border-radius: $borderRadiusFull;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        background-color: $colorBlue;
+                    }
+
+                    .card-statistics__rating-statistic--progress-bar-child-container-bar-bonus {
+                        background-color: $colorGreen;
+                    }
+
+                    .card-statistics__rating-statistic--progress-bar-child-container-bar-punish {
+                        background-color: $colorRed;
+                    }
+                }
+
+                // .card-statistics__rating-statistic--progress-bar-child-number {
+                //     display: flex;
+                //     justify-content: space-between;
+                //     align-items: center;
+                //     margin-bottom: 2px;
+
+                //     .card-statistics__rating-statistic--progress-bar-child-number-label {
+                //         font-size: $textFontSizeM;
+                //         font-weight: $fontWeightL;
+                //         color: $colorGray;
+                //         opacity: $opacityS;
+                //     }
+
+                //     .card-statistics__rating-statistic--progress-bar-child-number-total {
+                //         font-size: $textFontSizeM;
+                //         font-weight: $fontWeightXL;
+                //         color: $colorBlack;
+                //     }
+                // }
+
+                // .card-statistics__rating-statistic--progress-bar-child-container {
+                //     width: 100%;
+                //     position: relative;
+                //     border-radius: $borderRadiusFull;
+                //     background-color: $colorExtraLightGray;
+                //     text-align: center;
+
+                //     span {
+                //         position: absolute;
+                //         font-style: italic;
+                //         font-size: $fontWeightL;
+                //         color: $colorBlack;
+
+                //         &.more-than-overal {
+                //             color: white;
+                //         }
+                //     }
+
+                //     .card-statistics__rating-statistic--progress-bar-child-container-bar {
+                //         height: 8px;
+                //         border-radius: $borderRadiusFull;
+                //         display: flex;
+                //         align-items: center;
+                //         justify-content: center;
+                //         background-color: $colorBlue;
+                //     }
+
+                //     .card-statistics__rating-statistic--progress-bar-child-container-bar-bonus {
+                //         background-color: $colorGreen;
+                //     }
+
+                //     .card-statistics__rating-statistic--progress-bar-child-container-bar-punish {
+                //         background-color: $colorRed;
+                //     }
+                // }
             }
         }
     }
@@ -800,7 +1076,7 @@
             font-size: $textFontSizeM;
             font-weight: $fontWeightL;
             color: $colorGray;
-            opacity: 0.7;
+            opacity: $opacityS;
         }
 
         .card-statistics__icon--layout-content-main {

@@ -27,6 +27,9 @@ $lineHeight2XL: 28px;
 $lineHeight3XL: 32px;
 $lineHeight4XL: 36px;
 
+// $fontFamily: "Open Sans";
+// $fontFamily: "Inter";
+// $fontFamily: "system-ui";
 $fontFamily: "Roboto";
 $fontWeightM: 300;
 $fontWeightL: 400;
@@ -36,7 +39,8 @@ $fontStyleNormal: normal;
 $fontStyleItalic: italic;
 
 // Black Palette
-$colorBlack: #15191f;
+$colorBlack: #43464b;
+// $colorBlack: 475569;
 // White Palette
 $colorWhite: #ffffff;
 // Violet Palette
@@ -48,19 +52,28 @@ $colorLightGray: #9ca3af;
 $colorExtraLightGray: #e7ecf3;
 // Green Palette
 $colorGreen: #22c55e;
+$colorLightGreen: #86efac;
+$colorMoreLightGreen: #bbf7d0;
 $colorExtraLightGreen: #dcfce7;
 // Amber Palette
 $colorExtraLightAmber: #fef3c7;
 // Red Palette
 $colorRed: #ef4444;
+$colorLightRed: #fca5a5;
+$colorMoreLightRed: #fecaca;
 $colorExtraLightRed: #fee2e2;
 // Yellow Palette
 $colorYellow: #eab308;
 $colorExtraLightYellow: #fef9c3;
 // Blue Palette
-$colorExtraLightBlue: #dbeafe;
 $colorBlue: #3b82f6;
+$colorLightBlue: #93c5fd;
+$colorMoreLightBlue: #bfdbfe;
+$colorExtraLightBlue: #dbeafe;
 
+$opacityS: 0.8;
+$opacityM: 0.7;
+$opacityL: 0.6;
 
 //
 $colorBackgroundWhite: #ffffff1f;

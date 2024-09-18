@@ -7,6 +7,8 @@ import { useSelector } from "react-redux";
 import { getLanguageState } from "../../../../../../../redux/selectors/auth";
 import i18n from "../../../../../../../i18n";
 import useWindowDimensions from "../../../../../../../helper/useWindowDimensions";
+import CardInfo from "../../../../../../../components/card";
+import DataTable from "../../../../../../../components/tables/dataTable";
 
 const Review = ({ id, totalReview }) => {
   const [data, setData] = useState([]);
@@ -14,15 +16,20 @@ const Review = ({ id, totalReview }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const { width } = useWindowDimensions();
   const lang = useSelector(getLanguageState);
-
+  const [lengthPage, setLengthPage] = useState(
+    JSON.parse(localStorage.getItem("linePerPage"))
+      ? JSON.parse(localStorage.getItem("linePerPage")).value
+      : 20
+  );
+  const [startPage, setStartPage] = useState(0);
   useEffect(() => {
-    getReviewCollaborator(id, 0, 20)
+    getReviewCollaborator(id, startPage, lengthPage)
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
       })
       .catch((err) => {});
-  }, [id]);
+  }, [id, startPage, lengthPage]);
 
   const onChange = (page) => {
     setCurrentPage(page);
@@ -35,123 +42,90 @@ const Review = ({ id, totalReview }) => {
       })
       .catch((err) => {});
   };
+  const onChangePage = (value) => {
+    setStartPage(value);
+  };
 
   const columns = [
     {
-      title: () => {
-        return (
-          <p className="title-column">{`${i18n.t("date_create", {
-            lng: lang,
-          })}`}</p>
-        );
-      },
-      render: (data) => {
-        return (
-          <div className="time-review">
-            <p className="text-time">
-              {moment(new Date(data?.date_create_review)).format("DD/MM/YYYY")}
-            </p>
-            <p className="text-time">
-              {moment(new Date(data?.date_create_review)).format("HH:mm")}
-            </p>
-          </div>
-        );
-      },
+      title: "Ngày tạo",
+      // dataIndex: "",
+      key: "rating_date",
+      width: 60,
+      FontSize: "text-size-M",
     },
     {
-      title: () => {
-        return (
-          <p className="title-column">{`${i18n.t("assessor", {
-            lng: lang,
-          })}`}</p>
-        );
-      },
-      render: (data) => {
-        return (
-          <p className="name-customer-reivew">{data?.id_customer?.full_name}</p>
-        );
-      },
-      align: "center",
+      title: "Khách hàng đánh giá",
+      // dataIndex: "",
+      key: "customer-name-phone",
+      width: 60,
+      FontSize: "text-size-M",
     },
     {
-      title: () => {
-        return (
-          <p className="title-column">{`${i18n.t("number_star", {
-            lng: lang,
-          })}`}</p>
-        );
-      },
-      align: "center",
-      render: (data) => {
-        return (
-          <p className="name-customer-reivew">
-            {data?.star} <i class="uil uil-star icon-star"></i>
-          </p>
-        );
-      },
+      title: "Số sao đánh giá",
+      // dataIndex: "",
+      key: "id_view_name_service",
+      width: 60,
+      FontSize: "text-size-M",
     },
     {
-      title: () => {
-        return (
-          <p className="title-column">{`${i18n.t("content", {
-            lng: lang,
-          })}`}</p>
-        );
-      },
-      render: (data) => {
-        return <p className="text-quick_review">{data?.review}</p>;
-      },
+      title: "Nội dung",
+      dataIndex: "review",
+      key: "text",
+      width: 60,
+      FontSize: "text-size-M",
     },
     {
-      title: () => {
-        return (
-          <p className="title-column">{`${i18n.t("quick_review", {
-            lng: lang,
-          })}`}</p>
-        );
-      },
-      render: (data) => {
-        return (
-          <div>
-            {data?.short_review?.map((item) => (
-              <p className="text-quick_review">{item}</p>
-            ))}
-          </div>
-        );
-      },
+      title: "Đánh giá nhanh",
+      dataIndex: "short_review",
+      key: "text",
+      width: 60,
+      FontSize: "text-size-M",
     },
   ];
+
   return (
-    <div>
-      <div>
-        <p className="text-total-star">
-          {`${i18n.t("total_review", { lng: lang })}`}: {totalReview}
-          <i class="uil uil-star icon-star"></i>
-        </p>
-      </div>
-
-      <div className="mt-3">
-        <Table
-          columns={columns}
-          dataSource={data}
-          pagination={false}
-          scroll={{ x: width < 900 ? 1000 : 0 }}
-        />
-
-        <div className="div-pagination p-2">
-          <p>
-            {`${i18n.t("total", { lng: lang })}`}: {total}
-          </p>
-          <div>
-            <Pagination
-              current={currentPage}
-              onChange={onChange}
-              total={total}
-              showSizeChanger={false}
-              pageSize={20}
-            />
-          </div>
+    <div className="collaborator-rating">
+      <div className="collaborator-rating__overview">
+        {/* Thẻ thống kê lượt đánh giá theo năm */}
+        <div className="collaborator-rating__overview--statistic">
+          <CardInfo
+            collaboratorRatingStatistic={true}
+            collaboratorId={id}
+            headerLabel="Thống kê đánh giá"
+            // collaboratorStar={star}
+          />
         </div>
+        {/* Thẻ tổng lượt đánh giá */}
+        <div className="collaborator-rating__overview--total">
+          <CardInfo
+            collaboratorRating={true}
+            collaboratorId={id}
+            headerLabel="Số lượt đánh giá"
+            collaboratorStar={totalReview}
+          />
+          {/* hello */}
+        </div>
+        {/* Thẻ tổng lần vi phạm và khen thưởng theo tháng */}
+        {/* <div className="collaborator-rating__overview--bonus-punish">
+          <CardInfo
+            collaboratorRatingBonusAndPunish={true}
+            collaboratorId={id}
+            headerLabel="Khen thưởng, vị phạm"
+            // collaboratorStar={star}
+          />
+        </div> */}
+      </div>
+      <div>
+        <DataTable
+          columns={columns}
+          data={data}
+          start={startPage}
+          pageSize={lengthPage}
+          setLengthPage={setLengthPage}
+          totalItem={total}
+          onCurrentPageChange={onChangePage}
+        />
       </div>
     </div>
   );

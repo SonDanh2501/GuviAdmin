@@ -15,6 +15,9 @@ import moneyLogo from "../../assets/images/moneyLogo.svg";
 import jobLogo from "../../assets/images/jobLogo.svg";
 import avatarDefault from "../../assets/images/user.png";
 import {
+  Bar,
+  BarChart,
+  CartesianGrid,
   Cell,
   Legend,
   Pie,
@@ -24,7 +27,13 @@ import {
   PolarRadiusAxis,
   Radar,
   RadarChart,
+  Rectangle,
   ResponsiveContainer,
+  XAxis,
+  YAxis,
+  Tooltip as RechartsTooltip,
+  AreaChart,
+  Area,
 } from "recharts";
 import { Image, Popover, Select, Tooltip } from "antd";
 import { useDispatch, useSelector } from "react-redux";
@@ -106,8 +115,8 @@ const CardInfo = (props) => {
     headerLabel, // Tiêu đề của thẻ
     supportIcon, // Hiển thị icon bên cạnh tiêu đề
     supportText, // Chữ muốn hiển thị khi hover icon
-    collaboratorId, // Id của cộng tác viên (dùng để lấy thông tin)
-    collaboratorStar, // Số sao của cộng tác viên
+    collaboratorId, // Id của CTV (dùng để lấy thông tin)
+    collaboratorStar, // Số sao của CTV
     timeFilter, // Hiển thị bộ lọc thời gian
     collaboratorRatingOverview, // Thẻ tổng quan đánh giá
     collaboratorCriteria, // Thẻ tiêu chí đánh giá
@@ -116,8 +125,11 @@ const CardInfo = (props) => {
     collaboratorFinance, // Thẻ tài chính
     collaboratorJobs, // Thẻ hiệu quả công việc
     collaboratorActivitys, // Thẻ hoạt động gần đây
-    collaboratorInformation, // Thẻ thông tin cộng tác viên
+    collaboratorInformation, // Thẻ thông tin CTV
     collaboratorDocument, // Thẻ tiến hành hồ sơ
+    collaboratorRating, // Thẻ tổng số đánh giá của CTV
+    collaboratorRatingStatistic, // Thẻ thống kê lượt đánh giá theo từng tháng trong năm
+    collaboratorRatingBonusAndPunish, // Thẻ thống kê lần được khen thưởng và phạt
   } = props;
   const dispatch = useDispatch();
   const lang = useSelector(getLanguageState);
@@ -132,7 +144,7 @@ const CardInfo = (props) => {
   const [totalJobsSuccess, setTotalJobsSuccess] = useState(0);
   const [totalJobsCancel, setTotalJobsCancel] = useState(0);
   const [totalJobsOther, setTotalJobsOther] = useState(0);
-  const [totalRating, setTotalRating] = useState([
+  const [totalRatingOverview, setTotalRatingOverview] = useState([
     {
       name: "5 sao",
       value: 1,
@@ -154,6 +166,47 @@ const CardInfo = (props) => {
       value: 1,
     },
   ]);
+  const [dataRatingTemp, setdDtaRatingTemp] = useState([
+    {
+      name: "5 sao",
+      value: 5,
+    },
+    {
+      name: "4 sao",
+      value: 2,
+    },
+    {
+      name: "3 sao",
+      value: 1,
+    },
+    {
+      name: "2 sao",
+      value: 1,
+    },
+    {
+      name: "1 sao",
+      value: 0,
+    },
+  ]);
+  const [totalRating, setTotalRating] = useState([
+    { name: "Số lượt khen thưởng", value: 20, color: "#00ff00" },
+    { name: "Số lượt phạt", value: 10, color: "#ff0000" },
+    { name: "Tổng", value: 30, color: "#3b82f6" },
+  ]);
+  const [ratingStatistic, setRatingStatistic] = useState([
+    { name: "Thg 1", value: 90 },
+    { name: "Thg 2", value: 70 },
+    { name: "Thg 3", value: 85 },
+    { name: "Thg 4", value: 60 },
+    { name: "Thg 5", value: 75 },
+    { name: "Thg 6", value: 70 },
+    { name: "Thg 7", value: 90 },
+    { name: "Thg 8", value: 65 },
+    { name: "Thg 9", value: 80 },
+    { name: "Thg 10", value: 70 },
+    { name: "Thg 11", value: 70 },
+    { name: "Thg 12", value: 70 },
+  ]);
   const [total, setTotal] = useState({
     total_favourite: 0,
     total_order: 0,
@@ -164,8 +217,8 @@ const CardInfo = (props) => {
   const city = province.filter((x) => x.code === dataDetail.city)[0];
   // ~~~ Function ~~~
   // 1. Tổng quan đánh giá
-  const getStar = (totalRating, dataReview) => {
-    if (totalRating.length > 0 && dataReview.totalItem > 0) {
+  const getStar = (totalRatingOverview, dataReview) => {
+    if (totalRatingOverview.length > 0 && dataReview.totalItem > 0) {
       let fiveStar = 0;
       let fourStar = 0;
       let threeStar = 0;
@@ -178,7 +231,7 @@ const CardInfo = (props) => {
         if (el.star === 2) twoStar += 1;
         if (el.star === 1) oneStar += 1;
       });
-      totalRating?.forEach((element) => {
+      totalRatingOverview?.forEach((element) => {
         if (element.name === "5 sao") {
           element.value = fiveStar;
         }
@@ -259,7 +312,14 @@ const CardInfo = (props) => {
     return (
       <text x={x} y={y} textAnchor={textAnchor} fill="#666">
         {lines.map((line, index) => (
-          <tspan x={x} dy={index === 0 ? 0 : 14} key={index}>
+          <tspan
+            fontFamily="Roboto"
+            fontSize="12"
+            fill="#9ca3af"
+            x={x}
+            dy={index === 0 ? 0 : 14}
+            key={index}
+          >
             {line}
           </tspan>
         ))}
@@ -299,12 +359,6 @@ const CardInfo = (props) => {
     },
   ];
   // 3. Hoạt động gần đây
-  const capitalizeWords = (str) => {
-    return str
-      .split(" ")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ");
-  };
   const timeWork = (data) => {
     const start = moment(new Date(data.date_work)).format("HH:mm");
     const timeEnd = moment(new Date(data?.date_work))
@@ -316,7 +370,8 @@ const CardInfo = (props) => {
   // ~~~ useEffect ~~~
   useEffect(() => {
     if (collaboratorId) {
-      if (collaboratorRatingOverview) {
+      // Thẻ đánh giá tổng quan, thẻ số lượt đánh giá
+      if (collaboratorRatingOverview || collaboratorRating) {
         let tempTotalDataReview = 0;
         getReviewCollaborator(collaboratorId, 0, 1)
           .then((res) => {
@@ -325,11 +380,27 @@ const CardInfo = (props) => {
           .catch((err) => {});
         getReviewCollaborator(collaboratorId, 0, tempTotalDataReview)
           .then((res) => {
-            getStar(totalRating, res);
+            getStar(totalRatingOverview, res);
+            setTotalRating((prevTotalRating) =>
+              prevTotalRating.map((item, index) => {
+                if (index === 0) {
+                  return { ...item, value: res?.totalItem };
+                }
+                if (index === 1) {
+                  return {
+                    ...item,
+                    value:
+                      res?.totalItem < 10 ? 10 : res?.totalItem < 20 ? 20 : 50,
+                  };
+                }
+                return item;
+              })
+            );
             setDataReview(res);
           })
           .catch((err) => {});
       }
+      // Thẻ bài kiểm tra
       if (collaboratorTest) {
         getListTrainingLessonByCollaboratorApi(collaboratorId, 0, 20, "all")
           .then((res) => {
@@ -337,6 +408,7 @@ const CardInfo = (props) => {
           })
           .catch((err) => {});
       }
+      // Thẻ hiệu quả công việc, thẻ hoạt động gần đây
       if (collaboratorJobs || collaboratorActivitys) {
         let tempTotalActivity = 0;
         dispatch(loadingAction.loadingRequest(true));
@@ -371,6 +443,7 @@ const CardInfo = (props) => {
           })
           .catch((err) => {});
       }
+      // Thẻ thông tin CTV, thẻ tiến hành hồ sơ
       if (collaboratorInformation || collaboratorDocument) {
         getOverviewCollaborator(collaboratorId)
           .then((res) => {
@@ -469,7 +542,7 @@ const CardInfo = (props) => {
             <ResponsiveContainer width="100%" height={230}>
               <PieChart>
                 <Pie
-                  data={totalRating}
+                  data={totalRatingOverview}
                   cx="50%"
                   cy="50%"
                   labelLine={false}
@@ -478,7 +551,7 @@ const CardInfo = (props) => {
                   fill="#8884d8"
                   dataKey="value"
                 >
-                  {totalRating.map((entry, index) => (
+                  {totalRatingOverview.map((entry, index) => (
                     <Cell
                       key={`cell-${index}`}
                       fill={COLORS[index % COLORS.length]}
@@ -999,6 +1072,14 @@ const CardInfo = (props) => {
                   </span>
                   <div className="card-statistics__overview-information--avatar-information-other">
                     <span className="card-statistics__overview-information--avatar-information-other-subtext-label">
+                      Tuổi:
+                    </span>
+                    <span className="card-statistics__overview-information--avatar-information-other-subtext">
+                      {moment().diff(dataDetail?.birthday, "years")}
+                    </span>
+                  </div>
+                  <div className="card-statistics__overview-information--avatar-information-other">
+                    <span className="card-statistics__overview-information--avatar-information-other-subtext-label">
                       Mã giới thiệu:
                     </span>
                     <span className="card-statistics__overview-information--avatar-information-other-subtext">
@@ -1269,6 +1350,281 @@ const CardInfo = (props) => {
                   Giấy xác nhận hạnh kiểm
                 </span>
               </div>
+            </div>
+          </div>
+        )}
+        {/* Thẻ tổng lượt đánh giá */}
+        {collaboratorRating && (
+          <div className="card-statistics__rating-overview">
+            {/* Điểm đánh giá */}
+            <div className="card-statistics__rating-statistic">
+              {/* Tựa đề hướng dẫn */}
+              <span>
+
+              </span>
+              {/* Số điểm đánh giá */}
+              <span>
+                
+                </span>
+            </div>
+            {/* Chart */}
+            <div>
+              <ResponsiveContainer height={296} width={"100%"}>
+                <BarChart data={dataRatingTemp} barSize={40}>
+                  <XAxis
+                    dataKey="name"
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{
+                      fontSize: 12,
+                      fontFamily: "Roboto",
+                      fill: "#475569",
+                    }}
+                  />
+                  <RechartsTooltip />
+                  <CartesianGrid strokeDasharray="5 10" vertical={false} />
+                  <Bar
+                    dataKey="value"
+                    fill="#fef08a"
+                    // background={{ fill: "#eee" }}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+            {/* Điểm đánh giá */}
+            {/* <div className="card-statistics__rating-statistic--number">
+              <span className="card-statistics__rating-statistic--number-subtext">
+                Số sao trung bình
+              </span>
+              <span className="card-statistics__rating-statistic--number-average">
+                4.9
+              </span>
+              <div className="card-statistics__rating-statistic--number-star">
+                {renderStarFromNumber(collaboratorStar).map((el, index) => (
+                  <span>{el}</span>
+                ))}
+              </div>
+            </div> */}
+            {/* Thống kê từng loại đánh giá */}
+            {/* <div className="card-statistics__rating-statistic--progress-bar">
+              <div className="card-statistics__rating-statistic--progress-bar-child">
+                <span className="card-statistics__rating-statistic--progress-bar-child-label">
+                  5 sao
+                </span>
+                <div className="card-statistics__rating-statistic--progress-bar-child-container">
+                  <span
+                    className={`${
+                      calculateNumberPercent(
+                        totalJobs,
+                        totalJobsSuccess + totalJobsOther
+                      ) > 60 && "more-than-overal"
+                    }`}
+                    // className="text-white"
+                  >
+                    {calculateNumberPercent(
+                      totalJobs,
+                      totalJobsSuccess + totalJobsOther
+                    )}
+                    %
+                  </span>
+                  <div className="card-statistics__rating-statistic--progress-bar-child-container-bar card-statistics__rating-statistic--progress-bar-child-container-bar-bonus"></div>
+                </div>
+              </div>
+              <div className="card-statistics__rating-statistic--progress-bar-child">
+                <span className="card-statistics__rating-statistic--progress-bar-child-label">
+                  5 sao
+                </span>
+                <div className="card-statistics__rating-statistic--progress-bar-child-container">
+                  <span
+                    className={`${
+                      calculateNumberPercent(
+                        totalJobs,
+                        totalJobsSuccess + totalJobsOther
+                      ) > 60 && "more-than-overal"
+                    }`}
+                    // className="text-white"
+                  >
+                    {calculateNumberPercent(
+                      totalJobs,
+                      totalJobsSuccess + totalJobsOther
+                    )}
+                    %
+                  </span>
+                  <div className="card-statistics__rating-statistic--progress-bar-child-container-bar card-statistics__rating-statistic--progress-bar-child-container-bar-bonus"></div>
+                </div>
+              </div>
+              <div className="card-statistics__rating-statistic--progress-bar-child">
+                <span className="card-statistics__rating-statistic--progress-bar-child-label">
+                  5 sao
+                </span>
+                <div className="card-statistics__rating-statistic--progress-bar-child-container">
+                  <span
+                    className={`${
+                      calculateNumberPercent(
+                        totalJobs,
+                        totalJobsSuccess + totalJobsOther
+                      ) > 60 && "more-than-overal"
+                    }`}
+                    // className="text-white"
+                  >
+                    {calculateNumberPercent(
+                      totalJobs,
+                      totalJobsSuccess + totalJobsOther
+                    )}
+                    %
+                  </span>
+                  <div className="card-statistics__rating-statistic--progress-bar-child-container-bar card-statistics__rating-statistic--progress-bar-child-container-bar-bonus"></div>
+                </div>
+              </div>
+              <div className="card-statistics__rating-statistic--progress-bar-child">
+                <span className="card-statistics__rating-statistic--progress-bar-child-label">
+                  5 sao
+                </span>
+                <div className="card-statistics__rating-statistic--progress-bar-child-container">
+                  <span
+                    className={`${
+                      calculateNumberPercent(
+                        totalJobs,
+                        totalJobsSuccess + totalJobsOther
+                      ) > 60 && "more-than-overal"
+                    }`}
+                    // className="text-white"
+                  >
+                    {calculateNumberPercent(
+                      totalJobs,
+                      totalJobsSuccess + totalJobsOther
+                    )}
+                    %
+                  </span>
+                  <div className="card-statistics__rating-statistic--progress-bar-child-container-bar card-statistics__rating-statistic--progress-bar-child-container-bar-bonus"></div>
+                </div>
+              </div>
+              <div className="card-statistics__rating-statistic--progress-bar-child">
+                <span className="card-statistics__rating-statistic--progress-bar-child-label">
+                  5 sao
+                </span>
+                <div className="card-statistics__rating-statistic--progress-bar-child-container">
+                  <span
+                    className={`${
+                      calculateNumberPercent(
+                        totalJobs,
+                        totalJobsSuccess + totalJobsOther
+                      ) > 60 && "more-than-overal"
+                    }`}
+                    // className="text-white"
+                  >
+                    {calculateNumberPercent(
+                      totalJobs,
+                      totalJobsSuccess + totalJobsOther
+                    )}
+                    %
+                  </span>
+                  <div className="card-statistics__rating-statistic--progress-bar-child-container-bar card-statistics__rating-statistic--progress-bar-child-container-bar-bonus"></div>
+                </div>
+              </div>
+            </div> */}
+          </div>
+        )}
+        {/* Thẻ thống kê lượt đánh giá theo từng tháng trong năm */}
+        {collaboratorRatingStatistic && (
+          <div className="card-statistics__rating-statistic">
+            {/* Các thẻ thống kê tổng quát */}
+            <div className="card-statistics__rating-statistic--card">
+              {/* Đánh giá */}
+              <div className="card-statistics__rating-statistic--card-child card-child-blue">
+                <div className="card-statistics__rating-statistic--card-child-label ">
+                  <span className="card-statistics__rating-statistic--card-child-label-heading">
+                    Đánh giá
+                  </span>
+                  <span className="card-statistics__rating-statistic--card-child-label-number label-number-blue">
+                    20
+                  </span>
+                </div>
+                <div className="card-statistics__rating-statistic--card-child-circle-outside circle-outside-blue"></div>
+                <div className="card-statistics__rating-statistic--card-child-circle circle-blue"></div>
+                <div className="card-statistics__rating-statistic--card-child-line-bottom line-bottom-blue"></div>
+              </div>
+              {/* Khen thưởng */}
+              <div className="card-statistics__rating-statistic--card-child card-child-green">
+                <div className="card-statistics__rating-statistic--card-child-label">
+                  <span className="card-statistics__rating-statistic--card-child-label-heading">
+                    Khen thưởng
+                  </span>
+                  <span className="card-statistics__rating-statistic--card-child-label-number label-number-green">
+                    0
+                  </span>
+                </div>
+                <div className="card-statistics__rating-statistic--card-child-circle-outside circle-outside-green"></div>
+                <div className="card-statistics__rating-statistic--card-child-circle circle-green"></div>
+                <div className="card-statistics__rating-statistic--card-child-line-bottom line-bottom-green"></div>
+              </div>
+              {/* Vi phạm */}
+              <div className="card-statistics__rating-statistic--card-child card-child-red">
+                <div className="card-statistics__rating-statistic--card-child-label">
+                  <span className="card-statistics__rating-statistic--card-child-label-heading">
+                    Vi phạm
+                  </span>
+                  <span className="card-statistics__rating-statistic--card-child-label-number label-number-red">
+                    10
+                  </span>
+                </div>
+                <div className="card-statistics__rating-statistic--card-child-circle-outside circle-outside-red"></div>
+                <div className="card-statistics__rating-statistic--card-child-circle circle-red"></div>
+                <div className="card-statistics__rating-statistic--card-child-line-bottom line-bottom-red"></div>
+              </div>
+            </div>
+            {/* Chart */}
+            <div className="card-statistics__rating-statistic--chart">
+              <ResponsiveContainer width="100%" height={200}>
+                <AreaChart data={ratingStatistic}>
+                  <defs>
+                    <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+                      <stop
+                        offset="15%"
+                        stopColor="#93c5fd"
+                        stopOpacity={0.8}
+                      />
+                      <stop offset="100%" stopColor="#93c5fd" stopOpacity={0} />
+                    </linearGradient>
+                    {/* <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
+                      <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
+                    </linearGradient> */}
+                  </defs>
+                  <XAxis
+                    interval="preserveStartEnd"
+                    dataKey="name"
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{
+                      fontSize: 12,
+                      fontFamily: "Roboto",
+                      fill: "#475569",
+                    }}
+                  />
+                  {/* <YAxis
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{
+                      fontSize: 12,
+                      fontFamily: "Roboto",
+                      fill: "#475569",
+                    }}
+                  /> */}
+                  <CartesianGrid strokeDasharray="5 10" vertical={false} />
+                  <RechartsTooltip />
+                  <Area
+                    type="monotone"
+                    dataKey="value"
+                    stroke="#3b82f6"
+                    strokeWidth={3}
+                    fillOpacity={1}
+                    fill="url(#colorUv)"
+                    dot={{ r: 3 }}
+                    activeDot={{ r: 6 }}
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
             </div>
           </div>
         )}
