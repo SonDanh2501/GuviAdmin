@@ -42,6 +42,7 @@ import {
   countryList,
   listSkills,
   listLanguages,
+  sortList,
 } from "../../../../../../../utils/contant";
 import user from "../../../../../../../assets/images/user.png";
 const {
@@ -132,7 +133,6 @@ const Information = ({ data, idCTV, setData, id }) => {
   const [imgInformation, setImgInformation] = useState([]);
   const [imgCertification, setImgCertification] = useState([]);
   const [imgRegistration, setImgRegistration] = useState([]);
-
   // ~~~ useEffect ~~~
   // 1. Lấy giá trị và gán cho các trường thông tin cộng tác viên
   useEffect(() => {
@@ -749,8 +749,6 @@ const Information = ({ data, idCTV, setData, id }) => {
   });
   // ↑ trở lên là code cũ không cần quan tâm
 
-
-  // console.log("data?.contact_persons", data?.contact_persons > );
   return (
     <>
       <div>
@@ -1268,7 +1266,7 @@ const Information = ({ data, idCTV, setData, id }) => {
                       value={selectBankName}
                       placeHolder="Tên ngân hàng"
                       setValueSelectedProps={setSelectBankName}
-                      options={bankList}
+                      options={sortList(bankList, "code")}
                       previewImage={true}
                     />
                   </div>

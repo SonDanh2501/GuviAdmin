@@ -38,6 +38,7 @@ import {
   IoRemove,
   IoTrendingUp,
   IoTrendingDown,
+  IoChevronDown ,
 } from "react-icons/io5";
 
 const icons = {
@@ -80,6 +81,7 @@ const icons = {
   IoRemove,
   IoTrendingUp,
   IoTrendingDown,
+  IoChevronDown,
 };
 
 export default icons;

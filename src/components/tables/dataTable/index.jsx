@@ -96,7 +96,7 @@ const DataTable = (props) => {
   });
   let pageSizeOptions = [
     { value: 10, label: "10 dòng/trang" },
-    { value: 20, label: "20 dòng/trang" },
+    { value: 25, label: "25 dòng/trang" },
     { value: 50, label: "50 dòng/trang" },
     { value: 100, label: "100 dòng/trang" },
   ];
@@ -288,7 +288,7 @@ const DataTable = (props) => {
               </div>
             );
             break;
-          case "customer-name-phone":
+          case "customer_name_phone":
             return (
               <div className="div-customer-name-phone">
                 <Link
@@ -779,18 +779,18 @@ const DataTable = (props) => {
           }
           case "status":
             return (
-              <div className="div-status-order">
+              <div className="status-text">
                 <span
-                  className={`text-star ${item?.fontSize} ${
+                  className={`${
                     data?.status === "pending"
-                      ? "text-status-pending"
+                      ? "status-text__pending"
                       : data?.status === "confirm"
-                      ? "text-status-confirm"
+                      ? "status-text__confirm"
                       : data?.status === "doing"
-                      ? "text-status-doing"
+                      ? "status-text__doing"
                       : data?.status === "done"
-                      ? "text-status-done"
-                      : "text-status-cancel"
+                      ? "status-text__done"
+                      : "status-text__cancel"
                   }`}
                 >
                   {data?.status === "pending"
@@ -1693,9 +1693,7 @@ const DataTable = (props) => {
             break;
           }
           case "rating_content": {
-            return (
-              <span>{data?.review}</span>
-            );
+            return <span>{data?.review}</span>;
             break;
           }
           // case :
@@ -1817,11 +1815,11 @@ const DataTable = (props) => {
     : [];
   scroll.x = scrollX ? scrollX : widthPage;
 
-
-  console.log("check data >>>", data);
+  // console.log("check data >>>", data);
   return (
     <React.Fragment>
-      <div className="mr-t ">
+      <div></div>
+      <div className="mr-t">
         <ConfigProvider
           theme={{
             components: {

@@ -691,8 +691,8 @@ const RangeDatePicker = (props) => {
     <div>
       <div>
         <div className="btn-date-picker" onClick={() => setOpen(!open)}>
-          <p className="text-gray-700/80 mr-1">Thời gian:</p>
-          <p className="font-medium">{title}</p>
+          <p className="text-gray-500/70">Thời gian:</p>
+          <p className="font-normal">{title}</p>
         </div>
       </div>
       {open && (

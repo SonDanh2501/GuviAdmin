@@ -112,7 +112,6 @@ const ProfileCollaborator = () => {
     }
   };
   
-  // console.log("check img", img);
   return (
     <div>
       <div>

@@ -430,7 +430,7 @@ const columns = [
   {
     title: "Tên KH",
     dataIndex: "customer-name-phone",
-    key: "customer-name-phone",
+    key: "customer_name_phone",
     width: 70,
     fontSize: "text-size-M",
   },

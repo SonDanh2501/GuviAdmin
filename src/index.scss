@@ -11,6 +11,19 @@
   width: 100%;
 }
 
+.card-shadow {
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 1px 3px;
+}
+
+// <div className="bg-white rounded-xl my-4 p-4 card-shadow border-gray-300 border">
+
+.card-table {
+  background-color: $colorWhite;
+  border-radius: $borderRadiusM;
+  padding: 12px 20px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 1px 3px;
+}
+
 .div-flex-row {
   display: flex;
   flex-direction: row;
@@ -411,6 +424,8 @@
 
 .ant-table-thead p {
   color: white;
+  font-size: $textFontSizeM;
+  font-weight: $fontWeightXL;
 }
 
 .ant-table tbody tr:nth-child(odd) td {
@@ -425,9 +440,9 @@
   // padding: 10px;
 }
 
-.ant-table-wrapper .ant-table{
+.ant-table-wrapper .ant-table {
   scrollbar-color: unset;
-} 
+}
 
 .ant-table-body {
   scrollbar-width: auto;
@@ -436,13 +451,13 @@
 
 // custom scrollbar
 .ant-table-body::-webkit-scrollbar {
-    width: 12px;
-    height: 12px;
-    // border-radius: 8px;
+  width: 12px;
+  height: 12px;
+  // border-radius: 8px;
 }
 
 .ant-table-body::-webkit-scrollbar-track {
-  background-color:#ebe0f8;
+  background-color: #ebe0f8;
 }
 
 .ant-table-body::-webkit-scrollbar-thumb {

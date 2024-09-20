@@ -4,15 +4,16 @@
   display: flex;
   flex-direction: column;
   gap: $gapL;
+  padding-bottom: 16px;
   
   .collaborator-rating__overview {
     display: flex;
     gap: $gapL;
     .collaborator-rating__overview--total {
-      width: 35%;
+      width: 30%;
     }
     .collaborator-rating__overview--statistic {
-      width: 65%;
+      width: 70%;
     }
   }
 }

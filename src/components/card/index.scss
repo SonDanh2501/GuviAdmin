@@ -785,8 +785,50 @@
 
     // ~~~ Thẻ thống kê chi tiết các loại đánh giá và số sao của CTV
     .card-statistics__rating-overview {
-        
+        display: flex;
+        flex-direction: column;
+        padding: 16px 20px;
+        gap: $gapM;
+
+        .card-statistics__rating-overview--average-point {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            .card-statistics__rating-overview--average-point-label {
+                font-size: $textFontSizeM;
+                font-weight: $fontWeightL;
+                color: $colorBlack;
+                padding: 4px 0px;
+                // opacity: $opacityS;
+            }
+
+            .card-statistics__rating-overview--average-point-number {
+                display: flex;
+                align-items: center;
+                gap: $gapS;
+
+                .card-statistics__rating-overview--average-point-number-sub {
+                    font-weight: $fontWeightL;
+                    color: $colorGray;
+                    opacity: $opacityL;
+                    // padding: 2px 0px;
+                }
+
+                .card-statistics__rating-overview--average-point-number-total {
+                    background-color: $colorExtraLightYellow;
+                    padding: 4px 6px;
+                    border-radius: $borderRadiusM;
+                    font-size: $textFontSizeXL;
+                    font-weight: $fontWeightXL;
+                    color: $colorYellow;
+                    // opacity: $opacityS;
+                }
+
+            }
+        }
     }
+
     // ~~~ Thẻ thống kê số lần được đánh giá, khen thưởng, vi phạm ~~~
     .card-statistics__rating-statistic {
         display: flex;
@@ -812,9 +854,11 @@
                 &.card-child-blue {
                     background-color: $colorExtraLightBlue;
                 }
+
                 &.card-child-red {
                     background-color: $colorExtraLightRed;
                 }
+
                 &.card-child-green {
                     background-color: $colorExtraLightGreen;
                 }
@@ -833,12 +877,15 @@
                     .card-statistics__rating-statistic--card-child-label-number {
                         font-size: $textFontSizeXL;
                         font-weight: $fontWeightXL;
+
                         &.label-number-blue {
                             color: $colorBlue;
                         }
+
                         &.label-number-red {
                             color: $colorRed;
                         }
+
                         &.label-number-green {
                             color: $colorGreen;
                         }
@@ -853,12 +900,15 @@
                     right: -16px;
                     border-radius: $borderRadiusFull;
                     transition: transform 0.3s ease; // Thêm transition cho transform
+
                     &.circle-blue {
                         background-color: $colorLightBlue;
                     }
+
                     &.circle-red {
                         background-color: $colorLightRed;
                     }
+
                     &.circle-green {
                         background-color: $colorLightGreen;
                     }
@@ -873,12 +923,15 @@
                     right: -24px;
                     border-radius: $borderRadiusFull;
                     transition: transform 0.3s ease;
+
                     &.circle-outside-blue {
                         background-color: $colorMoreLightBlue;
                     }
+
                     &.circle-outside-red {
                         background-color: $colorMoreLightRed;
                     }
+
                     &.circle-outside-green {
                         background-color: $colorMoreLightGreen;
                     }
@@ -886,11 +939,11 @@
 
                 &:hover {
                     .card-statistics__rating-statistic--card-child-circle {
-                        transform: scale(1.2);
+                        transform: scale(1.3);
                     }
 
                     .card-statistics__rating-statistic--card-child-circle-outside {
-                        transform: scale(1.2);
+                        transform: scale(1.3);
                     }
                 }
 
@@ -899,15 +952,17 @@
                     height: 2px;
                     position: absolute;
                     bottom: 4px;
-                    left: 80px;
+                    left: 90px;
                     border-radius: $borderRadiusFull;
 
                     &.line-bottom-blue {
                         background-color: $colorLightBlue;
                     }
+
                     &.line-bottom-red {
                         background-color: $colorLightRed;
                     }
+
                     &.line-bottom-green {
                         background-color: $colorLightGreen;
                     }

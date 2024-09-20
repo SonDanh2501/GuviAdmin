@@ -98,7 +98,7 @@ const Feedback = () => {
     {
       i18n_title: "customer",
       dataIndex: "customer",
-      key: "customer-name-phone",
+      key: "customer_name_phone",
       width: 130,
     },
     {

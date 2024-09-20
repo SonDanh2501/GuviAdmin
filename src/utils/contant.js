@@ -12,6 +12,10 @@ import VP_BANK from "../assets/images/bank_vp.svg";
 import TP_BANK from "../assets/images/bank_tp.svg";
 import VIB_BANK from "../assets/images/bank_vib.svg";
 import SHB_BANK from "../assets/images/bank_shb.svg";
+import CB_BANK from "../assets/images/bank_cb.svg";
+import OCEAN_BANK from "../assets/images/bank_ocean.svg";
+import HD_BANK from "../assets/images/bank_hd.svg";
+import PVC_BANK from "../assets/images/bank_pvc.svg";
 // Flag list
 import CHINA_FLAG from "../assets/images/flag_china.svg";
 import VIETNAM_FLAG from "../assets/images/flag_vietnam.svg";
@@ -119,67 +123,61 @@ export const bankList = [
     code: "vietcom_bank",
     label: (
       <div style={{ gap: "12px" }} className="flex items-center">
-        {/* <IoStar /> */}
         <img className="w-full h-6" src={VIETCOM_BANK}></img>
         <span className="text-xs font-normal">Vietcombank</span>
       </div>
     ),
     image: VIETCOM_BANK,
-    name: "Ngân hàng Thương mại cổ phần Ngoại thương Việt Nam (VCB)",
+    name: "Ngân hàng Thương mại cổ phần Ngoại thương Việt Nam (VIETCOMBANK)",
   },
   {
     code: "mb_bank",
     label: (
       <div style={{ gap: "12px" }} className="flex items-center">
-        {/* <IoStar /> */}
         <img className="w-full h-6" src={MB_BANK}></img>
         <span className="text-xs font-normal">MBBank</span>
       </div>
     ),
     image: MB_BANK,
-    name: "Ngân hàng Quân đội (MBB)",
+    name: "Ngân hàng Quân đội (MBBank)",
   },
   {
     code: "vietin_bank",
     label: (
       <div style={{ gap: "12px" }} className="flex items-center">
-        {/* <IoStar /> */}
         <img className="w-full h-6" src={VIETIN_BANK}></img>
         <span className="text-xs font-normal">Vietinbank</span>
       </div>
     ),
     image: VIETIN_BANK,
-    name: "Ngân hàng Thương mại cổ phần Công Thương Việt Nam (VTB)",
+    name: "Ngân hàng Thương mại cổ phần Công Thương Việt Nam (VIETINBANK)",
   },
   {
     code: "techcom_bank",
     label: (
       <div style={{ gap: "12px" }} className="flex items-center">
-        {/* <IoStar /> */}
         <img className="w-full h-6" src={TECHCOM_BANK}></img>
         <span className="text-xs font-normal">Techcombank</span>
       </div>
     ),
     image: TECHCOM_BANK,
-    name: "Ngân hàng Thương mại cổ phần Kỹ Thương Việt Nam (TCB)",
+    name: "Ngân hàng Thương mại cổ phần Kỹ Thương Việt Nam (TECHCOMBANK)",
   },
   {
     code: "agri_bank",
     label: (
       <div style={{ gap: "12px" }} className="flex items-center">
-        {/* <IoStar /> */}
         <img className="w-full h-6" src={ARGI_BANK}></img>
         <span className="text-xs font-normal">Agribank</span>
       </div>
     ),
     image: ARGI_BANK,
-    name: "Ngân hàng Nông nghiệp và Phát triển Nông thôn Việt Nam (AGRI)",
+    name: "Ngân hàng Nông nghiệp và Phát triển Nông thôn Việt Nam (AGRIBANK)",
   },
   {
     code: "bidv_bank",
     label: (
       <div style={{ gap: "12px" }} className="flex items-center">
-        {/* <IoStar /> */}
         <img className="w-full h-6" src={BIDV_BANK}></img>
         <span className="text-xs font-normal">BIDV</span>
       </div>
@@ -191,7 +189,6 @@ export const bankList = [
     code: "sacom_bank",
     label: (
       <div style={{ gap: "12px" }} className="flex items-center">
-        {/* <IoStar /> */}
         <img className="w-full h-6" src={SACOM_BANK}></img>
         <span className="text-xs font-normal">Sacombank</span>
       </div>
@@ -203,7 +200,6 @@ export const bankList = [
     code: "acb_bank",
     label: (
       <div style={{ gap: "12px" }} className="flex items-center">
-        {/* <IoStar /> */}
         <img className="w-full h-6" src={ACB_BANK}></img>
         <span className="text-xs font-normal">ACB</span>
       </div>
@@ -215,31 +211,28 @@ export const bankList = [
     code: "vp_bank",
     label: (
       <div style={{ gap: "12px" }} className="flex items-center">
-        {/* <IoStar /> */}
         <img className="w-full h-6" src={VP_BANK}></img>
         <span className="text-xs font-normal">VPBank</span>
       </div>
     ),
     image: VP_BANK,
-    name: "Ngân hàng Thương mại cổ phần Việt Nam Thịnh Vượng (VPB)",
+    name: "Ngân hàng Thương mại cổ phần Việt Nam Thịnh Vượng (VPBANK)",
   },
   {
     code: "tp_bank",
     label: (
       <div style={{ gap: "12px" }} className="flex items-center">
-        {/* <IoStar /> */}
         <img className="w-full h-6" src={TP_BANK}></img>
         <span className="text-xs font-normal">TPBank</span>
       </div>
     ),
     image: TP_BANK,
-    name: "Ngân hàng Thương mại cổ phần Tiên Phong (TPB)",
+    name: "Ngân hàng Thương mại cổ phần Tiên Phong (TPBANK)",
   },
   {
     code: "vib_bank",
     label: (
       <div style={{ gap: "12px" }} className="flex items-center">
-        {/* <IoStar /> */}
         <img className="w-full h-6" src={VIB_BANK}></img>
         <span className="text-xs font-normal">VIB</span>
       </div>
@@ -251,13 +244,56 @@ export const bankList = [
     code: "shb_bank",
     label: (
       <div style={{ gap: "12px" }} className="flex items-center">
-        {/* <IoStar /> */}
         <img className="w-full h-6" src={SHB_BANK}></img>
         <span className="text-xs font-normal">SHB</span>
       </div>
     ),
     image: SHB_BANK,
     name: "Ngân hàng Thương mại cổ phần Sài Gòn-Hà Nội (SHB)",
+  },
+  {
+    code: "pvc_bank",
+    label: (
+      <div style={{ gap: "12px" }} className="flex items-center">
+        <img className="w-full h-6" src={PVC_BANK}></img>
+        <span className="text-xs font-normal">PVCOMB</span>
+      </div>
+    ),
+    image: PVC_BANK,
+    name: "Ngân hàng TMCP Đại Chúng Việt Nam (PVCOMBANK)",
+  },
+  {
+    code: "ocean_bank",
+    label: (
+      <div style={{ gap: "12px" }} className="flex items-center">
+        <img className="w-full h-6" src={OCEAN_BANK}></img>
+        <span className="text-xs font-normal">OCEANB</span>
+      </div>
+    ),
+    image: OCEAN_BANK,
+    name: "Ngân hàng Đại Dương (OceanBank)",
+  },
+  {
+    code: "cb_bank",
+    label: (
+      <div style={{ gap: "12px" }} className="flex items-center">
+        <img className="w-full h-6" src={CB_BANK}></img>
+        <span className="text-xs font-normal">CBB</span>
+      </div>
+    ),
+    image: CB_BANK,
+    name: "Ngân hàng xây dựng (CBBANK)",
+  },
+  {
+    code: "hd_bank",
+    label: (
+      <div style={{ gap: "12px" }} className="flex items-center">
+        <img className="w-full h-6" src={HD_BANK}></img>
+        <span className="text-xs font-normal">HDBANK</span>
+      </div>
+    ),
+    image: HD_BANK,
+    name: "Ngân hàng thương mại cổ phần Phát triển Thành phố Hồ Chí Minh (HDBANK)",
   },
 ];
 
@@ -448,6 +484,7 @@ export const listLanguages = [
   { code: 4, label: "Tiếng Trung" },
   { code: 5, label: "Tiếng Nhật" },
 ];
+
 // Hàm render sao từ giá trị đánh giá (number) truyền vào
 export const renderStarFromNumber = (number, color, size) => {
   const integerPart = Math.floor(number);
@@ -496,3 +533,8 @@ export const moveElement = (array, position, conditionFind) => {
     return newArray;
   }
 };
+
+// Hàm sắp xếp theo bảng chữ cái
+export const sortList = (list,valueSort) => {
+  return list.sort((a, b) => a[valueSort].localeCompare(b[valueSort]));
+}

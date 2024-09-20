@@ -1,5 +1,5 @@
 @import "../../../index.scss";
-
+@import "../../../@theme/style.scss";
 
 .data-table__date-time {
   display: flex;
@@ -180,10 +180,11 @@ span {
   //   background-color: $colorSuccess;
   // }
 }
+
 .div-status-order {
   .text-status-pending {
     color: $color2;
-    border: 1px solid $color2;
+    // border: 1px solid $color2;
     padding: 4px;
     border-radius: 5px;
     background-color: $backGroundColor2;
@@ -348,3 +349,50 @@ span {
   }
 }
 
+
+
+// Sơn CSS
+.status-text {
+  display: flex;
+  align-items: center;
+  .status-text__pending {
+    padding: 6px 8px;
+    color: $colorRed;
+    background-color: $colorExtraLightRed;
+    border-radius: $borderRadiusM;
+    font-weight: $fontWeightXL;
+    font-size: $textFontSizeM;
+  }
+  .status-text__done {
+    padding: 6px 8px;
+    color: $colorGreen;
+    background-color: $colorExtraLightGreen;
+    border-radius: $borderRadiusM;
+    font-weight: $fontWeightXL;
+    font-size: $textFontSizeM;
+  }
+  .status-text__confirm {
+    padding: 6px 8px;
+    color: $colorBlue;
+    background-color: $colorExtraLightBlue;
+    border-radius: $borderRadiusM;
+    font-weight: $fontWeightXL;
+    font-size: $textFontSizeM;
+  }
+  .status-text__doing {
+    padding: 6px 8px;
+    color: $colorBlue;
+    background-color: $colorExtraLightBlue;
+    border-radius: $borderRadiusM;
+    font-weight: $fontWeightXL;
+    font-size: $textFontSizeM;
+  }
+  .status-text__cancel {
+    padding: 6px 8px;
+    color: $colorRed;
+    background-color: $colorExtraLightRed;
+    border-radius: $borderRadiusM;
+    font-weight: $fontWeightXL;
+    font-size: $textFontSizeM;
+  }
+}

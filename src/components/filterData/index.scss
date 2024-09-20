@@ -1,0 +1,63 @@
+@import "../../../src/@theme/style.scss";
+
+.filter-data {
+  display: flex;
+  gap: $gapL;
+
+  .filter-data__left {
+    width: 75%;
+    display: flex;
+    gap: $gapM;
+
+    .filter-data__left--date-time-picker {
+      display: flex;
+      flex-direction: column;
+      gap: $gapXS;
+
+      span {
+        font-weight: $fontWeightXL;
+        font-size: $textFontSizeM;
+      }
+
+      .filter-data__left--date-time-picker-label {
+        display: flex;
+        gap: $gapXS;
+
+        .filter-data__left--date-time-picker-label-period-time {
+          display: flex;
+          gap: $gapXS;
+          justify-content: center;
+          align-items: center;
+          border: 1px solid $colorBorderAntDesign;
+          border-radius: $borderRadiusS;
+          padding: 6.5px 12px;
+
+          .filter-data__left--date-time-picker-label-period-time-sub {
+            font-size: $textFontSizeM;
+            font-weight: $fontWeightL;
+            color: $colorGray;
+            opacity: $opacityM;
+          }
+
+          .filter-data__left--date-time-picker-label-period-time-main {
+            font-size: $textFontSizeM;
+            font-weight: $fontWeightL;
+            // color: $colorGray;
+            // opacity: $opacityM;
+          }
+        }
+      }
+    }
+
+    .filter-data__left--data-filter-option {
+      display: flex;
+      flex-direction: column;
+      gap: $gapXS;
+
+      span {
+        font-weight: $fontWeightXL;
+        font-size: $textFontSizeM;
+      }
+    }
+  }
+}

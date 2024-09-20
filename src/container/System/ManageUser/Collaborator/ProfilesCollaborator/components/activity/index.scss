@@ -94,6 +94,7 @@
   color: black;
   width: 150px;
 }
+
 .text-collaborator {
   font-family: "Roboto";
   font-style: normal;
@@ -103,8 +104,6 @@
   text-decoration-line: underline;
   color: #023e8a;
 }
-
-
 
 .text-pending-activity {
   font-family: "Roboto";
@@ -187,4 +186,9 @@
     color: black;
     width: 100px;
   }
+}
+
+
+.collaborator-activity {
+  padding-bottom: 16px;
 }

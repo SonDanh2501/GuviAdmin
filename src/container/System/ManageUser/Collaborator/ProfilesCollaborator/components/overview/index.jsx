@@ -8,23 +8,23 @@ const Overview = ({ id, star }) => {
       {/* Left container */}
       <div class="collaborator-overview__left">
         <CardInfo
-          collaboratorRatingOverview={true}
+          collaboratorOverviewRating={true}
           collaboratorId={id}
           headerLabel="Tổng quan đánh giá"
           collaboratorStar={star}
         />
         <CardInfo
-          collaboratorCriteria={true}
+          collaboratorOverviewCriteria={true}
           headerLabel="Tiêu chí đánh giá"
           supportIcon={true}
         />
         <CardInfo
-          collaboratorBonusAndPunish={true}
+          collaboratorOverviewBonusAndPunish={true}
           headerLabel="Khen thưởng, vi phạm"
           supportIcon={true}
         />
         <CardInfo
-          collaboratorTest={true}
+          collaboratorOverviewTest={true}
           collaboratorId={id}
           headerLabel="Bài kiểm tra"
         />
@@ -32,27 +32,27 @@ const Overview = ({ id, star }) => {
       {/* Middle container */}
       <div class="collaborator-overview__middle">
         <CardInfo
-          collaboratorFinance={true}
+          collaboratorOverviewFinance={true}
           headerLabel="Tài chính"
           supportIcon={true}
           timeFilter={true}
         />
         <CardInfo
-          collaboratorJobs={true}
+          collaboratorOverviewJobs={true}
           collaboratorId={id}
           headerLabel="Hiệu quả công việc"
         />
         <CardInfo
-          collaboratorActivitys={true}
+          collaboratorOverviewActivitys={true}
           collaboratorId={id}
           headerLabel="Hoạt động gần đây"
         />
       </div>
       {/* Right container */}
       <div class="collaborator-overview__right">
-        <CardInfo collaboratorId={id} collaboratorInformation={true} />
+        <CardInfo collaboratorId={id} collaboratorOverviewInformation={true} />
         <CardInfo
-          collaboratorDocument={true}
+          collaboratorOverviewDocument={true}
           collaboratorId={id}
           headerLabel="Tiến hành hồ sơ"
         />

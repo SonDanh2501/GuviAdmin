@@ -8,7 +8,7 @@ import {
   Popover,
   Select,
 } from "antd";
-// import { IoAccessibility, IoCaretDownOutline, IoClose } from "react-icons/io5";
+// import { IoAccessibility, IoChevronDown , IoClose } from "react-icons/io5";
 import dayjs from "dayjs";
 import Calendar from "react-calendar";
 import moment from "moment";
@@ -24,7 +24,7 @@ const {
   IoCheckmarkCircleSharp,
   IoChevronDownOutline,
   IoSearchCircle,
-  IoCaretDownOutline,
+  IoChevronDown ,
   IoSearch,
   IoClose,
   IoCalendar,
@@ -822,7 +822,7 @@ const InputTextCustom = (props) => {
                 />
               </div>
             ) : (
-              <IoCaretDownOutline
+              <IoChevronDown 
                 className="form-field__icon"
                 size="14px"
                 color="#999"
@@ -911,7 +911,7 @@ const InputTextCustom = (props) => {
               <label htmlFor=" " className="form-field__label">
                 {placeHolder}
               </label>
-              <IoCaretDownOutline
+              <IoChevronDown 
                 className="form-field__icon"
                 size="14px"
                 color="#999"
@@ -965,7 +965,7 @@ const InputTextCustom = (props) => {
               <label htmlFor=" " className="form-field__label">
                 {placeHolder}
               </label>
-              <IoCaretDownOutline
+              <IoChevronDown 
                 className="form-field__icon"
                 size="14px"
                 color="#999"
@@ -1018,7 +1018,7 @@ const InputTextCustom = (props) => {
               <label htmlFor=" " className="form-field__label">
                 {placeHolder}
               </label>
-              <IoCaretDownOutline
+              <IoChevronDown 
                 className="form-field__icon"
                 size="14px"
                 color="#999"
@@ -1073,7 +1073,7 @@ const InputTextCustom = (props) => {
               <label htmlFor=" " className="form-field__label">
                 {placeHolder}
               </label>
-              <IoCaretDownOutline
+              <IoChevronDown 
                 className="form-field__icon"
                 size="14px"
                 color="#999"
@@ -1144,7 +1144,7 @@ const InputTextCustom = (props) => {
               <label htmlFor=" " className="form-field__label">
                 {placeHolder}
               </label>
-              <IoCaretDownOutline
+              <IoChevronDown 
                 className="form-field__icon"
                 size="14px"
                 color="#999"
