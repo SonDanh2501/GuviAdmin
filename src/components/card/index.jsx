@@ -571,7 +571,11 @@ const CardInfo = (props) => {
           .catch((err) => {});
       }
       // Thẻ hiệu quả công việc, thẻ hoạt động gần đây
-      if (collaboratorOverviewJobs || collaboratorOverviewActivitys) {
+      if (
+        collaboratorOverviewJobs ||
+        collaboratorOverviewActivitys ||
+        collaboratorOverviewInformation
+      ) {
         let tempTotalActivity = 0;
         dispatch(loadingAction.loadingRequest(true));
         getHistoryActivityCollaborator(collaboratorId, 0, 5)
@@ -1028,27 +1032,27 @@ const CardInfo = (props) => {
                 <div className="card-statistics__overview-jobs--content-child-progress-bar">
                   <div className="card-statistics__overview-jobs--content-child-progress-bar-number">
                     <span className="card-statistics__overview-jobs--content-child-progress-bar-number-label">
-                      Đơn
+                      Đơn đã hoàn thành
                     </span>
                     <span className="card-statistics__overview-jobs--content-child-progress-bar-number-total">
-                      {totalJobsSuccess + totalJobsOther} đơn
+                      {/* {totalJobsSuccess + totalJobsOther} đơn */}
+                      {totalJobsSuccess} đơn
                     </span>
                   </div>
                   <div className="card-statistics__overview-jobs--content-child-progress-bar-container">
                     <span
+                      // className={`${
+                      //   calculateNumberPercent(
+                      //     totalJobs,
+                      //     totalJobsSuccess + totalJobsOther
+                      //   ) > 60 && "more-than-overal"
+                      // }`}
                       className={`${
-                        calculateNumberPercent(
-                          totalJobs,
-                          totalJobsSuccess + totalJobsOther
-                        ) > 60 && "more-than-overal"
+                        calculateNumberPercent(totalJobs, totalJobsSuccess) >
+                          60 && "more-than-overal"
                       }`}
-                      // className="text-white"
                     >
-                      {calculateNumberPercent(
-                        totalJobs,
-                        totalJobsSuccess + totalJobsOther
-                      )}
-                      %
+                      {calculateNumberPercent(totalJobs, totalJobsSuccess)}%
                     </span>
                     <div
                       className="card-statistics__overview-jobs--content-child-progress-bar-contanier-bar 
@@ -1347,8 +1351,8 @@ const CardInfo = (props) => {
                     color="red"
                   />
                 }
-                label="Đơn đã hoàn thành"
-                content={total?.total_order}
+                label="Tổng đơn"
+                content={totalJobsCancel + totalJobsOther + totalJobsSuccess}
                 subcontent="đơn"
               />
               <IconTextCustom
@@ -1407,7 +1411,7 @@ const CardInfo = (props) => {
               <div className="card-statistics__overview-document--child-left">
                 <div
                   className={`p-1 ${
-                    collaboratorInformation?.is_identity
+                    collaboratorInformation?.is_document_code
                       ? "status-done"
                       : "status-not-process"
                   } rounded-full`}

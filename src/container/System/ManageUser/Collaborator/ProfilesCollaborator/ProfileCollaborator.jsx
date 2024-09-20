@@ -160,7 +160,7 @@ const ProfileCollaborator = () => {
               <Review id={id} totalReview={data?.star} />
             </Tabs.TabPane>
             <Tabs.TabPane tab={`${i18n.t("test", { lng: lang })}`} key="7">
-              <TestExam id={data?._id} />
+              <TestExam id={data?._id} collaboratorData={data} />
             </Tabs.TabPane>
             <Tabs.TabPane tab={`${i18n.t("referrals", { lng: lang })}`} key="8">
               <InviteCollaborator id={data?._id} />
