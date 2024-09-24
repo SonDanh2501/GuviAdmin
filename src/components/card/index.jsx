@@ -5,10 +5,12 @@ import {
 } from "../../utils/contant";
 import {
   getCollaboratorsById,
-  getHistoryActivityCollaborator,
+  getHistoryOrderCollaborator,
   getListTrainingLessonByCollaboratorApi,
   getOverviewCollaborator,
   getReviewCollaborator,
+  getHistoryActivityCollaborator,
+  getListTransitionByCollaborator
 } from "../../api/collaborator";
 import testLogo from "../../assets/images/testLogo.svg";
 import moneyLogo from "../../assets/images/moneyLogo.svg";
@@ -35,7 +37,7 @@ import {
   AreaChart,
   Area,
 } from "recharts";
-import { Image, Popover, Select, Tooltip } from "antd";
+import { Image, Pagination, Popover, Select, Tooltip } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { loadingAction } from "../../redux/actions/loading";
 import { errorNotify } from "../../helper/toast";
@@ -46,6 +48,7 @@ import { getProvince } from "../../redux/selectors/service";
 import icons from "../../utils/icons";
 import "./index.scss";
 import { getListPunishTicketApi } from "../../api/punish";
+import { formatMoney } from "../../helper/formatMoney";
 const {
   IoAlertOutline,
   IoCalendarNumberOutline,
@@ -72,6 +75,11 @@ const {
   IoCaretDown,
   IoTrendingUp,
   IoTrendingDown,
+  IoAdd,
+  IoRemove,
+  IoConstruct,
+  IoPeopleOutline,
+  IoSettingsOutline,
 } = icons;
 
 const IconTextCustom = (props) => {
@@ -136,18 +144,22 @@ const CardInfo = (props) => {
     collaboratorStar, // Số sao của CTV
     timeFilter, // Hiển thị bộ lọc thời gian
     collaboratorOverviewRating, // Thẻ tổng quan đánh giá
-    collaboratorOverviewCriteria, // Thẻ tiêu chí đánh giá
-    collaboratorOverviewBonusAndPunish, // Thẻ khen thưởng, vi phạm
-    collaboratorOverviewTest, // Thẻ bài kiểm tra
-    collaboratorOverviewFinance, // Thẻ tài chính
-    collaboratorOverviewJobs, // Thẻ hiệu quả công việc
-    collaboratorOverviewActivitys, // Thẻ hoạt động gần đây
-    collaboratorOverviewInformation, // Thẻ thông tin CTV
-    collaboratorOverviewDocument, // Thẻ tiến hành hồ sơ
+    collaboratorOverviewCriteria, // Thẻ tổng quan tiêu chí đánh giá
+    collaboratorOverviewBonusAndPunish, // Thẻ tổng quan khen thưởng, vi phạm
+    collaboratorOverviewTest, // Thẻ tổng quan bài kiểm tra
+    collaboratorOverviewFinance, // Thẻ tổng quan tài chính
+    collaboratorOverviewJobs, // Thẻ tổng quan hiệu quả công việc
+    collaboratorOverviewActivitys, // Thẻ tổng quan hoạt động gần đây
+    collaboratorOverviewInformation, // Thẻ tổng quan thông tin CTV
+    collaboratorOverviewDocument, // Thẻ tổng quan tiến hành hồ sơ
     collaboratorRatingStar, // Thẻ tổng số đánh giá của CTV
     collaboratorRatingStatistic, // Thẻ thống kê lượt đánh giá theo từng tháng trong năm
-    collaboratorRatingBonusAndPunish, // Thẻ thống kê lần được khen thưởng và phạt
+    collaboratorRatingBonusAndPunish, // Thẻ thống kê số lần được khen thưởng và phạt
+    collaboratorActivityOrder, // Thẻ hoạt động đơn hàng
     timePeriod, // Khoàng thời gian thống kê
+    collaboratorActivityStatistics, // Thẻ hoạt động thống kê
+    collaboratorActivityStatisticsTotal, // Biến phụ của thẻ hoạt động thống kê
+    collaboratorActivityHistory,
   } = props;
   const dispatch = useDispatch();
   const lang = useSelector(getLanguageState);
@@ -215,6 +227,22 @@ const CardInfo = (props) => {
   const city = province.filter(
     (x) => x.code === collaboratorInformation.city
   )[0];
+  const [dataHistory, setDataHistory] = useState([]); // Lịch sử các hoạt động liên quan đến đối tác
+  const [currentPage, setCurrentPage] = useState(1);
+  const onChange = (page) => {
+    setCurrentPage(page);
+    const dataLength = data.length < 10 ? 10 : data.length;
+    const start = page * dataLength - dataLength;
+    getHistoryActivityCollaborator(collaboratorId, start, 15)
+      .then((res) => {
+        setDataHistory(res);
+      })
+      .catch((err) => {
+        errorNotify({
+          message: err?.message,
+        });
+      });
+  };
   // ~~~ Function ~~~
   // 1. Tổng quan đánh giá
   const getStar = (totalRating, setTotalRating, dataReview) => {
@@ -570,7 +598,7 @@ const CardInfo = (props) => {
           })
           .catch((err) => {});
       }
-      // Thẻ hiệu quả công việc, thẻ hoạt động gần đây
+      // Thẻ tổng quan hiệu quả công việc, thẻ tổng quan hoạt động gần đây, thẻ tổng quan thông tin đối tác
       if (
         collaboratorOverviewJobs ||
         collaboratorOverviewActivitys ||
@@ -578,7 +606,7 @@ const CardInfo = (props) => {
       ) {
         let tempTotalActivity = 0;
         dispatch(loadingAction.loadingRequest(true));
-        getHistoryActivityCollaborator(collaboratorId, 0, 5)
+        getHistoryOrderCollaborator(collaboratorId, 0, 5)
           .then((res) => {
             tempTotalActivity = res.totalItem;
             setTotalJobs(res?.totalItem);
@@ -595,7 +623,7 @@ const CardInfo = (props) => {
         let tempTotalDoneActivity = 0;
         let tempTotalCancelActivity = 0;
         let tempTotalOtherActivity = 0;
-        getHistoryActivityCollaborator(collaboratorId, 0, tempTotalActivity)
+        getHistoryOrderCollaborator(collaboratorId, 0, tempTotalActivity)
           .then((res) => {
             // console.log("res", res);
             res?.data?.forEach((el) => {
@@ -636,19 +664,23 @@ const CardInfo = (props) => {
         //     });
         //   });
       }
+      // Thẻ hoạt động đơn hàng
+      if (collaboratorActivityHistory) {
+        dispatch(loadingAction.loadingRequest(true));
+        getHistoryActivityCollaborator(collaboratorId, 0, 15)
+          .then((res) => {
+            setDataHistory(res);
+            dispatch(loadingAction.loadingRequest(false));
+          })
+          .catch((err) => {
+            errorNotify({
+              message: err?.message,
+            });
+            dispatch(loadingAction.loadingRequest(false));
+          });
+      }
     }
   }, [collaboratorId, dispatch]);
-
-  // useEffect(() => {
-  //   if (collaboratorRatingStatistic) {
-  //     fetchDataPunishTicketStatisticsByMonth(timePeriod);
-  //   }
-  // }, [collaboratorId, collaboratorInformation]);
-
-  // if (collaboratorRatingStatistic)
-  //   console.log("check time period", getListPunishTicket());
-
- 
   return (
     <div className="card-statistics card-shadow">
       {/* Header */}
@@ -1600,10 +1632,11 @@ const CardInfo = (props) => {
                 onClick={() => handleChangeColorRatingStatistic("rating")}
                 className="card-statistics__rating-statistic--card-child card-child-blue"
               >
-                <div className="card-statistics__rating-statistic--card-child-label ">
-                  <span className="card-statistics__rating-statistic--card-child-label-heading">
-                    Đánh giá
-                  </span>
+                <div className="card-statistics__rating-statistic--card-child-label">
+                  <div className="card-statistics__rating-statistic--card-child-label-heading">
+                    {/* <div></div> */}
+                    <span>Đánh giá</span>
+                  </div>
                   <span className="card-statistics__rating-statistic--card-child-label-number label-number-blue">
                     {totalCountRating}
                   </span>
@@ -1622,7 +1655,7 @@ const CardInfo = (props) => {
                     Khen thưởng
                   </span>
                   <span className="card-statistics__rating-statistic--card-child-label-number label-number-green">
-                    0
+                    23
                   </span>
                 </div>
                 <div className="card-statistics__rating-statistic--card-child-circle-outside circle-outside-green"></div>
@@ -1706,6 +1739,122 @@ const CardInfo = (props) => {
               </ResponsiveContainer>
             </div>
           </div>
+        )}
+        {/* Thẻ hoạt động lịch sử của đối tác */}
+        {collaboratorActivityHistory ? (
+          dataHistory?.data?.length > 0 ? (
+            <div className="card-statistics__activity-history">
+              <div>
+                {dataHistory?.data?.map((activity, index) => (
+                  <div className="card-statistics__activity-history--activity">
+                    {/* Ngày tạo và thông tin quản trị viên tương tác nếu có*/}
+                    <div className="card-statistics__activity-history--activity-left">
+                      <span className="card-statistics__activity-history--activity-left-name-phone">
+                        {moment(new Date(activity?.date_create)).format(
+                          "DD MMM, YYYY"
+                        )}
+                      </span>
+                      <span className="card-statistics__activity-history--activity-left-id">
+                        {activity?.id_admin_action?.full_name}
+                      </span>
+                      {/* <span>{activity?.type.split("_")[0]}</span> */}
+                    </div>
+                    {/* Icon và line ở giữa */}
+                    <div className="card-statistics__activity-history--activity-line">
+                      <div
+                        className={`card-statistics__activity-history--activity-line-icon ${
+                          activity?.type.split("_")[0] === "admin"
+                            ? "admin"
+                            : activity?.type.split("_")[0] === "collaborator"
+                            ? "collaborator"
+                            : activity?.type.split("_")[0] === "verify"
+                            ? "verify"
+                            : activity?.type.split("_")[0] === "create"
+                            ? "create"
+                            : "system"
+                        }`}
+                      >
+                        {activity?.type.split("_")[0] === "admin" ? (
+                          <IoPeopleOutline size={15} color="violet" />
+                        ) : activity?.type.split("_")[0] === "collaborator" ? (
+                          <IoPersonOutline size={15} color="blue" />
+                        ) : activity?.type.split("_")[0] === "verify" ? (
+                          <IoCloseCircleOutline size={15} color="red" />
+                        ) : activity?.type.split("_")[0] === "create" ? (
+                          <IoCheckmarkDoneOutline size={15} color="green" />
+                        ) : (
+                          <IoSettingsOutline size={15} color="orange" />
+                        )}
+                      </div>
+                      {dataHistory?.data?.length - 1 !== index && (
+                        <div className="card-statistics__activity-history--activity-line-icon-line"></div>
+                      )}
+                    </div>
+                    {/* Nội dung */}
+                    <div className="card-statistics__activity-history--activity-right">
+                      {/* Tên hành động và các thông tin phụ */}
+                      <div className="card-statistics__activity-history--activity-right-header">
+                        {/* Tên hành động */}
+                        <span className="card-statistics__activity-history--activity-right-header-service">
+                          {activity?.title_admin}
+                        </span>
+                      </div>
+                      {/* Địa chỉ */}
+                      {/* <div className="card-statistics__activity-history--activity-right-address">
+                      <Tooltip placement="top" title={activity?.address}>
+                        <span className="">{activity?.address}</span>
+                      </Tooltip>
+                    </div> */}
+                      {/* Trạng thái */}
+                      {/* <div
+                      className={`card-statistics__activity-history--activity-right-status  ${
+                        activity?.status === "pending"
+                          ? "pending"
+                          : activity?.status === "confirm"
+                          ? "confirm"
+                          : activity?.status === "doing"
+                          ? "doing"
+                          : activity?.status === "done"
+                          ? "done"
+                          : "cancel"
+                      }`}
+                    >
+                      <span>
+                        {activity?.status === "pending"
+                          ? `${i18n.t("pending", { lng: lang })}`
+                          : activity?.status === "confirm"
+                          ? `${i18n.t("confirm", { lng: lang })}`
+                          : activity?.status === "doing"
+                          ? `${i18n.t("doing", { lng: lang })}`
+                          : activity?.status === "done"
+                          ? `${i18n.t("complete", { lng: lang })}`
+                          : `${i18n.t("cancel", { lng: lang })}`}{" "}
+                      </span>
+                    </div> */}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div>
+                <Pagination
+                  simple={{ readOnly: true }}
+                  current={currentPage}
+                  onChange={onChange}
+                  total={dataHistory?.totalItem}
+                  showSizeChanger={false}
+                  pageSize={15}
+                />
+              </div>
+            </div>
+          ) : (
+            <div className="flex justify-center items-center p-4">
+              <span className="text-xs text-gray-500/60 italic">
+                Cộng tác viên chưa có hoạt động nào
+              </span>
+            </div>
+          )
+        ) : (
+          ""
         )}
       </div>
     </div>

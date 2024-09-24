@@ -1,3 +1,5 @@
+@import "../../../../../../../@theme/style.scss";
+
 .div-list-item {
   display: flex;
   flex-direction: column;
@@ -13,6 +15,7 @@
     text-decoration: none;
     width: 100%;
   }
+
   .text-date {
     font-family: Helvetica;
     font-weight: 200;
@@ -144,6 +147,7 @@
   text-decoration: none;
   margin: 0;
 }
+
 .text-done-activity {
   font-family: "Roboto";
   font-style: normal;
@@ -190,5 +194,122 @@
 
 
 .collaborator-activity {
+  display: flex;
+  flex-direction: column;
+  gap: $gapL;
   padding-bottom: 16px;
+
+  .collaborator-activity__statistics {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: $gapL;
+
+    .collaborator-activity__statistics--statistic {
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: $gapXS;
+      background-color: $colorWhite;
+      border-radius: $borderRadiusM;
+      box-shadow: rgba(0, 0, 0, 0.24) 0px 1px 3px;
+
+      .collaborator-activity__statistics--statistic--icon {
+        padding: 8px;
+        width: 36px;
+        height: 36px;
+        border-radius: $borderRadiusFull;
+
+        &.green {
+          background-color: $colorExtraLightGreen;
+        }
+
+        &.red {
+          background-color: $colorExtraLightRed;
+        }
+
+        &.blue {
+          background-color: $colorExtraLightBlue;
+        }
+
+        &.yellow {
+          background-color: $colorExtraLightYellow;
+        }
+      }
+
+      .collaborator-activity__statistics--statistic--header {
+        padding-top: 4px;
+        font-size: $textFontSizeM;
+        font-weight: $fontWeightXL;
+      }
+
+      .collaborator-activity__statistics--statistic--number {
+        font-size: $textFontSize2XL;
+        font-weight: $fontWeightXL;
+        &.green {
+          color: $colorGreen;
+        }
+
+        &.red {
+          color: $colorRed;
+        }
+
+        &.blue {
+          color: $colorBlue;
+        }
+
+        &.yellow {
+          color: $colorYellow;
+        }
+      }
+
+      .collaborator-activity__statistics--statistic--previous-period {
+        display: flex;
+        align-items: center;
+        gap: $gapXS;
+
+        .collaborator-activity__statistics--statistic--previous-period-label {
+          font-size: $textFontSizeM;
+          font-weight: $fontWeightL;
+          color: $colorGray;
+          opacity: $opacityM;
+        }
+
+        .collaborator-activity__statistics--statistic--previous-period-number {
+          display: flex;
+          align-items: center;
+          white-space: nowrap;
+          &.uptrend {
+            color: $colorGreen;
+          }
+          &.downtrend {
+            color: $colorRed;
+          }
+        }
+      }
+    }
+  }
+
+  .collaborator-activity__history {
+    display: flex;
+    // grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: $gapL;
+
+    .collaborator-activity__history--order {
+      width: 70%;
+      height: fit-content;
+      background-color: $colorWhite;
+      border-radius: $borderRadiusM;
+    }
+
+    .collaborator-activity__history--activities {
+      width: 30%;
+      height: fit-content;
+      background-color: $colorWhite;
+      border-radius: $borderRadiusM;
+    }
+  }
 }
+
+// ~~~ Thẻ thống kê của hoạt động đơn hàng

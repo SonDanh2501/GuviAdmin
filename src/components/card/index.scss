@@ -237,7 +237,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: $colorExtraLightViolet;
+            background: $colorExtraLightPurple;
             border-radius: $borderRadiusXL;
 
             .card-statistics__overview-examination--image-label {
@@ -684,7 +684,7 @@
         padding: 16px 20px;
 
         .card-statistics__overview-information--avatar {
-            background-color: $colorExtraLightViolet;
+            background-color: $colorExtraLightPurple;
             border-radius: $borderRadiusL;
             // margin: 12px 12px;
             padding: 16px 16px;
@@ -870,8 +870,13 @@
                     padding-left: 16px;
 
                     .card-statistics__rating-statistic--card-child-label-heading {
-                        font-size: $textFontSizeXL;
-                        font-weight: $fontWeightXL;
+                        .card-statistics__rating-statistic--card-child-label-heading-icon {}
+
+                        span {
+                            font-size: $textFontSizeXL;
+                            font-weight: $fontWeightXL;
+                        }
+
                     }
 
                     .card-statistics__rating-statistic--card-child-label-number {
@@ -1114,6 +1119,184 @@
             }
         }
     }
+
+    // ~~~ Thẻ hoạt động đơn hàng
+    .card-statistics__activity-history {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: $gapS;
+        padding: 16px 14px;
+
+        // gap: $gapS;
+        .card-statistics__activity-history--activity {
+            display: flex;
+            padding-bottom: 32px;
+
+            .card-statistics__activity-history--activity-left {
+                width: 30%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding-top: 4px;
+
+                .card-statistics__activity-history--activity-left-id {
+                    font-size: $textFontSizeM;
+                    font-weight: $fontWeightXL;
+                    color: $colorBlue;
+                    cursor: pointer;
+                }
+
+                .card-statistics__activity-history--activity-left-name-phone {
+                    font-size: $textFontSizeM;
+                    font-weight: $fontWeightXL;
+                    color: $colorBlack;
+                }
+
+                .card-statistics__activity-history--activity-left-date {
+                    font-size: $textFontSizeM;
+                    font-weight: $fontWeightL;
+                    color: $colorGray;
+                    opacity: $opacityS;
+                    text-transform: capitalize;
+                }
+            }
+
+            .card-statistics__activity-history--activity-line {
+                width: 15%;
+                align-items: center;
+                display: flex;
+                flex-direction: column;
+                margin-bottom: -32px;
+
+                .card-statistics__activity-history--activity-line-icon {
+                    padding: 8px 8px;
+                    width: fit-content;
+                    height: fit-content;
+                    border-radius: $borderRadiusFull;
+                    &.collaborator {
+                        background-color: $colorExtraLightBlue;
+                    }
+                    &.admin {
+                        background-color: $colorExtraLightPurple;
+                    }
+                    &.verify {
+                        background-color: $colorExtraLightRed;
+                    }
+                    &.system {
+                        background-color: $colorExtraLightYellow;
+                    }
+                    &.create {
+                        background-color: $colorExtraLightGreen;
+                    }
+                }
+
+                .card-statistics__activity-history--activity-line-icon-line {
+                    width: 2px;
+                    height: 100%;
+                    background-color: $colorExtraLightGray;
+                }
+            }
+
+            .card-statistics__activity-history--activity-right {
+                display: flex;
+                flex-direction: column;
+                // gap: $gapXS;
+                width: 55%;
+                padding-left: 4px;
+
+                .card-statistics__activity-history--activity-right-header {
+                    display: flex;
+                    justify-content: space-between;
+                    width: 100%;
+
+                    .card-statistics__activity-history--activity-right-header-service {
+                        font-size: $textFontSizeM;
+                        font-weight: $fontWeightL;
+                        color: $colorBlack;
+                        overflow: hidden;
+                        display: -webkit-box;
+                        -webkit-box-orient: vertical;
+                        -webkit-line-clamp: 2;
+                    }
+
+                    .card-statistics__activity-history--activity-right-header-money {
+                        display: flex;
+                        align-items: center;
+                        white-space: nowrap;
+                        font-size: $textFontSizeM;
+                        font-weight: $fontWeightL;
+
+                        &.plus {
+                            color: $colorGreen;
+                        }
+
+                        &.minus {
+                            color: $colorRed
+                        }
+                    }
+
+
+                }
+
+                .card-statistics__activity-history--activity-right-address {
+                    height: 50px;
+
+                    span {
+                        font-size: $textFontSizeM;
+                        font-weight: $fontWeightL;
+                        color: $colorGray;
+                        opacity: $opacityS;
+                        overflow: hidden;
+                        display: -webkit-box;
+                        -webkit-box-orient: vertical;
+                        -webkit-line-clamp: 2;
+                    }
+                }
+
+                .card-statistics__activity-history--activity-right-status {
+                    width: fit-content;
+                    padding: 4px 8px;
+                    border-radius: $borderRadiusM;
+                    // margin-top: 4px;
+                    &.collaborator {
+                        background-color: $colorExtraLightBlue;
+                        border: 1px solid $colorBlue;
+                        color: $colorBlue;
+                    }
+                    &.admin {
+                        background-color: $colorExtraLightGreen;
+                        border: 1px solid $colorGreen;
+                        color: $colorGreen;
+                    }
+                    &.verify {
+                        background-color: $colorExtraLightRed;
+                        border: 1px solid $colorRed;
+                        color: $colorRed;
+                    }
+                    &.system {
+                        background-color: $colorExtraLightYellow;
+                        border: 1px solid $colorYellow;
+                        color: $colorYellow;
+                    }
+                    &.create {
+                        background-color: $colorExtraLightGreen;
+                        border: 1px solid $colorGreen;
+                        color: $colorGreen;
+                    }
+
+               
+                    span {
+                        font-size: $textFontSizeM;
+                        font-weight: $fontWeightL;
+                    }
+                }
+
+            }
+
+        }
+    }
+
 
 }
 
