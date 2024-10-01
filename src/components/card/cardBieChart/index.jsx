@@ -6,7 +6,7 @@ import "./index.scss";
 const COLORS = ["#2fc22f", "#3b82f6", "#FFD700", "#FFA500", "#dc2626"];
 
 const CardBieChart = (props) => {
-  const { data, dataDetail, totalStar } = props;
+  const { data, star, totalItem } = props;
   const renderCustomizedLabel = ({
     cx,
     cy,
@@ -36,21 +36,21 @@ const CardBieChart = (props) => {
   return (
     <div className="card__bie-chart">
       <div className="card__bie-chart--star">
-        {renderStarFromNumber(totalStar).map((el, index) => (
+        {renderStarFromNumber(star).map((el, index) => (
           <span>{el}</span>
         ))}
         <span className="card__bie-chart--star-avg">
-          {totalStar ? totalStar?.toFixed(1) : 5}
+          {star ? star?.toFixed(1) : 5}
         </span>
       </div>
       <div className="card__bie-chart--total">
-        <span className="card__bie-chart--total-number">{data?.length}</span>
+        <span className="card__bie-chart--total-number">{totalItem}</span>
         <span>khách hàng đã đánh giá</span>
       </div>
       <ResponsiveContainer width="100%" height={230}>
         <PieChart>
           <Pie
-            data={dataDetail}
+            data={data}
             cx="50%"
             cy="50%"
             labelLine={false}
@@ -59,7 +59,7 @@ const CardBieChart = (props) => {
             fill="#8884d8"
             dataKey="value"
           >
-            {dataDetail.map((entry, index) => (
+            {data.map((entry, index) => (
               <Cell
                 key={`cell-${index}`}
                 fill={COLORS[index % COLORS.length]}

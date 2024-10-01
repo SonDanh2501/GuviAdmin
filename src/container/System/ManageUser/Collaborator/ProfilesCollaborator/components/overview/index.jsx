@@ -12,8 +12,40 @@ import CardRadio from "../../../../../../../components/card/cardRadio";
 
 const Overview = ({ id, star }) => {
   const dispatch = useDispatch();
+  const dataAreaChart = [
+    {
+      subject: "Làm việc chăm chỉ",
+      A: 1,
+      B: 2,
+      fullMark: 5,
+    },
+    {
+      subject: "Đồng phục gọn gàn, sạch sẽ",
+      A: 1,
+      B: 2,
+      fullMark: 5,
+    },
+    {
+      subject: "Dụng cụ chuẩn bị đầy đủ",
+      A: 3,
+      B: 4,
+      fullMark: 5,
+    },
+    {
+      subject: "Làm việc rất tốt, dọn dẹp sạch sẽ",
+      A: 5,
+      B: 5,
+      fullMark: 5,
+    },
+    {
+      subject: "Giờ giấc chuẩn, luôn đến trước giờ hẹn",
+      A: 3,
+      B: 4,
+      fullMark: 5,
+    },
+  ]; // Dữ liệu tạm thời để hiển thị của tiêu chí đánh giá
   const [dataOrder, setDataOrder] = useState([]); // Dữ liệu đơn hàng
-  const [totalRatingOverview, setTotalRatingOverview] = useState([
+  const [dataRating, setDataRating] = useState([
     {
       name: "5 sao",
       value: 1,
@@ -34,8 +66,14 @@ const Overview = ({ id, star }) => {
       name: "1 sao",
       value: 1,
     },
-  ]); // Tổng số sao thống kê theo từng loại
-  const getStar = (totalRating, setTotalRating, dataReview) => {
+  ]); // Dữ liệu tổng giá trị từng loại sao
+  /* Handle Function */
+  // 1. Hàm tính tổng từng loại sao
+  const handleCalculateStarEachKind = (
+    totalRating,
+    setTotalRating,
+    dataReview
+  ) => {
     if (totalRating.length > 0 && dataReview.totalItem > 0) {
       let fiveStar = 0;
       let fourStar = 0;
@@ -83,38 +121,6 @@ const Overview = ({ id, star }) => {
       );
     }
   };
-  const dataAreaChart = [
-    {
-      subject: "Làm việc chăm chỉ",
-      A: 1,
-      B: 2,
-      fullMark: 5,
-    },
-    {
-      subject: "Đồng phục gọn gàn, sạch sẽ",
-      A: 1,
-      B: 2,
-      fullMark: 5,
-    },
-    {
-      subject: "Dụng cụ chuẩn bị đầy đủ",
-      A: 3,
-      B: 4,
-      fullMark: 5,
-    },
-    {
-      subject: "Làm việc rất tốt, dọn dẹp sạch sẽ",
-      A: 5,
-      B: 5,
-      fullMark: 5,
-    },
-    {
-      subject: "Giờ giấc chuẩn, luôn đến trước giờ hẹn",
-      A: 3,
-      B: 4,
-      fullMark: 5,
-    },
-  ];
   /* Use effect */
   useEffect(() => {
     const fetchData = async () => {
@@ -133,7 +139,7 @@ const Overview = ({ id, star }) => {
         );
         // Cập nhật state
         setDataOrder(dataOrderFetch);
-        getStar(totalRatingOverview, setTotalRatingOverview, fullReviewData);
+        handleCalculateStarEachKind(dataRating, setDataRating, fullReviewData);
       } catch (err) {
         errorNotify({
           message: err?.message,
@@ -152,15 +158,21 @@ const Overview = ({ id, star }) => {
           cardHeader="Tổng quan đánh giá"
           cardContent={
             <CardBieChart
-              data={dataOrder?.data}
-              dataDetail={totalRatingOverview}
-              totalStar={star}
+              data={dataRating}
+              star={star}
+              totalItem={dataRating?.reduce((acc, item) => acc + item.value, 0)}
             />
           }
         />
         <CardInfo
           cardHeader="Tiêu chí đánh giá"
-          cardContent={<CardRadio data={dataAreaChart} dataKey = "subject" dataName ="Mục đánh giá" />}
+          cardContent={
+            <CardRadio
+              data={dataAreaChart}
+              dataKey="subject"
+              dataName="Mục đánh giá"
+            />
+          }
         />
         <CardInfo
           collaboratorOverviewBonusAndPunish={true}

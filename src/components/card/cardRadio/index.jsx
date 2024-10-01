@@ -22,7 +22,6 @@ const CardRadio = (props) => {
     return <circle cx={cx} cy={cy} r={5} fill="#9e68df" stroke="none" />;
   };
   const getMultiLineText = (text, maxLineWidth) => {
-    console.log("check text", text);
     const words = text.split(" ");
     const lines = [];
     let currentLine = words[0];
