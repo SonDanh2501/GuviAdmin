@@ -115,6 +115,7 @@ const Information = ({ data, idCTV, setData, id }) => {
   const [selectSkills, setSelectSkills] = useState([]); // Giá trị kỹ năng của CTV
   const [selectLanguages, setSelectLanguages] = useState([]); // Giá trị ngôn ngữ của CTV
   const [socialMediaInfo, setSocialMediaInfo] = useState(""); // Giá trị mạng xã hội
+  const [taxCode, setTaxCode] = useState(""); // Giá trị mã số thuế
   // Thông tin tài khoản
   const [accountNumber, setAccountNumber] = useState("");
   const [bankName, setBankName] = useState("");
@@ -205,7 +206,8 @@ const Information = ({ data, idCTV, setData, id }) => {
     setResident(data?.permanent_address);
     setStaying(data?.temporary_address);
 
-    if (data?.contact_persons?.length > 0) setContactPersons(data?.contact_persons);
+    if (data?.contact_persons?.length > 0)
+      setContactPersons(data?.contact_persons);
   }, [data]);
   // 2. Code cũ
   useEffect(() => {
@@ -539,6 +541,7 @@ const Information = ({ data, idCTV, setData, id }) => {
     dispatch(loadingAction.loadingRequest(true));
     const birthDayFormat = moment(new Date(birthday)).toISOString(); // Format lại dữ liệu ngày sinh nhật (birthday)
     const indentityDay = moment(new Date(issuedDay)).toISOString(); // Format lại dữ liệu ngày cấp (issuedDay)
+    // Lưu ý nhỏ: các thông tin liên quan đến select địa chỉ thường trả về theo kiểu {label, code}
     updateInformationCollaboratorApi(data?._id, {
       full_name: name.trim(), // Họ và tên của CTV [✓]
       gender: gender, // Giới tính của CTV [✓]
@@ -572,8 +575,8 @@ const Information = ({ data, idCTV, setData, id }) => {
 
       //   // permanent_address: resident, // Địa chỉ thường trú của CTV (dữ liệu cũ)
       //   // temporary_address: staying, //  Địa chỉ tạm trú của CTV (dữ liệu cũ)
-      //   // district: codeDistrict, // Quận/Huyện làm việc của CTV
-      //   // city: !codeCity ? -1 : codeCity, // Tỉnh/Thành phố làm việc của CTV
+      district: codeDistrict, // Quận/Huyện làm việc của CTV
+      city: codeCity?.code ? codeCity?.code : codeCity, // Tỉnh/Thành phố làm việc của CTV
       //   // id_business: idBusiness, // Đối tác (dữ liệu cũ)
     })
       .then((res) => {
@@ -625,6 +628,8 @@ const Information = ({ data, idCTV, setData, id }) => {
     contactPersons,
     img,
     type,
+    codeCity,
+    codeDistrict,
     dispatch,
     lang,
   ]);
@@ -749,6 +754,8 @@ const Information = ({ data, idCTV, setData, id }) => {
   });
   // ↑ trở lên là code cũ không cần quan tâm
 
+  // console.log("Check codecity", codeCity?.code ? codeCity?.code : codeCity);
+  console.log("check district >>>", codeDistrict);
   return (
     <>
       <div>
@@ -1145,6 +1152,17 @@ const Information = ({ data, idCTV, setData, id }) => {
                     />
                   </div>
                 </div>
+                {/* Mã số thuế */}
+                <div className="collaborator-information__input-field">
+                  <div className="collaborator-information__input-field--child">
+                    <InputTextCustom
+                      type="text"
+                      value={taxCode}
+                      placeHolder="Mã số thuế"
+                      onChange={(e) => setTaxCode(e.target.value)}
+                    />
+                  </div>
+                </div>
                 {/* Mã giới thiệu, đối tác */}
                 <div className="collaborator-information__input-field">
                   <div className="collaborator-information__input-field--child">
@@ -1505,248 +1523,6 @@ const Information = ({ data, idCTV, setData, id }) => {
           </div>
         </div>
       </div>
-      {/* <>
-        <Form>
-          <div>
-            <h5>{`${i18n.t("info", { lng: lang })}`}</h5>
-            <Row>
-              <Col lg="6">
-                <InputCustom
-                  title={`${i18n.t("full_name", { lng: lang })}`}
-                  placeholder={`${i18n.t("placeholder", { lng: lang })}`}
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                />
-              </Col>
-              <Col lg="6">
-                <InputCustom
-                  title={`${i18n.t("gender", { lng: lang })}`}
-                  value={gender}
-                  onChange={(e) => setGender(e)}
-                  select={true}
-                  options={[
-                    {
-                      value: "other",
-                      label: `${i18n.t("other", { lng: lang })}`,
-                    },
-                    {
-                      value: "male",
-                      label: `${i18n.t("male", { lng: lang })}`,
-                    },
-                    {
-                      value: "female",
-                      label: `${i18n.t("female", { lng: lang })}`,
-                    },
-                  ]}
-                />
-              </Col>
-            </Row>
-            <Row>
-              <Col lg="6">
-                <InputCustom
-                  title={`${i18n.t("phone", { lng: lang })}`}
-                  type="number"
-                  value={phone}
-                  disabled={true}
-                />
-              </Col>
-            </Row>
-            <Row>
-              <Col lg="6">
-                <InputCustom
-                  title={`${i18n.t("permanent_address", { lng: lang })}`}
-                  type="text"
-                  value={resident}
-                  onChange={(e) => setResident(e.target.value)}
-                />
-              </Col>
-              <Col lg="6">
-                <InputCustom
-                  title={`${i18n.t("Đối tác", { lng: lang })}`}
-                  value={idBusiness}
-                  options={businessOption}
-                  select={true}
-                  onChange={(e) => setIdBusiness(e)}
-                />
-              </Col>
-            </Row>
-            <Row>
-              <Col lg="6">
-                <InputCustom
-                  title={`${i18n.t("temporary_address", { lng: lang })}`}
-                  type="text"
-                  value={staying}
-                  onChange={(e) => setStaying(e.target.value)}
-                />
-              </Col>
-              <Col lg="6">
-                <InputCustom
-                  title={`${i18n.t("type_service", { lng: lang })}`}
-                  style={{ width: "100%" }}
-                  mode="multiple"
-                  allowClear
-                  value={serviceApply}
-                  onChange={(e) => {
-                    setServiceApply(e);
-                  }}
-                  options={serviceOption}
-                  select={true}
-                />
-              </Col>
-            </Row>
-            <Row>
-              <Col lg="6">
-                <InputCustom
-                  title={`${i18n.t("nation", { lng: lang })}`}
-                  type="text"
-                  value={ethnic}
-                  onChange={(e) => setEthnic(e.target.value)}
-                />
-              </Col>
-              <Col lg="6">
-                <InputCustom
-                  title={`${i18n.t("religion", { lng: lang })}`}
-                  type="text"
-                  value={religion}
-                  onChange={(e) => setReligion(e.target.value)}
-                />
-              </Col>
-            </Row>
-            <Row>
-              <Col lg="6">
-                <InputCustom
-                  title={`${i18n.t("cultural_level", { lng: lang })}`}
-                  style={{ width: "100%" }}
-                  value={level}
-                  onChange={(e) => setLevel(e)}
-                  options={[
-                    { value: "5/12", label: "5/12" },
-                    { value: "9/12", label: "9/12" },
-                    { value: "12/12", label: "12/12" },
-                    {
-                      value: "Cao đẳng",
-                      label: `${i18n.t("college", { lng: lang })}`,
-                    },
-                    {
-                      value: "Đại học",
-                      label: `${i18n.t("university", { lng: lang })}`,
-                    },
-                    {
-                      value: "Thạc sĩ",
-                      label: `${i18n.t("master", { lng: lang })}`,
-                    },
-                    {
-                      value: "Tiến sĩ",
-                      label: `${i18n.t("doctor_philosophy", { lng: lang })}`,
-                    },
-                  ]}
-                  select={true}
-                />
-              </Col>
-              <Col lg="6">
-                <InputCustom
-                  title={`${i18n.t("code_invite", { lng: lang })}`}
-                  type="text"
-                  value={codeInvite}
-                  disabled={true}
-                />
-              </Col>
-            </Row>
-            <Row>
-              <Col lg="6">
-                <InputCustom
-                  title={`${i18n.t("Tỉnh/Thành phố làm việc", { lng: lang })}`}
-                  value={codeCity}
-                  select={true}
-                  options={cityOption}
-                  style={{ width: "100%" }}
-                  // onChange={onChangeCity}
-                />
-              </Col>
-              <Col lg="6">
-                <InputCustom
-                  title={`${i18n.t("Quận/huyện làm việc", { lng: lang })}`}
-                  value={codeDistrict}
-                  options={districtsOption}
-                  style={{ width: "100%" }}
-                  // onChange={onChangeDistrict}
-                  mode="multiple"
-                  allowClear
-                  select={true}
-                />
-              </Col>
-            </Row>
-            <hr />
-            <h5>{`${i18n.t("citizen_ID", { lng: lang })}`}</h5>
-            <Row>
-              <Col lg="6">
-                <InputCustom
-                  title={`${i18n.t("citizen_ID", { lng: lang })}`}
-                  type="number"
-                  value={number}
-                  min={0}
-                  // onChange={(e) => onChangeNumberIndentity(e)}
-                />
-              </Col>
-            </Row>
-            <Row>
-              <Col lg="6">
-                <InputCustom
-                  title={`${i18n.t("issued_by", { lng: lang })}`}
-                  type="text"
-                  value={issued}
-                  onChange={(e) => setIssued(e.target.value)}
-                />
-              </Col>
-            </Row>
-            <hr />
-            <h5>{`${i18n.t("introduce", { lng: lang })}`}</h5>
-            <Row>
-              <Col lg="12">
-                <div>
-                  <InputCustom
-                    title={`${i18n.t("code_invite", { lng: lang })}`}
-                    value={nameCollaborator}
-                    disabled={data?.is_verify ? true : false}
-
-                    // onChange={(e) => {
-                    //   searchCollaborator(e.target.value);
-                    //   searchValue(e.target.value);
-                    // }}
-                  />
-
-                  {dataCollaborator.length > 0 && (
-                    <List type={"unstyled"}>
-                      {dataCollaborator?.map((item, index) => {
-                        return (
-                          <div
-                            key={index}
-                            onClick={(e) => {
-                              setIdCollaborator(item?._id);
-                              setCodeInvite(item?.invite_code);
-                              setNameCollaborator(item?.full_name);
-                              setDataCollaborator([]);
-                            }}
-                          >
-                            <p>
-                              {item?.full_name} - {item?.phone} -{item?.id_view}{" "}
-                              - {item?.invite_code}
-                            </p>
-                          </div>
-                        );
-                      })}
-                    </List>
-                  )}
-                </div>
-              </Col>
-            </Row>
-          </div>
-          <Button onClick={handleUpdateCollaboratorInfo}>
-            {`${i18n.t("update", { lng: lang })}`}
-          </Button>
-        </Form>
-      </> */}
     </>
   );
 };

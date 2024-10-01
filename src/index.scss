@@ -12,7 +12,9 @@
 }
 
 .card-shadow {
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 1px 3px;
+   box-shadow:
+    rgba(67, 71, 85, 0.27) 0px 1px 0.25em,
+    rgba(90, 125, 188, 0.05) 0px 0.75em 2em;
 }
 
 // <div className="bg-white rounded-xl my-4 p-4 card-shadow border-gray-300 border">
@@ -21,7 +23,9 @@
   background-color: $colorWhite;
   border-radius: $borderRadiusM;
   padding: 12px 20px;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 1px 3px;
+   box-shadow:
+    rgba(67, 71, 85, 0.27) 0px 1px 0.25em,
+    rgba(90, 125, 188, 0.05) 0px 0.75em 2em;
 }
 
 .div-flex-row {
@@ -406,30 +410,25 @@
   }
 }
 
-// Ant Design Dropdown
+/* ~~~ Ant Design Dropdown ~~~ */
 .ant-dropdown-menu {
   box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px !important;
   max-height: 300px;
   overflow: auto;
 }
 
-// .ant-dropdown {
-//   height: 312px;
-//   overflow: hidden;
-//   overflow-y: auto;
-// }
-
-
-// Ant Design Table
-
+/* ~~~ Ant Design Table ~~~ */
 .ant-table-thead p {
-  color: white;
+  color: $colorWhite;
   font-size: $textFontSizeM;
   font-weight: $fontWeightXL;
 }
+// .ant-table-cell {
+//   height: fit-content;
+// }
 
 .ant-table tbody tr:nth-child(odd) td {
-  background-color: #f6f6f6;
+  // background-color: #f9f9f9;
   // border: 1px solid #CCC;
   // padding: 10px;
 }
@@ -501,7 +500,9 @@
   background-color: white;
   padding: 0px 12px;
   border-radius: 6px;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 1px 3px;
+   box-shadow:
+    rgba(67, 71, 85, 0.27) 0px 1px 0.25em,
+    rgba(90, 125, 188, 0.05) 0px 0.75em 2em;
 }
 
 // Ẩn thanh menu của tabs khi chiều rộng không đủ sẽ hiển thị 

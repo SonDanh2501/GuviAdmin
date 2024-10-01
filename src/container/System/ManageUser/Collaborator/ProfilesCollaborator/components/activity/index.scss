@@ -200,96 +200,116 @@
   padding-bottom: 16px;
 
   .collaborator-activity__statistics {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    display: flex;
     gap: $gapL;
 
-    .collaborator-activity__statistics--statistic {
-      padding: 16px 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: $gapXS;
-      background-color: $colorWhite;
-      border-radius: $borderRadiusM;
-      box-shadow: rgba(0, 0, 0, 0.24) 0px 1px 3px;
+    .collaborator-activity__statistics--overview {
+      display: grid;
+      gap: $gapL;
+      width: 30%;
 
-      .collaborator-activity__statistics--statistic--icon {
-        padding: 8px;
-        width: 36px;
-        height: 36px;
-        border-radius: $borderRadiusFull;
-
-        &.green {
-          background-color: $colorExtraLightGreen;
-        }
-
-        &.red {
-          background-color: $colorExtraLightRed;
-        }
-
-        &.blue {
-          background-color: $colorExtraLightBlue;
-        }
-
-        &.yellow {
-          background-color: $colorExtraLightYellow;
-        }
-      }
-
-      .collaborator-activity__statistics--statistic--header {
-        padding-top: 4px;
-        font-size: $textFontSizeM;
-        font-weight: $fontWeightXL;
-      }
-
-      .collaborator-activity__statistics--statistic--number {
-        font-size: $textFontSize2XL;
-        font-weight: $fontWeightXL;
-        &.green {
-          color: $colorGreen;
-        }
-
-        &.red {
-          color: $colorRed;
-        }
-
-        &.blue {
-          color: $colorBlue;
-        }
-
-        &.yellow {
-          color: $colorYellow;
-        }
-      }
-
-      .collaborator-activity__statistics--statistic--previous-period {
+      .collaborator-activity__statistics--overview-statistic {
+        padding: 16px 20px;
         display: flex;
+        flex-direction: column;
         align-items: center;
+        justify-content: center;
         gap: $gapXS;
+        background-color: $colorWhite;
+        border-radius: $borderRadiusM;
+        box-shadow:
+          rgba(67, 71, 85, 0.27) 0px 1px 0.25em,
+          rgba(90, 125, 188, 0.05) 0px 0.75em 2em;
 
-        .collaborator-activity__statistics--statistic--previous-period-label {
-          font-size: $textFontSizeM;
-          font-weight: $fontWeightL;
-          color: $colorGray;
-          opacity: $opacityM;
+        .collaborator-activity__statistics--overview-statistic-icon {
+          padding: 8px;
+          width: 36px;
+          height: 36px;
+          border-radius: $borderRadiusFull;
+
+          &.green {
+            background-color: $colorExtraLightGreen;
+          }
+
+          &.red {
+            background-color: $colorExtraLightRed;
+          }
+
+          &.blue {
+            background-color: $colorExtraLightBlue;
+          }
+
+          &.yellow {
+            background-color: $colorExtraLightYellow;
+          }
         }
 
-        .collaborator-activity__statistics--statistic--previous-period-number {
-          display: flex;
-          align-items: center;
-          white-space: nowrap;
-          &.uptrend {
+        .collaborator-activity__statistics--overview-statistic-header {
+          padding-top: 4px;
+          font-size: $textFontSizeM;
+          font-weight: $fontWeightXL;
+        }
+
+        .collaborator-activity__statistics--overview-statistic-number {
+          font-size: $textFontSize2XL;
+          font-weight: $fontWeightXL;
+
+          &.green {
             color: $colorGreen;
           }
-          &.downtrend {
+
+          &.red {
             color: $colorRed;
+          }
+
+          &.blue {
+            color: $colorBlue;
+          }
+
+          &.yellow {
+            color: $colorYellow;
+          }
+        }
+
+        .collaborator-activity__statistics--overview-statistic-previous-period {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: $gapXS;
+
+          .collaborator-activity__statistics--overview-statistic-previous-period-label {
+            font-size: $textFontSizeM;
+            font-weight: $fontWeightL;
+            color: $colorGray;
+            opacity: $opacityM;
+          }
+
+          .collaborator-activity__statistics--overview-statistic-previous-period-number {
+            display: flex;
+            gap: $gapXS;
+            align-items: center;
+            white-space: nowrap;
+
+            &.uptrend {
+              color: $colorGreen;
+            }
+
+            &.downtrend {
+              color: $colorRed;
+            }
           }
         }
       }
     }
+
+    .collaborator-activity__statistics--chart {
+      // background-color: $colorWhite;
+      // border-radius: $borderRadiusM;
+      // padding: 16px 20px;
+      width: 70%;
+    }
   }
+
 
   .collaborator-activity__history {
     display: flex;

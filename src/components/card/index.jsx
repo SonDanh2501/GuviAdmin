@@ -10,7 +10,7 @@ import {
   getOverviewCollaborator,
   getReviewCollaborator,
   getHistoryActivityCollaborator,
-  getListTransitionByCollaborator
+  getListTransitionByCollaborator,
 } from "../../api/collaborator";
 import testLogo from "../../assets/images/testLogo.svg";
 import moneyLogo from "../../assets/images/moneyLogo.svg";
@@ -71,7 +71,6 @@ const {
   IoShieldCheckmarkOutline,
   IoThumbsDownOutline,
   IoTimeOutline,
-  IoWalletOutline,
   IoCaretDown,
   IoTrendingUp,
   IoTrendingDown,
@@ -80,6 +79,7 @@ const {
   IoConstruct,
   IoPeopleOutline,
   IoSettingsOutline,
+  IoWalletOutline,
 } = icons;
 
 const IconTextCustom = (props) => {
@@ -137,7 +137,8 @@ const MAX_LINE_WIDTH = 110;
 
 const CardInfo = (props) => {
   const {
-    headerLabel, // Tiêu đề của thẻ
+    cardHeader, // Tiêu đề của thẻ
+    cardContent, // Nội dung của thẻ
     supportIcon, // Hiển thị icon bên cạnh tiêu đề
     supportText, // Chữ muốn hiển thị khi hover icon
     collaboratorId, // Id của CTV (dùng để lấy thông tin)
@@ -154,12 +155,15 @@ const CardInfo = (props) => {
     collaboratorOverviewDocument, // Thẻ tổng quan tiến hành hồ sơ
     collaboratorRatingStar, // Thẻ tổng số đánh giá của CTV
     collaboratorRatingStatistic, // Thẻ thống kê lượt đánh giá theo từng tháng trong năm
-    collaboratorRatingBonusAndPunish, // Thẻ thống kê số lần được khen thưởng và phạt
-    collaboratorActivityOrder, // Thẻ hoạt động đơn hàng
     timePeriod, // Khoàng thời gian thống kê
-    collaboratorActivityStatistics, // Thẻ hoạt động thống kê
-    collaboratorActivityStatisticsTotal, // Biến phụ của thẻ hoạt động thống kê
     collaboratorActivityHistory,
+    cardTotal, // Thẻ hiển thị tổng của một giá trị truyền vào
+    cardTotalValue, // Giá trị để hiện thị trong thẻ tổng
+    cardTotalIcon: CardTotalIcon, // Icon muốn thể hiện trong card total
+    cardTotalLabel, // Giá trị header của total
+    cardBarChart, // Thẻ thống kê theo kiểu cột
+    cardData, // Giá trị
+    cardHeight, // Giá trị chiều cao của thẻ
   } = props;
   const dispatch = useDispatch();
   const lang = useSelector(getLanguageState);
@@ -233,7 +237,7 @@ const CardInfo = (props) => {
     setCurrentPage(page);
     const dataLength = data.length < 10 ? 10 : data.length;
     const start = page * dataLength - dataLength;
-    getHistoryActivityCollaborator(collaboratorId, start, 15)
+    getHistoryActivityCollaborator(collaboratorId, start, 14)
       .then((res) => {
         setDataHistory(res);
       })
@@ -412,7 +416,6 @@ const CardInfo = (props) => {
       );
     }
   };
-
   const renderCustomizedLabel = ({
     cx,
     cy,
@@ -439,87 +442,6 @@ const CardInfo = (props) => {
       </text>
     );
   };
-  // 2. Tiêu chí đánh giá
-  const getMultiLineText = (text, maxLineWidth) => {
-    const words = text.split(" ");
-    const lines = [];
-    let currentLine = words[0];
-
-    words.slice(1).forEach((word) => {
-      const width = (currentLine + " " + word).length * 7; // Tạm tính chiều rộng bằng cách nhân số ký tự
-      if (width <= maxLineWidth) {
-        currentLine += " " + word;
-      } else {
-        lines.push(currentLine);
-        currentLine = word;
-      }
-    });
-
-    lines.push(currentLine);
-    return lines;
-  };
-  const CustomDot = (props) => {
-    const { cx, cy, value } = props;
-
-    if (value > 2500) {
-      return <circle cx={cx} cy={cy} r={10} fill="red" stroke="none" />;
-    }
-
-    return <circle cx={cx} cy={cy} r={5} fill="#9e68df" stroke="none" />;
-  };
-  const renderCustomTick = (props) => {
-    const { payload, x, y, textAnchor } = props;
-    const lines = getMultiLineText(payload.value, MAX_LINE_WIDTH);
-
-    return (
-      <text x={x} y={y} textAnchor={textAnchor} fill="#666">
-        {lines.map((line, index) => (
-          <tspan
-            fontFamily="Roboto"
-            fontSize="12"
-            fill="#9ca3af"
-            x={x}
-            dy={index === 0 ? 0 : 14}
-            key={index}
-          >
-            {line}
-          </tspan>
-        ))}
-      </text>
-    );
-  };
-  const dataAreaChart = [
-    {
-      subject: "Làm việc chăm chỉ",
-      A: 1,
-      B: 2,
-      fullMark: 5,
-    },
-    {
-      subject: "Đồng phục gọn gàn, sạch sẽ",
-      A: 1,
-      B: 2,
-      fullMark: 5,
-    },
-    {
-      subject: "Dụng cụ chuẩn bị đầy đủ",
-      A: 3,
-      B: 4,
-      fullMark: 5,
-    },
-    {
-      subject: "Làm việc rất tốt, dọn dẹp sạch sẽ",
-      A: 5,
-      B: 5,
-      fullMark: 5,
-    },
-    {
-      subject: "Giờ giấc chuẩn, luôn đến trước giờ hẹn",
-      A: 3,
-      B: 4,
-      fullMark: 5,
-    },
-  ];
   // 3. Hoạt động gần đây
   const timeWork = (data) => {
     const start = moment(new Date(data.date_work)).format("HH:mm");
@@ -667,7 +589,7 @@ const CardInfo = (props) => {
       // Thẻ hoạt động đơn hàng
       if (collaboratorActivityHistory) {
         dispatch(loadingAction.loadingRequest(true));
-        getHistoryActivityCollaborator(collaboratorId, 0, 15)
+        getHistoryActivityCollaborator(collaboratorId, 0, 14)
           .then((res) => {
             setDataHistory(res);
             dispatch(loadingAction.loadingRequest(false));
@@ -684,10 +606,10 @@ const CardInfo = (props) => {
   return (
     <div className="card-statistics card-shadow">
       {/* Header */}
-      {headerLabel && (
+      {cardHeader && (
         <div className="card-statistics__header">
           <div className="card-statistics__header--right">
-            <span>{headerLabel}</span>
+            <span>{cardHeader}</span>
             {supportIcon && (
               <Tooltip
                 placement="top"
@@ -728,8 +650,40 @@ const CardInfo = (props) => {
           </div>
         </div>
       )}
+      {/* New body code */}
+      {cardContent && (
+        <div className="card-statistics__content">{cardContent}</div>
+      )}
       {/* Content */}
       <div>
+        {/* Thẻ thể hiện tổng quan một giá trị duy nhất */}
+        {cardTotal && (
+          <div className="card-statistics__total">
+            {/* Icon */}
+            <div className="card-statistics__total--icon">
+              <CardTotalIcon
+                className="card-statistics__icon circle dark-purple small"
+                color="white"
+              />
+            </div>
+            {/* Body */}
+            <div className="card-statistics__total--body">
+              {/* left */}
+              <div className="card-statistics__total--body-left">
+                <span className="card-statistics__total--body-left-header">
+                  {cardTotalLabel}
+                </span>
+                <span className="card-statistics__total--body-left-value">
+                  {cardTotalValue}
+                </span>
+              </div>
+              {/* right */}
+              <div className="card-statistics__total--body-right">
+                {/* <span>10%</span> */}
+              </div>
+            </div>
+          </div>
+        )}
         {/* Thẻ tổng quan đánh giá */}
         {collaboratorOverviewRating && (
           <div className="card-statistics__overview-rating">
@@ -808,7 +762,7 @@ const CardInfo = (props) => {
           </div>
         )}
         {/* Thẻ tiêu chí đánh giá */}
-        {collaboratorOverviewCriteria && (
+        {/* {collaboratorOverviewCriteria && (
           <div className="card-statistics__overview-criteria">
             <ResponsiveContainer height={250} width={"100%"}>
               <RadarChart outerRadius={80} data={dataAreaChart}>
@@ -830,7 +784,7 @@ const CardInfo = (props) => {
               </RadarChart>
             </ResponsiveContainer>
           </div>
-        )}
+        )} */}
         {/* Thẻ khen thưởng, vi phạm */}
         {collaboratorOverviewBonusAndPunish && (
           <div className="card-statistics__overview-bonus-punish">
@@ -1741,12 +1695,16 @@ const CardInfo = (props) => {
           </div>
         )}
         {/* Thẻ hoạt động lịch sử của đối tác */}
-        {collaboratorActivityHistory ? (
-          dataHistory?.data?.length > 0 ? (
+        {collaboratorActivityHistory &&
+          (dataHistory?.data?.length > 0 ? (
             <div className="card-statistics__activity-history">
               <div>
                 {dataHistory?.data?.map((activity, index) => (
-                  <div className="card-statistics__activity-history--activity">
+                  <div
+                    className={`card-statistics__activity-history--activity ${
+                      index === dataHistory?.data?.length - 1 && "last-item"
+                    }`}
+                  >
                     {/* Ngày tạo và thông tin quản trị viên tương tác nếu có*/}
                     <div className="card-statistics__activity-history--activity-left">
                       <span className="card-statistics__activity-history--activity-left-name-phone">
@@ -1795,42 +1753,12 @@ const CardInfo = (props) => {
                       {/* Tên hành động và các thông tin phụ */}
                       <div className="card-statistics__activity-history--activity-right-header">
                         {/* Tên hành động */}
-                        <span className="card-statistics__activity-history--activity-right-header-service">
-                          {activity?.title_admin}
-                        </span>
+                        <Tooltip placement="top" title={activity?.title_admin}>
+                          <span className="card-statistics__activity-history--activity-right-header-service">
+                            {activity?.title_admin}
+                          </span>
+                        </Tooltip>
                       </div>
-                      {/* Địa chỉ */}
-                      {/* <div className="card-statistics__activity-history--activity-right-address">
-                      <Tooltip placement="top" title={activity?.address}>
-                        <span className="">{activity?.address}</span>
-                      </Tooltip>
-                    </div> */}
-                      {/* Trạng thái */}
-                      {/* <div
-                      className={`card-statistics__activity-history--activity-right-status  ${
-                        activity?.status === "pending"
-                          ? "pending"
-                          : activity?.status === "confirm"
-                          ? "confirm"
-                          : activity?.status === "doing"
-                          ? "doing"
-                          : activity?.status === "done"
-                          ? "done"
-                          : "cancel"
-                      }`}
-                    >
-                      <span>
-                        {activity?.status === "pending"
-                          ? `${i18n.t("pending", { lng: lang })}`
-                          : activity?.status === "confirm"
-                          ? `${i18n.t("confirm", { lng: lang })}`
-                          : activity?.status === "doing"
-                          ? `${i18n.t("doing", { lng: lang })}`
-                          : activity?.status === "done"
-                          ? `${i18n.t("complete", { lng: lang })}`
-                          : `${i18n.t("cancel", { lng: lang })}`}{" "}
-                      </span>
-                    </div> */}
                     </div>
                   </div>
                 ))}
@@ -1842,7 +1770,7 @@ const CardInfo = (props) => {
                   onChange={onChange}
                   total={dataHistory?.totalItem}
                   showSizeChanger={false}
-                  pageSize={15}
+                  pageSize={14}
                 />
               </div>
             </div>
@@ -1852,10 +1780,7 @@ const CardInfo = (props) => {
                 Cộng tác viên chưa có hoạt động nào
               </span>
             </div>
-          )
-        ) : (
-          ""
-        )}
+          ))}
       </div>
     </div>
   );

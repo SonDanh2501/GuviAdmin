@@ -48,6 +48,12 @@ import {
   IoConstruct,
   IoPeopleOutline,
   IoSettingsOutline,
+  IoWallet,
+  IoArrowUp,
+  IoArrowDown,
+  IoPerson,
+  IoCubeOutline,
+  IoPieChartOutline,
 } from "react-icons/io5";
 
 const icons = {
@@ -100,6 +106,12 @@ const icons = {
   IoPeopleOutline,
   IoSettingsOutline,
   IoStatsChartOutline,
+  IoWallet,
+  IoArrowUp,
+  IoArrowDown,
+  IoPerson,
+  IoCubeOutline,
+  IoPieChartOutline,
 };
 
 export default icons;

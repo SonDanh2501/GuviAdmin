@@ -423,7 +423,7 @@ const columns = [
   {
     title: "Trạng thái",
     dataIndex: "status",
-    key: "status_transfer",
+    key: "transfer_status",
     width: 50,
     fontSize: "text-size-M",
   },

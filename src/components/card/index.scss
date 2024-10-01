@@ -7,11 +7,14 @@
 
     // Icon sử dụng trong card
     .card-statistics__icon {
-        padding: 8px;
+        padding: 7px;
         width: 36px;
         height: 36px;
         border-radius: $borderRadiusL;
 
+        &.circle {
+            border-radius: $borderRadiusFull;
+        }
         &.green {
             background-color: $colorExtraLightGreen;
         }
@@ -27,9 +30,20 @@
         &.yellow {
             background-color: $colorExtraLightYellow;
         }
+        &.dark-green {
+            background-color: $colorGreen;
+        }
+        &.dark-purple {
+            background-color: $colorPurple;
+        }
+        &.small {
+            padding: 3px;
+            width: 24px;
+            height: 24px;
+        }
     }
 
-    // ~~~ Tiêu đề thẻ ~~~
+    /* ~~~ Tiêu đề thẻ ~~~ */
     .card-statistics__header {
         display: flex;
         justify-content: space-between;
@@ -59,71 +73,12 @@
         }
     }
 
-    // ~~~ Thẻ tổng quan đánh giá ~~~
-    .card-statistics__overview-rating {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding: 16px 20px;
-        gap: $gapS;
-
-        .card-statistics__overview-rating--star {
-            display: flex;
-            border-radius: $borderRadiusXL;
-            padding: 8px 16px;
-            align-items: center;
-            justify-content: center;
-            background-color: $bgStarCard;
-            gap: $gapXS;
-
-            .card-statistics__overview-rating--star-avg {
-                padding-top: 3px;
-                margin-left: 3px;
-                font-weight: $fontWeightXL;
-                font-size: $textFontSizeL;
-                font-family: $fontFamily;
-                color: $colorBlack;
-            }
-        }
-
-        .card-statistics__overview-rating--total {
-            display: flex;
-            align-items: center;
-            gap: $gapXS;
-
-            .card-statistics__overview-rating--total-number {
-                font-weight: $fontWeightXL;
-                color: $colorBlack;
-            }
-
-            span {
-                font-style: italic;
-                color: $colorBlack;
-            }
-        }
-
-        .card-statistics__overview-rating--kind {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: $gapM;
-
-            .card-statistics__overview-rating--kind-label {
-                display: flex;
-                gap: $gapXS;
-                align-items: center;
-                color: $colorBlack;
-
-                .card-statistics__overview-rating--kind-label-circle {
-                    width: 12px;
-                    height: 12px;
-                    border-radius: $borderRadiusFull;
-                }
-            }
-        }
-
+    /* ~~~ Nội dung hiển thị của thẻ ~~~ */
+    .card-statistics__content {
+        padding: 12px 12px;
     }
+
+
 
     // ~~~ Thẻ tiêu chí đánh giá ~~~
     .card-statistics__overview-criteria {
@@ -538,143 +493,7 @@
         }
     }
 
-    // ~~~ Thẻ hoạt động gần đây ~~~
-    .card-statistics__overview-activities {
-        padding: 16px 20px;
-
-        // gap: $gapS;
-        .card-statistics__overview-activities--activity {
-            display: flex;
-            padding-bottom: 12px;
-
-            .card-statistics__overview-activities--activity-left {
-                width: 25%;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-
-                .card-statistics__overview-activities--activity-left-date {
-                    font-size: $textFontSizeM;
-                    font-weight: $fontWeightXL;
-                    color: $colorBlack;
-                }
-
-                .card-statistics__overview-activities--activity-left-day {
-                    font-size: $textFontSizeM;
-                    font-weight: $fontWeightL;
-                    color: $colorGray;
-                    opacity: $opacityS;
-                    text-transform: capitalize;
-                }
-            }
-
-            .card-statistics__overview-activities--activity-line {
-                width: 16.67%;
-                align-items: center;
-                display: flex;
-                flex-direction: column;
-                margin-bottom: -12px;
-
-                .card-statistics__overview-activities--activity-line-icon {
-                    padding: 8px 8px;
-                    width: fit-content;
-                    height: fit-content;
-                    border-radius: $borderRadiusFull;
-
-                    &.pending {
-                        background-color: $colorExtraLightYellow;
-                    }
-
-                    &.confirm {
-                        background-color: $colorExtraLightBlue;
-                    }
-
-                    &.doing {
-                        background-color: $colorExtraLightBlue;
-                    }
-
-                    &.done {
-                        background-color: $colorExtraLightGreen;
-                    }
-
-                    &.cancel {
-                        background-color: $colorExtraLightRed;
-                    }
-                }
-
-                .card-statistics__overview-activities--activity-line-icon-line {
-                    width: 2px;
-                    height: 100%;
-                    background-color: $colorExtraLightGray;
-                }
-            }
-
-            .card-statistics__overview-activities--activity-right {
-                width: 58.33%;
-
-                .card-statistics__overview-activities--activity-right-time {
-                    font-size: $textFontSizeM;
-                    font-weight: $fontWeightXL;
-                    color: $colorBlack;
-                }
-
-                .card-statistics__overview-activities--activity-right-address {
-                    font-size: $textFontSizeM;
-                    font-weight: $fontWeightL;
-                    color: $colorGray;
-                    opacity: $opacityS;
-                    overflow: hidden;
-                    display: -webkit-box;
-                    -webkit-box-orient: vertical;
-                    -webkit-line-clamp: 3;
-                }
-
-                .card-statistics__overview-activities--activity-right-status {
-                    width: fit-content;
-                    padding: 3px 8px;
-                    border-radius: $borderRadiusL;
-                    // border: 1px solid;
-                    margin-top: 4px;
-
-                    &.pending {
-                        background-color: $colorExtraLightYellow;
-                        border: 1px solid $colorYellow;
-                        color: $colorYellow;
-                    }
-
-                    &.confirm {
-                        background-color: $colorExtraLightBlue;
-                        border: 1px solid $colorBlue;
-                        color: $colorBlue;
-                    }
-
-                    &.doing {
-                        background-color: $colorExtraLightBlue;
-                        border: 1px solid $colorBlue;
-                        color: $colorBlue;
-                    }
-
-                    &.done {
-                        background-color: $colorExtraLightGreen;
-                        border: 1px solid $colorGreen;
-                        color: $colorGreen;
-                    }
-
-                    &.cancel {
-                        background-color: $colorExtraLightRed;
-                        border: 1px solid $colorRed;
-                        color: $colorRed;
-                    }
-
-                    span {
-                        font-size: $textFontSizeM;
-                        font-weight: $fontWeightL;
-                    }
-                }
-            }
-
-        }
-    }
+ 
 
     // ~~~ Thẻ thông tin cá nhân ~~~
     .card-statistics__overview-information {
@@ -1125,13 +944,15 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: $gapS;
         padding: 16px 14px;
 
-        // gap: $gapS;
         .card-statistics__activity-history--activity {
             display: flex;
-            padding-bottom: 32px;
+            padding-bottom: 32px; 
+
+            &.last-item {
+                padding-bottom: 7.5px;
+            }
 
             .card-statistics__activity-history--activity-left {
                 width: 30%;
@@ -1174,18 +995,23 @@
                     width: fit-content;
                     height: fit-content;
                     border-radius: $borderRadiusFull;
+
                     &.collaborator {
                         background-color: $colorExtraLightBlue;
                     }
+
                     &.admin {
                         background-color: $colorExtraLightPurple;
                     }
+
                     &.verify {
                         background-color: $colorExtraLightRed;
                     }
+
                     &.system {
                         background-color: $colorExtraLightYellow;
                     }
+
                     &.create {
                         background-color: $colorExtraLightGreen;
                     }
@@ -1258,34 +1084,39 @@
                     width: fit-content;
                     padding: 4px 8px;
                     border-radius: $borderRadiusM;
+
                     // margin-top: 4px;
                     &.collaborator {
                         background-color: $colorExtraLightBlue;
                         border: 1px solid $colorBlue;
                         color: $colorBlue;
                     }
+
                     &.admin {
                         background-color: $colorExtraLightGreen;
                         border: 1px solid $colorGreen;
                         color: $colorGreen;
                     }
+
                     &.verify {
                         background-color: $colorExtraLightRed;
                         border: 1px solid $colorRed;
                         color: $colorRed;
                     }
+
                     &.system {
                         background-color: $colorExtraLightYellow;
                         border: 1px solid $colorYellow;
                         color: $colorYellow;
                     }
+
                     &.create {
                         background-color: $colorExtraLightGreen;
                         border: 1px solid $colorGreen;
                         color: $colorGreen;
                     }
 
-               
+
                     span {
                         font-size: $textFontSizeM;
                         font-weight: $fontWeightL;
@@ -1295,6 +1126,53 @@
             }
 
         }
+    }
+
+    // ~~~ Thẻ thể hiện giá trị tổng kết ~~~
+    .card-statistics__total {
+        display: flex;
+        align-items: center;
+        padding: 12px 12px;
+        gap: $gapM;
+
+        .card-statistics__total--icon {
+            background-color: $colorExtraLightPurple;
+            padding: 12px 12px;
+            border-radius: $borderRadiusFull;
+        }
+
+        .card-statistics__total--body {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            .card-statistics__total--body-left {
+                display: flex;
+                flex-direction: column;
+                .card-statistics__total--body-left-header {
+                    font-weight: $fontWeightXL;
+                    font-size: $textFontSizeM;
+                    color: $colorGray;
+                    opacity: $opacityM;
+                    text-transform: uppercase;
+                }
+                .card-statistics__total--body-left-value {
+                    padding-top: 2px;
+                    font-weight: $fontWeightXL;
+                    font-size: $textFontSizeXL;
+                }
+            }
+
+            .card-statistics__total--body-right {
+                display: flex;
+                flex-direction: column;
+            }
+        }
+    }
+
+    // ~~~ Thẻ biểu đồ cột ~~~
+    .card-statistics__bar-chart {
+        padding: 16px 20px;
     }
 
 

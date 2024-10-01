@@ -1,0 +1,41 @@
+@import "../../../@theme/style.scss";
+
+.card__bar-chart {
+    display: flex;
+    flex-direction: column;
+    gap: $gapL;
+
+    .card__bar-chart--header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .card__bar-chart--header-label {
+            font-size: $textFontSizeM;
+            font-weight: $fontWeightL;
+            color: $colorBlack;
+            padding: 4px 0px;
+        }
+
+        .card__bar-chart--header-average {
+            display: flex;
+            align-items: center;
+            gap: $gapS;
+
+            .card__bar-chart--header-average-label {
+                font-weight: $fontWeightL;
+                color: $colorGray;
+                opacity: $opacityL;
+            }
+
+            .card__bar-chart--header-average-number {
+                // background-color: $colorExtraLightYellow;
+                padding: 4px 6px;
+                border-radius: $borderRadiusM;
+                font-size: $textFontSizeXL;
+                font-weight: $fontWeightXL;
+                // color: $colorYellow;
+            }
+        }
+    }
+}

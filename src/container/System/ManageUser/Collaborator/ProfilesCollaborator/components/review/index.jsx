@@ -94,7 +94,7 @@ const Review = ({ id, totalReview }) => {
           <CardInfo
             collaboratorRatingStatistic={true}
             collaboratorId={id}
-            headerLabel="Thống kê đánh giá"
+            cardHeader="Thống kê đánh giá"
             timePeriod={timePeriod}
             supportIcon={true}
           />
@@ -104,7 +104,7 @@ const Review = ({ id, totalReview }) => {
           <CardInfo
             collaboratorRatingStar={true}
             collaboratorId={id}
-            headerLabel="Số lượt đánh giá"
+            cardHeader="Số lượt đánh giá"
             collaboratorStar={totalReview}
           />
         </div>

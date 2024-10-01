@@ -694,7 +694,7 @@ const InputTextCustom = (props) => {
               value?.map((item, index) => {
                 return (
                   <div
-                    style={{ borderRadius: "6px", border: "2px dashed	#eee" }}
+                    style={{ borderRadius: "6px", border: "2px dashed #a855f7" }}
                     className={`${
                       hideImage ? "hidden" : "flex"
                     } items-center justify-between mt-2 p-2 border-2 gap-2`}
@@ -712,8 +712,11 @@ const InputTextCustom = (props) => {
                         }}
                       />
                       <span style={{ maxWidth: "280px", overflow: "hidden" }}>
-                        Định dạng file:{" "}
-                        {item?.split("/").pop().split(".").pop()}
+                        {`File ${placeHolder} ${index + 1}  (${item
+                          ?.split("/")
+                          .pop()
+                          .split(".")
+                          .pop()})`}
                       </span>
                     </div>
                     <div className="flex gap-2">
@@ -736,7 +739,7 @@ const InputTextCustom = (props) => {
               })
             ) : (
               <div
-                style={{ borderRadius: "6px", border: "2px dashed	#eee" }}
+                style={{ borderRadius: "6px", border: "2px dashed #a855f7" }}
                 className={`${
                   hideImage ? "hidden" : "flex"
                 } items-center justify-between mt-2 p-2 border-2 gap-2`}
@@ -751,7 +754,12 @@ const InputTextCustom = (props) => {
                     }}
                   />
                   <span style={{ maxWidth: "280px", overflow: "hidden" }}>
-                    Định dạng file:{" "}{value?.split("/").pop().split(".").pop()}
+                    {`File ${placeHolder} (${value
+                      ?.split("/")
+                      .pop()
+                      .split(".")
+                      .pop()})`}
+                    {/* Định dạng file:{" "}{value?.split("/").pop().split(".").pop()} */}
                   </span>
                 </div>
                 <div className="flex gap-2">
@@ -822,7 +830,7 @@ const InputTextCustom = (props) => {
                 />
               </div>
             ) : (
-              <IoChevronDown 
+              <IoChevronDown
                 className="form-field__icon"
                 size="14px"
                 color="#999"
@@ -911,7 +919,7 @@ const InputTextCustom = (props) => {
               <label htmlFor=" " className="form-field__label">
                 {placeHolder}
               </label>
-              <IoChevronDown 
+              <IoChevronDown
                 className="form-field__icon"
                 size="14px"
                 color="#999"
@@ -965,7 +973,7 @@ const InputTextCustom = (props) => {
               <label htmlFor=" " className="form-field__label">
                 {placeHolder}
               </label>
-              <IoChevronDown 
+              <IoChevronDown
                 className="form-field__icon"
                 size="14px"
                 color="#999"
@@ -1018,7 +1026,7 @@ const InputTextCustom = (props) => {
               <label htmlFor=" " className="form-field__label">
                 {placeHolder}
               </label>
-              <IoChevronDown 
+              <IoChevronDown
                 className="form-field__icon"
                 size="14px"
                 color="#999"
@@ -1073,7 +1081,7 @@ const InputTextCustom = (props) => {
               <label htmlFor=" " className="form-field__label">
                 {placeHolder}
               </label>
-              <IoChevronDown 
+              <IoChevronDown
                 className="form-field__icon"
                 size="14px"
                 color="#999"
@@ -1144,7 +1152,7 @@ const InputTextCustom = (props) => {
               <label htmlFor=" " className="form-field__label">
                 {placeHolder}
               </label>
-              <IoChevronDown 
+              <IoChevronDown
                 className="form-field__icon"
                 size="14px"
                 color="#999"

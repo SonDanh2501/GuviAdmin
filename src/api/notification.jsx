@@ -10,10 +10,6 @@ export const getDetailNotification = (id) => {
   return axiosClient.get(`/admin/push_notification_manager/detail_item/${id}`);
 };
 
-export const createPushNotification = (data) => {
-  return axiosClient.post("/admin/push_notification_manager/create_item", data);
-};
-
 export const editPushNotification = (id, data) => {
   return axiosClient.post(
     `/admin/push_notification_manager/edit_item/${id}`,
@@ -28,6 +24,21 @@ export const deletePushNotification = (id) => {
 export const activePushNotification = (id, data) => {
   return axiosClient.post(
     `/admin/push_notification_manager/active_item/${id}`,
+    data
+  );
+};
+
+// Hàm tạo mới
+
+export const getListNotifications = (start, length, is_created) => {
+  return axiosClient.get(
+    `api/admin/notification_schedule_manager/get_list?start=${start}&length=${length}&is_created=${is_created}`
+  );
+};
+
+export const createPushNotification = (data) => {
+  return axiosClient.post(
+    "api/admin/notification_schedule_manager/create_item",
     data
   );
 };

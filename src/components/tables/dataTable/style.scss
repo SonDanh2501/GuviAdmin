@@ -6,6 +6,7 @@
   flex-direction: column;
   // align-items: center;
 }
+
 .title-column {
   text-align: left;
 }
@@ -55,6 +56,7 @@ span {
   // align-items: center;
   // justify-items: center;
   flex-direction: column;
+
   button {
     margin-bottom: 5px;
   }
@@ -66,6 +68,7 @@ span {
     margin: 0;
     font-weight: $fontWeightL;
   }
+
   .text-phone-customer {
     color: $colorBlack;
     margin: 0;
@@ -76,6 +79,7 @@ span {
   display: flex;
   flex-direction: column;
   justify-content: center;
+
   .text-service {
     text-decoration: none;
   }
@@ -101,20 +105,25 @@ span {
         margin: 0;
       }
     }
+
     .div-phone-star {
       display: flex;
+
       p {
         color: $colorBlack;
       }
+
       .div-star {
         display: flex;
         flex-direction: row;
         margin-left: 15px;
+
         .text-star {
           color: $colorBlack;
           text-decoration: none;
           margin: 0px 0px 0px 5px;
         }
+
         .icon-star {
           color: #f2cc0e;
           margin: auto;
@@ -127,8 +136,10 @@ span {
 .div-collaborator-avatar {
   display: flex;
   flex-direction: row;
+
   .div-avatar {
     margin-right: 10px;
+
     img {
       width: 50px;
     }
@@ -138,26 +149,32 @@ span {
     display: flex;
     flex-direction: column;
     justify-content: center;
+
     p {
       text-decoration-line: underline;
       color: $color1;
       margin: 0;
     }
+
     .div-phone-star {
       display: flex;
+
       p {
         color: $colorBlack;
         text-decoration-line: unset !important;
       }
+
       .div-star {
         display: flex;
         flex-direction: row;
         margin-left: 15px;
+
         .text-star {
           color: $colorBlack;
           text-decoration: none;
           margin: 0px 0px 0px 5px;
         }
+
         .icon-star {
           color: #f2cc0e;
           margin: auto;
@@ -166,10 +183,12 @@ span {
     }
   }
 }
+
 .div-type-transaction {
   p {
     text-align: center;
   }
+
   // .div-withdraw {
   //   background-color: $backGroundDiscount;
   //   padding: 0.2rem;
@@ -189,6 +208,7 @@ span {
     border-radius: 5px;
     background-color: $backGroundColor2;
   }
+
   .text-status-confirm {
     color: $color1;
     border: 1px solid $color1;
@@ -196,6 +216,7 @@ span {
     border-radius: 5px;
     background-color: $backGroundColor1;
   }
+
   .text-status-doing {
     color: $color1;
     border: 1px solid $color1;
@@ -203,6 +224,7 @@ span {
     border-radius: 5px;
     background-color: $backGroundColor1;
   }
+
   .text-status-done {
     color: $colorSuccess;
     border: 1px solid $colorSuccess;
@@ -210,6 +232,7 @@ span {
     border-radius: 5px;
     background-color: $backGroundColorSuccess;
   }
+
   .text-status-cancel {
     color: $colorError;
     border: 1px solid $colorError;
@@ -226,6 +249,7 @@ span {
 
 .name_customer {
   display: flex;
+
   .text-name-customer {
     color: $colorBlack;
     position: absolute;
@@ -241,11 +265,13 @@ span {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+
   .phone-text {
     color: $colorBlack;
     text-decoration: none;
     margin: 0;
   }
+
   .btn-eyes {
     background-color: transparent;
     border: none;
@@ -265,10 +291,12 @@ span {
   .text-contacted {
     color: $colorSuccess;
   }
+
   .div-uncontact {
     .text-uncontact {
       color: $colorBlack;
     }
+
     .btn-contacted-deep2 {
       width: 5em;
       padding: 3px 0px;
@@ -279,6 +307,7 @@ span {
       margin-top: 5px;
       border-radius: 4px;
       cursor: pointer;
+
       .text-btn-contact {
         color: $colorWhite;
       }
@@ -321,6 +350,7 @@ span {
   display: flex;
   flex-direction: column;
 }
+
 .subject-ADMIN {
   span {
     // border: 1px solid $color1;
@@ -330,6 +360,7 @@ span {
     color: rgb(255 188 10);
   }
 }
+
 .subject-KH {
   span {
     // border: 1px solid $color1;
@@ -339,6 +370,7 @@ span {
     color: rgb(0 189 157);
   }
 }
+
 .subject-CTV {
   span {
     // border: 1px solid $color1;
@@ -349,21 +381,70 @@ span {
   }
 }
 
+/* ~~~ Css dành cho table ~~~ */
+.table-data {
+  box-shadow:
+    rgba(67, 71, 85, 0.27) 0px 1px 0.25em,
+    rgba(90, 125, 188, 0.05) 0px 0.75em 2em;
+  border-radius: $borderRadiusM;
 
+  // Nội dung hiển thị
+  .table-data__content {}
 
-// Sơn CSS
-.status-text {
+  // Phân trang
+  .table-data__pagination {
+    display: flex;
+    justify-content: space-between;
+    background-color: $colorWhite;
+  }
+
+  .table-data__footer {
+    display: flex;
+    justify-content: space-between;
+
+    .table-data__footer--left {
+      display: flex;
+      align-items: center;
+      gap: $gapL;
+
+      .table-data__footer--left-select {
+        display: flex;
+        flex-direction: column;
+        min-width: 150px;
+        gap: $gapXS;
+
+        .table-data__footer--left-select-label {
+          display: flex;
+          gap: $gapXS;
+          align-items: center;
+
+          span {
+            font-weight: $fontWeightXL;
+            font-size: $textFontSizeM;
+          }
+        }
+      }
+    }
+  }
+}
+
+/* ~~~ Css dành cho các trường hợp ~~~ */
+
+// Trường trạng thái
+.case__status-text {
   display: flex;
   align-items: center;
-  .status-text__pending {
+
+  .case__status-text--pending {
     padding: 6px 8px;
-    color: $colorRed;
-    background-color: $colorExtraLightRed;
+    color: $colorYellow;
+    background-color: $colorExtraLightYellow;
     border-radius: $borderRadiusM;
     font-weight: $fontWeightXL;
     font-size: $textFontSizeM;
   }
-  .status-text__done {
+
+  .case__status-text--done {
     padding: 6px 8px;
     color: $colorGreen;
     background-color: $colorExtraLightGreen;
@@ -371,7 +452,8 @@ span {
     font-weight: $fontWeightXL;
     font-size: $textFontSizeM;
   }
-  .status-text__confirm {
+
+  .case__status-text--confirm {
     padding: 6px 8px;
     color: $colorBlue;
     background-color: $colorExtraLightBlue;
@@ -379,7 +461,8 @@ span {
     font-weight: $fontWeightXL;
     font-size: $textFontSizeM;
   }
-  .status-text__doing {
+
+  .case__status-text--doing {
     padding: 6px 8px;
     color: $colorBlue;
     background-color: $colorExtraLightBlue;
@@ -387,7 +470,8 @@ span {
     font-weight: $fontWeightXL;
     font-size: $textFontSizeM;
   }
-  .status-text__cancel {
+
+  .case__status-text--cancel {
     padding: 6px 8px;
     color: $colorRed;
     background-color: $colorExtraLightRed;
@@ -395,4 +479,96 @@ span {
     font-weight: $fontWeightXL;
     font-size: $textFontSizeM;
   }
+}
+
+// Trường ngày giao dịch
+.case__withdrawal-date {
+  display: flex;
+  flex-direction: column;
+  // align-items: center;
+  gap: $gapXS;
+}
+
+// Trường kiểu giao dịch
+.case__withdrawal-type-transfer {
+  border-radius: $borderRadiusM;
+  padding: 4px 8px;
+  width: fit-content;
+
+  &.withdrawal {
+    background-color: $colorRed;
+  }
+
+  &.deposit {
+    background-color: $colorGreen;
+  }
+
+  .case__withdrawal-type-transfer {
+    color: $colorWhite;
+    // &.withdrawal {
+    //   color: $colorRed;
+    // }
+
+    // &.deposit {
+    //   color: $colorGreen;
+    // }
+  }
+}
+
+// Trường trạng thái giao dịch 
+.case__transfer-status {
+  .case__transfer-status--pending {
+    background-color: $colorExtraLightYellow;
+    border-radius: $borderRadiusM;
+    color: $colorYellow;
+    font-weight: $fontWeightXL;
+    font-size: $textFontSizeM;
+    padding: 6px 8px;
+  }
+
+  .case__transfer-status--confirm {
+    background-color: $colorExtraLightBlue;
+    border-radius: $borderRadiusM;
+    color: $colorBlue;
+    font-weight: $fontWeightXL;
+    font-size: $textFontSizeM;
+    padding: 6px 8px;
+  }
+
+  .case__transfer-status--doing {
+    background-color: $colorExtraLightPurple;
+    border-radius: $borderRadiusM;
+    color: $colorPurple;
+    font-weight: $fontWeightXL;
+    font-size: $textFontSizeM;
+    padding: 6px 8px;
+  }
+
+  .case__transfer-status--done {
+    background-color: $colorExtraLightGreen;
+    border-radius: $borderRadiusM;
+    color: $colorGreen;
+    font-weight: $fontWeightXL;
+    font-size: $textFontSizeM;
+    padding: 6px 8px;
+  }
+
+  .case__transfer-status--cancel {
+    background-color: $colorExtraLightRed;
+    border-radius: $borderRadiusM;
+    color: $colorRed;
+    font-weight: $fontWeightXL;
+    font-size: $textFontSizeM;
+    padding: 6px 8px;
+  }
+
+  .case__transfer-status--other {
+    background-color: $colorExtraLightStone;
+    border-radius: $borderRadiusM;
+    color: $colorStone;
+    font-weight: $fontWeightXL;
+    font-size: $textFontSizeM;
+    padding: 6px 8px;
+  }
+
 }
