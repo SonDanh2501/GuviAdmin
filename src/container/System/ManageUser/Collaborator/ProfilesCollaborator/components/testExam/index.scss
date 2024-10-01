@@ -1,3 +1,5 @@
+@import "../../../../../../../../src/@theme/style.scss";
+
 .title-test-exam {
   font-family: "Roboto";
   font-weight: 500;
@@ -142,6 +144,7 @@
   .item-tab-exam {
     padding: 5px;
     margin-right: 10px;
+
     .text-tab {
       font-family: "Roboto";
       font-weight: 500;
@@ -151,6 +154,7 @@
       margin: 0;
     }
   }
+
   .item-tab-exam-select {
     padding: 5px;
     border-bottom: 1px solid blue;
@@ -167,10 +171,121 @@
   }
 }
 
-.div-list-lesson-collaborator {
+.collaborator-exam {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  padding-bottom: 16px;
+
+  // align-items: center;
+  .collaborator-exam__lesson {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: $gapL;
+
+    .collaborator-exam__lesson--child {
+      display: flex;
+      flex-direction: column;
+       box-shadow:
+    rgba(67, 71, 85, 0.27) 0px 1px 0.25em,
+    rgba(90, 125, 188, 0.05) 0px 0.75em 2em;
+      background-color: $colorWhite;
+      border-radius: $borderRadiusM;
+      padding: 12px 12px;
+      gap: $gapXS;
+
+      .collaborator-exam__lesson--child-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .collaborator-exam__lesson--child-header-name {
+          font-weight: $fontWeightXL;
+          font-size: $textFontSizeM;
+        }
+
+        .collaborator-exam__lesson--child-header-status {
+          padding: 4px;
+          //  background-color: $colorExtraLightGreen;
+          border-radius: $borderRadiusFull;
+
+          &.done {
+            color: $colorGreen;
+            background-color: $colorExtraLightGreen;
+          }
+
+          &.not-done {
+            // color: $co;
+            background-color: $colorExtraLightGray;
+          }
+        }
+      }
+
+      .collaborator-exam__lesson--child-subcontent {
+        span {
+          font-weight: $fontWeightL;
+          color: $colorGray;
+          opacity: $opacityM;
+        }
+      }
+
+      .collaborator-exam__lesson--child-owner {
+        display: flex;
+        gap: $gapM;
+        padding-top: 4px;
+
+        .collaborator-exam__lesson--child-owner-avatar {
+          height: 28px;
+          width: 28px;
+          border-radius: $borderRadiusFull;
+        }
+
+        .collaborator-exam__lesson--child-owner-body {
+          display: flex;
+          justify-content: space-between;
+          // align-items: center;
+          width: 100%;
+
+          .collaborator-exam__lesson--child-owner-body-info {
+            display: flex;
+            flex-direction: column;
+
+            .collaborator-exam__lesson--child-owner-body-info-name {
+              font-size: $textFontSizeM;
+              font-weight: $fontWeightXL;
+            }
+
+            .collaborator-exam__lesson--child-owner-body-info-time {
+              font-size: $textFontSizeM;
+              font-weight: $fontWeightL;
+              color: $colorGray;
+              opacity: $opacityM;
+            }
+          }
+
+          .collaborator-exam__lesson--child-owner-body-more-detail {
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-end;
+
+            span {
+              font-size: $textFontSizeM;
+              font-weight: $fontWeightL;
+              color: $colorGray;
+              opacity: $opacityM;
+              cursor: pointer;
+              transition-duration: 0.3s;
+
+              &:hover {
+                color: $colorBlack;
+                opacity: 1;
+                text-decoration: underline;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 
   .div-item-lesson-collaborator {
     display: flex;

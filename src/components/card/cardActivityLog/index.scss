@@ -1,0 +1,137 @@
+@import "../../../@theme//style.scss";
+
+.card-activities {
+    padding: 16px 20px;
+
+    .card-activities--activity {
+        display: flex;
+        padding-bottom: 12px;
+
+        .card-activities--activity-left {
+            width: 25%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            .card-activities--activity-left-date {
+                font-size: $textFontSizeM;
+                font-weight: $fontWeightXL;
+                color: $colorBlack;
+            }
+
+            .card-activities--activity-left-day {
+                font-size: $textFontSizeM;
+                font-weight: $fontWeightL;
+                color: $colorGray;
+                opacity: $opacityS;
+                text-transform: capitalize;
+            }
+        }
+
+        .card-activities--activity-line {
+            width: 16.67%;
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+            margin-bottom: -12px;
+
+            .card-activities--activity-line-icon {
+                padding: 8px 8px;
+                width: fit-content;
+                height: fit-content;
+                border-radius: $borderRadiusFull;
+
+                &.pending {
+                    background-color: $colorExtraLightYellow;
+                }
+
+                &.confirm {
+                    background-color: $colorExtraLightBlue;
+                }
+
+                &.doing {
+                    background-color: $colorExtraLightBlue;
+                }
+
+                &.done {
+                    background-color: $colorExtraLightGreen;
+                }
+
+                &.cancel {
+                    background-color: $colorExtraLightRed;
+                }
+            }
+
+            .card-activities--activity-line-icon-line {
+                width: 2px;
+                height: 100%;
+                background-color: $colorExtraLightGray;
+            }
+        }
+
+        .card-activities--activity-right {
+            width: 58.33%;
+
+            .card-activities--activity-right-time {
+                font-size: $textFontSizeM;
+                font-weight: $fontWeightXL;
+                color: $colorBlack;
+            }
+
+            .card-activities--activity-right-address {
+                font-size: $textFontSizeM;
+                font-weight: $fontWeightL;
+                color: $colorGray;
+                opacity: $opacityS;
+                overflow: hidden;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 3;
+            }
+
+            .card-activities--activity-right-status {
+                width: fit-content;
+                padding: 3px 8px;
+                border-radius: $borderRadiusL;
+                // border: 1px solid;
+                margin-top: 4px;
+
+                &.pending {
+                    background-color: $colorExtraLightYellow;
+                    border: 1px solid $colorYellow;
+                    color: $colorYellow;
+                }
+
+                &.confirm {
+                    background-color: $colorExtraLightBlue;
+                    border: 1px solid $colorBlue;
+                    color: $colorBlue;
+                }
+
+                &.doing {
+                    background-color: $colorExtraLightBlue;
+                    border: 1px solid $colorBlue;
+                    color: $colorBlue;
+                }
+
+                &.done {
+                    background-color: $colorExtraLightGreen;
+                    border: 1px solid $colorGreen;
+                    color: $colorGreen;
+                }
+
+                &.cancel {
+                    background-color: $colorExtraLightRed;
+                    border: 1px solid $colorRed;
+                    color: $colorRed;
+                }
+
+                span {
+                    font-size: $textFontSizeM;
+                    font-weight: $fontWeightL;
+                }
+            }
+        }
+
+    }
+}

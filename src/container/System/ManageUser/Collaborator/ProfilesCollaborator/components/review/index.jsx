@@ -9,8 +9,10 @@ import i18n from "../../../../../../../i18n";
 import useWindowDimensions from "../../../../../../../helper/useWindowDimensions";
 import CardInfo from "../../../../../../../components/card";
 import DataTable from "../../../../../../../components/tables/dataTable";
+import FilterData from "../../../../../../../components/filterData/filterData";
 
 const Review = ({ id, totalReview }) => {
+  const [timePeriod, setTimePeriod] = useState([]);
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
@@ -57,7 +59,7 @@ const Review = ({ id, totalReview }) => {
     {
       title: "Khách hàng đánh giá",
       // dataIndex: "",
-      key: "customer-name-phone",
+      key: "customer_name_phone",
       width: 60,
       FontSize: "text-size-M",
     },
@@ -92,31 +94,25 @@ const Review = ({ id, totalReview }) => {
           <CardInfo
             collaboratorRatingStatistic={true}
             collaboratorId={id}
-            headerLabel="Thống kê đánh giá"
-            // collaboratorStar={star}
+            cardHeader="Thống kê đánh giá"
+            timePeriod={timePeriod}
+            supportIcon={true}
           />
         </div>
         {/* Thẻ tổng lượt đánh giá */}
         <div className="collaborator-rating__overview--total">
           <CardInfo
-            collaboratorRating={true}
+            collaboratorRatingStar={true}
             collaboratorId={id}
-            headerLabel="Số lượt đánh giá"
+            cardHeader="Số lượt đánh giá"
             collaboratorStar={totalReview}
           />
-          {/* hello */}
         </div>
-        {/* Thẻ tổng lần vi phạm và khen thưởng theo tháng */}
-        {/* <div className="collaborator-rating__overview--bonus-punish">
-          <CardInfo
-            collaboratorRatingBonusAndPunish={true}
-            collaboratorId={id}
-            headerLabel="Khen thưởng, vị phạm"
-            // collaboratorStar={star}
-          />
-        </div> */}
       </div>
-      <div>
+
+      <div className="card-table">
+        <FilterData setTimePeriod={setTimePeriod} />
+        {/* table */}
         <DataTable
           columns={columns}
           data={data}

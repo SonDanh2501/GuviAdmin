@@ -1,3 +1,4 @@
+// Font Size
 $textFontSizeS: 10px;
 $textFontSizeM: 12px;
 $textFontSizeL: 14px;
@@ -5,20 +6,24 @@ $textFontSizeXL: 16px;
 $textFontSize2XL: 18px;
 $textFontSize3XL: 20px;
 $textFontSize4XL: 22px;
-
+// Opacity
+$opacityS: 0.8;
+$opacityM: 0.7;
+$opacityL: 0.6;
+// Gap
 $gapXS: 4px;
 $gapS: 8px;
 $gapM: 12px;
-$gapL: 16px; // Các trường hợp nên xài (khoảng cách giữa các item theo chiều column)
+$gapL: 16px;
 $gapXL: 20px;
 $gap2XL: 24px;
-
+// Border Radius
 $borderRadiusS: 4px;
 $borderRadiusM: 6px;
 $borderRadiusL: 8px;
 $borderRadiusXL: 10px;
 $borderRadiusFull: 9999px;
-
+// Line Height
 $lineHeightS: 12px;
 $lineHeightM: 16px;
 $lineHeightL: 20px;
@@ -26,26 +31,21 @@ $lineHeightXL: 24px;
 $lineHeight2XL: 28px;
 $lineHeight3XL: 32px;
 $lineHeight4XL: 36px;
-
-// $fontFamily: "Open Sans";
-// $fontFamily: "Inter";
-// $fontFamily: "system-ui";
+// Font Weight
 $fontFamily: "Roboto";
 $fontWeightM: 300;
 $fontWeightL: 400;
 $fontWeightXL: 500;
-
 $fontStyleNormal: normal;
 $fontStyleItalic: italic;
 
 // Black Palette
 $colorBlack: #43464b;
-// $colorBlack: 475569;
 // White Palette
 $colorWhite: #ffffff;
 // Violet Palette
-$colorViolet: #8b5cf6;
-$colorExtraLightViolet: #ede9fe;
+$colorPurple: #8b5cf6;
+$colorExtraLightPurple: #ede9fe;
 // Gray Palette
 $colorGray: #79808c;
 $colorLightGray: #9ca3af;
@@ -70,12 +70,21 @@ $colorBlue: #3b82f6;
 $colorLightBlue: #93c5fd;
 $colorMoreLightBlue: #bfdbfe;
 $colorExtraLightBlue: #dbeafe;
+// Purple
+$colorPurple: #a855f7;
+$colorLightPurple: #d8b4fe;
+$colorMoreLightPurple: #e9d5ff;
+$colorExtraLightPurple: #f3e8ff;
+// Stone
+$colorStone: #78716c;
+$colorLightStone: #d6d3d1;
+$colorMoreLightStone: #e7e5e4;
+$colorExtraLightStone: #f5f5f4;
+// Other
+$colorBorderAntDesign: #DBDBDB;
 
-$opacityS: 0.8;
-$opacityM: 0.7;
-$opacityL: 0.6;
 
-//
+// Old css value
 $colorBackgroundWhite: #ffffff1f;
 $colorBackgroundBlack: #21212125;
 $color1: #2463eb;
@@ -148,7 +157,55 @@ span {
   width: 100%;
 }
 
-
 .text-gray {
   color: $colorGray;
+}
+
+// Grid Column
+.grid-column-1 {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+.grid-column-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.grid-column-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.grid-column-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.grid-column-5 {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.grid-column-6 {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.grid-column-7 {
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+.grid-column-8 {
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+}
+
+.grid-column-9 {
+  grid-template-columns: repeat(9, minmax(0, 1fr));
+}
+
+.grid-column-10 {
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+}
+
+.grid-column-11 {
+  grid-template-columns: repeat(11, minmax(0, 1fr));
+}
+
+.grid-column-12 {
+  grid-template-columns: repeat(12, minmax(0, 1fr));
 }

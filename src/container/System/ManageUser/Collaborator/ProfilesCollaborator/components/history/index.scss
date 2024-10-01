@@ -1,3 +1,5 @@
+@import "../../../../../../../@theme/style.scss";
+
 .div-list-collaborator {
   display: flex;
   flex-direction: column;
@@ -102,9 +104,11 @@
       align-items: center;
       justify-content: center;
       width: 20px;
+
       .icon-plus {
         color: #00cf3a;
       }
+
       .icon-deduction {
         color: #ff0000;
       }
@@ -119,6 +123,7 @@
   justify-content: space-between;
   align-items: center;
 }
+
 .div-monney {
   display: flex;
   flex-direction: column;
@@ -131,6 +136,7 @@
     color: #000000 !important;
     margin: 0;
   }
+
   .text-monney {
     font-family: "Roboto";
     font-style: normal;
@@ -154,6 +160,7 @@
       color: #000000 !important;
       margin: 0;
     }
+
     .text-monney {
       font-family: "Roboto";
       font-style: normal;
@@ -163,6 +170,7 @@
       margin: 0 0 0 5px;
     }
   }
+
   .div-list-collaborator {
     display: flex;
     flex-direction: column;
@@ -224,6 +232,7 @@
 
         .div-text-title-surplus {
           width: 60px;
+
           .text-title-surplus {
             font-family: "Roboto";
             font-weight: 500;
@@ -265,12 +274,172 @@
         align-items: center;
         justify-content: center;
         width: 20px;
+
         .icon-plus {
           color: #00cf3a;
         }
+
         .icon-deduction {
           color: #ff0000;
         }
+      }
+    }
+  }
+}
+
+// ~~~ Trang lịch sử tài chính của đối tác ~~~
+.collaborator-history {
+  display: flex;
+  flex-direction: column;
+  gap: $gapL;
+
+  /* Bố cục của các thẻ thể hiện giá trị tổng */
+  .collaborator-history__top {
+    display: flex;
+    gap: $gapL;
+    .collaborator-history__top--left {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: $gapL;
+      width: 30%;
+    }
+    .collaborator-history__top--right {
+      width: 70%;
+    }
+
+  }
+
+  /* Bố cục của các thẻ chính */
+  .collaborator-history__body {
+    display: flex;
+    flex-direction: column;
+    gap: $gapL;
+    padding-bottom: 16px;
+
+    /* Bố cục của thẻ lịch sử dòng tiền */
+    .collaborator-history__body--financial-history {
+      background-color: $colorWhite;
+      border-radius: $borderRadiusM;
+      width: 100%;
+      box-shadow: rgba(0, 0, 0, 0.24) 0px 1px 3px;
+
+      /* Header */
+      .collaborator-history__body--financial-history-header {
+        display: flex;
+        padding: 12px 12px;
+        border-bottom: 2px solid $colorExtraLightGray;
+
+        span {
+          font-size: $textFontSizeM;
+          font-weight: $fontWeightXL;
+        }
+      }
+
+      /* Body */
+      .collaborator-history__body--financial-history-body {
+        padding: 16px 20px;
+        
+      }
+    }
+
+    /* Bố cục của thẻ yêu cầu nạp rút */
+    .collaborator-history__body--withdrawal {
+      
+    }
+  }
+}
+
+
+
+
+.collaborator-activity__statistics--overview-statistic {
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: $gapXS;
+  background-color: $colorWhite;
+  border-radius: $borderRadiusM;
+  box-shadow:
+    rgba(67, 71, 85, 0.27) 0px 1px 0.25em,
+    rgba(90, 125, 188, 0.05) 0px 0.75em 2em;
+
+  .collaborator-activity__statistics--overview-statistic-icon {
+    padding: 8px;
+    width: 36px;
+    height: 36px;
+    border-radius: $borderRadiusFull;
+
+    &.green {
+      background-color: $colorExtraLightGreen;
+    }
+
+    &.red {
+      background-color: $colorExtraLightRed;
+    }
+
+    &.blue {
+      background-color: $colorExtraLightBlue;
+    }
+
+    &.yellow {
+      background-color: $colorExtraLightYellow;
+    }
+  }
+
+  .collaborator-activity__statistics--overview-statistic-header {
+    padding-top: 4px;
+    font-size: $textFontSizeM;
+    font-weight: $fontWeightXL;
+  }
+
+  .collaborator-activity__statistics--overview-statistic-number {
+    font-size: $textFontSize2XL;
+    font-weight: $fontWeightXL;
+
+    &.green {
+      color: $colorGreen;
+    }
+
+    &.red {
+      color: $colorRed;
+    }
+
+    &.blue {
+      color: $colorBlue;
+    }
+
+    &.yellow {
+      color: $colorYellow;
+    }
+  }
+
+  .collaborator-activity__statistics--overview-statistic-previous-period {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $gapXS;
+
+    .collaborator-activity__statistics--overview-statistic-previous-period-label {
+      font-size: $textFontSizeM;
+      font-weight: $fontWeightL;
+      color: $colorGray;
+      opacity: $opacityM;
+    }
+
+    .collaborator-activity__statistics--overview-statistic-previous-period-number {
+      display: flex;
+      gap: $gapXS;
+      align-items: center;
+      white-space: nowrap;
+
+      &.uptrend {
+        color: $colorGreen;
+      }
+
+      &.downtrend {
+        color: $colorRed;
       }
     }
   }

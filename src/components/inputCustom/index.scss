@@ -6,7 +6,7 @@
 
     .form-field__input {
         border: 2px solid #eee;
-        border-radius: 4px;
+        border-radius: $borderRadiusS;
         width: 100%;
         font-size: $textFontSizeL;
         line-height: $lineHeightL;

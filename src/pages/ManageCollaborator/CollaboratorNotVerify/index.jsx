@@ -520,7 +520,7 @@ const CollaboratorNotVerify = () => {
     setModal("");
   };
 
-  const changeStatusOrder = (value: string) => {
+  const changeStatusOrder = (value) => {
     setSelectStatus(value);
   };
 

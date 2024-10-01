@@ -511,7 +511,7 @@ const ManageCollaborator = () => {
     setModal("");
   };
 
-  const changeStatusOrder = (value: string) => {
+  const changeStatusOrder = (value) => {
     setSelectStatus(value);
   };
 

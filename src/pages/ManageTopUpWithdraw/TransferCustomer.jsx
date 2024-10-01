@@ -423,14 +423,14 @@ const columns = [
   {
     title: "Trạng thái",
     dataIndex: "status",
-    key: "status_transfer",
+    key: "transfer_status",
     width: 50,
     fontSize: "text-size-M",
   },
   {
     title: "Tên KH",
     dataIndex: "customer-name-phone",
-    key: "customer-name-phone",
+    key: "customer_name_phone",
     width: 70,
     fontSize: "text-size-M",
   },

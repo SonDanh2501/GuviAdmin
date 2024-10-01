@@ -13,11 +13,14 @@ import LoadingPagination from "../../../../../../../components/paginationLoading
 import { errorNotify } from "../../../../../../../helper/toast";
 import i18n from "../../../../../../../i18n";
 import { getLanguageState } from "../../../../../../../redux/selectors/auth";
-import "./styles.scss";
+import "./index.scss";
 import { Image } from "antd";
+import icons from "../../../../../../../utils/icons";
+// import { } from "react-icons/io5";
 
+const {IoCheckmark, IoLockClosed   } = icons
 const TestExam = (props) => {
-  const { id } = props;
+  const { id, collaboratorData } = props;
   const [dataLesson, setDataLesson] = useState([]);
   const [data, setData] = useState([]);
   const [title, setTitle] = useState("");
@@ -79,7 +82,7 @@ const TestExam = (props) => {
   };
 
   return (
-    <>
+    <div className="collaborator-exam">
       <div className="div-tab-exam">
         {TAB_EXAM?.map((item, index) => {
           return (
@@ -97,52 +100,62 @@ const TestExam = (props) => {
           );
         })}
       </div>
-      <div className="div-list-lesson-collaborator mt-5">
+      <div className="collaborator-exam__lesson">
         {dataLesson?.map((item, index) => {
           return (
-            <div
-              key={index}
-              className={
-                item?.is_pass
-                  ? "div-item-lesson-collaborator"
-                  : "div-item-lesson-collaborator-hide"
-              }
-            >
-              <div className="div-title-lesson">
-                <p className="text-title">{item?.title[lang]}</p>
-                {item?.is_pass ? (
-                  <Image src={qualified} className="img" preview={false} />
-                ) : !item?.is_pass &&
-                  item?.collaborator_times_submit === item?.times_submit ? (
-                  <Image src={unqualified} className="img" preview={false} />
-                ) : !item?.is_pass ? (
-                  <i class="uil uil-padlock"></i>
-                ) : null}
+            <div className="collaborator-exam__lesson--child">
+              {/* Container 1 */}
+              <div className="collaborator-exam__lesson--child-header">
+                {/* Tên bài kiểm tra */}
+                <span className="collaborator-exam__lesson--child-header-name">
+                  {item?.title[lang]}
+                </span>
+                <div
+                  className={`collaborator-exam__lesson--child-header-status ${
+                    item?.is_pass ? "& done" : "& not-done"
+                  }`}
+                >
+                  {/* {item} */}
+                  {item?.is_pass ? (
+                    <IoCheckmark color="green" />
+                  ) : (
+                    <IoLockClosed color="gray" />
+                  )}
+                </div>
               </div>
-              <p className="text-description">{item?.description[lang]}</p>
-
-              {(item?.is_pass ||
-                (!item?.is_pass &&
-                  item?.collaborator_times_submit === item?.times_submit)) && (
-                <p
-                  className="see-answer"
-                  onClick={() =>
-                    handleSeeInfoLesson(item?._id, item?.title[lang])
-                  }
-                >
-                  Xem câu trả lời <i class="uil uil-angle-right"></i>
-                </p>
-              )}
-              {!item?.is_pass && (
-                <p
-                  className="see-answer"
-                  onClick={() =>
-                    onPassLesson(item?._id, item?.type_training_lesson)
-                  }
-                >
-                  Pass
-                </p>
-              )}
+              {/* Container 2 */}
+              <div className="collaborator-exam__lesson--child-subcontent">
+                <span>{item?.description[lang]}</span>
+              </div>
+              {/* Container 3 */}
+              <div className="collaborator-exam__lesson--child-owner">
+                {/* Avatar */}
+                <img
+                  className="collaborator-exam__lesson--child-owner-avatar"
+                  src={collaboratorData?.avatar}
+                ></img>
+                {/* Tên và thời gian thực hiện, nút xem chi tiết */}
+                <div className="collaborator-exam__lesson--child-owner-body">
+                  <div className="collaborator-exam__lesson--child-owner-body-info">
+                    <span className="collaborator-exam__lesson--child-owner-body-info-name">
+                      {collaboratorData?.full_name}
+                    </span>
+                    <span className="collaborator-exam__lesson--child-owner-body-info-time">
+                      Thời gian kết thúc:{" "}
+                      {moment(data[0]?.time_end).format("HH:mm - DD MMMM YYYY")}
+                    </span>
+                  </div>
+                  <div className="collaborator-exam__lesson--child-owner-body-more-detail">
+                    <span
+                      onClick={() =>
+                        handleSeeInfoLesson(item?._id, item?.title[lang])
+                      }
+                    >
+                      Chi tiết <i class="uil uil-angle-right"></i>
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
           );
         })}
@@ -244,7 +257,7 @@ const TestExam = (props) => {
         </div>
       </div>
       {isLoading && <LoadingPagination />}
-    </>
+    </div>
   );
 };
 

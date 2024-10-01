@@ -3,26 +3,73 @@ import moment from "moment";
 import { memo, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { getHistoryActivityCollaborator } from "../../../../../../../api/collaborator";
+import {
+  getHistoryOrderCollaborator,
+  getHistoryActivityCollaborator,
+} from "../../../../../../../api/collaborator";
 import { errorNotify } from "../../../../../../../helper/toast";
 import useWindowDimensions from "../../../../../../../helper/useWindowDimensions";
 import i18n from "../../../../../../../i18n";
 import { loadingAction } from "../../../../../../../redux/actions/loading";
 import { getLanguageState } from "../../../../../../../redux/selectors/auth";
 import "./index.scss";
+import FilterData from "../../../../../../../components/filterData/filterData";
+import DataTable from "../../../../../../../components/tables/dataTable";
+import CardInfo from "../../../../../../../components/card";
+import CardBarChart from "../../../../../../../components/card/cardBarChart";
 
+import icons from "../../../../../../../utils/icons";
+
+const {
+  IoLogoUsd,
+  IoTrendingUp,
+  IoTime,
+  IoStatsChart,
+  IoCalendarNumber,
+  IoTrendingDown,
+  IoStatsChartOutline,
+  IoTimeOutline,
+  IoCalendarNumberOutline,
+  IoCubeOutline,
+  IoPieChartOutline,
+} = icons;
 const Activity = ({ id }) => {
   const [data, setData] = useState([]);
+  const [startPage, setStartPage] = useState(0);
+  const [lengthPage, setLengthPage] = useState(
+    JSON.parse(localStorage.getItem("linePerPage"))
+      ? JSON.parse(localStorage.getItem("linePerPage")).value
+      : 20
+  );
   const [totalData, setTotalData] = useState([]);
+  const [timePeriod, setTimePeriod] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const lang = useSelector(getLanguageState);
   const { width } = useWindowDimensions();
 
+  const [valueActivityStatistics, setValueActivityStatistics] = useState([
+    {
+      label: "Tổng đơn",
+      value: 0,
+    },
+    {
+      label: "Tổng đơn năm ngoái",
+      value: 0,
+    },
+    {
+      label: "Tổng đơn năm nay",
+      value: 0,
+    },
+    {
+      label: "Tổng đơn tháng này",
+      value: 0,
+    },
+  ]);
   useEffect(() => {
     dispatch(loadingAction.loadingRequest(true));
-    getHistoryActivityCollaborator(id, 0, 10)
+    getHistoryOrderCollaborator(id, startPage, lengthPage)
       .then((res) => {
         setData(res.data);
         setTotalData(res.totalItem);
@@ -34,18 +81,23 @@ const Activity = ({ id }) => {
         });
         dispatch(loadingAction.loadingRequest(false));
       });
-  }, [id, dispatch]);
+  }, [id, dispatch, startPage, lengthPage]);
 
+  useEffect(() => {}, [id, dispatch, startPage, lengthPage]);
   const onChange = (page) => {
     setCurrentPage(page);
     const dataLength = data.length < 10 ? 10 : data.length;
     const start = page * dataLength - dataLength;
-    getHistoryActivityCollaborator(id, start, 10)
+    getHistoryOrderCollaborator(id, start, 10)
       .then((res) => {
         setData(res.data);
         setTotalData(res.totalItem);
       })
       .catch((err) => console.log(err));
+  };
+
+  const onChangePage = (value) => {
+    setStartPage(value);
   };
 
   const timeWork = (data) => {
@@ -60,216 +112,444 @@ const Activity = ({ id }) => {
 
   const columns = [
     {
-      title: () => {
-        return (
-          <p className="title-column">{`${i18n.t("code_order", {
-            lng: lang,
-          })}`}</p>
-        );
-      },
-      render: (data) => {
-        return (
-          <p
-            className="text-id-activity"
-            onClick={() =>
-              navigate(
-                "/system/collaborator-manage/details-collaborator/details-activity",
-                {
-                  state: { idOrder: data?._id, idCollaborator: id },
-                }
-              )
-            }
-          >
-            {data?.id_view}
-          </p>
-        );
-      },
+      title: "Mã đơn",
+      // dataIndex: "",
+      key: "code_order",
+      width: 70,
+      FontSize: "text-size-M",
     },
     {
-      title: () => {
-        return (
-          <p className="title-column">{`${i18n.t("date_create", {
-            lng: lang,
-          })}`}</p>
-        );
-      },
-      render: (data) => {
-        return (
-          <div className="div-create-activity">
-            <p className="text-create">
-              {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}
-            </p>
-            <p className="text-create">
-              {moment(new Date(data?.date_create)).format("HH:mm")}
-            </p>
-          </div>
-        );
-      },
-      responsive: ["xl"],
+      title: "Khách hàng",
+      // dataIndex: "",
+      key: "customer_name_phone",
+      width: 55,
+      FontSize: "text-size-M",
     },
     {
-      title: () => {
-        return (
-          <p className="title-column">{`${i18n.t("customer", {
-            lng: lang,
-          })}`}</p>
-        );
-      },
-      render: (data) => {
-        return (
-          <Link
-            to={`/profile-customer/${data?.id_customer?._id}`}
-            className="div-name-activity"
-          >
-            <p className="text-name-customer">{data?.id_customer?.full_name}</p>
-            <p className="text-phone-customer">{data?.id_customer?.phone}</p>
-          </Link>
-        );
-      },
+      title: "Dịch vụ",
+      // dataIndex: "review",
+      key: "service",
+      width: 50,
+      FontSize: "text-size-M",
     },
     {
-      title: () => {
-        return (
-          <p className="title-column">{`${i18n.t("service", {
-            lng: lang,
-          })}`}</p>
-        );
-      },
-      render: (data) => {
-        return (
-          <div className="div-service-activity">
-            <p className="text-service">
-              {data?.type === "loop" && data?.is_auto_order
-                ? `${i18n.t("repeat", { lng: lang })}`
-                : data?.service?._id?.kind === "giup_viec_theo_gio"
-                ? `${i18n.t("cleaning", { lng: lang })}`
-                : data?.service?._id?.kind === "giup_viec_co_dinh"
-                ? `${i18n.t("cleaning_subscription", { lng: lang })}`
-                : data?.service?._id?.kind === "phuc_vu_nha_hang"
-                ? `${i18n.t("serve", { lng: lang })}`
-                : ""}
-            </p>
-            <p className="text-service">{timeWork(data)}</p>
-          </div>
-        );
-      },
+      title: "Ngày làm",
+      // dataIndex: "short_review",
+      key: "date_work",
+      width: 55,
+      FontSize: "text-size-M",
     },
     {
-      title: () => {
-        return (
-          <p className="title-column">{`${i18n.t("date_work", {
-            lng: lang,
-          })}`}</p>
-        );
-      },
-      render: (data) => {
-        return (
-          <div className="div-worktime-activity">
-            <p className="text-worktime">
-              {" "}
-              {moment(new Date(data?.date_work)).format("DD/MM/YYYY")}
-            </p>
-            <p className="text-worktime">
-              {moment(new Date(data?.date_work)).locale(lang).format("dddd")}
-            </p>
-          </div>
-        );
-      },
+      title: "Địa chỉ",
+      dataIndex: "address",
+      key: "text",
+      width: 60,
+      FontSize: "text-size-M",
     },
     {
-      title: () => {
-        return (
-          <p className="title-column">{`${i18n.t("address", {
-            lng: lang,
-          })}`}</p>
-        );
-      },
-      render: (data) => (
-        <p className="text-address-activity">{data?.address}</p>
-      ),
-      responsive: ["xl"],
-    },
-    {
-      title: () => {
-        return (
-          <p className="title-column">{`${i18n.t("status", { lng: lang })}`}</p>
-        );
-      },
-      render: (data) => (
-        <p
-          className={
-            data?.status === "pending"
-              ? "text-pending-activity"
-              : data?.status === "confirm"
-              ? "text-confirm-activity"
-              : data?.status === "doing"
-              ? "text-doing-activity"
-              : data?.status === "done"
-              ? "text-done-activity"
-              : "text-cancel-activity"
-          }
-        >
-          {data?.status === "pending"
-            ? `${i18n.t("pending", { lng: lang })}`
-            : data?.status === "confirm"
-            ? `${i18n.t("confirm", { lng: lang })}`
-            : data?.status === "doing"
-            ? `${i18n.t("doing", { lng: lang })}`
-            : data?.status === "done"
-            ? `${i18n.t("complete", { lng: lang })}`
-            : `${i18n.t("cancel", { lng: lang })}`}
-        </p>
-      ),
+      title: "Trạng thái",
+      // dataIndex: "short_review",
+      key: "status",
+      width: 55,
+      FontSize: "text-size-M",
     },
   ];
 
+  const testData = [
+    {
+      name: "Thg 1",
+      value: 4,
+    },
+    {
+      name: "Thg 2",
+      value: 5,
+    },
+    {
+      name: "Thg 3",
+      value: 6,
+    },
+    {
+      name: "Thg 4",
+      value: 7,
+    },
+    {
+      name: "Thg 5",
+      value: 1,
+    },
+    {
+      name: "Thg 6",
+      value: 7,
+    },
+    {
+      name: "Thg 7",
+      value: 7,
+    },
+    {
+      name: "Thg 8",
+      value: 9,
+    },
+    {
+      name: "Thg 9",
+      value: 11,
+    },
+    {
+      name: "Thg 10",
+      value: 5,
+    },
+    {
+      name: "Thg 11",
+      value: 13,
+    },
+    {
+      name: "Thg 12",
+      value: 1,
+    },
+  ];
+    
   return (
-    <>
-      <Table
-        columns={columns}
-        dataSource={data}
-        pagination={false}
-        scroll={{
-          x: width <= 900 ? 1000 : 0,
-        }}
-        expandable={
-          width <= 1200
-            ? {
-                expandedRowRender: (record) => {
-                  return (
-                    <div className="div-plus">
-                      <p>
-                        {`${i18n.t("address", { lng: lang })}`}:{" "}
-                        {record?.address}
-                      </p>
-                      <p>
-                        {`${i18n.t("date_create", { lng: lang })}`}:{" "}
-                        {moment(new Date(record?.date_create)).format(
-                          "DD/MM/YYYY - HH:mm"
-                        )}
-                      </p>
-                    </div>
-                  );
-                },
-              }
-            : ""
-        }
-      />
+    <div className="collaborator-activity">
+      {/* Các thẻ thống kê */}
+      <div className="collaborator-activity__statistics">
+        <div className="collaborator-activity__statistics--overview grid-column-2">
+          {valueActivityStatistics.map((item, index) => {
+            if (index === 0) {
+              return (
+                <div className="collaborator-activity__statistics--overview-statistic">
+                  {/* Icon */}
+                  <div>
+                    <IoCubeOutline
+                      className="collaborator-activity__statistics--overview-statistic-icon green"
+                      color="green"
+                    />
+                  </div>
+                  {/* Header */}
+                  <span className="collaborator-activity__statistics--overview-statistic-header">
+                    {item.label}
+                  </span>
+                  {/* Number */}
+                  <span className="collaborator-activity__statistics--overview-statistic-number green">
+                    {item.value}
+                  </span>
+                  {/* So với kì trước */}
+                  <div className="collaborator-activity__statistics--overview-statistic-previous-period">
+                    <span className="collaborator-activity__statistics--overview-statistic-previous-period-label">
+                      So với kì trước
+                    </span>
 
-      <div className="div-pagination p-2">
-        <p>Tổng: {totalData}</p>
-        <div>
-          <Pagination
-            current={currentPage}
-            onChange={onChange}
-            total={totalData}
-            showSizeChanger={false}
-            pageSize={10}
+                    <span className="collaborator-activity__statistics--overview-statistic-previous-period-number uptrend">
+                      +8.2%
+                      <IoTrendingUp color="#22c55e" />
+                    </span>
+                  </div>
+                </div>
+              );
+            }
+            if (index === 1) {
+              return (
+                <div className="collaborator-activity__statistics--overview-statistic">
+                  {/* Icon */}
+                  <div>
+                    <IoStatsChartOutline
+                      className="collaborator-activity__statistics--overview-statistic-icon blue"
+                      color="blue"
+                    />
+                  </div>
+                  {/* Header */}
+                  <span className="collaborator-activity__statistics--overview-statistic-header">
+                    {item.label}
+                  </span>
+                  {/* Number */}
+                  <span className="collaborator-activity__statistics--overview-statistic-number blue">
+                    {item.value}
+                  </span>
+                  {/* So với kì trước */}
+                  <div className="collaborator-activity__statistics--overview-statistic-previous-period">
+                    <span className="collaborator-activity__statistics--overview-statistic-previous-period-label">
+                      So với kì trước
+                    </span>
+                    <span className="collaborator-activity__statistics--overview-statistic-previous-period-number downtrend">
+                      -10.5%
+                      <IoTrendingDown color="#ef4444" />
+                    </span>
+                  </div>
+                </div>
+              );
+            }
+            if (index === 2) {
+              return (
+                <div className="collaborator-activity__statistics--overview-statistic">
+                  {/* Icon */}
+                  <div>
+                    <IoPieChartOutline
+                      className="collaborator-activity__statistics--overview-statistic-icon yellow"
+                      color="orange"
+                    />
+                  </div>
+                  {/* Header */}
+                  <span className="collaborator-activity__statistics--overview-statistic-header">
+                    {item.label}
+                  </span>
+                  {/* Number */}
+                  <span className="collaborator-activity__statistics--overview-statistic-number yellow">
+                    {item.value}
+                  </span>
+                  {/* So với kì trước */}
+                  <div className="collaborator-activity__statistics--overview-statistic-previous-period">
+                    <span className="collaborator-activity__statistics--overview-statistic-previous-period-label">
+                      So với kì trước
+                    </span>
+                    <span className="collaborator-activity__statistics--overview-statistic-previous-period-number uptrend">
+                      +8.2%
+                      <IoTrendingUp color="#22c55e" />
+                    </span>
+                  </div>
+                </div>
+              );
+            }
+            if (index === 3) {
+              return (
+                <div className="collaborator-activity__statistics--overview-statistic">
+                  {/* Icon */}
+                  <div>
+                    <IoCalendarNumberOutline
+                      className="collaborator-activity__statistics--overview-statistic-icon red"
+                      color="red"
+                    />
+                  </div>
+                  {/* Header */}
+                  <span className="collaborator-activity__statistics--overview-statistic-header">
+                    {item.label}
+                  </span>
+                  {/* Number */}
+                  <span className="collaborator-activity__statistics--overview-statistic-number red">
+                    {item.value}
+                  </span>
+                  {/* So với kì trước */}
+                  <div className="collaborator-activity__statistics--overview-statistic-previous-period">
+                    <span className="collaborator-activity__statistics--overview-statistic-previous-period-label">
+                      So với kì trước
+                    </span>
+                    <span className="collaborator-activity__statistics--overview-statistic-previous-period-number uptrend">
+                      +8.2%
+                      <IoTrendingUp color="#22c55e" />
+                    </span>
+                  </div>
+                </div>
+              );
+            }
+          })}
+        </div>
+        <div className="collaborator-activity__statistics--chart">
+          <CardInfo
+            cardHeader="Thống kê đơn hàng"
+            cardContent={
+              <CardBarChart
+                data={testData}
+                height={300}
+                verticalValue="value"
+                // verticalLine={true}
+                horizontalValue="name"
+                horizontalLine={true}
+                chartUnit="đánh giá"
+                total={20}
+                color="#fef9c3"
+                colorTotal="#eab308"
+              />
+            }
           />
         </div>
       </div>
-    </>
+
+      {/* Lịch sử đơn hàng và Lịch sử hoạt động */}
+      <div className="collaborator-activity__history">
+        <div className="collaborator-activity__history--order card-table">
+          <FilterData setTimePeriod={setTimePeriod} />
+          <DataTable
+            columns={columns}
+            data={data}
+            start={startPage}
+            pageSize={lengthPage}
+            setLengthPage={setLengthPage}
+            totalItem={totalData}
+            onCurrentPageChange={onChangePage}
+          />
+        </div>
+        {/* Lịch sử đơn hàng */}
+        <div className="collaborator-activity__history--activities">
+          <CardInfo
+            collaboratorActivityHistory={true}
+            collaboratorId={id}
+            cardHeader="Lịch sử hoạt động"
+          />
+        </div>
+      </div>
+    </div>
   );
 };
 
 export default memo(Activity);
+
+// const columns = [
+//   {
+//     title: () => {
+//       return (
+//         <p className="title-column">{`${i18n.t("code_order", {
+//           lng: lang,
+//         })}`}</p>
+//       );
+//     },
+//     render: (data) => {
+//       return (
+//         <p
+//           className="text-id-activity"
+//           onClick={() =>
+//             navigate(
+//               "/system/collaborator-manage/details-collaborator/details-activity",
+//               {
+//                 state: { idOrder: data?._id, idCollaborator: id },
+//               }
+//             )
+//           }
+//         >
+//           {data?.id_view}
+//         </p>
+//       );
+//     },
+//   },
+//   {
+//     title: () => {
+//       return (
+//         <p className="title-column">{`${i18n.t("date_create", {
+//           lng: lang,
+//         })}`}</p>
+//       );
+//     },
+//     render: (data) => {
+//       return (
+//         <div className="div-create-activity">
+//           <p className="text-create">
+//             {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}
+//           </p>
+//           <p className="text-create">
+//             {moment(new Date(data?.date_create)).format("HH:mm")}
+//           </p>
+//         </div>
+//       );
+//     },
+//     responsive: ["xl"],
+//   },
+//   {
+//     title: () => {
+//       return (
+//         <p className="title-column">{`${i18n.t("customer", {
+//           lng: lang,
+//         })}`}</p>
+//       );
+//     },
+//     render: (data) => {
+//       return (
+//         <Link
+//           to={`/profile-customer/${data?.id_customer?._id}`}
+//           className="div-name-activity"
+//         >
+//           <p className="text-name-customer">{data?.id_customer?.full_name}</p>
+//           <p className="text-phone-customer">{data?.id_customer?.phone}</p>
+//         </Link>
+//       );
+//     },
+//   },
+//   {
+//     title: () => {
+//       return (
+//         <p className="title-column">{`${i18n.t("service", {
+//           lng: lang,
+//         })}`}</p>
+//       );
+//     },
+//     render: (data) => {
+//       return (
+//         <div className="div-service-activity">
+//           <p className="text-service">
+//             {data?.type === "loop" && data?.is_auto_order
+//               ? `${i18n.t("repeat", { lng: lang })}`
+//               : data?.service?._id?.kind === "giup_viec_theo_gio"
+//               ? `${i18n.t("cleaning", { lng: lang })}`
+//               : data?.service?._id?.kind === "giup_viec_co_dinh"
+//               ? `${i18n.t("cleaning_subscription", { lng: lang })}`
+//               : data?.service?._id?.kind === "phuc_vu_nha_hang"
+//               ? `${i18n.t("serve", { lng: lang })}`
+//               : ""}
+//           </p>
+//           <p className="text-service">{timeWork(data)}</p>
+//         </div>
+//       );
+//     },
+//   },
+//   {
+//     title: () => {
+//       return (
+//         <p className="title-column">{`${i18n.t("date_work", {
+//           lng: lang,
+//         })}`}</p>
+//       );
+//     },
+//     render: (data) => {
+//       return (
+//         <div className="div-worktime-activity">
+//           <p className="text-worktime">
+//             {" "}
+//             {moment(new Date(data?.date_work)).format("DD/MM/YYYY")}
+//           </p>
+//           <p className="text-worktime">
+//             {moment(new Date(data?.date_work)).locale(lang).format("dddd")}
+//           </p>
+//         </div>
+//       );
+//     },
+//   },
+//   {
+//     title: () => {
+//       return (
+//         <p className="title-column">{`${i18n.t("address", {
+//           lng: lang,
+//         })}`}</p>
+//       );
+//     },
+//     render: (data) => (
+//       <p className="text-address-activity">{data?.address}</p>
+//     ),
+//     responsive: ["xl"],
+//   },
+//   {
+//     title: () => {
+//       return (
+//         <p className="title-column">{`${i18n.t("status", { lng: lang })}`}</p>
+//       );
+//     },
+//     render: (data) => (
+//       <p
+//         className={
+//           data?.status === "pending"
+//             ? "text-pending-activity"
+//             : data?.status === "confirm"
+//             ? "text-confirm-activity"
+//             : data?.status === "doing"
+//             ? "text-doing-activity"
+//             : data?.status === "done"
+//             ? "text-done-activity"
+//             : "text-cancel-activity"
+//         }
+//       >
+//         {data?.status === "pending"
+//           ? `${i18n.t("pending", { lng: lang })}`
+//           : data?.status === "confirm"
+//           ? `${i18n.t("confirm", { lng: lang })}`
+//           : data?.status === "doing"
+//           ? `${i18n.t("doing", { lng: lang })}`
+//           : data?.status === "done"
+//           ? `${i18n.t("complete", { lng: lang })}`
+//           : `${i18n.t("cancel", { lng: lang })}`}
+//       </p>
+//     ),
+//   },
+// ];

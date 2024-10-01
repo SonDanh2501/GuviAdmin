@@ -55,12 +55,12 @@ const DataTable = (props) => {
   const timeWork = (data) => {
     const start = moment(
       new Date(
-        data.date_work ? data.date_work : data.date_work_schedule[0].date
+        data?.date_work ? data?.date_work : data?.date_work_schedule[0].date
       )
     ).format("HH:mm");
     const timeEnd = moment(
       new Date(
-        data.date_work ? data.date_work : data.date_work_schedule[0].date
+        data?.date_work ? data?.date_work : data?.date_work_schedule[0].date
       )
     )
       .add(data?.total_estimate, "hours")
@@ -96,7 +96,7 @@ const DataTable = (props) => {
   });
   let pageSizeOptions = [
     { value: 10, label: "10 dòng/trang" },
-    { value: 20, label: "20 dòng/trang" },
+    { value: 25, label: "25 dòng/trang" },
     { value: 50, label: "50 dòng/trang" },
     { value: 100, label: "100 dòng/trang" },
   ];
@@ -288,7 +288,7 @@ const DataTable = (props) => {
               </div>
             );
             break;
-          case "customer-name-phone":
+          case "customer_name_phone":
             return (
               <div className="div-customer-name-phone">
                 <Link
@@ -575,7 +575,7 @@ const DataTable = (props) => {
 
                   <div className="div-name-star">
                     <Link to={`/details-collaborator/${data?._id}`}>
-                      <p className={`${item?.fontSize}`}>{data.full_name}</p>
+                      <p className={`${item?.fontSize}`}>{data?.full_name}</p>
                     </Link>
                     <div className="div-phone-star">
                       <p className={`${item?.fontSize}`}>{data?.phone}</p>
@@ -779,18 +779,18 @@ const DataTable = (props) => {
           }
           case "status":
             return (
-              <div className="div-status-order">
+              <div className="case__status-text">
                 <span
-                  className={`text-star ${item?.fontSize} ${
+                  className={`${
                     data?.status === "pending"
-                      ? "text-status-pending"
-                      : data?.status === "confirm"
-                      ? "text-status-confirm"
-                      : data?.status === "doing"
-                      ? "text-status-doing"
+                      ? "case__status-text--pending"
                       : data?.status === "done"
-                      ? "text-status-done"
-                      : "text-status-cancel"
+                      ? "case__status-text--done"
+                      : data?.status === "confirm"
+                      ? "case__status-text--confirm"
+                      : data?.status === "doing"
+                      ? "case__status-text--doing"
+                      : "case__status-text--cancel"
                   }`}
                 >
                   {data?.status === "pending"
@@ -1104,13 +1104,13 @@ const DataTable = (props) => {
               <p
                 className={`${item?.fontSize}`}
                 onClick={() =>
-                  navigate(`/profile-customer/${data.id_customer._id}`, {
+                  navigate(`/profile-customer/${data?.id_customer._id}`, {
                     state: { date: data?._id },
                   })
                 }
               >
                 {" "}
-                {data.id_customer.full_name}
+                {data?.id_customer.full_name}
               </p>
             );
             break;
@@ -1121,19 +1121,19 @@ const DataTable = (props) => {
                 className={`${item?.fontSize}`}
                 onClick={() =>
                   navigate(
-                    `/report/manage-report/report-order-by-collaborator/${data.id_collaborator._id}`,
+                    `/report/manage-report/report-order-by-collaborator/${data?.id_collaborator._id}`,
                     {
                       state: {
                         startDate: data?.start_date,
                         endDate: data?.end_date,
-                        status: data.status,
+                        status: data?.status,
                       },
                     }
                   )
                 }
               >
                 {" "}
-                {data.id_collaborator.full_name}
+                {data?.id_collaborator.full_name}
               </p>
             );
             break;
@@ -1408,54 +1408,9 @@ const DataTable = (props) => {
               </div>
             );
           }
-          case "status_transfer": {
-            let _text_status = <span></span>;
-            switch (data.status) {
-              case "stanby":
-              case "pending":
-                _text_status = (
-                  <span className="text-status-pending">{`${i18n.t(
-                    "processing"
-                  )}`}</span>
-                );
-                break;
-              case "transferred":
-              case "processing":
-              case "doing":
-              case "revoke":
-                _text_status = (
-                  <span className="text-status-confirm">{`${i18n.t(
-                    "money_transferred"
-                  )}`}</span>
-                );
-                break;
-              case "done":
-                _text_status = (
-                  <span className="text-status-done">{`${i18n.t(
-                    "complete"
-                  )}`}</span>
-                );
-                break;
-              case "cancel":
-              case "cancel":
-              case "out_date":
-                _text_status = (
-                  <span className="text-status-cancel">Đã huỷ</span>
-                );
-                break;
-              case "holding":
-                _text_status = (
-                  <span className="text-status-doing">{`Tạm giữ`}</span>
-                );
-                break;
-              default:
-                break;
-            }
-            return <div className="div-status-order">{_text_status}</div>;
-          }
           case "status_ticket": {
             let _text_status = <span></span>;
-            switch (data.status) {
+            switch (data?.status) {
               case "standby":
                 _text_status = (
                   <span className="text-status-pending">Chờ duyệt</span>
@@ -1693,12 +1648,116 @@ const DataTable = (props) => {
             break;
           }
           case "rating_content": {
+            return <span>{data?.review}</span>;
+            break;
+          }
+          case "withdrawal_date": {
             return (
-              <span>{data?.review}</span>
+              <div className="case__withdrawal-date">
+                <span>
+                  {moment(new Date(data?.date_created)).format("DD/MM/YYYY")}
+                </span>
+                <span>
+                  {moment(new Date(data?.date_created)).format("HH:mm")}
+                </span>
+              </div>
             );
             break;
           }
-          // case :
+          case "withdrawal_money": {
+            return <span>{formatMoney(data?.money)}</span>;
+            break;
+          }
+          case "withdrawal_type_transfer": {
+            let type_transfer = "Nạp";
+            switch (data?.type_transfer) {
+              case "other":
+                type_transfer = "Khác";
+                break;
+              case "withdraw":
+                type_transfer = "Rút";
+                break;
+              case "refund_service":
+                type_transfer = "Hoàn tiền đơn hàng";
+                break;
+              case "reward":
+                type_transfer = "Thưởng";
+                break;
+              case "punish":
+                type_transfer = "Phạt";
+                break;
+              case "pay_service":
+                type_transfer = "Thanh toán dịch vụ";
+                break;
+              default:
+                break;
+            }
+            return (
+              <div className="case__withdrawal-type-transfer">
+                {type_transfer === "Rút" ? (
+                  <p className="case__withdrawal-type-transfer withdrawal">
+                    {type_transfer}
+                  </p>
+                ) : (
+                  <p className="case__withdrawal-type-transfer deposit">
+                    {type_transfer}
+                  </p>
+                )}
+              </div>
+            );
+          }
+          case "transfer_status": {
+            let _text_status = <span></span>;
+            switch (data?.status) {
+              case "stanby":
+              case "pending":
+                _text_status = (
+                  <span className="case__transfer-status--pending">{`${i18n.t(
+                    "processing"
+                  )}`}</span>
+                );
+                break;
+              case "transferred":
+              case "processing":
+              case "doing":
+              case "revoke":
+                _text_status = (
+                  <span className="case__transfer-status--confirm">{`${i18n.t(
+                    "money_transferred"
+                  )}`}</span>
+                );
+                break;
+              case "done":
+                _text_status = (
+                  <span className="case__transfer-status--done">{`${i18n.t(
+                    "complete"
+                  )}`}</span>
+                );
+                break;
+              case "cancel":
+              case "cancel":
+              case "out_date":
+                _text_status = (
+                  <span className="case__transfer-status--cancel">Đã huỷ</span>
+                );
+                break;
+              case "holding":
+                _text_status = (
+                  <span className="case__transfer-status--doing">{`Tạm giữ`}</span>
+                );
+                break;
+              case "transfered":
+                _text_status = (
+                  <span className="case__transfer-status--doing">
+                    Đã chuyển tiền
+                  </span>
+                );
+                break;
+              default:
+                break;
+            }
+            return <div className="case__transfer-status">{_text_status}</div>;
+          }
           default: {
             const dataView = data[item.dataIndex] || "";
             return <p className={`${item?.fontSize}`}> {dataView}</p>;
@@ -1707,6 +1766,7 @@ const DataTable = (props) => {
         }
       },
       width: item.width || 100,
+      align: item.align || "left",
     };
     headerTable.push(temp);
     widthPage += Number(temp.width);
@@ -1753,59 +1813,67 @@ const DataTable = (props) => {
 
   const footerRender = () => {
     return (
-      <div className="flex gap-4">
-        <div className="flex flex-col gap-1 min-w-[150px]">
-          <Popover
-            content={
-              "Chiều dài của bảng dữ liệu, người dùng chọn để giới hạn chiều dài bảng"
-            }
-            placement="top"
-            overlayInnerStyle={{
-              backgroundColor: "white",
-            }}
-          >
-            <div className="flex items-center gap-2">
-              <span className="font-bold">Chiều dài bảng</span>
-              <IoHelpCircleOutline />
-            </div>
-          </Popover>
-          <Select
-            className=" w-fit"
-            value={scrollYValue}
-            // style={{ width: width <= 490 ? "100%" : "18%" }}
-            onChange={(e) => handleSelectScrollY(e)}
-            style={{ width: "100%" }}
-            options={[
-              { value: 0, label: "Hiển thị tất cả" },
-              { value: 1, label: "Hiển thị nhiều" },
-              { value: 2, label: "Hiển thị vừa" },
-              { value: 3, label: "Hiển thị ít" },
-            ]}
-            defaultValue={0}
-          />
-          {/* <span onClick={() => {}}>Fixed Header</span> */}
+      <div className="table-data__footer">
+        <div className="table-data__footer--left">
+          <div className="table-data__footer--left-select">
+            <Popover
+              content={
+                "Chiều dài của bảng dữ liệu, người dùng chọn để giới hạn chiều dài bảng"
+              }
+              placement="top"
+              overlayInnerStyle={{
+                backgroundColor: "white",
+              }}
+            >
+              <div className="table-data__footer--left-select-label">
+                <span>Chiều dài bảng</span>
+                <IoHelpCircleOutline />
+              </div>
+            </Popover>
+            <Select
+              value={scrollYValue}
+              onChange={(e) => handleSelectScrollY(e)}
+              style={{ width: "100%" }}
+              options={[
+                { value: 0, label: "Hiển thị tất cả" },
+                { value: 1, label: "Hiển thị nhiều" },
+                { value: 2, label: "Hiển thị vừa" },
+                { value: 3, label: "Hiển thị ít" },
+              ]}
+              defaultValue={0}
+            />
+          </div>
+          <div className="table-data__footer--left-select">
+            <Popover
+              content={"Số dòng hiển thị trong một trang"}
+              placement="top"
+              overlayInnerStyle={{
+                backgroundColor: "white",
+              }}
+            >
+              <div className="table-data__footer--left-select-label">
+                <span className="table-data__footer--left-select-label-main-text">
+                  Số dòng
+                </span>
+                <IoHelpCircleOutline />
+              </div>
+            </Popover>
+            <Select
+              value={pageSizeOption}
+              onChange={(e) => handleSelectPagination(e)}
+              style={{ width: "100%" }}
+              options={pageSizeOptions}
+              defaultValue={0}
+            />
+          </div>
         </div>
-        <div className="flex flex-col gap-1 min-w-[150px]">
-          <Popover
-            content={"Số dòng hiển thị trong một trang"}
-            placement="top"
-            overlayInnerStyle={{
-              backgroundColor: "white",
-            }}
-          >
-            <div className="flex items-center gap-2">
-              <span className="font-bold">Số dòng</span>
-              <IoHelpCircleOutline />
-            </div>
-          </Popover>{" "}
-          <Select
-            className=" w-fit"
-            value={pageSizeOption}
-            // style={{ width: width <= 490 ? "100%" : "18%" }}
-            onChange={(e) => handleSelectPagination(e)}
-            style={{ width: "100%" }}
-            options={pageSizeOptions}
-            defaultValue={0}
+        <div>
+          <Pagination
+            current={currentPage}
+            onChange={calculateCurrentPage}
+            total={totalItem}
+            showSizeChanger={false}
+            pageSize={pageSizeOption?.value || 20}
           />
         </div>
       </div>
@@ -1817,61 +1885,49 @@ const DataTable = (props) => {
     : [];
   scroll.x = scrollX ? scrollX : widthPage;
 
-
-  console.log("check data >>>", data);
   return (
-    <React.Fragment>
-      <div className="mr-t ">
-        <ConfigProvider
-          theme={{
-            components: {
-              Table: {
-                headerBg: "#7e53b2",
-                rowHoverBg: "#f0f0f0",
-                borderColor: "#d8d8d8",
-                lineWidth: 1,
-              },
+    <div className="table-data">
+      <ConfigProvider
+        theme={{
+          components: {
+            Table: {
+              headerBg: "#9E68DF",
+              rowHoverBg: "#f0f0f0",
+              borderColor: "#e7ecf3",
+              lineWidth: 1,
+              headerBorderRadius: 6,
+              footerBg: "#ffffff",
             },
+          },
+        }}
+      >
+        <Table
+          locale={locale}
+          columns={headerTable}
+          title={() => (
+            <div className="flex gap-1">
+              <span className="font-bold">
+                {`${i18n.t("total", { lng: lang })}`}:
+              </span>
+              <span>{totalItem}</span>
+            </div>
+          )}
+          footer={() => footerRender()}
+          dataSource={data}
+          pagination={false}
+          scroll={scroll}
+          onRow={(record, rowIndex) => {
+            return {
+              onClick: (event) => {
+                setItem(record);
+                setRowIndex(rowIndex);
+                if (props.getItemRow) props.getItemRow(record);
+              },
+            };
           }}
-        >
-          <Table
-            // loading={isLoading}
-            // size="small"
-            locale={locale}
-            bordered
-            // rowSelection={rowSelection}
-            columns={headerTable}
-            title={() => (
-              // <p className="font-bold">
-              //   {`${i18n.t("total", { lng: lang })}`}: {totalItem}
-              // </p>
-              <div className="flex gap-1">
-                <span className="font-bold">
-                  {`${i18n.t("total", { lng: lang })}`}:
-                </span>
-                <span>{totalItem}</span>
-              </div>
-            )}
-            footer={() => footerRender()}
-            dataSource={data}
-            pagination={false}
-            // scroll={{ x: scrollX ? scrollX : widthPage, y: 1080 }}
-            scroll={scroll}
-            // scroll={{ x: 'max-content' }}
-            // loading={detectLoading}
-            onRow={(record, rowIndex) => {
-              return {
-                onClick: (event) => {
-                  setItem(record);
-                  setRowIndex(rowIndex);
-                  if (props.getItemRow) props.getItemRow(record);
-                },
-              };
-            }}
-          />
-        </ConfigProvider>
-      </div>
-      <div className="mt-2 p-2 pagination">
+        />
+      </ConfigProvider>
+      {/* <div className="table-data__pagination">
         <div></div>
         <div>
           <Pagination
@@ -1884,10 +1940,8 @@ const DataTable = (props) => {
             hideOnSinglePage={true}
           />
         </div>
-      </div>
-
-      {/* {isLoading && <LoadingPagination />} */}
-    </React.Fragment>
+      </div> */}
+    </div>
   );
 };
 

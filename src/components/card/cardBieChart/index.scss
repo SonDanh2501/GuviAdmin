@@ -1,0 +1,66 @@
+@import "../../../@theme/style.scss";
+
+.card__bie-chart {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 16px 20px;
+    gap: $gapS;
+
+    .card__bie-chart--star {
+        display: flex;
+        border-radius: $borderRadiusXL;
+        padding: 8px 16px;
+        align-items: center;
+        justify-content: center;
+        background-color: $bgStarCard;
+        gap: $gapXS;
+
+        .card__bie-chart--star-avg {
+            padding-top: 3px;
+            margin-left: 3px;
+            font-weight: $fontWeightXL;
+            font-size: $textFontSizeL;
+            font-family: $fontFamily;
+            color: $colorBlack;
+        }
+    }
+
+    .card__bie-chart--total {
+        display: flex;
+        align-items: center;
+        gap: $gapXS;
+
+        .card__bie-chart--total-number {
+            font-weight: $fontWeightXL;
+            color: $colorBlack;
+        }
+
+        span {
+            font-style: italic;
+            color: $colorBlack;
+        }
+    }
+
+    .card__bie-chart--kind {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: $gapM;
+
+        .card__bie-chart--kind-label {
+            display: flex;
+            gap: $gapXS;
+            align-items: center;
+            color: $colorBlack;
+
+            .card__bie-chart--kind-label-circle {
+                width: 12px;
+                height: 12px;
+                border-radius: $borderRadiusFull;
+            }
+        }
+    }
+
+}

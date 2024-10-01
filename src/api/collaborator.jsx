@@ -81,9 +81,15 @@ export const updateDocumentCollaboratorApi = (id, data) => {
   );
 };
 
-export const getHistoryActivityCollaborator = (id, start, length) => {
+export const getHistoryOrderCollaborator = (id, start, length) => {
   return axiosClient.get(
     `/admin/collaborator_manager/get_history_activity_v2/${id}?start=${start}&length=${length}`
+  );
+};
+
+export const getHistoryActivityCollaborator = (id, start, length) => {
+  return axiosClient.get(
+    `api/admin/collaborator_manager/get_history_activity/${id}?start=${start}&length=${length}`
   );
 };
 
@@ -205,3 +211,4 @@ export const getTotalCollaboratorByArea = (arrStatus, search) => {
     `/admin/collaborator_manager/get_total_collaborator_by_area?arr_status=${arrStatus}&search=${search}&city=`
   )
 }
+

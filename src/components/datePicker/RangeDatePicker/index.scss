@@ -2,11 +2,13 @@
 
 .btn-date-picker {
   display: flex;
-  border: 1px solid #E2E2E2;
-  border-radius: 6px;
-  width: auto;
-  padding: 6.4px 10px;
-  cursor: pointer;
+  gap: $gapXS;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid $colorBorderAntDesign;
+  border-radius: $borderRadiusS;
+  line-height: $lineHeightL;
+  padding: 6.5px 12px;
 }
 
 .div-body-modal {

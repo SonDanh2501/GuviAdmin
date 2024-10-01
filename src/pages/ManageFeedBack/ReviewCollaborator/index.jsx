@@ -175,7 +175,7 @@ const ReviewCollaborator = () => {
         />
       ),
       dataIndex: "id_customer",
-      key: "customer-name-phone",
+      key: "customer_name_phone",
       width: 140,
       fontSize: "text-size-M",
     },
@@ -362,7 +362,6 @@ const ReviewCollaborator = () => {
     [startPage, lengthPage, startDate, endDate, star]
   );
 
-  console.log("check data >>>", data, data?.service?._id?.title?.vi);
   return (
     <>
       <div className="div-container-content">

@@ -102,7 +102,7 @@ const ManageGroupPromotion = () => {
     {
       i18n_title: "customer",
       dataIndex: "customer",
-      key: "customer-name-phone",
+      key: "customer_name_phone",
       width: 140,
       fontSize: "text-size-M",
     },

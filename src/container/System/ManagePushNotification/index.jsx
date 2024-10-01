@@ -17,15 +17,15 @@ import {
   getLanguageState,
 } from "../../../redux/selectors/auth";
 import {
-  getListNotifications,
+  // getListNotifications,
   getNotificationTotal,
 } from "../../../redux/selectors/notification";
 import AddPushNotification from "./AddPushNotification";
 import EditPushNotification from "./EditPushNotification";
 import "./index.scss";
-
+import { getListNotifications } from '../../../api/notification'
 const ManagePushNotification = () => {
-  const listNotification = useSelector(getListNotifications);
+  // const listNotification = useSelector(getListNotifications);
   const totalNotification = useSelector(getNotificationTotal);
   const [itemEdit, setItemEdit] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -40,31 +40,43 @@ const ManagePushNotification = () => {
     window.scrollTo(0, 0);
   }, []);
 
+  // useEffect(() => {
+  //   dispatch(
+  //     getNotification.getNotificationRequest({
+  //       status: status,
+  //       start: 0,
+  //       length: 20,
+  //     })
+  //   );
+  // }, [status, dispatch]);
+
   useEffect(() => {
-    dispatch(
-      getNotification.getNotificationRequest({
-        status: status,
-        start: 0,
-        length: 20,
+    dispatch(loadingAction.loadingRequest(true));
+    getListNotifications(0, 15, 1)
+      .then((res) => {
+        console.log("check res notification", res);
+        dispatch(loadingAction.loadingRequest(false));
       })
-    );
-  }, [status, dispatch]);
+      .catch((err) => {
+        dispatch(loadingAction.loadingRequest(false));
+      });
+  }, [dispatch, status]);
   const toggle = () => setModal(!modal);
   const toggleVerify = () => setModalVerify(!modalVerify);
 
-  const onChange = (page) => {
-    setCurrentPage(page);
-    const dataLength =
-      listNotification.length < 20 ? 20 : listNotification.length;
-    const start = page * dataLength - dataLength;
-    dispatch(
-      getNotification.getNotificationRequest({
-        status: status,
-        start: start > 0 ? start : 0,
-        length: 20,
-      })
-    );
-  };
+  // const onChange = (page) => {
+  //   setCurrentPage(page);
+  //   const dataLength =
+  //     listNotification.length < 20 ? 20 : listNotification.length;
+  //   const start = page * dataLength - dataLength;
+  //   dispatch(
+  //     getNotification.getNotificationRequest({
+  //       status: status,
+  //       start: start > 0 ? start : 0,
+  //       length: 20,
+  //     })
+  //   );
+  // };
 
   const onActive = (id, active) => {
     dispatch(loadingAction.loadingRequest(true));
@@ -232,7 +244,7 @@ const ManagePushNotification = () => {
       <div className="mt-3">
         <Table
           columns={columns}
-          dataSource={listNotification}
+          // dataSource={listNotification}
           onRow={(record, rowIndex) => {
             return {
               onClick: (event) => {
@@ -253,7 +265,7 @@ const ManagePushNotification = () => {
         <div>
           <Pagination
             current={currentPage}
-            onChange={onChange}
+            // onChange={onChange}
             total={totalNotification}
             showSizeChanger={false}
             pageSize={20}

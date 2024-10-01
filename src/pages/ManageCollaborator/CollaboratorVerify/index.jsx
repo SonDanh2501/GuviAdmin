@@ -493,6 +493,7 @@ const CollaboratorVerify = () => {
   //     },
   //     [startPage, status, idGroup, lang]
   //   );
+  console.log("check data >>>", data);
   return (
     <>
       <div className="div-container-content">

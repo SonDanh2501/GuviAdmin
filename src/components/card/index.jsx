@@ -5,10 +5,12 @@ import {
 } from "../../utils/contant";
 import {
   getCollaboratorsById,
-  getHistoryActivityCollaborator,
+  getHistoryOrderCollaborator,
   getListTrainingLessonByCollaboratorApi,
   getOverviewCollaborator,
   getReviewCollaborator,
+  getHistoryActivityCollaborator,
+  getListTransitionByCollaborator,
 } from "../../api/collaborator";
 import testLogo from "../../assets/images/testLogo.svg";
 import moneyLogo from "../../assets/images/moneyLogo.svg";
@@ -35,7 +37,7 @@ import {
   AreaChart,
   Area,
 } from "recharts";
-import { Image, Popover, Select, Tooltip } from "antd";
+import { Image, Pagination, Popover, Select, Tooltip } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { loadingAction } from "../../redux/actions/loading";
 import { errorNotify } from "../../helper/toast";
@@ -45,6 +47,8 @@ import i18n from "../../i18n";
 import { getProvince } from "../../redux/selectors/service";
 import icons from "../../utils/icons";
 import "./index.scss";
+import { getListPunishTicketApi } from "../../api/punish";
+import { formatMoney } from "../../helper/formatMoney";
 const {
   IoAlertOutline,
   IoCalendarNumberOutline,
@@ -67,10 +71,15 @@ const {
   IoShieldCheckmarkOutline,
   IoThumbsDownOutline,
   IoTimeOutline,
-  IoWalletOutline,
   IoCaretDown,
   IoTrendingUp,
   IoTrendingDown,
+  IoAdd,
+  IoRemove,
+  IoConstruct,
+  IoPeopleOutline,
+  IoSettingsOutline,
+  IoWalletOutline,
 } = icons;
 
 const IconTextCustom = (props) => {
@@ -108,42 +117,67 @@ const timeFilterOptions = [
   },
 ];
 const COLORS = ["#2fc22f", "#3b82f6", "#FFD700", "#FFA500", "#dc2626"];
+const COLORS_RATING = {
+  colorBlue: "#3b82f6",
+  colorLightBlue: "#93c5fd",
+  colorMoreLightBlue: "#bfdbfe",
+  colorExtraLightBlue: "#dbeafe",
+  //
+  colorRed: "#ef4444",
+  colorLightRed: "#fca5a5",
+  colorMoreLightRed: "#fecaca",
+  colorExtraLightRed: "#fee2e2",
+  //
+  colorGreen: "#22c55e",
+  colorLightGreen: "#86efac",
+  colorMoreLightGreen: "#bbf7d0",
+  colorExtraLightGreen: "#dcfce7",
+};
 const MAX_LINE_WIDTH = 110;
 
 const CardInfo = (props) => {
   const {
-    headerLabel, // Tiêu đề của thẻ
+    cardHeader, // Tiêu đề của thẻ
+    cardContent, // Nội dung của thẻ
     supportIcon, // Hiển thị icon bên cạnh tiêu đề
     supportText, // Chữ muốn hiển thị khi hover icon
     collaboratorId, // Id của CTV (dùng để lấy thông tin)
     collaboratorStar, // Số sao của CTV
     timeFilter, // Hiển thị bộ lọc thời gian
-    collaboratorRatingOverview, // Thẻ tổng quan đánh giá
-    collaboratorCriteria, // Thẻ tiêu chí đánh giá
-    collaboratorBonusAndPunish, // Thẻ khen thưởng, vi phạm
-    collaboratorTest, // Thẻ bài kiểm tra
-    collaboratorFinance, // Thẻ tài chính
-    collaboratorJobs, // Thẻ hiệu quả công việc
-    collaboratorActivitys, // Thẻ hoạt động gần đây
-    collaboratorInformation, // Thẻ thông tin CTV
-    collaboratorDocument, // Thẻ tiến hành hồ sơ
-    collaboratorRating, // Thẻ tổng số đánh giá của CTV
+    collaboratorOverviewRating, // Thẻ tổng quan đánh giá
+    collaboratorOverviewCriteria, // Thẻ tổng quan tiêu chí đánh giá
+    collaboratorOverviewBonusAndPunish, // Thẻ tổng quan khen thưởng, vi phạm
+    collaboratorOverviewTest, // Thẻ tổng quan bài kiểm tra
+    collaboratorOverviewFinance, // Thẻ tổng quan tài chính
+    collaboratorOverviewJobs, // Thẻ tổng quan hiệu quả công việc
+    collaboratorOverviewActivitys, // Thẻ tổng quan hoạt động gần đây
+    collaboratorOverviewInformation, // Thẻ tổng quan thông tin CTV
+    collaboratorOverviewDocument, // Thẻ tổng quan tiến hành hồ sơ
+    collaboratorRatingStar, // Thẻ tổng số đánh giá của CTV
     collaboratorRatingStatistic, // Thẻ thống kê lượt đánh giá theo từng tháng trong năm
-    collaboratorRatingBonusAndPunish, // Thẻ thống kê lần được khen thưởng và phạt
+    timePeriod, // Khoàng thời gian thống kê
+    collaboratorActivityHistory,
+    cardTotal, // Thẻ hiển thị tổng của một giá trị truyền vào
+    cardTotalValue, // Giá trị để hiện thị trong thẻ tổng
+    cardTotalIcon: CardTotalIcon, // Icon muốn thể hiện trong card total
+    cardTotalLabel, // Giá trị header của total
+    cardBarChart, // Thẻ thống kê theo kiểu cột
+    cardData, // Giá trị
+    cardHeight, // Giá trị chiều cao của thẻ
   } = props;
   const dispatch = useDispatch();
   const lang = useSelector(getLanguageState);
+  const province = useSelector(getProvince);
   const [dataReview, setDataReview] = useState([]);
   const [totalCountRating, setTotalCountRating] = useState(0);
-  const [dataDetail, setDataDetail] = useState([]);
-  const province = useSelector(getProvince);
+  const [collaboratorInformation, setCollaboratorInformation] = useState([]); // Thông tin của CTV
   const [data, setData] = useState([]);
-  const [dataLesson, setDataLesson] = useState([]);
-  const [dataRecentActivities, setDataRecentActivities] = useState([]);
-  const [totalJobs, setTotalJobs] = useState(0);
-  const [totalJobsSuccess, setTotalJobsSuccess] = useState(0);
-  const [totalJobsCancel, setTotalJobsCancel] = useState(0);
-  const [totalJobsOther, setTotalJobsOther] = useState(0);
+  const [totalLesson, setTotalLesson] = useState([]); // Tổng các bài kiểm trả
+  const [totalRecentActivities, setTotalRecentActivities] = useState([]); // Tổng các hoạt động gần đây (5 hoạt động)
+  const [totalJobs, setTotalJobs] = useState(0); // Tổng số công việc (hoàn thành, hủy, đã nhận, đang làm)
+  const [totalJobsSuccess, setTotalJobsSuccess] = useState(0); // Tổng số công việc hoàn thành
+  const [totalJobsCancel, setTotalJobsCancel] = useState(0); // Tổng số công việc đã hủy
+  const [totalJobsOther, setTotalJobsOther] = useState(0); // Tổng các công việc khác (đã nhận, đang làm)
   const [totalRatingOverview, setTotalRatingOverview] = useState([
     {
       name: "5 sao",
@@ -165,60 +199,58 @@ const CardInfo = (props) => {
       name: "1 sao",
       value: 1,
     },
-  ]);
-  const [dataRatingTemp, setdDtaRatingTemp] = useState([
-    {
-      name: "5 sao",
-      value: 5,
-    },
-    {
-      name: "4 sao",
-      value: 2,
-    },
-    {
-      name: "3 sao",
-      value: 1,
-    },
-    {
-      name: "2 sao",
-      value: 1,
-    },
-    {
-      name: "1 sao",
-      value: 0,
-    },
-  ]);
-  const [totalRating, setTotalRating] = useState([
-    { name: "Số lượt khen thưởng", value: 20, color: "#00ff00" },
-    { name: "Số lượt phạt", value: 10, color: "#ff0000" },
-    { name: "Tổng", value: 30, color: "#3b82f6" },
-  ]);
+  ]); // Tổng số sao thống kê theo từng loại
+  const [totalPunishTicket, setTotalPunishTicket] = useState(0);
   const [ratingStatistic, setRatingStatistic] = useState([
-    { name: "Thg 1", value: 90 },
-    { name: "Thg 2", value: 70 },
-    { name: "Thg 3", value: 85 },
-    { name: "Thg 4", value: 60 },
-    { name: "Thg 5", value: 75 },
-    { name: "Thg 6", value: 70 },
-    { name: "Thg 7", value: 90 },
-    { name: "Thg 8", value: 65 },
-    { name: "Thg 9", value: 80 },
-    { name: "Thg 10", value: 70 },
+    { name: "Thg 1", value: 30 },
+    { name: "Thg 2", value: 20 },
+    { name: "Thg 3", value: 40 },
+    { name: "Thg 4", value: 50 },
+    { name: "Thg 5", value: 10 },
+    { name: "Thg 6", value: 23 },
+    { name: "Thg 7", value: 54 },
+    { name: "Thg 8", value: 40 },
+    { name: "Thg 9", value: 23 },
+    { name: "Thg 10", value: 40 },
     { name: "Thg 11", value: 70 },
-    { name: "Thg 12", value: 70 },
-  ]);
+    { name: "Thg 12", value: 100 },
+  ]); // Tổng số giá trị (đánh giá, khen thưởng, vi phạm) thống kê theo từng tháng
   const [total, setTotal] = useState({
     total_favourite: 0,
     total_order: 0,
     total_hour: 0,
     remainder: 0,
     gift_remainder: 0,
-  });
-  const city = province.filter((x) => x.code === dataDetail.city)[0];
+  }); // Tổng các giá trị: số lượt yêu thích, số đơn hoàn thành, số giờ làm...
+  const [colorRatingStatistic, setColorRatingStatistic] = useState({
+    color: `${COLORS_RATING.colorBlue}`,
+    lightColor: `${COLORS_RATING.colorLightBlue}`,
+    moreLightColor: `${COLORS_RATING.colorMoreLightBlue}`,
+    ExtraLightcolor: `${COLORS_RATING.colorExtraLightBlue}`,
+  }); // Giá trị màu cho thống kê: đánh giá, khen thưởng, vi phạm
+  const city = province.filter(
+    (x) => x.code === collaboratorInformation.city
+  )[0];
+  const [dataHistory, setDataHistory] = useState([]); // Lịch sử các hoạt động liên quan đến đối tác
+  const [currentPage, setCurrentPage] = useState(1);
+  const onChange = (page) => {
+    setCurrentPage(page);
+    const dataLength = data.length < 10 ? 10 : data.length;
+    const start = page * dataLength - dataLength;
+    getHistoryActivityCollaborator(collaboratorId, start, 14)
+      .then((res) => {
+        setDataHistory(res);
+      })
+      .catch((err) => {
+        errorNotify({
+          message: err?.message,
+        });
+      });
+  };
   // ~~~ Function ~~~
   // 1. Tổng quan đánh giá
-  const getStar = (totalRatingOverview, dataReview) => {
-    if (totalRatingOverview.length > 0 && dataReview.totalItem > 0) {
+  const getStar = (totalRating, setTotalRating, dataReview) => {
+    if (totalRating.length > 0 && dataReview.totalItem > 0) {
       let fiveStar = 0;
       let fourStar = 0;
       let threeStar = 0;
@@ -231,24 +263,157 @@ const CardInfo = (props) => {
         if (el.star === 2) twoStar += 1;
         if (el.star === 1) oneStar += 1;
       });
-      totalRatingOverview?.forEach((element) => {
-        if (element.name === "5 sao") {
-          element.value = fiveStar;
-        }
-        if (element.name === "4 sao") {
-          element.value = fourStar;
-        }
-        if (element.name === "3 sao") {
-          element.value = threeStar;
-        }
-        if (element.name === "2 sao") {
-          element.value = twoStar;
-        }
-        if (element.name === "1 sao") {
-          element.value = oneStar;
-        }
-      });
+      setTotalRating((prevTotalRating) =>
+        prevTotalRating.map((item, index) => {
+          if (index === 0) {
+            return { ...item, value: fiveStar };
+          }
+          if (index === 1) {
+            return {
+              ...item,
+              value: fourStar,
+            };
+          }
+          if (index === 2) {
+            return {
+              ...item,
+              value: threeStar,
+            };
+          }
+          if (index === 3) {
+            return {
+              ...item,
+              value: twoStar,
+            };
+          }
+          if (index === 4) {
+            return {
+              ...item,
+              value: oneStar,
+            };
+          }
+          return item;
+        })
+      );
+      // totalRatingOverview?.forEach((element) => {
+      //   if (element.name === "5 sao") {
+      //     element.value = fiveStar;
+      //   }
+      //   if (element.name === "4 sao") {
+      //     element.value = fourStar;
+      //   }
+      //   if (element.name === "3 sao") {
+      //     element.value = threeStar;
+      //   }
+      //   if (element.name === "2 sao") {
+      //     element.value = twoStar;
+      //   }
+      //   if (element.name === "1 sao") {
+      //     element.value = oneStar;
+      //   }
+      // });
       setTotalCountRating(fiveStar + fourStar + threeStar + twoStar + oneStar);
+    }
+  };
+  // Hàm thống kê theo từng tháng
+  const fetchDataPunishTicketStatisticsByMonth = (timePeriod) => {
+    if (timePeriod) {
+      for (const time of timePeriod) {
+        getListPunishTicket(time.startOfMonth, time.endOfMonth, time.month);
+      }
+    }
+    const totalValue = ratingStatistic.reduce(
+      (acc, item) => acc + item.value,
+      0
+    );
+    setTotalPunishTicket(totalValue);
+  };
+  const getListPunishTicket = async (startDate, endDate, month) => {
+    let tempTotalPunishTicketStatusDone = 0;
+    // Trick nhỏ để lấy total mà không cần viết một API mới
+    const fetchPunishTicketTotal = await getListPunishTicketApi(
+      0,
+      1,
+      "",
+      `&start_date=${startDate ? startDate : ""}&end_date=${
+        endDate ? endDate : ""
+      }&search=${
+        collaboratorInformation?.full_name
+          ? collaboratorInformation?.full_name
+          : ""
+      }`
+    );
+    const fetchPunishticketData = await getListPunishTicketApi(
+      0,
+      fetchPunishTicketTotal?.totalItem,
+      "",
+      `&start_date=${startDate ? startDate : ""}&end_date=${
+        endDate ? endDate : ""
+      }&search=${
+        collaboratorInformation?.full_name
+          ? collaboratorInformation?.full_name
+          : ""
+      }`
+    );
+    fetchPunishticketData?.data?.map((el) => {
+      if (el.status === "done") {
+        tempTotalPunishTicketStatusDone += 1;
+      }
+    });
+    if (tempTotalPunishTicketStatusDone !== 0) {
+      setRatingStatistic((prevTotalRating) =>
+        prevTotalRating.map((item, index) => {
+          // Thg 1
+          if (index === 0 && month === "1") {
+            return { ...item, value: tempTotalPunishTicketStatusDone };
+          }
+          // Thg 2
+          if (index === 1 && month === "2") {
+            return { ...item, value: tempTotalPunishTicketStatusDone };
+          }
+          // Thg 3
+          if (index === 2 && month === "3") {
+            return { ...item, value: tempTotalPunishTicketStatusDone };
+          }
+          // Thg 4
+          if (index === 3 && month === "4") {
+            return { ...item, value: tempTotalPunishTicketStatusDone };
+          }
+          // Thg 5
+          if (index === 4 && month === "5") {
+            return { ...item, value: tempTotalPunishTicketStatusDone };
+          }
+          // Thg 6
+          if (index === 5 && month === "6") {
+            return { ...item, value: tempTotalPunishTicketStatusDone };
+          }
+          // Thg 7
+          if (index === 6 && month === "7") {
+            return { ...item, value: tempTotalPunishTicketStatusDone };
+          }
+          // Thg 8
+          if (index === 7 && month === "8") {
+            return { ...item, value: tempTotalPunishTicketStatusDone };
+          }
+          // Thg 9
+          if (index === 8 && month === "9") {
+            return { ...item, value: tempTotalPunishTicketStatusDone };
+          }
+          // Thg 10
+          if (index === 9 && month === "10") {
+            return { ...item, value: tempTotalPunishTicketStatusDone };
+          }
+          // Thg 11
+          if (index === 10 && month === "11") {
+            return { ...item, value: tempTotalPunishTicketStatusDone };
+          }
+          // Thg 12
+          if (index === 11 && month === "12") {
+            return { ...item, value: tempTotalPunishTicketStatusDone };
+          }
+          return item;
+        })
+      );
     }
   };
   const renderCustomizedLabel = ({
@@ -277,87 +442,6 @@ const CardInfo = (props) => {
       </text>
     );
   };
-  // 2. Tiêu chí đánh giá
-  const getMultiLineText = (text, maxLineWidth) => {
-    const words = text.split(" ");
-    const lines = [];
-    let currentLine = words[0];
-
-    words.slice(1).forEach((word) => {
-      const width = (currentLine + " " + word).length * 7; // Tạm tính chiều rộng bằng cách nhân số ký tự
-      if (width <= maxLineWidth) {
-        currentLine += " " + word;
-      } else {
-        lines.push(currentLine);
-        currentLine = word;
-      }
-    });
-
-    lines.push(currentLine);
-    return lines;
-  };
-  const CustomDot = (props) => {
-    const { cx, cy, value } = props;
-
-    if (value > 2500) {
-      return <circle cx={cx} cy={cy} r={10} fill="red" stroke="none" />;
-    }
-
-    return <circle cx={cx} cy={cy} r={5} fill="#9e68df" stroke="none" />;
-  };
-  const renderCustomTick = (props) => {
-    const { payload, x, y, textAnchor } = props;
-    const lines = getMultiLineText(payload.value, MAX_LINE_WIDTH);
-
-    return (
-      <text x={x} y={y} textAnchor={textAnchor} fill="#666">
-        {lines.map((line, index) => (
-          <tspan
-            fontFamily="Roboto"
-            fontSize="12"
-            fill="#9ca3af"
-            x={x}
-            dy={index === 0 ? 0 : 14}
-            key={index}
-          >
-            {line}
-          </tspan>
-        ))}
-      </text>
-    );
-  };
-  const dataAreaChart = [
-    {
-      subject: "Làm việc chăm chỉ",
-      A: 1,
-      B: 2,
-      fullMark: 5,
-    },
-    {
-      subject: "Đồng phục gọn gàn, sạch sẽ",
-      A: 1,
-      B: 2,
-      fullMark: 5,
-    },
-    {
-      subject: "Dụng cụ chuẩn bị đầy đủ",
-      A: 3,
-      B: 4,
-      fullMark: 5,
-    },
-    {
-      subject: "Làm việc rất tốt, dọn dẹp sạch sẽ",
-      A: 5,
-      B: 5,
-      fullMark: 5,
-    },
-    {
-      subject: "Giờ giấc chuẩn, luôn đến trước giờ hẹn",
-      A: 3,
-      B: 4,
-      fullMark: 5,
-    },
-  ];
   // 3. Hoạt động gần đây
   const timeWork = (data) => {
     const start = moment(new Date(data.date_work)).format("HH:mm");
@@ -367,11 +451,54 @@ const CardInfo = (props) => {
     return start + " - " + timeEnd;
   };
 
+  const handleChangeColorRatingStatistic = (type) => {
+    if (type === "rating") {
+      setColorRatingStatistic({
+        ...colorRatingStatistic,
+        color: COLORS_RATING.colorBlue,
+        lightColor: COLORS_RATING.colorLightBlue,
+        moreLightColor: COLORS_RATING.colorMoreLightBlue,
+        ExtraLightcolor: COLORS_RATING.colorExtraLightBlue,
+      });
+    }
+    if (type === "bonus") {
+      setColorRatingStatistic({
+        ...colorRatingStatistic,
+        color: COLORS_RATING.colorGreen,
+        lightColor: COLORS_RATING.colorLightGreen,
+        moreLightColor: COLORS_RATING.colorMoreLightGreen,
+        ExtraLightcolor: COLORS_RATING.colorExtraLightGreen,
+      });
+    }
+    if (type === "punish") {
+      setColorRatingStatistic({
+        ...colorRatingStatistic,
+        color: COLORS_RATING.colorRed,
+        lightColor: COLORS_RATING.colorLightRed,
+        moreLightColor: COLORS_RATING.colorMoreLightRed,
+        ExtraLightcolor: COLORS_RATING.colorExtraLightRed,
+      });
+      fetchDataPunishTicketStatisticsByMonth(timePeriod);
+    }
+  };
   // ~~~ useEffect ~~~
   useEffect(() => {
     if (collaboratorId) {
-      // Thẻ đánh giá tổng quan, thẻ số lượt đánh giá
-      if (collaboratorRatingOverview || collaboratorRating) {
+      getCollaboratorsById(collaboratorId)
+        .then((res) => {
+          setCollaboratorInformation(res);
+        })
+        .catch((err) => {
+          errorNotify({
+            message: err?.message,
+          });
+        });
+      // Thẻ đánh giá tổng quan, Thẻ đánh giá chi tiết số lượt đánh giá, Thẻ đánh giá chi tiết thống kê đánh giá
+      if (
+        collaboratorOverviewRating ||
+        collaboratorRatingStar ||
+        collaboratorRatingStatistic
+      ) {
         let tempTotalDataReview = 0;
         getReviewCollaborator(collaboratorId, 0, 1)
           .then((res) => {
@@ -380,43 +507,32 @@ const CardInfo = (props) => {
           .catch((err) => {});
         getReviewCollaborator(collaboratorId, 0, tempTotalDataReview)
           .then((res) => {
-            getStar(totalRatingOverview, res);
-            setTotalRating((prevTotalRating) =>
-              prevTotalRating.map((item, index) => {
-                if (index === 0) {
-                  return { ...item, value: res?.totalItem };
-                }
-                if (index === 1) {
-                  return {
-                    ...item,
-                    value:
-                      res?.totalItem < 10 ? 10 : res?.totalItem < 20 ? 20 : 50,
-                  };
-                }
-                return item;
-              })
-            );
+            getStar(totalRatingOverview, setTotalRatingOverview, res);
             setDataReview(res);
           })
           .catch((err) => {});
       }
       // Thẻ bài kiểm tra
-      if (collaboratorTest) {
+      if (collaboratorOverviewTest) {
         getListTrainingLessonByCollaboratorApi(collaboratorId, 0, 20, "all")
           .then((res) => {
-            setDataLesson(res?.data);
+            setTotalLesson(res?.data);
           })
           .catch((err) => {});
       }
-      // Thẻ hiệu quả công việc, thẻ hoạt động gần đây
-      if (collaboratorJobs || collaboratorActivitys) {
+      // Thẻ tổng quan hiệu quả công việc, thẻ tổng quan hoạt động gần đây, thẻ tổng quan thông tin đối tác
+      if (
+        collaboratorOverviewJobs ||
+        collaboratorOverviewActivitys ||
+        collaboratorOverviewInformation
+      ) {
         let tempTotalActivity = 0;
         dispatch(loadingAction.loadingRequest(true));
-        getHistoryActivityCollaborator(collaboratorId, 0, 5)
+        getHistoryOrderCollaborator(collaboratorId, 0, 5)
           .then((res) => {
             tempTotalActivity = res.totalItem;
             setTotalJobs(res?.totalItem);
-            setDataRecentActivities(res?.data);
+            setTotalRecentActivities(res?.data);
             dispatch(loadingAction.loadingRequest(false));
           })
           .catch((err) => {
@@ -429,7 +545,7 @@ const CardInfo = (props) => {
         let tempTotalDoneActivity = 0;
         let tempTotalCancelActivity = 0;
         let tempTotalOtherActivity = 0;
-        getHistoryActivityCollaborator(collaboratorId, 0, tempTotalActivity)
+        getHistoryOrderCollaborator(collaboratorId, 0, tempTotalActivity)
           .then((res) => {
             // console.log("res", res);
             res?.data?.forEach((el) => {
@@ -444,7 +560,7 @@ const CardInfo = (props) => {
           .catch((err) => {});
       }
       // Thẻ thông tin CTV, thẻ tiến hành hồ sơ
-      if (collaboratorInformation || collaboratorDocument) {
+      if (collaboratorOverviewInformation || collaboratorOverviewDocument) {
         getOverviewCollaborator(collaboratorId)
           .then((res) => {
             setData(res?.arr_order?.reverse());
@@ -460,26 +576,40 @@ const CardInfo = (props) => {
             });
           })
           .catch((err) => {});
-        getCollaboratorsById(collaboratorId)
+        // getCollaboratorsById(collaboratorId)
+        //   .then((res) => {
+        //     setCollaboratorInformation(res);
+        //   })
+        //   .catch((err) => {
+        //     errorNotify({
+        //       message: err?.message,
+        //     });
+        //   });
+      }
+      // Thẻ hoạt động đơn hàng
+      if (collaboratorActivityHistory) {
+        dispatch(loadingAction.loadingRequest(true));
+        getHistoryActivityCollaborator(collaboratorId, 0, 14)
           .then((res) => {
-            setDataDetail(res);
+            setDataHistory(res);
+            dispatch(loadingAction.loadingRequest(false));
           })
           .catch((err) => {
             errorNotify({
               message: err?.message,
             });
+            dispatch(loadingAction.loadingRequest(false));
           });
       }
     }
   }, [collaboratorId, dispatch]);
-
   return (
     <div className="card-statistics card-shadow">
       {/* Header */}
-      {headerLabel && (
+      {cardHeader && (
         <div className="card-statistics__header">
           <div className="card-statistics__header--right">
-            <span>{headerLabel}</span>
+            <span>{cardHeader}</span>
             {supportIcon && (
               <Tooltip
                 placement="top"
@@ -520,10 +650,42 @@ const CardInfo = (props) => {
           </div>
         </div>
       )}
+      {/* New body code */}
+      {cardContent && (
+        <div className="card-statistics__content">{cardContent}</div>
+      )}
       {/* Content */}
       <div>
+        {/* Thẻ thể hiện tổng quan một giá trị duy nhất */}
+        {cardTotal && (
+          <div className="card-statistics__total">
+            {/* Icon */}
+            <div className="card-statistics__total--icon">
+              <CardTotalIcon
+                className="card-statistics__icon circle dark-purple small"
+                color="white"
+              />
+            </div>
+            {/* Body */}
+            <div className="card-statistics__total--body">
+              {/* left */}
+              <div className="card-statistics__total--body-left">
+                <span className="card-statistics__total--body-left-header">
+                  {cardTotalLabel}
+                </span>
+                <span className="card-statistics__total--body-left-value">
+                  {cardTotalValue}
+                </span>
+              </div>
+              {/* right */}
+              <div className="card-statistics__total--body-right">
+                {/* <span>10%</span> */}
+              </div>
+            </div>
+          </div>
+        )}
         {/* Thẻ tổng quan đánh giá */}
-        {collaboratorRatingOverview && (
+        {collaboratorOverviewRating && (
           <div className="card-statistics__overview-rating">
             <div className="card-statistics__overview-rating--star">
               {renderStarFromNumber(collaboratorStar).map((el, index) => (
@@ -600,7 +762,7 @@ const CardInfo = (props) => {
           </div>
         )}
         {/* Thẻ tiêu chí đánh giá */}
-        {collaboratorCriteria && (
+        {/* {collaboratorOverviewCriteria && (
           <div className="card-statistics__overview-criteria">
             <ResponsiveContainer height={250} width={"100%"}>
               <RadarChart outerRadius={80} data={dataAreaChart}>
@@ -622,9 +784,9 @@ const CardInfo = (props) => {
               </RadarChart>
             </ResponsiveContainer>
           </div>
-        )}
+        )} */}
         {/* Thẻ khen thưởng, vi phạm */}
-        {collaboratorBonusAndPunish && (
+        {collaboratorOverviewBonusAndPunish && (
           <div className="card-statistics__overview-bonus-punish">
             {/* Số lần khen thưởng và phạt */}
             <div className="card-statistics__overview-bonus-punish--total">
@@ -706,7 +868,7 @@ const CardInfo = (props) => {
           </div>
         )}
         {/* Thẻ thực hiện bài kiểm tra */}
-        {collaboratorTest && (
+        {collaboratorOverviewTest && (
           <div className="card-statistics__overview-examination">
             <div className="card-statistics__overview-examination--image">
               <span className="card-statistics__overview-examination--image-label">
@@ -717,10 +879,10 @@ const CardInfo = (props) => {
                 src={testLogo}
               />
             </div>
-            {dataLesson.map((lesson, index) => (
+            {totalLesson.map((lesson, index) => (
               <div
                 className={`card-statistics__overview-examination--exam ${
-                  index !== dataLesson.length - 1 && "not-last-exam"
+                  index !== totalLesson.length - 1 && "not-last-exam"
                 }`}
               >
                 <div className="card-statistics__overview-examination--exam-content">
@@ -745,7 +907,7 @@ const CardInfo = (props) => {
           </div>
         )}
         {/* Thẻ tài chính */}
-        {collaboratorFinance && (
+        {collaboratorOverviewFinance && (
           <div className="card-statistics__overview-finance">
             {/* Ảnh tài chính */}
             <div className="card-statistics__overview-finance--image">
@@ -822,7 +984,7 @@ const CardInfo = (props) => {
           </div>
         )}
         {/* Thẻ hiệu quả công việc*/}
-        {collaboratorJobs && (
+        {collaboratorOverviewJobs && (
           <div className="card-statistics__overview-jobs">
             <div className="card-statistics__overview-jobs--image">
               <div className="card-statistics__overview-jobs--image-content">
@@ -859,24 +1021,24 @@ const CardInfo = (props) => {
                       Đơn đã hoàn thành
                     </span>
                     <span className="card-statistics__overview-jobs--content-child-progress-bar-number-total">
-                      {totalJobsSuccess + totalJobsOther} đơn
+                      {/* {totalJobsSuccess + totalJobsOther} đơn */}
+                      {totalJobsSuccess} đơn
                     </span>
                   </div>
                   <div className="card-statistics__overview-jobs--content-child-progress-bar-container">
                     <span
+                      // className={`${
+                      //   calculateNumberPercent(
+                      //     totalJobs,
+                      //     totalJobsSuccess + totalJobsOther
+                      //   ) > 60 && "more-than-overal"
+                      // }`}
                       className={`${
-                        calculateNumberPercent(
-                          totalJobs,
-                          totalJobsSuccess + totalJobsOther
-                        ) > 60 && "more-than-overal"
+                        calculateNumberPercent(totalJobs, totalJobsSuccess) >
+                          60 && "more-than-overal"
                       }`}
-                      // className="text-white"
                     >
-                      {calculateNumberPercent(
-                        totalJobs,
-                        totalJobsSuccess + totalJobsOther
-                      )}
-                      %
+                      {calculateNumberPercent(totalJobs, totalJobsSuccess)}%
                     </span>
                     <div
                       className="card-statistics__overview-jobs--content-child-progress-bar-contanier-bar 
@@ -934,10 +1096,10 @@ const CardInfo = (props) => {
           </div>
         )}
         {/* Thẻ hoạt động gần đây */}
-        {collaboratorActivitys ? (
-          dataRecentActivities.length > 0 ? (
+        {collaboratorOverviewActivitys ? (
+          totalRecentActivities.length > 0 ? (
             <div className="card-statistics__overview-activities">
-              {dataRecentActivities?.map((activity, index) => (
+              {totalRecentActivities?.map((activity, index) => (
                 <div className="card-statistics__overview-activities--activity">
                   {/* Ngày tháng năm */}
                   <div className="card-statistics__overview-activities--activity-left">
@@ -1051,7 +1213,7 @@ const CardInfo = (props) => {
           ""
         )}
         {/* Thẻ thông tin cá nhân */}
-        {collaboratorInformation && (
+        {collaboratorOverviewInformation && (
           <div className="card-statistics__overview-information">
             <div className="card-statistics__overview-information--avatar">
               <div className="card-statistics__overview-information--avatar-image">
@@ -1063,19 +1225,26 @@ const CardInfo = (props) => {
                   }}
                   width={"150px"}
                   height={"150px"}
-                  src={dataDetail?.avatar ? dataDetail?.avatar : avatarDefault}
+                  src={
+                    collaboratorInformation?.avatar
+                      ? collaboratorInformation?.avatar
+                      : avatarDefault
+                  }
                   alt=""
                 />
                 <div className="card-statistics__overview-information--avatar-information">
                   <span className="card-statistics__overview-information--avatar-information-name">
-                    {dataDetail?.full_name}
+                    {collaboratorInformation?.full_name}
                   </span>
                   <div className="card-statistics__overview-information--avatar-information-other">
                     <span className="card-statistics__overview-information--avatar-information-other-subtext-label">
                       Tuổi:
                     </span>
                     <span className="card-statistics__overview-information--avatar-information-other-subtext">
-                      {moment().diff(dataDetail?.birthday, "years")}
+                      {moment().diff(
+                        collaboratorInformation?.birthday,
+                        "years"
+                      )}
                     </span>
                   </div>
                   <div className="card-statistics__overview-information--avatar-information-other">
@@ -1083,7 +1252,7 @@ const CardInfo = (props) => {
                       Mã giới thiệu:
                     </span>
                     <span className="card-statistics__overview-information--avatar-information-other-subtext">
-                      {dataDetail?.invite_code}
+                      {collaboratorInformation?.invite_code}
                     </span>
                   </div>
                   <div className="card-statistics__overview-information--avatar-information-other">
@@ -1098,23 +1267,23 @@ const CardInfo = (props) => {
                   <Tooltip
                     placement="bottom"
                     title={
-                      dataDetail?.status === "locked"
-                        ? dataDetail?.note_handle_admin
-                          ? dataDetail?.note_handle_admin
+                      collaboratorInformation?.status === "locked"
+                        ? collaboratorInformation?.note_handle_admin
+                          ? collaboratorInformation?.note_handle_admin
                           : "Tài khoản đã bị khóa"
                         : ""
                     }
                   >
                     <span
                       className={`card-statistics__overview-information--avatar-information-status ${
-                        dataDetail?.status === "actived"
+                        collaboratorInformation?.status === "actived"
                           ? "status-done"
                           : "status-not-contact"
                       }`}
                     >
-                      {dataDetail?.status === "actived"
+                      {collaboratorInformation?.status === "actived"
                         ? "Đang hoạt động"
-                        : dataDetail?.status === "locked"
+                        : collaboratorInformation?.status === "locked"
                         ? "Đang khóa"
                         : "Khác"}
                     </span>
@@ -1134,7 +1303,7 @@ const CardInfo = (props) => {
                   />
                 }
                 label="Điện thoại"
-                content={dataDetail?.phone}
+                content={collaboratorInformation?.phone}
               />
               <IconTextCustom
                 icon={
@@ -1144,7 +1313,9 @@ const CardInfo = (props) => {
                   />
                 }
                 label="Giới tính"
-                content={dataDetail.gender === "male" ? "Nam" : "Nữ"}
+                content={
+                  collaboratorInformation.gender === "male" ? "Nam" : "Nữ"
+                }
               />
               <IconTextCustom
                 icon={
@@ -1154,7 +1325,9 @@ const CardInfo = (props) => {
                   />
                 }
                 label="Ngày sinh"
-                content={moment(dataDetail?.birthday).format("DD/MM/YYYY")}
+                content={moment(collaboratorInformation?.birthday).format(
+                  "DD/MM/YYYY"
+                )}
               />
 
               <IconTextCustom
@@ -1164,8 +1337,8 @@ const CardInfo = (props) => {
                     color="red"
                   />
                 }
-                label="Tổng số đơn"
-                content={total?.total_order}
+                label="Tổng đơn"
+                content={totalJobsCancel + totalJobsOther + totalJobsSuccess}
                 subcontent="đơn"
               />
               <IconTextCustom
@@ -1198,7 +1371,9 @@ const CardInfo = (props) => {
                   />
                 }
                 label="Ngày kích hoạt"
-                content={moment(dataDetail?.date_create).format("DD/MM/YYYY")}
+                content={moment(collaboratorInformation?.date_create).format(
+                  "DD/MM/YYYY"
+                )}
               />
               <IconTextCustom
                 icon={
@@ -1208,24 +1383,26 @@ const CardInfo = (props) => {
                   />
                 }
                 label="Ngày đăng ký"
-                content={moment(dataDetail?.date_create).format("DD/MM/YYYY")}
+                content={moment(collaboratorInformation?.date_create).format(
+                  "DD/MM/YYYY"
+                )}
               />
             </div>
           </div>
         )}
         {/* Thẻ tiến hành hồ sơ*/}
-        {collaboratorDocument && (
+        {collaboratorOverviewDocument && (
           <div className="card-statistics__overview-document">
             <div className="card-statistics__overview-document--child">
               <div className="card-statistics__overview-document--child-left">
                 <div
                   className={`p-1 ${
-                    dataDetail?.is_identity
+                    collaboratorInformation?.is_document_code
                       ? "status-done"
                       : "status-not-process"
                   } rounded-full`}
                 >
-                  {dataDetail?.is_document_code ? (
+                  {collaboratorInformation?.is_document_code ? (
                     <IoCheckmark color="green" />
                   ) : (
                     <IoCheckmark
@@ -1236,7 +1413,7 @@ const CardInfo = (props) => {
                 </div>
                 <span
                   className={`card-statistics__overview-document--child-left-label ${
-                    !dataDetail?.is_document_code && "not-upload"
+                    !collaboratorInformation?.is_document_code && "not-upload"
                   } `}
                 >
                   Thỏa thuận hợp tác
@@ -1247,12 +1424,12 @@ const CardInfo = (props) => {
               <div className="card-statistics__overview-document--child-left">
                 <div
                   className={`p-1 ${
-                    dataDetail?.is_identity
+                    collaboratorInformation?.is_identity
                       ? "status-done"
                       : "status-not-process"
                   } rounded-full`}
                 >
-                  {dataDetail?.is_identity ? (
+                  {collaboratorInformation?.is_identity ? (
                     <IoCheckmark color="green" />
                   ) : (
                     <IoCheckmark
@@ -1263,7 +1440,7 @@ const CardInfo = (props) => {
                 </div>
                 <span
                   className={`card-statistics__overview-document--child-left-label ${
-                    !dataDetail?.is_identity && "not-upload"
+                    !collaboratorInformation?.is_identity && "not-upload"
                   } `}
                 >
                   CCCD/CMND
@@ -1274,12 +1451,12 @@ const CardInfo = (props) => {
               <div className="card-statistics__overview-document--child-left">
                 <div
                   className={`p-1 ${
-                    dataDetail?.is_personal_infor
+                    collaboratorInformation?.is_personal_infor
                       ? "status-done"
                       : "status-not-process"
                   } rounded-full`}
                 >
-                  {dataDetail?.is_personal_infor ? (
+                  {collaboratorInformation?.is_personal_infor ? (
                     <IoCheckmark color="green" />
                   ) : (
                     <IoCheckmark
@@ -1290,7 +1467,7 @@ const CardInfo = (props) => {
                 </div>
                 <span
                   className={`card-statistics__overview-document--child-left-label ${
-                    !dataDetail?.is_personal_infor && "not-upload"
+                    !collaboratorInformation?.is_personal_infor && "not-upload"
                   } `}
                 >
                   Sơ yếu lí lịch
@@ -1301,12 +1478,12 @@ const CardInfo = (props) => {
               <div className="card-statistics__overview-document--child-left">
                 <div
                   className={`p-1 ${
-                    dataDetail?.is_household_book
+                    collaboratorInformation?.is_household_book
                       ? "status-done"
                       : "status-not-process"
                   } rounded-full`}
                 >
-                  {dataDetail?.is_household_book ? (
+                  {collaboratorInformation?.is_household_book ? (
                     <IoCheckmark color="green" />
                   ) : (
                     <IoCheckmark
@@ -1317,7 +1494,7 @@ const CardInfo = (props) => {
                 </div>
                 <span
                   className={`card-statistics__overview-document--child-left-label ${
-                    !dataDetail?.is_household_book && "not-upload"
+                    !collaboratorInformation?.is_household_book && "not-upload"
                   } `}
                 >
                   Sổ hộ khẩu{" "}
@@ -1328,12 +1505,12 @@ const CardInfo = (props) => {
               <div className="card-statistics__overview-document--child-left">
                 <div
                   className={`p-1 ${
-                    dataDetail?.is_behaviour
+                    collaboratorInformation?.is_behaviour
                       ? "status-done"
                       : "status-not-process"
                   } rounded-full`}
                 >
-                  {dataDetail?.is_behaviour ? (
+                  {collaboratorInformation?.is_behaviour ? (
                     <IoCheckmark color="green" />
                   ) : (
                     <IoCheckmark
@@ -1344,7 +1521,7 @@ const CardInfo = (props) => {
                 </div>
                 <span
                   className={`card-statistics__overview-document--child-left-label ${
-                    !dataDetail?.is_behaviour && "not-upload"
+                    !collaboratorInformation?.is_behaviour && "not-upload"
                   } `}
                 >
                   Giấy xác nhận hạnh kiểm
@@ -1354,23 +1531,28 @@ const CardInfo = (props) => {
           </div>
         )}
         {/* Thẻ tổng lượt đánh giá */}
-        {collaboratorRating && (
+        {collaboratorRatingStar && (
           <div className="card-statistics__rating-overview">
             {/* Điểm đánh giá */}
-            <div className="card-statistics__rating-statistic">
+            <div className="card-statistics__rating-overview--average-point">
               {/* Tựa đề hướng dẫn */}
-              <span>
-
+              <span className="card-statistics__rating-overview--average-point-label">
+                Các loại đánh giá
               </span>
               {/* Số điểm đánh giá */}
-              <span>
-                
+              <div className="card-statistics__rating-overview--average-point-number">
+                <span className="card-statistics__rating-overview--average-point-number-sub">
+                  Tổng đánh giá:
                 </span>
+                <span className="card-statistics__rating-overview--average-point-number-total">
+                  {collaboratorStar?.toFixed(1)}
+                </span>
+              </div>
             </div>
             {/* Chart */}
             <div>
-              <ResponsiveContainer height={296} width={"100%"}>
-                <BarChart data={dataRatingTemp} barSize={40}>
+              <ResponsiveContainer height={259} width={"99%"}>
+                <BarChart data={totalRatingOverview} barSize={30}>
                   <XAxis
                     dataKey="name"
                     axisLine={false}
@@ -1384,6 +1566,7 @@ const CardInfo = (props) => {
                   <RechartsTooltip />
                   <CartesianGrid strokeDasharray="5 10" vertical={false} />
                   <Bar
+                    label={true}
                     dataKey="value"
                     fill="#fef08a"
                     // background={{ fill: "#eee" }}
@@ -1391,138 +1574,6 @@ const CardInfo = (props) => {
                 </BarChart>
               </ResponsiveContainer>
             </div>
-            {/* Điểm đánh giá */}
-            {/* <div className="card-statistics__rating-statistic--number">
-              <span className="card-statistics__rating-statistic--number-subtext">
-                Số sao trung bình
-              </span>
-              <span className="card-statistics__rating-statistic--number-average">
-                4.9
-              </span>
-              <div className="card-statistics__rating-statistic--number-star">
-                {renderStarFromNumber(collaboratorStar).map((el, index) => (
-                  <span>{el}</span>
-                ))}
-              </div>
-            </div> */}
-            {/* Thống kê từng loại đánh giá */}
-            {/* <div className="card-statistics__rating-statistic--progress-bar">
-              <div className="card-statistics__rating-statistic--progress-bar-child">
-                <span className="card-statistics__rating-statistic--progress-bar-child-label">
-                  5 sao
-                </span>
-                <div className="card-statistics__rating-statistic--progress-bar-child-container">
-                  <span
-                    className={`${
-                      calculateNumberPercent(
-                        totalJobs,
-                        totalJobsSuccess + totalJobsOther
-                      ) > 60 && "more-than-overal"
-                    }`}
-                    // className="text-white"
-                  >
-                    {calculateNumberPercent(
-                      totalJobs,
-                      totalJobsSuccess + totalJobsOther
-                    )}
-                    %
-                  </span>
-                  <div className="card-statistics__rating-statistic--progress-bar-child-container-bar card-statistics__rating-statistic--progress-bar-child-container-bar-bonus"></div>
-                </div>
-              </div>
-              <div className="card-statistics__rating-statistic--progress-bar-child">
-                <span className="card-statistics__rating-statistic--progress-bar-child-label">
-                  5 sao
-                </span>
-                <div className="card-statistics__rating-statistic--progress-bar-child-container">
-                  <span
-                    className={`${
-                      calculateNumberPercent(
-                        totalJobs,
-                        totalJobsSuccess + totalJobsOther
-                      ) > 60 && "more-than-overal"
-                    }`}
-                    // className="text-white"
-                  >
-                    {calculateNumberPercent(
-                      totalJobs,
-                      totalJobsSuccess + totalJobsOther
-                    )}
-                    %
-                  </span>
-                  <div className="card-statistics__rating-statistic--progress-bar-child-container-bar card-statistics__rating-statistic--progress-bar-child-container-bar-bonus"></div>
-                </div>
-              </div>
-              <div className="card-statistics__rating-statistic--progress-bar-child">
-                <span className="card-statistics__rating-statistic--progress-bar-child-label">
-                  5 sao
-                </span>
-                <div className="card-statistics__rating-statistic--progress-bar-child-container">
-                  <span
-                    className={`${
-                      calculateNumberPercent(
-                        totalJobs,
-                        totalJobsSuccess + totalJobsOther
-                      ) > 60 && "more-than-overal"
-                    }`}
-                    // className="text-white"
-                  >
-                    {calculateNumberPercent(
-                      totalJobs,
-                      totalJobsSuccess + totalJobsOther
-                    )}
-                    %
-                  </span>
-                  <div className="card-statistics__rating-statistic--progress-bar-child-container-bar card-statistics__rating-statistic--progress-bar-child-container-bar-bonus"></div>
-                </div>
-              </div>
-              <div className="card-statistics__rating-statistic--progress-bar-child">
-                <span className="card-statistics__rating-statistic--progress-bar-child-label">
-                  5 sao
-                </span>
-                <div className="card-statistics__rating-statistic--progress-bar-child-container">
-                  <span
-                    className={`${
-                      calculateNumberPercent(
-                        totalJobs,
-                        totalJobsSuccess + totalJobsOther
-                      ) > 60 && "more-than-overal"
-                    }`}
-                    // className="text-white"
-                  >
-                    {calculateNumberPercent(
-                      totalJobs,
-                      totalJobsSuccess + totalJobsOther
-                    )}
-                    %
-                  </span>
-                  <div className="card-statistics__rating-statistic--progress-bar-child-container-bar card-statistics__rating-statistic--progress-bar-child-container-bar-bonus"></div>
-                </div>
-              </div>
-              <div className="card-statistics__rating-statistic--progress-bar-child">
-                <span className="card-statistics__rating-statistic--progress-bar-child-label">
-                  5 sao
-                </span>
-                <div className="card-statistics__rating-statistic--progress-bar-child-container">
-                  <span
-                    className={`${
-                      calculateNumberPercent(
-                        totalJobs,
-                        totalJobsSuccess + totalJobsOther
-                      ) > 60 && "more-than-overal"
-                    }`}
-                    // className="text-white"
-                  >
-                    {calculateNumberPercent(
-                      totalJobs,
-                      totalJobsSuccess + totalJobsOther
-                    )}
-                    %
-                  </span>
-                  <div className="card-statistics__rating-statistic--progress-bar-child-container-bar card-statistics__rating-statistic--progress-bar-child-container-bar-bonus"></div>
-                </div>
-              </div>
-            </div> */}
           </div>
         )}
         {/* Thẻ thống kê lượt đánh giá theo từng tháng trong năm */}
@@ -1531,13 +1582,17 @@ const CardInfo = (props) => {
             {/* Các thẻ thống kê tổng quát */}
             <div className="card-statistics__rating-statistic--card">
               {/* Đánh giá */}
-              <div className="card-statistics__rating-statistic--card-child card-child-blue">
-                <div className="card-statistics__rating-statistic--card-child-label ">
-                  <span className="card-statistics__rating-statistic--card-child-label-heading">
-                    Đánh giá
-                  </span>
+              <div
+                onClick={() => handleChangeColorRatingStatistic("rating")}
+                className="card-statistics__rating-statistic--card-child card-child-blue"
+              >
+                <div className="card-statistics__rating-statistic--card-child-label">
+                  <div className="card-statistics__rating-statistic--card-child-label-heading">
+                    {/* <div></div> */}
+                    <span>Đánh giá</span>
+                  </div>
                   <span className="card-statistics__rating-statistic--card-child-label-number label-number-blue">
-                    20
+                    {totalCountRating}
                   </span>
                 </div>
                 <div className="card-statistics__rating-statistic--card-child-circle-outside circle-outside-blue"></div>
@@ -1545,13 +1600,16 @@ const CardInfo = (props) => {
                 <div className="card-statistics__rating-statistic--card-child-line-bottom line-bottom-blue"></div>
               </div>
               {/* Khen thưởng */}
-              <div className="card-statistics__rating-statistic--card-child card-child-green">
+              <div
+                onClick={() => handleChangeColorRatingStatistic("bonus")}
+                className="card-statistics__rating-statistic--card-child card-child-green"
+              >
                 <div className="card-statistics__rating-statistic--card-child-label">
                   <span className="card-statistics__rating-statistic--card-child-label-heading">
                     Khen thưởng
                   </span>
                   <span className="card-statistics__rating-statistic--card-child-label-number label-number-green">
-                    0
+                    23
                   </span>
                 </div>
                 <div className="card-statistics__rating-statistic--card-child-circle-outside circle-outside-green"></div>
@@ -1559,13 +1617,16 @@ const CardInfo = (props) => {
                 <div className="card-statistics__rating-statistic--card-child-line-bottom line-bottom-green"></div>
               </div>
               {/* Vi phạm */}
-              <div className="card-statistics__rating-statistic--card-child card-child-red">
+              <div
+                onClick={() => handleChangeColorRatingStatistic("punish")}
+                className="card-statistics__rating-statistic--card-child card-child-red"
+              >
                 <div className="card-statistics__rating-statistic--card-child-label">
                   <span className="card-statistics__rating-statistic--card-child-label-heading">
                     Vi phạm
                   </span>
                   <span className="card-statistics__rating-statistic--card-child-label-number label-number-red">
-                    10
+                    {totalPunishTicket}
                   </span>
                 </div>
                 <div className="card-statistics__rating-statistic--card-child-circle-outside circle-outside-red"></div>
@@ -1581,10 +1642,14 @@ const CardInfo = (props) => {
                     <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
                       <stop
                         offset="15%"
-                        stopColor="#93c5fd"
+                        stopColor={colorRatingStatistic.lightColor}
                         stopOpacity={0.8}
                       />
-                      <stop offset="100%" stopColor="#93c5fd" stopOpacity={0} />
+                      <stop
+                        offset="100%"
+                        stopColor={colorRatingStatistic.lightColor}
+                        stopOpacity={0}
+                      />
                     </linearGradient>
                     {/* <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
                       <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
@@ -1614,9 +1679,10 @@ const CardInfo = (props) => {
                   <CartesianGrid strokeDasharray="5 10" vertical={false} />
                   <RechartsTooltip />
                   <Area
+                    // label={true}
                     type="monotone"
                     dataKey="value"
-                    stroke="#3b82f6"
+                    stroke={colorRatingStatistic.color}
                     strokeWidth={3}
                     fillOpacity={1}
                     fill="url(#colorUv)"
@@ -1628,6 +1694,93 @@ const CardInfo = (props) => {
             </div>
           </div>
         )}
+        {/* Thẻ hoạt động lịch sử của đối tác */}
+        {collaboratorActivityHistory &&
+          (dataHistory?.data?.length > 0 ? (
+            <div className="card-statistics__activity-history">
+              <div>
+                {dataHistory?.data?.map((activity, index) => (
+                  <div
+                    className={`card-statistics__activity-history--activity ${
+                      index === dataHistory?.data?.length - 1 && "last-item"
+                    }`}
+                  >
+                    {/* Ngày tạo và thông tin quản trị viên tương tác nếu có*/}
+                    <div className="card-statistics__activity-history--activity-left">
+                      <span className="card-statistics__activity-history--activity-left-name-phone">
+                        {moment(new Date(activity?.date_create)).format(
+                          "DD MMM, YYYY"
+                        )}
+                      </span>
+                      <span className="card-statistics__activity-history--activity-left-id">
+                        {activity?.id_admin_action?.full_name}
+                      </span>
+                      {/* <span>{activity?.type.split("_")[0]}</span> */}
+                    </div>
+                    {/* Icon và line ở giữa */}
+                    <div className="card-statistics__activity-history--activity-line">
+                      <div
+                        className={`card-statistics__activity-history--activity-line-icon ${
+                          activity?.type.split("_")[0] === "admin"
+                            ? "admin"
+                            : activity?.type.split("_")[0] === "collaborator"
+                            ? "collaborator"
+                            : activity?.type.split("_")[0] === "verify"
+                            ? "verify"
+                            : activity?.type.split("_")[0] === "create"
+                            ? "create"
+                            : "system"
+                        }`}
+                      >
+                        {activity?.type.split("_")[0] === "admin" ? (
+                          <IoPeopleOutline size={15} color="violet" />
+                        ) : activity?.type.split("_")[0] === "collaborator" ? (
+                          <IoPersonOutline size={15} color="blue" />
+                        ) : activity?.type.split("_")[0] === "verify" ? (
+                          <IoCloseCircleOutline size={15} color="red" />
+                        ) : activity?.type.split("_")[0] === "create" ? (
+                          <IoCheckmarkDoneOutline size={15} color="green" />
+                        ) : (
+                          <IoSettingsOutline size={15} color="orange" />
+                        )}
+                      </div>
+                      {dataHistory?.data?.length - 1 !== index && (
+                        <div className="card-statistics__activity-history--activity-line-icon-line"></div>
+                      )}
+                    </div>
+                    {/* Nội dung */}
+                    <div className="card-statistics__activity-history--activity-right">
+                      {/* Tên hành động và các thông tin phụ */}
+                      <div className="card-statistics__activity-history--activity-right-header">
+                        {/* Tên hành động */}
+                        <Tooltip placement="top" title={activity?.title_admin}>
+                          <span className="card-statistics__activity-history--activity-right-header-service">
+                            {activity?.title_admin}
+                          </span>
+                        </Tooltip>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div>
+                <Pagination
+                  simple={{ readOnly: true }}
+                  current={currentPage}
+                  onChange={onChange}
+                  total={dataHistory?.totalItem}
+                  showSizeChanger={false}
+                  pageSize={14}
+                />
+              </div>
+            </div>
+          ) : (
+            <div className="flex justify-center items-center p-4">
+              <span className="text-xs text-gray-500/60 italic">
+                Cộng tác viên chưa có hoạt động nào
+              </span>
+            </div>
+          ))}
       </div>
     </div>
   );
