@@ -1,0 +1,31 @@
+@import "../../../@theme/style.scss";
+
+.card__check-list {
+    display: flex;
+    flex-direction: column;
+    gap: $gapM;
+
+    .card__check-list--child {
+        display: flex;
+        align-items: center;
+        gap: $gapM;
+
+        .card__check-list--child-left {
+            display: flex;
+            gap: $gapM;
+            align-items: center;
+
+            .card__check-list--child-left-label {
+                font-size: $textFontSizeM;
+                font-weight: $fontWeightL;
+                color: $colorBlack;
+
+                &.not-upload {
+                    color: $colorGray;
+                    opacity: $opacityS;
+                }
+            }
+
+        }
+    }
+}

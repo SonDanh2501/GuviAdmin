@@ -1,0 +1,178 @@
+@import "../../../@theme/style.scss";
+
+.card__total-value {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: $gapXS;
+
+    .card__total-value--icon {
+        padding: 8px;
+        width: 36px;
+        height: 36px;
+        border-radius: $borderRadiusFull;
+
+        &.green {
+            background-color: $colorExtraLightGreen;
+        }
+
+        &.red {
+            background-color: $colorExtraLightRed;
+        }
+
+        &.blue {
+            background-color: $colorExtraLightBlue;
+        }
+
+        &.yellow {
+            background-color: $colorExtraLightYellow;
+        }
+    }
+
+    .card__total-value--header {
+        padding-top: 4px;
+        font-size: $textFontSizeM;
+        font-weight: $fontWeightXL;
+    }
+
+    .card__total-value--number {
+        font-size: $textFontSize2XL;
+        font-weight: $fontWeightXL;
+
+        &.green {
+            color: $colorGreen;
+        }
+
+        &.red {
+            color: $colorRed;
+        }
+
+        &.blue {
+            color: $colorBlue;
+        }
+
+        &.yellow {
+            color: $colorYellow;
+        }
+    }
+
+    .card__total-value--previous-period {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: $gapXS;
+
+        .card__total-value--previous-period-label {
+            font-size: $textFontSizeM;
+            font-weight: $fontWeightL;
+            color: $colorGray;
+            opacity: $opacityM;
+        }
+
+        .card__total-value--previous-period-number {
+            display: flex;
+            gap: $gapXS;
+            align-items: center;
+            white-space: nowrap;
+
+            &.uptrend {
+                color: $colorGreen;
+            }
+
+            &.downtrend {
+                color: $colorRed;
+            }
+        }
+    }
+}
+
+.card__total-value-horizontal {
+    .card__total-value-horizontal--top {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+
+        .card__total-value-horizontal--top-label {
+            font-size: $textFontSizeM;
+            font-weight: $fontWeightXL;
+            color: $colorGray;
+            opacity: $opacityM;
+            padding-top: 2px;
+        }
+
+        .card__total-value-horizontal--top-icon {
+            padding: 8px;
+            width: 36px;
+            height: 36px;
+            border-radius: $borderRadiusFull;
+
+            &.green {
+                background-color: $colorExtraLightGreen;
+            }
+
+            &.red {
+                background-color: $colorExtraLightRed;
+            }
+
+            &.blue {
+                background-color: $colorExtraLightBlue;
+            }
+
+            &.yellow {
+                background-color: $colorExtraLightYellow;
+            }
+
+            &.orange {
+                background-color: $colorExtraLightOrange;
+            }
+        }
+    }
+
+    .card__total-value-horizontal--bottom {
+        display: flex;
+        flex-direction: column;
+        gap: $gapL;
+
+        .card__total-value-horizontal--bottom-number {
+            font-size: $textFontSize2XL;
+            font-weight: $fontWeightXL;
+            color: $colorBlack;
+        }
+
+        .card__total-value-horizontal--bottom-previous {
+            font-size: $textFontSize2XL;
+            font-weight: $fontWeightXL;
+            display: flex;
+            gap: $gapXS;
+
+            &.green {
+                color: $colorGreen;
+            }
+
+            &.red {
+                color: $colorRed;
+            }
+
+            &.blue {
+                color: $colorBlue;
+            }
+
+            &.yellow {
+                color: $colorYellow;
+            }
+
+            &.orange {
+                color: $colorOrange;
+            }
+
+        }
+
+        .card__total-value-horizontal--bottom-sub-label {
+            font-weight: $fontWeightL;
+            font-size: $textFontSizeM;
+            color: $colorGray;
+            opacity: $opacityM;
+        }
+    }
+}

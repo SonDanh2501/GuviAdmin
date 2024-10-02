@@ -150,12 +150,12 @@ const ProfileCollaborator = () => {
             >
               <History id={id} />
             </Tabs.TabPane>
-            <Tabs.TabPane
+            {/* <Tabs.TabPane
               tab={`${i18n.t("topup_withdraw", { lng: lang })}`}
               key="5"
             >
               <WithdrawTopup id={id} />
-            </Tabs.TabPane>
+            </Tabs.TabPane> */}
             <Tabs.TabPane tab={`${i18n.t("review", { lng: lang })}`} key="6">
               <Review id={id} totalReview={data?.star} />
             </Tabs.TabPane>

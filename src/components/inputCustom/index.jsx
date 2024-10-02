@@ -24,7 +24,7 @@ const {
   IoCheckmarkCircleSharp,
   IoChevronDownOutline,
   IoSearchCircle,
-  IoChevronDown ,
+  IoChevronDown,
   IoSearch,
   IoClose,
   IoCalendar,
@@ -694,10 +694,13 @@ const InputTextCustom = (props) => {
               value?.map((item, index) => {
                 return (
                   <div
-                    style={{ borderRadius: "6px", border: "2px dashed #a855f7" }}
+                    style={{
+                      borderRadius: "6px",
+                      border: "2px dashed #a855f7",
+                    }}
                     className={`${
                       hideImage ? "hidden" : "flex"
-                    } items-center justify-between mt-2 p-2 border-2 gap-2`}
+                    } items-center justify-between mt-2 p-1 border-2 gap-2`}
                   >
                     <div
                       style={{ gap: "10px" }}
@@ -725,6 +728,7 @@ const InputTextCustom = (props) => {
                         className="p-2 hover:bg-red-500 hover:text-white text-red-500 duration-300 ease-out"
                       >
                         <IoClose
+                          className="mr-1"
                           onClick={() =>
                             setValueSelectedProps(
                               value?.filter((el) => el !== item)
@@ -742,7 +746,7 @@ const InputTextCustom = (props) => {
                 style={{ borderRadius: "6px", border: "2px dashed #a855f7" }}
                 className={`${
                   hideImage ? "hidden" : "flex"
-                } items-center justify-between mt-2 p-2 border-2 gap-2`}
+                } items-center justify-between mt-2 p-1 border-2 gap-2`}
               >
                 <div style={{ gap: "10px" }} className="flex items-center px-2">
                   <Image
@@ -768,6 +772,7 @@ const InputTextCustom = (props) => {
                     className="p-2 hover:bg-red-500 hover:text-white text-red-500 duration-300 ease-out"
                   >
                     <IoClose
+                      className="mr-1"
                       onClick={() => setValueSelectedProps("")}
                       size="14px"
                     />

@@ -1,0 +1,91 @@
+@import "../../../@theme/style.scss";
+
+.card__bonus-punish {
+    display: flex;
+    flex-direction: column;
+    gap: $gapL;
+
+    .card__bonus-punish--total {
+        display: flex;
+        flex-direction: row;
+        gap: $gapL;
+
+        .card__bonus-punish--total-container {
+            width: 50%;
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border: 2px solid #e5e7eb;
+            border-radius: $borderRadiusXL;
+            gap: $gapM;
+
+            .card__bonus-punish--total-container-number {
+                display: flex;
+                flex-direction: column;
+
+                .card__bonus-punish--total-container-number-label {
+                    font-weight: $fontWeightL;
+                    font-size: $textFontSizeM;
+                    font-family: $fontFamily;
+                    color: $colorGray;
+                    opacity: $opacityS;
+                }
+
+                .card__bonus-punish--total-container-number-number {
+                    font-weight: $fontWeightXL;
+                    font-size: $textFontSizeXL;
+                    color: $colorBlack;
+
+                    .card__bonus-punish--total-container-number-number-sub {
+                        font-weight: $textFontSizeM;
+                        font-size: $textFontSizeM;
+                        text-transform: uppercase;
+                        color: $colorBlack;
+                    }
+                }
+
+            }
+        }
+    }
+
+    .card__bonus-punish--recent {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 10px;
+        border-radius: $borderRadiusXL;
+
+        .card__bonus-punish--recent-icon {
+            display: flex;
+            gap: 12px;
+
+            .card__bonus-punish--recent-icon-label {
+                display: flex;
+                flex-direction: column;
+                gap: 2px;
+                color: $colorBlack;
+
+                .card__bonus-punish--recent-icon-label-time {
+                    color: $colorGray;
+                    opacity: $opacityS;
+                }
+            }
+        }
+
+        .card__bonus-punish--recent-status {
+            padding: 1px 6px;
+            color: white;
+            background-color: $colorYellow;
+            border-radius: $borderRadiusXL;
+        }
+    }
+
+    .card__bonus-punish--recent-success {
+        border: 2px solid $colorGreen;
+    }
+
+    .card__bonus-punish--recent-punish {
+        border: 2px solid $colorRed;
+    }
+
+}

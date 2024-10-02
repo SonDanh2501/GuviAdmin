@@ -166,6 +166,7 @@ const ManageOrder = () => {
       district
     )
       .then((res) => {
+        console.log("check response", res);
         setData(res?.data);
         setTotal(res?.totalItem);
       })

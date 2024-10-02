@@ -19,10 +19,19 @@ import CardInfo from "../../../../../../../components/card";
 import icons from "../../../../../../../utils/icons";
 import DataTable from "../../../../../../../components/tables/dataTable";
 import CardBarChart from "../../../../../../../components/card/cardBarChart";
+import CardTotalValue from "../../../../../../../components/card/cardTotalValue";
+
 import { IoCubeOutline, IoTrendingUp } from "react-icons/io5";
 
-const { IoWalletOutline, IoArrowUp, IoArrowDown, IoPersonOutline, IoPerson } =
-  icons;
+const {
+  IoWalletOutline,
+  IoArrowUp,
+  IoArrowDown,
+  IoPersonOutline,
+  IoPerson,
+  IoArrowDownCircleOutline,
+  IoArrowUpCircleOutline,
+} = icons;
 
 const History = ({ id }) => {
   const [collaboratorMoneyHistory, setCollaboratorMoneyHistory] = useState([]); // Giá trị lịch sử dòng tiền của đối tác
@@ -69,7 +78,7 @@ const History = ({ id }) => {
       FontSize: "text-size-M",
     },
   ];
-  
+
   const testData = [
     {
       name: "Thg 1",
@@ -190,134 +199,70 @@ const History = ({ id }) => {
           cardTotalValue={0}
         /> */}
         <div className="collaborator-history__top--left">
-          <div className="collaborator-activity__statistics--overview-statistic">
-            {/* Icon */}
-            <div>
-              <IoCubeOutline
-                className="collaborator-activity__statistics--overview-statistic-icon green"
-                color="green"
-              />
-            </div>
-            {/* Header */}
-            <span className="collaborator-activity__statistics--overview-statistic-header">
-              Ví nạp
-            </span>
-            {/* Number */}
-            <span className="collaborator-activity__statistics--overview-statistic-number green">
-              0
-            </span>
-            {/* So với kì trước */}
-            <div className="collaborator-activity__statistics--overview-statistic-previous-period">
-              <span className="collaborator-activity__statistics--overview-statistic-previous-period-label">
-                So với kì trước
-              </span>
-
-              <span className="collaborator-activity__statistics--overview-statistic-previous-period-number uptrend">
-                +8.2%
-                <IoTrendingUp color="#22c55e" />
-              </span>
-            </div>
-          </div>
-          <div className="collaborator-activity__statistics--overview-statistic">
-            {/* Icon */}
-            <div>
-              <IoCubeOutline
-                className="collaborator-activity__statistics--overview-statistic-icon blue"
-                color="blue"
-              />
-            </div>
-            {/* Header */}
-            <span className="collaborator-activity__statistics--overview-statistic-header">
-              Ví CTV
-            </span>
-            {/* Number */}
-            <span className="collaborator-activity__statistics--overview-statistic-number blue">
-              0
-            </span>
-            {/* So với kì trước */}
-            <div className="collaborator-activity__statistics--overview-statistic-previous-period">
-              <span className="collaborator-activity__statistics--overview-statistic-previous-period-label">
-                So với kì trước
-              </span>
-
-              <span className="collaborator-activity__statistics--overview-statistic-previous-period-number uptrend">
-                +8.2%
-                <IoTrendingUp color="#22c55e" />
-              </span>
-            </div>
-          </div>
-          <div className="collaborator-activity__statistics--overview-statistic">
-            {/* Icon */}
-            <div>
-              <IoCubeOutline
-                className="collaborator-activity__statistics--overview-statistic-icon yellow"
-                color="orange"
-              />
-            </div>
-            {/* Header */}
-            <span className="collaborator-activity__statistics--overview-statistic-header">
-              Tổng tiền thu được
-            </span>
-            {/* Number */}
-            <span className="collaborator-activity__statistics--overview-statistic-number yellow">
-              0
-            </span>
-            {/* So với kì trước */}
-            <div className="collaborator-activity__statistics--overview-statistic-previous-period">
-              <span className="collaborator-activity__statistics--overview-statistic-previous-period-label">
-                So với kì trước
-              </span>
-
-              <span className="collaborator-activity__statistics--overview-statistic-previous-period-number uptrend">
-                +8.2%
-                <IoTrendingUp color="#22c55e" />
-              </span>
-            </div>
-          </div>
-          <div className="collaborator-activity__statistics--overview-statistic">
-            {/* Icon */}
-            <div>
-              <IoCubeOutline
-                className="collaborator-activity__statistics--overview-statistic-icon red"
+          <CardInfo
+            cardContent={
+              <CardTotalValue
+                label={`${i18n.t("work_wallet", { lng: lang })}`}
+                total={formatMoney(work_wallet)}
+                previousCompare="0"
+                IconComponent={IoWalletOutline}
                 color="red"
+                horizontal={true}
               />
-            </div>
-            {/* Header */}
-            <span className="collaborator-activity__statistics--overview-statistic-header">
-              Tổng tiền thu được
-            </span>
-            {/* Number */}
-            <span className="collaborator-activity__statistics--overview-statistic-number red">
-              0
-            </span>
-            {/* So với kì trước */}
-            <div className="collaborator-activity__statistics--overview-statistic-previous-period">
-              <span className="collaborator-activity__statistics--overview-statistic-previous-period-label">
-                So với kì trước
-              </span>
-
-              <span className="collaborator-activity__statistics--overview-statistic-previous-period-number uptrend">
-                +8.2%
-                <IoTrendingUp color="#22c55e" />
-              </span>
-            </div>
-          </div>
+            }
+          />
+          <CardInfo
+            cardContent={
+              <CardTotalValue
+                label={`${i18n.t("collaborator_wallet", { lng: lang })}`}
+                total={formatMoney(collaborator_wallet)}
+                previousCompare="0"
+                IconComponent={IoPersonOutline}
+                color="orange"
+                horizontal={true}
+              />
+            }
+          />
+          <CardInfo
+            cardContent={
+              <CardTotalValue
+                label="Tổng nạp"
+                total={0}
+                previousCompare="0"
+                IconComponent={IoArrowUpCircleOutline}
+                color="blue"
+                horizontal={true}
+              />
+            }
+          />
+          <CardInfo
+            cardContent={
+              <CardTotalValue
+                label="Tổng rút"
+                total={0}
+                previousCompare="0"
+                IconComponent={IoArrowDownCircleOutline}
+                color="green"
+                horizontal={true}
+              />
+            }
+          />
         </div>
         <div className="collaborator-history__top--right">
           <CardInfo
-            cardHeader="Thống kê đơn hàng"
+            cardHeader="Thống kê số tiền"
             cardContent={
               <CardBarChart
                 data={testData}
-                height={300}
+                height={190}
                 verticalValue="value"
                 // verticalLine={true}
                 horizontalValue="name"
                 horizontalLine={true}
                 chartUnit="đánh giá"
                 total={20}
-                color="#fef9c3"
-                colorTotal="#eab308"
+                color="#f5d0fe"
+                colorTotal="#d946ef"
               />
             }
           />

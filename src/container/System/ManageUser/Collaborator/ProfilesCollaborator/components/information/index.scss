@@ -87,6 +87,7 @@
           border-bottom: 2px solid $colorExtraLightGray;
 
           .collaborator-information__right--card-body-overview-label {
+            padding-bottom: 4px;
             span {
               color: $colorGray
             }
@@ -95,7 +96,7 @@
           .collaborator-information__right--card-body-overview-checklist {
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 6px;
 
             .collaborator-information__right--card-body-overview-checklist-checkbox {
               display: flex;

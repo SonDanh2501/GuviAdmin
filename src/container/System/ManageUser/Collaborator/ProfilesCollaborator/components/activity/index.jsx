@@ -16,6 +16,8 @@ import "./index.scss";
 import FilterData from "../../../../../../../components/filterData/filterData";
 import DataTable from "../../../../../../../components/tables/dataTable";
 import CardInfo from "../../../../../../../components/card";
+import CardTotalValue from "../../../../../../../components/card/cardTotalValue";
+
 import CardBarChart from "../../../../../../../components/card/cardBarChart";
 
 import icons from "../../../../../../../utils/icons";
@@ -33,6 +35,7 @@ const {
   IoCubeOutline,
   IoPieChartOutline,
 } = icons;
+
 const Activity = ({ id }) => {
   const [data, setData] = useState([]);
   const [startPage, setStartPage] = useState(0);
@@ -51,20 +54,28 @@ const Activity = ({ id }) => {
 
   const [valueActivityStatistics, setValueActivityStatistics] = useState([
     {
-      label: "Tổng đơn",
+      label: "Tổng đơn đến nay",
       value: 0,
+      icon: IoCubeOutline,
+      color: "green",
     },
     {
-      label: "Tổng đơn năm ngoái",
+      label: "Tổng đơn năm trước",
       value: 0,
+      icon: IoStatsChartOutline,
+      color: "blue",
     },
     {
       label: "Tổng đơn năm nay",
       value: 0,
+      icon: IoPieChartOutline,
+      color: "yellow",
     },
     {
       label: "Tổng đơn tháng này",
       value: 0,
+      icon: IoCalendarNumberOutline,
+      color: "red",
     },
   ]);
   useEffect(() => {
@@ -205,138 +216,26 @@ const Activity = ({ id }) => {
       value: 1,
     },
   ];
-    
+
   return (
     <div className="collaborator-activity">
       {/* Các thẻ thống kê */}
       <div className="collaborator-activity__statistics">
         <div className="collaborator-activity__statistics--overview grid-column-2">
           {valueActivityStatistics.map((item, index) => {
-            if (index === 0) {
-              return (
-                <div className="collaborator-activity__statistics--overview-statistic">
-                  {/* Icon */}
-                  <div>
-                    <IoCubeOutline
-                      className="collaborator-activity__statistics--overview-statistic-icon green"
-                      color="green"
-                    />
-                  </div>
-                  {/* Header */}
-                  <span className="collaborator-activity__statistics--overview-statistic-header">
-                    {item.label}
-                  </span>
-                  {/* Number */}
-                  <span className="collaborator-activity__statistics--overview-statistic-number green">
-                    {item.value}
-                  </span>
-                  {/* So với kì trước */}
-                  <div className="collaborator-activity__statistics--overview-statistic-previous-period">
-                    <span className="collaborator-activity__statistics--overview-statistic-previous-period-label">
-                      So với kì trước
-                    </span>
-
-                    <span className="collaborator-activity__statistics--overview-statistic-previous-period-number uptrend">
-                      +8.2%
-                      <IoTrendingUp color="#22c55e" />
-                    </span>
-                  </div>
-                </div>
-              );
-            }
-            if (index === 1) {
-              return (
-                <div className="collaborator-activity__statistics--overview-statistic">
-                  {/* Icon */}
-                  <div>
-                    <IoStatsChartOutline
-                      className="collaborator-activity__statistics--overview-statistic-icon blue"
-                      color="blue"
-                    />
-                  </div>
-                  {/* Header */}
-                  <span className="collaborator-activity__statistics--overview-statistic-header">
-                    {item.label}
-                  </span>
-                  {/* Number */}
-                  <span className="collaborator-activity__statistics--overview-statistic-number blue">
-                    {item.value}
-                  </span>
-                  {/* So với kì trước */}
-                  <div className="collaborator-activity__statistics--overview-statistic-previous-period">
-                    <span className="collaborator-activity__statistics--overview-statistic-previous-period-label">
-                      So với kì trước
-                    </span>
-                    <span className="collaborator-activity__statistics--overview-statistic-previous-period-number downtrend">
-                      -10.5%
-                      <IoTrendingDown color="#ef4444" />
-                    </span>
-                  </div>
-                </div>
-              );
-            }
-            if (index === 2) {
-              return (
-                <div className="collaborator-activity__statistics--overview-statistic">
-                  {/* Icon */}
-                  <div>
-                    <IoPieChartOutline
-                      className="collaborator-activity__statistics--overview-statistic-icon yellow"
-                      color="orange"
-                    />
-                  </div>
-                  {/* Header */}
-                  <span className="collaborator-activity__statistics--overview-statistic-header">
-                    {item.label}
-                  </span>
-                  {/* Number */}
-                  <span className="collaborator-activity__statistics--overview-statistic-number yellow">
-                    {item.value}
-                  </span>
-                  {/* So với kì trước */}
-                  <div className="collaborator-activity__statistics--overview-statistic-previous-period">
-                    <span className="collaborator-activity__statistics--overview-statistic-previous-period-label">
-                      So với kì trước
-                    </span>
-                    <span className="collaborator-activity__statistics--overview-statistic-previous-period-number uptrend">
-                      +8.2%
-                      <IoTrendingUp color="#22c55e" />
-                    </span>
-                  </div>
-                </div>
-              );
-            }
-            if (index === 3) {
-              return (
-                <div className="collaborator-activity__statistics--overview-statistic">
-                  {/* Icon */}
-                  <div>
-                    <IoCalendarNumberOutline
-                      className="collaborator-activity__statistics--overview-statistic-icon red"
-                      color="red"
-                    />
-                  </div>
-                  {/* Header */}
-                  <span className="collaborator-activity__statistics--overview-statistic-header">
-                    {item.label}
-                  </span>
-                  {/* Number */}
-                  <span className="collaborator-activity__statistics--overview-statistic-number red">
-                    {item.value}
-                  </span>
-                  {/* So với kì trước */}
-                  <div className="collaborator-activity__statistics--overview-statistic-previous-period">
-                    <span className="collaborator-activity__statistics--overview-statistic-previous-period-label">
-                      So với kì trước
-                    </span>
-                    <span className="collaborator-activity__statistics--overview-statistic-previous-period-number uptrend">
-                      +8.2%
-                      <IoTrendingUp color="#22c55e" />
-                    </span>
-                  </div>
-                </div>
-              );
-            }
+            return (
+              <CardInfo
+                cardContent={
+                  <CardTotalValue
+                    label={item.label}
+                    total={item.value}
+                    previousCompare="0"
+                    IconComponent={item.icon}
+                    color={item.color}
+                  />
+                }
+              />
+            );
           })}
         </div>
         <div className="collaborator-activity__statistics--chart">
@@ -345,15 +244,15 @@ const Activity = ({ id }) => {
             cardContent={
               <CardBarChart
                 data={testData}
-                height={300}
+                height={220}
                 verticalValue="value"
                 // verticalLine={true}
                 horizontalValue="name"
                 horizontalLine={true}
                 chartUnit="đánh giá"
                 total={20}
-                color="#fef9c3"
-                colorTotal="#eab308"
+                color="#bbf7d0"
+                colorTotal="#22c55e"
               />
             }
           />

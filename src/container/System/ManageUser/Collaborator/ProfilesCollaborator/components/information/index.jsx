@@ -755,775 +755,770 @@ const Information = ({ data, idCTV, setData, id }) => {
   // ↑ trở lên là code cũ không cần quan tâm
 
   // console.log("Check codecity", codeCity?.code ? codeCity?.code : codeCity);
-  console.log("check district >>>", codeDistrict);
   return (
-    <>
-      <div>
-        <div className="collaborator-information">
-          {/* Container 1 */}
-          <div className="collaborator-information__left">
-            <div className="collaborator-information__left--card card-shadow">
-              {/* Header */}
-              <div className="collaborator-information__left--card-header">
-                <span>Thông tin cộng tác viên</span>
-              </div>
-              {/* Content */}
-              <div className="collaborator-information__left--card-body">
-                {/* Avatar */}
-                <div className="collaborator-information__input-field">
-                  <div className="collaborator-information__input-field--child">
-                    <InputTextCustom
-                      type="file"
-                      placeHolder="Ảnh đại diện"
-                      // value={img ? img : data?.avatar ? data?.avatar : user}
-                      value={img}
-                      notShowPreviewImage={true}
-                      onChangeImage={onChangeThumbnail}
-                      setValueSelectedProps={setImg}
-                    />
-                  </div>
-                </div>
-                {/* Họ và tên, giới tính */}
-                <div className="collaborator-information__input-field">
-                  <div className="collaborator-information__input-field--child">
-                    <InputTextCustom
-                      type="text"
-                      value={name}
-                      required
-                      placeHolder="Họ và tên"
-                      onChange={(e) => setName(e.target.value)}
-                    />
-                  </div>
-                  <div className="collaborator-information__input-field--child">
-                    <InputTextCustom
-                      type="select"
-                      value={gender}
-                      placeHolder="Giới tính"
-                      setValueSelectedProps={setGender}
-                      options={[
-                        {
-                          code: "other",
-                          label: `${i18n.t("other", { lng: lang })}`,
-                        },
-                        {
-                          code: "male",
-                          label: `${i18n.t("male", { lng: lang })}`,
-                        },
-                        {
-                          code: "female",
-                          label: `${i18n.t("female", { lng: lang })}`,
-                        },
-                      ]}
-                    />
-                  </div>
-                </div>
-                {/* Email */}
-                <div className="collaborator-information__input-field">
-                  <div className="collaborator-information__input-field--child">
-                    <InputTextCustom
-                      type="text"
-                      value={email}
-                      placeHolder="Email"
-                      onChange={(e) => setEmail(e.target.value)}
-                    />
-                  </div>
-                </div>
-                {/* Số điện thoại, ngày sinh */}
-                <div className="collaborator-information__input-field">
-                  <div className="collaborator-information__input-field--child">
-                    <InputTextCustom
-                      type="textValue"
-                      valueUnit="(+84)"
-                      disable={true}
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                      required
-                      placeHolder="Số điện thoại"
-                    />
-                  </div>
-                  <div className="collaborator-information__input-field--child">
-                    <InputTextCustom
-                      type="date"
-                      value={birthday}
-                      placeHolder="Ngày sinh"
-                      birthday={
-                        birthday ? dayjs(birthday.slice(0, 1), dateFormat) : ""
-                      }
-                      setValueSelectedProps={setBirthday}
-                    />
-                  </div>
-                </div>
-                {/* Mạng xã hội (Số điện thoại zalo, facebook, etc...) */}
-                <div className="collaborator-information__input-field">
-                  <div className="collaborator-information__input-field--child">
-                    <InputTextCustom
-                      type="text"
-                      value={socialMediaInfo}
-                      placeHolder="Mạng xã hội"
-                      onChange={(e) => setSocialMediaInfo(e.target.value)}
-                    />
-                  </div>
-                </div>
-                {/* CCCD/CMND, nơi cấp, ngày cấp */}
-                <div className="collaborator-information__input-field">
-                  <div className="collaborator-information__input-field--child">
-                    <InputTextCustom
-                      type="text"
-                      // disable={true}
-                      value={number}
-                      number
-                      placeHolder="CCCD/CMND"
-                      onChange={(e) => setNumber(e.target.value)}
-                    />
-                  </div>
-                  <div className="collaborator-information__input-field--child">
-                    <InputTextCustom
-                      type="text"
-                      // disable={true}
-                      value={issued}
-                      placeHolder="Nơi cấp"
-                      onChange={(e) => setIssued(e.target.value)}
-                    />
-                  </div>
-                  <div className="collaborator-information__input-field--child">
-                    <InputTextCustom
-                      type="date"
-                      value={issuedDay}
-                      placeHolder="Ngày cấp"
-                      birthday={
-                        issuedDay
-                          ? dayjs(issuedDay.slice(0, 11), dateFormat)
-                          : ""
-                      }
-                      setValueSelectedProps={setIssuedDay}
-                    />
-                  </div>
-                </div>
-                {/* Quốc tịch, quê quán */}
-                <div className="collaborator-information__input-field">
-                  <div className="collaborator-information__input-field--child">
-                    <InputTextCustom
-                      type="select"
-                      searchField={true}
-                      value={selectcountry}
-                      placeHolder="Quốc tịch"
-                      setValueSelectedProps={setSelectCountry}
-                      options={countryList}
-                      previewImage={true}
-                    />
-                  </div>
-                  <div className="collaborator-information__input-field--child">
-                    <InputTextCustom
-                      type="text"
-                      value={homeTown}
-                      placeHolder="Quê quán"
-                      setValueSelectedProps={setHomeTown}
-                      // options={province}
-                    />
-                  </div>
-                </div>
-                {/* Tỉnh/Thành phố thường trú, Quận/Huyện thường trú*/}
-                <div className="collaborator-information__input-field">
-                  <div className="collaborator-information__input-field--child">
-                    <InputTextCustom
-                      type="province"
-                      searchField={true}
-                      value={selectProvinceLive}
-                      placeHolder="Tỉnh/Thành phố (thường trú)"
-                      province={province}
-                      setValueSelectedProps={setSelectProvinceLive}
-                      setValueSelectedPropsSupport={setSelectDistrictLive}
-                      setValueArrayProps={setDistrictArrayLive}
-                    />
-                  </div>
-                  <div className="collaborator-information__input-field--child">
-                    <InputTextCustom
-                      type="district"
-                      searchField={true}
-                      disable={
-                        selectProvinceLive > 0
-                          ? false
-                          : selectProvinceLive?.code > 0
-                          ? false
-                          : selectDistrictLive?.length > 0
-                          ? false
-                          : true
-                      }
-                      value={selectDistrictLive}
-                      placeHolder="Quận/Huyện (thường trú)"
-                      district={districtArrayLive}
-                      setValueSelectedProps={setSelectDistrictLive}
-                    />
-                  </div>
-                </div>
-                {/* Địa chỉ cụ thể thường trú */}
-                <div className="collaborator-information__input-field">
-                  <div className="collaborator-information__input-field--child">
-                    <InputTextCustom
-                      type="text"
-                      disable={
-                        selectDistrictLive > 0
-                          ? false
-                          : selectDistrictLive?.code > 0
-                          ? false
-                          : selectDistrictLive?.length > 0
-                          ? false
-                          : true
-                      }
-                      value={addressResidentLive}
-                      placeHolder="Số nhà, Tên đường (thường trú)"
-                      onChange={(e) => setAddressResidentLive(e.target.value)}
-                    />
-                  </div>
-                </div>
-                {/* Tỉnh/Thành phố tạm trú, Quận/Huyện tạm trú*/}
-                <div className="collaborator-information__input-field">
-                  <div className="collaborator-information__input-field--child">
-                    <InputTextCustom
-                      type="province"
-                      searchField={true}
-                      value={selectProvinceTemp}
-                      placeHolder="Tỉnh/Thành phố (tạm trú)"
-                      province={province}
-                      setValueSelectedProps={setSelectProvinceTemp}
-                      setValueSelectedPropsSupport={setSelectDistrictTemp}
-                      setValueArrayProps={setDistrictArrayTemp}
-                    />
-                  </div>
-                  <div className="collaborator-information__input-field--child">
-                    <InputTextCustom
-                      type="district"
-                      searchField={true}
-                      disable={
-                        selectProvinceTemp > 0
-                          ? false
-                          : selectProvinceTemp?.code > 0
-                          ? false
-                          : selectProvinceTemp?.length > 0
-                          ? false
-                          : true
-                      }
-                      value={selectDistrictTemp}
-                      placeHolder="Quận/Huyện (tạm trú)"
-                      district={districtArrayTemp}
-                      setValueSelectedProps={setSelectDistrictTemp}
-                    />
-                  </div>
-                </div>
-                {/* Địa chỉ cụ thể tạm trú */}
-                <div className="collaborator-information__input-field">
-                  <div className="collaborator-information__input-field--child">
-                    <InputTextCustom
-                      type="text"
-                      disable={
-                        selectDistrictTemp > 0
-                          ? false
-                          : selectDistrictTemp?.code > 0
-                          ? false
-                          : selectDistrictTemp?.length > 0
-                          ? false
-                          : true
-                      }
-                      value={addressResidentTemp}
-                      placeHolder="Số nhà, Tên đường (tạm trú)"
-                      onChange={(e) => setAddressResidentTemp(e.target.value)}
-                    />
-                  </div>
-                </div>
-                {/* Dân tộc, tôn giáo, trình độ văn hóa */}
-                <div className="collaborator-information__input-field">
-                  <div className="collaborator-information__input-field--child">
-                    <InputTextCustom
-                      type="text"
-                      value={ethnic}
-                      placeHolder="Dân tộc"
-                      onChange={(e) => setEthnic(e.target.value)}
-                    />
-                  </div>
-                  <div className="collaborator-information__input-field--child">
-                    <InputTextCustom
-                      type="text"
-                      value={religion}
-                      placeHolder="Tôn giáo"
-                      onChange={(e) => setReligion(e.target.value)}
-                    />
-                  </div>
-                  <div className="collaborator-information__input-field--child">
-                    <InputTextCustom
-                      type="select"
-                      value={level}
-                      placeHolder="Trình độ"
-                      setValueSelectedProps={setLevel}
-                      options={[
-                        { code: "5/12", label: "5/12" },
-                        { code: "9/12", label: "9/12" },
-                        { code: "12/12", label: "12/12" },
-                        {
-                          code: "Cao đẳng",
-                          label: `${i18n.t("college", { lng: lang })}`,
-                        },
-                        {
-                          code: "Đại học",
-                          label: `${i18n.t("university", { lng: lang })}`,
-                        },
-                        {
-                          code: "Thạc sĩ",
-                          label: `${i18n.t("master", { lng: lang })}`,
-                        },
-                        {
-                          code: "Tiến sĩ",
-                          label: `${i18n.t("doctor_philosophy", {
-                            lng: lang,
-                          })}`,
-                        },
-                      ]}
-                    />
-                  </div>
-                </div>
-                {/* Ngoại ngữ, kỹ năng */}
-                <div className="collaborator-information__input-field">
-                  <div className="collaborator-information__input-field--child">
-                    <InputTextCustom
-                      type="multiSelect"
-                      value={selectLanguages}
-                      multiSelectOptions={listLanguages}
-                      placeHolder="Ngôn ngữ"
-                      limitShows={3}
-                      setValueSelectedProps={setSelectLanguages}
-                    />
-                  </div>
-                  <div className="collaborator-information__input-field--child">
-                    <InputTextCustom
-                      type="multiSelect"
-                      value={selectSkills}
-                      multiSelectOptions={listSkills}
-                      placeHolder="Kỹ năng"
-                      limitShows={3}
-                      setValueSelectedProps={setSelectSkills}
-                    />
-                  </div>
-                </div>
-                {/* Loại dịch vụ */}
-                <div className="collaborator-information__input-field">
-                  <div className="collaborator-information__input-field--child">
-                    <InputTextCustom
-                      type="service"
-                      value={selectService}
-                      multiSelectOptions={service}
-                      placeHolder="Loại dịch vụ"
-                      setValueSelectedProps={setSelectService}
-                    />
-                  </div>
-                </div>
-                {/* Tỉnh/Thành phố làm việc, Quận/Huyện làm việc*/}
-                <div className="collaborator-information__input-field">
-                  <div className="collaborator-information__input-field--child">
-                    <InputTextCustom
-                      type="province"
-                      searchField={true}
-                      value={codeCity}
-                      placeHolder="Nơi làm việc (tỉnh/thành phố)"
-                      province={province}
-                      setValueSelectedProps={setCodeCity}
-                      setValueSelectedPropsSupport={setCodeDistrict}
-                      setValueArrayProps={setDistrictArrayWork}
-                      testing
-                    />
-                  </div>
-                  <div className="collaborator-information__input-field--child">
-                    <InputTextCustom
-                      type="multiDistrict"
-                      searchField={true}
-                      // disable={selectProvinceWork ? false : true}
-                      disable={
-                        codeCity > 0
-                          ? false
-                          : codeCity?.code > 0
-                          ? false
-                          : codeCity?.length > 0
-                          ? false
-                          : true
-                      }
-                      value={codeDistrict}
-                      multiSelectOptions={districtArrayWork}
-                      placeHolder="Nơi làm việc (quận/huyện)"
-                      // district={districtArrayWork}
-                      setValueSelectedProps={setCodeDistrict}
-                    />
-                  </div>
-                </div>
-                {/* Mã số thuế */}
-                <div className="collaborator-information__input-field">
-                  <div className="collaborator-information__input-field--child">
-                    <InputTextCustom
-                      type="text"
-                      value={taxCode}
-                      placeHolder="Mã số thuế"
-                      onChange={(e) => setTaxCode(e.target.value)}
-                    />
-                  </div>
-                </div>
-                {/* Mã giới thiệu, đối tác */}
-                <div className="collaborator-information__input-field">
-                  <div className="collaborator-information__input-field--child">
-                    <InputTextCustom
-                      type="text"
-                      disable={true}
-                      value={codeInvite}
-                      // multiSelectOptions={service}
-                      placeHolder="Mã giới thiệu"
-                      // setValueSelectedProps={setSelectService}
-                    />
-                  </div>
-                  <div className="collaborator-information__input-field--child">
-                    <InputTextCustom
-                      type="select"
-                      disable={true}
-                      // value={codeInvite}
-                      // multiSelectOptions={service}
-                      placeHolder="Đối tác"
-                      // setValueSelectedProps={setSelectService}
-                    />
-                  </div>
-                </div>
-                {/* Tên, số điện thoại, mối quan hệ với CTV*/}
-                {contactPersons?.map((inputField, index) => (
-                  <div
-                    style={{ alignItems: "center" }}
-                    className="collaborator-information__input-field"
-                  >
-                    <div className="collaborator-information__input-field--child">
-                      <InputTextCustom
-                        type="text"
-                        name="name_relative"
-                        value={inputField.name_relative}
-                        placeHolder={`Người liên hệ ${index + 1}`}
-                        onChange={(e) => handleChangeContact(e, index)}
-                      />
-                    </div>
-                    <div className="collaborator-information__input-field--child">
-                      <InputTextCustom
-                        type="text"
-                        name="phone_relative"
-                        value={inputField.phone_relative}
-                        placeHolder={`Số điện thoại`}
-                        onChange={(e) => handleChangeContact(e, index)}
-                      />
-                    </div>
-                    <div className="collaborator-information__input-field--child">
-                      <InputTextCustom
-                        type="text"
-                        name="relation_relative"
-                        value={inputField.relation_relative}
-                        placeHolder={`Quan hệ`}
-                        onChange={(e) => handleChangeContact(e, index)}
-                      />
-                    </div>
-                    <div
-                      onClick={() => handleDeleteContact(index)}
-                      style={{ margin: "18px 0px 0px 0px", padding: "2px" }}
-                      className="w-fit bg-red-500 rounded-full hover:bg-red-300 duration-300 cursor-pointer text-white"
-                    >
-                      <IoRemove />
-                    </div>
-                  </div>
-                ))}
-              </div>
-              {/* Thêm người liên hệ */}
-              <div style={{ padding: "2px 14px 0px 14px" }}>
-                <span
-                  onClick={() => handleAddingContact()}
-                  className={` ${
-                    contactPersons?.length >= 3
-                      ? "text-gray-500/60 cursor-not-allowed"
-                      : "text-violet-500 cursor-pointer"
-                  } duration-300`}
-                >
-                  Thêm người liên hệ
-                </span>
-              </div>
-              {/* Cập nhật thông tin cộng tác viên */}
-              <div style={{ padding: "4px 14px 0px 14px" }}>
-                <ButtonCustom
-                  label="Cập nhật"
-                  onClick={handleUpdateCollaboratorInfo}
-                />
-              </div>
+    <div>
+      <div className="collaborator-information">
+        {/* Container 1 */}
+        <div className="collaborator-information__left">
+          <div className="collaborator-information__left--card card-shadow">
+            {/* Header */}
+            <div className="collaborator-information__left--card-header">
+              <span>Thông tin cộng tác viên</span>
             </div>
-            <div className="collaborator-information__left--card card-shadow">
-              {/* Header */}
-              <div className="collaborator-information__left--card-header">
-                <span>Thông tin ngân hàng</span>
+            {/* Content */}
+            <div className="collaborator-information__left--card-body">
+              {/* Avatar */}
+              <div className="collaborator-information__input-field">
+                <div className="collaborator-information__input-field--child">
+                  <InputTextCustom
+                    type="file"
+                    placeHolder="Ảnh đại diện"
+                    // value={img ? img : data?.avatar ? data?.avatar : user}
+                    value={img}
+                    notShowPreviewImage={true}
+                    onChangeImage={onChangeThumbnail}
+                    setValueSelectedProps={setImg}
+                  />
+                </div>
               </div>
-              {/* Content */}
-              <div className="collaborator-information__left--card-body">
-                {/* Số tài khoản, Tên chủ thẻ */}
-                <div className="collaborator-information__input-field">
+              {/* Họ và tên, giới tính */}
+              <div className="collaborator-information__input-field">
+                <div className="collaborator-information__input-field--child">
+                  <InputTextCustom
+                    type="text"
+                    value={name}
+                    required
+                    placeHolder="Họ và tên"
+                    onChange={(e) => setName(e.target.value)}
+                  />
+                </div>
+                <div className="collaborator-information__input-field--child">
+                  <InputTextCustom
+                    type="select"
+                    value={gender}
+                    placeHolder="Giới tính"
+                    setValueSelectedProps={setGender}
+                    options={[
+                      {
+                        code: "other",
+                        label: `${i18n.t("other", { lng: lang })}`,
+                      },
+                      {
+                        code: "male",
+                        label: `${i18n.t("male", { lng: lang })}`,
+                      },
+                      {
+                        code: "female",
+                        label: `${i18n.t("female", { lng: lang })}`,
+                      },
+                    ]}
+                  />
+                </div>
+              </div>
+              {/* Email */}
+              <div className="collaborator-information__input-field">
+                <div className="collaborator-information__input-field--child">
+                  <InputTextCustom
+                    type="text"
+                    value={email}
+                    placeHolder="Email"
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                </div>
+              </div>
+              {/* Số điện thoại, ngày sinh */}
+              <div className="collaborator-information__input-field">
+                <div className="collaborator-information__input-field--child">
+                  <InputTextCustom
+                    type="textValue"
+                    valueUnit="(+84)"
+                    disable={true}
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    required
+                    placeHolder="Số điện thoại"
+                  />
+                </div>
+                <div className="collaborator-information__input-field--child">
+                  <InputTextCustom
+                    type="date"
+                    value={birthday}
+                    placeHolder="Ngày sinh"
+                    birthday={
+                      birthday ? dayjs(birthday.slice(0, 1), dateFormat) : ""
+                    }
+                    setValueSelectedProps={setBirthday}
+                  />
+                </div>
+              </div>
+              {/* Mạng xã hội (Số điện thoại zalo, facebook, etc...) */}
+              <div className="collaborator-information__input-field">
+                <div className="collaborator-information__input-field--child">
+                  <InputTextCustom
+                    type="text"
+                    value={socialMediaInfo}
+                    placeHolder="Mạng xã hội"
+                    onChange={(e) => setSocialMediaInfo(e.target.value)}
+                  />
+                </div>
+              </div>
+              {/* CCCD/CMND, nơi cấp, ngày cấp */}
+              <div className="collaborator-information__input-field">
+                <div className="collaborator-information__input-field--child">
+                  <InputTextCustom
+                    type="text"
+                    // disable={true}
+                    value={number}
+                    number
+                    placeHolder="CCCD/CMND"
+                    onChange={(e) => setNumber(e.target.value)}
+                  />
+                </div>
+                <div className="collaborator-information__input-field--child">
+                  <InputTextCustom
+                    type="text"
+                    // disable={true}
+                    value={issued}
+                    placeHolder="Nơi cấp"
+                    onChange={(e) => setIssued(e.target.value)}
+                  />
+                </div>
+                <div className="collaborator-information__input-field--child">
+                  <InputTextCustom
+                    type="date"
+                    value={issuedDay}
+                    placeHolder="Ngày cấp"
+                    birthday={
+                      issuedDay ? dayjs(issuedDay.slice(0, 11), dateFormat) : ""
+                    }
+                    setValueSelectedProps={setIssuedDay}
+                  />
+                </div>
+              </div>
+              {/* Quốc tịch, quê quán */}
+              <div className="collaborator-information__input-field">
+                <div className="collaborator-information__input-field--child">
+                  <InputTextCustom
+                    type="select"
+                    searchField={true}
+                    value={selectcountry}
+                    placeHolder="Quốc tịch"
+                    setValueSelectedProps={setSelectCountry}
+                    options={countryList}
+                    previewImage={true}
+                  />
+                </div>
+                <div className="collaborator-information__input-field--child">
+                  <InputTextCustom
+                    type="text"
+                    value={homeTown}
+                    placeHolder="Quê quán"
+                    setValueSelectedProps={setHomeTown}
+                    // options={province}
+                  />
+                </div>
+              </div>
+              {/* Tỉnh/Thành phố thường trú, Quận/Huyện thường trú*/}
+              <div className="collaborator-information__input-field">
+                <div className="collaborator-information__input-field--child">
+                  <InputTextCustom
+                    type="province"
+                    searchField={true}
+                    value={selectProvinceLive}
+                    placeHolder="Tỉnh/Thành phố (thường trú)"
+                    province={province}
+                    setValueSelectedProps={setSelectProvinceLive}
+                    setValueSelectedPropsSupport={setSelectDistrictLive}
+                    setValueArrayProps={setDistrictArrayLive}
+                  />
+                </div>
+                <div className="collaborator-information__input-field--child">
+                  <InputTextCustom
+                    type="district"
+                    searchField={true}
+                    disable={
+                      selectProvinceLive > 0
+                        ? false
+                        : selectProvinceLive?.code > 0
+                        ? false
+                        : selectDistrictLive?.length > 0
+                        ? false
+                        : true
+                    }
+                    value={selectDistrictLive}
+                    placeHolder="Quận/Huyện (thường trú)"
+                    district={districtArrayLive}
+                    setValueSelectedProps={setSelectDistrictLive}
+                  />
+                </div>
+              </div>
+              {/* Địa chỉ cụ thể thường trú */}
+              <div className="collaborator-information__input-field">
+                <div className="collaborator-information__input-field--child">
+                  <InputTextCustom
+                    type="text"
+                    disable={
+                      selectDistrictLive > 0
+                        ? false
+                        : selectDistrictLive?.code > 0
+                        ? false
+                        : selectDistrictLive?.length > 0
+                        ? false
+                        : true
+                    }
+                    value={addressResidentLive}
+                    placeHolder="Số nhà, Tên đường (thường trú)"
+                    onChange={(e) => setAddressResidentLive(e.target.value)}
+                  />
+                </div>
+              </div>
+              {/* Tỉnh/Thành phố tạm trú, Quận/Huyện tạm trú*/}
+              <div className="collaborator-information__input-field">
+                <div className="collaborator-information__input-field--child">
+                  <InputTextCustom
+                    type="province"
+                    searchField={true}
+                    value={selectProvinceTemp}
+                    placeHolder="Tỉnh/Thành phố (tạm trú)"
+                    province={province}
+                    setValueSelectedProps={setSelectProvinceTemp}
+                    setValueSelectedPropsSupport={setSelectDistrictTemp}
+                    setValueArrayProps={setDistrictArrayTemp}
+                  />
+                </div>
+                <div className="collaborator-information__input-field--child">
+                  <InputTextCustom
+                    type="district"
+                    searchField={true}
+                    disable={
+                      selectProvinceTemp > 0
+                        ? false
+                        : selectProvinceTemp?.code > 0
+                        ? false
+                        : selectProvinceTemp?.length > 0
+                        ? false
+                        : true
+                    }
+                    value={selectDistrictTemp}
+                    placeHolder="Quận/Huyện (tạm trú)"
+                    district={districtArrayTemp}
+                    setValueSelectedProps={setSelectDistrictTemp}
+                  />
+                </div>
+              </div>
+              {/* Địa chỉ cụ thể tạm trú */}
+              <div className="collaborator-information__input-field">
+                <div className="collaborator-information__input-field--child">
+                  <InputTextCustom
+                    type="text"
+                    disable={
+                      selectDistrictTemp > 0
+                        ? false
+                        : selectDistrictTemp?.code > 0
+                        ? false
+                        : selectDistrictTemp?.length > 0
+                        ? false
+                        : true
+                    }
+                    value={addressResidentTemp}
+                    placeHolder="Số nhà, Tên đường (tạm trú)"
+                    onChange={(e) => setAddressResidentTemp(e.target.value)}
+                  />
+                </div>
+              </div>
+              {/* Dân tộc, tôn giáo, trình độ văn hóa */}
+              <div className="collaborator-information__input-field">
+                <div className="collaborator-information__input-field--child">
+                  <InputTextCustom
+                    type="text"
+                    value={ethnic}
+                    placeHolder="Dân tộc"
+                    onChange={(e) => setEthnic(e.target.value)}
+                  />
+                </div>
+                <div className="collaborator-information__input-field--child">
+                  <InputTextCustom
+                    type="text"
+                    value={religion}
+                    placeHolder="Tôn giáo"
+                    onChange={(e) => setReligion(e.target.value)}
+                  />
+                </div>
+                <div className="collaborator-information__input-field--child">
+                  <InputTextCustom
+                    type="select"
+                    value={level}
+                    placeHolder="Trình độ"
+                    setValueSelectedProps={setLevel}
+                    options={[
+                      { code: "5/12", label: "5/12" },
+                      { code: "9/12", label: "9/12" },
+                      { code: "12/12", label: "12/12" },
+                      {
+                        code: "Cao đẳng",
+                        label: `${i18n.t("college", { lng: lang })}`,
+                      },
+                      {
+                        code: "Đại học",
+                        label: `${i18n.t("university", { lng: lang })}`,
+                      },
+                      {
+                        code: "Thạc sĩ",
+                        label: `${i18n.t("master", { lng: lang })}`,
+                      },
+                      {
+                        code: "Tiến sĩ",
+                        label: `${i18n.t("doctor_philosophy", {
+                          lng: lang,
+                        })}`,
+                      },
+                    ]}
+                  />
+                </div>
+              </div>
+              {/* Ngoại ngữ, kỹ năng */}
+              <div className="collaborator-information__input-field">
+                <div className="collaborator-information__input-field--child">
+                  <InputTextCustom
+                    type="multiSelect"
+                    value={selectLanguages}
+                    multiSelectOptions={listLanguages}
+                    placeHolder="Ngôn ngữ"
+                    limitShows={3}
+                    setValueSelectedProps={setSelectLanguages}
+                  />
+                </div>
+                <div className="collaborator-information__input-field--child">
+                  <InputTextCustom
+                    type="multiSelect"
+                    value={selectSkills}
+                    multiSelectOptions={listSkills}
+                    placeHolder="Kỹ năng"
+                    limitShows={3}
+                    setValueSelectedProps={setSelectSkills}
+                  />
+                </div>
+              </div>
+              {/* Loại dịch vụ */}
+              <div className="collaborator-information__input-field">
+                <div className="collaborator-information__input-field--child">
+                  <InputTextCustom
+                    type="service"
+                    value={selectService}
+                    multiSelectOptions={service}
+                    placeHolder="Loại dịch vụ"
+                    setValueSelectedProps={setSelectService}
+                  />
+                </div>
+              </div>
+              {/* Tỉnh/Thành phố làm việc, Quận/Huyện làm việc*/}
+              <div className="collaborator-information__input-field">
+                <div className="collaborator-information__input-field--child">
+                  <InputTextCustom
+                    type="province"
+                    searchField={true}
+                    value={codeCity}
+                    placeHolder="Nơi làm việc (tỉnh/thành phố)"
+                    province={province}
+                    setValueSelectedProps={setCodeCity}
+                    setValueSelectedPropsSupport={setCodeDistrict}
+                    setValueArrayProps={setDistrictArrayWork}
+                    testing
+                  />
+                </div>
+                <div className="collaborator-information__input-field--child">
+                  <InputTextCustom
+                    type="multiDistrict"
+                    searchField={true}
+                    // disable={selectProvinceWork ? false : true}
+                    disable={
+                      codeCity > 0
+                        ? false
+                        : codeCity?.code > 0
+                        ? false
+                        : codeCity?.length > 0
+                        ? false
+                        : true
+                    }
+                    value={codeDistrict}
+                    multiSelectOptions={districtArrayWork}
+                    placeHolder="Nơi làm việc (quận/huyện)"
+                    // district={districtArrayWork}
+                    setValueSelectedProps={setCodeDistrict}
+                  />
+                </div>
+              </div>
+              {/* Mã số thuế */}
+              <div className="collaborator-information__input-field">
+                <div className="collaborator-information__input-field--child">
+                  <InputTextCustom
+                    type="text"
+                    value={taxCode}
+                    placeHolder="Mã số thuế"
+                    onChange={(e) => setTaxCode(e.target.value)}
+                  />
+                </div>
+              </div>
+              {/* Mã giới thiệu, đối tác */}
+              <div className="collaborator-information__input-field">
+                <div className="collaborator-information__input-field--child">
+                  <InputTextCustom
+                    type="text"
+                    disable={true}
+                    value={codeInvite}
+                    // multiSelectOptions={service}
+                    placeHolder="Mã giới thiệu"
+                    // setValueSelectedProps={setSelectService}
+                  />
+                </div>
+                <div className="collaborator-information__input-field--child">
+                  <InputTextCustom
+                    type="select"
+                    disable={true}
+                    // value={codeInvite}
+                    // multiSelectOptions={service}
+                    placeHolder="Đối tác"
+                    // setValueSelectedProps={setSelectService}
+                  />
+                </div>
+              </div>
+              {/* Tên, số điện thoại, mối quan hệ với CTV*/}
+              {contactPersons?.map((inputField, index) => (
+                <div
+                  style={{ alignItems: "center" }}
+                  className="collaborator-information__input-field"
+                >
                   <div className="collaborator-information__input-field--child">
                     <InputTextCustom
                       type="text"
-                      value={accountName}
-                      placeHolder="Tên chủ thẻ"
-                      onChange={(e) => setAccountName(e.target.value)}
+                      name="name_relative"
+                      value={inputField.name_relative}
+                      placeHolder={`Người liên hệ ${index + 1}`}
+                      onChange={(e) => handleChangeContact(e, index)}
                     />
                   </div>
                   <div className="collaborator-information__input-field--child">
                     <InputTextCustom
                       type="text"
-                      value={accountNumber}
-                      placeHolder="Số tài khoản"
-                      onChange={(e) => setAccountNumber(e.target.value)}
+                      name="phone_relative"
+                      value={inputField.phone_relative}
+                      placeHolder={`Số điện thoại`}
+                      onChange={(e) => handleChangeContact(e, index)}
                     />
                   </div>
-                </div>
-                {/* Tên ngân hàng */}
-                <div className="collaborator-information__input-field">
-                  <div className="collaborator-information__input-field--child">
-                    <InputTextCustom
-                      type="select"
-                      value={selectBankName}
-                      placeHolder="Tên ngân hàng"
-                      setValueSelectedProps={setSelectBankName}
-                      options={sortList(bankList, "code")}
-                      previewImage={true}
-                    />
-                  </div>
-                </div>
-                {/* Tên chi nhánh */}
-                <div className="collaborator-information__input-field">
                   <div className="collaborator-information__input-field--child">
                     <InputTextCustom
                       type="text"
-                      value={bankBrand}
-                      placeHolder="Tên chi nhánh"
-                      onChange={(e) => setBankBrand(e.target.value)}
+                      name="relation_relative"
+                      value={inputField.relation_relative}
+                      placeHolder={`Quan hệ`}
+                      onChange={(e) => handleChangeContact(e, index)}
                     />
                   </div>
+                  <div
+                    onClick={() => handleDeleteContact(index)}
+                    style={{ margin: "18px 0px 0px 0px", padding: "2px" }}
+                    className="w-fit bg-red-500 rounded-full hover:bg-red-300 duration-300 cursor-pointer text-white"
+                  >
+                    <IoRemove />
+                  </div>
                 </div>
-              </div>
-              {/* Cập nhật tài khoản ngân hàng */}
-              <div style={{ padding: "8px 14px 0px 14px" }}>
-                <ButtonCustom
-                  label="Cập nhật"
-                  onClick={handleUpdateAccountBankInfo}
-                />
-              </div>
+              ))}
+            </div>
+            {/* Thêm người liên hệ */}
+            <div style={{ padding: "2px 14px 0px 14px" }}>
+              <span
+                onClick={() => handleAddingContact()}
+                className={` ${
+                  contactPersons?.length >= 3
+                    ? "text-gray-500/60 cursor-not-allowed"
+                    : "text-violet-500 cursor-pointer"
+                } duration-300`}
+              >
+                Thêm người liên hệ
+              </span>
+            </div>
+            {/* Cập nhật thông tin cộng tác viên */}
+            <div style={{ padding: "4px 14px 0px 14px" }}>
+              <ButtonCustom
+                label="Cập nhật"
+                onClick={handleUpdateCollaboratorInfo}
+              />
             </div>
           </div>
-          {/* Container 2 */}
-          <div className="collaborator-information__right">
-            <div className="collaborator-information__right--card card-shadow">
-              {/* Header */}
-              <div className="collaborator-information__right--card-header">
-                <span className="">Thông tin tài liệu</span>
+          <div className="collaborator-information__left--card card-shadow">
+            {/* Header */}
+            <div className="collaborator-information__left--card-header">
+              <span>Thông tin ngân hàng</span>
+            </div>
+            {/* Content */}
+            <div className="collaborator-information__left--card-body">
+              {/* Số tài khoản, Tên chủ thẻ */}
+              <div className="collaborator-information__input-field">
+                <div className="collaborator-information__input-field--child">
+                  <InputTextCustom
+                    type="text"
+                    value={accountName}
+                    placeHolder="Tên chủ thẻ"
+                    onChange={(e) => setAccountName(e.target.value)}
+                  />
+                </div>
+                <div className="collaborator-information__input-field--child">
+                  <InputTextCustom
+                    type="text"
+                    value={accountNumber}
+                    placeHolder="Số tài khoản"
+                    onChange={(e) => setAccountNumber(e.target.value)}
+                  />
+                </div>
               </div>
-              {/* Content */}
-              <div className="collaborator-information__right--card-body">
-                {/* Thông tin tổng quan tài liệu */}
-                <div className="collaborator-information__right--card-body-overview">
-                  <div className="collaborator-information__right--card-body-overview-label">
-                    <span>Tổng quan</span>
+              {/* Tên ngân hàng */}
+              <div className="collaborator-information__input-field">
+                <div className="collaborator-information__input-field--child">
+                  <InputTextCustom
+                    type="select"
+                    value={selectBankName}
+                    placeHolder="Tên ngân hàng"
+                    setValueSelectedProps={setSelectBankName}
+                    options={sortList(bankList, "code")}
+                    previewImage={true}
+                  />
+                </div>
+              </div>
+              {/* Tên chi nhánh */}
+              <div className="collaborator-information__input-field">
+                <div className="collaborator-information__input-field--child">
+                  <InputTextCustom
+                    type="text"
+                    value={bankBrand}
+                    placeHolder="Tên chi nhánh"
+                    onChange={(e) => setBankBrand(e.target.value)}
+                  />
+                </div>
+              </div>
+            </div>
+            {/* Cập nhật tài khoản ngân hàng */}
+            <div style={{ padding: "8px 14px 0px 14px" }}>
+              <ButtonCustom
+                label="Cập nhật"
+                onClick={handleUpdateAccountBankInfo}
+              />
+            </div>
+          </div>
+        </div>
+        {/* Container 2 */}
+        <div className="collaborator-information__right">
+          <div className="collaborator-information__right--card card-shadow">
+            {/* Header */}
+            <div className="collaborator-information__right--card-header">
+              <span className="">Thông tin tài liệu</span>
+            </div>
+            {/* Content */}
+            <div className="collaborator-information__right--card-body">
+              {/* Thông tin tổng quan tài liệu */}
+              <div className="collaborator-information__right--card-body-overview">
+                <div className="collaborator-information__right--card-body-overview-label">
+                  <span>Tổng quan</span>
+                </div>
+                {/* Checkbox */}
+                <div className="collaborator-information__right--card-body-overview-checklist">
+                  {/* Thỏa thuận hợp tác */}
+                  <div
+                    className={`collaborator-information__right--card-body-overview-checklist-checkbox ${
+                      deal && "unchecked"
+                    }`}
+                  >
+                    <span className="font-normal">
+                      {`${i18n.t("cooperation_agreement", { lng: lang })}`}
+                    </span>
+                    <input
+                      style={{
+                        accentColor: "green",
+                        height: "16px",
+                        width: "16px",
+                      }}
+                      type="checkbox"
+                      checked={deal}
+                    />
                   </div>
-                  {/* Checkbox */}
-                  <div className="collaborator-information__right--card-body-overview-checklist">
-                    {/* Thỏa thuận hợp tác */}
-                    <div
-                      className={`collaborator-information__right--card-body-overview-checklist-checkbox ${
-                        deal && "unchecked"
-                      }`}
-                    >
-                      <span className="font-normal">
-                        {`${i18n.t("cooperation_agreement", { lng: lang })}`}
-                      </span>
-                      <input
-                        style={{
-                          accentColor: "green",
-                          height: "16px",
-                          width: "16px",
-                        }}
-                        type="checkbox"
-                        checked={deal}
-                      />
-                    </div>
-                    {/* CCCD/CMND */}
-                    <div
-                      className={`collaborator-information__right--card-body-overview-checklist-checkbox ${
-                        identify && "unchecked"
-                      }`}
-                    >
-                      <span>{`${i18n.t("citizen_ID", { lng: lang })}`}</span>
-                      <input
-                        style={{
-                          accentColor: "green",
-                          height: "16px",
-                          width: "16px",
-                        }}
-                        type="checkbox"
-                        checked={identify}
-                      />
-                    </div>
-                    {/* Sơ yếu lí lịch */}
-                    <div
-                      className={`collaborator-information__right--card-body-overview-checklist-checkbox ${
-                        information && "unchecked"
-                      }`}
-                    >
-                      <span>
-                        {`${i18n.t("curriculum_vitae", { lng: lang })}`}
-                      </span>
-                      <input
-                        style={{
-                          accentColor: "green",
-                          height: "16px",
-                          width: "16px",
-                        }}
-                        type="checkbox"
-                        checked={information}
-                      />
-                    </div>
-                    {/* Sổ hộ khẩu */}
-                    <div
-                      className={`collaborator-information__right--card-body-overview-checklist-checkbox ${
-                        registration && "unchecked"
-                      }`}
-                    >
-                      <span>{`${i18n.t("household_book", {
-                        lng: lang,
-                      })}`}</span>
-                      <input
-                        style={{
-                          accentColor: "green",
-                          height: "16px",
-                          width: "16px",
-                        }}
-                        type="checkbox"
-                        checked={registration}
-                      />
-                    </div>
-                    {/* Giấy xác nhận hạnh kiểm */}
-                    <div
-                      className={`collaborator-information__right--card-body-overview-checklist-checkbox ${
-                        certification && "unchecked"
-                      }`}
-                    >
-                      <span>
-                        {`${i18n.t("certificate_conduct", { lng: lang })}`}
-                      </span>
-                      <input
-                        style={{
-                          accentColor: "green",
-                          height: "16px",
-                          width: "16px",
-                        }}
-                        type="checkbox"
-                        checked={certification}
-                      />
-                      {/* <Checkbox></Checkbox> */}
-                    </div>
+                  {/* CCCD/CMND */}
+                  <div
+                    className={`collaborator-information__right--card-body-overview-checklist-checkbox ${
+                      identify && "unchecked"
+                    }`}
+                  >
+                    <span>{`${i18n.t("citizen_ID", { lng: lang })}`}</span>
+                    <input
+                      style={{
+                        accentColor: "green",
+                        height: "16px",
+                        width: "16px",
+                      }}
+                      type="checkbox"
+                      checked={identify}
+                    />
+                  </div>
+                  {/* Sơ yếu lí lịch */}
+                  <div
+                    className={`collaborator-information__right--card-body-overview-checklist-checkbox ${
+                      information && "unchecked"
+                    }`}
+                  >
+                    <span>
+                      {`${i18n.t("curriculum_vitae", { lng: lang })}`}
+                    </span>
+                    <input
+                      style={{
+                        accentColor: "green",
+                        height: "16px",
+                        width: "16px",
+                      }}
+                      type="checkbox"
+                      checked={information}
+                    />
+                  </div>
+                  {/* Sổ hộ khẩu */}
+                  <div
+                    className={`collaborator-information__right--card-body-overview-checklist-checkbox ${
+                      registration && "unchecked"
+                    }`}
+                  >
+                    <span>{`${i18n.t("household_book", {
+                      lng: lang,
+                    })}`}</span>
+                    <input
+                      style={{
+                        accentColor: "green",
+                        height: "16px",
+                        width: "16px",
+                      }}
+                      type="checkbox"
+                      checked={registration}
+                    />
+                  </div>
+                  {/* Giấy xác nhận hạnh kiểm */}
+                  <div
+                    className={`collaborator-information__right--card-body-overview-checklist-checkbox ${
+                      certification && "unchecked"
+                    }`}
+                  >
+                    <span>
+                      {`${i18n.t("certificate_conduct", { lng: lang })}`}
+                    </span>
+                    <input
+                      style={{
+                        accentColor: "green",
+                        height: "16px",
+                        width: "16px",
+                      }}
+                      type="checkbox"
+                      checked={certification}
+                    />
+                    {/* <Checkbox></Checkbox> */}
                   </div>
                 </div>
-                {/* Thông tin chi tiết tài liệu */}
-                <div
-                  className="collaborator-information__right--card-body-upload"
-                  style={{
-                    maxHeight: `${
-                      // Mỗi cái input có height là 52px
-                      contactPersons?.length === 3
-                        ? "772px"
-                        : contactPersons?.length === 2
-                        ? "720px"
-                        : contactPersons?.length === 1
-                        ? "668px"
-                        : "616px"
-                    }`,
-                    // maxHeight: "686px",
-                    // padding: "0px 6px",
-                    // scrollbarGutter: "stable both-edges",
-                  }}
-                >
-                  {/* Mã hồ sơ */}
-                  <div>
-                    {/* <InputTextCustom
+              </div>
+              {/* Thông tin chi tiết tài liệu */}
+              <div
+                className="collaborator-information__right--card-body-upload"
+                style={{
+                  maxHeight: `${
+                    // Mỗi cái input có height là 52px
+                    contactPersons?.length === 3
+                      ? "772px"
+                      : contactPersons?.length === 2
+                      ? "720px"
+                      : contactPersons?.length === 1
+                      ? "668px"
+                      : "616px"
+                  }`,
+                  // maxHeight: "686px",
+                  // padding: "0px 6px",
+                  // scrollbarGutter: "stable both-edges",
+                }}
+              >
+                {/* Mã hồ sơ */}
+                <div>
+                  {/* <InputTextCustom
                       type="text"
                       placeHolder={`${i18n.t("profile_ID", { lng: lang })}`}
                       value={imgProfile}
                       onChange={(e) => setImgProfile(e.target.value)}
                     /> */}
-                    <InputTextCustom
-                      type="file"
-                      placeHolder="Hồ sơ"
-                      value={imgProfile}
-                      onChangeImage={onChangeImageProfile}
-                      setValueSelectedProps={setImgProfile}
-                    />
-                  </div>
-                  {/* CCCD/CMND mặt trước*/}
-                  <div>
-                    <InputTextCustom
-                      type="file"
-                      placeHolder="CCCD/CMND (mặt trước)"
-                      value={imgIdentifyFronsite}
-                      onChangeImage={onChangeIdentifyBefore}
-                      setValueSelectedProps={setImgIdentifyFronsite}
-                    />
-                  </div>
-                  {/* CCCD/CMND mặt sau*/}
-                  <div>
-                    <InputTextCustom
-                      type="file"
-                      placeHolder="CCCD/CMND (mặt sau)"
-                      value={imgIdentifyBacksite}
-                      onChangeImage={onChangeIdentifyAfter}
-                      setValueSelectedProps={setImgIdentifyBacksite}
-                    />
-                  </div>
-                  {/* Sơ yếu lí lịch */}
-                  <div>
-                    <InputTextCustom
-                      type="file"
-                      placeHolder="Sơ yếu lí lịch"
-                      multiple
-                      value={imgInformation}
-                      onChangeImage={onChangeInformation}
-                      setValueSelectedProps={setImgInformation}
-                    />
-                  </div>
-                  {/* Sổ hộ khẩu */}
-                  <div>
-                    <InputTextCustom
-                      type="file"
-                      placeHolder="Sổ hộ khẩu"
-                      multiple
-                      value={imgRegistration}
-                      onChangeImage={onChangeRegistration}
-                      setValueSelectedProps={setImgRegistration}
-                    />
-                  </div>
-                  {/* Giấy xác nhận hạnh kiểm */}
-                  <div>
-                    <InputTextCustom
-                      type="file"
-                      placeHolder="Giấy xác nhận hạnh kiểm"
-                      multiple
-                      value={imgCertification}
-                      onChangeImage={onChangeCertification}
-                      setValueSelectedProps={setImgCertification}
-                    />
-                  </div>
+                  <InputTextCustom
+                    type="file"
+                    placeHolder="Hồ sơ"
+                    value={imgProfile}
+                    onChangeImage={onChangeImageProfile}
+                    setValueSelectedProps={setImgProfile}
+                  />
+                </div>
+                {/* CCCD/CMND mặt trước*/}
+                <div>
+                  <InputTextCustom
+                    type="file"
+                    placeHolder="CCCD/CMND (mặt trước)"
+                    value={imgIdentifyFronsite}
+                    onChangeImage={onChangeIdentifyBefore}
+                    setValueSelectedProps={setImgIdentifyFronsite}
+                  />
+                </div>
+                {/* CCCD/CMND mặt sau*/}
+                <div>
+                  <InputTextCustom
+                    type="file"
+                    placeHolder="CCCD/CMND (mặt sau)"
+                    value={imgIdentifyBacksite}
+                    onChangeImage={onChangeIdentifyAfter}
+                    setValueSelectedProps={setImgIdentifyBacksite}
+                  />
+                </div>
+                {/* Sơ yếu lí lịch */}
+                <div>
+                  <InputTextCustom
+                    type="file"
+                    placeHolder="Sơ yếu lí lịch"
+                    multiple
+                    value={imgInformation}
+                    onChangeImage={onChangeInformation}
+                    setValueSelectedProps={setImgInformation}
+                  />
+                </div>
+                {/* Sổ hộ khẩu */}
+                <div>
+                  <InputTextCustom
+                    type="file"
+                    placeHolder="Sổ hộ khẩu"
+                    multiple
+                    value={imgRegistration}
+                    onChangeImage={onChangeRegistration}
+                    setValueSelectedProps={setImgRegistration}
+                  />
+                </div>
+                {/* Giấy xác nhận hạnh kiểm */}
+                <div>
+                  <InputTextCustom
+                    type="file"
+                    placeHolder="Giấy xác nhận hạnh kiểm"
+                    multiple
+                    value={imgCertification}
+                    onChangeImage={onChangeCertification}
+                    setValueSelectedProps={setImgCertification}
+                  />
                 </div>
               </div>
-              {/* Cập nhật thông tin tài liệu */}
-              <div style={{ padding: "8px 22px" }}>
-                <ButtonCustom
-                  label="Cập nhật"
-                  onClick={handleUpdateCollaboratorDocument}
-                />
-              </div>
+            </div>
+            {/* Cập nhật thông tin tài liệu */}
+            <div style={{ padding: "8px 22px" }}>
+              <ButtonCustom
+                label="Cập nhật"
+                onClick={handleUpdateCollaboratorDocument}
+              />
             </div>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

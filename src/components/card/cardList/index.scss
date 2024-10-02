@@ -1,0 +1,74 @@
+@import "../../../@theme/style.scss";
+
+.card__list {
+    display: flex;
+    flex-direction: column;
+    gap: $gapL;
+
+    .card__list--image {
+        width: 100%;
+        height: 100px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: $colorExtraLightPurple;
+        border-radius: $borderRadiusXL;
+
+        .card__list--image-label {
+            padding-left: 24px;
+            font-size: $textFontSizeXL;
+            font-weight: $fontWeightXL;
+            color: $colorBlack;
+        }
+
+        .card__list--image-image {
+            height: 100%;
+        }
+    }
+
+    .card__list--exam {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 12px;
+
+        &.not-last-exam {
+            border-bottom: 1.5px solid $colorExtraLightGray;
+        }
+
+        .card__list--exam-content {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+
+            .card__list--exam-content-header {
+                text-transform: uppercase;
+                color: $colorBlack;
+            }
+
+            .card__list--exam-content-subheader {
+                text-transform: lowercase;
+                color: $colorGray;
+                opacity: $opacityS;
+            }
+
+            .card__list--exam-content-subheader::first-letter {
+                text-transform: uppercase;
+            }
+        }
+
+        .card__list--exam-status {
+            background-color: $colorExtraLightGreen;
+            padding: 4px 12px;
+            border-radius: $borderRadiusFull;
+            border: 1px solid $colorGreen;
+            color: $colorGreen;
+
+            &.not-pass {
+                background-color: $colorExtraLightGray;
+                border: 1px solid $colorGray;
+                color: $colorGray;
+            }
+        }
+    }
+}
