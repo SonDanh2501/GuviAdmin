@@ -228,14 +228,14 @@ const ManageOrder = () => {
       i18n_title: "collaborator",
       dataIndex: "collaborator",
       key: "collaborator",
-      width: 160,
+      width: 130,
       fontSize: "text-size-M",
     },
     {
       i18n_title: "status",
       dataIndex: "status",
       key: "status",
-      width: 120,
+      width: 130,
       fontSize: "text-size-M",
     },
     {

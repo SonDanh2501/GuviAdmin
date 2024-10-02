@@ -427,9 +427,29 @@ span {
     }
   }
 }
+/* ~~~ Css dành cho bảng ~~~ */
+.table__header-content {
+  display: flex;
+  justify-content: space-between;
+  .table__header-content--left {
+    display: flex;
+    gap: $gapXS;
+    .table__header-content--left-label {
+      font-size: $textFontSizeM;
+      font-weight: $fontWeightL;
+      color: $colorGray;
+      opacity: $opacityM;
+    }
+    .table__header-content--left-number {
+      font-size: $textFontSizeM;
+      font-weight: $fontWeightXL;
+    }
+  }
+  .table__header-content--right {
 
+  }
+}
 /* ~~~ Css dành cho các trường hợp ~~~ */
-
 // Trường trạng thái
 .case__status-text {
   display: flex;
@@ -572,3 +592,11 @@ span {
   }
 
 }
+
+// Các trường chỉ hiển chữ
+.case__normal-text {
+  font-weight: $fontWeightL;
+  font-size: $textFontSizeM;
+}
+
+

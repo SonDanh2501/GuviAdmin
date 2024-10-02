@@ -1,3 +1,5 @@
+@import "../../../@theme/style.scss";
+
 .div-date-create {
   display: flex;
   flex-direction: column;
@@ -54,5 +56,31 @@
       text-decoration: none;
       margin: 0;
     }
+  }
+}
+
+
+
+.manage-push-notification {
+  display: flex;
+  flex-direction: column;
+  gap: $gapL;
+  padding-bottom: 16px;
+
+  .manage-push-notification__label {
+    span {
+      font-weight: $fontWeightXL;
+      font-size: $textFontSize3XL;
+      color: $colorBlack;
+    }
+  }
+  .manage-push-notification__function {
+    display: flex;
+    gap: $gapL;
+    width: 100%;
+    padding: 16px;
+    background-color: $colorWhite;
+    border-radius: $borderRadiusM;
+
   }
 }

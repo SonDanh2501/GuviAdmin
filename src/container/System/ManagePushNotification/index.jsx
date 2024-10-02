@@ -23,10 +23,15 @@ import {
 import AddPushNotification from "./AddPushNotification";
 import EditPushNotification from "./EditPushNotification";
 import "./index.scss";
-import { getListNotifications } from '../../../api/notification'
+import { getListNotifications } from "../../../api/notification";
+import ButtonCustom from "../../../components/button";
+import DataTable from "../../../components/tables/dataTable";
+
 const ManagePushNotification = () => {
-  // const listNotification = useSelector(getListNotifications);
+  const listNotification = useSelector(getListNotifications);
   const totalNotification = useSelector(getNotificationTotal);
+  const [dataNotifications, setDataNotifications] = useState([]);
+
   const [itemEdit, setItemEdit] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [status, setStatus] = useState("todo");
@@ -36,31 +41,37 @@ const ManagePushNotification = () => {
   const lang = useSelector(getLanguageState);
   const { width } = useWindowDimensions();
   const dispatch = useDispatch();
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
-  // useEffect(() => {
-  //   dispatch(
-  //     getNotification.getNotificationRequest({
-  //       status: status,
-  //       start: 0,
-  //       length: 20,
-  //     })
-  //   );
-  // }, [status, dispatch]);
+  const [startPage, setStartPage] = useState(0);
+  const [lengthPage, setLengthPage] = useState(
+    JSON.parse(localStorage.getItem("linePerPage"))
+      ? JSON.parse(localStorage.getItem("linePerPage")).value
+      : 20
+  );
+  /* ~~~ Use effect ~~~ */
 
   useEffect(() => {
-    dispatch(loadingAction.loadingRequest(true));
-    getListNotifications(0, 15, 1)
-      .then((res) => {
-        console.log("check res notification", res);
+    const fetchData = async () => {
+      try {
+        dispatch(loadingAction.loadingRequest(true));
+        // Chạy API
+        const dataNotificationsFetch = await getListNotifications(
+          startPage,
+          lengthPage,
+          1
+        ); // Fetch dữ liệu thông báo
+        /* Gán giá trị */
+        setDataNotifications(dataNotificationsFetch);
+      } catch (err) {
+        errorNotify({
+          message: err?.message,
+        });
+      } finally {
         dispatch(loadingAction.loadingRequest(false));
-      })
-      .catch((err) => {
-        dispatch(loadingAction.loadingRequest(false));
-      });
-  }, [dispatch, status]);
+      }
+    };
+    fetchData();
+  }, [status, dispatch, startPage, lengthPage]);
+
   const toggle = () => setModal(!modal);
   const toggleVerify = () => setModalVerify(!modalVerify);
 
@@ -77,7 +88,7 @@ const ManagePushNotification = () => {
   //     })
   //   );
   // };
-
+  /* ~~~ Handle function ~~~ */
   const onActive = (id, active) => {
     dispatch(loadingAction.loadingRequest(true));
     activePushNotification(id, {
@@ -144,133 +155,97 @@ const ManagePushNotification = () => {
     },
   ];
 
+  const onChangePage = (value) => {
+    setStartPage(value);
+  };
+
   const columns = [
     {
-      title: `${i18n.t("date_create", { lng: lang })}`,
-      render: (data) => {
-        return (
-          <div className="div-date-create">
-            <p className="text-create">
-              {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}
-            </p>
-            <p className="text-create">
-              {moment(new Date(data?.date_create)).format("HH:mm")}
-            </p>
-          </div>
-        );
-      },
+      title: "STT",
+      dataIndex: "",
+      key: "ordinal",
+      width: 60,
+      fontSize: "text-size-M",
     },
     {
-      title: `${i18n.t("title", { lng: lang })}`,
-      render: (data) => <p className="text-title-table">{data?.title}</p>,
+      title: "Ngày tạo",
+      key: "date_create",
+      width: 60,
+      fontSize: "text-size-M",
     },
     {
-      title: `${i18n.t("content", { lng: lang })}`,
-      render: (data) => <p className="text-title-table">{data?.body}</p>,
+      title: "Tiêu đề",
+      key: "notification_title",
+      width: 60,
+      fontSize: "text-size-M",
     },
     {
-      title: `${i18n.t("announcement_date", { lng: lang })}`,
-      render: (data) => (
-        <p className="text-title-table">
-          {data?.date_schedule
-            ? moment(new Date(data?.date_schedule)).format("DD/MM/YYYY - HH:mm")
-            : ""}
-        </p>
-      ),
+      title: "Nội dung",
+      key: "notification_content",
+      width: 60,
+      fontSize: "text-size-M",
     },
     {
-      key: "action",
-      align: "center",
-      render: (data) => {
-        return (
-          <div>
-            <Space size="middle">
-              <div>
-                {checkElement?.includes("active_notification") && (
-                  <Switch
-                    checked={data?.is_active}
-                    onClick={toggleVerify}
-                    style={{
-                      backgroundColor: data?.is_active ? "#00cf3a" : "",
-                    }}
-                  />
-                )}
-              </div>
-              <Dropdown
-                menu={{
-                  items,
-                }}
-                placement="bottomRight"
-                trigger={["click"]}
-              >
-                <div>
-                  <i class="uil uil-ellipsis-v"></i>
-                </div>
-              </Dropdown>
-            </Space>
-          </div>
-        );
-      },
+      title: "Ngày thông báo",
+      key: "notification_date_schedule",
+      width: 60,
+      fontSize: "text-size-M",
     },
+    //   key: "action",
+    //   align: "center",
+    //   render: (data) => {
+    //     return (
+    //       <div>
+    //         <Space size="middle">
+    //           <div>
+    //             {checkElement?.includes("active_notification") && (
+    //               <Switch
+    //                 checked={data?.is_active}
+    //                 onClick={toggleVerify}
+    //                 style={{
+    //                   backgroundColor: data?.is_active ? "#00cf3a" : "",
+    //                 }}
+    //               />
+    //             )}
+    //           </div>
+    //           <Dropdown
+    //             menu={{
+    //               items,
+    //             }}
+    //             placement="bottomRight"
+    //             trigger={["click"]}
+    //           >
+    //             <div>
+    //               <i class="uil uil-ellipsis-v"></i>
+    //             </div>
+    //           </Dropdown>
+    //         </Space>
+    //       </div>
+    //     );
+    //   },
+    // },
   ];
 
   return (
-    <div>
-      <h5>{`${i18n.t("notification", { lng: lang })}`}</h5>
+    <div className="manage-push-notification">
+      <div className="manage-push-notification__label">
+        <span>Thông báo</span>
+      </div>
+      <div className="manage-push-notification__function card-shadow">
+        {/* <ButtonCustom onClick={toggleVerify} label="Tạo thông báo" />
+        <ButtonCustom label="Tạo thông báo cho đối tác" /> */}
+        <AddPushNotification />
+      </div>
       <div>
-        {checkElement?.includes("create_notification") && (
-          <AddPushNotification />
-        )}
-      </div>
-      <div className="div-tab mt-5">
-        {DATA.map((item) => {
-          return (
-            <div
-              key={item?.id}
-              className={
-                status === item?.value
-                  ? "div-item-tab-selected"
-                  : "div-item-tab"
-              }
-              onClick={() => setStatus(item?.value)}
-            >
-              <p className="text-tab">
-                {`${i18n.t(item?.title, { lng: lang })}`}
-              </p>
-            </div>
-          );
-        })}
-      </div>
-      <div className="mt-3">
-        <Table
+        <DataTable
           columns={columns}
-          // dataSource={listNotification}
-          onRow={(record, rowIndex) => {
-            return {
-              onClick: (event) => {
-                setItemEdit(record);
-              },
-            };
-          }}
-          pagination={false}
-          scroll={{
-            x: width <= 490 ? 1000 : 0,
-          }}
+          data={dataNotifications?.data ? dataNotifications?.data : []}
+          start={startPage}
+          pageSize={lengthPage}
+          setLengthPage={setLengthPage}
+          onCurrentPageChange={onChangePage}
+          totalItem={dataNotifications?.totalItem}
         />
-      </div>
-      <div className="div-pagination p-2">
-        <p>
-          {`${i18n.t("total", { lng: lang })}`}: {totalNotification}
-        </p>
-        <div>
-          <Pagination
-            current={currentPage}
-            // onChange={onChange}
-            total={totalNotification}
-            showSizeChanger={false}
-            pageSize={20}
-          />
-        </div>
       </div>
 
       <div>
@@ -316,6 +291,107 @@ const ManagePushNotification = () => {
         />
       </div>
     </div>
+    // <div>
+    //   <h5>{`${i18n.t("notification", { lng: lang })}`}</h5>
+    //   <div>
+    //     {checkElement?.includes("create_notification") && (
+    //       <AddPushNotification />
+    //     )}
+    //   </div>
+    //   <div className="div-tab mt-5">
+    //     {DATA.map((item) => {
+    //       return (
+    //         <div
+    //           key={item?.id}
+    //           className={
+    //             status === item?.value
+    //               ? "div-item-tab-selected"
+    //               : "div-item-tab"
+    //           }
+    //           onClick={() => setStatus(item?.value)}
+    //         >
+    //           <p className="text-tab">
+    //             {`${i18n.t(item?.title, { lng: lang })}`}
+    //           </p>
+    //         </div>
+    //       );
+    //     })}
+    //   </div>
+    //   <div className="mt-3">
+    //     <Table
+    //       columns={columns}
+    //       // dataSource={listNotification}
+    //       onRow={(record, rowIndex) => {
+    //         return {
+    //           onClick: (event) => {
+    //             setItemEdit(record);
+    //           },
+    //         };
+    //       }}
+    //       pagination={false}
+    //       scroll={{
+    //         x: width <= 490 ? 1000 : 0,
+    //       }}
+    //     />
+    //   </div>
+    //   <div className="div-pagination p-2">
+    //     <p>
+    //       {`${i18n.t("total", { lng: lang })}`}: {totalNotification}
+    //     </p>
+    //     <div>
+    //       <Pagination
+    //         current={currentPage}
+    //         // onChange={onChange}
+    //         total={totalNotification}
+    //         showSizeChanger={false}
+    //         pageSize={20}
+    //       />
+    //     </div>
+    //   </div>
+
+    //   <div>
+    //     <ModalCustom
+    //       isOpen={modalVerify}
+    //       title={
+    //         !itemEdit?.is_active === true
+    //           ? `${i18n.t("unlock_noti", { lng: lang })}`
+    //           : `${i18n.t("lock_noti", { lng: lang })}`
+    //       }
+    //       handleOk={() => onActive(itemEdit?._id, itemEdit?.is_active)}
+    //       handleCancel={toggleVerify}
+    //       textOk={
+    //         !itemEdit?.is_active === true
+    //           ? `${i18n.t("lock", { lng: lang })}`
+    //           : `${i18n.t("unlock", { lng: lang })}`
+    //       }
+    //       body={
+    //         <>
+    //           {!itemEdit?.is_active === true
+    //             ? `${i18n.t("want_unlock_noti", { lng: lang })}`
+    //             : `${i18n.t("want_lock_noti", { lng: lang })}`}
+    //           <h6>{itemEdit?.title}</h6>
+    //         </>
+    //       }
+    //     />
+    //   </div>
+    //   <div>
+    //     <ModalCustom
+    //       isOpen={modal}
+    //       title={`${i18n.t("remove_notification", { lng: lang })}`}
+    //       handleOk={() => onDelete(itemEdit?._id)}
+    //       handleCancel={toggle}
+    //       textOk={`${i18n.t("delete", { lng: lang })}`}
+    //       body={
+    //         <>
+    //           <p className="m-0">{`${i18n.t("want_remove_notification", {
+    //             lng: lang,
+    //           })}`}</p>
+    //           <p className="text-name-modal m-0">{itemEdit?.title}</p>
+    //         </>
+    //       }
+    //     />
+    //   </div>
+    // </div>
   );
 };
 

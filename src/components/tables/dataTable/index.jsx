@@ -1753,10 +1753,30 @@ const DataTable = (props) => {
                   </span>
                 );
                 break;
+             
               default:
                 break;
             }
             return <div className="case__transfer-status">{_text_status}</div>;
+          }
+          case "notification_title": {
+            return <span className="case__normal-text">{data?.title}</span>;
+            break;
+          }
+          case "notification_content": {
+            return <span className="case__normal-text">{data?.body}</span>;
+            break;
+          }
+          case "notification_date_schedule": {
+            return (
+              <span className="case__normal-text">
+                {data?.date_schedule
+                  ? moment(new Date(data?.date_schedule)).format(
+                      "DD/MM/YYYY - HH:mm"
+                    )
+                  : ""}
+              </span>
+            );
           }
           default: {
             const dataView = data[item.dataIndex] || "";
@@ -1891,7 +1911,8 @@ const DataTable = (props) => {
         theme={{
           components: {
             Table: {
-              headerBg: "#9E68DF",
+              // headerBg: "#8b5cf6",
+              headerBg: "#8b5cf6",
               rowHoverBg: "#f0f0f0",
               borderColor: "#e7ecf3",
               lineWidth: 1,
@@ -1905,11 +1926,19 @@ const DataTable = (props) => {
           locale={locale}
           columns={headerTable}
           title={() => (
-            <div className="flex gap-1">
-              <span className="font-bold">
-                {`${i18n.t("total", { lng: lang })}`}:
-              </span>
-              <span>{totalItem}</span>
+            <div className="table__header-content">
+              <div className="table__header-content--left">
+                <span className="table__header-content--left-label">
+                  {`${i18n.t("total", { lng: lang })}`}:
+                </span>
+                <span className="table__header-content--left-number">
+                  {totalItem}
+                </span>
+              </div>
+              <div className="table__header-content--right">
+
+                
+              </div>
             </div>
           )}
           footer={() => footerRender()}

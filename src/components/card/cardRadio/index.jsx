@@ -19,7 +19,7 @@ const CardRadio = (props) => {
       return <circle cx={cx} cy={cy} r={10} fill="red" stroke="none" />;
     }
 
-    return <circle cx={cx} cy={cy} r={5} fill="#9e68df" stroke="none" />;
+    return <circle cx={cx} cy={cy} r={5} fill="#8b5cf6" stroke="none" />;
   };
   const getMultiLineText = (text, maxLineWidth) => {
     const words = text.split(" ");
@@ -75,7 +75,7 @@ const CardRadio = (props) => {
             legendType="square"
             name={dataName}
             dataKey="B"
-            stroke="#9e68df"
+            stroke="#8b5cf6"
             strokeWidth={3}
             fill="transparent"
             fillOpacity={0.6}

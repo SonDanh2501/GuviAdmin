@@ -63,7 +63,7 @@ const Sidebar = ({ hide }) => {
               /* Color for active (khi đè chuột xuống)*/
               itemActiveBg: "#ebe0f8", // Màu background
               /* Color for selected item */
-              itemSelectedBg: "#9e68df", // Màu của item
+              itemSelectedBg: "#8b5cf6", // Màu của item
               itemSelectedColor: "#F4F5FE", // Màu của icon và text
             },
           },

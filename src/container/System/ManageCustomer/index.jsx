@@ -299,7 +299,7 @@ const ManageCustomer = () => {
           </div>
           {/*Button tạo đơn*/}
           <Button
-            className="bg-[#9e68df] text-white hover:text-black ml-2"
+            className="bg-[#8b5cf6] text-white hover:text-black ml-2"
             icon={<PlusCircleOutlined />}
             onClick={() => navigate("/group-order/manage-order/create-order")}
           >

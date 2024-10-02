@@ -15,6 +15,7 @@ import { loadingAction } from "../../../../redux/actions/loading";
 import { getNotification } from "../../../../redux/actions/notification";
 import { getLanguageState } from "../../../../redux/selectors/auth";
 import "./index.scss";
+import ButtonCustom from "../../../../components/button";
 
 const AddPushNotification = ({ idOrder }) => {
   const [open, setOpen] = useState(false);
@@ -154,9 +155,13 @@ const AddPushNotification = ({ idOrder }) => {
 
   return (
     <>
-      <div className="btn-add-push-noti" onClick={showDrawer}>
+      {/* <div className="btn-add-push-noti" onClick={showDrawer}>
         <p className="m-0">{`${i18n.t("create_noti", { lng: lang })}`}</p>
-      </div>
+      </div> */}
+      <ButtonCustom
+        label={`${i18n.t("create_noti", { lng: lang })}`}
+        onClick={showDrawer}
+      />
       <Drawer
         title={`${i18n.t("create_noti", { lng: lang })}`}
         placement="right"
@@ -178,7 +183,6 @@ const AddPushNotification = ({ idOrder }) => {
           onChange={(e) => setDescription(e.target.value)}
           textArea={true}
         />
-
         <div className="mt-2">
           <Checkbox
             checked={isDateSchedule}
@@ -195,7 +199,6 @@ const AddPushNotification = ({ idOrder }) => {
             />
           )}
         </div>
-
         <div className="mt-3">
           <Checkbox
             checked={isCustomer}
@@ -256,7 +259,6 @@ const AddPushNotification = ({ idOrder }) => {
             </div>
           )}
         </div>
-
         <div className="mt-3">
           <Checkbox
             checked={isGroupCustomer}
@@ -278,7 +280,6 @@ const AddPushNotification = ({ idOrder }) => {
             />
           )}
         </div>
-
         <UploadImage
           title={`${i18n.t("image", { lng: lang })} 200px * 200px, ${i18n.t(
             "ratio",
@@ -289,7 +290,6 @@ const AddPushNotification = ({ idOrder }) => {
           classImg="img-background-noti"
           classUpload="upload-img-background-noti"
         />
-
         <Button className="mr-t" type="primary" onClick={onCreateNotification}>
           {`${i18n.t("create", { lng: lang })}`}
         </Button>
