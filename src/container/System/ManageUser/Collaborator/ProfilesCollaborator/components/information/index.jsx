@@ -55,8 +55,6 @@ const {
 } = icons;
 
 const Information = ({ data, idCTV, setData, id }) => {
-
-
   const [resident, setResident] = useState("");
   const [staying, setStaying] = useState("");
   const [imgUrl, setImgUrl] = useState("");
@@ -791,6 +789,7 @@ const Information = ({ data, idCTV, setData, id }) => {
   });
   // ↑ trở lên là code cũ không cần quan tâm
 
+  console.log("check home_town", homeTown);
   return (
     <div>
       <div className="collaborator-information">
@@ -949,8 +948,7 @@ const Information = ({ data, idCTV, setData, id }) => {
                     type="text"
                     value={homeTown}
                     placeHolder="Quê quán"
-                    setValueSelectedProps={setHomeTown}
-                    // options={province}
+                    onChange={(e) => setHomeTown(e.target.value)}
                   />
                 </div>
               </div>

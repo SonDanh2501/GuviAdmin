@@ -39,7 +39,7 @@ const AddPushNotification = ({ idOrder }) => {
   const [title, setTitle] = useState(""); // Tiêu đề thông báo
   const [description, setDescription] = useState(""); // Nội dung thông báo
   const [isSelectDateSchedule, setIsSelectDateSchedule] = useState(false); // Giá trị true/false thời gian thông báo
-  const [isSelectCustomer, setIsSelectCustomer] = useState(false); // Giá trị true/false khách hàng
+  const [isSelectCustomer, setIsSelectCustomer] = useState(true); // Giá trị true/false khách hàng
   const [isSelectGroupCustomer, setIsSelectGroupCustomer] = useState(false); // Giá trị true/false nhóm khách hàng
   const [isSelectCollaborator, setIsSelectCollaborator] = useState(false); // Giá trị true/false đối tác
   const [dateSchedule, setDateSchedule] = useState(
@@ -284,7 +284,7 @@ const AddPushNotification = ({ idOrder }) => {
         placement="right"
         onClose={onClose}
         closable={false}
-        width={500}
+        width={430}
         open={open}
         footer={
           <div className="add-push-notification__footer">
@@ -295,56 +295,50 @@ const AddPushNotification = ({ idOrder }) => {
               label="Đăng thông báo"
               onClick={onCreateNotification}
             />
-            <ButtonCustom label="Hủy" onClick={onClose} normal />
+            <ButtonCustom label="Hủy" onClick={onClose} style="normal" />
           </div>
         }
       >
         <div className="add-push-notification">
-          {/* Check box tạo thông báo cho khách hàng */}
-          <div
-            onClick={() => {
-              setIsSelectCollaborator(false);
-              setIsSelectCustomer(!isSelectCustomer);
-            }}
-            className={`add-push-notification__check-box ${
-              isSelectCustomer && "unchecked"
-            }`}
-          >
-            <span className="add-push-notification__check-box--text">
-              Tạo thông báo cho khách hàng
-            </span>
-            <input
-              style={{
-                accentColor: "green",
-                height: "16px",
-                width: "16px",
-              }}
-              type="checkbox"
-              checked={isSelectCustomer}
-            />
-          </div>
-          {/* Check box tạo thông báo cho đối tác */}
-          <div
-            onClick={() => {
-              setIsSelectCustomer(false);
-              setIsSelectCollaborator(!isSelectCollaborator);
-            }}
-            className={`add-push-notification__check-box ${
-              isSelectCollaborator && "unchecked"
-            }`}
-          >
-            <span className="add-push-notification__check-box--text">
-              Tạo thông báo cho đối tác
-            </span>
-            <input
-              style={{
-                accentColor: "green",
-                height: "16px",
-                width: "16px",
-              }}
-              type="checkbox"
-              checked={isSelectCollaborator}
-            />
+          <div className="add-push-notification__radio">
+            <div className="add-push-notification__radio--child">
+              <input
+                className="add-push-notification__radio--child-box"
+                type="radio"
+                name="create_for"
+                checked={isSelectCustomer}
+                onChange={() => {
+                  setIsSelectCustomer(true);
+                  setIsSelectCollaborator(false);
+                }}
+              />
+              <span
+                className={`add-push-notification__radio--child-text ${
+                  isSelectCustomer ? "checked" : "un-checked"
+                }`}
+              >
+                Tạo thông báo cho khách hàng
+              </span>
+            </div>
+            <div className="add-push-notification__radio--child">
+              <input
+                className="add-push-notification__radio--child-box"
+                type="radio"
+                name="create_for"
+                checked={isSelectCollaborator}
+                onChange={() => {
+                  setIsSelectCollaborator(true);
+                  setIsSelectCustomer(false);
+                }}
+              />
+              <span
+                className={`add-push-notification__radio--child-text ${
+                  isSelectCollaborator ? "checked" : "un-checked"
+                }`}
+              >
+                Tạo thông báo cho đối tác
+              </span>
+            </div>
           </div>
           {/* Tiêu đề thông báo */}
           <div className="add-push-notification__field">
@@ -388,7 +382,7 @@ const AddPushNotification = ({ idOrder }) => {
               />
             </div>
           </div>
-          {/* Khách hàng, nhóm khách hàng */}
+          {/* Khách hàng */}
           <div className="add-push-notification__field">
             <div className="add-push-notification__field--child">
               <InputTextCustom
@@ -407,6 +401,9 @@ const AddPushNotification = ({ idOrder }) => {
                 setSearchValue={setNameCustomer}
               />
             </div>
+          </div>
+          {/* Nhóm khách hàng */}
+          <div className="add-push-notification__field">
             <div className="add-push-notification__field--child">
               <InputTextCustom
                 type="multiSelect"
@@ -416,7 +413,7 @@ const AddPushNotification = ({ idOrder }) => {
                   options ? formatArray(options, "value", "label") : []
                 }
                 placeHolder="Nhóm khách hàng"
-                limitShows={1}
+                limitShows={2}
                 setValueSelectedProps={setGroupCustomer}
               />
             </div>
@@ -427,7 +424,6 @@ const AddPushNotification = ({ idOrder }) => {
               <InputTextCustom
                 type="fileArea"
                 value={imgThumbnail}
-                // placeHolder="Ảnh"
                 setValueSelectedProps={setImgThumbnail}
                 onChangeImage={onChangeThumbnail}
               />

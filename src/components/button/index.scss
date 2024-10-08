@@ -4,7 +4,6 @@
     color: $colorWhite;
     background-color: $colorViolet;
     border-radius: $borderRadiusM;
-    border: 1px solid $colorViolet;
     transition: all 0.3s ease;
     padding: 8px 10px;
     font-size: $textFontSizeM;
@@ -12,25 +11,26 @@
     cursor: pointer;
 
     &:hover {
-        background-color: $colorLightViolet;
-        border-color:  $colorLightViolet;
-
+        background-color: $colorDarkPurple;
     }
 
     &.disable {
         background-color: $colorExtraLightGray;
-        color: $colorBlack;
+        color: $colorGray;
         cursor: not-allowed;
     }
 
     &.normal {
         background-color: $colorExtraLightGray;
-        color: $colorBlack;
-        cursor: not-allowed;
+        color: $colorGray;
+
+        &:hover {
+            background-color: $colorMoreLightGray;
+        }
     }
 }
 
-.button-custom-checked { 
+.button-custom-checked {
     color: $colorViolet;
     background-color: $colorWhite;
     border-radius: $borderRadiusM;
@@ -44,7 +44,7 @@
     &:hover {
         background-color: $colorViolet;
         color: $colorWhite;
-        border-color:  $colorViolet;
+        border-color: $colorViolet;
     }
 
     &.disable {

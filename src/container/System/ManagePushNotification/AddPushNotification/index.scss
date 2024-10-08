@@ -195,6 +195,35 @@
     }
   }
 
+  .add-push-notification__radio {
+    display: flex;
+    align-items: center;
+    // justify-content: center;
+    gap: $gapM;
+
+    .add-push-notification__radio--child {
+      width: 50%;
+      display: flex;
+      align-items: center;
+      gap: $gapS;
+      .add-push-notification__radio--child-box {
+        accent-color: $colorPurple;
+      }
+      .add-push-notification__radio--child-text {
+        font-size: $textFontSizeM;
+        font-weight: $fontWeightL;
+        transition: 0.3s all ease-out;
+        &.checked { 
+          color: $colorBlack;
+        }
+        &.un-checked {
+          color: $colorGray;
+          opacity: $opacityM;
+        }
+      }
+    }
+  }
+
   .add-push-notification__text {
     font-size: $textFontSizeM;
     font-weight: $fontWeightL;

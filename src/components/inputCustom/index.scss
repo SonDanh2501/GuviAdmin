@@ -42,11 +42,11 @@
         position: absolute;
         top: 1.5px;
         right: 1.5px;
-        padding: 15px 16px;
+        padding: 13px 16px;
         background-color: #f1f5f9;
         border-left: 2px solid #eee;
-        border-top-right-radius: 2px;
-        border-bottom-right-radius: 2px;
+        border-top-right-radius: 3px;
+        border-bottom-right-radius: 3px;
     }
 
     .form-field__image {
@@ -79,7 +79,7 @@
 
     .form-field__icon {
         position: absolute;
-        top: 13px;
+        top: 12px;
         right: 18px;
     }
 
@@ -110,8 +110,8 @@
             align-items: center;
             justify-content: center;
             width: 100%;
-            height: 145px;
-            border: 2px dashed $colorGray;
+            height: 160px;
+            border: 2px dashed $colorLightGray;
             border-radius: $borderRadiusM;
             cursor: pointer;
             background-color: $colorExtraLightGray;
@@ -187,7 +187,7 @@ input[type=file]::file-selector-button {
     margin-top: 2px;
     border: none;
     background: #8b5cf6;
-    padding: 3px 8px;
+    padding: 1px 8px;
     border-radius: $borderRadiusS;
     color: #fff;
     cursor: pointer;

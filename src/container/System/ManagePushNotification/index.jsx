@@ -17,15 +17,17 @@ import {
   getLanguageState,
 } from "../../../redux/selectors/auth";
 import {
-  // getListNotifications,
+  getListNotifications,
   getNotificationTotal,
 } from "../../../redux/selectors/notification";
 import AddPushNotification from "./AddPushNotification";
 import EditPushNotification from "./EditPushNotification";
 import "./index.scss";
-import { getListNotifications } from "../../../api/notification";
+// import { getListNotifications } from "../../../api/notification";
 import ButtonCustom from "../../../components/button";
 import DataTable from "../../../components/tables/dataTable";
+import FilterData from "../../../components/filterData/filterData";
+import { CaretDownOutlined } from "@ant-design/icons";
 
 const ManagePushNotification = () => {
   const listNotification = useSelector(getListNotifications);
@@ -46,32 +48,50 @@ const ManagePushNotification = () => {
       ? JSON.parse(localStorage.getItem("linePerPage")).value
       : 20
   );
+  const [selectedStatus, setSelectedStatus] = useState("pending");
   /* ~~~ Use effect ~~~ */
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       dispatch(loadingAction.loadingRequest(true));
+  //       // Chạy API
+  //       const dataNotificationsFetch = await getListNotifications(
+  //         startPage,
+  //         lengthPage,
+  //         1
+  //       ); // Fetch dữ liệu thông báo
+  //       /* Gán giá trị */
+  //       setDataNotifications(dataNotificationsFetch);
+  //     } catch (err) {
+  //       errorNotify({
+  //         message: err?.message,
+  //       });
+  //     } finally {
+  //       dispatch(loadingAction.loadingRequest(false));
+  //     }
+  //   };
+  //   fetchData();
+  // }, [status, dispatch, startPage, lengthPage]);
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        dispatch(loadingAction.loadingRequest(true));
-        // Chạy API
-        const dataNotificationsFetch = await getListNotifications(
-          startPage,
-          lengthPage,
-          1
-        ); // Fetch dữ liệu thông báo
-        /* Gán giá trị */
-        setDataNotifications(dataNotificationsFetch);
-      } catch (err) {
-        errorNotify({
-          message: err?.message,
-        });
-      } finally {
-        dispatch(loadingAction.loadingRequest(false));
-      }
-    };
-    fetchData();
+    dispatch(
+      getNotification.getNotificationRequest({
+        status: status,
+        start: startPage,
+        length: lengthPage,
+      })
+    );
   }, [status, dispatch, startPage, lengthPage]);
 
-  const toggle = () => setModal(!modal);
-  const toggleVerify = () => setModalVerify(!modalVerify);
+  const onActive = (id, active) => {
+  };
+
+  const onDelete = (id) => {
+  };
+
+  
+  // const toggle = () => setModal(!modal);
+  // const toggleVerify = () => setModalVerify(!modalVerify);
 
   // const onChange = (page) => {
   //   setCurrentPage(page);
@@ -90,6 +110,13 @@ const ManagePushNotification = () => {
   const onChangePage = (value) => {
     setStartPage(value);
   };
+  const handleSelectStatus = ({ key }) => {
+    console.log("check key >>>", key);
+    const findStatus = statusOptions.find((el) => el.key === key);
+    console.log("check findStatus", findStatus);
+    setSelectedStatus(findStatus?.label);
+  };
+  /* ~~~ Data list ~~~ */
   const columns = [
     {
       title: "STT",
@@ -156,12 +183,15 @@ const ManagePushNotification = () => {
     //   },
     // },
   ];
-
+  const statusOptions = [
+    { key: "pending", label: "Đang chờ" },
+    { key: "done", label: "Đã xong" },
+  ];
   return (
     <div className="manage-push-notification">
       <div className="manage-push-notification__label">
         <span>Thông báo</span>
-        {/* <div className="div-tab mt-5">
+        <div className="div-tab mt-5">
           {DATA.map((item) => {
             return (
               <div
@@ -179,15 +209,39 @@ const ManagePushNotification = () => {
               </div>
             );
           })}
-        </div> */}
+        </div>
       </div>
-      {/* <div className="manage-push-notification__function card-shadow">
-         <ButtonCustom isCheckButton={true} label="Đang chờ" />
-      </div> */}
+      <FilterData
+        content={
+          <div>
+            <Dropdown
+              placement="bottom"
+              arrow={{
+                pointAtCenter: true,
+              }}
+              menu={{
+                items: statusOptions,
+                selectable: true,
+                defaultSelectedKeys: [""],
+                onSelect: (key) => handleSelectStatus(key),
+              }}
+              trigger={["click"]}
+            >
+              <Space>
+                <span>Trạng thái: </span>
+                <span style={{ cursor: "pointer" }} className="fw-500">
+                  {selectedStatus}
+                </span>
+                <CaretDownOutlined />
+              </Space>
+            </Dropdown>
+          </div>
+        }
+      />
       <div>
         <DataTable
           columns={columns}
-          data={dataNotifications?.data ? dataNotifications?.data : []}
+          data={listNotification}
           start={startPage}
           pageSize={lengthPage}
           setLengthPage={setLengthPage}

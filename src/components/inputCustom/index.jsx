@@ -792,16 +792,16 @@ const InputTextCustom = (props) => {
                 style={{
                   borderRadius: "6px",
                   border: "2px dashed #a855f7",
-                  padding: "6px",
+                  padding: "4px",
                 }}
                 className={`${
                   hideImage ? "hidden" : "flex"
                 } items-center justify-between mt-2 border-2 gap-2`}
               >
-                <div style={{ gap: "10px" }} className="flex items-center px-2">
+                <div style={{ gap: "10px" }} className="flex items-center px-3">
                   <Image
-                    height={35}
-                    width={35}
+                    height={30}
+                    width={30}
                     src={notShowPreviewImage ? value : secretImage}
                     preview={{
                       src: `${value}`,
