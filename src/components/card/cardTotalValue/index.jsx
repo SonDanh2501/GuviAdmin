@@ -29,7 +29,7 @@ const CardTotalValue = (props) => {
             <span className="card__total-value-horizontal--bottom-number">
               {total}
             </span>
-            <div>
+            {/* <div>
               <span
                 className={`card__total-value-horizontal--bottom-previous ${color}`}
               >
@@ -37,7 +37,7 @@ const CardTotalValue = (props) => {
                 <IoTrendingUp color={`${color}`} />
               </span>
               <span className="">So với kì trước</span>
-            </div>
+            </div> */}
           </div>
         </div>
       ) : (

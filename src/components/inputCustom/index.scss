@@ -6,11 +6,11 @@
 
     .form-field__input {
         border: 2px solid #eee;
-        border-radius: $borderRadiusS;
+        border-radius: $borderRadiusM;
         width: 100%;
         font-size: $textFontSizeL;
         line-height: $lineHeightL;
-        padding: 6px 20px;
+        padding: 8px 20px;
         transition: 0.25s ease;
         outline: none;
         font-weight: $fontWeightL;
@@ -31,7 +31,7 @@
         font-weight: $fontWeightL;
         font-size: $textFontSizeM;
         font-family: $fontFamily;
-        
+
 
         .form-field__label--required {
             color: #EF4444;
@@ -42,11 +42,11 @@
         position: absolute;
         top: 1.5px;
         right: 1.5px;
-        padding: 13.5px 16px;
+        padding: 15px 16px;
         background-color: #f1f5f9;
         border-left: 2px solid #eee;
-        border-top-right-radius: 3px;
-        border-bottom-right-radius: 3px;
+        border-top-right-radius: 2px;
+        border-bottom-right-radius: 2px;
     }
 
     .form-field__image {
@@ -74,12 +74,12 @@
         }
 
 
-  
+
     }
 
     .form-field__icon {
         position: absolute;
-        top: 10px;
+        top: 13px;
         right: 18px;
     }
 
@@ -97,11 +97,83 @@
         background-color: white;
         color: #6a5af9;
     }
+
+    .form-field__text-area {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        // width: 100%;
+        .form-field__text-area--container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 145px;
+            border: 2px dashed $colorGray;
+            border-radius: $borderRadiusM;
+            cursor: pointer;
+            background-color: $colorExtraLightGray;
+            transition: 0.3s all ease-out;
+
+            &.showing-image {
+                border: 0px;
+                border-radius: $borderRadiusM;
+            }
+
+            &:hover {
+                border-color: $colorPurple;
+
+                .form-field__text-area--container-content .form-field__text-area--container-content-main-icon {
+                    color: $colorPurple;
+                }
+            }
+
+            .form-field__text-area--container-image {
+                width: 100%;
+                height: 100%;
+                border-radius: $borderRadiusM;
+            }
+
+            .form-field__text-area--container-content {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding-top: 20px;
+                padding-bottom: 24px;
+
+
+                .form-field__text-area--container-content-main-icon {
+                    transition: 0.3s all ease-out;
+                    font-size: 32px;
+                    color: $colorGray;
+
+                }
+
+                .form-field__text-area--container-content-main-text {
+                    margin-bottom: 8px;
+                    font-size: $textFontSizeM;
+                    color: $colorGray;
+
+                    .text-bold {
+                        font-weight: $fontWeightXL;
+                    }
+                }
+
+                .form-field__text-area--container-content-main-sub {
+                    font-style: italic;
+                    color: $colorGray;
+                }
+            }
+
+            .form-field__text-area--container-input {
+                display: none;
+            }
+        }
+    }
 }
-
-
-
-
 
 .form-label-unit {
     position: absolute;
@@ -109,7 +181,7 @@
     left: 12px;
 }
 
-// ~~~ Input có type là file
+
 input[type=file]::file-selector-button {
     margin-right: 10px;
     margin-top: 2px;
@@ -120,7 +192,6 @@ input[type=file]::file-selector-button {
     color: #fff;
     cursor: pointer;
     transition: .2s ease-in-out;
-    // display: none;
 }
 
 input[type=file]::file-selector-button:hover {

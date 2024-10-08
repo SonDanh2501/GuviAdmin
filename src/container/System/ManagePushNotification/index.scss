@@ -74,13 +74,14 @@
       color: $colorBlack;
     }
   }
+
   .manage-push-notification__function {
     display: flex;
+    justify-content: space-between;
     gap: $gapL;
     width: 100%;
     padding: 16px;
     background-color: $colorWhite;
     border-radius: $borderRadiusM;
-
   }
 }

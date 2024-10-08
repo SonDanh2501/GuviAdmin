@@ -1,5 +1,15 @@
 import { SearchOutlined } from "@ant-design/icons";
-import { Button, Checkbox, Drawer, Input, List, Select } from "antd";
+import {
+  Button,
+  Checkbox,
+  Drawer,
+  Input,
+  List,
+  Select,
+  Space,
+  Switch,
+  Upload,
+} from "antd";
 import _debounce from "lodash/debounce";
 import moment from "moment";
 import React, { useCallback, useEffect, useState } from "react";
@@ -16,25 +26,39 @@ import { getNotification } from "../../../../redux/actions/notification";
 import { getLanguageState } from "../../../../redux/selectors/auth";
 import "./index.scss";
 import ButtonCustom from "../../../../components/button";
+import InputTextCustom from "../../../../components/inputCustom";
+import { formatArray } from "../../../../utils/contant";
+import resizeFile from "../../../../helper/resizer";
+import { postFile } from "../../../../api/file";
+import { IoCloudUploadOutline } from "react-icons/io5";
 
 const AddPushNotification = ({ idOrder }) => {
-  const [open, setOpen] = useState(false);
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [isDateSchedule, setIsDateSchedule] = useState(false);
-  const [dateSchedule, setDateSchedule] = useState("");
-  const [isCustomer, setIsCustomer] = useState(false);
-  const [nameCustomer, setNameCustomer] = useState("");
-  const [dataFilter, setDataFilter] = useState([]);
-  const [listCustomers, setListCustomers] = useState([]);
-  const [listNameCustomers, setListNameCustomers] = useState([]);
-  const [isGroupCustomer, setIsGroupCustomer] = useState(false);
-  const [groupCustomer, setGroupCustomer] = React.useState([]);
-  const [dataGroupCustomer, setDataGroupCustomer] = useState([]);
-  const [imgThumbnail, setImgThumbnail] = useState("");
-  const options = [];
   const lang = useSelector(getLanguageState);
   const dispatch = useDispatch();
+  const [open, setOpen] = useState(false);
+  const [title, setTitle] = useState(""); // Tiêu đề thông báo
+  const [description, setDescription] = useState(""); // Nội dung thông báo
+  const [isSelectDateSchedule, setIsSelectDateSchedule] = useState(false); // Giá trị true/false thời gian thông báo
+  const [isSelectCustomer, setIsSelectCustomer] = useState(false); // Giá trị true/false khách hàng
+  const [isSelectGroupCustomer, setIsSelectGroupCustomer] = useState(false); // Giá trị true/false nhóm khách hàng
+  const [isSelectCollaborator, setIsSelectCollaborator] = useState(false); // Giá trị true/false đối tác
+  const [dateSchedule, setDateSchedule] = useState(
+    moment().seconds(0).format("YYYY-MM-DD HH:mm:ss")
+  ); // Giá trị ngày thông báo
+  const [nameCustomer, setNameCustomer] = useState(""); // Giá trị searching tên khách hàng
+  const [dataFilter, setDataFilter] = useState([]); // Giá trị fetch dữ liệu khách hàng tìm kiếm
+  const [listCustomers, setListCustomers] = useState([]); // Giá trị khách hàng đã chọn (lưu _id)
+  const [listNameCustomers, setListNameCustomers] = useState([]); // Giá trị khách hàng đã chọn (lưu toàn bộ thông tin, để render ra tên với sđt, ...)
+  const [groupCustomer, setGroupCustomer] = useState([]); // Giá trị nhóm khách hàng đã chọn (lưu _id)
+  const [dataGroupCustomer, setDataGroupCustomer] = useState([]); // Giá trị fetch dữ liệu nhóm khách hàng
+  const [imgThumbnail, setImgThumbnail] = useState(""); // Giá trị ảnh thumbnail
+  const options = [];
+  const listOptions = [
+    { name: "Tên", value: "<full_name>" },
+    { name: "Cấp bậc", value: "<rank>" },
+  ];
+
+  /* ~~~ Support function ~~~ */
   const showDrawer = () => {
     setOpen(true);
   };
@@ -43,19 +67,13 @@ const AddPushNotification = ({ idOrder }) => {
   };
   const width = window.innerWidth;
 
-  useEffect(() => {
-    getGroupCustomerApi(0, 10)
-      .then((res) => setDataGroupCustomer(res.data))
-      .catch((err) => console.log(err));
-  }, []);
-
-  dataGroupCustomer.map((item, index) => {
-    return options.push({
-      label: item?.name,
-      value: item?._id,
-    });
-  });
-
+  /* ~~~ Handle function ~~~ */
+  // 1. Handle select tag field
+  const handleSelectTag = (tag) => {
+    let newDescription = description;
+    newDescription = `${newDescription} ${tag.value}`.trim();
+    setDescription(newDescription);
+  };
   const changeValue = (value) => {
     setNameCustomer(value);
   };
@@ -107,13 +125,14 @@ const AddPushNotification = ({ idOrder }) => {
     createPushNotification({
       title: title,
       body: description,
-      is_date_schedule: isDateSchedule,
+      is_date_schedule: isSelectDateSchedule,
       date_schedule: moment(dateSchedule).toISOString(),
-      is_id_customer: isCustomer,
+      is_id_customer: isSelectCustomer,
       id_customer: listCustomers,
-      is_id_group_customer: isGroupCustomer,
+      is_id_group_customer: groupCustomer?.length > 0 ? true : false,
       id_group_customer: groupCustomer,
       image_url: imgThumbnail,
+      is_id_collaborator: isSelectCollaborator,
     })
       .then(() => {
         dispatch(
@@ -127,9 +146,9 @@ const AddPushNotification = ({ idOrder }) => {
         setOpen(false);
         setTitle("");
         setDescription("");
-        setIsDateSchedule(false);
         setDateSchedule("");
-        setIsCustomer(false);
+        setIsSelectDateSchedule(false);
+        setIsSelectCustomer(false);
         setListCustomers([]);
         setGroupCustomer([]);
         setImgThumbnail("");
@@ -143,158 +162,280 @@ const AddPushNotification = ({ idOrder }) => {
   }, [
     title,
     description,
-    isDateSchedule,
+    isSelectDateSchedule,
     dateSchedule,
-    isCustomer,
+    isSelectCustomer,
     listCustomers,
     groupCustomer,
     imgThumbnail,
     dispatch,
-    isGroupCustomer,
+    isSelectGroupCustomer,
   ]);
 
+  const onChangeThumbnail = async (e) => {
+    const extend = e.target.files[0].type.slice(
+      e.target.files[0].type.indexOf("/") + 1
+    );
+    if (e.target.files[0]) {
+      const reader = new FileReader();
+      reader.addEventListener("load", () => {
+        setImgThumbnail(reader.result);
+      });
+      reader.readAsDataURL(e.target.files[0]);
+    }
+    const file = e.target.files[0];
+    const image = await resizeFile(file, extend);
+    const formData = new FormData();
+    formData.append("multi-files", image);
+    dispatch(loadingAction.loadingRequest(true));
+    postFile(formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+      .then((res) => {
+        setImgThumbnail(res[0]);
+        dispatch(loadingAction.loadingRequest(false));
+      })
+      .catch((err) => {
+        setImgThumbnail("");
+        errorNotify({
+          message: err?.message,
+        });
+        dispatch(loadingAction.loadingRequest(false));
+      });
+  };
+
+  const handleChangeImg = async (info) => {
+    console.log("Check info ", info);
+    // if (info.file.status === "uploading") {
+    //   setLoading(true);
+    //   return;
+    // }
+    // const extend = info.fileList[0].type.slice(
+    //   info.fileList[0].type.indexOf("/") + 1
+    // );
+    // try {
+    //   const file = info.fileList[0].originFileObj;
+    //   const image = await resizeFile(file, extend);
+    //   const formData = new FormData();
+    //   formData.append("multi-files", image);
+    //   postFile(formData, {
+    //     headers: {
+    //       "Content-Type": "multipart/form-data",
+    //     },
+    //   })
+    //     .then((res) => {
+    //       setImage(res[0]);
+    //       setLoading(false);
+    //     })
+    //     .catch((err) => {
+    //       setImage("");
+    //       errorNotify({
+    //         message: err?.message,
+    //       });
+    //       setLoading(false);
+    //     });
+    // } catch (error) {}
+  };
+
+  /* ~~~ Use effect ~~~ */
+  // useEffect(() => {
+  //   getGroupCustomerApi(0, 10)
+  //     .then((res) => setDataGroupCustomer(res.data))
+  //     .catch((err) => console.log(err));
+  //   const dataCustomersFetch = searchCustomersApi(nameCustomer);
+  // }, []);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const dataGroupCustomerFetch = await getGroupCustomerApi(0, 10);
+        setDataGroupCustomer(
+          dataGroupCustomerFetch.data ? dataGroupCustomerFetch.data : []
+        );
+        if (nameCustomer.length > 0) {
+          const dataCustomersFetch = await searchCustomersApi(nameCustomer);
+          setDataFilter(dataCustomersFetch ? dataCustomersFetch?.data : []);
+        } else {
+          setDataFilter([]);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, [nameCustomer]);
+  dataGroupCustomer?.map((item, index) => {
+    return options.push({
+      label: item?.name,
+      value: item?._id,
+    });
+  });
+
   return (
-    <>
-      {/* <div className="btn-add-push-noti" onClick={showDrawer}>
-        <p className="m-0">{`${i18n.t("create_noti", { lng: lang })}`}</p>
-      </div> */}
+    <div>
       <ButtonCustom
         label={`${i18n.t("create_noti", { lng: lang })}`}
         onClick={showDrawer}
       />
       <Drawer
-        title={`${i18n.t("create_noti", { lng: lang })}`}
+        // title={`${i18n.t("create_noti", { lng: lang })}`}
+        title="Nội dung"
         placement="right"
         onClose={onClose}
-        width={width > 490 ? 500 : 300}
+        closable={false}
+        width={500}
         open={open}
-        headerStyle={{ height: 50 }}
+        footer={
+          <div className="add-push-notification__footer">
+            <ButtonCustom
+              disable={
+                title.length > 0 && description.length > 0 ? false : true
+              }
+              label="Đăng thông báo"
+              onClick={onCreateNotification}
+            />
+            <ButtonCustom label="Hủy" onClick={onClose} normal />
+          </div>
+        }
       >
-        <InputCustom
-          title={`${i18n.t("title", { lng: lang })}`}
-          type="text"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        <InputCustom
-          title={`${i18n.t("content", { lng: lang })}`}
-          type="textarea"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          textArea={true}
-        />
-        <div className="mt-2">
-          <Checkbox
-            checked={isDateSchedule}
-            onChange={(e) => setIsDateSchedule(e.target.checked)}
+        <div className="add-push-notification">
+          {/* Check box tạo thông báo cho khách hàng */}
+          <div
+            onClick={() => {
+              setIsSelectCollaborator(false);
+              setIsSelectCustomer(!isSelectCustomer);
+            }}
+            className={`add-push-notification__check-box ${
+              isSelectCustomer && "unchecked"
+            }`}
           >
-            {`${i18n.t("notice_time", { lng: lang })}`}
-          </Checkbox>
-          {isDateSchedule && (
-            <Input
-              type="datetime-local"
-              className="text-input mt-2"
-              value={dateSchedule}
-              onChange={(e) => setDateSchedule(e.target.value)}
-            />
-          )}
-        </div>
-        <div className="mt-3">
-          <Checkbox
-            checked={isCustomer}
-            onChange={(e) => setIsCustomer(e.target.checked)}
-          >
-            {`${i18n.t("customer", { lng: lang })}`}
-          </Checkbox>
-          {isCustomer && (
-            <div>
-              <InputCustom
-                placeholder={`${i18n.t("search", { lng: lang })}`}
-                type="text"
-                value={nameCustomer}
-                prefix={<SearchOutlined />}
-                onChange={(e) => {
-                  changeValue(e.target.value);
-                  searchCustomer(e.target.value);
-                }}
-              />
-              {dataFilter.length > 0 && (
-                <List type={"unstyled"} className="list-item-kh">
-                  {dataFilter?.map((item, index) => {
-                    return (
-                      <div
-                        className="div-item"
-                        key={index}
-                        onClick={() => onChooseCustomer(item)}
-                      >
-                        <p className="text-name">
-                          {item?.full_name} - {item?.phone} - {item?.id_view}
-                        </p>
-                      </div>
-                    );
-                  })}
-                </List>
-              )}
-
-              {listNameCustomers.length > 0 && (
-                <div className="div-list-customer">
-                  <List type={"unstyled"}>
-                    {listNameCustomers.map((item) => {
-                      return (
-                        <div className="div-item-customer">
-                          <p className="text-name-list">
-                            - {item?.full_name} . {item?.phone} .{" "}
-                            {item?.id_view}
-                          </p>
-                          <i
-                            class="uil uil-times-circle"
-                            onClick={() => removeItemCustomer(item)}
-                          ></i>
-                        </div>
-                      );
-                    })}
-                  </List>
-                </div>
-              )}
-            </div>
-          )}
-        </div>
-        <div className="mt-3">
-          <Checkbox
-            checked={isGroupCustomer}
-            onChange={(e) => setIsGroupCustomer(e.target.checked)}
-          >
-            {`${i18n.t("customer_group", { lng: lang })}`}
-          </Checkbox>
-
-          {isGroupCustomer && (
-            <Select
-              mode="multiple"
-              allowClear
+            <span className="add-push-notification__check-box--text">
+              Tạo thông báo cho khách hàng
+            </span>
+            <input
               style={{
-                width: "100%",
+                accentColor: "green",
+                height: "16px",
+                width: "16px",
               }}
-              placeholder="Please select"
-              onChange={handleChange}
-              options={options}
+              type="checkbox"
+              checked={isSelectCustomer}
             />
-          )}
+          </div>
+          {/* Check box tạo thông báo cho đối tác */}
+          <div
+            onClick={() => {
+              setIsSelectCustomer(false);
+              setIsSelectCollaborator(!isSelectCollaborator);
+            }}
+            className={`add-push-notification__check-box ${
+              isSelectCollaborator && "unchecked"
+            }`}
+          >
+            <span className="add-push-notification__check-box--text">
+              Tạo thông báo cho đối tác
+            </span>
+            <input
+              style={{
+                accentColor: "green",
+                height: "16px",
+                width: "16px",
+              }}
+              type="checkbox"
+              checked={isSelectCollaborator}
+            />
+          </div>
+          {/* Tiêu đề thông báo */}
+          <div className="add-push-notification__field">
+            <div className="add-push-notification__field--child">
+              <InputTextCustom
+                type="text"
+                value={title}
+                placeHolder="Tiêu đề thông báo"
+                onChange={(e) => setTitle(e.target.value)}
+              />
+            </div>
+          </div>
+          {/* Nội dung thông báo */}
+          <div className="add-push-notification__field">
+            <div className="add-push-notification__field--child">
+              <InputTextCustom
+                type="textArea"
+                value={description}
+                placeHolder="Nội dung thông báo"
+                onChange={(e) => setDescription(e.target.value)}
+              />
+            </div>
+          </div>
+          {/* Các thẻ select trường muốn thông báo */}
+          <div className="add-push-notification__field">
+            <div className="add-push-notification__field--child drap-field">
+              {listOptions?.map((el) => (
+                <span onClick={() => handleSelectTag(el)}>{el.name}</span>
+              ))}
+            </div>
+          </div>
+          {/* Thời gian thông báo */}
+          <div className="add-push-notification__field">
+            <div className="add-push-notification__field--child">
+              <Input
+                // disabled={!isSelectDateSchedule}
+                type="datetime-local"
+                className="w-full"
+                value={dateSchedule}
+                onChange={(e) => setDateSchedule(e.target.value)}
+              />
+            </div>
+          </div>
+          {/* Khách hàng, nhóm khách hàng */}
+          <div className="add-push-notification__field">
+            <div className="add-push-notification__field--child">
+              <InputTextCustom
+                type="multiSelect"
+                disable={groupCustomer.length > 0 ? true : false}
+                value={listCustomers}
+                multiSelectOptions={
+                  dataFilter
+                    ? formatArray(dataFilter, "_id", "full_name", "phone")
+                    : []
+                }
+                placeHolder="Khách hàng"
+                limitShows={1}
+                setValueSelectedProps={setListCustomers}
+                searchField={true}
+                setSearchValue={setNameCustomer}
+              />
+            </div>
+            <div className="add-push-notification__field--child">
+              <InputTextCustom
+                type="multiSelect"
+                disable={listCustomers?.length > 0 ? true : false}
+                value={groupCustomer}
+                multiSelectOptions={
+                  options ? formatArray(options, "value", "label") : []
+                }
+                placeHolder="Nhóm khách hàng"
+                limitShows={1}
+                setValueSelectedProps={setGroupCustomer}
+              />
+            </div>
+          </div>
+          {/* Upload ảnh */}
+          <div className="add-push-notification__field">
+            <div className="add-push-notification__field--child">
+              <InputTextCustom
+                type="fileArea"
+                value={imgThumbnail}
+                // placeHolder="Ảnh"
+                setValueSelectedProps={setImgThumbnail}
+                onChangeImage={onChangeThumbnail}
+              />
+            </div>
+          </div>
         </div>
-        <UploadImage
-          title={`${i18n.t("image", { lng: lang })} 200px * 200px, ${i18n.t(
-            "ratio",
-            { lng: lang }
-          )} 2,62`}
-          image={imgThumbnail}
-          setImage={setImgThumbnail}
-          classImg="img-background-noti"
-          classUpload="upload-img-background-noti"
-        />
-        <Button className="mr-t" type="primary" onClick={onCreateNotification}>
-          {`${i18n.t("create", { lng: lang })}`}
-        </Button>
       </Drawer>
-    </>
+    </div>
   );
 };
 export default AddPushNotification;

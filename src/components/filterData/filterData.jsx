@@ -112,7 +112,7 @@ const FilterData = (props) => {
   }, [startDate, endDate]);
 
   return (
-    <div className="filter-data">
+    <div className="filter-data card-shadow">
       <div className="filter-data__left">
         {/* Lịch */}
         <div className="filter-data__left--date-time-picker">

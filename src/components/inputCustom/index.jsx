@@ -28,6 +28,7 @@ const {
   IoSearch,
   IoClose,
   IoCalendar,
+  IoCloudUploadOutline,
 } = icons;
 
 const InputTextCustom = (props) => {
@@ -54,6 +55,7 @@ const InputTextCustom = (props) => {
     notShowPreviewImage, // Giá trị (boolean) hiển thị hay không preview image
     limitShows, // Hiển thị max là bao nhiêu lựa chọn
     valueUnit, // Phân vùng điện thoại
+    setSearchValue, // Lấy giá trị search viết trên component truyền ngược lại component cha
   } = props;
   // Lấy district (quận/huyện) từ giá trị province có được
   const tempDistrictArray = province?.find(
@@ -222,7 +224,7 @@ const InputTextCustom = (props) => {
           )}
         </div>
       )}
-      {searchInput.length > 0 && type === "select"
+      {searchInput.length > 0 && type === "select" && !setSearchValue
         ? options
             .filter((el) =>
               el.name.toLowerCase().includes(searchInput.toLowerCase())
@@ -543,6 +545,42 @@ const InputTextCustom = (props) => {
   // 7. Content khi type === "multiSelect"
   const contentMultiSelect = (
     <div className="flex flex-col">
+      {searchField && (
+        <div
+          className="w-full"
+          style={{ position: "relative", paddingBottom: "2px" }}
+        >
+          <input
+            value={searchInput}
+            onChange={(e) => {
+              setSearchInput(e.target.value);
+            }}
+            style={{
+              border: "2px solid #eee",
+              borderRadius: "4px",
+              outline: "none",
+            }}
+            className="py-2 pr-[20px] pl-[28px] mb-0.5 duration-300 flex items-center justify-between w-full"
+          />
+          {searchInput.length === 0 && (
+            <span
+              style={{ position: "absolute", top: 13, left: 30 }}
+              className="text-gray-500/60"
+            >
+              Nhập tìm kiếm
+            </span>
+          )}
+          <IoSearch style={{ position: "absolute", top: 14, left: 8 }} />
+          {searchInput.length > 0 && (
+            <IoClose
+              onClick={() => setSearchInput("")}
+              size="20px"
+              className="hover:bg-violet-500 hover:text-white p-0.5 rounded-full duration-300"
+              style={{ position: "absolute", top: 12, right: 8 }}
+            />
+          )}
+        </div>
+      )}
       {multiSelectDataArray?.map((item, index) => (
         <div
           onClick={() => {
@@ -619,9 +657,10 @@ const InputTextCustom = (props) => {
           return { ...itemOption, is_select: isSelected };
         }
       });
-      if (multiSelecDataOptions?.length) {
-        setMultiSelectDataArray(multiSelecDataOptions);
-      }
+      //
+      // if (multiSelecDataOptions?.length) {
+      setMultiSelectDataArray(multiSelecDataOptions);
+      // }
     }
   }, [multiSelectOptions, value]);
   // 3. Lấy giá trị cho district array nếu province có giá trị default
@@ -645,6 +684,12 @@ const InputTextCustom = (props) => {
       }
     }
   }, [value]);
+  // 5. Gán giá trị search cho một biến ở component cha
+  useEffect(() => {
+    if (setSearchValue) {
+      setSearchValue(searchInput);
+    }
+  }, [searchInput]);
 
   return (
     <div className="form-field" ref={refContainer}>
@@ -697,10 +742,11 @@ const InputTextCustom = (props) => {
                     style={{
                       borderRadius: "6px",
                       border: "2px dashed #a855f7",
+                      padding: "6px",
                     }}
                     className={`${
                       hideImage ? "hidden" : "flex"
-                    } items-center justify-between mt-2 p-1 border-2 gap-2`}
+                    } items-center justify-between mt-2 border-2 gap-2`}
                   >
                     <div
                       style={{ gap: "10px" }}
@@ -728,7 +774,7 @@ const InputTextCustom = (props) => {
                         className="p-2 hover:bg-red-500 hover:text-white text-red-500 duration-300 ease-out"
                       >
                         <IoClose
-                          className="mr-1"
+                          className="mr-0.5"
                           onClick={() =>
                             setValueSelectedProps(
                               value?.filter((el) => el !== item)
@@ -743,10 +789,14 @@ const InputTextCustom = (props) => {
               })
             ) : (
               <div
-                style={{ borderRadius: "6px", border: "2px dashed #a855f7" }}
+                style={{
+                  borderRadius: "6px",
+                  border: "2px dashed #a855f7",
+                  padding: "6px",
+                }}
                 className={`${
                   hideImage ? "hidden" : "flex"
-                } items-center justify-between mt-2 p-1 border-2 gap-2`}
+                } items-center justify-between mt-2 border-2 gap-2`}
               >
                 <div style={{ gap: "10px" }} className="flex items-center px-2">
                   <Image
@@ -772,7 +822,7 @@ const InputTextCustom = (props) => {
                     className="p-2 hover:bg-red-500 hover:text-white text-red-500 duration-300 ease-out"
                   >
                     <IoClose
-                      className="mr-1"
+                      className="mr-0.5"
                       onClick={() => setValueSelectedProps("")}
                       size="14px"
                     />
@@ -813,7 +863,8 @@ const InputTextCustom = (props) => {
                 style={{ cursor: "pointer" }}
                 placeholder=" "
                 value={
-                  options?.find((el) => el.code === value)?.name
+                  options?.find((el) => el.code === value)?.name &&
+                  options?.find((el) => el.code === value)?.name !== "unknow"
                     ? options?.find((el) => el.code === value)?.name
                     : options?.find((el) => el.code === value)?.label
                 }
@@ -873,6 +924,7 @@ const InputTextCustom = (props) => {
                 placeholder=" "
                 value={moment(value).format("DD/MM/YYYY")}
                 // onChange={(el) => printData(el)}
+                disabled={disable}
                 readOnly
               />
               <label htmlFor=" " className="form-field__label">
@@ -1165,6 +1217,65 @@ const InputTextCustom = (props) => {
             </div>
           </Popover>
         </ConfigProvider>
+      )}
+      {/* Text Area */}
+      {type === "textArea" && (
+        <>
+          {/* <input
+          type=""
+            disabled={disable}
+            className="form-field__input"
+            placeholder=" "
+            value={valueWithUnit}
+            onChange={onChange}1` ` ` `   10ou v41`1  
+          /> */}
+          <textarea
+            rows="2"
+            className="form-field__input"
+            onChange={onChange}
+            placeholder=" "
+            value={value}
+          ></textarea>
+          <label htmlFor=" " className="form-field__label">
+            {placeHolder}{" "}
+            {required && <span className="form-field__label--required">*</span>}
+          </label>
+        </>
+      )}
+      {/* Drag and Drop File */}
+      {type === "fileArea" && (
+        <div className="form-field__text-area">
+          <label
+            for="dropzone-file"
+            className={`form-field__text-area--container ${
+              value && "showing-image"
+            }`}
+          >
+            {value ? (
+              <img
+                className="form-field__text-area--container-image"
+                src={value}
+              />
+            ) : (
+              <div className="form-field__text-area--container-content">
+                <IoCloudUploadOutline className="form-field__text-area--container-content-main-icon" />
+                <div className="form-field__text-area--container-content-main-text">
+                  <span className="text-bold">Nhấn để tải ảnh lên</span>
+                  <span> hoặc kéo và thả ảnh vào đây</span>
+                </div>
+                <p className="form-field__text-area--container-content-main-sub">
+                  PNG, JPG (Tối đa 1MB, tỷ lệ 2:1)
+                </p>
+              </div>
+            )}
+            <input
+              id="dropzone-file"
+              type="file"
+              className="form-field__text-area--container-input"
+              onChange={onChangeImage}
+            />
+          </label>
+        </div>
       )}
     </div>
   );

@@ -3,6 +3,9 @@
 .filter-data {
   display: flex;
   gap: $gapL;
+  background-color: white;
+  padding: 12px;
+  border-radius: $borderRadiusM;
 
   .filter-data__left {
     width: 75%;
@@ -21,7 +24,7 @@
 
       .filter-data__left--date-time-picker-label {
         display: flex;
-        gap: $gapXS;
+        gap: $gapS;
 
         .filter-data__left--date-time-picker-label-period-time {
           display: flex;

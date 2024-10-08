@@ -69,7 +69,7 @@ const CardActivityLog = (props) => {
     );
   };
   // 2. Hàm render nội dung giữa (line và icon)
-  const middleContent = (status) => {
+  const middleContent = (status, lastItem) => {
     let iconType;
     switch (status) {
       case "pending":
@@ -114,7 +114,9 @@ const CardActivityLog = (props) => {
     return (
       <div className="card-activities--activity-line">
         {iconType}
-        <div className="card-activities--activity-line-icon-line"></div>
+        {!lastItem && (
+          <div className="card-activities--activity-line-icon-line"></div>
+        )}
       </div>
     );
   };
@@ -122,7 +124,6 @@ const CardActivityLog = (props) => {
   const rightConent = (data) => {
     let headerContent;
     let status;
-    let subContent;
     switch (data?.service?._id?.kind) {
       case "giup_viec_theo_gio":
         headerContent = `${i18n.t("cleaning", { lng: lang })}`;
@@ -215,9 +216,9 @@ const CardActivityLog = (props) => {
                   .format("dddd")
               )}
               {/* Icon và line ở giữa */}
-              {/* <div className="card-activities--activity-line"> */}
-              {middleContent(activity?.status)}
-              {/* </div> */}
+              {index === data?.length - 1
+                ? middleContent(activity?.status, true)
+                : middleContent(activity?.status, false)}
               {/* Nội dung bên phải */}
               {rightConent(activity)}
             </div>

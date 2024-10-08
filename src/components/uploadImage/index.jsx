@@ -13,7 +13,9 @@ import { useDispatch } from "react-redux";
 import { loadingAction } from "../../redux/actions/loading";
 import { postFile } from "../../api/file";
 import axios from "axios";
+import icons from "../../utils/icons";
 
+const {IoCloudUploadOutline } = icons
 const UploadImage = (props) => {
   const {
     setUrl,
@@ -80,10 +82,10 @@ const UploadImage = (props) => {
   };
 
   return (
-    <div className="mt-2 div-upload">
+    <div className="div-upload">
       {title && (
         <div className="div-head-title-upload">
-          <a className="title-upload">{title}</a>
+          <span className="title-upload">{title}</span>
           <div>{icon}</div>
         </div>
       )}
@@ -93,6 +95,7 @@ const UploadImage = (props) => {
         showUploadList={false}
         disabled={disabled}
       >
+        {/* <IoCloudUploadOutline /> */}
         {image ? <img src={image} className={classImg} /> : uploadButton}
       </Upload>
     </div>

@@ -158,8 +158,8 @@ const ReviewCollaborator = () => {
     {
       customTitle: (
         <CustomHeaderDatatable
-          title="Thời Gian"
-          textToolTip="Thời gian đánh giá được gửi đến"
+          title="Ngày tạo"
+          textToolTip="Thời gian đánh giá được tạo ra (thời điểm đánh giá khác với thời điểm đơn được tạo)"
         />
       ),
       dataIndex: "date_create_review",
@@ -223,7 +223,6 @@ const ReviewCollaborator = () => {
       width: 150,
       fontSize: "text-size-M",
     },
-
     {
       customTitle: (
         <CustomHeaderDatatable
@@ -248,10 +247,6 @@ const ReviewCollaborator = () => {
       width: 190,
       fontSize: "text-size-M",
     },
-
-
-
-
 
     // {
     //   title: "NV liên hệ",
@@ -361,7 +356,6 @@ const ReviewCollaborator = () => {
     },
     [startPage, lengthPage, startDate, endDate, star]
   );
-
   return (
     <>
       <div className="div-container-content">

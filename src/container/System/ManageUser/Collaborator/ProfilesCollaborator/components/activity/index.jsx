@@ -255,13 +255,14 @@ const Activity = ({ id }) => {
                 colorTotal="#22c55e"
               />
             }
+            supportIcon={true}
           />
         </div>
       </div>
 
       {/* Lịch sử đơn hàng và Lịch sử hoạt động */}
       <div className="collaborator-activity__history">
-        <div className="collaborator-activity__history--order card-table">
+        <div className="collaborator-activity__history--order">
           <FilterData setTimePeriod={setTimePeriod} />
           <DataTable
             columns={columns}

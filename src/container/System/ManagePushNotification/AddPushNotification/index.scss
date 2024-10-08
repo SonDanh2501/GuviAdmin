@@ -1,3 +1,5 @@
+@import "../../../../@theme/style.scss";
+
 .label-noti {
   font-family: "Roboto";
   font-style: normal;
@@ -64,18 +66,18 @@
 }
 
 .img-background-noti {
-  width: 200px;
-  height: 200px;
-  border-radius: 4px;
+  width: 100%;
+  height: 300px;
+  border-radius: 6px;
 }
 
 .upload-img-background-noti {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 200px;
-  height: 200px;
-  border-radius: 4px;
+  width: 100%;
+  height: 300px;
+  border-radius: 6px;
   border: 1px solid #ccc;
 }
 
@@ -131,4 +133,107 @@
     align-items: center;
     justify-content: center;
   }
+}
+
+
+
+/* ~~~ Son CSS ~~~ */
+.add-push-notification {
+  display: flex;
+  flex-direction: column;
+  gap: $gapM;
+
+  .add-push-notification__field {
+    display: flex;
+    width: 100%;
+    gap: $gapL;
+
+    .add-push-notification__field--child {
+      width: 100%;
+
+      &.drap-field {
+        display: flex;
+        gap: $gapXS;
+        background-color: $colorExtraLightGray;
+        padding: 8px;
+        border-radius: $borderRadiusM;
+
+        span {
+          padding: 4px 8px;
+          background-color: $colorWhite;
+          border-radius: $borderRadiusS;
+          border: 1px solid $colorGray;
+          cursor: pointer;
+
+          &:hover {
+            background-color: $colorLightGray;
+            color: $colorWhite;
+          }
+        }
+      }
+    }
+  }
+
+  .add-push-notification__check-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background-color: $colorExtraLightGray;
+    border-radius: $borderRadiusS;
+    transition: 0.3s ease-in;
+    cursor: pointer;
+
+    .add-push-notification__check-box--text {
+      font-weight: $fontWeightL;
+      font-size: $textFontSizeM;
+    }
+
+    &.unchecked {
+      color: white;
+      background-color: $colorPurple;
+    }
+  }
+
+  .add-push-notification__text {
+    font-size: $textFontSizeM;
+    font-weight: $fontWeightL;
+    font-style: italic;
+  }
+
+  .add-push-notification__upload-field {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 150px;
+    border-radius: $borderRadiusM;
+    border: 2px dashed #ccc;
+    background-color: $colorExtraLightGray;
+    cursor: pointer;
+    transition: 0.3s all ease;
+
+    .add-push-notification__upload-field--child {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: $gapXS;
+
+      .add-push-notification__upload-field--child-sub-text {
+        font-size: $textFontSizeM;
+        font-weight: $fontWeightL;
+        font-style: italic;
+      }
+    }
+
+    &:hover {
+      border-color: $colorBlue;
+    }
+  }
+}
+
+.add-push-notification__footer {
+  display: flex;
+  gap: $gapS;
 }

@@ -2,14 +2,31 @@ import React from 'react'
 import "./index.scss";
 
 const ButtonCustom = (props) => {
-  const { label, onClick } = props;
+  const { label, onClick, disable, style, isCheckButton } = props;
   return (
-    <button
-      onClick={onClick}
-      className="button-custom"
-    >
-      {label}
-    </button>
+    <div>
+      {isCheckButton ? (
+        <button
+          onClick={onClick}
+          disabled={disable}
+          className={`button-custom-checked ${disable && "disable"} ${
+            style === "normal" && "normal"
+          }`}
+        >
+          {label}
+        </button>
+      ) : (
+        <button
+          onClick={onClick}
+          disabled={disable}
+          className={`button-custom ${disable && "disable"} ${
+            style === "normal" && "normal"
+          }`}
+        >
+          {label}
+        </button>
+      )}
+    </div>
   );
 };
 

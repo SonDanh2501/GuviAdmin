@@ -10,6 +10,7 @@ import {
   Button,
   ConfigProvider,
   Popover,
+  Tabs,
 } from "antd";
 import { StarFilled } from "@ant-design/icons";
 import { Link } from "react-router-dom";
@@ -32,6 +33,7 @@ import silver from "../../../assets/images/iconSilver.svg";
 import { useNavigate } from "react-router-dom";
 import SelectDefault from "../../Select/SelectDefault";
 import { IoAlertCircleOutline, IoHelpCircleOutline } from "react-icons/io5";
+import ButtonCustom from "../../button";
 
 const DataTable = (props) => {
   const {
@@ -47,6 +49,7 @@ const DataTable = (props) => {
     scrollX,
     setLengthPage,
     emptyText,
+    headerRightContent, 
   } = props;
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
@@ -1911,7 +1914,6 @@ const DataTable = (props) => {
         theme={{
           components: {
             Table: {
-              // headerBg: "#8b5cf6",
               headerBg: "#8b5cf6",
               rowHoverBg: "#f0f0f0",
               borderColor: "#e7ecf3",
@@ -1923,6 +1925,7 @@ const DataTable = (props) => {
         }}
       >
         <Table
+          style={{ borderRadius: "6px", overflow: "hidden" }} // Apply border-radius to the whole table
           locale={locale}
           columns={headerTable}
           title={() => (
@@ -1936,8 +1939,7 @@ const DataTable = (props) => {
                 </span>
               </div>
               <div className="table__header-content--right">
-
-                
+                {headerRightContent}
               </div>
             </div>
           )}
@@ -1956,6 +1958,7 @@ const DataTable = (props) => {
           }}
         />
       </ConfigProvider>
+
       {/* <div className="table-data__pagination">
         <div></div>
         <div>

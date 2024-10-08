@@ -17,6 +17,7 @@
     rgba(90, 125, 188, 0.05) 0px 0.75em 2em;
 }
 
+
 // <div className="bg-white rounded-xl my-4 p-4 card-shadow border-gray-300 border">
 
 .card-table {
@@ -468,14 +469,16 @@
 .ant-table-body::-webkit-scrollbar-thumb:hover {
   background-color: #7e53b2;
 }
-
-// Ant Design Progress
+.ant-table-footer {
+  border-radius: $borderRadiusM !important;
+}
+/* ~~~ Ant Design Progress ~~~ */
 .ant-progress-text {
   font-weight: bold;
   font-size: 14px;
 }
 
-// ~~~ Ant Design Tab Css ~~~
+/* ~~~  Ant Design Tab ~~~ */
 .ant-tabs-tab {
   font-size: $textFontSizeM !important;
   font-weight: $fontWeightXL !important;
@@ -544,6 +547,10 @@
   background-color: #7e53b2;
 }
 
+/* ~~~ Ant Design Drawler ~~~ */
+.ant-drawer-body {
+  padding: 16px !important;
+}
 // Ant Design Select
 // .ant-select-selector {
 //   height: 32px !important; /* Điều chỉnh chiều cao */

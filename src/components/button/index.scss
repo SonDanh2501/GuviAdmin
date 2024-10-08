@@ -4,12 +4,58 @@
     color: $colorWhite;
     background-color: $colorViolet;
     border-radius: $borderRadiusM;
+    border: 1px solid $colorViolet;
     transition: all 0.3s ease;
-    padding: 12px 16px;
+    padding: 8px 10px;
     font-size: $textFontSizeM;
     font-weight: $fontWeightXL;
+    cursor: pointer;
 
     &:hover {
         background-color: $colorLightViolet;
+        border-color:  $colorLightViolet;
+
+    }
+
+    &.disable {
+        background-color: $colorExtraLightGray;
+        color: $colorBlack;
+        cursor: not-allowed;
+    }
+
+    &.normal {
+        background-color: $colorExtraLightGray;
+        color: $colorBlack;
+        cursor: not-allowed;
+    }
+}
+
+.button-custom-checked { 
+    color: $colorViolet;
+    background-color: $colorWhite;
+    border-radius: $borderRadiusM;
+    border: 1px solid $colorViolet;
+    transition: all 0.3s ease;
+    padding: 8px 10px;
+    font-size: $textFontSizeM;
+    font-weight: $fontWeightXL;
+    cursor: pointer;
+
+    &:hover {
+        background-color: $colorViolet;
+        color: $colorWhite;
+        border-color:  $colorViolet;
+    }
+
+    &.disable {
+        background-color: $colorExtraLightGray;
+        color: $colorBlack;
+        cursor: not-allowed;
+    }
+
+    &.normal {
+        background-color: $colorExtraLightGray;
+        color: $colorBlack;
+        cursor: not-allowed;
     }
 }

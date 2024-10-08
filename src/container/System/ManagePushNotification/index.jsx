@@ -1,4 +1,4 @@
-import { Dropdown, Pagination, Space, Switch, Table } from "antd";
+import { Dropdown, Pagination, Space, Switch, Table, Tabs } from "antd";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -31,7 +31,6 @@ const ManagePushNotification = () => {
   const listNotification = useSelector(getListNotifications);
   const totalNotification = useSelector(getNotificationTotal);
   const [dataNotifications, setDataNotifications] = useState([]);
-
   const [itemEdit, setItemEdit] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [status, setStatus] = useState("todo");
@@ -48,7 +47,6 @@ const ManagePushNotification = () => {
       : 20
   );
   /* ~~~ Use effect ~~~ */
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -89,76 +87,9 @@ const ManagePushNotification = () => {
   //   );
   // };
   /* ~~~ Handle function ~~~ */
-  const onActive = (id, active) => {
-    dispatch(loadingAction.loadingRequest(true));
-    activePushNotification(id, {
-      is_active: active ? false : true,
-    })
-      .then((res) => {
-        dispatch(
-          getNotification.getNotificationRequest({
-            status: status,
-            start: 0,
-            length: 20,
-          })
-        );
-        setModalVerify(false);
-        dispatch(loadingAction.loadingRequest(false));
-      })
-      .catch((err) => {
-        errorNotify({
-          message: err?.message,
-        });
-        dispatch(loadingAction.loadingRequest(false));
-        setModalVerify(false);
-      });
-  };
-
-  const onDelete = (id) => {
-    dispatch(loadingAction.loadingRequest(true));
-    deletePushNotification(id)
-      .then((res) => {
-        dispatch(
-          getNotification.getNotificationRequest({
-            status: status,
-            start: 0,
-            length: 20,
-          })
-        );
-        setModal(false);
-        dispatch(loadingAction.loadingRequest(false));
-      })
-      .catch((err) => {
-        errorNotify({
-          message: err?.message,
-        });
-        dispatch(loadingAction.loadingRequest(false));
-        setModal(false);
-      });
-  };
-
-  const items = [
-    {
-      key: "1",
-      label: status === "todo" &&
-        checkElement?.includes("edit_notification") && (
-          <EditPushNotification id={itemEdit?._id} />
-        ),
-    },
-    {
-      key: "2",
-      label: checkElement?.includes("delete_notification") && (
-        <p className="m-0" onClick={toggle}>{`${i18n.t("delete", {
-          lng: lang,
-        })}`}</p>
-      ),
-    },
-  ];
-
   const onChangePage = (value) => {
     setStartPage(value);
   };
-
   const columns = [
     {
       title: "STT",
@@ -230,12 +161,29 @@ const ManagePushNotification = () => {
     <div className="manage-push-notification">
       <div className="manage-push-notification__label">
         <span>Thông báo</span>
+        {/* <div className="div-tab mt-5">
+          {DATA.map((item) => {
+            return (
+              <div
+                key={item?.id}
+                className={
+                  status === item?.value
+                    ? "div-item-tab-selected"
+                    : "div-item-tab"
+                }
+                onClick={() => setStatus(item?.value)}
+              >
+                <p className="text-tab">
+                  {`${i18n.t(item?.title, { lng: lang })}`}
+                </p>
+              </div>
+            );
+          })}
+        </div> */}
       </div>
-      <div className="manage-push-notification__function card-shadow">
-        {/* <ButtonCustom onClick={toggleVerify} label="Tạo thông báo" />
-        <ButtonCustom label="Tạo thông báo cho đối tác" /> */}
-        <AddPushNotification />
-      </div>
+      {/* <div className="manage-push-notification__function card-shadow">
+         <ButtonCustom isCheckButton={true} label="Đang chờ" />
+      </div> */}
       <div>
         <DataTable
           columns={columns}
@@ -245,51 +193,51 @@ const ManagePushNotification = () => {
           setLengthPage={setLengthPage}
           onCurrentPageChange={onChangePage}
           totalItem={dataNotifications?.totalItem}
+          headerRightContent={<AddPushNotification />}
         />
       </div>
-
-      <div>
-        <ModalCustom
-          isOpen={modalVerify}
-          title={
-            !itemEdit?.is_active === true
-              ? `${i18n.t("unlock_noti", { lng: lang })}`
-              : `${i18n.t("lock_noti", { lng: lang })}`
-          }
-          handleOk={() => onActive(itemEdit?._id, itemEdit?.is_active)}
-          handleCancel={toggleVerify}
-          textOk={
-            !itemEdit?.is_active === true
-              ? `${i18n.t("lock", { lng: lang })}`
-              : `${i18n.t("unlock", { lng: lang })}`
-          }
-          body={
-            <>
-              {!itemEdit?.is_active === true
-                ? `${i18n.t("want_unlock_noti", { lng: lang })}`
-                : `${i18n.t("want_lock_noti", { lng: lang })}`}
-              <h6>{itemEdit?.title}</h6>
-            </>
-          }
-        />
-      </div>
-      <div>
-        <ModalCustom
-          isOpen={modal}
-          title={`${i18n.t("remove_notification", { lng: lang })}`}
-          handleOk={() => onDelete(itemEdit?._id)}
-          handleCancel={toggle}
-          textOk={`${i18n.t("delete", { lng: lang })}`}
-          body={
-            <>
-              <p className="m-0">{`${i18n.t("want_remove_notification", {
-                lng: lang,
-              })}`}</p>
-              <p className="text-name-modal m-0">{itemEdit?.title}</p>
-            </>
-          }
-        />
-      </div>
+      {/* <div>
+      <ModalCustom
+        isOpen={modalVerify}
+        title={
+          !itemEdit?.is_active === true
+            ? `${i18n.t("unlock_noti", { lng: lang })}`
+            : `${i18n.t("lock_noti", { lng: lang })}`
+        }
+        handleOk={() => onActive(itemEdit?._id, itemEdit?.is_active)}
+        handleCancel={toggleVerify}
+        textOk={
+          !itemEdit?.is_active === true
+            ? `${i18n.t("lock", { lng: lang })}`
+            : `${i18n.t("unlock", { lng: lang })}`
+        }
+        body={
+          <>
+            {!itemEdit?.is_active === true
+              ? `${i18n.t("want_unlock_noti", { lng: lang })}`
+              : `${i18n.t("want_lock_noti", { lng: lang })}`}
+            <h6>{itemEdit?.title}</h6>
+          </>
+        }
+      />
+    </div>
+    <div>
+      <ModalCustom
+        isOpen={modal}
+        title={`${i18n.t("remove_notification", { lng: lang })}`}
+        handleOk={() => onDelete(itemEdit?._id)}
+        handleCancel={toggle}
+        textOk={`${i18n.t("delete", { lng: lang })}`}
+        body={
+          <>
+            <p className="m-0">{`${i18n.t("want_remove_notification", {
+              lng: lang,
+            })}`}</p>
+            <p className="text-name-modal m-0">{itemEdit?.title}</p>
+          </>
+        }
+      />
+    </div> */}
     </div>
     // <div>
     //   <h5>{`${i18n.t("notification", { lng: lang })}`}</h5>

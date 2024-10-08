@@ -109,15 +109,10 @@ export const INIT_STATE = {
   },
 };
 
-export const path = {
-  HOME: "/",
-  HOMEPAGE: "/home",
-  LOGIN: "/login",
-  LOG_OUT: "/logout",
-  SYSTEM: "/system",
-};
 
-// Danh sách ngân hàng
+
+/* ~~~ List ~~~ */
+/* 1. Danh sách ngân hàng */
 export const bankList = [
   {
     code: "vietcom_bank",
@@ -296,8 +291,7 @@ export const bankList = [
     name: "Ngân hàng thương mại cổ phần Phát triển Thành phố Hồ Chí Minh (HDBANK)",
   },
 ];
-
-// Danh sách các nước
+/* 2. Danh sách các nước */
 export const countryList = [
   {
     code: "vietnam",
@@ -467,16 +461,14 @@ export const countryList = [
     name: "Lào",
   },
 ];
-
-// Nên đưa vào redux để sau này gọi ở chỗ khác (các trường hợp cần filter)
-// Danh sách các kỹ năng của cộng tác viên
+/* 3. Danh sách các kỹ năng của đối tác */
 export const listSkills = [
   { code: 1, label: "Vệ sinh nhà cửa" },
   { code: 2, label: "Giúp việc nhà" },
   { code: 3, label: "Nấu ăn" },
   { code: 4, label: "Chăm em bé" },
 ];
-// Danh sách các ngôn ngữ
+/* 4. Danh sách các ngôn ngữ */
 export const listLanguages = [
   { code: 1, label: "Tiếng Việt" },
   { code: 2, label: "Tiếng Anh" },
@@ -484,8 +476,17 @@ export const listLanguages = [
   { code: 4, label: "Tiếng Trung" },
   { code: 5, label: "Tiếng Nhật" },
 ];
+/* 5. Danh sách các đường dẫn */
+export const path = {
+  HOME: "/",
+  HOMEPAGE: "/home",
+  LOGIN: "/login",
+  LOG_OUT: "/logout",
+  SYSTEM: "/system",
+};
 
-// Hàm render sao từ giá trị đánh giá (number) truyền vào
+/* ~~~ Function ~~~ */
+/* 1. Hàm render sao từ giá trị đánh giá (number) truyền vào */
 export const renderStarFromNumber = (number, color, size) => {
   const integerPart = Math.floor(number);
   const decimalPart = number - integerPart;
@@ -515,15 +516,13 @@ export const renderStarFromNumber = (number, color, size) => {
   }
   return stars;
 };
-
-// Hàm tính phần trăm của giá trị con (child) trên tổng (total)
+/* 2. Hàm tính phần trăm của giá trị con (child) trên tổng (total) */
 export const calculateNumberPercent = (total, child) => {
   let percent = (child / total) * 100;
   return percent ? Math.round((percent + Number.EPSILON) * 100) / 100 : 0;
 };
-
-// Hàm dời phần từ trong mảng (array) từ vị trí hiện tại thành vị trí truyền vào (position)
-// conditionFind là điều kiện để tìm ra phần tử cần đổi vị trí trong mảng array
+/* 3. Hàm dời phần từ trong mảng (array) từ vị trí hiện tại thành vị trí truyền vào (position) 
+conditionFind là điều kiện để tìm ra phần tử cần đổi vị trí trong mảng array */
 export const moveElement = (array, position, conditionFind) => {
   let newArray = [...array]; // Temp array
   const index = newArray.findIndex(conditionFind); // Check if having data or not
@@ -533,8 +532,18 @@ export const moveElement = (array, position, conditionFind) => {
     return newArray;
   }
 };
-
-// Hàm sắp xếp theo bảng chữ cái
+/* 4. Hàm sắp xếp theo bảng chữ cái */
 export const sortList = (list,valueSort) => {
   return list.sort((a, b) => a[valueSort].localeCompare(b[valueSort]));
 }
+/* 5. Hàm thiết lập mảng giá trị thành mảng phù hợp cho inputCustome */
+export const formatArray = (array, code, label, subLabel) => {
+  const updatedArray = array.map((item) => {
+    return {
+      ...item,
+      code: item[code],
+      label: subLabel ? item[label] + " " + item[subLabel] : item[label],
+    };
+  });
+  return updatedArray; 
+};
