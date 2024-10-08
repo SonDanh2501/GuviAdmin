@@ -48,7 +48,8 @@ const ManagePushNotification = () => {
       ? JSON.parse(localStorage.getItem("linePerPage")).value
       : 20
   );
-  const [selectedStatus, setSelectedStatus] = useState("pending");
+  const [selectedStatus, setSelectedStatus] = useState("todo");
+
   /* ~~~ Use effect ~~~ */
   // useEffect(() => {
   //   const fetchData = async () => {
@@ -111,10 +112,9 @@ const ManagePushNotification = () => {
     setStartPage(value);
   };
   const handleSelectStatus = ({ key }) => {
-    console.log("check key >>>", key);
     const findStatus = statusOptions.find((el) => el.key === key);
     console.log("check findStatus", findStatus);
-    setSelectedStatus(findStatus?.label);
+    setStatus(findStatus?.key);
   };
   /* ~~~ Data list ~~~ */
   const columns = [
@@ -184,14 +184,17 @@ const ManagePushNotification = () => {
     // },
   ];
   const statusOptions = [
-    { key: "pending", label: "Đang chờ" },
+    { key: "todo", label: "Đang chờ" },
     { key: "done", label: "Đã xong" },
   ];
+
+
+  console.log("check status", status)
   return (
     <div className="manage-push-notification">
       <div className="manage-push-notification__label">
         <span>Thông báo</span>
-        <div className="div-tab mt-5">
+        {/* <div className="div-tab mt-5">
           {DATA.map((item) => {
             return (
               <div
@@ -209,7 +212,7 @@ const ManagePushNotification = () => {
               </div>
             );
           })}
-        </div>
+        </div> */}
       </div>
       <FilterData
         content={
@@ -229,8 +232,8 @@ const ManagePushNotification = () => {
             >
               <Space>
                 <span>Trạng thái: </span>
-                <span style={{ cursor: "pointer" }} className="fw-500">
-                  {selectedStatus}
+                <span style={{ cursor: "pointer", fontWeight: 500 }}>
+                  {status === "done" ? "Đã xong" : "Đang chờ"}
                 </span>
                 <CaretDownOutlined />
               </Space>
@@ -246,7 +249,7 @@ const ManagePushNotification = () => {
           pageSize={lengthPage}
           setLengthPage={setLengthPage}
           onCurrentPageChange={onChangePage}
-          totalItem={dataNotifications?.totalItem}
+          totalItem={totalNotification}
           headerRightContent={<AddPushNotification />}
         />
       </div>

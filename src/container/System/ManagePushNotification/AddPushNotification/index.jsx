@@ -363,13 +363,13 @@ const AddPushNotification = ({ idOrder }) => {
             </div>
           </div>
           {/* Các thẻ select trường muốn thông báo */}
-          <div className="add-push-notification__field">
+          {/* <div className="add-push-notification__field">
             <div className="add-push-notification__field--child drap-field">
               {listOptions?.map((el) => (
                 <span onClick={() => handleSelectTag(el)}>{el.name}</span>
               ))}
             </div>
-          </div>
+          </div> */}
           {/* Thời gian thông báo */}
           <div className="add-push-notification__field">
             <div className="add-push-notification__field--child">

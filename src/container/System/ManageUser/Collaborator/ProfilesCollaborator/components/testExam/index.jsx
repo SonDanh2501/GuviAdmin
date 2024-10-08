@@ -111,6 +111,9 @@ const TestExam = (props) => {
                   {item?.title[lang]}
                 </span>
                 <div
+                  onClick={() =>
+                    onPassLesson(item?._id, item?.type_training_lesson)
+                  }
                   className={`collaborator-exam__lesson--child-header-status ${
                     item?.is_pass ? "& done" : "& not-done"
                   }`}
@@ -216,6 +219,7 @@ const TestExam = (props) => {
                     <div className="mt-3">
                       {data[0]?.answers?.map((iAnswers, idAnswers) => {
                         return (
+                     
                           <div key={idAnswers} className="div-question-test">
                             <p className="title-question">
                               Câu {idAnswers + 1}:{" "}
