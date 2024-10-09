@@ -258,7 +258,7 @@ const Main = ({ hide }) => {
           </Header>
           <Content
             style={{
-              margin: "28px 20px",
+              margin: "20px",
               overflow: "initial",
             }}
           >

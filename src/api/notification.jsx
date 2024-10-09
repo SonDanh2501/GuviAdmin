@@ -29,9 +29,9 @@ export const activePushNotification = (id, data) => {
 };
 
 // Hàm tạo mới
-export const getListNotifications = (start, length, is_created) => {
+export const getListNotifications = (start, length, is_created, status) => {
   return axiosClient.get(
-    `api/admin/notification_schedule_manager/get_list?start=${start}&length=${length}&is_created=${is_created}`
+    `api/admin/notification_schedule_manager/get_list?start=${start}&length=${length}&is_created=${is_created}&status=${status}`
   );
 };
 

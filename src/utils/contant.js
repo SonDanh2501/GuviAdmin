@@ -28,6 +28,7 @@ import PHILIPPINES_FLAG from "../assets/images/flag_philippines.svg";
 import SINGAPO_FLAG from "../assets/images/flag_singapo.svg";
 import THAILAND_FLAG from "../assets/images/flag_thailand.svg";
 import TIMOR_FLAG from "../assets/images/flag_timor.svg";
+import moment from "moment";
 
 const { IoStar, IoStarHalf, IoStarOutline } = icons;
 
@@ -547,3 +548,13 @@ export const formatArray = (array, code, label, subLabel) => {
   });
   return updatedArray; 
 };
+/* 6. Hàm so sánh hai mốc thời gian */
+export const compareDateIsBefore = (firstDate, secondDate) => { 
+  const date1 = moment(firstDate)
+  const date2 = moment(secondDate)
+  if (date1.isBefore(date2)) {
+    return true;
+  } else {
+    return false;
+  }
+}

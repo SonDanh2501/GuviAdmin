@@ -653,7 +653,6 @@ const CollaboratorManage = (props) => {
             </div>
           </div>
         </div>
-
         <div>
           <ModalCustom
             isOpen={modalLockTime}

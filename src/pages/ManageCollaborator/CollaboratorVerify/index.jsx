@@ -209,7 +209,6 @@ const CollaboratorVerify = () => {
         tempCity.length > 0
           ? tempCity[0].name.replace(new RegExp(`${"Thành phố"}|${"Tỉnh"}`), "")
           : "Khác";
-          console.log("check getListDataCollaborator after ", res);
 
       res.data[i]["name_service_apply"] = "";
       for (const item of tempService) {
@@ -393,41 +392,49 @@ const CollaboratorVerify = () => {
   };
 
   const processHandle = async (dataChange) => {
-    if (modal === "delete_collaborator") {
-      await deleteCollaborator(dataChange._id);
-    } else {
-      switch (dataChange.status) {
-        case "actived": {
-          if (dataChange.is_locked === true) {
-            const payload = {
-              is_locked: false,
-              date_lock: null,
-            };
-            lockTimeCollaborator(dataChange._id, payload);
-          } else {
-            verifyCollaborator(dataChange._id);
+    console.log("check dataChange", dataChange);
+    try {
+      if (modal === "delete_collaborator") {
+        await deleteCollaborator(dataChange._id);
+      } else {
+        switch (dataChange.status) {
+          case "actived": {
+            if (dataChange.is_locked) {
+              const unlockPayload = {
+                is_locked: false,
+                date_lock: null,
+              };
+              await lockTimeCollaborator(dataChange._id, unlockPayload);
+            } else {
+              await verifyCollaborator(dataChange._id);
+            }
+            break;
           }
-          break;
+          case "locked": {
+            const lockPayload = {
+              is_locked: true,
+              date_lock: dataChange.date_lock,
+            };
+            await lockTimeCollaborator(dataChange._id, lockPayload);
+            break;
+          }
+          default:
+            break;
         }
-        case "locked": {
-          const payload = {
-            is_locked: true,
-            date_lock: dataChange.date_lock,
-          };
-          lockTimeCollaborator(dataChange._id, payload);
-          break;
-        }
-        default:
-          break;
+  
+        const statusPayload = {
+          note_handle_admin: dataChange.note_handle_admin,
+          status: dataChange.status,
+        };
+        console.log("check payload >>>", statusPayload);
+        await updateStatusCollaborator(dataChange._id, statusPayload);
       }
-      let payload = {
-        note_handle_admin: dataChange.note_handle_admin,
-        status: dataChange.status,
-      };
-      await updateStatusCollaborator(dataChange._id, payload);
+  
+      await getListCollaborator();
+      setModal("");
+    } catch (error) {
+      console.error("Error in processHandle:", error);
     }
-    getListCollaborator();
-    setModal("");
   };
 
   const changeStatusOrder = (value) => {
@@ -493,7 +500,8 @@ const CollaboratorVerify = () => {
   //     },
   //     [startPage, status, idGroup, lang]
   //   );
-  console.log("check data >>>", data);
+
+  console.log("check modal", modal);
   return (
     <>
       <div className="div-container-content">
@@ -634,9 +642,8 @@ const CollaboratorVerify = () => {
         isShow={modal === "status_collaborator" ? true : false}
         item={item}
         handleOk={(payload) => processHandle(payload)}
-        handleCancel={setModal}
+        handleCancel={() => setModal("")}
       />
-
       <div>
         <ModalCustom
           isOpen={modal === "delete_collaborator" ? true : false}

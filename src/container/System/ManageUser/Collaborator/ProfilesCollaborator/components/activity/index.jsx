@@ -220,7 +220,7 @@ const Activity = ({ id }) => {
   return (
     <div className="collaborator-activity">
       {/* Các thẻ thống kê */}
-      <div className="collaborator-activity__statistics">
+      {/* <div className="collaborator-activity__statistics">
         <div className="collaborator-activity__statistics--overview grid-column-2">
           {valueActivityStatistics.map((item, index) => {
             return (
@@ -258,7 +258,7 @@ const Activity = ({ id }) => {
             supportIcon={true}
           />
         </div>
-      </div>
+      </div> */}
 
       {/* Lịch sử đơn hàng và Lịch sử hoạt động */}
       <div className="collaborator-activity__history">

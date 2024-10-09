@@ -4,13 +4,15 @@
   display: flex;
   gap: $gapL;
   background-color: white;
-  padding: 12px;
+  padding: 16px;
   border-radius: $borderRadiusM;
 
   .filter-data__left {
-    width: 75%;
+    width: 50%;
     display: flex;
     gap: $gapM;
+    // font-size: $textFontSizeM;
+    // font-weight: $fontWeightL;
 
     .filter-data__left--date-time-picker {
       display: flex;
@@ -62,5 +64,8 @@
         font-size: $textFontSizeM;
       }
     }
+  }
+  .filter-data__right {
+    width: 50%;
   }
 }

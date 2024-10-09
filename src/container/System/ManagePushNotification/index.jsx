@@ -16,26 +16,27 @@ import {
   getElementState,
   getLanguageState,
 } from "../../../redux/selectors/auth";
-import {
-  getListNotifications,
-  getNotificationTotal,
-} from "../../../redux/selectors/notification";
+// import {
+//   // getListNotifications,
+//   // getNotificationTotal,
+// } from "../../../redux/selectors/notification";
 import AddPushNotification from "./AddPushNotification";
 import EditPushNotification from "./EditPushNotification";
 import "./index.scss";
-// import { getListNotifications } from "../../../api/notification";
+import { getListNotifications } from "../../../api/notification";
 import ButtonCustom from "../../../components/button";
 import DataTable from "../../../components/tables/dataTable";
 import FilterData from "../../../components/filterData/filterData";
 import { CaretDownOutlined } from "@ant-design/icons";
+import { compareDateIsBefore } from "../../../utils/contant";
 
 const ManagePushNotification = () => {
-  const listNotification = useSelector(getListNotifications);
-  const totalNotification = useSelector(getNotificationTotal);
+  // const listNotification = useSelector(getListNotifications);
+  // const totalNotification = useSelector(getNotificationTotal);
   const [dataNotifications, setDataNotifications] = useState([]);
   const [itemEdit, setItemEdit] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [status, setStatus] = useState("todo");
+  const [statusFilter, setStatusFilter] = useState("todo");
   const [modalVerify, setModalVerify] = useState(false);
   const [modal, setModal] = useState(false);
   const checkElement = useSelector(getElementState);
@@ -48,49 +49,41 @@ const ManagePushNotification = () => {
       ? JSON.parse(localStorage.getItem("linePerPage")).value
       : 20
   );
-  const [selectedStatus, setSelectedStatus] = useState("todo");
+  const [totalNotification, setTotalNotification] = useState(0);
+  const [totalNotificationDone, setTotalNotificationDone] = useState(0);
+  const [totalNotificationTodo, setTotalNotificationTodo] = useState(0);
 
   /* ~~~ Use effect ~~~ */
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       dispatch(loadingAction.loadingRequest(true));
-  //       // Chạy API
-  //       const dataNotificationsFetch = await getListNotifications(
-  //         startPage,
-  //         lengthPage,
-  //         1
-  //       ); // Fetch dữ liệu thông báo
-  //       /* Gán giá trị */
-  //       setDataNotifications(dataNotificationsFetch);
-  //     } catch (err) {
-  //       errorNotify({
-  //         message: err?.message,
-  //       });
-  //     } finally {
-  //       dispatch(loadingAction.loadingRequest(false));
-  //     }
-  //   };
-  //   fetchData();
-  // }, [status, dispatch, startPage, lengthPage]);
-
+  // 1. Fetch dữ liệu thông báo
   useEffect(() => {
-    dispatch(
-      getNotification.getNotificationRequest({
-        status: status,
-        start: startPage,
-        length: lengthPage,
-      })
-    );
-  }, [status, dispatch, startPage, lengthPage]);
+    const fetchData = async () => {
+      try {
+        dispatch(loadingAction.loadingRequest(true));
+        // Chạy API
+        const dataNotificationsFetch = await getListNotifications(
+          startPage,
+          lengthPage,
+          1,
+          statusFilter
+        ); // Fetch dữ liệu thông báo
+        /* Gán giá trị */
+        setDataNotifications(dataNotificationsFetch);
+        setTotalNotification(dataNotificationsFetch?.totalItem);
+      } catch (err) {
+        errorNotify({
+          message: err?.message,
+        });
+      } finally {
+        dispatch(loadingAction.loadingRequest(false));
+      }
+    };
+    fetchData();
+  }, [dispatch, startPage, lengthPage,statusFilter]);
 
-  const onActive = (id, active) => {
-  };
+  const onActive = (id, active) => {};
 
-  const onDelete = (id) => {
-  };
+  const onDelete = (id) => {};
 
-  
   // const toggle = () => setModal(!modal);
   // const toggleVerify = () => setModalVerify(!modalVerify);
 
@@ -113,10 +106,31 @@ const ManagePushNotification = () => {
   };
   const handleSelectStatus = ({ key }) => {
     const findStatus = statusOptions.find((el) => el.key === key);
-    console.log("check findStatus", findStatus);
-    setStatus(findStatus?.key);
+    setStatusFilter(findStatus?.key);
+  };
+  const handleFilterData = (array, status) => {
+    let arrayFilter = [];
+    const today = moment();
+    if (status === "todo") {
+      array?.map((el) => {
+        if (compareDateIsBefore(el?.date_schedule, today) === false) {
+          arrayFilter.push(el);
+        }
+      });
+      return arrayFilter;
+    } else if (status === "done") {
+      array?.map((el) => {
+        if (compareDateIsBefore(el?.date_schedule, today) === true) {
+          arrayFilter.push(el);
+        }
+      });
+      return arrayFilter;
+    } else {
+      return array;
+    }
   };
   /* ~~~ Data list ~~~ */
+  // 1. Danh sách các cột của bảng
   const columns = [
     {
       title: "STT",
@@ -183,73 +197,63 @@ const ManagePushNotification = () => {
     //   },
     // },
   ];
+  // 2. Danh sách các trạng thái của bộ lọc
   const statusOptions = [
     { key: "todo", label: "Đang chờ" },
     { key: "done", label: "Đã xong" },
   ];
 
+  console.log("check dataNotification", dataNotifications);
 
-  console.log("check status", status)
   return (
     <div className="manage-push-notification">
+      {/* Header */}
       <div className="manage-push-notification__label">
-        <span>Thông báo</span>
-        {/* <div className="div-tab mt-5">
-          {DATA.map((item) => {
-            return (
-              <div
-                key={item?.id}
-                className={
-                  status === item?.value
-                    ? "div-item-tab-selected"
-                    : "div-item-tab"
-                }
-                onClick={() => setStatus(item?.value)}
-              >
-                <p className="text-tab">
-                  {`${i18n.t(item?.title, { lng: lang })}`}
-                </p>
-              </div>
-            );
-          })}
-        </div> */}
+        <span className="manage-push-notification__label--header">
+          Thông báo
+        </span>
       </div>
-      <FilterData
-        content={
-          <div>
-            <Dropdown
-              placement="bottom"
-              arrow={{
-                pointAtCenter: true,
-              }}
-              menu={{
-                items: statusOptions,
-                selectable: true,
-                defaultSelectedKeys: [""],
-                onSelect: (key) => handleSelectStatus(key),
-              }}
-              trigger={["click"]}
-            >
-              <Space>
-                <span>Trạng thái: </span>
-                <span style={{ cursor: "pointer", fontWeight: 500 }}>
-                  {status === "done" ? "Đã xong" : "Đang chờ"}
-                </span>
-                <CaretDownOutlined />
-              </Space>
-            </Dropdown>
-          </div>
-        }
-      />
+      {/* Filter */}
+      <div>
+        <FilterData
+          leftContent={
+            <div>
+              <Dropdown
+                menu={{
+                  items: statusOptions,
+                  selectable: true,
+                  defaultSelectedKeys: ["todo"],
+                  onSelect: (key) => handleSelectStatus(key),
+                }}
+                trigger={["click"]}
+              >
+                <Space>
+                  <span>Trạng thái: </span>
+                  <span style={{ cursor: "pointer", fontWeight: 500 }}>
+                    {/* {status === "done" ? "Đã xong" : "Đang chờ"} */}
+                    {
+                      statusOptions.find(
+                        (status) => status.key === statusFilter
+                      )?.label
+                    }
+                  </span>
+                  <CaretDownOutlined />
+                </Space>
+              </Dropdown>
+            </div>
+          }
+        />
+      </div>
+      {/* Table */}
       <div>
         <DataTable
           columns={columns}
-          data={listNotification}
+          data={dataNotifications?.data ? dataNotifications?.data : []}
           start={startPage}
           pageSize={lengthPage}
           setLengthPage={setLengthPage}
           onCurrentPageChange={onChangePage}
-          totalItem={totalNotification}
+          totalItem={dataNotifications?.totalItem}
           headerRightContent={<AddPushNotification />}
         />
       </div>

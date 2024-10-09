@@ -9,7 +9,7 @@ import "./index.scss";
 import InputTextCustom from "../inputCustom";
 
 const FilterData = (props) => {
-  const { isTimeFilter, setTimePeriod, content } = props;
+  const { isTimeFilter, setTimePeriod, leftContent, rightContent } = props;
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
@@ -109,8 +109,9 @@ const FilterData = (props) => {
           </div>
         )}
         {/* Nội dung */}
-        {content}
+        {leftContent && <div>{leftContent}</div>}
       </div>
+      <div className="filter-data_right">{rightContent}</div>
     </div>
   );
 };

@@ -49,8 +49,9 @@ const DataTable = (props) => {
     scrollX,
     setLengthPage,
     emptyText,
-    headerRightContent, 
+    headerRightContent,
   } = props;
+  console.log("check data >>>", data);
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
   const [saveToCookie] = useCookies();
@@ -87,7 +88,6 @@ const DataTable = (props) => {
       ? JSON.parse(localStorage.getItem("tableHeight"))?.y
       : 0
   );
-
   const [scroll, setScroll] = useState([]);
   const [pageSizeOption, setPageSizeOption] = useState({
     value: JSON.parse(localStorage.getItem("linePerPage"))
@@ -113,21 +113,6 @@ const DataTable = (props) => {
       </div>
     ),
   };
-  // let flag = false;
-  // pageSizeOptions.map((el) => {
-  //   if (el.value === pageSizeOption.value) flag = true;
-  // });
-  // if (flag === false) {
-  //   pageSizeOptions.push({
-  //     value: pageSizeOption.value,
-  //     label: pageSizeOption.label,
-  //   });
-  // }
-  //
-  // setPageSizeOptions(tempOptions)
-  //
-  // scroll.x = "100vw";
-  // scroll.y = 240;
   let widthPage = 0;
   let headerTable = [];
   const [hidePhone, setHidePhone] = useState(false);
@@ -141,6 +126,9 @@ const DataTable = (props) => {
     onChange: onSelectChange,
   };
   const hasSelected = selectedRowKeys.length > 0;
+
+  /* ~~~ Use effect ~~~ */
+  // 1.
   useEffect(() => {
     setOrdinalNumber(start);
     if (start === 0) {
@@ -148,42 +136,8 @@ const DataTable = (props) => {
     }
   }, [start]);
 
-  // useEffect(() => {
-  //   setIsLoading(true);
-  // }, [detectLoading]);
-
-  const HeaderTitle = (title) => {
-    return (
-      <React.Fragment>
-        <p className="title-column">{title}</p>
-      </React.Fragment>
-    );
-  };
-
-  const onChangeValue = (item, dataIndex, value) => {
-    // item: phan tu trong mang data
-    // dataIndex: ten field thay doi
-    // value: gia tri moi da thay doi
-    if (props.onChangeValue) {
-      const data = {
-        item,
-        dataIndex,
-        value,
-      };
-      props.onChangeValue(data);
-    }
-  };
-
-  const hideMiddleChars = (str) => {
-    const length = str.length;
-    const numStars = Math.floor(length / 2);
-    const halfIndex = Math.floor((length - numStars) / 2);
-
-    const stars = "*".repeat(numStars);
-
-    return str.slice(0, halfIndex) + stars + str.slice(halfIndex + numStars);
-  };
-
+  /* ~~~ Other ~~~ */
+  // 1. Hàm hiển thị các dữ liệu truyền vào tương ứng với từng cột trong bảng
   for (const item of columns) {
     // Duyệt qua từng item trong list Columns
     // Gán title = item title (i18n => đa ngôn ngữ)
@@ -1756,7 +1710,7 @@ const DataTable = (props) => {
                   </span>
                 );
                 break;
-             
+
               default:
                 break;
             }
@@ -1794,20 +1748,16 @@ const DataTable = (props) => {
     headerTable.push(temp);
     widthPage += Number(temp.width);
   }
-  // Nếu có actionColumn thì đẩy vào table
+  // 2. Gắn giá trị cho chiều dài bảng và số dòng/trang (dựa trên local storage)
+  scroll.y = JSON.parse(localStorage.getItem("tableHeight"))
+    ? JSON.parse(localStorage.getItem("tableHeight")).y
+    : [];
+  scroll.x = scrollX ? scrollX : widthPage;
+  // 3. Đẩy action column vào bảng(cột hiển thị gắn cứng góc phải của bảng)
   if (actionColumn) headerTable.push(actionColumn);
-  const calculateCurrentPage = (event) => {
-    //
-    setCurrentPage(event);
-    if (props.onCurrentPageChange) {
-      setIsLoading(true);
-      props.onCurrentPageChange(event * pageSize - pageSize);
-    }
-  };
 
-  const toggleModal = (event) => {
-    if (props.onToggleModal) props.onToggleModal(true);
-  };
+  /* ~~~ Handle function ~~~ */
+  // 1. Hàm chọn chiều dài bảng
   const handleSelectScrollY = (e) => {
     let myObj_serialized;
     if (e === 0) {
@@ -1823,7 +1773,7 @@ const DataTable = (props) => {
     localStorage.setItem("tableHeight", myObj_serialized);
     setScrollYValue(e);
   };
-
+  // 2. Hàm chọn số dòng/trang
   const handleSelectPagination = (e) => {
     const tempPageSizeOption = { value: e, label: `${e} dòng/trang` };
     let myObj_serialized = JSON.stringify(tempPageSizeOption);
@@ -1834,7 +1784,72 @@ const DataTable = (props) => {
     }
   };
 
-  const footerRender = () => {
+  /* ~~~ Support function ~~~ */
+  // 1. Hàm tính trang hiện tại đang hiển thị
+  const calculateCurrentPage = (event) => {
+    //
+    setCurrentPage(event);
+    if (props.onCurrentPageChange) {
+      setIsLoading(true);
+      props.onCurrentPageChange(event * pageSize - pageSize);
+    }
+  };
+  // 2.
+  const toggleModal = (event) => {
+    if (props.onToggleModal) props.onToggleModal(true);
+  };
+  // 3.
+  const onChangeValue = (item, dataIndex, value) => {
+    // item: phan tu trong mang data
+    // dataIndex: ten field thay doi
+    // value: gia tri moi da thay doi
+    if (props.onChangeValue) {
+      const data = {
+        item,
+        dataIndex,
+        value,
+      };
+      props.onChangeValue(data);
+    }
+  };
+  // 4.
+  const HeaderTitle = (title) => {
+    return (
+      <React.Fragment>
+        <p className="title-column">{title}</p>
+      </React.Fragment>
+    );
+  };
+  // 5.
+  const hideMiddleChars = (str) => {
+    const length = str.length;
+    const numStars = Math.floor(length / 2);
+    const halfIndex = Math.floor((length - numStars) / 2);
+
+    const stars = "*".repeat(numStars);
+
+    return str.slice(0, halfIndex) + stars + str.slice(halfIndex + numStars);
+  };
+
+  /* ~~~ Table child ~~~ */
+  // 1. Header của table
+  const tableHeader = () => {
+    return (
+      <div className="table__header-content">
+        <div className="table__header-content--left">
+          <span className="table__header-content--left-label">
+            {`${i18n.t("total", { lng: lang })}`}:
+          </span>
+          <span className="table__header-content--left-number">
+            {totalItem}
+          </span>
+        </div>
+        <div className="table__header-content--right">{headerRightContent}</div>
+      </div>
+    );
+  };
+  // 2. Footer của table
+  const tableFooter = () => {
     return (
       <div className="table-data__footer">
         <div className="table-data__footer--left">
@@ -1903,11 +1918,6 @@ const DataTable = (props) => {
     );
   };
 
-  scroll.y = JSON.parse(localStorage.getItem("tableHeight"))
-    ? JSON.parse(localStorage.getItem("tableHeight")).y
-    : [];
-  scroll.x = scrollX ? scrollX : widthPage;
-
   return (
     <div className="table-data">
       <ConfigProvider
@@ -1925,25 +1935,11 @@ const DataTable = (props) => {
         }}
       >
         <Table
-          style={{ borderRadius: "6px", overflow: "hidden" }} // Apply border-radius to the whole table
+          style={{ borderRadius: "6px", overflow: "hidden" }}
           locale={locale}
           columns={headerTable}
-          title={() => (
-            <div className="table__header-content">
-              <div className="table__header-content--left">
-                <span className="table__header-content--left-label">
-                  {`${i18n.t("total", { lng: lang })}`}:
-                </span>
-                <span className="table__header-content--left-number">
-                  {totalItem}
-                </span>
-              </div>
-              <div className="table__header-content--right">
-                {headerRightContent}
-              </div>
-            </div>
-          )}
-          footer={() => footerRender()}
+          title={() => tableHeader()}
+          footer={() => tableFooter()}
           dataSource={data}
           pagination={false}
           scroll={scroll}
@@ -1958,21 +1954,6 @@ const DataTable = (props) => {
           }}
         />
       </ConfigProvider>
-
-      {/* <div className="table-data__pagination">
-        <div></div>
-        <div>
-          <Pagination
-            current={currentPage}
-            onChange={calculateCurrentPage}
-            total={totalItem}
-            showSizeChanger={false}
-            // pageSize={pageSize || 20}
-            pageSize={pageSizeOption?.value || 20}
-            hideOnSinglePage={true}
-          />
-        </div>
-      </div> */}
     </div>
   );
 };

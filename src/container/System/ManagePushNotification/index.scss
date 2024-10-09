@@ -68,7 +68,7 @@
   padding-bottom: 16px;
 
   .manage-push-notification__label {
-    span {
+    .manage-push-notification__label--header {
       font-weight: $fontWeightXL;
       font-size: $textFontSize3XL;
       color: $colorBlack;
