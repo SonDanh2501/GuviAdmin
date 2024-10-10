@@ -237,7 +237,7 @@ const CardInfo = (props) => {
     setCurrentPage(page);
     const dataLength = data.length < 10 ? 10 : data.length;
     const start = page * dataLength - dataLength;
-    getHistoryActivityCollaborator(collaboratorId, start, 14)
+    getHistoryActivityCollaborator(collaboratorId, start, 10)
       .then((res) => {
         setDataHistory(res);
       })
@@ -589,7 +589,7 @@ const CardInfo = (props) => {
       // Thẻ hoạt động đơn hàng
       if (collaboratorActivityHistory) {
         dispatch(loadingAction.loadingRequest(true));
-        getHistoryActivityCollaborator(collaboratorId, 0, 14)
+        getHistoryActivityCollaborator(collaboratorId, 0, 10)
           .then((res) => {
             setDataHistory(res);
             dispatch(loadingAction.loadingRequest(false));
@@ -863,7 +863,12 @@ const CardInfo = (props) => {
                     <div className="card-statistics__activity-history--activity-left">
                       <span className="card-statistics__activity-history--activity-left-name-phone">
                         {moment(new Date(activity?.date_create)).format(
-                          "DD MMM, YYYY"
+                          "DD/MM/YYYY"
+                        )}
+                      </span>
+                      <span className="card-statistics__activity-history--activity-left-date">
+                        {moment(new Date(activity?.date_create)).format(
+                          "HH:mm"
                         )}
                       </span>
                       <span className="card-statistics__activity-history--activity-left-id">
@@ -924,7 +929,7 @@ const CardInfo = (props) => {
                   onChange={onChange}
                   total={dataHistory?.totalItem}
                   showSizeChanger={false}
-                  pageSize={14}
+                  pageSize={10}
                 />
               </div>
             </div>

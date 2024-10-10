@@ -57,11 +57,11 @@
         padding: 0px 12px;
         position: absolute;
         // padding-left: 8px;
-        top: 3.5px;
+        top: 5.5px;
         right: 1.5px;
         border-top-right-radius: 2.5px;
         border-bottom-right-radius: 2.5px;
-        border-left: 1.5px solid #eee;
+        border-left: 2px solid #eee;
 
         .form-field__image--number {
             color: #6b7280;
@@ -123,10 +123,10 @@
             }
 
             &:hover {
-                border-color: $colorPurple;
+                border-color: $colorViolet;
 
                 .form-field__text-area--container-content .form-field__text-area--container-content-main-icon {
-                    color: $colorPurple;
+                    color: $colorViolet;
                 }
             }
 

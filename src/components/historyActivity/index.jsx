@@ -44,7 +44,7 @@ const HistoryActivity = (props) => {
               {/* left */}
               <div className="history-activity__item--left">
                 <span className="history-activity__item--left-time">
-                  {moment(new Date(date_create)).format("DD MMM, YYYY - h:mm")}
+                  {moment(new Date(date_create)).format("DD/MM/YYYY - HH:mm")}
                 </span>
                 <span className="history-activity__item--left-date">
                   {moment(new Date(date_create)).locale(lang).format("dddd")}
@@ -83,41 +83,64 @@ const HistoryActivity = (props) => {
                     <span className="history-activity__item--right-top-title">
                       {title_admin}
                     </span>
-                    <div className="history-activity__item--right-top-money">
-                      <span className="history-activity__item--right-top-money-title">
-                        Ví Nạp:
-                      </span>
-                      <span className="">
-                        {formatMoney(item?.current_work_wallet)}
-                      </span>
-                      {item?.status_current_work_wallet === "down" ? (
-                        <IoTrendingDown color="red" />
-                      ) : item?.status_current_work_wallet === "up" ? (
-                        <IoTrendingUp color="green" />
-                      ) : item?.status_current_work_wallet === "none" ? (
-                        <IoRemove color="black" />
-                      ) : (
-                        ""
-                      )}
-                    </div>
-                    <div className="history-activity__item--right-top-money">
-                      <span className="history-activity__item--right-top-money-title">
-                        Ví CTV:
-                      </span>
-                      <span>
-                        {formatMoney(item?.current_collaborator_wallet)}
-                      </span>
-                      {item?.status_current_collaborator_wallet === "down" ? (
-                        <IoTrendingDown color="red" />
-                      ) : item?.status_current_collaborator_wallet === "up" ? (
-                        <IoTrendingUp color="green" />
-                      ) : item?.status_current_collaborator_wallet ===
-                        "none" ? (
-                        <IoRemove color="black" />
-                      ) : (
-                        ""
-                      )}
-                    </div>
+                    {item?.id_collaborator && (
+                      <>
+                        <div className="history-activity__item--right-top-money">
+                          <span className="history-activity__item--right-top-money-title">
+                            Ví Nạp:
+                          </span>
+                          <span className="">
+                            {formatMoney(item?.current_work_wallet)}
+                          </span>
+                          {item?.status_current_work_wallet === "down" ? (
+                            <IoTrendingDown color="red" />
+                          ) : item?.status_current_work_wallet === "up" ? (
+                            <IoTrendingUp color="green" />
+                          ) : item?.status_current_work_wallet === "none" ? (
+                            <IoRemove color="black" />
+                          ) : (
+                            ""
+                          )}
+                        </div>
+                        <div className="history-activity__item--right-top-money">
+                          <span className="history-activity__item--right-top-money-title">
+                            Ví CTV:
+                          </span>
+                          <span>
+                            {formatMoney(item?.current_collaborator_wallet)}
+                          </span>
+                          {item?.status_current_collaborator_wallet ===
+                          "down" ? (
+                            <IoTrendingDown color="red" />
+                          ) : item?.status_current_collaborator_wallet ===
+                            "up" ? (
+                            <IoTrendingUp color="green" />
+                          ) : item?.status_current_collaborator_wallet ===
+                            "none" ? (
+                            <IoRemove color="black" />
+                          ) : (
+                            ""
+                          )}
+                        </div>
+                      </>
+                    )}
+                    {item?.id_customer && (
+                      <div className="history-activity__item--right-top-money">
+                        <span className="history-activity__item--right-top-money-title">
+                          Số dư tài khoản:
+                        </span>
+                        <span>{formatMoney(item?.current_pay_point)}</span>
+                        {item?.status_current_pay_point === "down" ? (
+                          <IoTrendingDown color="red" />
+                        ) : item?.status_current_pay_point === "up" ? (
+                          <IoTrendingUp color="green" />
+                        ) : item?.status_current_pay_point === "none" ? (
+                          <IoRemove color="black" />
+                        ) : (
+                          ""
+                        )}
+                      </div>
+                    )}
                   </div>
                   <div className="history-activity__item--right-top-transiction">
                     <span

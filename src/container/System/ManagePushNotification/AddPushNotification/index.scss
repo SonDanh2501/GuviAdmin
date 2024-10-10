@@ -191,7 +191,7 @@
 
     &.unchecked {
       color: white;
-      background-color: $colorPurple;
+      background-color: $colorViolet;
     }
   }
 
@@ -207,7 +207,7 @@
       align-items: center;
       gap: $gapS;
       .add-push-notification__radio--child-box {
-        accent-color: $colorPurple;
+        accent-color: $colorViolet;
       }
       .add-push-notification__radio--child-text {
         font-size: $textFontSizeM;

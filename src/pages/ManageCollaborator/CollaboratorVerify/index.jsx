@@ -392,7 +392,6 @@ const CollaboratorVerify = () => {
   };
 
   const processHandle = async (dataChange) => {
-    console.log("check dataChange", dataChange);
     try {
       if (modal === "delete_collaborator") {
         await deleteCollaborator(dataChange._id);
@@ -501,7 +500,6 @@ const CollaboratorVerify = () => {
   //     [startPage, status, idGroup, lang]
   //   );
 
-  console.log("check modal", modal);
   return (
     <>
       <div className="div-container-content">

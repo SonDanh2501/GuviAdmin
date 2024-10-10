@@ -109,20 +109,15 @@ const Review = ({ id, totalReview }) => {
           />
         </div>
       </div>
-
-      <div className="card-table">
-        <FilterData setTimePeriod={setTimePeriod} />
-        {/* table */}
-        <DataTable
-          columns={columns}
-          data={data}
-          start={startPage}
-          pageSize={lengthPage}
-          setLengthPage={setLengthPage}
-          totalItem={total}
-          onCurrentPageChange={onChangePage}
-        />
-      </div>
+      <DataTable
+        columns={columns}
+        data={data}
+        start={startPage}
+        pageSize={lengthPage}
+        setLengthPage={setLengthPage}
+        totalItem={total}
+        onCurrentPageChange={onChangePage}
+      />
     </div>
   );
 };

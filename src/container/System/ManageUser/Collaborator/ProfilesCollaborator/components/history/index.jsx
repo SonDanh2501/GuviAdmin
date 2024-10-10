@@ -36,6 +36,12 @@ const {
 const History = ({ id }) => {
   const [collaboratorMoneyHistory, setCollaboratorMoneyHistory] = useState([]); // Giá trị lịch sử dòng tiền của đối tác
   const [collaboratorWithdrawal, setCollaboratorWithdrawal] = useState([]); // Giá trị lịch sử yêu cầu nạp rút của đối tác
+  const [startPage, setStartPage] = useState(0);
+  const [lengthPage, setLengthPage] = useState(
+    JSON.parse(localStorage.getItem("linePerPage"))
+      ? JSON.parse(localStorage.getItem("linePerPage")).value
+      : 20
+  );
   const [currentPage, setCurrentPage] = useState(1);
   const [topup, setTopup] = useState(0);
   const [withdraw, setWithdraw] = useState(0);
@@ -129,22 +135,24 @@ const History = ({ id }) => {
       value: 1,
     },
   ];
+  const onChangePage = (value) => {
+    setStartPage(value);
+  };
   /* ~~~ Use effect ~~~ */
+  // 1. Fetch giá trị lịch sử dòng tiền và dữ liệu tổng nạp, tổng rút khi vào trang lần đầu
   useEffect(() => {
     const fetchData = async () => {
       try {
         dispatch(loadingAction.loadingRequest(true));
         // Thực hiện các gọi API song song
-        const [historyData, remainderData, getDataa] = await Promise.all([
+        const [historyData, remainderData] = await Promise.all([
           getHistoryCollaboratorRemainder(id, 0, 10), // Fetch dữ liệu lịch sử dòng tiền
           getCollaboratorRemainder(id), // Fetch dữ liệu tổng nạp, tổng rút
-          getListTransitionByCollaborator(id, 0, 100), // Fetch dữ liệu lịch sử yêu cầu nạp rút
         ]);
         // Cập nhật state sau khi nhận dữ liệu từ API
         setCollaboratorMoneyHistory(historyData);
         setWorkWallet(remainderData?.work_wallet);
         setCollaboratorWallet(remainderData?.collaborator_wallet);
-        setCollaboratorWithdrawal(getDataa);
       } catch (err) {
         errorNotify({
           message: err?.message,
@@ -155,6 +163,25 @@ const History = ({ id }) => {
     };
     fetchData();
   }, [id, dispatch]);
+  // 2. Fetch giá trị yêu cầu nạp rút
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        dispatch(loadingAction.loadingRequest(true));
+        // Thực hiện các gọi API song song
+        const dataFetchListTransitionByCollaborator =
+          await getListTransitionByCollaborator(id, startPage, lengthPage); // Fetch dữ liệu lịch sử yêu cầu nạp rút
+        setCollaboratorWithdrawal(dataFetchListTransitionByCollaborator);
+      } catch (err) {
+        errorNotify({
+          message: err?.message,
+        });
+      } finally {
+        dispatch(loadingAction.loadingRequest(false));
+      }
+    };
+    fetchData();
+  }, [id, dispatch, startPage, lengthPage]);
   /* ~~~ Handle function ~~~*/
   // 1. Handle qua trang lịch sử dòng tiền của đối tác
   const handleChangePageMoneyHistory = (page) => {
@@ -223,7 +250,7 @@ const History = ({ id }) => {
               />
             }
           />
-          <CardInfo
+          {/* <CardInfo
             cardContent={
               <CardTotalValue
                 label="Tổng nạp"
@@ -246,9 +273,9 @@ const History = ({ id }) => {
                 horizontal={true}
               />
             }
-          />
+          /> */}
         </div>
-        <div className="collaborator-history__top--right">
+        {/* <div className="collaborator-history__top--right">
           <CardInfo
             cardHeader="Thống kê số tiền"
             cardContent={
@@ -266,7 +293,7 @@ const History = ({ id }) => {
               />
             }
           />
-        </div>
+        </div> */}
       </div>
       <div className="collaborator-history__body">
         <div className="collaborator-history__body--financial-history">
@@ -276,16 +303,18 @@ const History = ({ id }) => {
           <div className="collaborator-history__body--financial-history-body">
             <HistoryActivity data={collaboratorMoneyHistory?.data} />
             <div className="div-pagination">
-              <p>
+              <span>
                 {`${i18n.t("total", { lng: lang })}`}:{" "}
-                {collaboratorMoneyHistory?.totalItem}
-              </p>
+                <span style={{ fontWeight: 500 }}>
+                  {collaboratorMoneyHistory?.totalItem}
+                </span>
+              </span>
+
               <div>
                 <Pagination
                   current={currentPage}
                   onChange={handleChangePageMoneyHistory}
                   total={collaboratorMoneyHistory?.totalItem}
-                  showSizeChanger={false}
                   pageSize={10}
                 />
               </div>
@@ -298,6 +327,11 @@ const History = ({ id }) => {
             data={
               collaboratorWithdrawal?.data ? collaboratorWithdrawal?.data : []
             }
+            start={startPage}
+            pageSize={lengthPage}
+            setLengthPage={setLengthPage}
+            totalItem={collaboratorWithdrawal?.totalItem}
+            onCurrentPageChange={onChangePage}
           />
         </div>
       </div>

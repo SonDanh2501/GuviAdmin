@@ -469,6 +469,7 @@
 .ant-table-body::-webkit-scrollbar-thumb:hover {
   background-color: #7e53b2;
 }
+
 .ant-table-footer {
   border-radius: $borderRadiusM !important;
 }
@@ -488,14 +489,14 @@
 
 // Tab active bottom border
 .ant-tabs-ink-bar {
-  border-bottom: 5px solid $colorPurple;
+  border-bottom: 5px solid $colorViolet;
   border-top-left-radius: $borderRadiusFull;
   border-top-right-radius: $borderRadiusFull;
 }
 
 // Tab active text
 .ant-tabs-tab-active .ant-tabs-tab-btn {
-  color: $colorPurple !important;
+  color: $colorViolet !important;
 }
 
 // Tab background container

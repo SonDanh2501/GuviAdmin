@@ -789,7 +789,6 @@ const Information = ({ data, idCTV, setData, id }) => {
   });
   // ↑ trở lên là code cũ không cần quan tâm
 
-  console.log("check home_town", homeTown);
   return (
     <div>
       <div className="collaborator-information">
@@ -1274,7 +1273,7 @@ const Information = ({ data, idCTV, setData, id }) => {
                   </div>
                   <div
                     onClick={() => handleDeleteContact(index)}
-                    style={{ margin: "18px 0px 0px 0px", padding: "2px" }}
+                    style={{ padding: "3px" }}
                     className="w-fit bg-red-500 rounded-full hover:bg-red-300 duration-300 cursor-pointer text-white"
                   >
                     <IoRemove />

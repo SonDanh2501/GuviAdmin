@@ -387,6 +387,7 @@ span {
     rgba(67, 71, 85, 0.27) 0px 1px 0.25em,
     rgba(90, 125, 188, 0.05) 0px 0.75em 2em;
   border-radius: $borderRadiusM;
+
   // margin-top: 16px;
   // border: 2px solid black;
   // Nội dung hiển thị
@@ -428,28 +429,32 @@ span {
     }
   }
 }
+
 /* ~~~ Css dành cho bảng ~~~ */
 .table__header-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
+
   .table__header-content--left {
     display: flex;
     gap: $gapXS;
+
     .table__header-content--left-label {
       font-size: $textFontSizeM;
       font-weight: $fontWeightL;
       color: $colorBlack;
     }
+
     .table__header-content--left-number {
       font-size: $textFontSizeM;
       font-weight: $fontWeightXL;
     }
   }
-  .table__header-content--right {
 
-  }
+  .table__header-content--right {}
 }
+
 /* ~~~ Css dành cho các trường hợp ~~~ */
 // Trường trạng thái
 .case__status-text {
@@ -557,9 +562,9 @@ span {
   }
 
   .case__transfer-status--doing {
-    background-color: $colorExtraLightPurple;
+    background-color: $colorExtraLightViolet;
     border-radius: $borderRadiusM;
-    color: $colorPurple;
+    color: $colorViolet;
     font-weight: $fontWeightXL;
     font-size: $textFontSizeM;
     padding: 6px 8px;
@@ -598,6 +603,8 @@ span {
 .case__normal-text {
   font-weight: $fontWeightL;
   font-size: $textFontSizeM;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }
-
-

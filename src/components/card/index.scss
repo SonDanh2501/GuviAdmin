@@ -37,7 +37,7 @@
         }
 
         &.dark-purple {
-            background-color: $colorPurple;
+            background-color: $colorViolet;
         }
 
         &.small {
@@ -520,7 +520,7 @@
                     }
 
                     &.admin {
-                        background-color: $colorExtraLightPurple;
+                        background-color: $colorExtraLightViolet;
                     }
 
                     &.verify {
@@ -655,7 +655,7 @@
         gap: $gapM;
 
         .card-statistics__total--icon {
-            background-color: $colorExtraLightPurple;
+            background-color: $colorExtraLightViolet;
             padding: 12px 12px;
             border-radius: $borderRadiusFull;
         }

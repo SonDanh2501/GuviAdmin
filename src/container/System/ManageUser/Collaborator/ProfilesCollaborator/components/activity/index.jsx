@@ -78,6 +78,8 @@ const Activity = ({ id }) => {
       color: "red",
     },
   ]);
+  /* ~~~ Use effect ~~~ */
+  // 1. Fetch giá trị lịch sử hoạt động của đối tác
   useEffect(() => {
     dispatch(loadingAction.loadingRequest(true));
     getHistoryOrderCollaborator(id, startPage, lengthPage)
@@ -94,7 +96,6 @@ const Activity = ({ id }) => {
       });
   }, [id, dispatch, startPage, lengthPage]);
 
-  useEffect(() => {}, [id, dispatch, startPage, lengthPage]);
   const onChange = (page) => {
     setCurrentPage(page);
     const dataLength = data.length < 10 ? 10 : data.length;
@@ -107,10 +108,11 @@ const Activity = ({ id }) => {
       .catch((err) => console.log(err));
   };
 
+  /* ~~~ Handle function ~~~ */
+  // 1. Hàm xử lý khi chuyển trang
   const onChangePage = (value) => {
     setStartPage(value);
   };
-
   const timeWork = (data) => {
     const start = moment(new Date(data.date_work)).format("HH:mm");
 
@@ -121,12 +123,14 @@ const Activity = ({ id }) => {
     return start + " - " + timeEnd;
   };
 
+  /* ~~~ Column ~~~ */
+  // 1. Giá trị các cột của bảng
   const columns = [
     {
       title: "Mã đơn",
       // dataIndex: "",
       key: "code_order",
-      width: 70,
+      width: 60,
       FontSize: "text-size-M",
     },
     {
@@ -147,25 +151,26 @@ const Activity = ({ id }) => {
       title: "Ngày làm",
       // dataIndex: "short_review",
       key: "date_work",
-      width: 55,
+      width: 50,
       FontSize: "text-size-M",
     },
     {
       title: "Địa chỉ",
       dataIndex: "address",
       key: "text",
-      width: 60,
+      width: 70,
       FontSize: "text-size-M",
     },
     {
       title: "Trạng thái",
       // dataIndex: "short_review",
       key: "status",
-      width: 55,
+      width: 50,
       FontSize: "text-size-M",
     },
   ];
 
+  // 2. Giá trị
   const testData = [
     {
       name: "Thg 1",
@@ -219,7 +224,7 @@ const Activity = ({ id }) => {
 
   return (
     <div className="collaborator-activity">
-      {/* Các thẻ thống kê */}
+      {/* Các thẻ thống kê (hiện tại đang ẩn đi chừng nào viết xong api thì mở ra và truyền dữ liệu vào) */}
       {/* <div className="collaborator-activity__statistics">
         <div className="collaborator-activity__statistics--overview grid-column-2">
           {valueActivityStatistics.map((item, index) => {
@@ -259,11 +264,9 @@ const Activity = ({ id }) => {
           />
         </div>
       </div> */}
-
       {/* Lịch sử đơn hàng và Lịch sử hoạt động */}
       <div className="collaborator-activity__history">
         <div className="collaborator-activity__history--order">
-          <FilterData setTimePeriod={setTimePeriod} />
           <DataTable
             columns={columns}
             data={data}

@@ -51,7 +51,6 @@ const DataTable = (props) => {
     emptyText,
     headerRightContent,
   } = props;
-  console.log("check data >>>", data);
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
   const [saveToCookie] = useCookies();
@@ -1124,14 +1123,11 @@ const DataTable = (props) => {
             break;
           }
           case "text": {
-            const max = item.maxLength || 75;
-            let getDataView = data[item.dataIndex] || "";
-            const indexSlice = getDataView.length - max;
-            const sliceData =
-              indexSlice > 0 ? getDataView.slice(0, max) + "..." : getDataView;
             return (
-              <Tooltip placement="top" title={getDataView}>
-                <span className={`${item?.fontSize} `}>{sliceData}</span>
+              <Tooltip placement="top" title={data[item.dataIndex]}>
+                <span className={`${item?.fontSize} case__normal-text`}>
+                  {data[item.dataIndex] || ""}
+                </span>
               </Tooltip>
             );
             break;
