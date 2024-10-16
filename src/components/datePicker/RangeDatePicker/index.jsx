@@ -5,9 +5,11 @@ import Calendar from "react-calendar";
 import { useSelector } from "react-redux";
 import { getLanguageState } from "../../../redux/selectors/auth";
 import i18n from "../../../i18n";
-
-import "./index.scss";
 import useWindowDimensions from "../../../helper/useWindowDimensions";
+import "./index.scss";
+import icons from "../../../utils/icons";
+
+const { IoAddCircleOutline,IoCalendarOutline   } = icons;
 
 const RangeDatePicker = (props) => {
   const { width } = useWindowDimensions();
@@ -43,7 +45,7 @@ const RangeDatePicker = (props) => {
       pad = function (num) {
         return (num < 10 ? "0" : "") + num;
       };
-  
+
     // console.log("CHECK TZO", tzo);
     return date.toISOString();
     // date?.getFullYear() +
@@ -684,15 +686,33 @@ const RangeDatePicker = (props) => {
     setSelectedMonths(sortedMonths);
   };
 
-  //
-  //
-
   return (
     <div>
-      <div>
-        <div className="btn-date-picker" onClick={() => setOpen(!open)}>
-          <p className="text-gray-500/70">Thời gian:</p>
-          <p className="font-normal">{title}</p>
+      <div onClick={() => setOpen(!open)} className="range-date-picker">
+        <span className="range-date-picker__label">
+          <IoCalendarOutline size="16px" />
+          Thời gian
+        </span>
+        <div className="range-date-picker__line"></div>
+        <div className="range-date-picker__option">
+          <span
+            style={{ fontWeight: 400 }}
+            className="range-date-picker__option--title"
+          >
+            {/* {title} {moment(toIsoString(startCalendar?._d)).format("DD/MM/YYYY")} -{" "}
+            {moment(toIsoString(endCalendar?._d)).format("DD/MM/YYYY")} */}
+            {title}{" "}
+            {start._d
+              ? "(" + moment(toIsoString(start?._d)).format("DD/MM/YYYY")
+              : start
+              ? "(" + moment(toIsoString(start)).format("DD/MM/YYYY")
+              : ""}
+            {end._d
+              ? " - " + moment(toIsoString(end?._d)).format("DD/MM/YYYY") + ")"
+              : end
+              ? " - " + moment(toIsoString(end)).format("DD/MM/YYYY") + ")"
+              : ""}
+          </span>
         </div>
       </div>
       {open && (

@@ -863,7 +863,7 @@ const CardInfo = (props) => {
                     <div className="card-statistics__activity-history--activity-left">
                       <span className="card-statistics__activity-history--activity-left-name-phone">
                         {moment(new Date(activity?.date_create)).format(
-                          "DD/MM/YYYY"
+                          "DD MMMM, YYYY"
                         )}
                       </span>
                       <span className="card-statistics__activity-history--activity-left-date">
@@ -922,9 +922,10 @@ const CardInfo = (props) => {
                   </div>
                 ))}
               </div>
-              <div>
+              <div className="card-statistics__activity-history--pagination">
+                <div></div>
                 <Pagination
-                  simple={{ readOnly: true }}
+                  // simple={{ readOnly: true }}
                   current={currentPage}
                   onChange={onChange}
                   total={dataHistory?.totalItem}

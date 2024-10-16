@@ -5,7 +5,7 @@
     position: relative;
 
     .form-field__input {
-        border: 2px solid #eee;
+        border: 2px solid $colorMoreLightStone;
         border-radius: $borderRadiusM;
         width: 100%;
         font-size: $textFontSizeL;
@@ -40,8 +40,8 @@
 
     .form-field__hide-image {
         position: absolute;
-        top: 1.5px;
-        right: 1.5px;
+        top: 11px;
+        right: 11.5px;
         padding: 13px 16px;
         background-color: #f1f5f9;
         border-left: 2px solid #eee;

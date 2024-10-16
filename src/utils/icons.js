@@ -56,6 +56,7 @@ import {
   IoPieChartOutline,
   IoArrowDownCircleOutline,
   IoArrowUpCircleOutline,
+  IoAddCircleOutline,
 } from "react-icons/io5";
 
 const icons = {
@@ -116,6 +117,7 @@ const icons = {
   IoPieChartOutline,
   IoArrowDownCircleOutline,
   IoArrowUpCircleOutline,
+  IoAddCircleOutline,
 };
 
 export default icons;

@@ -1722,13 +1722,21 @@ const DataTable = (props) => {
           }
           case "notification_date_schedule": {
             return (
-              <span className="case__normal-text">
-                {data?.date_schedule
-                  ? moment(new Date(data?.date_schedule)).format(
-                      "DD/MM/YYYY - HH:mm"
-                    )
-                  : ""}
-              </span>
+              // <span className="case__normal-text">
+              //   {data?.date_schedule
+              //     ? moment(new Date(data?.date_schedule)).format(
+              //         "DD/MM/YYYY - HH:mm"
+              //       )
+              //     : ""}
+              // </span>
+              <div className="div-date-create">
+              <p className={`${item?.fontSize}`}>
+                {moment(new Date(data?.date_schedule)).format("DD/MM/YYYY")}
+              </p>
+              <p className={`${item?.fontSize}`}>
+                {moment(new Date(data?.date_schedule)).format("HH:mm")}
+              </p>
+            </div>
             );
           }
           default: {

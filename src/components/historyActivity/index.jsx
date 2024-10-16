@@ -20,12 +20,12 @@ import {
 } from "react-icons/io5";
 
 const HistoryActivity = (props) => {
-
+  const { data } = props;
   const { width } = useWindowDimensions();
   const lang = useSelector(getLanguageState);
-  const { data } = props;
   const [arrComponents, setArrComponents] = useState([]);
   const [chooseItem, setChooseItem] = useState();
+
   useEffect(() => {}, []);
   const onChooseItem = (item) => {
     if (item?._id === chooseItem?._id) {
@@ -34,6 +34,7 @@ const HistoryActivity = (props) => {
       setChooseItem(item);
     }
   };
+
   return (
     <div className="history-activity">
       {data?.map((item, index) => {
@@ -44,7 +45,7 @@ const HistoryActivity = (props) => {
               {/* left */}
               <div className="history-activity__item--left">
                 <span className="history-activity__item--left-time">
-                  {moment(new Date(date_create)).format("DD/MM/YYYY - HH:mm")}
+                  {moment(new Date(date_create)).format("DD MMM, YYYY - HH:mm")}
                 </span>
                 <span className="history-activity__item--left-date">
                   {moment(new Date(date_create)).locale(lang).format("dddd")}
@@ -61,12 +62,20 @@ const HistoryActivity = (props) => {
                       ? "down"
                       : item?.status_current_work_wallet === "up"
                       ? "up"
+                      : item?.status_current_collaborator_wallet === "down"
+                      ? "down"
+                      : item?.status_current_collaborator_wallet === "up"
+                      ? "up"
                       : "setting"
                   }`}
                 >
                   {item?.status_current_work_wallet === "down" ? (
                     <IoArrowDown size={15} color="red" />
                   ) : item?.status_current_work_wallet === "up" ? (
+                    <IoArrowUp size={15} color="green" />
+                  ) : item?.status_current_collaborator_wallet === "down" ? (
+                    <IoArrowDown size={15} color="red" />
+                  ) : item?.status_current_collaborator_wallet === "up" ? (
                     <IoArrowUp size={15} color="green" />
                   ) : (
                     <IoSettings size={15} color="blue" />

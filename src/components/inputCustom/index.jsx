@@ -35,6 +35,7 @@ const InputTextCustom = (props) => {
   const {
     disable, // Giá trị (boolean) vô hiệu hóa input
     placeHolder, // Giá trị (string) place holder của input
+    placeHolderNormal, // Giá trị (string) place holder của input nhưng không có css (nếu có placeHolder thì không xài placeHolderNormal và ngược lại)
     type, // Giá trị (string) chọn kiểu của input (text, select, service: select multi cho dịch vụ, province: select cho tỉnh/thành phố, district: select cho huyện/quận, multiDistrict: select multi cho district )
     value, // Giá trị (string) hiển thị
     options, // Giá trị (array) các giá trị select nếu type là "select"
@@ -700,7 +701,7 @@ const InputTextCustom = (props) => {
             disabled={disable}
             name={name ? name : ""}
             className="form-field__input"
-            placeholder=" "
+            placeholder={placeHolderNormal ? placeHolderNormal : " "}
             value={value}
             onChange={onChange}
           />
@@ -712,7 +713,13 @@ const InputTextCustom = (props) => {
       )}
       {/* File Field  */}
       {type === "file" && (
-        <div>
+        <div
+          style={{
+            border: "2px solid #e7e5e4",
+            padding: "8px",
+            borderRadius: "6px",
+          }}
+        >
           <input
             multiple={multiple}
             disabled={disable}
@@ -741,8 +748,8 @@ const InputTextCustom = (props) => {
                   <div
                     style={{
                       borderRadius: "6px",
-                      border: "2px dashed #a855f7",
-                      padding: "6px",
+                      border: "2px dashed #e5e7eb",
+                      padding: "4px",
                     }}
                     className={`${
                       hideImage ? "hidden" : "flex"
@@ -771,10 +778,10 @@ const InputTextCustom = (props) => {
                     <div className="flex gap-2">
                       <button
                         style={{ borderRadius: "100%" }}
-                        className="p-2 hover:bg-red-500 hover:text-white text-red-500 duration-300 ease-out"
+                        className="p-2 hover:bg-red-500 hover:text-white text-red-500 duration-300 ease-out mr-1"
                       >
                         <IoClose
-                          className="mr-0.5"
+                          // className="mr-0.5"
                           onClick={() =>
                             setValueSelectedProps(
                               value?.filter((el) => el !== item)
@@ -791,7 +798,7 @@ const InputTextCustom = (props) => {
               <div
                 style={{
                   borderRadius: "6px",
-                  border: "2px dashed #a855f7",
+                  border: "2px dashed #e5e7eb",
                   padding: "4px",
                 }}
                 className={`${
@@ -819,10 +826,10 @@ const InputTextCustom = (props) => {
                 <div className="flex gap-2">
                   <button
                     style={{ borderRadius: "100%" }}
-                    className="p-2 hover:bg-red-500 hover:text-white text-red-500 duration-300 ease-out"
+                    className="p-2 hover:bg-red-500 hover:text-white text-red-500 duration-300 ease-out mr-1"
                   >
                     <IoClose
-                      className="mr-0.5"
+                      // className="mr-1"
                       onClick={() => setValueSelectedProps("")}
                       size="14px"
                     />
@@ -1222,13 +1229,13 @@ const InputTextCustom = (props) => {
       {type === "textArea" && (
         <>
           {/* <input
-          type=""
-            disabled={disable}
-            className="form-field__input"
-            placeholder=" "
-            value={valueWithUnit}
-            onChange={onChange}1` ` ` `   10ou v41`1  
-          /> */}
+type=""
+disabled={disable}
+className="form-field__input"
+placeholder=" "
+value={valueWithUnit}
+onChange={onChange}1` ` ` `   10ou v41`1  
+/> */}
           <textarea
             rows="2"
             className="form-field__input"

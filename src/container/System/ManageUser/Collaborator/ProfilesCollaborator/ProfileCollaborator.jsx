@@ -111,7 +111,7 @@ const ProfileCollaborator = () => {
       return hidePhone;
     }
   };
-  
+
   return (
     <div>
       <div>

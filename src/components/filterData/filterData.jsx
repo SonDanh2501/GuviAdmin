@@ -9,9 +9,18 @@ import "./index.scss";
 import InputTextCustom from "../inputCustom";
 
 const FilterData = (props) => {
-  const { isTimeFilter, setTimePeriod, leftContent, rightContent } = props;
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const {
+    isTimeFilter,
+    setTimePeriod,
+    leftContent,
+    rightContent,
+    startDate,
+    endDate,
+    setStartDate,
+    setEndDate,
+  } = props;
+  // const [startDate, setStartDate] = useState("");
+  // const [endDate, setEndDate] = useState("")
 
   const toIsoString = (date) => {
     var tzo = -date?.getTimezoneOffset(),
@@ -77,10 +86,11 @@ const FilterData = (props) => {
   };
 
   useEffect(() => {
-    if (isTimeFilter) {
+    if (isTimeFilter && setTimePeriod) {
       handleCountMonth(moment(startDate), moment(endDate));
     }
   }, [startDate, endDate]);
+
 
   return (
     <div className="filter-data card-shadow">
@@ -88,15 +98,27 @@ const FilterData = (props) => {
         {/* Lịch */}
         {isTimeFilter && (
           <div className="filter-data__left--date-time-picker">
-            <span>Khoảng thời gian</span>
+            {/* <span>Khoảng thời gian</span> */}
             <div className="filter-data__left--date-time-picker-label">
               <RangeDatePicker
                 setStartDate={setStartDate}
                 setEndDate={setEndDate}
                 onCancel={() => {}}
-                rangeDateDefaults={"last_ninety"}
+                rangeDateDefaults={"thirty_last"}
               />
-              <div className="filter-data__left--date-time-picker-label-period-time">
+              {/* <div className="filter-data__left--date-time-picker-label-period-time">
+                <span className="filter-data__left--date-time-picker-label-period-time-sub">
+                  Mốc chọn
+                </span>
+                <div className="filter-data__left--date-time-picker-label-period-time-line"></div>
+                <div className="filter-data__left--date-time-picker-label-period-time-main">
+                  <span className="filter-data__left--date-time-picker-label-period-time-main-title">
+                    {moment(startDate).format("DD/MM/YYYY")} -{" "}
+                    {moment(endDate).format("DD/MM/YYYY")}
+                  </span>
+                </div>
+              </div> */}
+              {/* <div className="filter-data__left--date-time-picker-label-period-time">
                 <span className="filter-data__left--date-time-picker-label-period-time-sub">
                   Mốc chọn:
                 </span>
@@ -104,14 +126,14 @@ const FilterData = (props) => {
                   {moment(startDate).format("DD/MM/YYYY")} -{" "}
                   {moment(endDate).format("DD/MM/YYYY")}
                 </span>
-              </div>
+              </div> */}
             </div>
           </div>
         )}
         {/* Nội dung */}
         {leftContent && <div>{leftContent}</div>}
       </div>
-      <div className="filter-data_right">{rightContent}</div>
+      <div className="filter-data__right">{rightContent}</div>
     </div>
   );
 };

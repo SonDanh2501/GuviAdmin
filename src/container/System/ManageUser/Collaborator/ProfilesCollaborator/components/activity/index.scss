@@ -220,18 +220,19 @@
 
   .collaborator-activity__history {
     display: flex;
+    flex-direction: column;
     // grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: $gapL;
 
     .collaborator-activity__history--order {
-      width: 70%;
+      width: 100%;
       height: fit-content;
       // background-color: $colorWhite;
       // border-radius: $borderRadiusM;
     }
 
     .collaborator-activity__history--activities {
-      width: 30%;
+      width: 100%;
       height: fit-content;
       background-color: $colorWhite;
       border-radius: $borderRadiusM;

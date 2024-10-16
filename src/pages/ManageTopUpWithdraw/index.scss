@@ -1,0 +1,23 @@
+@import "../../@theme/style.scss";
+
+.manage-top-up-with-draw {
+    display: flex;
+    flex-direction: column;
+    gap: $gapL;
+    padding-bottom: 16px;
+
+    .manage-top-up-with-draw__header {
+        span {
+            font-weight: $fontWeightXL;
+            font-size: $textFontSize3XL;
+            color: $colorBlack;
+        }
+
+    }
+
+    .manage-top-up-with-draw__filter-content {
+        display: flex;
+        gap: $gapL;
+        
+    }
+}

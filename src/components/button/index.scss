@@ -59,3 +59,112 @@
         cursor: not-allowed;
     }
 }
+
+.button-custom-select {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 8px;
+    border: 1px solid $colorViolet;
+    border-radius: $borderRadiusM;
+    cursor: pointer;
+    transition: 0.7s all ease;
+    gap: $gapS;
+
+    .button-custom-select__label {
+        display: flex;
+        gap: $gapXS;
+        align-items: center;
+        color: $colorViolet;
+        font-weight: $fontWeightXL;
+        font-size: $textFontSizeM;
+    }
+
+    .button-custom-select__line {
+        width: 1px;
+        height: 20px;
+        border-radius: $borderRadiusM;
+        background-color: $colorMoreLightGray;
+    }
+
+    .button-custom-select__option {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 4px 8px;
+        background-color: $colorMoreLightGray;
+        border-radius: $borderRadiusM;
+
+        span {
+            font-size: $textFontSizeM;
+            font-weight: $fontWeightL;
+        }
+    }
+
+    &:hover {
+        // border: 0px;
+        background-color: $colorViolet;
+
+        .button-custom-select__label {
+            color: $colorWhite;
+        }
+
+        .button-custom-select__line,
+        .button-custom-select__option {
+            background-color: $colorWhite;
+        }
+    }
+
+}
+
+.button-custom-content {
+    display: flex;
+    flex-direction: column;
+
+    .button-custom-content__child {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-weight: $fontWeightL;
+        font-size: $textFontSizeM;
+        color: $colorBlack;
+        padding: 8px;
+        cursor: pointer;
+        border-radius: $borderRadiusM;
+        transition: 0.3s all ease-out;
+        margin-bottom: 4px;
+
+        &:hover {
+            background-color: $colorViolet;
+            color: $colorWhite;
+        }
+        &.checked {
+            background-color: $colorViolet;
+            font-weight: $fontWeightL;
+            font-size: $textFontSizeM;
+            color: $colorWhite;
+        }
+    }
+
+    .button-custom-content__child--text {
+        display: flex;
+        align-items: center;
+        gap: $gapS;
+        .button-custom-content__child--text-number {
+            text-align: center;
+            background-color: $colorMoreLightGray;
+            padding: 2px 4px;
+            border-radius: $borderRadiusM;
+            font-weight: $fontWeightL;
+            font-size: $textFontSizeM;
+            min-width: 20px;
+            color: $colorBlack;
+
+            &.checked {
+                background-color: $colorWhite;
+                color: $colorBlack;
+            }
+        }
+    }
+
+}

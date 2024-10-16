@@ -1,5 +1,64 @@
 @import "/src/@theme/style.scss";
 
+/* ~~~ SON CSS ~~~ */
+
+.range-date-picker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 8px;
+  border: 1px solid $colorViolet;
+  border-radius: $borderRadiusM;
+  cursor: pointer;
+  transition: 0.7s all ease;
+  gap: $gapS;
+
+  .range-date-picker__label {
+    display: flex;
+    gap: $gapXS;
+    align-items: center;
+    color: $colorViolet;
+    font-weight: $fontWeightXL;
+    font-size: $textFontSizeM;
+  }
+
+  .range-date-picker__line {
+    width: 1px;
+    height: 20px;
+    border-radius: $borderRadiusM;
+    background-color: $colorMoreLightGray;
+  }
+
+  .range-date-picker__option {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 8px;
+    background-color: $colorMoreLightGray;
+    border-radius: $borderRadiusM;
+
+    .range-date-picker__option--title {
+      font-size: $textFontSizeM;
+      font-weight: $fontWeightL;
+    }
+  }
+
+  &:hover {
+    // border: 0px;
+    background-color: $colorViolet;
+
+    .range-date-picker__label {
+      color: $colorWhite;
+    }
+
+    .range-date-picker__line,
+    .range-date-picker__option {
+      background-color: $colorWhite;
+    }
+  }
+
+}
+
 .btn-date-picker {
   display: flex;
   gap: $gapXS;

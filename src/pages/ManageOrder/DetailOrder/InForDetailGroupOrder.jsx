@@ -50,6 +50,11 @@ const InForDetailGroupOrder = (props) => {
   const [collaborator, setCollaborator] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [startPage, setStartPage] = useState(0);
+  const [lengthPage, setLengthPage] = useState(
+    JSON.parse(localStorage.getItem("linePerPage"))
+      ? JSON.parse(localStorage.getItem("linePerPage")).value
+      : 20
+  );
   const [total, setTotal] = useState(0);
   const [item, setItem] = useState({ date_work: "" });
   const [detectLoading, setDetectLoading] = useState(false);
@@ -104,7 +109,7 @@ const InForDetailGroupOrder = (props) => {
 
   useEffect(() => {
     getData();
-  }, [id, reCallData, startPage]);
+  }, [id, reCallData, startPage, lengthPage]);
   useEffect(() => {
     if (dataGroup) {
       const _date_create = new Date(dataGroup?.date_create);
@@ -196,7 +201,7 @@ const InForDetailGroupOrder = (props) => {
   const getData = () => {
     setDetectLoading(true);
     setIsLoading(true);
-    getOrderByGroupOrderApi(id, lang, startPage, 20)
+    getOrderByGroupOrderApi(id, lang, startPage, lengthPage)
       .then((res) => {
         console.log("resss ", res);
         setDataGroup(res?.data?.groupOrder);
@@ -512,14 +517,25 @@ const InForDetailGroupOrder = (props) => {
           data={dataList}
           actionColumn={addActionColumn}
           start={startPage}
-          pageSize={20}
+          pageSize={lengthPage}
+          setLengthPage={setLengthPage}
           totalItem={total}
-          getItemRow={setItem}
+          // getItemRow={setItem}
           onCurrentPageChange={onChangePage}
-          detectLoading={detectLoading}
-          setOpenModalCancel={setIsOpenModalCancel}
-          setOpenModalChangeStatus={setIsOpenModalChangeStatus}
+          // detectLoading={detectLoading}
+          // setOpenModalCancel={setIsOpenModalCancel}
+          // setOpenModalChangeStatus={setIsOpenModalChangeStatus}
         />
+
+      //   <DataTable
+      //   columns={columns}
+      //   data={data}
+      //   start={startPage}
+      //   pageSize={lengthPage}
+      //   setLengthPage={setLengthPage}
+      //   totalItem={totalData}
+      //   onCurrentPageChange={onChangePage}
+      // />
       )}
       <FloatButton.BackTop />
       <ModalCustom

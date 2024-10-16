@@ -29,13 +29,13 @@ import DataTable from "../../../components/tables/dataTable";
 import FilterData from "../../../components/filterData/filterData";
 import { CaretDownOutlined } from "@ant-design/icons";
 import { compareDateIsBefore } from "../../../utils/contant";
+import icons from "../../../utils/icons";
+
+const { IoCaretDown } = icons;
 
 const ManagePushNotification = () => {
-  // const listNotification = useSelector(getListNotifications);
-  // const totalNotification = useSelector(getNotificationTotal);
   const [dataNotifications, setDataNotifications] = useState([]);
   const [itemEdit, setItemEdit] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
   const [statusFilter, setStatusFilter] = useState("todo");
   const [modalVerify, setModalVerify] = useState(false);
   const [modal, setModal] = useState(false);
@@ -49,26 +49,21 @@ const ManagePushNotification = () => {
       ? JSON.parse(localStorage.getItem("linePerPage")).value
       : 20
   );
-  const [totalNotification, setTotalNotification] = useState(0);
-  const [totalNotificationDone, setTotalNotificationDone] = useState(0);
-  const [totalNotificationTodo, setTotalNotificationTodo] = useState(0);
-
+  const [isCreateNotification, setIsCreateNotification] = useState(false); // Giá trị cờ để kiểm tra có tạo thông báo không để fetch lại dữ liệu thông báo
+  const toggle = () => setModal(!modal);
+  const toggleVerify = () => setModalVerify(!modalVerify);
   /* ~~~ Use effect ~~~ */
   // 1. Fetch dữ liệu thông báo
   useEffect(() => {
     const fetchData = async () => {
       try {
         dispatch(loadingAction.loadingRequest(true));
-        // Chạy API
         const dataNotificationsFetch = await getListNotifications(
           startPage,
           lengthPage,
-          1,
           statusFilter
-        ); // Fetch dữ liệu thông báo
-        /* Gán giá trị */
+        );
         setDataNotifications(dataNotificationsFetch);
-        setTotalNotification(dataNotificationsFetch?.totalItem);
       } catch (err) {
         errorNotify({
           message: err?.message,
@@ -77,29 +72,22 @@ const ManagePushNotification = () => {
         dispatch(loadingAction.loadingRequest(false));
       }
     };
+    // 1. Cách chạy 1
     fetchData();
-  }, [dispatch, startPage, lengthPage,statusFilter]);
+    // 2. Cách chạy 2
+    // const timer = setTimeout(() => {
+    //   fetchData();
+    // }, 2000);
+    // return () => clearTimeout(timer);
+  }, [dispatch, startPage, lengthPage, statusFilter, isCreateNotification]);
 
-  const onActive = (id, active) => {};
-
-  const onDelete = (id) => {};
-
-  // const toggle = () => setModal(!modal);
-  // const toggleVerify = () => setModalVerify(!modalVerify);
-
-  // const onChange = (page) => {
-  //   setCurrentPage(page);
-  //   const dataLength =
-  //     listNotification.length < 20 ? 20 : listNotification.length;
-  //   const start = page * dataLength - dataLength;
-  //   dispatch(
-  //     getNotification.getNotificationRequest({
-  //       status: status,
-  //       start: start > 0 ? start : 0,
-  //       length: 20,
+  // useEffect(() => {
+  //   getListNotifications(startPage, lengthPage, 1, statusFilter)
+  //     .then((res) => {
+  //       console.log("check res >>>", res);
   //     })
-  //   );
-  // };
+  //     .catch((err) => {});
+  // }, [isCreateNotification]);
   /* ~~~ Handle function ~~~ */
   const onChangePage = (value) => {
     setStartPage(value);
@@ -129,81 +117,116 @@ const ManagePushNotification = () => {
       return array;
     }
   };
-  /* ~~~ Data list ~~~ */
+  /* ~~~ List ~~~ */
   // 1. Danh sách các cột của bảng
   const columns = [
     {
       title: "STT",
       dataIndex: "",
       key: "ordinal",
-      width: 60,
+      width: 30,
       fontSize: "text-size-M",
     },
     {
       title: "Ngày tạo",
       key: "date_create",
-      width: 60,
+      width: 30,
       fontSize: "text-size-M",
     },
     {
       title: "Tiêu đề",
       key: "notification_title",
-      width: 60,
+      width: 100,
       fontSize: "text-size-M",
     },
     {
       title: "Nội dung",
-      key: "notification_content",
-      width: 60,
+      dataIndex: "body",
+      key: "text",
+      width: 100,
       fontSize: "text-size-M",
     },
     {
       title: "Ngày thông báo",
       key: "notification_date_schedule",
-      width: 60,
+      width: 30,
       fontSize: "text-size-M",
     },
-    //   key: "action",
-    //   align: "center",
-    //   render: (data) => {
-    //     return (
-    //       <div>
-    //         <Space size="middle">
-    //           <div>
-    //             {checkElement?.includes("active_notification") && (
-    //               <Switch
-    //                 checked={data?.is_active}
-    //                 onClick={toggleVerify}
-    //                 style={{
-    //                   backgroundColor: data?.is_active ? "#00cf3a" : "",
-    //                 }}
-    //               />
-    //             )}
-    //           </div>
-    //           <Dropdown
-    //             menu={{
-    //               items,
-    //             }}
-    //             placement="bottomRight"
-    //             trigger={["click"]}
-    //           >
-    //             <div>
-    //               <i class="uil uil-ellipsis-v"></i>
-    //             </div>
-    //           </Dropdown>
-    //         </Space>
-    //       </div>
-    //     );
-    //   },
-    // },
   ];
   // 2. Danh sách các trạng thái của bộ lọc
   const statusOptions = [
-    { key: "todo", label: "Đang chờ" },
-    { key: "done", label: "Đã xong" },
+    { code: "todo", label: "Đang chờ" },
+    { code: "done", label: "Đã xong" },
   ];
-
-  console.log("check dataNotification", dataNotifications);
+  /* ~~~ Other ~~~ */
+  const filterContent = () => {
+    return (
+      <div>
+        <ButtonCustom
+          label="Trạng thái"
+          options={statusOptions}
+          value={statusFilter}
+          setValueSelectedProps={setStatusFilter}
+        />
+      </div>
+    );
+  };
+  const items = [
+    {
+      key: "1",
+      label: statusFilter === "todo" &&
+        checkElement?.includes("edit_notification") && (
+          <EditPushNotification id={itemEdit?._id} />
+        ),
+    },
+    {
+      key: "2",
+      label: checkElement?.includes("delete_notification") && (
+        <p className="m-0" onClick={toggle}>{`${i18n.t("delete", {
+          lng: lang,
+        })}`}</p>
+      ),
+    },
+  ];
+  const addActionColumn = {
+    i18n_title: "",
+    dataIndex: "action",
+    key: "action",
+    fixed: "right",
+    width: 50,
+    render: (data) => {
+      return (
+        <div>
+          <Space size="middle">
+            <div>
+              {checkElement?.includes("active_notification") && (
+                <Switch
+                  checked={data?.is_active}
+                  onClick={toggleVerify}
+                  style={{
+                    backgroundColor: data?.is_active ? "#00cf3a" : "",
+                  }}
+                />
+              )}
+            </div>
+            <Dropdown
+              menu={{
+                items,
+              }}
+              placement="bottomRight"
+              trigger={["click"]}
+            >
+              <div>
+                <i class="uil uil-ellipsis-v"></i>
+              </div>
+            </Dropdown>
+          </Space>
+        </div>
+      );
+    },
+  };
+  const onActive = (id, active) => {};
+  const onDelete = (id) => {};
 
   return (
     <div className="manage-push-notification">
@@ -215,34 +238,7 @@ const ManagePushNotification = () => {
       </div>
       {/* Filter */}
       <div>
-        <FilterData
-          leftContent={
-            <div>
-              <Dropdown
-                menu={{
-                  items: statusOptions,
-                  selectable: true,
-                  defaultSelectedKeys: ["todo"],
-                  onSelect: (key) => handleSelectStatus(key),
-                }}
-                trigger={["click"]}
-              >
-                <Space>
-                  <span>Trạng thái: </span>
-                  <span style={{ cursor: "pointer", fontWeight: 500 }}>
-                    {/* {status === "done" ? "Đã xong" : "Đang chờ"} */}
-                    {
-                      statusOptions.find(
-                        (status) => status.key === statusFilter
-                      )?.label
-                    }
-                  </span>
-                  <CaretDownOutlined />
-                </Space>
-              </Dropdown>
-            </div>
-          }
-        />
+        <FilterData leftContent={filterContent()} />
       </div>
       {/* Table */}
       <div>
@@ -253,154 +249,59 @@ const ManagePushNotification = () => {
           pageSize={lengthPage}
           setLengthPage={setLengthPage}
           onCurrentPageChange={onChangePage}
+          actionColumn={addActionColumn}
           totalItem={dataNotifications?.totalItem}
-          headerRightContent={<AddPushNotification />}
+          headerRightContent={
+            <AddPushNotification
+              isCreateNotification={isCreateNotification}
+              setIsCreateNotification={setIsCreateNotification}
+            />
+          }
         />
       </div>
-      {/* <div>
-      <ModalCustom
-        isOpen={modalVerify}
-        title={
-          !itemEdit?.is_active === true
-            ? `${i18n.t("unlock_noti", { lng: lang })}`
-            : `${i18n.t("lock_noti", { lng: lang })}`
-        }
-        handleOk={() => onActive(itemEdit?._id, itemEdit?.is_active)}
-        handleCancel={toggleVerify}
-        textOk={
-          !itemEdit?.is_active === true
-            ? `${i18n.t("lock", { lng: lang })}`
-            : `${i18n.t("unlock", { lng: lang })}`
-        }
-        body={
-          <>
-            {!itemEdit?.is_active === true
-              ? `${i18n.t("want_unlock_noti", { lng: lang })}`
-              : `${i18n.t("want_lock_noti", { lng: lang })}`}
-            <h6>{itemEdit?.title}</h6>
-          </>
-        }
-      />
+      <div style={{ display: `${!modalVerify && "none"}` }}>
+        <ModalCustom
+          isOpen={modalVerify}
+          title={
+            !itemEdit?.is_active === true
+              ? `${i18n.t("unlock_noti", { lng: lang })}`
+              : `${i18n.t("lock_noti", { lng: lang })}`
+          }
+          handleOk={() => onActive(itemEdit?._id, itemEdit?.is_active)}
+          handleCancel={toggleVerify}
+          textOk={
+            !itemEdit?.is_active === true
+              ? `${i18n.t("lock", { lng: lang })}`
+              : `${i18n.t("unlock", { lng: lang })}`
+          }
+          body={
+            <>
+              {!itemEdit?.is_active === true
+                ? `${i18n.t("want_unlock_noti", { lng: lang })}`
+                : `${i18n.t("want_lock_noti", { lng: lang })}`}
+              <h6>{itemEdit?.title}</h6>
+            </>
+          }
+        />
+      </div>
+      <div style={{ display: `${!modal && "none"}` }}>
+        <ModalCustom
+          isOpen={modal}
+          title={`${i18n.t("remove_notification", { lng: lang })}`}
+          handleOk={() => onDelete(itemEdit?._id)}
+          handleCancel={toggle}
+          textOk={`${i18n.t("delete", { lng: lang })}`}
+          body={
+            <>
+              <p className="m-0">{`${i18n.t("want_remove_notification", {
+                lng: lang,
+              })}`}</p>
+              <p className="text-name-modal m-0">{itemEdit?.title}</p>
+            </>
+          }
+        />
+      </div>
     </div>
-    <div>
-      <ModalCustom
-        isOpen={modal}
-        title={`${i18n.t("remove_notification", { lng: lang })}`}
-        handleOk={() => onDelete(itemEdit?._id)}
-        handleCancel={toggle}
-        textOk={`${i18n.t("delete", { lng: lang })}`}
-        body={
-          <>
-            <p className="m-0">{`${i18n.t("want_remove_notification", {
-              lng: lang,
-            })}`}</p>
-            <p className="text-name-modal m-0">{itemEdit?.title}</p>
-          </>
-        }
-      />
-    </div> */}
-    </div>
-    // <div>
-    //   <h5>{`${i18n.t("notification", { lng: lang })}`}</h5>
-    //   <div>
-    //     {checkElement?.includes("create_notification") && (
-    //       <AddPushNotification />
-    //     )}
-    //   </div>
-    //   <div className="div-tab mt-5">
-    //     {DATA.map((item) => {
-    //       return (
-    //         <div
-    //           key={item?.id}
-    //           className={
-    //             status === item?.value
-    //               ? "div-item-tab-selected"
-    //               : "div-item-tab"
-    //           }
-    //           onClick={() => setStatus(item?.value)}
-    //         >
-    //           <p className="text-tab">
-    //             {`${i18n.t(item?.title, { lng: lang })}`}
-    //           </p>
-    //         </div>
-    //       );
-    //     })}
-    //   </div>
-    //   <div className="mt-3">
-    //     <Table
-    //       columns={columns}
-    //       // dataSource={listNotification}
-    //       onRow={(record, rowIndex) => {
-    //         return {
-    //           onClick: (event) => {
-    //             setItemEdit(record);
-    //           },
-    //         };
-    //       }}
-    //       pagination={false}
-    //       scroll={{
-    //         x: width <= 490 ? 1000 : 0,
-    //       }}
-    //     />
-    //   </div>
-    //   <div className="div-pagination p-2">
-    //     <p>
-    //       {`${i18n.t("total", { lng: lang })}`}: {totalNotification}
-    //     </p>
-    //     <div>
-    //       <Pagination
-    //         current={currentPage}
-    //         // onChange={onChange}
-    //         total={totalNotification}
-    //         showSizeChanger={false}
-    //         pageSize={20}
-    //       />
-    //     </div>
-    //   </div>
-
-    //   <div>
-    //     <ModalCustom
-    //       isOpen={modalVerify}
-    //       title={
-    //         !itemEdit?.is_active === true
-    //           ? `${i18n.t("unlock_noti", { lng: lang })}`
-    //           : `${i18n.t("lock_noti", { lng: lang })}`
-    //       }
-    //       handleOk={() => onActive(itemEdit?._id, itemEdit?.is_active)}
-    //       handleCancel={toggleVerify}
-    //       textOk={
-    //         !itemEdit?.is_active === true
-    //           ? `${i18n.t("lock", { lng: lang })}`
-    //           : `${i18n.t("unlock", { lng: lang })}`
-    //       }
-    //       body={
-    //         <>
-    //           {!itemEdit?.is_active === true
-    //             ? `${i18n.t("want_unlock_noti", { lng: lang })}`
-    //             : `${i18n.t("want_lock_noti", { lng: lang })}`}
-    //           <h6>{itemEdit?.title}</h6>
-    //         </>
-    //       }
-    //     />
-    //   </div>
-    //   <div>
-    //     <ModalCustom
-    //       isOpen={modal}
-    //       title={`${i18n.t("remove_notification", { lng: lang })}`}
-    //       handleOk={() => onDelete(itemEdit?._id)}
-    //       handleCancel={toggle}
-    //       textOk={`${i18n.t("delete", { lng: lang })}`}
-    //       body={
-    //         <>
-    //           <p className="m-0">{`${i18n.t("want_remove_notification", {
-    //             lng: lang,
-    //           })}`}</p>
-    //           <p className="text-name-modal m-0">{itemEdit?.title}</p>
-    //         </>
-    //       }
-    //     />
-    //   </div>
-    // </div>
   );
 };
 

@@ -16,7 +16,7 @@ const CustomHeaderDatatable = ({
           <div className="table-header-label">
             <p
               style={{
-                fontSize: "14px",
+                fontSize: "12px",
                 fontWeight: "500",
                 color: title === "Doanh thu" ? "#2463eb" : "none",
               }}
@@ -33,7 +33,7 @@ const CustomHeaderDatatable = ({
               >
                 <div>
                   <IoHelpCircleOutline
-                    size={size ? size : 18}
+                    size={size ? size : 16}
                     color={color ? color : "white"}
                   />
                   {/* <i

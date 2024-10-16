@@ -14,7 +14,9 @@
             font-size: $textFontSizeM;
             font-weight: $fontWeightL;
             color: $colorBlack;
-            padding: 4px 0px;
+            background-color: $colorMoreLightGray;
+            border-radius: $borderRadiusM;
+            padding: 4px 8px;
         }
 
         .card__bar-chart--header-average {

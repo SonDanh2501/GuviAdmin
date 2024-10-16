@@ -53,11 +53,18 @@ const Activity = ({ id }) => {
   const { width } = useWindowDimensions();
 
   const [valueActivityStatistics, setValueActivityStatistics] = useState([
+    
     {
       label: "Tổng đơn đến nay",
       value: 0,
       icon: IoCubeOutline,
       color: "green",
+    },
+    {
+      label: "Tổng đơn tháng này",
+      value: 0,
+      icon: IoCalendarNumberOutline,
+      color: "red",
     },
     {
       label: "Tổng đơn năm trước",
@@ -71,12 +78,7 @@ const Activity = ({ id }) => {
       icon: IoPieChartOutline,
       color: "yellow",
     },
-    {
-      label: "Tổng đơn tháng này",
-      value: 0,
-      icon: IoCalendarNumberOutline,
-      color: "red",
-    },
+
   ]);
   /* ~~~ Use effect ~~~ */
   // 1. Fetch giá trị lịch sử hoạt động của đối tác
@@ -162,6 +164,13 @@ const Activity = ({ id }) => {
       FontSize: "text-size-M",
     },
     {
+      title: "Phương thức thanh toán",
+      // dataIndex: "short_review",
+      key: "pay",
+      width: 70,
+      FontSize: "text-size-M",
+    },
+    {
       title: "Trạng thái",
       // dataIndex: "short_review",
       key: "status",
@@ -225,7 +234,7 @@ const Activity = ({ id }) => {
   return (
     <div className="collaborator-activity">
       {/* Các thẻ thống kê (hiện tại đang ẩn đi chừng nào viết xong api thì mở ra và truyền dữ liệu vào) */}
-      {/* <div className="collaborator-activity__statistics">
+      <div className="collaborator-activity__statistics">
         <div className="collaborator-activity__statistics--overview grid-column-2">
           {valueActivityStatistics.map((item, index) => {
             return (
@@ -254,7 +263,7 @@ const Activity = ({ id }) => {
                 // verticalLine={true}
                 horizontalValue="name"
                 horizontalLine={true}
-                chartUnit="đánh giá"
+                chartUnit="đơn hàng"
                 total={20}
                 color="#bbf7d0"
                 colorTotal="#22c55e"
@@ -263,7 +272,7 @@ const Activity = ({ id }) => {
             supportIcon={true}
           />
         </div>
-      </div> */}
+      </div>
       {/* Lịch sử đơn hàng và Lịch sử hoạt động */}
       <div className="collaborator-activity__history">
         <div className="collaborator-activity__history--order">

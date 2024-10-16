@@ -201,30 +201,6 @@ const History = ({ id }) => {
   return (
     <div className="collaborator-history">
       <div className="collaborator-history__top">
-        {/* <CardInfo
-          cardTotal={true}
-          cardTotalIcon={IoWalletOutline}
-          cardTotalLabel={`${i18n.t("work_wallet", { lng: lang })}`}
-          cardTotalValue={formatMoney(work_wallet)}
-        />
-        <CardInfo
-          cardTotal={true}
-          cardTotalIcon={IoPerson}
-          cardTotalLabel={`${i18n.t("collaborator_wallet", { lng: lang })}`}
-          cardTotalValue={formatMoney(collaborator_wallet)}
-        />
-        <CardInfo
-          cardTotal={true}
-          cardTotalIcon={IoArrowUp}
-          cardTotalLabel="Tổng nạp"
-          cardTotalValue={0}
-        />
-        <CardInfo
-          cardTotal={true}
-          cardTotalIcon={IoArrowDown}
-          cardTotalLabel="Tổng rút"
-          cardTotalValue={0}
-        /> */}
         <div className="collaborator-history__top--left">
           <CardInfo
             cardContent={
@@ -250,32 +226,8 @@ const History = ({ id }) => {
               />
             }
           />
-          {/* <CardInfo
-            cardContent={
-              <CardTotalValue
-                label="Tổng nạp"
-                total={0}
-                previousCompare="0"
-                IconComponent={IoArrowUpCircleOutline}
-                color="blue"
-                horizontal={true}
-              />
-            }
-          />
-          <CardInfo
-            cardContent={
-              <CardTotalValue
-                label="Tổng rút"
-                total={0}
-                previousCompare="0"
-                IconComponent={IoArrowDownCircleOutline}
-                color="green"
-                horizontal={true}
-              />
-            }
-          /> */}
         </div>
-        {/* <div className="collaborator-history__top--right">
+        <div className="collaborator-history__top--right">
           <CardInfo
             cardHeader="Thống kê số tiền"
             cardContent={
@@ -286,14 +238,14 @@ const History = ({ id }) => {
                 // verticalLine={true}
                 horizontalValue="name"
                 horizontalLine={true}
-                chartUnit="đánh giá"
+                chartUnit="giao dịch"
                 total={20}
                 color="#f5d0fe"
                 colorTotal="#d946ef"
               />
             }
           />
-        </div> */}
+        </div>
       </div>
       <div className="collaborator-history__body">
         <div className="collaborator-history__body--financial-history">
@@ -316,6 +268,7 @@ const History = ({ id }) => {
                   onChange={handleChangePageMoneyHistory}
                   total={collaboratorMoneyHistory?.totalItem}
                   pageSize={10}
+                  showSizeChanger={false}
                 />
               </div>
             </div>

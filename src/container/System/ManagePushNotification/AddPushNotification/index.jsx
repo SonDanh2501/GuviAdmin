@@ -10,7 +10,8 @@ import {
   Switch,
   Upload,
 } from "antd";
-import _debounce from "lodash/debounce";
+// import _debounce from "lodash/debounce";
+import _, { filter } from "lodash";
 import moment from "moment";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -30,15 +31,17 @@ import InputTextCustom from "../../../../components/inputCustom";
 import { formatArray } from "../../../../utils/contant";
 import resizeFile from "../../../../helper/resizer";
 import { postFile } from "../../../../api/file";
-import { IoCloudUploadOutline } from "react-icons/io5";
 
-const AddPushNotification = ({ idOrder }) => {
+import { IoCloudUploadOutline,IoCloseCircleOutline, IoClose  } from "react-icons/io5";
+
+const AddPushNotification = ( props) => {
+  const {isCreateNotification,setIsCreateNotification} = props;
   const lang = useSelector(getLanguageState);
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState(""); // Tiêu đề thông báo
   const [description, setDescription] = useState(""); // Nội dung thông báo
-  const [isSelectDateSchedule, setIsSelectDateSchedule] = useState(false); // Giá trị true/false thời gian thông báo
+  // const [isSelectDateSchedule, setIsSelectDateSchedule] = useState(false); // Giá trị true/false thời gian thông báo
   const [isSelectCustomer, setIsSelectCustomer] = useState(true); // Giá trị true/false khách hàng
   const [isSelectGroupCustomer, setIsSelectGroupCustomer] = useState(false); // Giá trị true/false nhóm khách hàng
   const [isSelectCollaborator, setIsSelectCollaborator] = useState(false); // Giá trị true/false đối tác
@@ -48,10 +51,11 @@ const AddPushNotification = ({ idOrder }) => {
   const [nameCustomer, setNameCustomer] = useState(""); // Giá trị searching tên khách hàng
   const [dataFilter, setDataFilter] = useState([]); // Giá trị fetch dữ liệu khách hàng tìm kiếm
   const [listCustomers, setListCustomers] = useState([]); // Giá trị khách hàng đã chọn (lưu _id)
-  const [listNameCustomers, setListNameCustomers] = useState([]); // Giá trị khách hàng đã chọn (lưu toàn bộ thông tin, để render ra tên với sđt, ...)
+  // const [listNameCustomers, setListNameCustomers] = useState([]); // Giá trị khách hàng đã chọn (lưu toàn bộ thông tin, để render ra tên với sđt, ...)
   const [groupCustomer, setGroupCustomer] = useState([]); // Giá trị nhóm khách hàng đã chọn (lưu _id)
   const [dataGroupCustomer, setDataGroupCustomer] = useState([]); // Giá trị fetch dữ liệu nhóm khách hàng
   const [imgThumbnail, setImgThumbnail] = useState(""); // Giá trị ảnh thumbnail
+  const [dataFilterTemp, setDataFilterTemp] = useState([]); // Giá trị lưu tạm lại dữ liệu khách hàng tìm kiếm để hiển thị thông tin những khách hàng mà đã lựa chọn
   const options = [];
   const listOptions = [
     { name: "Tên", value: "<full_name>" },
@@ -68,90 +72,57 @@ const AddPushNotification = ({ idOrder }) => {
   const width = window.innerWidth;
 
   /* ~~~ Handle function ~~~ */
-  // 1. Handle select tag field
-  const handleSelectTag = (tag) => {
-    let newDescription = description;
-    newDescription = `${newDescription} ${tag.value}`.trim();
-    setDescription(newDescription);
-  };
-  const changeValue = (value) => {
-    setNameCustomer(value);
-  };
-
-  const onChooseCustomer = (item) => {
-    setNameCustomer("");
-    setDataFilter([]);
-    const newData = listCustomers.concat(item?._id);
-    const newNameData = listNameCustomers.concat({
-      _id: item?._id,
-      full_name: item?.full_name,
-      phone: item?.phone,
-      id_view: item?.id_view,
-    });
-    setListCustomers(newData);
-    setListNameCustomers(newNameData);
-  };
-
-  const removeItemCustomer = (item) => {
-    const newNameArray = listNameCustomers.filter((i) => i?._id !== item?._id);
-    const newArray = listCustomers.filter((i) => i !== item?._id);
-    setListNameCustomers(newNameArray);
-    setListCustomers(newArray);
-  };
-
-  const searchCustomer = _debounce((value) => {
-    setNameCustomer(value);
-    if (value) {
-      searchCustomersApi(value)
-        .then((res) => {
-          if (value === "") {
-            setDataFilter([]);
-          } else {
-            setDataFilter(res.data);
-          }
-        })
-        .catch((err) => console.log(err));
-    } else {
-      setDataFilter([]);
-    }
-  }, 500);
-
-  const handleChange = (value) => {
-    setGroupCustomer(value);
-  };
-
-  const onCreateNotification = useCallback(() => {
+  // 1. Hàm tìm kiếm khách hàng
+  const handleSearchCustomer = useCallback(
+    _.debounce(async (nameCustomer) => {
+      if (nameCustomer.length > 0) {
+        const dataCustomersFetch = await searchCustomersApi(nameCustomer);
+        setDataFilter(dataCustomersFetch ? dataCustomersFetch?.data : []);
+        // setDataFilterTemp(dataCustomersFetch ? dataCustomersFetch?.data : []);
+        setDataFilterTemp((prev) => [
+          ...prev,
+          ...(dataCustomersFetch?.data || []),
+        ]);
+      } else {
+        setDataFilter([]);
+      }
+    }, 500),
+    []
+  );
+  // 2. Hàm tạo thông báo
+  const handleCreateNotification = useCallback(() => {
     dispatch(loadingAction.loadingRequest(true));
     createPushNotification({
       title: title,
       body: description,
-      is_date_schedule: isSelectDateSchedule,
+      image_url: imgThumbnail,
+      // is_date_schedule: isSelectDateSchedule,
       date_schedule: moment(dateSchedule).toISOString(),
       is_id_customer: isSelectCustomer,
       id_customer: listCustomers,
       is_id_group_customer: groupCustomer?.length > 0 ? true : false,
       id_group_customer: groupCustomer,
-      image_url: imgThumbnail,
       is_id_collaborator: isSelectCollaborator,
     })
       .then(() => {
-        dispatch(
-          getNotification.getNotificationRequest({
-            status: "todo",
-            start: 0,
-            length: 20,
-          })
-        );
+        // dispatch(
+        //   getNotification.getNotificationRequest({
+        //     status: "todo",
+        //     start: 0,
+        //     length: 20,
+        //   })
+        // );
         dispatch(loadingAction.loadingRequest(false));
         setOpen(false);
+        setIsSelectCustomer(true); // Giá trị thông báo cho khách hàng
         setTitle("");
         setDescription("");
-        setDateSchedule("");
-        setIsSelectDateSchedule(false);
-        setIsSelectCustomer(false);
+        setDateSchedule(moment().seconds(0).format("YYYY-MM-DD HH:mm:ss"));
+        // setIsSelectDateSchedule(false);
         setListCustomers([]);
         setGroupCustomer([]);
         setImgThumbnail("");
+        setIsCreateNotification(!isCreateNotification);
       })
       .catch((err) => {
         errorNotify({
@@ -162,7 +133,6 @@ const AddPushNotification = ({ idOrder }) => {
   }, [
     title,
     description,
-    isSelectDateSchedule,
     dateSchedule,
     isSelectCustomer,
     listCustomers,
@@ -171,8 +141,8 @@ const AddPushNotification = ({ idOrder }) => {
     dispatch,
     isSelectGroupCustomer,
   ]);
-
-  const onChangeThumbnail = async (e) => {
+  // 3. Hàm đổi ảnh
+  const handleChangeThumbnail = async (e) => {
     const extend = e.target.files[0].type.slice(
       e.target.files[0].type.indexOf("/") + 1
     );
@@ -205,47 +175,97 @@ const AddPushNotification = ({ idOrder }) => {
         dispatch(loadingAction.loadingRequest(false));
       });
   };
+  // 4. Hàm xử lí xóa khách khỏi list
+  const handleDeleteCustomer = (id) => {
+    const filterCustomer = listCustomers.filter((customer) => customer !== id);
+    setListCustomers(filterCustomer);
+  }
+  // const handleSelectTag = (tag) => {
+  //   let newDescription = description;
+  //   newDescription = `${newDescription} ${tag.value}`.trim();
+  //   setDescription(newDescription);
+  // };
+  // const changeValue = (value) => {
+  //   setNameCustomer(value);
+  // };
 
-  const handleChangeImg = async (info) => {
-    console.log("Check info ", info);
-    // if (info.file.status === "uploading") {
-    //   setLoading(true);
-    //   return;
-    // }
-    // const extend = info.fileList[0].type.slice(
-    //   info.fileList[0].type.indexOf("/") + 1
-    // );
-    // try {
-    //   const file = info.fileList[0].originFileObj;
-    //   const image = await resizeFile(file, extend);
-    //   const formData = new FormData();
-    //   formData.append("multi-files", image);
-    //   postFile(formData, {
-    //     headers: {
-    //       "Content-Type": "multipart/form-data",
-    //     },
-    //   })
-    //     .then((res) => {
-    //       setImage(res[0]);
-    //       setLoading(false);
-    //     })
-    //     .catch((err) => {
-    //       setImage("");
-    //       errorNotify({
-    //         message: err?.message,
-    //       });
-    //       setLoading(false);
-    //     });
-    // } catch (error) {}
-  };
+  // const onChooseCustomer = (item) => {
+  //   setNameCustomer("");
+  //   setDataFilter([]);
+  //   const newData = listCustomers.concat(item?._id);
+  //   const newNameData = listNameCustomers.concat({
+  //     _id: item?._id,
+  //     full_name: item?.full_name,
+  //     phone: item?.phone,
+  //     id_view: item?.id_view,
+  //   });
+  //   setListCustomers(newData);
+  //   setListNameCustomers(newNameData);
+  // };
+
+  // const removeItemCustomer = (item) => {
+  //   const newNameArray = listNameCustomers.filter((i) => i?._id !== item?._id);
+  //   const newArray = listCustomers.filter((i) => i !== item?._id);
+  //   setListNameCustomers(newNameArray);
+  //   setListCustomers(newArray);
+  // };
+
+  // const handleChange = (value) => {
+  //   setGroupCustomer(value);
+  // };
+
+  // const handleChangeImg = async (info) => {
+  //   console.log("Check info ", info);
+  //   // if (info.file.status === "uploading") {
+  //   //   setLoading(true);
+  //   //   return;
+  //   // }
+  //   // const extend = info.fileList[0].type.slice(
+  //   //   info.fileList[0].type.indexOf("/") + 1
+  //   // );
+  //   // try {
+  //   //   const file = info.fileList[0].originFileObj;
+  //   //   const image = await resizeFile(file, extend);
+  //   //   const formData = new FormData();
+  //   //   formData.append("multi-files", image);
+  //   //   postFile(formData, {
+  //   //     headers: {
+  //   //       "Content-Type": "multipart/form-data",
+  //   //     },
+  //   //   })
+  //   //     .then((res) => {
+  //   //       setImage(res[0]);
+  //   //       setLoading(false);
+  //   //     })
+  //   //     .catch((err) => {
+  //   //       setImage("");
+  //   //       errorNotify({
+  //   //         message: err?.message,
+  //   //       });
+  //   //       setLoading(false);
+  //   //     });
+  //   // } catch (error) {}
+  // };
+
+  // const searchCustomer = _debounce((value) => {
+  //   setNameCustomer(value);
+  //   if (value) {
+  //     searchCustomersApi(value)
+  //       .then((res) => {
+  //         if (value === "") {
+  //           setDataFilter([]);
+  //         } else {
+  //           setDataFilter(res.data);
+  //         }
+  //       })
+  //       .catch((err) => console.log(err));
+  //   } else {
+  //     setDataFilter([]);
+  //   }
+  // }, 500);
 
   /* ~~~ Use effect ~~~ */
-  // useEffect(() => {
-  //   getGroupCustomerApi(0, 10)
-  //     .then((res) => setDataGroupCustomer(res.data))
-  //     .catch((err) => console.log(err));
-  //   const dataCustomersFetch = searchCustomersApi(nameCustomer);
-  // }, []);
+  // 1. Hàm fetch giá trị các nhóm khách hàng
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -253,18 +273,24 @@ const AddPushNotification = ({ idOrder }) => {
         setDataGroupCustomer(
           dataGroupCustomerFetch.data ? dataGroupCustomerFetch.data : []
         );
-        if (nameCustomer.length > 0) {
-          const dataCustomersFetch = await searchCustomersApi(nameCustomer);
-          setDataFilter(dataCustomersFetch ? dataCustomersFetch?.data : []);
-        } else {
-          setDataFilter([]);
-        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
+  // 2. Hàm fetch giá trị khách hàng khi search
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        handleSearchCustomer(nameCustomer);
       } catch (error) {
         console.log(error);
       }
     };
     fetchData();
   }, [nameCustomer]);
+
   dataGroupCustomer?.map((item, index) => {
     return options.push({
       label: item?.name,
@@ -293,7 +319,7 @@ const AddPushNotification = ({ idOrder }) => {
                 title.length > 0 && description.length > 0 ? false : true
               }
               label="Đăng thông báo"
-              onClick={onCreateNotification}
+              onClick={handleCreateNotification}
             />
             <ButtonCustom label="Hủy" onClick={onClose} style="normal" />
           </div>
@@ -362,7 +388,7 @@ const AddPushNotification = ({ idOrder }) => {
               />
             </div>
           </div>
-          {/* Các thẻ select trường muốn thông báo */}
+          {/* Các thẻ select trường muốn thông báo (tính năng hiện tại ẩn) */}
           {/* <div className="add-push-notification__field">
             <div className="add-push-notification__field--child drap-field">
               {listOptions?.map((el) => (
@@ -402,6 +428,41 @@ const AddPushNotification = ({ idOrder }) => {
               />
             </div>
           </div>
+          <div
+            className={`add-push-notification__field ${
+              listCustomers.length === 0 && "hidden"
+            }`}
+          >
+            <div className="add-push-notification__field--info">
+              {dataFilterTemp
+                .filter(
+                  (value, index, self) =>
+                    index === self.findIndex((obj) => obj._id === value._id)
+                )
+                .filter((item) => listCustomers.includes(item._id))
+                // .slice(0, 3)
+                .map((el, index) => (
+                  <div className="add-push-notification__field--info-customer">
+                    <span className="add-push-notification__field--info-customer-text">
+                      {el.full_name} - {el.phone}
+                    </span>
+                    <span
+                      onClick={() => handleDeleteCustomer(el._id)}
+                      className="add-push-notification__field--info-customer-icon"
+                    >
+                      <IoClose size="16px" />
+                    </span>
+                  </div>
+                ))}
+              {/* {dataFilterTemp
+                .filter(
+                  (value, index, self) =>
+                    index === self.findIndex((obj) => obj._id === value._id)
+                )
+                .filter((item) => listCustomers.includes(item._id)).length >
+                3 && <div>hello</div>} */}
+            </div>
+          </div>
           {/* Nhóm khách hàng */}
           <div className="add-push-notification__field">
             <div className="add-push-notification__field--child">
@@ -425,7 +486,7 @@ const AddPushNotification = ({ idOrder }) => {
                 type="fileArea"
                 value={imgThumbnail}
                 setValueSelectedProps={setImgThumbnail}
-                onChangeImage={onChangeThumbnail}
+                onChangeImage={handleChangeThumbnail}
               />
             </div>
           </div>

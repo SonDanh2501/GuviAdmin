@@ -2,17 +2,15 @@
 
 .filter-data {
   display: flex;
+  justify-content: space-between;
   gap: $gapL;
   background-color: white;
   padding: 16px;
   border-radius: $borderRadiusM;
 
   .filter-data__left {
-    width: 50%;
     display: flex;
     gap: $gapM;
-    // font-size: $textFontSizeM;
-    // font-weight: $fontWeightL;
 
     .filter-data__left--date-time-picker {
       display: flex;
@@ -30,25 +28,42 @@
 
         .filter-data__left--date-time-picker-label-period-time {
           display: flex;
-          gap: $gapXS;
-          justify-content: center;
           align-items: center;
-          border: 1px solid $colorBorderAntDesign;
-          border-radius: $borderRadiusS;
-          padding: 6.5px 12px;
+          justify-content: center;
+          padding: 6px 8px;
+          border: 1px solid $colorViolet;
+          border-radius: $borderRadiusM;
+          transition: 0.7s all ease;
+          gap: $gapS;
 
           .filter-data__left--date-time-picker-label-period-time-sub {
+            display: flex;
+            gap: $gapXS;
+            align-items: center;
+            color: $colorViolet;
+            font-weight: $fontWeightXL;
             font-size: $textFontSizeM;
-            font-weight: $fontWeightL;
-            color: $colorGray;
-            opacity: $opacityM;
+          }
+
+          .filter-data__left--date-time-picker-label-period-time-line {
+            width: 1px;
+            height: 20px;
+            border-radius: $borderRadiusM;
+            background-color: $colorMoreLightGray;
           }
 
           .filter-data__left--date-time-picker-label-period-time-main {
-            font-size: $textFontSizeM;
-            font-weight: $fontWeightL;
-            // color: $colorGray;
-            // opacity: $opacityM;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4px 8px;
+            background-color: $colorMoreLightGray;
+            border-radius: $borderRadiusM;
+
+            .filter-data__left--date-time-picker-label-period-time-main-title {
+              font-size: $textFontSizeM;
+              font-weight: $fontWeightL;
+            }
           }
         }
       }
@@ -65,7 +80,10 @@
       }
     }
   }
+
   .filter-data__right {
-    width: 50%;
+    // width: 100%;
+    background-color: $colorMoreLightGray;
+    display: flex;
   }
 }

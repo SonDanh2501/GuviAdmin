@@ -29,7 +29,7 @@ const CardBarChart = (props) => {
       <div className="card__bar-chart--header">
         {chartUnit && (
           <span className="card__bar-chart--header-label">
-            Các loại {chartUnit}
+            Số lượng {chartUnit} theo từng tháng
           </span>
         )}
         {chartUnit && total && (

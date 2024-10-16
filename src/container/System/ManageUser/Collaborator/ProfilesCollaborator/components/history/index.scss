@@ -299,12 +299,12 @@
     gap: $gapL;
     .collaborator-history__top--left {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(1, minmax(0, 1fr));
       gap: $gapL;
-      width: 30%;
+      width: 20%;
     }
     .collaborator-history__top--right {
-      width: 70%;
+      width: 80%;
     }
 
   }
