@@ -1348,16 +1348,21 @@ const DataTable = (props) => {
                 break;
             }
             return (
-              <div className="div-type-transaction">
-                {type_transfer === "Rút" ? (
-                  <div className="div-status-order">
-                    <p className="text-status-cancel">{type_transfer}</p>
-                  </div>
-                ) : (
-                  <div className="div-status-order">
-                    <p className="text-status-done">{type_transfer}</p>
-                  </div>
-                )}
+              // <div className="case__transfer-type-transfer">
+              //   {type_transfer === "Rút" ? (
+              //       <span className="">{type_transfer}</span>
+              //   ) : (
+              //       <span className="">{type_transfer}</span>
+              //   )}
+              // </div>
+              <div
+                className={`case__transfer-type-transfer ${
+                  type_transfer === "Rút" ? "withdraw" : "top-up"
+                }`}
+              >
+                <span className="case__transfer-type-transfer--text">
+                  {type_transfer}
+                </span>
               </div>
             );
           }

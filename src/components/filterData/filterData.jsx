@@ -94,11 +94,10 @@ const FilterData = (props) => {
 
   return (
     <div className="filter-data card-shadow">
+      {/* Nội dung bên trái */}
       <div className="filter-data__left">
-        {/* Lịch */}
         {isTimeFilter && (
           <div className="filter-data__left--date-time-picker">
-            {/* <span>Khoảng thời gian</span> */}
             <div className="filter-data__left--date-time-picker-label">
               <RangeDatePicker
                 setStartDate={setStartDate}
@@ -106,33 +105,12 @@ const FilterData = (props) => {
                 onCancel={() => {}}
                 rangeDateDefaults={"thirty_last"}
               />
-              {/* <div className="filter-data__left--date-time-picker-label-period-time">
-                <span className="filter-data__left--date-time-picker-label-period-time-sub">
-                  Mốc chọn
-                </span>
-                <div className="filter-data__left--date-time-picker-label-period-time-line"></div>
-                <div className="filter-data__left--date-time-picker-label-period-time-main">
-                  <span className="filter-data__left--date-time-picker-label-period-time-main-title">
-                    {moment(startDate).format("DD/MM/YYYY")} -{" "}
-                    {moment(endDate).format("DD/MM/YYYY")}
-                  </span>
-                </div>
-              </div> */}
-              {/* <div className="filter-data__left--date-time-picker-label-period-time">
-                <span className="filter-data__left--date-time-picker-label-period-time-sub">
-                  Mốc chọn:
-                </span>
-                <span className="filter-data__left--date-time-picker-label-period-time-main">
-                  {moment(startDate).format("DD/MM/YYYY")} -{" "}
-                  {moment(endDate).format("DD/MM/YYYY")}
-                </span>
-              </div> */}
             </div>
           </div>
         )}
-        {/* Nội dung */}
         {leftContent && <div>{leftContent}</div>}
       </div>
+      {/* Nội dung bên phải */}
       <div className="filter-data__right">{rightContent}</div>
     </div>
   );

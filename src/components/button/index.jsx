@@ -39,9 +39,9 @@ const ButtonCustom = (props) => {
             <span
               className={`button-custom-content__child--text-number ${
                 item?.code === value && "checked"
-              }`}
+              } ${!item?.total && item?.total !== 0 && "hidden"}`}
             >
-              {item.total}
+              {item?.total}
             </span>
           </span>
           {item?.code === value && <IoCheckmarkCircleSharp size={"20px"} />}

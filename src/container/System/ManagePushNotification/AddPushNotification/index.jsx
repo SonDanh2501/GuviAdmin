@@ -78,7 +78,6 @@ const AddPushNotification = ( props) => {
       if (nameCustomer.length > 0) {
         const dataCustomersFetch = await searchCustomersApi(nameCustomer);
         setDataFilter(dataCustomersFetch ? dataCustomersFetch?.data : []);
-        // setDataFilterTemp(dataCustomersFetch ? dataCustomersFetch?.data : []);
         setDataFilterTemp((prev) => [
           ...prev,
           ...(dataCustomersFetch?.data || []),
@@ -281,15 +280,15 @@ const AddPushNotification = ( props) => {
   }, []);
   // 2. Hàm fetch giá trị khách hàng khi search
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        handleSearchCustomer(nameCustomer);
-      } catch (error) {
-        console.log(error);
-      }
+    if (nameCustomer) {
+      handleSearchCustomer(nameCustomer);
+    }
+  
+    // Cleanup function để hủy debounce khi component unmount hoặc khi nameCustomer thay đổi
+    return () => {
+      handleSearchCustomer.cancel(); 
     };
-    fetchData();
-  }, [nameCustomer]);
+  }, [nameCustomer, handleSearchCustomer]);
 
   dataGroupCustomer?.map((item, index) => {
     return options.push({

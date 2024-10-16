@@ -4,8 +4,10 @@
     color: $colorWhite;
     background-color: $colorViolet;
     border-radius: $borderRadiusM;
-    transition: all 0.3s ease;
-    padding: 8px 10px;
+    transition: all 0.5s ease;
+    padding: 6px 8px;
+    border: 1px solid $colorViolet;
+    border-radius: $borderRadiusM;
     font-size: $textFontSizeM;
     font-weight: $fontWeightXL;
     cursor: pointer;
@@ -68,7 +70,7 @@
     border: 1px solid $colorViolet;
     border-radius: $borderRadiusM;
     cursor: pointer;
-    transition: 0.7s all ease;
+    transition: 0.5s all ease;
     gap: $gapS;
 
     .button-custom-select__label {
@@ -163,6 +165,10 @@
             &.checked {
                 background-color: $colorWhite;
                 color: $colorBlack;
+            }
+
+            &.hidden {
+                display: none;
             }
         }
     }

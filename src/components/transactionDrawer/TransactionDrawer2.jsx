@@ -9,6 +9,7 @@ import { getListAccount } from "../../api/createAccount";
 import InputCustom from "../textInputCustom";
 import i18n from "../../i18n";
 import { Button, Drawer, List, Select } from "antd";
+import ButtonCustom from "../button";
 const initValue = {
   money: 0,
   note: "",
@@ -102,9 +103,10 @@ const TransactionDrawer2 = (props) => {
   // ----------------------------- UI ----------------------------------- //
   return (
     <div className="transaction-drawer_container">
-      <Button type="primary" onClick={showDrawer}>
+      {/* <Button type="primary" onClick={showDrawer}>
         {titleButton}
-      </Button>
+      </Button> */}
+      <ButtonCustom label={titleButton} onClick={showDrawer} />
       <Drawer
         title={titleHeader}
         width={width > 490 ? 500 : 300}

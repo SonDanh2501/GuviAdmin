@@ -691,7 +691,7 @@ const InputTextCustom = (props) => {
       setSearchValue(searchInput);
     }
   }, [searchInput]);
-
+  
   return (
     <div className="form-field" ref={refContainer}>
       {/* Input Field  */}

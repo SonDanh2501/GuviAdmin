@@ -7,10 +7,12 @@
   background-color: white;
   padding: 16px;
   border-radius: $borderRadiusM;
+  width: 100%;
 
   .filter-data__left {
     display: flex;
     gap: $gapM;
+    width: 100%;
 
     .filter-data__left--date-time-picker {
       display: flex;
@@ -82,8 +84,7 @@
   }
 
   .filter-data__right {
-    // width: 100%;
-    background-color: $colorMoreLightGray;
     display: flex;
+    // width: 30%;
   }
 }

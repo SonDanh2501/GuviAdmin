@@ -80,14 +80,6 @@ const ManagePushNotification = () => {
     // }, 2000);
     // return () => clearTimeout(timer);
   }, [dispatch, startPage, lengthPage, statusFilter, isCreateNotification]);
-
-  // useEffect(() => {
-  //   getListNotifications(startPage, lengthPage, 1, statusFilter)
-  //     .then((res) => {
-  //       console.log("check res >>>", res);
-  //     })
-  //     .catch((err) => {});
-  // }, [isCreateNotification]);
   /* ~~~ Handle function ~~~ */
   const onChangePage = (value) => {
     setStartPage(value);
@@ -188,43 +180,43 @@ const ManagePushNotification = () => {
       ),
     },
   ];
-  const addActionColumn = {
-    i18n_title: "",
-    dataIndex: "action",
-    key: "action",
-    fixed: "right",
-    width: 50,
-    render: (data) => {
-      return (
-        <div>
-          <Space size="middle">
-            <div>
-              {checkElement?.includes("active_notification") && (
-                <Switch
-                  checked={data?.is_active}
-                  onClick={toggleVerify}
-                  style={{
-                    backgroundColor: data?.is_active ? "#00cf3a" : "",
-                  }}
-                />
-              )}
-            </div>
-            <Dropdown
-              menu={{
-                items,
-              }}
-              placement="bottomRight"
-              trigger={["click"]}
-            >
-              <div>
-                <i class="uil uil-ellipsis-v"></i>
-              </div>
-            </Dropdown>
-          </Space>
-        </div>
-      );
-    },
-  };
+  // const addActionColumn = {
+  //   i18n_title: "",
+  //   dataIndex: "action",
+  //   key: "action",
+  //   fixed: "right",
+  //   width: 50,
+  //   render: (data) => {
+  //     return (
+  //       <div>
+  //         <Space size="middle">
+  //           <div>
+  //             {checkElement?.includes("active_notification") && (
+  //               <Switch
+  //                 checked={data?.is_active}
+  //                 onClick={toggleVerify}
+  //                 style={{
+  //                   backgroundColor: data?.is_active ? "#00cf3a" : "",
+  //                 }}
+  //               />
+  //             )}
+  //           </div>
+  //           <Dropdown
+  //             menu={{
+  //               items,
+  //             }}
+  //             placement="bottomRight"
+  //             trigger={["click"]}
+  //           >
+  //             <div>
+  //               <i class="uil uil-ellipsis-v"></i>
+  //             </div>
+  //           </Dropdown>
+  //         </Space>
+  //       </div>
+  //     );
+  //   },
+  // };
   const onActive = (id, active) => {};
   const onDelete = (id) => {};
 
@@ -249,7 +241,7 @@ const ManagePushNotification = () => {
           pageSize={lengthPage}
           setLengthPage={setLengthPage}
           onCurrentPageChange={onChangePage}
-          actionColumn={addActionColumn}
+          // actionColumn={addActionColumn}
           totalItem={dataNotifications?.totalItem}
           headerRightContent={
             <AddPushNotification

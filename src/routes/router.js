@@ -776,6 +776,17 @@ const router = [
         null,
         null
       ),
+      // getItem(
+      //   <Link
+      //     style={{ textDecoration: "none" }}
+      //     to="/transaction/other"
+      //   >
+      //     Khác
+      //   </Link>,
+      //   "/transaction/other",
+      //   null,
+      //   null
+      // ),
       getItem(
         <Link style={{ textDecoration: "none" }} to="/punish/manage-punish">
           Phạt

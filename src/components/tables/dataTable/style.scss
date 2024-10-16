@@ -452,7 +452,10 @@ span {
     }
   }
 
-  .table__header-content--right {}
+  .table__header-content--right {
+    display: flex;
+    gap: $gapL;
+  }
 }
 
 /* ~~~ Css dành cho các trường hợp ~~~ */
@@ -599,6 +602,24 @@ span {
 
 }
 
+// Trường loại giao dịch
+.case__transfer-type-transfer {
+  display: flex;
+  width: fit-content;
+  padding: 6px 8px;
+  border-radius: $borderRadiusM;
+  &.withdraw {
+    background-color: $colorRed;
+  }
+  &.top-up {
+    background-color: $colorGreen;
+  }
+  .case__transfer-type-transfer--text {
+    font-size: $textFontSizeM;
+    font-weight: $fontWeightXL;
+    color: $colorWhite;
+  }
+}
 // Các trường chỉ hiển chữ
 .case__normal-text {
   font-weight: $fontWeightL;

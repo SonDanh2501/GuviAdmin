@@ -3,7 +3,7 @@
 .manage-top-up-with-draw {
     display: flex;
     flex-direction: column;
-    gap: $gapL;
+    gap: $gapM;
     padding-bottom: 16px;
 
     .manage-top-up-with-draw__header {
@@ -12,12 +12,20 @@
             font-size: $textFontSize3XL;
             color: $colorBlack;
         }
-
     }
 
     .manage-top-up-with-draw__filter-content {
         display: flex;
-        gap: $gapL;
-        
+        gap: $gapM;
+        .manage-top-up-with-draw__filter-content--search-field {
+            width: 400px;
+            overflow: hidden;
+        }
     }
+
+    .manage-top-up-with-draw__table--right-header {
+        display: flex;
+        gap: $gapM;
+    }
+
 }

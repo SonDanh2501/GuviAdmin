@@ -103,6 +103,7 @@ import CollaboratorNotVerify from "../pages/ManageCollaborator/CollaboratorNotVe
 import DetailGroupOrder from "../pages/ManageOrder/DetailOrder/index";
 import DetailOrder from "../pages/ManageOrder/DetailOrder/DetailOrder";
 import ManageTopUpWithdraw from "../pages/ManageTopUpWithdraw";
+import ManageTopUpWithdrawOther from "../pages/ManageTopUpWithdraw/ManageTopUpWithdrawOther";
 import TransferCustomer from "../pages/ManageTopUpWithdraw/TransferCustomer";
 import TransferCollaborator from "../pages/ManageTopUpWithdraw/TransferCollaborator";
 import ManagePunish from "../pages/ManagePunish";
@@ -256,6 +257,10 @@ const Admin = () => {
       <Route
         path="/transaction/manage-transaction"
         element={<ManageTopUpWithdraw />}
+      />
+      <Route
+        path="/transaction/other"
+        element={<ManageTopUpWithdrawOther />}
       />
       <Route
         path="/transaction/manage-transaction-collaborator"
