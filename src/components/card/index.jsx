@@ -586,21 +586,7 @@ const CardInfo = (props) => {
         //     });
         //   });
       }
-      // Thẻ hoạt động đơn hàng
-      if (collaboratorActivityHistory) {
-        dispatch(loadingAction.loadingRequest(true));
-        getHistoryActivityCollaborator(collaboratorId, 0, 10)
-          .then((res) => {
-            setDataHistory(res);
-            dispatch(loadingAction.loadingRequest(false));
-          })
-          .catch((err) => {
-            errorNotify({
-              message: err?.message,
-            });
-            dispatch(loadingAction.loadingRequest(false));
-          });
-      }
+   
     }
   }, [collaboratorId, dispatch]);
   return (
@@ -848,99 +834,6 @@ const CardInfo = (props) => {
             </div>
           </div>
         )}
-        {/* Thẻ hoạt động lịch sử của đối tác */}
-        {collaboratorActivityHistory &&
-          (dataHistory?.data?.length > 0 ? (
-            <div className="card-statistics__activity-history">
-              <div>
-                {dataHistory?.data?.map((activity, index) => (
-                  <div
-                    className={`card-statistics__activity-history--activity ${
-                      index === dataHistory?.data?.length - 1 && "last-item"
-                    }`}
-                  >
-                    {/* Ngày tạo và thông tin quản trị viên tương tác nếu có*/}
-                    <div className="card-statistics__activity-history--activity-left">
-                      <span className="card-statistics__activity-history--activity-left-name-phone">
-                        {moment(new Date(activity?.date_create)).format(
-                          "DD MMMM, YYYY"
-                        )}
-                      </span>
-                      <span className="card-statistics__activity-history--activity-left-date">
-                        {moment(new Date(activity?.date_create)).format(
-                          "HH:mm"
-                        )}
-                      </span>
-                      <span className="card-statistics__activity-history--activity-left-id">
-                        {activity?.id_admin_action?.full_name}
-                      </span>
-                      {/* <span>{activity?.type.split("_")[0]}</span> */}
-                    </div>
-                    {/* Icon và line ở giữa */}
-                    <div className="card-statistics__activity-history--activity-line">
-                      <div
-                        className={`card-statistics__activity-history--activity-line-icon ${
-                          activity?.type.split("_")[0] === "admin"
-                            ? "admin"
-                            : activity?.type.split("_")[0] === "collaborator"
-                            ? "collaborator"
-                            : activity?.type.split("_")[0] === "verify"
-                            ? "verify"
-                            : activity?.type.split("_")[0] === "create"
-                            ? "create"
-                            : "system"
-                        }`}
-                      >
-                        {activity?.type.split("_")[0] === "admin" ? (
-                          <IoPeopleOutline size={15} color="violet" />
-                        ) : activity?.type.split("_")[0] === "collaborator" ? (
-                          <IoPersonOutline size={15} color="blue" />
-                        ) : activity?.type.split("_")[0] === "verify" ? (
-                          <IoCloseCircleOutline size={15} color="red" />
-                        ) : activity?.type.split("_")[0] === "create" ? (
-                          <IoCheckmarkDoneOutline size={15} color="green" />
-                        ) : (
-                          <IoSettingsOutline size={15} color="orange" />
-                        )}
-                      </div>
-                      {dataHistory?.data?.length - 1 !== index && (
-                        <div className="card-statistics__activity-history--activity-line-icon-line"></div>
-                      )}
-                    </div>
-                    {/* Nội dung */}
-                    <div className="card-statistics__activity-history--activity-right">
-                      {/* Tên hành động và các thông tin phụ */}
-                      <div className="card-statistics__activity-history--activity-right-header">
-                        {/* Tên hành động */}
-                        <Tooltip placement="top" title={activity?.title_admin}>
-                          <span className="card-statistics__activity-history--activity-right-header-service">
-                            {activity?.title_admin}
-                          </span>
-                        </Tooltip>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div className="card-statistics__activity-history--pagination">
-                <div></div>
-                <Pagination
-                  // simple={{ readOnly: true }}
-                  current={currentPage}
-                  onChange={onChange}
-                  total={dataHistory?.totalItem}
-                  showSizeChanger={false}
-                  pageSize={10}
-                />
-              </div>
-            </div>
-          ) : (
-            <div className="flex justify-center items-center p-4">
-              <span className="text-xs text-gray-500/60 italic">
-                Cộng tác viên chưa có hoạt động nào
-              </span>
-            </div>
-          ))}
       </div>
     </div>
   );

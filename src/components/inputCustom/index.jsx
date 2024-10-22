@@ -18,7 +18,7 @@ import { moveElement } from "../../utils/contant";
 import icons from "../../utils/icons";
 
 import secretImage from "../../assets/images/preview_image.png";
-import emptyDataImage from "../../assets/images/empty_data.svg";
+import notFoundImage from "../../assets/images/not_found_image.svg";
 
 const {
   IoCheckmarkCircleSharp,
@@ -888,7 +888,7 @@ const InputTextCustom = (props) => {
                   src={
                     options?.find((el) => el.code === value)?.image
                       ? options?.find((el) => el.code === value)?.image
-                      : emptyDataImage
+                      : notFoundImage
                   }
                 />
               </div>

@@ -11,6 +11,7 @@ import {
   getTotalMoneyTransactionApi,
   getTotalTransactionApi,
   verifyTransactionApi,
+  getListTransactionApi,
 } from "../../api/transaction";
 import { LENGTH_ITEM } from "../../constants";
 import { errorNotify, successNotify } from "../../helper/toast";
@@ -39,7 +40,6 @@ const ManageTopUpWithdraw = () => {
   let { width } = useWindowDimensions();
   const lang = useSelector(getLanguageState);
   const permission = useSelector(getPermissionState);
-  const [item, setItem] = useState();
   const [openModalCancel, setOpenModalCancel] = useState(false);
   const [openModalChangeStatus, setOpenModalChangeStatus] = useState(false);
   const [returnFilter, setReturnFilter] = useState([]);
@@ -155,8 +155,9 @@ const ManageTopUpWithdraw = () => {
       ? JSON.parse(localStorage.getItem("linePerPage")).value
       : 20
   );
+  const [item, setItem] = useState();
   /* ~~~ List ~~~ */
-  // 1. Danh sách các loại ví
+  // 1. Danh sách các loại trạng thái
   const [statusList, setStatusList] = useState([
     { code: "", label: "Tất cả", total: 0 },
     { code: "pending", label: "Đang xử lí", total: 0 },
@@ -166,12 +167,19 @@ const ManageTopUpWithdraw = () => {
     { code: "cancel", label: "Đã hủy", total: 0 },
   ]);
   // 2. Danh sách các đối tượng
-  const objectList = [
+
+  // const objectList = [
+  // { code: "", label: "Tất cả" },
+  // { code: "collaborator", label: "Cộng tác viên" },
+  // { code: "customer", label: "Khách hàng" },
+  // { code: "other", label: "Khác" },
+  // ];
+  const [objectList, setObjectList] = useState([
     { code: "", label: "Tất cả" },
     { code: "collaborator", label: "Cộng tác viên" },
     { code: "customer", label: "Khách hàng" },
     { code: "other", label: "Khác" },
-  ];
+  ]);
   // 3. Danh sách các loại giao dịch
   const transferTypeList = [
     { code: "", label: "Tất cả" },
@@ -245,7 +253,7 @@ const ManageTopUpWithdraw = () => {
         />
       ),
       dataIndex: "",
-      key: "subject",
+      key: "information",
       width: 50,
     },
     {
@@ -256,7 +264,7 @@ const ManageTopUpWithdraw = () => {
         />
       ),
       dataIndex: "",
-      key: "",
+      key: "type_account",
       width: 50,
     },
     {
@@ -413,7 +421,7 @@ const ManageTopUpWithdraw = () => {
       let query =
         selectFilter.map((item) => `&${item.key}=${item.code}`).join("") +
         `&start_date=${startDate}&end_date=${endDate}`;
-      const res = await getListTransactionV2Api(
+      const res = await getListTransactionApi(
         startPage,
         lengthPage,
         query,
@@ -423,27 +431,27 @@ const ManageTopUpWithdraw = () => {
       setTotal(res?.totalItem);
       dispatch(loadingAction.loadingRequest(false));
     } catch (err) {
-      console.log("Lỗi: ", err);
+      console.log("Lỗi fetchData: ", err);
     }
   };
   // 3. Hàm fetch số lượng total để hiển thị bên cạnh các tabs
   const fetchTotalData = async () => {
     try {
-      const res = await getTotalTransactionApi(valueSearch);
-      setStatusList((prevList) =>
-        prevList.map((item) => ({
-          ...item,
-          total: res[item.code]
-            ? res[item.code]
-            : item.code === ""
-            ? res["total"]
-            : item.total,
-        }))
-      );
+      let query =
+        selectFilter.map((item) => `&${item?.key}=${item?.code}`).join("") +
+        `&start_date=${startDate}&end_date=${endDate}`;
+      const res = await getTotalTransactionApi(query, valueSearch);
+      console.log("check res", res);
+        setStatusList((prevList) =>
+          prevList.map((item) => ({
+            ...item,
+            total: item?.code === "" ? res["total"] : res[item?.code],
+          }))
+        );
       const temp_arr = Object.values(res).map((i) => ({ value: i }));
       setTotalTransaction(temp_arr);
     } catch (err) {
-      console.log("Lỗi: ", err);
+      console.log("Lỗi fetchTotalData: ", err);
     }
   };
   // 4. Hàm searching
@@ -495,7 +503,6 @@ const ManageTopUpWithdraw = () => {
     selectTransferType,
     selectWalletType,
   ]);
-
   /* ~~~ Other ~~~ */
   const filterByType = () => {
     return (
@@ -641,7 +648,6 @@ const ManageTopUpWithdraw = () => {
       );
     },
   };
-
   /* ~~~ Main ~~~ */
   return (
     <div className="manage-top-up-with-draw">
@@ -672,6 +678,7 @@ const ManageTopUpWithdraw = () => {
           onCurrentPageChange={onChangePage}
           scrollX={2500}
           actionColumn={addActionColumn}
+          getItemRow={setItem}
           headerRightContent={
             <div className="manage-top-up-with-draw__table--right-header">
               <TransactionDrawer2
@@ -685,6 +692,58 @@ const ManageTopUpWithdraw = () => {
                 onClick={handleWithdraw}
               />
             </div>
+          }
+        />
+      </div>
+      <div>
+        <ModalCustom
+          isOpen={openModalCancel}
+          title={`Huỷ giao dịch`}
+          handleOk={handleCancelTransfer}
+          handleCancel={() => setOpenModalCancel(false)}
+          textOk={`Xác nhận`}
+          body={
+            <>
+              <p>Bạn có xác nhận muốn huỷ lệnh giao dịch</p>
+              <p>
+                Mã giao dịch: <span className="fw-500">{item?.id_view}</span>
+              </p>
+              <p>
+                Số tiền:{" "}
+                <span className="fw-500">{formatMoney(item?.money || 0)}</span>{" "}
+              </p>
+              <p>
+                <span className="fw-500">
+                  {item?.id_collaborator?.full_name}
+                </span>
+              </p>
+            </>
+          }
+        />
+      </div>
+      <div>
+        <ModalCustom
+          isOpen={openModalChangeStatus}
+          title={`Duyệt giao dịch`}
+          handleOk={handleVerifyTransfer}
+          handleCancel={() => setOpenModalChangeStatus(false)}
+          textOk={`Xác nhận`}
+          body={
+            <>
+              <p>Bạn có xác nhận muốn duyệt lệnh giao dịch</p>
+              <p>
+                Mã giao dịch: <span className="fw-500">{item?.id_view}</span>
+              </p>
+              <p>
+                Số tiền:
+                <span className="fw-500">
+                  {formatMoney(item?.money || 0)}
+                </span>{" "}
+              </p>
+              <p>
+                Nội dung: <span>{item?.transfer_note}</span>
+              </p>
+            </>
           }
         />
       </div>
@@ -766,60 +825,61 @@ const ManageTopUpWithdraw = () => {
     //   </div>
     //   {/* ********************** Modal custom ***************************** */}
     //   {/*Pop up xác thực*/}
-    //   <div>
-    //     <ModalCustom
-    //       isOpen={openModalCancel}
-    //       title={`Huỷ giao dịch`}
-    //       handleOk={handleCancelTransfer}
-    //       handleCancel={() => setOpenModalCancel(false)}
-    //       textOk={`Xác nhận`}
-    //       body={
-    //         <>
-    //           <p>Bạn có xác nhận muốn huỷ lệnh giao dịch</p>
-    //           <p>
-    //             Mã giao dịch: <span className="fw-500">{item?.id_view}</span>
-    //           </p>
-    //           <p>
-    //             Số tiền:{" "}
-    //             <span className="fw-500">{formatMoney(item?.money || 0)}</span>{" "}
-    //           </p>
-    //           <p>
-    //             <span className="fw-500">
-    //               {item?.id_collaborator?.full_name}
-    //             </span>
-    //           </p>
-    //         </>
-    //       }
-    //     />
-    //   </div>
-    //   <div>
-    //     <ModalCustom
-    //       isOpen={openModalChangeStatus}
-    //       title={`Duyệt giao dịch`}
-    //       handleOk={handleVerifyTransfer}
-    //       handleCancel={() => setOpenModalChangeStatus(false)}
-    //       textOk={`Xác nhận`}
-    //       body={
-    //         <>
-    //           <p>Bạn có xác nhận muốn duyệt lệnh giao dịch</p>
-    //           <p>
-    //             Mã giao dịch: <span className="fw-500">{item?.id_view}</span>
-    //           </p>
-    //           <p>
-    //             Số tiền:
-    //             <span className="fw-500">
-    //               {formatMoney(item?.money || 0)}
-    //             </span>{" "}
-    //           </p>
-    //           <p>
-    //             Nội dung: <span>{item?.transfer_note}</span>
-    //           </p>
-    //         </>
-    //       }
-    //     />
-    //   </div>
+    // <div>
+    //   <ModalCustom
+    //     isOpen={openModalCancel}
+    //     title={`Huỷ giao dịch`}
+    //     handleOk={handleCancelTransfer}
+    //     handleCancel={() => setOpenModalCancel(false)}
+    //     textOk={`Xác nhận`}
+    //     body={
+    //       <>
+    //         <p>Bạn có xác nhận muốn huỷ lệnh giao dịch</p>
+    //         <p>
+    //           Mã giao dịch: <span className="fw-500">{item?.id_view}</span>
+    //         </p>
+    //         <p>
+    //           Số tiền:{" "}
+    //           <span className="fw-500">{formatMoney(item?.money || 0)}</span>{" "}
+    //         </p>
+    //         <p>
+    //           <span className="fw-500">
+    //             {item?.id_collaborator?.full_name}
+    //           </span>
+    //         </p>
+    //       </>
+    //     }
+    //   />
+    // </div>
+    // <div>
+    //   <ModalCustom
+    //     isOpen={openModalChangeStatus}
+    //     title={`Duyệt giao dịch`}
+    //     handleOk={handleVerifyTransfer}
+    //     handleCancel={() => setOpenModalChangeStatus(false)}
+    //     textOk={`Xác nhận`}
+    //     body={
+    //       <>
+    //         <p>Bạn có xác nhận muốn duyệt lệnh giao dịch</p>
+    //         <p>
+    //           Mã giao dịch: <span className="fw-500">{item?.id_view}</span>
+    //         </p>
+    //         <p>
+    //           Số tiền:
+    //           <span className="fw-500">
+    //             {formatMoney(item?.money || 0)}
+    //           </span>{" "}
+    //         </p>
+    //         <p>
+    //           Nội dung: <span>{item?.transfer_note}</span>
+    //         </p>
+    //       </>
+    //     }
+    //   />
+    // </div>
     // </div>
   );
 };
 
 export default ManageTopUpWithdraw;
+

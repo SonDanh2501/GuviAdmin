@@ -223,6 +223,7 @@ const Overview = ({ id, star }) => {
     };
     fetchData();
   }, [id, dispatch]);
+
   return (
     <div class="collaborator-overview">
       {/* Left container */}
@@ -285,6 +286,7 @@ const Overview = ({ id, star }) => {
               data={dataOrder?.data}
               totalItem={dataOrder?.data?.length}
               dateIndex="date_work"
+              statusIndex="status"
             />
           }
         />

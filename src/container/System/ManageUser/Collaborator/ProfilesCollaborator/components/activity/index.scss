@@ -232,10 +232,11 @@
     }
 
     .collaborator-activity__history--activities {
-      width: 100%;
-      height: fit-content;
-      background-color: $colorWhite;
-      border-radius: $borderRadiusM;
+      display: flex;
+      gap: $gapL;
+      .collaborator-activity__history--activities-activity {
+        width: 50%;
+      }
     }
   }
 }

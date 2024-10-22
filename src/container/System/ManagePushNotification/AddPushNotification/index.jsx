@@ -40,6 +40,7 @@ const AddPushNotification = ( props) => {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState(""); // Tiêu đề thông báo
+  const [link, setLink] = useState(""); // Link
   const [description, setDescription] = useState(""); // Nội dung thông báo
   // const [isSelectDateSchedule, setIsSelectDateSchedule] = useState(false); // Giá trị true/false thời gian thông báo
   const [isSelectCustomer, setIsSelectCustomer] = useState(true); // Giá trị true/false khách hàng
@@ -475,6 +476,17 @@ const AddPushNotification = ( props) => {
                 placeHolder="Nhóm khách hàng"
                 limitShows={2}
                 setValueSelectedProps={setGroupCustomer}
+              />
+            </div>
+          </div>
+          {/* Nhóm khách hàng */}
+          <div className="add-push-notification__field">
+            <div className="add-push-notification__field--child">
+              <InputTextCustom
+                type="text"
+                value={link}
+                placeHolder="Link"
+                onChange={(e) => setLink(e.target.value)}
               />
             </div>
           </div>

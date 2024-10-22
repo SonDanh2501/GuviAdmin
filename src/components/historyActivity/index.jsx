@@ -8,24 +8,27 @@ import "./index.scss";
 import moment from "moment";
 import { getLanguageState } from "../../redux/selectors/auth";
 import { useSelector } from "react-redux";
-import {
-  IoArrowDown,
-  IoArrowForward,
-  IoArrowUp,
-  IoPeopleOutline,
-  IoRemove,
-  IoSettings,
-  IoTrendingDown,
-  IoTrendingUp,
-} from "react-icons/io5";
+import icons from "../../utils/icons";
+import emptyData from "../../assets/images/empty_data.svg";
+
 
 const HistoryActivity = (props) => {
   const { data } = props;
+  const {
+    IoArrowDown,
+    IoArrowForward,
+    IoArrowUp,
+    IoRemove,
+    IoSettings,
+    IoTrendingDown,
+    IoTrendingUp,
+  } = icons;
   const { width } = useWindowDimensions();
   const lang = useSelector(getLanguageState);
+  /* ~~~ Value ~~~ */
   const [arrComponents, setArrComponents] = useState([]);
   const [chooseItem, setChooseItem] = useState();
-
+  /* ~~~ Use effect ~~~ */
   useEffect(() => {}, []);
   const onChooseItem = (item) => {
     if (item?._id === chooseItem?._id) {
@@ -34,7 +37,7 @@ const HistoryActivity = (props) => {
       setChooseItem(item);
     }
   };
-
+  /* ~~~ Main ~~~ */
   return (
     <div className="history-activity">
       {data?.map((item, index) => {
@@ -262,6 +265,15 @@ const HistoryActivity = (props) => {
           </div>
         );
       })}
+      {/* Nếu không có dữ liệu */}
+      {data?.length === 0 && (
+        <div className="history-activity__empty">
+          <img className="history-activity__empty--image" src={emptyData}></img>
+          <span className="history-activity__empty--label">
+            Không có dữ liệu để hiển thịs
+          </span>
+        </div>
+      )}
     </div>
   );
 };

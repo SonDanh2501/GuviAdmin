@@ -2,6 +2,9 @@
 
 .card-activities {
 
+    display: flex;
+    flex-direction: column;
+    gap: $gapM;
     .card-activities--activity {
         display: flex;
         padding-bottom: 12px;
@@ -18,7 +21,14 @@
                 color: $colorBlack;
             }
 
-            .card-activities--activity-left-day {
+            .card-activities--activity-left-day-in-week {
+                font-size: $textFontSizeM;
+                font-weight: $fontWeightL;
+                color: $colorGray;
+                opacity: $opacityS;
+            }
+
+            .card-activities--activity-left-time {
                 font-size: $textFontSizeM;
                 font-weight: $fontWeightL;
                 color: $colorGray;
@@ -32,7 +42,7 @@
             align-items: center;
             display: flex;
             flex-direction: column;
-            margin-bottom: -12px;
+            margin-bottom: -40px;
 
             .card-activities--activity-line-icon {
                 padding: 8px 8px;
@@ -59,12 +69,32 @@
                 &.cancel {
                     background-color: $colorExtraLightRed;
                 }
+
+                &.blue {
+                    background-color: $colorExtraLightBlue;
+                }
+
+                &.green {
+                    background-color: $colorExtraLightGreen;
+                }
+
+                &.red {
+                    background-color: $colorExtraLightRed;
+                }
+
+                &.yellow {
+                    background-color: $colorExtraLightYellow;
+                }
+
+                &.violet {
+                    background-color: $colorExtraLightViolet;
+                }
             }
 
             .card-activities--activity-line-icon-line {
                 width: 2px;
                 height: 100%;
-                background-color: $colorExtraLightGray;
+                background-color: $colorMoreLightGray;
             }
         }
 
@@ -132,5 +162,16 @@
             }
         }
 
+       
+
+    }
+
+    .card-activities--pagination {
+        display: flex;
+        justify-content: flex-end;
+        width: 100%;
+        &.hidden {
+            display: none;
+        }
     }
 }

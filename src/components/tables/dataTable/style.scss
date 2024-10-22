@@ -592,7 +592,7 @@ span {
   }
 
   .case__transfer-status--other {
-    background-color: $colorExtraLightStone;
+    background-color: $colorMoreLightGray;
     border-radius: $borderRadiusM;
     color: $colorStone;
     font-weight: $fontWeightXL;
@@ -608,18 +608,78 @@ span {
   width: fit-content;
   padding: 6px 8px;
   border-radius: $borderRadiusM;
+
   &.withdraw {
     background-color: $colorRed;
   }
+
   &.top-up {
     background-color: $colorGreen;
   }
+
   .case__transfer-type-transfer--text {
     font-size: $textFontSizeM;
     font-weight: $fontWeightXL;
     color: $colorWhite;
   }
 }
+
+// Trường thông tin cá nhân
+.case__information {
+  display: flex;
+  flex-direction: column;
+  // align-items: center;
+
+  .case__information--info {
+    display: flex;
+    flex-direction: column;
+    // align-items: center;
+
+    .case__information--info-name {
+      font-size: $textFontSizeM;
+      font-weight: $fontWeightL;
+      color: $colorBlue;
+
+      &:hover {
+        color: $colorLightBlue;
+      }
+    }
+
+    .case__information--info-phone {
+      font-size: $textFontSizeM;
+      font-weight: $fontWeightL;
+    }
+
+  }
+}
+
+// Trường loại tài khoản
+.case__type-account {
+  padding: 4px 8px;
+  width: fit-content;
+  border-radius: $borderRadiusM;
+
+  &.customer {
+    background-color: $colorMoreLightGray;
+    color: $colorBlack;
+  }
+
+  &.collaborator {
+    background-color: $colorExtraLightOrange;
+    color: $colorOrange;
+  }
+
+  &.other {
+    background-color: $colorMoreLightGray;
+    color: $colorBlack;
+  }
+
+  .case__type-account--label {
+    font-weight: $fontWeightXL;
+    font-size: $textFontSizeM;
+  }
+}
+
 // Các trường chỉ hiển chữ
 .case__normal-text {
   font-weight: $fontWeightL;

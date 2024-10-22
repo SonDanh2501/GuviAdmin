@@ -115,6 +115,7 @@
                         padding: 4px 8px;
                         width: fit-content;
                         border-radius: $borderRadiusM;
+                        white-space: nowrap;
 
                         &.up {
                             color: $colorGreen;
@@ -191,6 +192,26 @@
             }
 
 
+        }
+    }
+
+    .history-activity__empty {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        .history-activity__empty--image {
+            height: 100px;
+            width: 100px;
+        }
+
+        .history-activity__empty--label {
+            font-size: $textFontSizeM;
+            font-weight: $fontWeightL;
+            color: $colorGray;
+            opacity: $opacityM;
+            font-style: italic;
         }
     }
 }

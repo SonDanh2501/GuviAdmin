@@ -50,6 +50,7 @@ const DataTable = (props) => {
     setLengthPage,
     emptyText,
     headerRightContent,
+    onCurrentPageChange,
   } = props;
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
@@ -661,6 +662,79 @@ const DataTable = (props) => {
             );
             break;
           }
+          // Tên, số điện thoại
+          case "information": {
+            return (
+              <div className="case__information">
+                {data?.id_customer && (
+                  <Link
+                    to={`/profile-customer/${
+                      data?.id_customer?._id || data?._id
+                    }`}
+                    target="_blank"
+                    style={{ textDecoration: "none" }}
+                  >
+                    <div className="case__information--info">
+                      <span className="case__information--info-name">
+                        {data?.id_customer?.full_name}
+                      </span>
+                      <span className="case__information--info-phone">
+                        {data?.id_customer?.phone}
+                      </span>
+                    </div>
+                  </Link>
+                )}
+                {data?.id_collaborator && (
+                  <Link
+                    to={`/details-collaborator/${data?.id_collaborator?._id}`}
+                    className="div-name-star"
+                    target="_blank"
+                    style={{ textDecoration: "none" }}
+                  >
+                    <div className="case__information--info">
+                      <span className="case__information--info-name">
+                        {data?.id_collaborator?.full_name}
+                      </span>
+                      <span className="case__information--info-phone">
+                        {data?.id_collaborator?.phone}
+                      </span>
+                    </div>
+                  </Link>
+                )}
+                {!data?.id_collaborator && !data?.id_customer && (
+                  <div className="case__information--info">
+                    <span className="case__information--info-name">
+                      {data?.id_admin_action?.full_name}
+                    </span>
+                  </div>
+                )}
+              </div>
+            );
+            break;
+          }
+          // Loại tài khoản
+          case "type_account": {
+            return (
+              <div
+                className={`case__type-account ${
+                  data?.id_collaborator
+                    ? "collaborator"
+                    : data?.id_customer
+                    ? "customer"
+                    : "other"
+                }`}
+              >
+                <span className="case__type-account--label">
+                  {data?.id_collaborator
+                    ? "Đối tác"
+                    : data?.id_customer
+                    ? "Khách hàng"
+                    : "Khác"}
+                </span>
+              </div>
+            );
+            break;
+          }
           case "created_by": {
             let _created_by_customer = false;
             let _created_by_collborator = false;
@@ -695,9 +769,9 @@ const DataTable = (props) => {
                             {data?.id_customer?.phone}
                           </p>
                         </div>
-                        <div>
+                        {/* <div>
                           <p>Nạp</p>
-                        </div>
+                        </div> */}
                       </Link>
                     </div>
                   )}
@@ -1323,38 +1397,19 @@ const DataTable = (props) => {
             );
             break;
           }
+          // Loại giao dịch
           case "type_transfer": {
-            let type_transfer = "Nạp";
-            switch (data?.type_transfer) {
-              case "other":
-                type_transfer = "Khác";
-                break;
-              case "withdraw":
-                type_transfer = "Rút";
-                break;
-              case "refund_service":
-                type_transfer = "Hoàn tiền đơn hàng";
-                break;
-              case "reward":
-                type_transfer = "Thưởng";
-                break;
-              case "punish":
-                type_transfer = "Phạt";
-                break;
-              case "pay_service":
-                type_transfer = "Thanh toán dịch vụ";
-                break;
-              default:
-                break;
-            }
+            const typeTransferMap = {
+              other: "Khác",
+              withdraw: "Phiếu chi", // Rút
+              top_up: "Phiếu thu", // Nạp
+              refund_service: "Hoàn tiền đơn hàng",
+              reward: "Thưởng",
+              punish: "Phạt",
+              pay_service: "Thanh toán dịch vụ",
+            };
+            const type_transfer = typeTransferMap[data?.type_transfer] || "";
             return (
-              // <div className="case__transfer-type-transfer">
-              //   {type_transfer === "Rút" ? (
-              //       <span className="">{type_transfer}</span>
-              //   ) : (
-              //       <span className="">{type_transfer}</span>
-              //   )}
-              // </div>
               <div
                 className={`case__transfer-type-transfer ${
                   type_transfer === "Rút" ? "withdraw" : "top-up"
@@ -1503,10 +1558,10 @@ const DataTable = (props) => {
             let _payment_out = "Chuyển khoản";
             switch (data?.payment_out) {
               case "momo":
-                _payment_out = "MoMo";
+                _payment_out = "Ví MoMo";
                 break;
               case "vnpay":
-                _payment_out = "VNPAY";
+                _payment_out = "Ví VNPAY";
                 break;
               case "viettel_pay":
                 _payment_out = "Viettel Pay";
@@ -1524,7 +1579,7 @@ const DataTable = (props) => {
                 _payment_out = "Tiền mặt";
                 break;
               case "bank":
-                _payment_out = "Chuyển khoản";
+                _payment_out = "Chuyển khoản NH";
                 break;
               default:
                 break;
@@ -1735,13 +1790,13 @@ const DataTable = (props) => {
               //     : ""}
               // </span>
               <div className="div-date-create">
-              <p className={`${item?.fontSize}`}>
-                {moment(new Date(data?.date_schedule)).format("DD/MM/YYYY")}
-              </p>
-              <p className={`${item?.fontSize}`}>
-                {moment(new Date(data?.date_schedule)).format("HH:mm")}
-              </p>
-            </div>
+                <p className={`${item?.fontSize}`}>
+                  {moment(new Date(data?.date_schedule)).format("DD/MM/YYYY")}
+                </p>
+                <p className={`${item?.fontSize}`}>
+                  {moment(new Date(data?.date_schedule)).format("HH:mm")}
+                </p>
+              </div>
             );
           }
           default: {
@@ -1796,11 +1851,10 @@ const DataTable = (props) => {
   /* ~~~ Support function ~~~ */
   // 1. Hàm tính trang hiện tại đang hiển thị
   const calculateCurrentPage = (event) => {
-    //
     setCurrentPage(event);
-    if (props.onCurrentPageChange) {
+    if (onCurrentPageChange) {
       setIsLoading(true);
-      props.onCurrentPageChange(event * pageSize - pageSize);
+      onCurrentPageChange(event * pageSize - pageSize);
     }
   };
   // 2.

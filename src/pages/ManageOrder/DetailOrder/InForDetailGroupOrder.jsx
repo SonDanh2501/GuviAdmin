@@ -520,11 +520,11 @@ const InForDetailGroupOrder = (props) => {
           pageSize={lengthPage}
           setLengthPage={setLengthPage}
           totalItem={total}
-          // getItemRow={setItem}
+          getItemRow={setItem}
           onCurrentPageChange={onChangePage}
           // detectLoading={detectLoading}
-          // setOpenModalCancel={setIsOpenModalCancel}
-          // setOpenModalChangeStatus={setIsOpenModalChangeStatus}
+          setOpenModalCancel={setIsOpenModalCancel}
+          setOpenModalChangeStatus={setIsOpenModalChangeStatus}
         />
 
       //   <DataTable

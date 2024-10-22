@@ -21,6 +21,7 @@ import CardTotalValue from "../../../../../../../components/card/cardTotalValue"
 import CardBarChart from "../../../../../../../components/card/cardBarChart";
 
 import icons from "../../../../../../../utils/icons";
+import CardActivityLog from "../../../../../../../components/card/cardActivityLog";
 
 const {
   IoLogoUsd,
@@ -37,23 +38,28 @@ const {
 } = icons;
 
 const Activity = ({ id }) => {
-  const [data, setData] = useState([]);
-  const [startPage, setStartPage] = useState(0);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const lang = useSelector(getLanguageState);
+  const { width } = useWindowDimensions();
+  const [startPageOrder, setStartPageOrder] = useState(0);
+  const [startPageHistoryActivities, setStartPageHistoryActivities] =
+    useState(0);
   const [lengthPage, setLengthPage] = useState(
     JSON.parse(localStorage.getItem("linePerPage"))
       ? JSON.parse(localStorage.getItem("linePerPage")).value
       : 20
   );
-  const [totalData, setTotalData] = useState([]);
+  /* ~~~ Value ~~~ */
+  const [dataHistoryOrderCollaborator, setDataHistoryOrderCollaborator] =
+    useState([]);
+  const [
+    dataHistoryActivitiesCollaborator,
+    setDataHistoryActivitiesCollaborator,
+  ] = useState([]);
   const [timePeriod, setTimePeriod] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const lang = useSelector(getLanguageState);
-  const { width } = useWindowDimensions();
-
   const [valueActivityStatistics, setValueActivityStatistics] = useState([
-    
     {
       label: "Tổng đơn đến nay",
       value: 0,
@@ -78,55 +84,10 @@ const Activity = ({ id }) => {
       icon: IoPieChartOutline,
       color: "yellow",
     },
-
   ]);
-  /* ~~~ Use effect ~~~ */
-  // 1. Fetch giá trị lịch sử hoạt động của đối tác
-  useEffect(() => {
-    dispatch(loadingAction.loadingRequest(true));
-    getHistoryOrderCollaborator(id, startPage, lengthPage)
-      .then((res) => {
-        setData(res.data);
-        setTotalData(res.totalItem);
-        dispatch(loadingAction.loadingRequest(false));
-      })
-      .catch((err) => {
-        errorNotify({
-          message: err?.message,
-        });
-        dispatch(loadingAction.loadingRequest(false));
-      });
-  }, [id, dispatch, startPage, lengthPage]);
 
-  const onChange = (page) => {
-    setCurrentPage(page);
-    const dataLength = data.length < 10 ? 10 : data.length;
-    const start = page * dataLength - dataLength;
-    getHistoryOrderCollaborator(id, start, 10)
-      .then((res) => {
-        setData(res.data);
-        setTotalData(res.totalItem);
-      })
-      .catch((err) => console.log(err));
-  };
-
-  /* ~~~ Handle function ~~~ */
-  // 1. Hàm xử lý khi chuyển trang
-  const onChangePage = (value) => {
-    setStartPage(value);
-  };
-  const timeWork = (data) => {
-    const start = moment(new Date(data.date_work)).format("HH:mm");
-
-    const timeEnd = moment(new Date(data?.date_work))
-      .add(data?.total_estimate, "hours")
-      .format("HH:mm");
-
-    return start + " - " + timeEnd;
-  };
-
-  /* ~~~ Column ~~~ */
-  // 1. Giá trị các cột của bảng
+  /* ~~~ List ~~~ */
+  // 1. Danh sách các cột trong bảng
   const columns = [
     {
       title: "Mã đơn",
@@ -178,9 +139,8 @@ const Activity = ({ id }) => {
       FontSize: "text-size-M",
     },
   ];
-
-  // 2. Giá trị
-  const testData = [
+  // 2. Danh sách đơn hàng thống kê theo tháng
+  const orderDataStatistic = [
     {
       name: "Thg 1",
       value: 4,
@@ -230,7 +190,51 @@ const Activity = ({ id }) => {
       value: 1,
     },
   ];
-
+  /* ~~~ Handle function ~~~ */
+  // 1. Hàm xử lý khi chuyển trang bảng lịch sử đơn hàng
+  const onChangePageOrder = (value) => {
+    setStartPageOrder(value);
+  };
+  // 2. Hàm xử lý khi chuyển trang lịch sử hoạt động
+  const onChangePageHistoryActivity = (value) => {
+    setStartPageHistoryActivities(value);
+  };
+  // 3. Hàm fetch dữ liệu đơn hàng của đối tác
+  const fetchHistoryOrderCollaborator = async (id, start, length) => {
+    try {
+      dispatch(loadingAction.loadingRequest(true));
+      const res = await getHistoryOrderCollaborator(id, start, length);
+      setDataHistoryOrderCollaborator(res);
+      dispatch(loadingAction.loadingRequest(false));
+    } catch (err) {
+      console.log("Lỗi lấy dữ liệu đơn hàng: ", err);
+    }
+  };
+  // 4. Hàm fetch dữ liệu lịch sử hoạt động (lịch sử hoạt động là phần tử cha của lịch sử trạng thái)
+  const fetchHistoryActivitiesCollaborator = async (id, start, length) => {
+    try {
+      dispatch(loadingAction.loadingRequest(true));
+      const res = await getHistoryActivityCollaborator(id, start, length);
+      setDataHistoryActivitiesCollaborator(res);
+      dispatch(loadingAction.loadingRequest(false));
+    } catch (err) {
+      console.log("Lỗi lấy dữ liệu lịch sử hoạt động: ", err);
+    }
+  };
+  /* ~~~ Use effect ~~~ */
+  // 1. Fetch giá trị lịch sử đơn hàng của đối tác
+  useEffect(() => {
+    fetchHistoryOrderCollaborator(id, startPageOrder, lengthPage);
+  }, [id, dispatch, startPageOrder, lengthPage]);
+  // 2. Fetch giá trị lịch sử hoạt động của đối tác
+  useEffect(() => {
+    fetchHistoryActivitiesCollaborator(
+      id,
+      startPageHistoryActivities,
+      lengthPage
+    );
+  }, [id, dispatch, startPageHistoryActivities, lengthPage]);
+  /* ~~~ Main ~~~ */
   return (
     <div className="collaborator-activity">
       {/* Các thẻ thống kê (hiện tại đang ẩn đi chừng nào viết xong api thì mở ra và truyền dữ liệu vào) */}
@@ -257,7 +261,7 @@ const Activity = ({ id }) => {
             cardHeader="Thống kê đơn hàng"
             cardContent={
               <CardBarChart
-                data={testData}
+                data={orderDataStatistic}
                 height={220}
                 verticalValue="value"
                 // verticalLine={true}
@@ -278,21 +282,50 @@ const Activity = ({ id }) => {
         <div className="collaborator-activity__history--order">
           <DataTable
             columns={columns}
-            data={data}
-            start={startPage}
+            data={dataHistoryOrderCollaborator?.data || []}
+            start={startPageOrder}
             pageSize={lengthPage}
             setLengthPage={setLengthPage}
-            totalItem={totalData}
-            onCurrentPageChange={onChangePage}
+            totalItem={dataHistoryOrderCollaborator?.totalItem || 0}
+            onCurrentPageChange={onChangePageOrder}
           />
         </div>
         {/* Lịch sử đơn hàng */}
         <div className="collaborator-activity__history--activities">
-          <CardInfo
-            collaboratorActivityHistory={true}
-            collaboratorId={id}
-            cardHeader="Lịch sử hoạt động"
-          />
+          <div className="collaborator-activity__history--activities-activity">
+            <CardInfo
+              cardHeader="Lịch sử hoạt động"
+              cardContent={
+                <CardActivityLog
+                  data={dataHistoryActivitiesCollaborator?.data}
+                  totalItem={dataHistoryActivitiesCollaborator?.totalItem}
+                  dateIndex="date_create"
+                  statusIndex="type"
+                  pageSize={lengthPage}
+                  setLengthPage={setLengthPage}
+                  onCurrentPageChange={onChangePageHistoryActivity}
+                  pagination={true}
+                />
+              }
+            />
+          </div>
+          {/* <div className="collaborator-activity__history--activities-activity">
+            <CardInfo
+              cardHeader="Lịch sử trạng thái"
+              cardContent={
+                <CardActivityLog
+                  data={dataHistoryActivitiesCollaborator?.data}
+                  totalItem={dataHistoryActivitiesCollaborator?.totalItem}
+                  dateIndex="date_create"
+                  statusIndex="type"
+                  start={startPageOrder}
+                  pageSize={lengthPage}
+                  setLengthPage={setLengthPage}
+                  onCurrentPageChange={onChangePageOrder}
+                />
+              }
+            />
+          </div> */}
         </div>
       </div>
     </div>

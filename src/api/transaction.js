@@ -1,17 +1,12 @@
 import axiosClient from "../axios";
 
 //
-export const getListTransactionApi = (
-  start = 0,
-  length = 20,
-  type_transfer = "all",
-  kind_transfer = "all",
-  search = ""
-) => {
+export const getListTransactionApi = (start, length, query, search) => {
   return axiosClient.get(
-    `/admin/transaction_manager/get_list?lang=vi&start=${start}&length=${length}&type_transfer=${type_transfer}&kind_transfer=${kind_transfer}&search=${search}`
+    `api/admin/transaction_manager/get_list?lang=vi&start=${start}&length=${length}&search=${search}${query}`
   );
 };
+
 export const getListTransactionV2Api = (
   start = 0,
   length = 20,
@@ -64,9 +59,9 @@ export const cancelTransactionApi = (id) => {
   return axiosClient.post(`/admin/transaction_manager/cancel_item/${id}`);
 };
 
-export const getTotalTransactionApi = (_query, search = "") => {
+export const getTotalTransactionApi = (query, search) => {
   return axiosClient.get(
-    `/admin/transaction_manager/get_total?lang=vi&${_query}&search=${search}`
+    `api/admin/transaction_manager/get_total?lang=vi&search=${search}${query}`
   );
 };
 export const getTotalTransactionCustomerApi = (_query) => {
@@ -109,3 +104,5 @@ export const getActivityHistoryTransactionApi = (id) => {
     `/admin/transaction_manager/get_activity_history_transaction/${id}`
   );
 };
+
+

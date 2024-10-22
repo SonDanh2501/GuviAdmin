@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import "./index.scss";
 import moment from "moment";
 import { useSelector } from "react-redux";
 import { getLanguageState } from "../../../redux/selectors/auth";
 import icons from "../../../utils/icons";
-import { Tooltip } from "antd";
+import { Pagination, Tooltip } from "antd";
 import i18n from "../../../i18n";
 
 const {
@@ -41,8 +41,19 @@ const {
 } = icons;
 
 const CardActivityLog = (props) => {
-  const { data, totalItem, dateIndex } = props;
+  const {
+    data,
+    totalItem,
+    start,
+    pageSize,
+    setLengthPage,
+    onCurrentPageChange,
+    dateIndex,
+    statusIndex,
+    pagination
+  } = props;
   const lang = useSelector(getLanguageState);
+  const [currentPage, setCurrentPage] = useState(1);
 
   /* Hàm hỗ trợ */
   // 1. Hàm tính thời gian bắt đầu - thời gian kết thúc
@@ -53,17 +64,31 @@ const CardActivityLog = (props) => {
       .format("HH:mm");
     return start + " - " + timeEnd;
   };
-
+  // 2.
+  const onChange = (page) => {
+    setLengthPage(page);
+  };
+  const calculateCurrentPage = (event) => {
+    setCurrentPage(event);
+    if (onCurrentPageChange) {
+      onCurrentPageChange(event * pageSize - pageSize);
+    }
+  };
   /* Hàm render */
   // 1. Hàm render nội dung bên trái (ngày tháng năm, thời gian và tên (nếu có))
-  const leftContent = (day, time) => {
+  const leftContent = (date, dayInWeek, time) => {
     return (
       <div className="card-activities--activity-left">
         <div>
-          <span className="card-activities--activity-left-date">{day}</span>
+          <span className="card-activities--activity-left-date">{date}</span>
         </div>
         <div>
-          <span className="card-activities--activity-left-day">{time}</span>
+          <span className="card-activities--activity-left-day-in-week">
+            {dayInWeek}
+          </span>
+        </div>
+        <div>
+          <span className="card-activities--activity-left-time">{time}</span>
         </div>
       </div>
     );
@@ -71,45 +96,85 @@ const CardActivityLog = (props) => {
   // 2. Hàm render nội dung giữa (line và icon)
   const middleContent = (status, lastItem) => {
     let iconType;
-    switch (status) {
-      case "pending":
-        iconType = (
-          <div className="card-activities--activity-line-icon pending">
-            <IoAlertOutline size={15} color="orange" />
-          </div>
-        );
-        break;
-      case "confirm":
-        iconType = (
-          <div className="card-activities--activity-line-icon confirm">
-            <IoFlagOutline size={15} color="blue" />
-          </div>
-        );
-        break;
-      case "doing":
-        iconType = (
-          <div className="card-activities--activity-line-icon doing">
-            <IoHourglassOutline size={15} color="blue" />
-          </div>
-        );
-        break;
-      case "done":
-        iconType = (
-          <div className="card-activities--activity-line-icon done">
-            <IoCheckmarkDoneOutline size={15} color="green" />
-          </div>
-        );
-        break;
-      case "cancel":
-        iconType = (
-          <div className="card-activities--activity-line-icon cancel">
-            <IoCloseCircleOutline size={15} color="red" />
-          </div>
-        );
-        break;
-      default:
-        iconType = "";
-        break;
+    if (statusIndex === "type") {
+      switch (status?.split("_")[0]) {
+        case "admin":
+          iconType = (
+            <div className="card-activities--activity-line-icon violet">
+              <IoPeopleOutline size={15} color="violet" />
+            </div>
+          );
+          break;
+        case "collaborator":
+          iconType = (
+            <div className="card-activities--activity-line-icon blue">
+              <IoPersonOutline size={15} color="blue" />
+            </div>
+          );
+          break;
+        case "verify":
+          iconType = (
+            <div className="card-activities--activity-line-icon red">
+              <IoCloseCircleOutline size={15} color="red" />
+            </div>
+          );
+          break;
+        case "create":
+          iconType = (
+            <div className="card-activities--activity-line-icon green">
+              <IoCheckmarkDoneOutline size={15} color="green" />
+            </div>
+          );
+          break;
+        default:
+          iconType = (
+            <div className="card-activities--activity-line-icon yellow">
+              <IoSettingsOutline size={15} color="orange" />
+            </div>
+          );
+          break;
+      }
+    } else if (statusIndex === "status") {
+      switch (status) {
+        case "pending":
+          iconType = (
+            <div className="card-activities--activity-line-icon pending">
+              <IoAlertOutline size={15} color="orange" />
+            </div>
+          );
+          break;
+        case "confirm":
+          iconType = (
+            <div className="card-activities--activity-line-icon confirm">
+              <IoFlagOutline size={15} color="blue" />
+            </div>
+          );
+          break;
+        case "doing":
+          iconType = (
+            <div className="card-activities--activity-line-icon doing">
+              <IoHourglassOutline size={15} color="blue" />
+            </div>
+          );
+          break;
+        case "done":
+          iconType = (
+            <div className="card-activities--activity-line-icon done">
+              <IoCheckmarkDoneOutline size={15} color="green" />
+            </div>
+          );
+          break;
+        case "cancel":
+          iconType = (
+            <div className="card-activities--activity-line-icon cancel">
+              <IoCloseCircleOutline size={15} color="red" />
+            </div>
+          );
+          break;
+        default:
+          iconType = "";
+          break;
+      }
     }
     return (
       <div className="card-activities--activity-line">
@@ -124,22 +189,27 @@ const CardActivityLog = (props) => {
   const rightConent = (data) => {
     let headerContent;
     let status;
+    // Header content
     switch (data?.service?._id?.kind) {
       case "giup_viec_theo_gio":
-        headerContent = `${i18n.t("cleaning", { lng: lang })}`;
+        headerContent = `${i18n.t("cleaning", { lng: lang })} / ${timeWork(
+          data
+        )}`;
         break;
       case "giup_viec_co_dinh":
         headerContent = `${i18n.t("cleaning_subscription", {
           lng: lang,
-        })}`;
+        })} / ${timeWork(data)}`;
         break;
       case "phuc_vu_nha_hang":
-        headerContent = `${i18n.t("serve", { lng: lang })}`;
+        headerContent = `${i18n.t("serve", { lng: lang })} / ${timeWork(data)}`;
         break;
       default:
         headerContent = "";
         break;
     }
+    if (data?.title_admin) headerContent = data?.title_admin;
+    // Status content
     switch (data?.status) {
       case "pending":
         status = (
@@ -185,7 +255,7 @@ const CardActivityLog = (props) => {
         {/* Header */}
         <div>
           <span className="card-activities--activity-right-time">
-            {headerContent} / {timeWork(data)}
+            {headerContent}
           </span>
         </div>
         {/* Sub content */}
@@ -210,19 +280,31 @@ const CardActivityLog = (props) => {
             <div className="card-activities--activity">
               {/* Nội dung bên trái */}
               {leftContent(
-                moment(new Date(activity[dateIndex])).format("DD/MM/YYYY"),
+                moment(new Date(activity[dateIndex])).format("DD MMM, YYYY"),
+                "",
                 moment(new Date(activity[dateIndex]))
                   .locale(lang)
-                  .format("dddd")
+                  .format("dddd - HH:mm")
               )}
               {/* Icon và line ở giữa */}
               {index === data?.length - 1
-                ? middleContent(activity?.status, true)
-                : middleContent(activity?.status, false)}
+                ? middleContent(activity[statusIndex], true)
+                : middleContent(activity[statusIndex], false)}
               {/* Nội dung bên phải */}
               {rightConent(activity)}
             </div>
           ))}
+          <div
+            className={`card-activities--pagination ${!pagination && "hidden"}`}
+          >
+            <Pagination
+              current={currentPage}
+              onChange={calculateCurrentPage}
+              total={totalItem}
+              showSizeChanger={false}
+              pageSize={pageSize}
+            />
+          </div>
         </div>
       ) : (
         <div className="flex justify-center items-center p-4">
