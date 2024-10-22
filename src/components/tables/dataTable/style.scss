@@ -641,13 +641,14 @@ span {
       color: $colorBlue;
 
       &:hover {
-        color: $colorLightBlue;
+        color: $colorDarkBlue;
       }
     }
 
     .case__information--info-phone {
       font-size: $textFontSizeM;
       font-weight: $fontWeightL;
+      color: $colorLightGray
     }
 
   }
@@ -680,6 +681,77 @@ span {
   }
 }
 
+// Trường yêu cầu tạo bởi
+.case__create-by {
+  display: flex;
+
+  .case__create-by--person {
+    display: flex;
+    flex-direction: column;
+    transition: 0.5s all ease-out;
+
+    .case__create-by--person-name {
+      font-size: $textFontSizeM;
+      font-weight: $fontWeightL;
+      color: $colorBlack;
+      transition: 0.3s all ease;
+      text-transform: capitalize;
+    }
+
+    .case__create-by--person-phone {
+      font-size: $textFontSizeM;
+      font-weight: $fontWeightL;
+      color: $colorLightGray;
+    }
+
+    &:hover {
+      .case__create-by--person-name {
+        color: $colorBlue;
+      }
+    }
+  }
+}
+
+// Trường hợp xác nhận bởi
+.case__admin-verify {
+  display: flex;
+  flex-direction: column;
+  .case__admin-verify--info {
+    display: flex;
+    flex-direction: column;
+
+    .case__admin-verify--info-name {
+      font-size: $textFontSizeM;
+      font-weight: $fontWeightL;
+      color: $colorBlack;
+      text-transform: capitalize;
+    }
+
+    .case__admin-verify--info-sub {
+      font-size: $textFontSizeM;
+      font-weight: $fontWeightL;
+      color: $colorLightGray;
+    }
+  }
+}
+
+// Trường hợp ngày tạo
+.case__date-create {
+  display: flex;
+  flex-direction: column;
+
+  .case__date-create-date {
+    font-size: $textFontSizeM;
+    font-weight: $fontWeightL;
+    color: $colorBlack;
+  }
+
+  .case__date-create-time {
+    font-size: $textFontSizeM;
+    font-weight: $fontWeightL;
+    color: $colorLightGray;
+  }
+}
 // Các trường chỉ hiển chữ
 .case__normal-text {
   font-weight: $fontWeightL;

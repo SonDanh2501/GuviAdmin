@@ -3,7 +3,7 @@
 .manage-top-up-with-draw {
     display: flex;
     flex-direction: column;
-    gap: $gapM;
+    gap: $gapL;
     padding-bottom: 16px;
 
     .manage-top-up-with-draw__header {
@@ -16,10 +16,45 @@
 
     .manage-top-up-with-draw__filter-content {
         display: flex;
+
         gap: $gapM;
+
         .manage-top-up-with-draw__filter-content--search-field {
             width: 400px;
             overflow: hidden;
+        }
+
+        .manage-top-up-with-draw__filter-content--tab {
+            background-color: $colorMoreLightGray;
+            display: flex;
+            gap: $gapS;
+            align-items: center;
+            justify-content: center;
+            padding: 6px 8px;
+            border-radius: $borderRadiusM;
+            cursor: pointer;
+            color: $colorBlack;
+            transition: 0.5s all ease-out;
+
+
+            .manage-top-up-with-draw__filter-content--tab-label {
+                font-weight: $fontWeightL;
+                font-size: $textFontSizeM;
+            }
+
+            .manage-top-up-with-draw__filter-content--tab-number {
+                background-color: $colorWhite;
+                padding: 2px 4px;
+                min-width: 20px;
+                border-radius: $borderRadiusFull;
+                color: $colorBlack;
+                text-align: center;
+            }
+
+            &.selected {
+                background-color: $colorViolet;
+                color: $colorWhite;
+            }
         }
     }
 

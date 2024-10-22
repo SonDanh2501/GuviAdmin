@@ -1,5 +1,5 @@
 import { InfoCircleOutlined, SearchOutlined } from "@ant-design/icons";
-import { Button, Dropdown, Input, Pagination, Popover, Space } from "antd";
+import { Button, Dropdown, Input, Pagination, Popover, Space, Tabs, TabPane } from "antd";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import _ from "lodash";
@@ -26,7 +26,6 @@ import DataTable from "../../components/tables/dataTable";
 import ModalCustom from "../../components/modalCustom";
 import { formatMoney } from "../../helper/formatMoney";
 import TransactionDrawer2 from "../../components/transactionDrawer/TransactionDrawer2";
-import Tabs from "../../components/tabs/tabs1";
 import useWindowDimensions from "../../helper/useWindowDimensions";
 import i18n from "../../i18n";
 import "./index.scss";
@@ -142,6 +141,7 @@ const ManageTopUpWithdraw = () => {
   const [total, setTotal] = useState(0); // Giá trị tổng các phần tử trong bảng
   const [startDate, setStartDate] = useState(""); // Giá trị ngày bắt đầu
   const [endDate, setEndDate] = useState(""); // Giá trị ngày kết thúc
+  const [tabStatus, setTabStatus] = useState(""); // Giá trị status khi chuyển tab
   const [selectFilter, setSelectFilter] = useState([
     { key: "status", code: "" },
     { key: "subject", code: "" },
@@ -260,7 +260,7 @@ const ManageTopUpWithdraw = () => {
       customTitle: (
         <CustomHeaderDatatable
           title="Loại tài khoản"
-          textToolTip="Loại tài khoản của người yêu cầu lệnh giao dịch"
+          textToolTip="Loại tài khoản"
         />
       ),
       dataIndex: "",
@@ -296,8 +296,8 @@ const ManageTopUpWithdraw = () => {
           textToolTip="Phương thức thanh toán (Momo, Chuyển khoản NH, Ví VNPAY, Tiền mặt)"
         />
       ),
-      dataIndex: "payment_out",
-      key: "",
+      dataIndex: "",
+      key: "payment_out",
       width: 60,
     },
     {
@@ -307,8 +307,8 @@ const ManageTopUpWithdraw = () => {
           textToolTip="Nguồn tiền thanh toán đi từ nguồn nào đến"
         />
       ),
-      dataIndex: "",
-      key: "payment_out",
+      dataIndex: "payment_out",
+      key: "",
       width: 40,
     },
     {
@@ -442,12 +442,12 @@ const ManageTopUpWithdraw = () => {
         `&start_date=${startDate}&end_date=${endDate}`;
       const res = await getTotalTransactionApi(query, valueSearch);
       console.log("check res", res);
-        setStatusList((prevList) =>
-          prevList.map((item) => ({
-            ...item,
-            total: item?.code === "" ? res["total"] : res[item?.code],
-          }))
-        );
+      setStatusList((prevList) =>
+        prevList.map((item) => ({
+          ...item,
+          total: item?.code === "" ? res["total"] : res[item?.code],
+        }))
+      );
       const temp_arr = Object.values(res).map((i) => ({ value: i }));
       setTotalTransaction(temp_arr);
     } catch (err) {
@@ -507,15 +507,6 @@ const ManageTopUpWithdraw = () => {
   const filterByType = () => {
     return (
       <div className="manage-top-up-with-draw__filter-content">
-        {/* Lọc theo loại trạng thái */}
-        <div>
-          <ButtonCustom
-            label="Trạng thái"
-            options={statusList}
-            value={selectStatus}
-            setValueSelectedProps={setSelectStatus}
-          />
-        </div>
         {/* Lọc theo loại đối tượng */}
         <div>
           <ButtonCustom
@@ -552,6 +543,27 @@ const ManageTopUpWithdraw = () => {
             setValueSelectedProps={setSelectWalletMetod}
           />
         </div>
+      </div>
+    );
+  };
+  const filterDateAndSearchRight = () => {
+    return (
+      <div className="manage-top-up-with-draw__filter-content">
+        {statusList?.map((el) => (
+          <div
+            onClick={() => setSelectStatus(el.code)}
+            className={`manage-top-up-with-draw__filter-content--tab ${
+              selectStatus === el.code && "selected"
+            }`}
+          >
+            <span className="manage-top-up-with-draw__filter-content--tab-label">
+              {el?.label}
+            </span>
+            <span className="manage-top-up-with-draw__filter-content--tab-number">
+              {el?.total}
+            </span>
+          </div>
+        ))}
       </div>
     );
   };
@@ -648,6 +660,7 @@ const ManageTopUpWithdraw = () => {
       );
     },
   };
+  console.log("check data >>>>", data);
   /* ~~~ Main ~~~ */
   return (
     <div className="manage-top-up-with-draw">
@@ -657,15 +670,18 @@ const ManageTopUpWithdraw = () => {
       </div>
       {/* Filter */}
       <FilterData
+        leftContent={filterDateAndSearchRight()}
+        rightContent={filterDateAndSearch()}
+      />
+      {/* Filter */}
+      <FilterData
         isTimeFilter
         startDate={startDate}
         endDate={endDate}
         setStartDate={setStartDate}
         setEndDate={setEndDate}
-        leftContent={filterDateAndSearch()}
+        leftContent={filterByType()}
       />
-      {/* Filter */}
-      <FilterData leftContent={filterByType()} />
       {/* Table */}
       <div>
         <DataTable

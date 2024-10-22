@@ -235,13 +235,21 @@ const DataTable = (props) => {
           // Ngày tạo của sổ quỹ
           case "date_create":
             return (
-              <div className="div-date-create">
-                <p className={`${item?.fontSize}`}>
+              // <div className="case__date-create">
+              //   <p className={`${item?.fontSize}`}>
+              //     {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}
+              //   </p>
+              //   <p className={`${item?.fontSize}`}>
+              //     {moment(new Date(data?.date_create)).format("HH:mm")}
+              //   </p>
+              // </div>
+              <div className="case__date-create">
+                <span className="case__date-create-date">
                   {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}
-                </p>
-                <p className={`${item?.fontSize}`}>
-                  {moment(new Date(data?.date_create)).format("HH:mm")}
-                </p>
+                </span>
+                <span className="case__date-create-time">
+                  {moment(new Date(data?.date_create)).format("HH:mm:ss")}
+                </span>
               </div>
             );
             break;
@@ -749,57 +757,117 @@ const DataTable = (props) => {
               }
             }
             return (
+              // <>
+              //   <div className="div-collaborator">
+              //     {_created_by_customer && (
+              //       <div className="div-name-star">
+              //         <Link
+              //           to={`/profile-customer/${
+              //             data?.id_customer?._id || data?._id
+              //           }`}
+              //           target="_blank"
+              //         >
+              //           <div className="div-name">
+              //             <p className={`${item?.fontSize}`}>
+              //               KH - {data?.id_customer?.full_name}
+              //             </p>
+              //           </div>
+              //           <div className="div-phone-star">
+              //             <p className={`${item?.fontSize}`}>
+              //               {data?.id_customer?.phone}
+              //             </p>
+              //           </div>
+              //           {/* <div>
+              //             <p>Nạp</p>
+              //           </div> */}
+              //         </Link>
+              //       </div>
+              //     )}
+              //     {_created_by_collborator && (
+              //       <>
+              //         <Link
+              //           to={`/details-collaborator/${data?.id_collaborator?._id}`}
+              //           className="div-name-star"
+              //           target="_blank"
+              //         >
+              //           <div className="div-name">
+              //             <p className={`${item?.fontSize}`}>
+              //               CTV - {data?.id_collaborator?.full_name}
+              //             </p>
+              //           </div>
+              //           <div className="div-phone-star">
+              //             <p className={`${item?.fontSize}`}>
+              //               {data?.id_collaborator?.phone}
+              //             </p>
+              //           </div>
+              //         </Link>
+              //       </>
+              //     )}
+              //     {_created_by_admin && (
+              //       <div className="div-name">
+              //         <p className={`${item?.fontSize}`}>
+              //           Quản trị - {data?.id_admin_action?.full_name}
+              //         </p>
+              //       </div>
+              //     )}
+              //   </div>
+              // </>
               <>
-                <div className="div-collaborator">
+                <div className="case__create-by">
                   {_created_by_customer && (
-                    <div className="div-name-star">
-                      <Link
-                        to={`/profile-customer/${
-                          data?.id_customer?._id || data?._id
-                        }`}
-                        target="_blank"
-                      >
-                        <div className="div-name">
-                          <p className={`${item?.fontSize}`}>
-                            KH - {data?.id_customer?.full_name}
-                          </p>
-                        </div>
-                        <div className="div-phone-star">
-                          <p className={`${item?.fontSize}`}>
-                            {data?.id_customer?.phone}
-                          </p>
-                        </div>
-                        {/* <div>
-                          <p>Nạp</p>
-                        </div> */}
-                      </Link>
-                    </div>
+                    <Link
+                      to={`/profile-customer/${
+                        data?.id_customer?._id || data?._id
+                      }`}
+                      target="_blank"
+                    >
+                      <div className="case__create-by--person">
+                        <span className="case__create-by--person-name">
+                          {data?.id_customer?.full_name}
+                        </span>
+                        {/* <span>{data?.id_collaborator?.phone}</span> */}
+                        <span className="case__create-by--person-phone">
+                          Khách hàng
+                        </span>
+                      </div>
+                    </Link>
                   )}
                   {_created_by_collborator && (
-                    <>
-                      <Link
-                        to={`/details-collaborator/${data?.id_collaborator?._id}`}
-                        className="div-name-star"
-                        target="_blank"
-                      >
-                        <div className="div-name">
-                          <p className={`${item?.fontSize}`}>
-                            CTV - {data?.id_collaborator?.full_name}
-                          </p>
-                        </div>
-                        <div className="div-phone-star">
-                          <p className={`${item?.fontSize}`}>
-                            {data?.id_collaborator?.phone}
-                          </p>
-                        </div>
-                      </Link>
-                    </>
+                    <Link
+                      style={{ textDecoration: "none" }}
+                      to={`/details-collaborator/${data?.id_collaborator?._id}`}
+                      target="_blank"
+                    >
+                      {/* <div className="div-name">
+                        <p className={`${item?.fontSize}`}>
+                          CTV - {data?.id_collaborator?.full_name}
+                        </p>
+                      </div>
+                      <div className="div-phone-star">
+                        <p className={`${item?.fontSize}`}>
+                          {data?.id_collaborator?.phone}
+                        </p>
+                      </div> */}
+                      <div className="case__create-by--person">
+                        <span className="case__create-by--person-name">
+                          {data?.id_collaborator?.full_name}
+                        </span>
+                        {/* <span>{data?.id_collaborator?.phone}</span> */}
+                        <span className="case__create-by--person-phone">
+                          Đối tác
+                        </span>
+                      </div>
+                    </Link>
                   )}
                   {_created_by_admin && (
-                    <div className="div-name">
-                      <p className={`${item?.fontSize}`}>
-                        Quản trị - {data?.id_admin_action?.full_name}
-                      </p>
+                    <div className="case__create-by--person">
+                      <span className="case__create-by--person-name">
+                        {data?.id_admin_action?.full_name}
+                      </span>
+                      {/* <span>{data?.id_collaborator?.phone}</span> */}
+                      <span className="case__create-by--person-phone">
+                        GUVI
+                      </span>
                     </div>
                   )}
                 </div>
@@ -1549,8 +1617,28 @@ const DataTable = (props) => {
             break;
           case "admin_verify":
             return (
-              <div className="div-date-create">
-                <p className="fw-500">{data?.id_admin_verify?.full_name}</p>
+              <div className="case__admin-verify">
+                {data?.id_admin_verify ? (
+                  <div className="case__admin-verify--info">
+                    <span className="case__admin-verify--info-name">
+                      {data?.id_admin_verify?.full_name}
+                    </span>
+                    <span className="case__admin-verify--info-sub">
+                      Kế toán
+                    </span>
+                  </div>
+                ) : data?.status === "done" ? (
+                  <div className="case__admin-verify--info">
+                    <span className="case__admin-verify--info-name">
+                      Hệ thống
+                    </span>
+                    <span className="case__admin-verify--info-sub">
+                      Automation
+                    </span>
+                  </div>
+                ) : (
+                  <></>
+                )}
               </div>
             );
             break;
