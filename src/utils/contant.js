@@ -558,3 +558,12 @@ export const compareDateIsBefore = (firstDate, secondDate) => {
     return false;
   }
 }
+/* 7. Hàm che số điện thoại */
+export const convertPhoneNumber = (phoneNumber, length) => {
+  if (!phoneNumber || length >= phoneNumber.length) {
+    return phoneNumber;
+  }
+  const mask = '*'.repeat(length); 
+  const visiblePart = phoneNumber.slice(length); 
+  return mask + visiblePart;
+}
