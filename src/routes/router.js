@@ -738,6 +738,7 @@ const router = [
     ],
     "support_customer"
   ),
+  /* ~~~ Tài chính ~~~ */
   getItem(
     <Link style={{ textDecoration: "none" }} to="/finance/manage-finance">
       Tài chính
@@ -747,11 +748,57 @@ const router = [
     null,
     "finance"
   ),
+  /* ~~~ Sổ quỹ ~~~ */
   getItem(
     "Sổ quỹ",
     "transaction",
     <IoReader />,
     [
+      /* 1. Sổ quỹ (đối tác) */
+      getItem(
+        <Link
+          style={{ textDecoration: "none" }}
+          to="/transaction/manage-transaction/collaborator"
+        >
+          Sổ quỹ đối tác
+        </Link>,
+        "/transaction/manage-transaction/collaborator",
+        null,
+        null
+      ),
+      /* 2. Sổ quỹ (khách hàng) */
+      getItem(
+        <Link
+          style={{ textDecoration: "none" }}
+          to="/transaction/manage-transaction/customer"
+        >
+          Sổ quỹ khách hàng
+        </Link>,
+        "/transaction/manage-transaction/customer",
+        null,
+        null
+      ),
+      /* 3. Sổ quỹ (khách hàng) */
+      getItem(
+        <Link
+          style={{ textDecoration: "none" }}
+          to="/transaction/manage-transaction/other"
+        >
+          Khác
+        </Link>,
+        "/transaction/manage-transaction/other",
+        null,
+        null
+      ),
+      /* 4. Phạt */
+      getItem(
+        <Link style={{ textDecoration: "none" }} to="/punish/manage-punish">
+          Phạt
+        </Link>,
+        "/punish/manage-punish",
+        null,
+        null
+      ),
       // getItem(
       //   "CTV",
       //   "/transaction/manage-transaction-collaborator",
@@ -765,17 +812,7 @@ const router = [
       //   null
       // ),
       // getItem("Khác", "/transaction/manage-transaction-staff", null, null),
-      getItem(
-        <Link
-          style={{ textDecoration: "none" }}
-          to="/transaction/manage-transaction"
-        >
-          Sổ quỹ
-        </Link>,
-        "/transaction/manage-transaction",
-        null,
-        null
-      ),
+
       // getItem(
       //   <Link
       //     style={{ textDecoration: "none" }}
@@ -787,14 +824,7 @@ const router = [
       //   null,
       //   null
       // ),
-      getItem(
-        <Link style={{ textDecoration: "none" }} to="/punish/manage-punish">
-          Phạt
-        </Link>,
-        "/punish/manage-punish",
-        null,
-        null
-      ),
+
       // getItem(
       //   "Thưởng",
       //   "/reward/manage-reward",

@@ -1,11 +1,31 @@
-.div-table-header {
+@import "../../../@theme/style.scss";
+
+.custom-table-header {
     display: flex;
     align-items: center;
-    .table-header-label {
+
+    &.left {
+        justify-content: start;
+    }
+
+    &.center {
+        justify-content: center;
+    }
+
+    &.right {
+        justify-content: end;
+    }
+
+    .custom-table-header__label {
         display: flex;
+        gap: $gapXS;
         align-items: center;
-        justify-items: center;
-        gap: 8px;
-        font-weight: bold;
+
+        .custom-table-header__label--title {
+            font-size: $textFontSizeM;
+            font-weight: $fontWeightXL;
+            color: $colorWhite;
+            text-transform: uppercase;
+        }
     }
 }

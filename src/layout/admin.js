@@ -255,13 +255,18 @@ const Admin = () => {
       {/* 
       <Route path="/topup/manage-cashbook" element={< ManageCashBook />} /> */}
       <Route
-        path="/transaction/manage-transaction"
-        element={<ManageTopUpWithdraw />}
+        path="/transaction/manage-transaction/collaborator"
+        element={<ManageTopUpWithdraw object="collaborator" />}
       />
       <Route
-        path="/transaction/other"
-        element={<ManageTopUpWithdrawOther />}
+        path="/transaction/manage-transaction/customer"
+        element={<ManageTopUpWithdraw object="customer" />}
       />
+      <Route
+        path="/transaction/manage-transaction/other"
+        element={<ManageTopUpWithdraw object="other" />}
+      />
+      <Route path="/transaction/other" element={<ManageTopUpWithdrawOther />} />
       <Route
         path="/transaction/manage-transaction-collaborator"
         element={<TransferCollaborator />}

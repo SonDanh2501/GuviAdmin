@@ -93,13 +93,13 @@ const ButtonCustom = (props) => {
             trigger="click"
             placement="bottomLeft"
             title={" "}
-            open={open}
+            open={disable ? false : open}
             content={content}
             arrow={false}
             onOpenChange={handleOpen}
           >
-            <div className="button-custom-select">
-              <span className="button-custom-select__label">
+            <div className={`button-custom-select ${disable && "disable"}`}>
+              <span className={`button-custom-select__label ${disable && "disable"}`}>
                 <IoAddCircleOutline size="16px" />
                 {label}
               </span>

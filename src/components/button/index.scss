@@ -73,6 +73,24 @@
     transition: 0.5s all ease;
     gap: $gapS;
 
+    &.disable {
+        border-color: $colorLightGray;
+        cursor: not-allowed;
+
+        &:hover {
+            background-color: $colorWhite;
+
+            .button-custom-select__label {
+                color: $colorLightGray;
+            }
+    
+            .button-custom-select__line,
+            .button-custom-select__option {
+                background-color: $colorMoreLightGray;
+            }
+        }
+    }
+
     .button-custom-select__label {
         display: flex;
         gap: $gapXS;
@@ -80,6 +98,10 @@
         color: $colorViolet;
         font-weight: $fontWeightXL;
         font-size: $textFontSizeM;
+
+        &.disable {
+            color: $colorLightGray;
+        }
     }
 
     .button-custom-select__line {

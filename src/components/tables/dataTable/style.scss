@@ -459,7 +459,7 @@ span {
 }
 
 /* ~~~ Css dành cho các trường hợp ~~~ */
-// Trường trạng thái
+/* 1. Trường hợp trạng thái */
 .case__status-text {
   display: flex;
   align-items: center;
@@ -510,7 +510,7 @@ span {
   }
 }
 
-// Trường ngày giao dịch
+/* 2. Trường hợp ngày giao dịch */
 .case__withdrawal-date {
   display: flex;
   flex-direction: column;
@@ -518,7 +518,7 @@ span {
   gap: $gapXS;
 }
 
-// Trường kiểu giao dịch
+/* 3. Trường hợp kiểu giao dịch */
 .case__withdrawal-type-transfer {
   border-radius: $borderRadiusM;
   padding: 4px 8px;
@@ -529,7 +529,7 @@ span {
   }
 
   &.deposit {
-    background-color: $colorGreen;
+    background-color: $colorYellow;
   }
 
   .case__withdrawal-type-transfer {
@@ -544,101 +544,99 @@ span {
   }
 }
 
-// Trường trạng thái giao dịch 
+/* 4. Trường hợp trạng thái giao dịch */
 .case__transfer-status {
-  .case__transfer-status--pending {
-    background-color: $colorExtraLightYellow;
-    border-radius: $borderRadiusM;
-    color: $colorYellow;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+
+  .case__transfer-status--name {
     font-weight: $fontWeightXL;
     font-size: $textFontSizeM;
     padding: 6px 8px;
-  }
+    width: 100%;
+    text-align: center;
+    border-radius: $borderRadiusFull;
 
-  .case__transfer-status--confirm {
-    background-color: $colorExtraLightBlue;
-    border-radius: $borderRadiusM;
-    color: $colorBlue;
-    font-weight: $fontWeightXL;
-    font-size: $textFontSizeM;
-    padding: 6px 8px;
-  }
+    &.pending {
+      background-color: $colorExtraLightYellow;
+      color: $colorYellow;
+    }
 
-  .case__transfer-status--doing {
-    background-color: $colorExtraLightViolet;
-    border-radius: $borderRadiusM;
-    color: $colorViolet;
-    font-weight: $fontWeightXL;
-    font-size: $textFontSizeM;
-    padding: 6px 8px;
-  }
+    &.confirm,
+    &.revoke,
+    &.transferred {
+      background-color: $colorExtraLightBlue;
+      color: $colorBlue;
+    }
 
-  .case__transfer-status--done {
-    background-color: $colorExtraLightGreen;
-    border-radius: $borderRadiusM;
-    color: $colorGreen;
-    font-weight: $fontWeightXL;
-    font-size: $textFontSizeM;
-    padding: 6px 8px;
-  }
+    &.done {
+      background-color: $colorExtraLightGreen;
+      color: $colorGreen;
+    }
 
-  .case__transfer-status--cancel {
-    background-color: $colorExtraLightRed;
-    border-radius: $borderRadiusM;
-    color: $colorRed;
-    font-weight: $fontWeightXL;
-    font-size: $textFontSizeM;
-    padding: 6px 8px;
-  }
+    &.cancel,
+    &.out_date {
+      background-color: $colorExtraLightRed;
+      color: $colorRed;
+    }
 
-  .case__transfer-status--other {
-    background-color: $colorMoreLightGray;
-    border-radius: $borderRadiusM;
-    color: $colorStone;
-    font-weight: $fontWeightXL;
-    font-size: $textFontSizeM;
-    padding: 6px 8px;
-  }
+    &.holding {
+      background-color: $colorExtraLightOrange;
+      color: $colorOrange;
+    }
 
+    &.other {
+      background-color: $colorMoreLightGray;
+      color: $colorStone;
+    }
+  }
 }
 
-// Trường loại giao dịch
+/* 5. Trường hợp loại giao dịch */
 .case__transfer-type-transfer {
   display: flex;
-  width: fit-content;
-  padding: 6px 8px;
-  border-radius: $borderRadiusM;
-
-  &.withdraw {
-    background-color: $colorRed;
-  }
-
-  &.top-up {
-    background-color: $colorGreen;
-  }
+  align-items: center;
+  justify-content: center;
 
   .case__transfer-type-transfer--text {
     font-size: $textFontSizeM;
     font-weight: $fontWeightXL;
+    width: 100%;
     color: $colorWhite;
+    padding: 6px 8px;
+    border-radius: $borderRadiusFull;
+    text-align: center;
+
+    &.withdraw {
+      background-color: $colorRed;
+    }
+
+    &.top-up {
+      background-color: $colorGreen;
+    }
   }
 }
 
-// Trường thông tin cá nhân
+/* 6. Trường hợp thông tin cá nhân */
 .case__information {
   display: flex;
   flex-direction: column;
-  // align-items: center;
+  align-items: center;
 
   .case__information--info {
     display: flex;
     flex-direction: column;
-    // align-items: center;
+    align-items: center;
 
     .case__information--info-name {
       font-size: $textFontSizeM;
       font-weight: $fontWeightL;
       color: $colorBlue;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
 
       &:hover {
         color: $colorDarkBlue;
@@ -650,15 +648,16 @@ span {
       font-weight: $fontWeightL;
       color: $colorLightGray
     }
-
   }
 }
 
-// Trường loại tài khoản
+/* 7. Trường hợp loại tài khoản */
 .case__type-account {
-  padding: 4px 8px;
-  width: fit-content;
-  border-radius: $borderRadiusM;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  border-radius: $borderRadiusFull;
 
   &.customer {
     background-color: $colorMoreLightGray;
@@ -678,24 +677,35 @@ span {
   .case__type-account--label {
     font-weight: $fontWeightXL;
     font-size: $textFontSizeM;
+    padding: 6px 8px;
+    width: 100%;
+    text-align: center;
+    border-radius: $borderRadiusFull;
   }
 }
 
-// Trường yêu cầu tạo bởi
+/* 8. Trường hợp yêu cầu tạo bởi */
 .case__create-by {
   display: flex;
+  align-items: center;
+  justify-content: center;
 
   .case__create-by--person {
     display: flex;
+    align-items: center;
+    justify-content: center;
     flex-direction: column;
     transition: 0.5s all ease-out;
 
     .case__create-by--person-name {
       font-size: $textFontSizeM;
       font-weight: $fontWeightL;
-      color: $colorBlack;
+      color: $colorBlue;
       transition: 0.3s all ease;
       text-transform: capitalize;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
 
     .case__create-by--person-phone {
@@ -712,13 +722,17 @@ span {
   }
 }
 
-// Trường hợp xác nhận bởi
+/* 9. Trường hợp hợp xác nhận bởi */
 .case__admin-verify {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
   .case__admin-verify--info {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
 
     .case__admin-verify--info-name {
       font-size: $textFontSizeM;
@@ -735,10 +749,12 @@ span {
   }
 }
 
-// Trường hợp ngày tạo
+/* 10. Trường hợp hợp ngày tạo */
 .case__date-create {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
 
   .case__date-create-date {
     font-size: $textFontSizeM;
@@ -752,10 +768,85 @@ span {
     color: $colorLightGray;
   }
 }
-// Các trường chỉ hiển chữ
+
+/* 11. Trường hợp số thứ tự */
+.case__serial-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .case__serial-number--number {
+    font-size: $textFontSizeM;
+    font-weight: $fontWeightL;
+    color: $colorBlack;
+  }
+}
+
+/* 12. Trường hợp mã (_id) */
+.case__code-id {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .case__code-id--number {
+    font-weight: $fontWeightL;
+    font-size: $textFontSizeM;
+    color: $colorBlue;
+    transition: 0.3s all ease;
+
+    &:hover {
+      color: $colorDarkBlue;
+    }
+  }
+}
+
+/* 13. Trường hợp số tiền */
+.case__money {
+  display: flex;
+  justify-content: end;
+
+  .case__money--number {
+    font-weight: $fontWeightL;
+    font-size: $textFontSizeM;
+    color: $colorBlack;
+  }
+}
+
+/* 14. Trường hợp phương thức thanh toán */
+.case__payment-out {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .case__payment-out--label {
+    font-weight: $fontWeightXL;
+    font-size: $textFontSizeM;
+    color: $colorBlack;
+  }
+}
+
+/* Các trường chỉ hiển chữ mới */
 .case__normal-text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .case__normal-text--label {
+    font-weight: $fontWeightL;
+    font-size: $textFontSizeM;
+    color: $colorBlack;
+
+    &.uppercase {
+      text-transform: uppercase;
+    }
+  }
+}
+
+/* Các trường chỉ hiển chữ */
+.case__normal-text-old {
   font-weight: $fontWeightL;
   font-size: $textFontSizeM;
+  color: $colorBlack;
   overflow: hidden;
   display: -webkit-box;
   -webkit-box-orient: vertical;

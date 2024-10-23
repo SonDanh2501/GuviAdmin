@@ -1,5 +1,14 @@
 import { InfoCircleOutlined, SearchOutlined } from "@ant-design/icons";
-import { Button, Dropdown, Input, Pagination, Popover, Space, Tabs, TabPane } from "antd";
+import {
+  Button,
+  Dropdown,
+  Input,
+  Pagination,
+  Popover,
+  Space,
+  Tabs,
+  TabPane,
+} from "antd";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import _ from "lodash";
@@ -35,9 +44,8 @@ import CustomHeaderDatatable from "../../components/tables/tableHeader";
 import { loadingAction } from "../../redux/actions/loading";
 import InputTextCustom from "../../components/inputCustom";
 
-const ManageTopUpWithdraw = () => {
+const ManageTopUpWithdraw = (props) => {
   let { width } = useWindowDimensions();
-  const lang = useSelector(getLanguageState);
   const permission = useSelector(getPermissionState);
   const [openModalCancel, setOpenModalCancel] = useState(false);
   const [openModalChangeStatus, setOpenModalChangeStatus] = useState(false);
@@ -131,9 +139,11 @@ const ManageTopUpWithdraw = () => {
   };
   /* ~~~~~~~~~~~~~~~~~~~~~~~~ SON ~~~~~~~~~~~~~~~~~~~~~~~~ */
   /* ~~~ Value ~~~ */
+  const { object } = props;
   const dispatch = useDispatch();
+  const lang = useSelector(getLanguageState);
   const [selectStatus, setSelectStatus] = useState(""); // Giá trị lựa chọn trạng thái
-  const [selectObject, setSelectObject] = useState(""); // Giá trị lựa chọn đối tượng
+  const [selectObject, setSelectObject] = useState(""); // Giá trị lựa chọn đối tượng (mặc định là đối tác)
   const [selectTransferType, setSelectTransferType] = useState(""); // Giá trị lựa chọn loại giao dịch
   const [selectPaymentMetod, setSelectPaymentMetod] = useState(""); // Giá trị lựa chọn phương thức thanh toán
   const [selectWalletType, setSelectWalletMetod] = useState(""); // Giá trị lựa chọn phương thức thanh toán
@@ -176,7 +186,7 @@ const ManageTopUpWithdraw = () => {
   // ];
   const [objectList, setObjectList] = useState([
     { code: "", label: "Tất cả" },
-    { code: "collaborator", label: "Cộng tác viên" },
+    { code: "collaborator", label: "Đối tác" },
     { code: "customer", label: "Khách hàng" },
     { code: "other", label: "Khác" },
   ]);
@@ -210,7 +220,7 @@ const ManageTopUpWithdraw = () => {
       ),
       dataIndex: "",
       key: "ordinal",
-      width: 30,
+      width: 20,
     },
     {
       customTitle: (
@@ -221,7 +231,7 @@ const ManageTopUpWithdraw = () => {
       ),
       dataIndex: "date_create",
       key: "date_create",
-      width: 40,
+      width: 30,
     },
     {
       customTitle: (
@@ -232,7 +242,7 @@ const ManageTopUpWithdraw = () => {
       ),
       dataIndex: "code_transaction",
       key: "code_transaction",
-      width: 50,
+      width: 40,
     },
     {
       customTitle: (
@@ -245,28 +255,37 @@ const ManageTopUpWithdraw = () => {
       key: "transfer_status",
       width: 40,
     },
-    {
-      customTitle: (
-        <CustomHeaderDatatable
-          title="Thông tin tài khoản"
-          textToolTip="Thông tin tài khoản tài khoản ngân hàng của đối tác"
-        />
-      ),
-      dataIndex: "",
-      key: "information",
-      width: 50,
-    },
-    {
-      customTitle: (
-        <CustomHeaderDatatable
-          title="Loại tài khoản"
-          textToolTip="Loại tài khoản"
-        />
-      ),
-      dataIndex: "",
-      key: "type_account",
-      width: 50,
-    },
+    ...(object !== "other"
+      ? [
+          {
+            customTitle: (
+              <CustomHeaderDatatable
+                title="Thông tin tài khoản"
+                textToolTip="Thông tin tài khoản tài khoản ngân hàng của đối tác"
+              />
+            ),
+            dataIndex: "",
+            key: "information",
+            width: 50,
+          },
+        ]
+      : []),
+    ...(object !== "other"
+      ? [
+          {
+            customTitle: (
+              <CustomHeaderDatatable
+                title="Loại tài khoản"
+                textToolTip="Loại tài khoản"
+              />
+            ),
+            dataIndex: "",
+            key: "type_account",
+            width: 40,
+          },
+        ]
+      : []),
+
     {
       customTitle: (
         <CustomHeaderDatatable
@@ -276,29 +295,30 @@ const ManageTopUpWithdraw = () => {
       ),
       dataIndex: "type_transfer",
       key: "type_transfer",
-      width: 50,
+      width: 40,
     },
     {
       customTitle: (
         <CustomHeaderDatatable
           title="Số tiền"
           textToolTip="Giá trị của giao dịch"
+          position="right"
         />
       ),
       dataIndex: "money",
       key: "money",
-      width: 50,
+      width: 35,
     },
     {
       customTitle: (
         <CustomHeaderDatatable
-          title="Phương thức thanh toán"
+          title="Phương thức TT"
           textToolTip="Phương thức thanh toán (Momo, Chuyển khoản NH, Ví VNPAY, Tiền mặt)"
         />
       ),
       dataIndex: "",
       key: "payment_out",
-      width: 60,
+      width: 45,
     },
     {
       customTitle: (
@@ -309,7 +329,7 @@ const ManageTopUpWithdraw = () => {
       ),
       dataIndex: "payment_out",
       key: "",
-      width: 40,
+      width: 35,
     },
     {
       customTitle: (
@@ -320,7 +340,7 @@ const ManageTopUpWithdraw = () => {
       ),
       dataIndex: "",
       key: "payment_in",
-      width: 50,
+      width: 40,
     },
     {
       customTitle: (
@@ -353,7 +373,7 @@ const ManageTopUpWithdraw = () => {
       ),
       dataIndex: "id_admin_verify",
       key: "admin_verify",
-      width: 40,
+      width: 35,
     },
     {
       customTitle: (
@@ -441,7 +461,6 @@ const ManageTopUpWithdraw = () => {
         selectFilter.map((item) => `&${item?.key}=${item?.code}`).join("") +
         `&start_date=${startDate}&end_date=${endDate}`;
       const res = await getTotalTransactionApi(query, valueSearch);
-      console.log("check res", res);
       setStatusList((prevList) =>
         prevList.map((item) => ({
           ...item,
@@ -485,7 +504,8 @@ const ManageTopUpWithdraw = () => {
         if (item.key === "status") {
           return { ...item, code: selectStatus };
         } else if (item.key === "subject") {
-          return { ...item, code: selectObject };
+          // return { ...item, code: selectObject };
+          return { ...item, code: object };
         } else if (item.key === "type_transfer") {
           return { ...item, code: selectTransferType };
         } else if (item.key === "payment_out") {
@@ -497,7 +517,8 @@ const ManageTopUpWithdraw = () => {
       })
     );
   }, [
-    selectObject,
+    // selectObject,
+    object,
     selectStatus,
     selectPaymentMetod,
     selectTransferType,
@@ -512,8 +533,9 @@ const ManageTopUpWithdraw = () => {
           <ButtonCustom
             label="Đối tượng"
             options={objectList}
-            value={selectObject}
+            value={object}
             setValueSelectedProps={setSelectObject}
+            disable={true}
           />
         </div>
         {/* Lọc theo loại giao dịch */}
@@ -660,7 +682,6 @@ const ManageTopUpWithdraw = () => {
       );
     },
   };
-  console.log("check data >>>>", data);
   /* ~~~ Main ~~~ */
   return (
     <div className="manage-top-up-with-draw">
@@ -692,7 +713,7 @@ const ManageTopUpWithdraw = () => {
           setLengthPage={setLengthPage}
           totalItem={total}
           onCurrentPageChange={onChangePage}
-          scrollX={2500}
+          scrollX={2400}
           actionColumn={addActionColumn}
           getItemRow={setItem}
           headerRightContent={
@@ -898,4 +919,3 @@ const ManageTopUpWithdraw = () => {
 };
 
 export default ManageTopUpWithdraw;
-

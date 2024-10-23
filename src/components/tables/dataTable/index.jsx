@@ -34,6 +34,7 @@ import { useNavigate } from "react-router-dom";
 import SelectDefault from "../../Select/SelectDefault";
 import { IoAlertCircleOutline, IoHelpCircleOutline } from "react-icons/io5";
 import ButtonCustom from "../../button";
+import { convertPhoneNumber } from "../../../utils/contant";
 
 const DataTable = (props) => {
   const {
@@ -210,10 +211,14 @@ const DataTable = (props) => {
           case "code_transaction":
             linkRedirect = `/transaction/transaction-detail/${data?._id}`;
             return (
-              <Link to={linkRedirect} target="_blank">
-                <p className={`text-id-code-order ${item?.fontSize}`}>
-                  {data?.id_view}
-                </p>
+              <Link
+                style={{ textDecoration: "none" }}
+                to={linkRedirect}
+                target="_blank"
+              >
+                <div className="case__code-id">
+                  <span className="case__code-id--number">{data?.id_view}</span>
+                </div>
               </Link>
             );
             break;
@@ -687,7 +692,7 @@ const DataTable = (props) => {
                         {data?.id_customer?.full_name}
                       </span>
                       <span className="case__information--info-phone">
-                        {data?.id_customer?.phone}
+                        {convertPhoneNumber(data?.id_customer?.phone, 4)}
                       </span>
                     </div>
                   </Link>
@@ -704,7 +709,7 @@ const DataTable = (props) => {
                         {data?.id_collaborator?.full_name}
                       </span>
                       <span className="case__information--info-phone">
-                        {data?.id_collaborator?.phone}
+                        {convertPhoneNumber(data?.id_collaborator?.phone, 4)}
                       </span>
                     </div>
                   </Link>
@@ -757,88 +762,32 @@ const DataTable = (props) => {
               }
             }
             return (
-              // <>
-              //   <div className="div-collaborator">
-              //     {_created_by_customer && (
-              //       <div className="div-name-star">
-              //         <Link
-              //           to={`/profile-customer/${
-              //             data?.id_customer?._id || data?._id
-              //           }`}
-              //           target="_blank"
-              //         >
-              //           <div className="div-name">
-              //             <p className={`${item?.fontSize}`}>
-              //               KH - {data?.id_customer?.full_name}
-              //             </p>
-              //           </div>
-              //           <div className="div-phone-star">
-              //             <p className={`${item?.fontSize}`}>
-              //               {data?.id_customer?.phone}
-              //             </p>
-              //           </div>
-              //           {/* <div>
-              //             <p>Nạp</p>
-              //           </div> */}
-              //         </Link>
-              //       </div>
-              //     )}
-              //     {_created_by_collborator && (
-              //       <>
-              //         <Link
-              //           to={`/details-collaborator/${data?.id_collaborator?._id}`}
-              //           className="div-name-star"
-              //           target="_blank"
-              //         >
-              //           <div className="div-name">
-              //             <p className={`${item?.fontSize}`}>
-              //               CTV - {data?.id_collaborator?.full_name}
-              //             </p>
-              //           </div>
-              //           <div className="div-phone-star">
-              //             <p className={`${item?.fontSize}`}>
-              //               {data?.id_collaborator?.phone}
-              //             </p>
-              //           </div>
-              //         </Link>
-              //       </>
-              //     )}
-              //     {_created_by_admin && (
-              //       <div className="div-name">
-              //         <p className={`${item?.fontSize}`}>
-              //           Quản trị - {data?.id_admin_action?.full_name}
-              //         </p>
-              //       </div>
-              //     )}
-              //   </div>
-              // </>
-              <>
-                <div className="case__create-by">
-                  {_created_by_customer && (
-                    <Link
-                      to={`/profile-customer/${
-                        data?.id_customer?._id || data?._id
-                      }`}
-                      target="_blank"
-                    >
-                      <div className="case__create-by--person">
-                        <span className="case__create-by--person-name">
-                          {data?.id_customer?.full_name}
-                        </span>
-                        {/* <span>{data?.id_collaborator?.phone}</span> */}
-                        <span className="case__create-by--person-phone">
-                          Khách hàng
-                        </span>
-                      </div>
-                    </Link>
-                  )}
-                  {_created_by_collborator && (
-                    <Link
-                      style={{ textDecoration: "none" }}
-                      to={`/details-collaborator/${data?.id_collaborator?._id}`}
-                      target="_blank"
-                    >
-                      {/* <div className="div-name">
+              <div className="case__create-by">
+                {_created_by_customer && (
+                  <Link
+                    to={`/profile-customer/${
+                      data?.id_customer?._id || data?._id
+                    }`}
+                    target="_blank"
+                  >
+                    <div className="case__create-by--person">
+                      <span className="case__create-by--person-name">
+                        {data?.id_customer?.full_name}
+                      </span>
+                      {/* <span>{data?.id_collaborator?.phone}</span> */}
+                      <span className="case__create-by--person-phone">
+                        Khách hàng
+                      </span>
+                    </div>
+                  </Link>
+                )}
+                {_created_by_collborator && (
+                  <Link
+                    style={{ textDecoration: "none" }}
+                    to={`/details-collaborator/${data?.id_collaborator?._id}`}
+                    target="_blank"
+                  >
+                    {/* <div className="div-name">
                         <p className={`${item?.fontSize}`}>
                           CTV - {data?.id_collaborator?.full_name}
                         </p>
@@ -848,30 +797,27 @@ const DataTable = (props) => {
                           {data?.id_collaborator?.phone}
                         </p>
                       </div> */}
-                      <div className="case__create-by--person">
-                        <span className="case__create-by--person-name">
-                          {data?.id_collaborator?.full_name}
-                        </span>
-                        {/* <span>{data?.id_collaborator?.phone}</span> */}
-                        <span className="case__create-by--person-phone">
-                          Đối tác
-                        </span>
-                      </div>
-                    </Link>
-                  )}
-                  {_created_by_admin && (
                     <div className="case__create-by--person">
                       <span className="case__create-by--person-name">
-                        {data?.id_admin_action?.full_name}
+                        {data?.id_collaborator?.full_name}
                       </span>
                       {/* <span>{data?.id_collaborator?.phone}</span> */}
                       <span className="case__create-by--person-phone">
-                        GUVI
+                        Đối tác
                       </span>
                     </div>
-                  )}
-                </div>
-              </>
+                  </Link>
+                )}
+                {_created_by_admin && (
+                  <div className="case__create-by--person">
+                    <span className="case__create-by--person-name">
+                      {data?.id_admin_action?.full_name}
+                    </span>
+                    {/* <span>{data?.id_collaborator?.phone}</span> */}
+                    <span className="case__create-by--person-phone">GUVI</span>
+                  </div>
+                )}
+              </div>
             );
             break;
           }
@@ -1135,9 +1081,11 @@ const DataTable = (props) => {
             break;
           case "money": {
             return (
-              <p className={`text-address-customer ${item?.fontSize}`}>
-                {formatMoney(data[item.dataIndex] || 0)}
-              </p>
+              <div className="case__money">
+                <span className="case__money--number">
+                  {formatMoney(data[item.dataIndex] || 0)}
+                </span>
+              </div>
             );
             break;
           }
@@ -1267,9 +1215,11 @@ const DataTable = (props) => {
           case "text": {
             return (
               <Tooltip placement="top" title={data[item.dataIndex]}>
-                <span className={`${item?.fontSize} case__normal-text`}>
-                  {data[item.dataIndex] || ""}
-                </span>
+                <div className="case__normal-text">
+                  <span className="case__normal-text--label">
+                    {data[item.dataIndex] || ""}
+                  </span>
+                </div>
               </Tooltip>
             );
             break;
@@ -1478,12 +1428,12 @@ const DataTable = (props) => {
             };
             const type_transfer = typeTransferMap[data?.type_transfer] || "";
             return (
-              <div
-                className={`case__transfer-type-transfer ${
-                  type_transfer === "Rút" ? "withdraw" : "top-up"
-                }`}
-              >
-                <span className="case__transfer-type-transfer--text">
+              <div className="case__transfer-type-transfer">
+                <span
+                  className={`case__transfer-type-transfer--text ${
+                    data?.type_transfer === "withdraw" ? "withdraw" : "top-up"
+                  }`}
+                >
                   {type_transfer}
                 </span>
               </div>
@@ -1570,32 +1520,23 @@ const DataTable = (props) => {
           }
           case "date_verify":
             return (
-              <div className="div-date-create">
-                {data?.date_verify_created && (
-                  <p className={`${item?.fontSize}`}>
-                    {moment(new Date(data?.date_verify_created)).format(
+              <div className="case__date-create">
+                <span className="case__date-create-date">
+                  {data?.date_verify_created &&
+                    moment(new Date(data?.date_verify_created)).format(
                       "DD/MM/YYYY"
                     )}
-                  </p>
-                )}
-                {data?.date_verify_created && (
-                  <p className={`${item?.fontSize}`}>
-                    {moment(new Date(data?.date_verify_created)).format(
-                      "HH:mm"
+                  {data?.date_verify &&
+                    moment(new Date(data?.date_verify)).format("DD/MM/YYYY")}
+                </span>
+                <span className="case__date-create-time">
+                  {data?.date_verify_created &&
+                    moment(new Date(data?.date_verify_created)).format(
+                      "HH:mm:ss"
                     )}
-                  </p>
-                )}
-
-                {data?.date_verify && (
-                  <p className={`${item?.fontSize}`}>
-                    {moment(new Date(data?.date_verify)).format("DD/MM/YYYY")}
-                  </p>
-                )}
-                {data?.date_verify && (
-                  <p className={`${item?.fontSize}`}>
-                    {moment(new Date(data?.date_verify)).format("HH:mm")}
-                  </p>
-                )}
+                  {data?.date_verify &&
+                    moment(new Date(data?.date_verify)).format("HH:mm:ss")}
+                </span>
               </div>
             );
             break;
@@ -1673,8 +1614,9 @@ const DataTable = (props) => {
                 break;
             }
             return (
-              <div className="div-date-create">
-                <p>{_payment_out}</p>
+              <div className="case__payment-out">
+                {/* <p>{_payment_out}</p> */}
+                <span className="case__payment-out--label">{_payment_out}</span>
               </div>
             );
             break;
@@ -1711,8 +1653,10 @@ const DataTable = (props) => {
           // STT Sổ quỹ
           case "ordinal": {
             return (
-              <div className="div-date-create">
-                <p>{index + ordinalNumber + 1}</p>
+              <div className="case__serial-number">
+                <span className="case__serial-number--number">
+                  {index + ordinalNumber + 1}
+                </span>
               </div>
             );
             break;
@@ -1795,7 +1739,7 @@ const DataTable = (props) => {
             }
             return (
               <div className="case__withdrawal-type-transfer">
-                {type_transfer === "Rút" ? (
+                {type_transfer === "withdraw" ? (
                   <p className="case__withdrawal-type-transfer withdrawal">
                     {type_transfer}
                   </p>
@@ -1813,64 +1757,83 @@ const DataTable = (props) => {
               case "stanby":
               case "pending":
                 _text_status = (
-                  <span className="case__transfer-status--pending">{`${i18n.t(
+                  <span className="case__transfer-status--name pending">{`${i18n.t(
                     "processing"
                   )}`}</span>
                 );
                 break;
               case "transferred":
+                _text_status = (
+                  <span className="case__transfer-status--name transferred">
+                    Đã chuyền tiền
+                  </span>
+                );
+                break;
               case "processing":
+                _text_status = (
+                  <span className="case__transfer-status--name processing">
+                    Đang xử lý
+                  </span>
+                );
+                break;
               case "doing":
+                _text_status = (
+                  <span className="case__transfer-status--name doing">
+                    Đang làm
+                  </span>
+                );
+                break;
               case "revoke":
                 _text_status = (
-                  <span className="case__transfer-status--confirm">{`${i18n.t(
-                    "money_transferred"
-                  )}`}</span>
+                  <span className="case__transfer-status--name revoke">
+                    Đã thu hồi
+                  </span>
                 );
                 break;
               case "done":
                 _text_status = (
-                  <span className="case__transfer-status--done">{`${i18n.t(
-                    "complete"
-                  )}`}</span>
+                  <span className="case__transfer-status--name done">
+                    Hoàn thành
+                  </span>
                 );
                 break;
               case "cancel":
-              case "cancel":
+                _text_status = (
+                  <span className="case__transfer-status--name out_date">
+                    Đã huỷ
+                  </span>
+                );
+                break;
               case "out_date":
                 _text_status = (
-                  <span className="case__transfer-status--cancel">Đã huỷ</span>
+                  <span className="case__transfer-status--name out_date">
+                    Quá hạn
+                  </span>
                 );
                 break;
               case "holding":
                 _text_status = (
-                  <span className="case__transfer-status--doing">{`Tạm giữ`}</span>
-                );
-                break;
-              case "transfered":
-                _text_status = (
-                  <span className="case__transfer-status--doing">
-                    Đã chuyển tiền
+                  <span className="case__transfer-status--name holding">
+                    Tạm giữ
                   </span>
                 );
                 break;
-
               default:
                 break;
             }
             return <div className="case__transfer-status">{_text_status}</div>;
           }
           case "notification_title": {
-            return <span className="case__normal-text">{data?.title}</span>;
+            return <span className="case__normal-text-old">{data?.title}</span>;
             break;
           }
           case "notification_content": {
-            return <span className="case__normal-text">{data?.body}</span>;
+            return <span className="case__normal-text-old">{data?.body}</span>;
             break;
           }
           case "notification_date_schedule": {
             return (
-              // <span className="case__normal-text">
+              // <span className="case__normal-text-old">
               //   {data?.date_schedule
               //     ? moment(new Date(data?.date_schedule)).format(
               //         "DD/MM/YYYY - HH:mm"
@@ -1888,9 +1851,13 @@ const DataTable = (props) => {
             );
           }
           default: {
-            const dataView = data[item.dataIndex] || "";
-            return <p className={`${item?.fontSize}`}> {dataView}</p>;
-            break;
+            return (
+              <div className="case__normal-text">
+                <span className="case__normal-text--label">
+                  {data[item.dataIndex] || ""}
+                </span>
+              </div>
+            );
           }
         }
       },
