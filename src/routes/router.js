@@ -619,7 +619,6 @@ const router = [
     null,
     "customer"
   ),
-  // getItem('Cộng tác viên', '/system/collaborator-manage', <IconCustom icon={collaborator} />, null, "collaborator"),
   // Đối tác
   getItem(
     "Đối tác",
@@ -650,6 +649,14 @@ const router = [
         null
       ),
       "collaborator",
+      getItem(
+        <Link style={{ textDecoration: "none" }} to="/punish/manage-punish">
+          Phạt
+        </Link>,
+        "/punish/manage-punish",
+        null,
+        null
+      ),
     ],
     "collaborator"
   ),
@@ -760,7 +767,7 @@ const router = [
           style={{ textDecoration: "none" }}
           to="/transaction/manage-transaction/collaborator"
         >
-          Sổ quỹ đối tác
+          Thu chi đối tác
         </Link>,
         "/transaction/manage-transaction/collaborator",
         null,
@@ -772,7 +779,7 @@ const router = [
           style={{ textDecoration: "none" }}
           to="/transaction/manage-transaction/customer"
         >
-          Sổ quỹ khách hàng
+          Thu chi khách hàng
         </Link>,
         "/transaction/manage-transaction/customer",
         null,
@@ -784,21 +791,13 @@ const router = [
           style={{ textDecoration: "none" }}
           to="/transaction/manage-transaction/other"
         >
-          Khác
+          Thu chi khác
         </Link>,
         "/transaction/manage-transaction/other",
         null,
         null
       ),
-      /* 4. Phạt */
-      getItem(
-        <Link style={{ textDecoration: "none" }} to="/punish/manage-punish">
-          Phạt
-        </Link>,
-        "/punish/manage-punish",
-        null,
-        null
-      ),
+
       // getItem(
       //   "CTV",
       //   "/transaction/manage-transaction-collaborator",

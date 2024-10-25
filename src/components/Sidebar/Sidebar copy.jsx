@@ -46,7 +46,7 @@ const Sidebar = ({ onClick }) => {
   return (
     <div className="div-sidebar">
       <div className="div-logo">
-        <img src={logo} className="img-logo" />
+        {/* <img src={logo} className="img-logo" /> */}
       </div>
       <div className="container-sidebar" responsive>
         {user?.role === "admin" ? (

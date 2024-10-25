@@ -57,6 +57,7 @@ const InputTextCustom = (props) => {
     limitShows, // Hiển thị max là bao nhiêu lựa chọn
     valueUnit, // Phân vùng điện thoại
     setSearchValue, // Lấy giá trị search viết trên component truyền ngược lại component cha
+    isPassword, // Giá trị text password (che dấu *)
   } = props;
   // Lấy district (quận/huyện) từ giá trị province có được
   const tempDistrictArray = province?.find(
@@ -698,6 +699,7 @@ const InputTextCustom = (props) => {
       {type === "text" && (
         <>
           <input
+            type={isPassword ? "password" : "text"}
             disabled={disable}
             name={name ? name : ""}
             className="form-field__input"

@@ -197,7 +197,7 @@ const Sidebar = ({ hide }) => {
       ) : (
         <div className="div-sidebar">
           <div className="div-logo">
-            <img src={logo} className="img-logo-hide" />
+            {/* <img src={logo} className="img-logo-hide" /> */}
           </div>
           <div responsive className="container-sidebar">
             {router?.map((item, key) => {

@@ -1,0 +1,21 @@
+@import "../../../@theme/style.scss";
+
+.manange-promotion {
+    display: flex;
+    flex-direction: column;
+    gap: $gapL;
+    padding-bottom: 16px;
+
+    .manange-promotion__header {
+        span {
+            font-weight: $fontWeightXL;
+            font-size: $textFontSize3XL;
+            color: $colorBlack;
+        }
+    }
+
+    .manange-promotion__filter-content {
+        display: flex;
+        gap: $gapM;
+    }
+}

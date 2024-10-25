@@ -34,17 +34,32 @@ import {
 } from "../../../redux/selectors/auth.js";
 import { getProvince, getService } from "../../../redux/selectors/service.js";
 import "./styles.scss";
+import "./index.scss";
+import FilterData from "../../../components/filterData/filterData.jsx";
+import ButtonCustom from "../../../components/button/index.jsx";
 
 const ManagePromotions = () => {
+  const toggle = () => setModal(!modal);
+  const toggleActive = () => setModalActive(!modalActive);
+  const scrollRef = useHorizontalScroll();
+  const { width } = useWindowDimensions();
+  const checkElement = useSelector(getElementState);
+  const lang = useSelector(getLanguageState);
+  const navigate = useNavigate();
+  const province = useSelector(getProvince);
+  const service = useSelector(getService);
+
+  /* ~~~ Value ~~~ */
+  const [groupPromotion, setGroupPromotion] = useState([]); // Dữ liệu nhóm khuyến mãi
   const [isLoading, setIsLoading] = useState(false);
   const [valueSearch, setValueSearch] = useState("");
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [itemEdit, setItemEdit] = useState([]);
   const [modalActive, setModalActive] = useState(false);
-  const [data, setData] = useState([]);
-  const [total, setTotal] = useState(0);
-  const [modal, setModal] = useState(false);
-  const typeSort = -1;
+  const [data, setData] = useState([]); // Dữ liệu của bảng
+  const [total, setTotal] = useState(0); // Giá trị tổng số phần tử trong bảng (tí xóa)
+  const [modal, setModal] = useState(false); // Giá trị modal
+  const typeSort = -1; // Giá trị sort (lọc giá trị theo phần từ mới nhất của bảng từ trên xuống)
   const [saveToCookie, readCookie] = useCookies();
   const [state, setState] = useState({
     currentPage: 1,
@@ -58,470 +73,15 @@ const ManagePromotions = () => {
     kind: "",
     group: "",
   });
-  const [groupPromotion, setGroupPromotion] = useState([]);
-  const toggle = () => setModal(!modal);
-  const toggleActive = () => setModalActive(!modalActive);
-  const scrollRef = useHorizontalScroll();
-  const { width } = useWindowDimensions();
-  const checkElement = useSelector(getElementState);
-  const lang = useSelector(getLanguageState);
-  const navigate = useNavigate();
-  const province = useSelector(getProvince);
-  const service = useSelector(getService);
-  const groupPromotionOption = [
-    {
-      value: "",
-      label: "Tất cả nhóm KM",
-    },
-  ];
-  const optionService = [
-    {
-      value: "",
-      label: `${i18n.t("Tất cả dịch vụ", { lng: lang })}`,
-    },
-  ];
 
-  service.map((item) => {
-    return optionService.push({
-      value: item?._id,
-      label: item?.title?.[lang],
-    });
-  });
-
-  const tabCookie = readCookie("tab_status_promotion");
-  const serviceCookie = readCookie("service_prmotion");
+  // Những giá trị của selecet
+  const tabCookie = readCookie("tab_status_promotion"); // Giá trị status của promotion (có 2 loại: upcomming và doing)
+  const serviceCookie = readCookie("service_prmotion"); // Giá trị của selected dịch vụ (lưu id)
   const selectCookie = readCookie("selected_promotion");
   const brandCookie = readCookie("brand_promotion");
   const valueCookie = readCookie("value_promotion");
   const kindCookie = readCookie("kind_promotion");
-
-  useEffect(() => {
-    setState({
-      ...state,
-      status: tabCookie == "" ? "doing" : tabCookie,
-      idService: serviceCookie === "" ? "" : serviceCookie,
-      type: selectCookie === " " ? "code" : selectCookie,
-      brand: brandCookie === "" ? "guvi" : brandCookie,
-      value: valueCookie === "" ? "kmkh" : valueCookie,
-      kind: kindCookie === "" ? "promotion" : kindCookie,
-    });
-    fetchPromotion(
-      "",
-      tabCookie == "" ? "doing" : tabCookie,
-      0,
-      20,
-      selectCookie === "" ? "code" : selectCookie,
-      brandCookie === "" ? "guvi" : brandCookie,
-      serviceCookie === "" ? "" : serviceCookie,
-      "",
-      typeSort,
-      state.group
-    )
-      .then((res) => {
-        setData(res?.data);
-        setTotal(res?.totalItem);
-      })
-      .catch((err) => {});
-
-    getGroupPromotion(0, 20, "")
-      .then((res) => {
-        setGroupPromotion(res?.data);
-      })
-      .catch((err) => {});
-  }, [
-    serviceCookie,
-    brandCookie,
-    selectCookie,
-    tabCookie,
-    kindCookie,
-    valueCookie,
-    typeSort,
-  ]);
-
-  groupPromotion?.map((item) => {
-    return groupPromotionOption.push({
-      value: item?._id,
-      label: item.name[lang],
-    });
-  });
-
-  const onDelete = useCallback(
-    (id) => {
-      setIsLoading(true);
-      deletePromotion(id)
-        .then((res) => {
-          fetchPromotion(
-            valueSearch,
-            state?.status,
-            state?.startPage,
-            20,
-            state?.type,
-            state?.brand,
-            state?.idService,
-            "",
-            typeSort,
-            state.group
-          )
-            .then((res) => {
-              setData(res?.data);
-              setTotal(res?.totalItem);
-            })
-            .catch((err) => {});
-          setModal(false);
-          setIsLoading(false);
-        })
-        .catch((err) => {
-          errorNotify({
-            message: err?.message,
-          });
-          setIsLoading(false);
-        });
-    },
-    [valueSearch, typeSort, state]
-  );
-
-  const onActive = useCallback(
-    (id, is_active) => {
-      setIsLoading(true);
-      activePromotion(id, { is_active: is_active ? false : true })
-        .then((res) => {
-          fetchPromotion(
-            valueSearch,
-            state?.status,
-            state?.startPage,
-            20,
-            state?.type,
-            state?.brand,
-            state?.idService,
-            "",
-            typeSort,
-            state.group
-          )
-            .then((res) => {
-              setData(res?.data);
-              setTotal(res?.totalItem);
-            })
-            .catch((err) => {});
-          setModalActive(false);
-          setIsLoading(false);
-        })
-        .catch((err) => {
-          errorNotify({
-            message: err?.message,
-          });
-          setIsLoading(false);
-        });
-    },
-    [valueSearch, typeSort, state]
-  );
-
-  const onChange = (page) => {
-    const lengthData = data.length < 20 ? 20 : data.length;
-    const start = page * lengthData - lengthData;
-    setState({ ...state, currentPage: page, startPage: start });
-    fetchPromotion(
-      valueSearch,
-      state?.status,
-      start,
-      20,
-      state?.type,
-      state?.brand,
-      state?.idService,
-      "",
-      typeSort,
-      state.group
-    )
-      .then((res) => {
-        setData(res?.data);
-        setTotal(res?.totalItem);
-        window.scroll(0, 0);
-      })
-      .catch((err) => {});
-  };
-
-  const handleSearch = _debounce((value) => {
-    setValueSearch(value);
-    setIsLoading(true);
-    fetchPromotion(
-      value,
-      state?.status,
-      state?.startPage,
-      20,
-      state?.type,
-      state?.brand,
-      state?.idService,
-      "",
-      typeSort,
-      state.group
-    )
-      .then((res) => {
-        setIsLoading(false);
-        setData(res?.data);
-        setTotal(res?.totalItem);
-      })
-      .catch((err) => {});
-  }, 1000);
-
-  const onChangeTab = (item) => {
-    setIsLoading(true);
-    saveToCookie("tab_status_promotion", item?.status);
-    saveToCookie("selected_promotion", item?.selected);
-    saveToCookie("brand_promotion", item?.brand);
-    saveToCookie("value_promotion", item?.value);
-    saveToCookie("kind_promotion", item?.kind);
-    setState({
-      ...state,
-      status: item?.status,
-      startPage: 0,
-      currentPage: 1,
-      type: item?.selected,
-      brand: item?.brand,
-      value: item?.value,
-      kind: item?.kind,
-    });
-    fetchPromotion(
-      valueSearch,
-      item?.status,
-      0,
-      20,
-      item?.selected,
-      item?.brand,
-      state?.idService,
-      "",
-      typeSort,
-      state.group
-    )
-      .then((res) => {
-        setIsLoading(false);
-        setData(res?.data);
-        setTotal(res?.totalItem);
-      })
-      .catch((err) => {});
-  };
-
-  const onChangeService = (value) => {
-    setIsLoading(true);
-    saveToCookie("service_prmotion", value);
-    setState({ ...state, idService: value });
-    fetchPromotion(
-      valueSearch,
-      state?.status,
-      state?.startPage,
-      20,
-      state?.type,
-      state?.brand,
-      value,
-      "",
-      typeSort,
-      state.group
-    )
-      .then((res) => {
-        setIsLoading(false);
-        setData(res?.data);
-        setTotal(res?.totalItem);
-      })
-      .catch((err) => {});
-  };
-
-  const onChangeTypePromotion = (value, item) => {
-    saveToCookie("selected_promotion", item?.selected);
-    saveToCookie("brand_promotion", item?.brand);
-    saveToCookie("kind_promotion", value);
-    setState({
-      ...state,
-      type: item?.selected,
-      brand: item?.brand,
-      kind: value,
-    });
-    if (
-      state.status === "doing" &&
-      item?.selected === "code" &&
-      item?.brand === "guvi"
-    ) {
-      saveToCookie("value_promotion", "kmkh");
-      setState({
-        ...state,
-        value: "kmkh",
-        type: item?.selected,
-        brand: item?.brand,
-        kind: value,
-      });
-    } else if (
-      state.status === "doing" &&
-      item?.selected === "code" &&
-      item?.brand === "orther"
-    ) {
-      saveToCookie("value_promotion", "kmdtkh");
-      setState({
-        ...state,
-        value: "kmdtkh",
-        type: item?.selected,
-        brand: item?.brand,
-        kind: value,
-      });
-    } else if (
-      state.status === "doing" &&
-      item?.selected === "event" &&
-      item?.brand === ""
-    ) {
-      saveToCookie("value_promotion", "ctkmkh");
-      setState({
-        ...state,
-        value: "ctkmkh",
-        type: item?.selected,
-        brand: item?.brand,
-        kind: value,
-      });
-    } else if (
-      state.status === "upcoming" &&
-      item?.selected === "code" &&
-      item?.brand === "guvi"
-    ) {
-      saveToCookie("value_promotion", "kmckh");
-      setState({
-        ...state,
-        value: "kmckh",
-        type: item?.selected,
-        brand: item?.brand,
-        kind: value,
-      });
-    } else if (
-      state.status === "upcoming" &&
-      item?.selected === "code" &&
-      item?.brand === "orther"
-    ) {
-      saveToCookie("value_promotion", "kmdtckh");
-      setState({
-        ...state,
-        value: "kmdtckh",
-        type: item?.selected,
-        brand: item?.brand,
-        kind: value,
-      });
-    } else if (
-      state.status === "upcoming" &&
-      item?.selected === "event" &&
-      item?.brand === ""
-    ) {
-      saveToCookie("value_promotion", "ctkmckh");
-      setState({
-        ...state,
-        value: "ctkmckh",
-        type: item?.selected,
-        brand: item?.brand,
-        kind: value,
-      });
-    } else if (
-      state.status === "upcoming" ||
-      (state.status === "doing" && item?.selected === "" && item?.brand === "")
-    ) {
-      saveToCookie("value_promotion", "");
-      setState({
-        ...state,
-        value: "",
-        type: item?.selected,
-        brand: item?.brand,
-        kind: value,
-      });
-    }
-
-    fetchPromotion(
-      valueSearch,
-      state?.status,
-      0,
-      20,
-      item?.selected,
-      item?.brand,
-      state?.idService,
-      "",
-      typeSort,
-      state.group
-    )
-      .then((res) => {
-        setData(res?.data);
-        setTotal(res?.totalItem);
-      })
-      .catch((err) => {});
-  };
-
-  const onChangeShow = (id, active) => {
-    setIsLoading(true);
-    updatePromotion(id, {
-      is_show_in_app: false,
-    })
-      .then((res) => {
-        setIsLoading(false);
-        setState({ ...state, modalShowApp: active ? false : true });
-        fetchPromotion(
-          valueSearch,
-          state?.status,
-          state?.startPage,
-          20,
-          state?.type,
-          state?.brand,
-          state?.idService,
-          "",
-          typeSort,
-          state.group
-        )
-          .then((res) => {
-            setData(res?.data);
-            setTotal(res?.totalItem);
-          })
-          .catch((err) => {});
-      })
-      .catch((err) => {
-        setIsLoading(false);
-        errorNotify({
-          message: err?.message,
-        });
-      });
-  };
-
-  const onChangeGroupPromotion = (value) => {
-    setState({ ...state, group: value });
-    fetchPromotion(
-      valueSearch,
-      state?.status,
-      state?.startPage,
-      20,
-      state?.type,
-      state?.brand,
-      state?.idService,
-      "",
-      typeSort,
-      value
-    )
-      .then((res) => {
-        setData(res?.data);
-        setTotal(res?.totalItem);
-      })
-      .catch((err) => {});
-  };
-
-  // const handleSortPosition = (value) => {
-  //   setTypeSort(value);
-  //   setIsLoading(true);
-  //   fetchPromotion(
-  //     valueSearch,
-  //     state?.status,
-  //     0,
-  //     20,
-  //     state?.type,
-  //     state?.brand,
-  //     state?.idService,
-  //     "",
-  //     value,
-  //     state.group
-  //   )
-  //     .then((res) => {
-  //       setIsLoading(false);
-  //       setData(res?.data);
-  //       setTotal(res?.totalItem);
-  //     })
-  //     .catch((err) => {});
-  // };
-
+  /* ~~~ List ~~~ */
   const columns = [
     {
       title: () => {
@@ -666,23 +226,6 @@ const ManagePromotions = () => {
       align: "center",
       width: "8%",
     },
-    // {
-    //   title: () => <a className="title-column">Hiện thị</a>,
-    //   render: (data) => {
-    //     return (
-    //       <Switch
-    //         size="small"
-    //         checked={data?.is_show_in_app}
-    //         onChange={() => setState({ ...state, modalShowApp: true })}
-    //         className={
-    //           data?.is_show_in_app ? "switch-select-show-app" : "switch"
-    //         }
-    //       />
-    //     );
-    //   },
-    //   align: "center",
-    //   width: "6%",
-    // },
     {
       title: () => <p className="title-column">Khu vực</p>,
       render: (data) => {
@@ -886,7 +429,449 @@ const ManagePromotions = () => {
       width: "10%",
     },
   ];
+  const optionService = [
+    {
+      value: "",
+      label: `${i18n.t("Tất cả dịch vụ", { lng: lang })}`,
+    },
+  ];
+  service.map((item) => {
+    return optionService.push({
+      value: item?._id,
+      label: item?.title?.[lang],
+    });
+  });
+  const groupPromotionOption = [
+    {
+      value: "",
+      label: "Tất cả nhóm KM",
+    },
+  ];
+  groupPromotion?.map((item) => {
+    return groupPromotionOption.push({
+      value: item?._id,
+      label: item.name[lang],
+    });
+  });
+  /* ~~~ Handle function ~~~ */
+  const onDelete = useCallback(
+    (id) => {
+      setIsLoading(true);
+      deletePromotion(id)
+        .then((res) => {
+          fetchPromotion(
+            valueSearch,
+            state?.status,
+            state?.startPage,
+            20,
+            state?.type,
+            state?.brand,
+            state?.idService,
+            "",
+            typeSort,
+            state.group
+          )
+            .then((res) => {
+              setData(res?.data);
+              setTotal(res?.totalItem);
+            })
+            .catch((err) => {});
+          setModal(false);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          errorNotify({
+            message: err?.message,
+          });
+          setIsLoading(false);
+        });
+    },
+    [valueSearch, typeSort, state]
+  );
+  const onActive = useCallback(
+    (id, is_active) => {
+      setIsLoading(true);
+      activePromotion(id, { is_active: is_active ? false : true })
+        .then((res) => {
+          fetchPromotion(
+            valueSearch,
+            state?.status,
+            state?.startPage,
+            20,
+            state?.type,
+            state?.brand,
+            state?.idService,
+            "",
+            typeSort,
+            state.group
+          )
+            .then((res) => {
+              setData(res?.data);
+              setTotal(res?.totalItem);
+            })
+            .catch((err) => {});
+          setModalActive(false);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          errorNotify({
+            message: err?.message,
+          });
+          setIsLoading(false);
+        });
+    },
+    [valueSearch, typeSort, state]
+  );
+  const onChange = (page) => {
+    const lengthData = data.length < 20 ? 20 : data.length;
+    const start = page * lengthData - lengthData;
+    setState({ ...state, currentPage: page, startPage: start });
+    fetchPromotion(
+      valueSearch,
+      state?.status,
+      start,
+      20,
+      state?.type,
+      state?.brand,
+      state?.idService,
+      "",
+      typeSort,
+      state.group
+    )
+      .then((res) => {
+        setData(res?.data);
+        setTotal(res?.totalItem);
+        window.scroll(0, 0);
+      })
+      .catch((err) => {});
+  };
+  const handleSearch = _debounce((value) => {
+    setValueSearch(value);
+    setIsLoading(true);
+    fetchPromotion(
+      value,
+      state?.status,
+      state?.startPage,
+      20,
+      state?.type,
+      state?.brand,
+      state?.idService,
+      "",
+      typeSort,
+      state.group
+    )
+      .then((res) => {
+        setIsLoading(false);
+        setData(res?.data);
+        setTotal(res?.totalItem);
+      })
+      .catch((err) => {});
+  }, 1000);
+  const onChangeTab = (item) => {
+    setIsLoading(true);
+    saveToCookie("tab_status_promotion", item?.status);
+    saveToCookie("selected_promotion", item?.selected);
+    saveToCookie("brand_promotion", item?.brand);
+    saveToCookie("value_promotion", item?.value);
+    saveToCookie("kind_promotion", item?.kind);
+    setState({
+      ...state,
+      status: item?.status,
+      startPage: 0,
+      currentPage: 1,
+      type: item?.selected,
+      brand: item?.brand,
+      value: item?.value,
+      kind: item?.kind,
+    });
+    fetchPromotion(
+      valueSearch,
+      item?.status,
+      0,
+      20,
+      item?.selected,
+      item?.brand,
+      state?.idService,
+      "",
+      typeSort,
+      state.group
+    )
+      .then((res) => {
+        setIsLoading(false);
+        setData(res?.data);
+        setTotal(res?.totalItem);
+      })
+      .catch((err) => {});
+  };
+  const onChangeService = (value) => {
+    setIsLoading(true);
+    saveToCookie("service_prmotion", value);
+    setState({ ...state, idService: value });
+    fetchPromotion(
+      valueSearch,
+      state?.status,
+      state?.startPage,
+      20,
+      state?.type,
+      state?.brand,
+      value,
+      "",
+      typeSort,
+      state.group
+    )
+      .then((res) => {
+        setIsLoading(false);
+        setData(res?.data);
+        setTotal(res?.totalItem);
+      })
+      .catch((err) => {});
+  };
+  const onChangeTypePromotion = (value, item) => {
+    saveToCookie("selected_promotion", item?.selected);
+    saveToCookie("brand_promotion", item?.brand);
+    saveToCookie("kind_promotion", value);
+    setState({
+      ...state,
+      type: item?.selected,
+      brand: item?.brand,
+      kind: value,
+    });
+    if (
+      state.status === "doing" &&
+      item?.selected === "code" &&
+      item?.brand === "guvi"
+    ) {
+      saveToCookie("value_promotion", "kmkh");
+      setState({
+        ...state,
+        value: "kmkh",
+        type: item?.selected,
+        brand: item?.brand,
+        kind: value,
+      });
+    } else if (
+      state.status === "doing" &&
+      item?.selected === "code" &&
+      item?.brand === "orther"
+    ) {
+      saveToCookie("value_promotion", "kmdtkh");
+      setState({
+        ...state,
+        value: "kmdtkh",
+        type: item?.selected,
+        brand: item?.brand,
+        kind: value,
+      });
+    } else if (
+      state.status === "doing" &&
+      item?.selected === "event" &&
+      item?.brand === ""
+    ) {
+      saveToCookie("value_promotion", "ctkmkh");
+      setState({
+        ...state,
+        value: "ctkmkh",
+        type: item?.selected,
+        brand: item?.brand,
+        kind: value,
+      });
+    } else if (
+      state.status === "upcoming" &&
+      item?.selected === "code" &&
+      item?.brand === "guvi"
+    ) {
+      saveToCookie("value_promotion", "kmckh");
+      setState({
+        ...state,
+        value: "kmckh",
+        type: item?.selected,
+        brand: item?.brand,
+        kind: value,
+      });
+    } else if (
+      state.status === "upcoming" &&
+      item?.selected === "code" &&
+      item?.brand === "orther"
+    ) {
+      saveToCookie("value_promotion", "kmdtckh");
+      setState({
+        ...state,
+        value: "kmdtckh",
+        type: item?.selected,
+        brand: item?.brand,
+        kind: value,
+      });
+    } else if (
+      state.status === "upcoming" &&
+      item?.selected === "event" &&
+      item?.brand === ""
+    ) {
+      saveToCookie("value_promotion", "ctkmckh");
+      setState({
+        ...state,
+        value: "ctkmckh",
+        type: item?.selected,
+        brand: item?.brand,
+        kind: value,
+      });
+    } else if (
+      state.status === "upcoming" ||
+      (state.status === "doing" && item?.selected === "" && item?.brand === "")
+    ) {
+      saveToCookie("value_promotion", "");
+      setState({
+        ...state,
+        value: "",
+        type: item?.selected,
+        brand: item?.brand,
+        kind: value,
+      });
+    }
 
+    fetchPromotion(
+      valueSearch,
+      state?.status,
+      0,
+      20,
+      item?.selected,
+      item?.brand,
+      state?.idService,
+      "",
+      typeSort,
+      state.group
+    )
+      .then((res) => {
+        setData(res?.data);
+        setTotal(res?.totalItem);
+      })
+      .catch((err) => {});
+  };
+  const onChangeShow = (id, active) => {
+    setIsLoading(true);
+    updatePromotion(id, {
+      is_show_in_app: false,
+    })
+      .then((res) => {
+        setIsLoading(false);
+        setState({ ...state, modalShowApp: active ? false : true });
+        fetchPromotion(
+          valueSearch,
+          state?.status,
+          state?.startPage,
+          20,
+          state?.type,
+          state?.brand,
+          state?.idService,
+          "",
+          typeSort,
+          state.group
+        )
+          .then((res) => {
+            setData(res?.data);
+            setTotal(res?.totalItem);
+          })
+          .catch((err) => {});
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        errorNotify({
+          message: err?.message,
+        });
+      });
+  };
+  const onChangeGroupPromotion = (value) => {
+    setState({ ...state, group: value });
+    fetchPromotion(
+      valueSearch,
+      state?.status,
+      state?.startPage,
+      20,
+      state?.type,
+      state?.brand,
+      state?.idService,
+      "",
+      typeSort,
+      value
+    )
+      .then((res) => {
+        setData(res?.data);
+        setTotal(res?.totalItem);
+      })
+      .catch((err) => {});
+  };
+  /* ~~~ Use effect ~~~ */
+  // 1. Fetch dữ liệu bảng
+  useEffect(() => {
+    setState({
+      ...state,
+      status: tabCookie == "" ? "doing" : tabCookie,
+      idService: serviceCookie === "" ? "" : serviceCookie,
+      type: selectCookie === " " ? "code" : selectCookie,
+      brand: brandCookie === "" ? "guvi" : brandCookie,
+      value: valueCookie === "" ? "kmkh" : valueCookie,
+      kind: kindCookie === "" ? "promotion" : kindCookie,
+    });
+    fetchPromotion(
+      "",
+      tabCookie == "" ? "doing" : tabCookie,
+      0,
+      20,
+      selectCookie === "" ? "code" : selectCookie,
+      brandCookie === "" ? "guvi" : brandCookie,
+      serviceCookie === "" ? "" : serviceCookie,
+      "",
+      typeSort,
+      state.group
+    )
+      .then((res) => {
+        console.log("check res >>>", res);
+        setData(res?.data);
+        setTotal(res?.totalItem);
+      })
+      .catch((err) => {});
+
+    getGroupPromotion(0, 20, "")
+      .then((res) => {
+        setGroupPromotion(res?.data);
+      })
+      .catch((err) => {});
+  }, [
+    serviceCookie,
+    brandCookie,
+    selectCookie,
+    tabCookie,
+    kindCookie,
+    valueCookie,
+    typeSort,
+  ]);
+  /* ~~~ Other ~~~ */
+  const filterContent = () => {
+    return (
+      <div className="manage-top-up-with-draw__filter-content">
+        {/* Lọc theo loại đối tượng */}
+        <div>
+          {/* <ButtonCustom
+            label="Đối tượng"
+            options={objectList}
+            value={object}
+            setValueSelectedProps={setSelectObject}
+            disable={true}
+          /> */}
+        </div>
+      </div>
+    );
+  };
+  // saveToCookie("tab_status_promotion", item?.status);
+  // saveToCookie("selected_promotion", item?.selected);
+  // saveToCookie("brand_promotion", item?.brand);
+  // saveToCookie("value_promotion", item?.value);
+  // saveToCookie("kind_promotion", item?.kind);
+
+  console.log("check selectCookie", selectCookie);
+  // console.log("check selectCookie", selectCookie);
+  // console.log("check brandCookie", brandCookie);
+  // console.log("check serviceCookie", serviceCookie);
+  /* ~~~ Main ~~~ */
   return (
     <div>
       {width > 900 ? (
@@ -1065,6 +1050,55 @@ const ManagePromotions = () => {
       </div>
       {isLoading && <LoadingPagination />}
     </div>
+    // <div className="manange-promotion">
+    //   {/* Header */}
+    //   <div className="manange-promotion__header">
+    //     <span>Khuyến mãi</span>
+    //   </div>
+    //   {/* Filter */}
+    //   {/* <FilterData
+    //     leftContent={filterDateAndSearchRight()}
+    //     rightContent={filterDateAndSearch()}
+    //   /> */}
+    //   {/* Filter */}
+    //   {/* <FilterData
+    //   isTimeFilter
+    //   startDate={startDate}
+    //   endDate={endDate}
+    //   setStartDate={setStartDate}
+    //   setEndDate={setEndDate}
+    //   leftContent={filterByType()}
+    // /> */}
+    //   {/* Table */}
+    //   {/* <div>
+    //   <DataTable
+    //     columns={columns}
+    //     data={data}
+    //     start={startPage}
+    //     pageSize={lengthPage}
+    //     setLengthPage={setLengthPage}
+    //     totalItem={total}
+    //     onCurrentPageChange={onChangePage}
+    //     scrollX={2400}
+    //     actionColumn={addActionColumn}
+    //     getItemRow={setItem}
+    //     headerRightContent={
+    //       <div className="manage-top-up-with-draw__table--right-header">
+    //         <TransactionDrawer2
+    //           titleButton="Phiếu thu"
+    //           titleHeader="Phiếu thu"
+    //           onClick={handleTopUp}
+    //         />
+    //         <TransactionDrawer2
+    //           titleButton="Phiếu chi"
+    //           titleHeader="Phiếu chi"
+    //           onClick={handleWithdraw}
+    //         />
+    //       </div>
+    //     }
+    //   />
+    // </div> */}
+    // </div>
   );
 };
 

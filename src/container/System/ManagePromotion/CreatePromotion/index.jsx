@@ -89,7 +89,7 @@ const CreatePromotion = () => {
     data: [],
     listCustomers: [],
     listNameCustomers: [],
-    dataGroupCustomer: [],
+    dataGroupCustomer: [], // Danh sách nhóm khách hàng
     ratioApplyArea: 1,
     isApplyArea: false,
     city: [],
@@ -125,6 +125,7 @@ const CreatePromotion = () => {
     groupPromotion: [],
     dataGroupPromotion: [],
   });
+  const [dataGroupCustomer, setDataGroupCustomer] = useState([]);
   const [title, setTitle] = useState({
     vi: "",
     en: "",
@@ -166,9 +167,12 @@ const CreatePromotion = () => {
 
   useEffect(() => {
     getGroupCustomerApi(0, 10)
-      .then((res) =>
-        setStatePromo({ ...statePromo, dataGroupCustomer: res?.data })
-      )
+      .then((res) => {
+        if (res?.data.length > 0) {
+          setDataGroupCustomer(res?.data);
+          setStatePromo({ ...statePromo, dataGroupCustomer: res?.data });
+        }
+      })
       .catch((err) => {});
 
     getGroupPromotion(0, 100, "")
@@ -185,7 +189,14 @@ const CreatePromotion = () => {
     });
   });
 
-  statePromo?.dataGroupCustomer.map((item) => {
+  // statePromo?.dataGroupCustomer.map((item) => {
+  //   return options.push({
+  //     label: item?.name,
+  //     value: item?._id,
+  //   });
+  // });
+
+  dataGroupCustomer?.map((item) => {
     return options.push({
       label: item?.name,
       value: item?._id,
@@ -456,6 +467,7 @@ const CreatePromotion = () => {
   //   });
   // };
 
+console.log("checking", statePromo.groupCustomer);
   return (
     <>
       <div className="div-head-add-promotion">
@@ -1188,6 +1200,7 @@ const CreatePromotion = () => {
                 </div>
               )}
 
+              {/* Đối tượng khách hàng */}
               <div className="div-input">
                 <p className="title-input">
                   {`${i18n.t("Đối tượng khách hàng", { lng: lang })}`}
@@ -1226,6 +1239,7 @@ const CreatePromotion = () => {
                     <Radio value={3}>Tuỳ chọn khách hàng</Radio>
                   </Space>
                 </Radio.Group>
+                {/* Chỗ bug */}
                 <div>
                   {statePromo?.isObjectCustomer === 2 && (
                     <Select

@@ -16,6 +16,7 @@ const ButtonCustom = (props) => {
     value,
     setValueSelectedProps,
     total,
+    fullScreen,
   } = props;
   const [open, setOpen] = useState(false);
 
@@ -75,7 +76,7 @@ const ButtonCustom = (props) => {
           disabled={disable}
           className={`button-custom ${disable && "disable"} ${
             style === "normal" && "normal"
-          }`}
+          } ${fullScreen && "full-screen"}`}
         >
           {label}
         </button>
@@ -99,7 +100,11 @@ const ButtonCustom = (props) => {
             onOpenChange={handleOpen}
           >
             <div className={`button-custom-select ${disable && "disable"}`}>
-              <span className={`button-custom-select__label ${disable && "disable"}`}>
+              <span
+                className={`button-custom-select__label ${
+                  disable && "disable"
+                }`}
+              >
                 <IoAddCircleOutline size="16px" />
                 {label}
               </span>

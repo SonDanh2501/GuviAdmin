@@ -331,17 +331,18 @@ const ManageTopUpWithdraw = (props) => {
       key: "",
       width: 35,
     },
-    {
-      customTitle: (
-        <CustomHeaderDatatable
-          title="Tài khoản đến"
-          textToolTip="Nơi mà nguồn tiền thanh toán đi đến cuối cùng"
-        />
-      ),
-      dataIndex: "",
-      key: "payment_in",
-      width: 40,
-    },
+    // Chưa làm nên ẩn đi
+    // {
+    //   customTitle: (
+    //     <CustomHeaderDatatable
+    //       title="Tài khoản đến"
+    //       textToolTip="Nơi mà nguồn tiền thanh toán đi đến cuối cùng"
+    //     />
+    //   ),
+    //   dataIndex: "",
+    //   key: "payment_in",
+    //   width: 40,
+    // },
     {
       customTitle: (
         <CustomHeaderDatatable

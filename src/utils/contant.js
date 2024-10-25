@@ -563,7 +563,11 @@ export const convertPhoneNumber = (phoneNumber, length) => {
   if (!phoneNumber || length >= phoneNumber.length) {
     return phoneNumber;
   }
+  
   const mask = '*'.repeat(length); 
-  const visiblePart = phoneNumber.slice(length); 
+  const visiblePart = phoneNumber.slice(phoneNumber.length - length); 
+  // console.log("check phoneNumber lenght", phoneNumber.length);
+  console.log("check phoneNumber", phoneNumber, visiblePart);
+
   return mask + visiblePart;
 }

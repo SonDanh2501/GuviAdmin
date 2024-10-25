@@ -484,9 +484,9 @@ const AddPushNotification = ( props) => {
             <div className="add-push-notification__field--child">
               <InputTextCustom
                 type="text"
-                value={link}
+                value={imgThumbnail}
                 placeHolder="Link"
-                onChange={(e) => setLink(e.target.value)}
+                onChange={(e) => setImgThumbnail(e.target.value)}
               />
             </div>
           </div>

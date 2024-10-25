@@ -19,16 +19,22 @@
     &.disable {
         background-color: $colorExtraLightGray;
         color: $colorGray;
+        border-color: $colorExtraLightGray;
         cursor: not-allowed;
     }
 
     &.normal {
         background-color: $colorExtraLightGray;
         color: $colorGray;
+        border-color: $colorExtraLightGray;
 
         &:hover {
             background-color: $colorMoreLightGray;
         }
+    }
+
+    &.full-screen {
+        width: 100%;
     }
 }
 
@@ -52,13 +58,15 @@
     &.disable {
         background-color: $colorExtraLightGray;
         color: $colorBlack;
+        border-color: $colorExtraLightGray;
         cursor: not-allowed;
     }
 
     &.normal {
         background-color: $colorExtraLightGray;
         color: $colorBlack;
-        cursor: not-allowed;
+        border-color: $colorExtraLightGray;
+        // cursor: not-allowed;
     }
 }
 
@@ -83,7 +91,7 @@
             .button-custom-select__label {
                 color: $colorLightGray;
             }
-    
+
             .button-custom-select__line,
             .button-custom-select__option {
                 background-color: $colorMoreLightGray;
@@ -162,6 +170,7 @@
             background-color: $colorViolet;
             color: $colorWhite;
         }
+
         &.checked {
             background-color: $colorViolet;
             font-weight: $fontWeightL;
@@ -174,6 +183,7 @@
         display: flex;
         align-items: center;
         gap: $gapS;
+
         .button-custom-content__child--text-number {
             text-align: center;
             background-color: $colorMoreLightGray;

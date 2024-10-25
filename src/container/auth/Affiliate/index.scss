@@ -1,0 +1,83 @@
+@import "../../../@theme/style.scss";
+
+.login-affiliate {
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    width: 100%;
+    background: linear-gradient(90deg, $colorViolet 30%, $colorLightViolet 80%);
+
+    .login-affiliate__card {
+        width: 70%;
+        max-width: 400px;
+        background-color: $colorWhite;
+        border-radius: $borderRadiusM;
+        padding: 16px;
+
+        .login-affiliate__card--information {
+            display: flex;
+            width: 100%;
+            flex-direction: column;
+            gap: $gapL;
+
+            .login-affiliate__card--information-label {
+                font-weight: $fontWeightXL;
+                font-size: $textFontSize3XL;
+                text-align: center;
+            }
+
+            .login-affiliate__card--information-slogan {
+                display: flex;
+                gap: $gapL;
+                align-items: center;
+                justify-content: center;
+
+                .login-affiliate__card--information-slogan-icon {
+                    display: flex;
+                    width: 50%;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+
+                    .login-affiliate__card--information-slogan-icon-color {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        padding: 8px;
+                        background-color: $colorViolet;
+                        width: fit-content;
+                        border-radius: $borderRadiusFull;
+                        color: $colorWhite;
+                        margin-bottom: 2px;
+                    }
+
+                    .login-affiliate__card--information-slogan-icon-label {
+                        font-size: $textFontSizeM;
+                        font-weight: $fontWeightXL;
+                    }
+
+                    .login-affiliate__card--information-slogan-icon-sub-label {
+                        font-size: $textFontSizeM;
+                        font-weight: $fontWeightL;
+                        color: $colorLightGray;
+                        white-space: nowrap;
+                    }
+                }
+
+            }
+
+            .login-affiliate__card--information-logo {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                .login-affiliate__card--information-logo-image {
+                    width: 25%;
+                    height: 25%;
+                }
+                // height: 30%;
+                // width: 30%;
+            }
+        }
+    }
+}
