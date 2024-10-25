@@ -37,6 +37,8 @@ import "./styles.scss";
 import "./index.scss";
 import FilterData from "../../../components/filterData/filterData.jsx";
 import ButtonCustom from "../../../components/button/index.jsx";
+import InputTextCustom from "../../../components/inputCustom/index.jsx";
+import DataTable from "../../../components/tables/dataTable/index.jsx";
 
 const ManagePromotions = () => {
   const toggle = () => setModal(!modal);
@@ -73,16 +75,29 @@ const ManagePromotions = () => {
     kind: "",
     group: "",
   });
+  const [startPage, setStartPage] = useState(0);
+  const [lengthPage, setLengthPage] = useState(
+    JSON.parse(localStorage.getItem("linePerPage"))
+      ? JSON.parse(localStorage.getItem("linePerPage")).value
+      : 20
+  );
+  const [selectService, setSelectService] = useState(""); // Giá trị select của dịch vụ
+  const [selectObject, setSelectObject] = useState(""); // Giá trị select của đối tượng
+  const [selectPromotionType, setSelectPromotionType] = useState(""); // Giá trị select của loại khuyến mãi
+  const [selectGroupPromotionType, setSelectGroupPromotionType] = useState(""); // Giá trị select của nhóm khuyến mãi
+  const [selectStatus, setSelectStatus] = useState(""); // Giá trị select của trạng thái
 
   // Những giá trị của selecet
   const tabCookie = readCookie("tab_status_promotion"); // Giá trị status của promotion (có 2 loại: upcomming và doing)
   const serviceCookie = readCookie("service_prmotion"); // Giá trị của selected dịch vụ (lưu id)
-  const selectCookie = readCookie("selected_promotion");
-  const brandCookie = readCookie("brand_promotion");
-  const valueCookie = readCookie("value_promotion");
-  const kindCookie = readCookie("kind_promotion");
+  const selectCookie = readCookie("selected_promotion"); // Giá trị của type_promotion (có 2 loại: code (mã kh) và event (chương trình kh))
+  const brandCookie = readCookie("brand_promotion"); // Giá trị của brand (trong db) (tên brand của các loại kh)
+  const valueCookie = readCookie("value_promotion"); // Thừa (xóa)
+  const kindCookie = readCookie("kind_promotion"); // Thừa (xóa)
   /* ~~~ List ~~~ */
   const columns = [
+    {
+    },
     {
       title: () => {
         return (
@@ -429,30 +444,89 @@ const ManagePromotions = () => {
       width: "10%",
     },
   ];
-  const optionService = [
+  // Danh sách các dịch vụ
+  const serviceList = [
     {
-      value: "",
-      label: `${i18n.t("Tất cả dịch vụ", { lng: lang })}`,
+      code: "",
+      label: "Tất cả",
     },
   ];
   service.map((item) => {
-    return optionService.push({
-      value: item?._id,
+    return serviceList.push({
+      code: item?._id,
       label: item?.title?.[lang],
     });
   });
-  const groupPromotionOption = [
+  // Danh sách các đối tượng
+  const objectList = [
     {
-      value: "",
-      label: "Tất cả nhóm KM",
+      code: "",
+      label: "Tất cả",
+    },
+    {
+      code: "guvi",
+      label: "GUVI",
+    },
+    {
+      code: "other",
+      label: "Khác",
+    },
+  ];
+  // Danh sách các loại khuyến mãi
+  const promotionTypeList = [
+    {
+      code: "",
+      label: "Tất cả",
+    },
+    {
+      code: "code",
+      label: "Mã KH",
+    },
+    {
+      code: "event",
+      label: "Chương trình KH",
+    },
+  ];
+  // Danh sách các nhóm khuyến mãi
+  const groupPromotionList = [
+    {
+      code: "",
+      label: "Tất cả",
     },
   ];
   groupPromotion?.map((item) => {
-    return groupPromotionOption.push({
-      value: item?._id,
+    return groupPromotionList.push({
+      code: item?._id,
       label: item.name[lang],
     });
   });
+  // Danh sách các trạng thái
+  const statusList = [
+    {
+      code: "",
+      label: "Tất cả",
+    },
+    {
+      code: "upcoming",
+      label: "Chưa kích hoạt",
+    },
+    {
+      code: "doing",
+      label: "Đang kích hoạt",
+    },
+    {
+      code: "done",
+      label: "Kết thúc",
+    },
+    {
+      code: "out_of_date",
+      label: "Hết hạn",
+    },
+    {
+      code: "out_of_stock",
+      label: "Hết lượt sử dụng",
+    },
+  ];
   /* ~~~ Handle function ~~~ */
   const onDelete = useCallback(
     (id) => {
@@ -545,6 +619,9 @@ const ManagePromotions = () => {
       })
       .catch((err) => {});
   };
+  const onChangePage = (value) => {
+    setStartPage(value);
+  };
   const handleSearch = _debounce((value) => {
     setValueSearch(value);
     setIsLoading(true);
@@ -566,7 +643,7 @@ const ManagePromotions = () => {
         setTotal(res?.totalItem);
       })
       .catch((err) => {});
-  }, 1000);
+  }, 500);
   const onChangeTab = (item) => {
     setIsLoading(true);
     saveToCookie("tab_status_promotion", item?.status);
@@ -847,30 +924,68 @@ const ManagePromotions = () => {
   /* ~~~ Other ~~~ */
   const filterContent = () => {
     return (
-      <div className="manage-top-up-with-draw__filter-content">
-        {/* Lọc theo loại đối tượng */}
+      <div className="manange-promotion__filter-content">
+        {/* Lọc theo loại dịch vụ */}
         <div>
-          {/* <ButtonCustom
+          <ButtonCustom
+            label="Dịch vụ"
+            options={serviceList}
+            value={selectService}
+            setValueSelectedProps={setSelectService}
+          />
+        </div>
+        {/* Lọc theo loại đối tượng*/}
+        <div>
+          <ButtonCustom
             label="Đối tượng"
             options={objectList}
-            value={object}
+            value={selectObject}
             setValueSelectedProps={setSelectObject}
-            disable={true}
-          /> */}
+          />
+        </div>
+        {/* Lọc theo loại khuyến mãi*/}
+        <div>
+          <ButtonCustom
+            label="Loại khuyến mãi"
+            options={promotionTypeList}
+            value={selectPromotionType}
+            setValueSelectedProps={setSelectPromotionType}
+          />
+        </div>
+        {/* Lọc theo loại nhóm khuyến mãi*/}
+        <div>
+          <ButtonCustom
+            label="Nhóm khuyến mãi"
+            options={groupPromotionList}
+            value={selectGroupPromotionType}
+            setValueSelectedProps={setSelectGroupPromotionType}
+          />
+        </div>
+        {/* Lọc theo loại trạng thái */}
+        <div>
+          <ButtonCustom
+            label="Trạng thái"
+            options={statusList}
+            value={selectStatus}
+            setValueSelectedProps={setSelectStatus}
+          />
         </div>
       </div>
     );
   };
-  // saveToCookie("tab_status_promotion", item?.status);
-  // saveToCookie("selected_promotion", item?.selected);
-  // saveToCookie("brand_promotion", item?.brand);
-  // saveToCookie("value_promotion", item?.value);
-  // saveToCookie("kind_promotion", item?.kind);
-
-  console.log("check selectCookie", selectCookie);
-  // console.log("check selectCookie", selectCookie);
-  // console.log("check brandCookie", brandCookie);
-  // console.log("check serviceCookie", serviceCookie);
+  const searchContent = () => {
+   return (
+     <div>
+       <InputTextCustom
+         type="text"
+         placeHolderNormal="Tìm kiếm theo mã khuyến mãi"
+         onChange={(e) => {
+           handleSearch(e.target.value);
+         }}
+       />
+     </div>
+   );
+  }
   /* ~~~ Main ~~~ */
   return (
     <div>
@@ -902,7 +1017,7 @@ const ManagePromotions = () => {
       )}
       <div className="div-header-promotion mt-4">
         <Select
-          options={optionService}
+          options={serviceList}
           className="select-type-service"
           value={state?.idService}
           onChange={onChangeService}
@@ -915,7 +1030,7 @@ const ManagePromotions = () => {
         />
         <Select
           className="select-type-promotion"
-          options={groupPromotionOption}
+          options={groupPromotionList}
           value={state?.group}
           onChange={(e, item) => onChangeGroupPromotion(e)}
         />
@@ -947,7 +1062,6 @@ const ManagePromotions = () => {
           Chỉnh sửa vị trí
         </Button>
       </div>
-
       <div className="mt-3">
         <Table
           columns={columns}
@@ -1050,16 +1164,18 @@ const ManagePromotions = () => {
       </div>
       {isLoading && <LoadingPagination />}
     </div>
+
     // <div className="manange-promotion">
     //   {/* Header */}
     //   <div className="manange-promotion__header">
     //     <span>Khuyến mãi</span>
     //   </div>
+    //   <FilterData leftContent={searchContent()} />
     //   {/* Filter */}
-    //   {/* <FilterData
-    //     leftContent={filterDateAndSearchRight()}
-    //     rightContent={filterDateAndSearch()}
-    //   /> */}
+    //   <FilterData
+    //     leftContent={filterContent()}
+    //     // rightContent={filterDateAndSearch()}
+    //   />
     //   {/* Filter */}
     //   {/* <FilterData
     //   isTimeFilter
@@ -1070,7 +1186,7 @@ const ManagePromotions = () => {
     //   leftContent={filterByType()}
     // /> */}
     //   {/* Table */}
-    //   {/* <div>
+    //   <div>
     //   <DataTable
     //     columns={columns}
     //     data={data}
@@ -1080,24 +1196,24 @@ const ManagePromotions = () => {
     //     totalItem={total}
     //     onCurrentPageChange={onChangePage}
     //     scrollX={2400}
-    //     actionColumn={addActionColumn}
-    //     getItemRow={setItem}
-    //     headerRightContent={
-    //       <div className="manage-top-up-with-draw__table--right-header">
-    //         <TransactionDrawer2
-    //           titleButton="Phiếu thu"
-    //           titleHeader="Phiếu thu"
-    //           onClick={handleTopUp}
-    //         />
-    //         <TransactionDrawer2
-    //           titleButton="Phiếu chi"
-    //           titleHeader="Phiếu chi"
-    //           onClick={handleWithdraw}
-    //         />
-    //       </div>
-    //     }
+    //     // actionColumn={addActionColumn}
+    //     // getItemRow={setItem}
+    //     // headerRightContent={
+    //     //   <div className="manage-top-up-with-draw__table--right-header">
+    //     //     <TransactionDrawer2
+    //     //       titleButton="Phiếu thu"
+    //     //       titleHeader="Phiếu thu"
+    //     //       onClick={handleTopUp}
+    //     //     />
+    //     //     <TransactionDrawer2
+    //     //       titleButton="Phiếu chi"
+    //     //       titleHeader="Phiếu chi"
+    //     //       onClick={handleWithdraw}
+    //     //     />
+    //     //   </div>
+    //     // }
     //   />
-    // </div> */}
+    // </div>
     // </div>
   );
 };
