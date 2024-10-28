@@ -35,6 +35,7 @@ import SelectDefault from "../../Select/SelectDefault";
 import { IoAlertCircleOutline, IoHelpCircleOutline } from "react-icons/io5";
 import ButtonCustom from "../../button";
 import { convertPhoneNumber } from "../../../utils/contant";
+import { getProvince, getService } from "../../../redux/selectors/service";
 
 const DataTable = (props) => {
   const {
@@ -56,6 +57,8 @@ const DataTable = (props) => {
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
   const [saveToCookie] = useCookies();
+  const service = useSelector(getService);
+  const province = useSelector(getProvince);
   const { width } = useWindowDimensions();
   const timeWork = (data) => {
     const start = moment(
@@ -1849,6 +1852,278 @@ const DataTable = (props) => {
                 </p>
               </div>
             );
+            break;
+          }
+          case "promotion_code": {
+            return (
+              <div
+                className="case__promotion-code"
+                onClick={() =>
+                  navigate("/promotion/manage-setting/edit-promotion", {
+                    state: { id: data?._id },
+                  })
+                }
+              >
+                {data?.type_promotion === "code" &&
+                data?.type_discount === "partner_promotion" ? (
+                  <div className="case__promotion-code--brand">
+                    <span className="case__promotion-code--brand-name">
+                      {data?.brand}
+                    </span>
+                    <span className="case__promotion-code--brand-sub">
+                      Tài trợ khuyến mãi này
+                    </span>
+                  </div>
+                ) : (
+                  <div className="case__promotion-code--un-brand">
+                    <span className="case__promotion-code--un-brand-coupon">
+                      {data?.code}
+                    </span>
+                    <span className="case__promotion-code--un-brand-sub">
+                      {data?.discount_unit === "amount"
+                        ? `Giảm giá ${formatMoney(
+                            data?.discount_max_price
+                          )} cho dịch vụ`
+                        : `Giảm giá ${
+                            data?.discount_value
+                          }%, tối đa ${formatMoney(data?.discount_max_price)} ${
+                            data?.price_min_order > 0
+                              ? ` đơn từ ${formatMoney(
+                                  data?.price_min_order
+                                )} cho dịch vụ`
+                              : "cho dịch vụ"
+                          }`}
+                      {service?.map((item, index) => {
+                        if (data?.service_apply?.includes(item?._id)) {
+                          return (
+                            <span
+                              key={index}
+                              className="case__promotion-code--un-brand-sub-service"
+                            >
+                              {item?.title?.vi}
+                            </span>
+                          );
+                        }
+                      })}
+                    </span>
+                  </div>
+                )}
+              </div>
+            );
+            break;
+          }
+          case "type_promotion": {
+            return (
+              <div className="case__normal-text">
+                <span className="case__normal-text--label">
+                  {data?.type_promotion === "code" &&
+                  data?.type_discount === "order"
+                    ? "Mã KM"
+                    : data?.type_promotion === "code" &&
+                      data?.type_discount === "partner_promotion"
+                    ? "Mã KM"
+                    : "CTKM"}
+                </span>
+              </div>
+            );
+            break;
+          }
+          case "img_promotion": {
+            return (
+              <div className="case__promotion-image">
+                {data?.type_promotion === "code" &&
+                data?.type_discount === "order" ? (
+                  <Image
+                    className="case__promotion-image-picture"
+                    src={data?.thumbnail}
+                    preview={false}
+                  />
+                ) : data?.type_promotion === "code" &&
+                  data?.type_discount === "partner_promotion" ? (
+                  <Image
+                    src={data?.thumbnail}
+                    style={{
+                      width: 50,
+                      height: 50,
+                      borderRadius: 8,
+                      border: "0.5px solid #d6d6d6",
+                    }}
+                    preview={false}
+                  />
+                ) : null}
+              </div>
+            );
+            break;
+          }
+          case "area_promotion": {
+            return (
+              <div className="case__promotion-province">
+                {!data?.is_apply_area ? (
+                  <span className="case__promotion-province--label">
+                    Toàn quốc
+                  </span>
+                ) : (
+                  <div className="case__promotion-province--provinces">
+                    {province?.map((item, index) => {
+                      if (data?.city?.includes(item?.code)) {
+                        return (
+                          <span className="case__promotion-province--label">
+                            {item?.name?.replace(
+                              new RegExp(`${"Thành phố"}|${"Tỉnh"}`),
+                              ""
+                            )}
+                          </span>
+                        );
+                      }
+                    })}
+                  </div>
+                )}
+              </div>
+            );
+            break;
+          }
+          case "status_promotion": {
+            let _text_status = <span></span>;
+            switch (data?.status) {
+              case "upcoming":
+                _text_status = (
+                  <span className="case__promotion-status--name holding">
+                    {`${i18n.t("upcoming", {
+                      lng: lang,
+                    })}`}
+                  </span>
+                );
+                break;
+              case "doing":
+                _text_status = (
+                  <span className="case__promotion-status--name doing">
+                    {`${i18n.t("happenning", {
+                      lng: lang,
+                    })}`}
+                  </span>
+                );
+                break;
+              case "out_of_stock":
+                _text_status = (
+                  <span className="case__promotion-status--name out_of_stock">
+                    {`${i18n.t("out_stock", {
+                      lng: lang,
+                    })}`}
+                  </span>
+                );
+                break;
+              case "out_of_date":
+                _text_status = (
+                  <span className="case__promotion-status--name out_of_date">
+                    {`${i18n.t("out_date", {
+                      lng: lang,
+                    })}`}
+                  </span>
+                );
+                break;
+              case "done":
+                _text_status = (
+                  <span className="case__promotion-status--name done">
+                    {`${i18n.t("closed", {
+                      lng: lang,
+                    })}`}
+                  </span>
+                );
+                break;
+              default:
+                break;
+            }
+            return <div className="case__promotion-status">{_text_status}</div>;
+            break;
+          }
+          case "time_using_promotion": {
+            return (
+              <div className="case__normal-text">
+                <span className="case__normal-text--label">
+                  {data?.is_parrent_promotion
+                    ? data?.total_used_promotion +
+                      "/" +
+                      data?.total_child_promotion
+                    : data?.limit_count > 0
+                    ? data?.total_used_promotion + "/" + data?.limit_count
+                    : data?.total_used_promotion}
+                </span>
+              </div>
+            );
+            break;
+          }
+          case "time_using_promotion": {
+            return (
+              <div className="case__normal-text">
+                <span className="case__normal-text--label">
+                  {data?.is_parrent_promotion
+                    ? data?.total_used_promotion +
+                      "/" +
+                      data?.total_child_promotion
+                    : data?.limit_count > 0
+                    ? data?.total_used_promotion + "/" + data?.limit_count
+                    : data?.total_used_promotion}
+                </span>
+              </div>
+            );
+            break;
+          }
+          case "start_date_promotion": {
+            return (
+              <div className="case__date-create">
+                {data?.is_limit_date ? (
+                  <>
+                    <span className="case__date-create-date">
+                      {moment(new Date(data?.limit_start_date)).utc().format(
+                        "DD/MM/YYYY"
+                      )}
+                    </span>
+                    <span className="case__date-create-time">
+                      {moment(new Date(data?.limit_start_date)).utc().format(
+                        "HH:mm:ss"
+                      )}
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <span className="case__date-create-date">
+                      {moment(new Date(data?.date_create)).utc().format("DD/MM/YYYY")}
+                    </span>
+                    <span className="case__date-create-time">
+                      {moment(new Date(data?.date_create)).utc().format("HH:mm:ss")}
+                    </span>
+                  </>
+                )}
+              </div>
+            );
+            break;
+          }
+          case "end_date_promotion": {
+            return (
+              <div className="case__date-create">
+                {data?.is_limit_date ? (
+                  <>
+                    <span className="case__date-create-date">
+                      {moment(new Date(data?.limit_end_date)).utc().format(
+                        "DD/MM/YYYY"
+                      )}
+                    </span>
+                    <span className="case__date-create-time">
+                      {moment(new Date(data?.limit_end_date)).utc().format(
+                        "HH:mm:ss"
+                      )}
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <span className="case__date-create-date">
+                      Không giới hạn
+                    </span>
+                  </>
+                )}
+              </div>
+            );
+            break;
           }
           default: {
             return (

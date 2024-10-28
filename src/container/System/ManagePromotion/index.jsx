@@ -1,447 +1,140 @@
-import { SearchOutlined } from "@ant-design/icons";
-import {
-  Button,
-  Image,
-  Input,
-  Pagination,
-  Progress,
-  Select,
-  Table,
-} from "antd";
+
 import _debounce from "lodash/debounce";
-import moment from "moment";
-import React, { useCallback, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { getGroupPromotion } from "../../../api/configuration.jsx";
 import {
-  activePromotion,
-  deletePromotion,
   fetchPromotion,
-  updatePromotion,
 } from "../../../api/promotion.jsx";
-import ModalCustom from "../../../components/modalCustom/index.jsx";
-import LoadingPagination from "../../../components/paginationLoading/index.jsx";
-import { formatMoney } from "../../../helper/formatMoney.js";
 import { errorNotify } from "../../../helper/toast.js";
-import { useCookies } from "../../../helper/useCookies.js";
-import { useHorizontalScroll } from "../../../helper/useSideScroll.js";
-import useWindowDimensions from "../../../helper/useWindowDimensions.js";
-import i18n from "../../../i18n/index.js";
 import {
   getElementState,
   getLanguageState,
 } from "../../../redux/selectors/auth.js";
-import { getProvince, getService } from "../../../redux/selectors/service.js";
+import { getService } from "../../../redux/selectors/service.js";
 import "./styles.scss";
 import "./index.scss";
 import FilterData from "../../../components/filterData/filterData.jsx";
 import ButtonCustom from "../../../components/button/index.jsx";
 import InputTextCustom from "../../../components/inputCustom/index.jsx";
 import DataTable from "../../../components/tables/dataTable/index.jsx";
+import CustomHeaderDatatable from "../../../components/tables/tableHeader/index.jsx";
+import { loadingAction } from "../../../redux/actions/loading.js";
+import { useNavigate } from "react-router-dom";
+import { Button } from "antd";
 
 const ManagePromotions = () => {
-  const toggle = () => setModal(!modal);
-  const toggleActive = () => setModalActive(!modalActive);
-  const scrollRef = useHorizontalScroll();
-  const { width } = useWindowDimensions();
-  const checkElement = useSelector(getElementState);
-  const lang = useSelector(getLanguageState);
-  const navigate = useNavigate();
-  const province = useSelector(getProvince);
-  const service = useSelector(getService);
-
-  /* ~~~ Value ~~~ */
-  const [groupPromotion, setGroupPromotion] = useState([]); // Dữ liệu nhóm khuyến mãi
-  const [isLoading, setIsLoading] = useState(false);
-  const [valueSearch, setValueSearch] = useState("");
-  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  const [itemEdit, setItemEdit] = useState([]);
-  const [modalActive, setModalActive] = useState(false);
-  const [data, setData] = useState([]); // Dữ liệu của bảng
-  const [total, setTotal] = useState(0); // Giá trị tổng số phần tử trong bảng (tí xóa)
-  const [modal, setModal] = useState(false); // Giá trị modal
-  const typeSort = -1; // Giá trị sort (lọc giá trị theo phần từ mới nhất của bảng từ trên xuống)
-  const [saveToCookie, readCookie] = useCookies();
-  const [state, setState] = useState({
-    currentPage: 1,
-    startPage: 0,
-    type: "",
-    brand: "",
-    idService: "",
-    status: "",
-    modalShowApp: false,
-    value: "",
-    kind: "",
-    group: "",
-  });
+  const dispatch = useDispatch();
   const [startPage, setStartPage] = useState(0);
   const [lengthPage, setLengthPage] = useState(
     JSON.parse(localStorage.getItem("linePerPage"))
       ? JSON.parse(localStorage.getItem("linePerPage")).value
       : 20
   );
+  const lang = useSelector(getLanguageState);
+  const service = useSelector(getService);
+  const checkElement = useSelector(getElementState);
+  const navigate = useNavigate();
+  /* ~~~ Value ~~~ */
+  const typeSort = -1; // Giá trị sort (lọc giá trị theo phần từ mới nhất của bảng từ trên xuống)
+  const [groupPromotion, setGroupPromotion] = useState([]); // Dữ liệu nhóm khuyến mãi
+  const [valueSearch, setValueSearch] = useState("");
+  const [data, setData] = useState([]); // Dữ liệu của bảng
+  const [total, setTotal] = useState(0); // Giá trị tổng số phần tử trong bảng (tí xóa)
   const [selectService, setSelectService] = useState(""); // Giá trị select của dịch vụ
   const [selectObject, setSelectObject] = useState(""); // Giá trị select của đối tượng
   const [selectPromotionType, setSelectPromotionType] = useState(""); // Giá trị select của loại khuyến mãi
   const [selectGroupPromotionType, setSelectGroupPromotionType] = useState(""); // Giá trị select của nhóm khuyến mãi
   const [selectStatus, setSelectStatus] = useState(""); // Giá trị select của trạng thái
-
-  // Những giá trị của selecet
-  const tabCookie = readCookie("tab_status_promotion"); // Giá trị status của promotion (có 2 loại: upcomming và doing)
-  const serviceCookie = readCookie("service_prmotion"); // Giá trị của selected dịch vụ (lưu id)
-  const selectCookie = readCookie("selected_promotion"); // Giá trị của type_promotion (có 2 loại: code (mã kh) và event (chương trình kh))
-  const brandCookie = readCookie("brand_promotion"); // Giá trị của brand (trong db) (tên brand của các loại kh)
-  const valueCookie = readCookie("value_promotion"); // Thừa (xóa)
-  const kindCookie = readCookie("kind_promotion"); // Thừa (xóa)
   /* ~~~ List ~~~ */
-  const columns = [
+  const columns = [ 
     {
+      customTitle: (
+        <CustomHeaderDatatable
+          title="Mã khuyến mãi"
+          textToolTip="Mã để áp dụng khuyến mãi"
+        />
+      ),
+      dataIndex: "",
+      key: "promotion_code",
+      width: 60,
     },
     {
-      title: () => {
-        return (
-          <p className="title-column">{`${i18n.t("Khuyến mãi", {
-            lng: lang,
-          })}`}</p>
-        );
-      },
-      render: (data) => {
-        return (
-          <div
-            className="div-img-promotion"
-            onClick={() =>
-              navigate("/promotion/manage-setting/edit-promotion", {
-                state: { id: data?._id },
-              })
-            }
-          >
-            {/* <Image src={data?.thumbnail} className="img-customer-promotion" /> */}
-            <div className="div-name-promotion">
-              {data?.type_promotion === "code" &&
-              data?.type_discount === "partner_promotion" ? (
-                <div className="div-name-brand">
-                  <p className="text-name-brand">Ưu đãi từ</p>
-                  <p className="text-brand">"{data?.brand}"</p>
-                </div>
-              ) : (
-                <p className="text-title-code">{data?.code}</p>
-              )}
-
-              {data?.type_promotion === "code" &&
-              data?.type_discount === "partner_promotion" ? (
-                <></>
-              ) : (
-                <a className="text-title-promotion">
-                  {data?.discount_unit === "amount"
-                    ? `Giảm giá ${formatMoney(
-                        data?.discount_max_price
-                      )} cho dịch vụ`
-                    : `Giảm giá ${data?.discount_value}%, tối đa ${formatMoney(
-                        data?.discount_max_price
-                      )} ${
-                        data?.price_min_order > 0
-                          ? ` đơn từ ${formatMoney(
-                              data?.price_min_order
-                            )} cho dịch vụ `
-                          : "cho dịch vụ"
-                      } `}
-                  {service?.map((item, index) => {
-                    return (
-                      <a key={index} className="text-service">
-                        {data?.service_apply?.includes(item?._id)
-                          ? item?.title?.vi
-                          : null}
-                      </a>
-                    );
-                  })}
-                </a>
-              )}
-            </div>
-          </div>
-        );
-      },
-      width: "31%",
+      customTitle: (
+        <CustomHeaderDatatable
+          title="Hình thức"
+          textToolTip="Hình thức của khuyến mãi (mã hay chương trình)"
+        />
+      ),
+      dataIndex: "",
+      key: "type_promotion",
+      width: 20,
     },
     {
-      title: () => {
-        return (
-          <p className="title-column">{`${i18n.t("Hình thức", {
-            lng: lang,
-          })}`}</p>
-        );
-      },
-      render: (data) => {
-        return (
-          <p
-            className="text-promotion"
-            onClick={() =>
-              navigate("/promotion/manage-setting/edit-promotion", {
-                state: { id: data?._id },
-              })
-            }
-          >
-            {data?.type_promotion === "code" && data?.type_discount === "order"
-              ? "Mã KM"
-              : data?.type_promotion === "code" &&
-                data?.type_discount === "partner_promotion"
-              ? "Mã KM"
-              : "CTKM"}
-          </p>
-        );
-      },
-      align: "left",
-      width: "8%",
+      customTitle: (
+        <CustomHeaderDatatable
+          title="Hình ảnh"
+          textToolTip="Hình ảnh thumbnail của khuyến mãi"
+        />
+      ),
+      dataIndex: "",
+      key: "img_promotion",
+      width: 20,
     },
     {
-      title: () => {
-        return (
-          <p className="title-column">{`${i18n.t("Hình ảnh", {
-            lng: lang,
-          })}`}</p>
-        );
-      },
-      render: (data) => {
-        return (
-          <div
-            onClick={() =>
-              navigate("/promotion/manage-setting/edit-promotion", {
-                state: { id: data?._id },
-              })
-            }
-          >
-            {data?.type_promotion === "code" &&
-            data?.type_discount === "order" ? (
-              <Image
-                src={data?.thumbnail}
-                style={{
-                  width: 50,
-                  height: 50,
-                  borderRadius: 8,
-                  border: "0.5px solid #d6d6d6",
-                }}
-                preview={false}
-              />
-            ) : data?.type_promotion === "code" &&
-              data?.type_discount === "partner_promotion" ? (
-              <Image
-                src={data?.thumbnail}
-                style={{
-                  width: 50,
-                  height: 50,
-                  borderRadius: 8,
-                  border: "0.5px solid #d6d6d6",
-                }}
-                preview={false}
-              />
-            ) : null}
-          </div>
-        );
-      },
-      align: "center",
-      width: "8%",
+      customTitle: (
+        <CustomHeaderDatatable
+          title="Khu vực"
+          textToolTip="Khu vực mà được áp dụng mã khuyến mãi"
+        />
+      ),
+      dataIndex: "",
+      key: "area_promotion",
+      width: 20,
     },
     {
-      title: () => <p className="title-column">Khu vực</p>,
-      render: (data) => {
-        return (
-          <div
-            className="div-area-promotion"
-            onClick={() =>
-              navigate("/promotion/manage-setting/edit-promotion", {
-                state: { id: data?._id },
-              })
-            }
-          >
-            {!data?.is_apply_area ? (
-              <p className="text-area">Toàn quốc</p>
-            ) : (
-              <>
-                {province?.map((item, index) => {
-                  return (
-                    <p className="text-area">
-                      {data?.city?.includes(item?.code)
-                        ? `${item?.name?.replace(
-                            new RegExp(`${"Thành phố"}|${"Tỉnh"}`),
-                            ""
-                          )}` + ", "
-                        : null}
-                    </p>
-                  );
-                })}
-              </>
-            )}
-          </div>
-        );
-      },
-      width: "10%",
+      customTitle: (
+        <CustomHeaderDatatable
+          title="Trạng thái"
+          textToolTip="Trạng thái của mã khuyến mãi"
+        />
+      ),
+      dataIndex: "",
+      key: "status_promotion",
+      width: 30,
     },
     {
-      title: () => {
-        return (
-          <p className="title-column">{`${i18n.t("status", {
-            lng: lang,
-          })}`}</p>
-        );
-      },
-      align: "center",
-      render: (data) => {
-        return (
-          <div
-            className={
-              data?.status === "upcoming"
-                ? "div-text-upcoming"
-                : data?.status === "doing"
-                ? "div-doing-status-promotion"
-                : data?.status === "out_of_stock"
-                ? "div-out-stock"
-                : "div-cancel-promotion"
-            }
-            onClick={() =>
-              navigate("/promotion/manage-setting/edit-promotion", {
-                state: { id: data?._id },
-              })
-            }
-          >
-            {data?.status === "upcoming" ? (
-              <p className="text-upcoming">{`${i18n.t("upcoming", {
-                lng: lang,
-              })}`}</p>
-            ) : data?.status === "doing" ? (
-              <p className="text-doing-status">{`${i18n.t("happenning", {
-                lng: lang,
-              })}`}</p>
-            ) : data?.status === "out_of_stock" ? (
-              <p className="text-cancel-promotion">{`${i18n.t("out_stock", {
-                lng: lang,
-              })}`}</p>
-            ) : data?.status === "out_of_date" ? (
-              <p className="text-cancel-promotion">{`${i18n.t("out_date", {
-                lng: lang,
-              })}`}</p>
-            ) : (
-              <p className="text-cancel-promotion">{`${i18n.t("closed", {
-                lng: lang,
-              })}`}</p>
-            )}
-          </div>
-        );
-      },
-      width: "10%",
+      customTitle: (
+        <CustomHeaderDatatable
+          title="Sử dụng"
+          textToolTip="Số lượng mã khuyến mãi đã được sử dụng"
+        />
+      ),
+      dataIndex: "",
+      key: "time_using_promotion",
+      width: 20,
     },
     {
-      title: () => {
-        return (
-          <p className="title-column">{`${i18n.t("use", {
-            lng: lang,
-          })}`}</p>
-        );
-      },
-      render: (data) => {
-        return (
-          <div
-            className="div-use-promotion"
-            onClick={() =>
-              navigate("/promotion/manage-setting/edit-promotion", {
-                state: { id: data?._id },
-              })
-            }
-          >
-            <p
-              className="text-title-use"
-              onClick={() =>
-                navigate("/promotion/manage-setting/order-promotion", {
-                  state: { id: data?._id },
-                })
-              }
-            >
-              {data?.is_parrent_promotion
-                ? data?.total_used_promotion + "/" + data?.total_child_promotion
-                : data?.limit_count > 0
-                ? data?.total_used_promotion + "/" + data?.limit_count
-                : data?.total_used_promotion}
-            </p>
-            {(data?.is_parrent_promotion || data?.limit_count > 0) && (
-              <Progress
-                percent={
-                  data?.is_parrent_promotion
-                    ? (data?.total_used_promotion /
-                        data?.total_child_promotion) *
-                      100
-                    : (data?.total_used_promotion / data?.limit_count) * 100
-                }
-                strokeColor={{ "0%": "#108ee9", "100%": "#87d068" }}
-                showInfo={false}
-                size="small"
-                className="progress-bar"
-              />
-            )}
-          </div>
-        );
-      },
-      align: "right",
-      width: "8%",
+      customTitle: (
+        <CustomHeaderDatatable
+          title="Ngày bắt đầu"
+          textToolTip="Ngày bắt đầu"
+        />
+      ),
+      dataIndex: "",
+      key: "start_date_promotion",
+      width: 25,
     },
     {
-      title: () => {
-        return (
-          <p className="title-column">{`${i18n.t("Bắt đầu", {
-            lng: lang,
-          })}`}</p>
-        );
-      },
-      align: "center",
-      render: (data) => {
-        const startDate = moment(data?.limit_start_date)
-          .utc()
-          .format("DD/MM/YYYY");
-        const start = moment(data?.date_create).utc().format("DD/MM/YYYY");
-        return (
-          <div
-            onClick={() =>
-              navigate("/promotion/manage-setting/edit-promotion", {
-                state: { id: data?._id },
-              })
-            }
-          >
-            {data?.is_limit_date ? (
-              <div className="div-date-promotion">
-                <p className="text-title-promotion"> {startDate}</p>
-              </div>
-            ) : (
-              <div className="div-date-promotion">
-                <p className="text-title-promotion">{start}</p>
-              </div>
-            )}
-          </div>
-        );
-      },
-      width: "10%",
-    },
-    {
-      title: () => {
-        return (
-          <p className="title-column">{`${i18n.t("Kết thúc", {
-            lng: lang,
-          })}`}</p>
-        );
-      },
-      render: (data) => {
-        const endDate = moment(data?.limit_end_date).utc().format("DD/MM/YYYY");
-        return (
-          <div className="div-date-promotion">
-            {data?.is_limit_date ? (
-              <p className="text-title-promotion"> {endDate}</p>
-            ) : (
-              <p className="text-title-promotion">{`${i18n.t("no_expiry", {
-                lng: lang,
-              })}`}</p>
-            )}
-          </div>
-        );
-      },
-      align: "center",
-      width: "10%",
+      customTitle: (
+        <CustomHeaderDatatable
+          title="Ngày kết thúc"
+          textToolTip="Ngày kết thúc"
+        />
+      ),
+      dataIndex: "",
+      key: "end_date_promotion",
+      width: 25,
     },
   ];
   // Danh sách các dịch vụ
@@ -528,398 +221,65 @@ const ManagePromotions = () => {
     },
   ];
   /* ~~~ Handle function ~~~ */
-  const onDelete = useCallback(
-    (id) => {
-      setIsLoading(true);
-      deletePromotion(id)
-        .then((res) => {
-          fetchPromotion(
-            valueSearch,
-            state?.status,
-            state?.startPage,
-            20,
-            state?.type,
-            state?.brand,
-            state?.idService,
-            "",
-            typeSort,
-            state.group
-          )
-            .then((res) => {
-              setData(res?.data);
-              setTotal(res?.totalItem);
-            })
-            .catch((err) => {});
-          setModal(false);
-          setIsLoading(false);
-        })
-        .catch((err) => {
-          errorNotify({
-            message: err?.message,
-          });
-          setIsLoading(false);
-        });
-    },
-    [valueSearch, typeSort, state]
-  );
-  const onActive = useCallback(
-    (id, is_active) => {
-      setIsLoading(true);
-      activePromotion(id, { is_active: is_active ? false : true })
-        .then((res) => {
-          fetchPromotion(
-            valueSearch,
-            state?.status,
-            state?.startPage,
-            20,
-            state?.type,
-            state?.brand,
-            state?.idService,
-            "",
-            typeSort,
-            state.group
-          )
-            .then((res) => {
-              setData(res?.data);
-              setTotal(res?.totalItem);
-            })
-            .catch((err) => {});
-          setModalActive(false);
-          setIsLoading(false);
-        })
-        .catch((err) => {
-          errorNotify({
-            message: err?.message,
-          });
-          setIsLoading(false);
-        });
-    },
-    [valueSearch, typeSort, state]
-  );
-  const onChange = (page) => {
-    const lengthData = data.length < 20 ? 20 : data.length;
-    const start = page * lengthData - lengthData;
-    setState({ ...state, currentPage: page, startPage: start });
-    fetchPromotion(
-      valueSearch,
-      state?.status,
-      start,
-      20,
-      state?.type,
-      state?.brand,
-      state?.idService,
-      "",
-      typeSort,
-      state.group
-    )
-      .then((res) => {
-        setData(res?.data);
-        setTotal(res?.totalItem);
-        window.scroll(0, 0);
-      })
-      .catch((err) => {});
+  // 1. Fetch dữ liệu bảng
+  const fetchData = async () => {
+    try {
+      dispatch(loadingAction.loadingRequest(true));
+      const res = await fetchPromotion(
+        valueSearch,
+        selectStatus,
+        startPage,
+        lengthPage,
+        selectPromotionType,
+        selectObject,
+        selectService,
+        "",
+        typeSort,
+        selectGroupPromotionType,
+      );
+      setData(res?.data);
+      setTotal(res?.totalItem);
+      dispatch(loadingAction.loadingRequest(false));
+    } catch (err) {
+      errorNotify({
+        message: err?.message,
+      });
+    }
+  };
+  // 2. Fetch dữ liệu nhóm khuyễn mãi
+  const fetchGroupPromotion = async () => {
+    try {
+      dispatch(loadingAction.loadingRequest(true));
+      const res = await getGroupPromotion(0, 20, "");
+      setGroupPromotion(res?.data);
+      dispatch(loadingAction.loadingRequest(false));
+    } catch (err) {
+      errorNotify({
+        message: err?.message,
+      });
+    }
   };
   const onChangePage = (value) => {
     setStartPage(value);
   };
   const handleSearch = _debounce((value) => {
     setValueSearch(value);
-    setIsLoading(true);
-    fetchPromotion(
-      value,
-      state?.status,
-      state?.startPage,
-      20,
-      state?.type,
-      state?.brand,
-      state?.idService,
-      "",
-      typeSort,
-      state.group
-    )
-      .then((res) => {
-        setIsLoading(false);
-        setData(res?.data);
-        setTotal(res?.totalItem);
-      })
-      .catch((err) => {});
   }, 500);
-  const onChangeTab = (item) => {
-    setIsLoading(true);
-    saveToCookie("tab_status_promotion", item?.status);
-    saveToCookie("selected_promotion", item?.selected);
-    saveToCookie("brand_promotion", item?.brand);
-    saveToCookie("value_promotion", item?.value);
-    saveToCookie("kind_promotion", item?.kind);
-    setState({
-      ...state,
-      status: item?.status,
-      startPage: 0,
-      currentPage: 1,
-      type: item?.selected,
-      brand: item?.brand,
-      value: item?.value,
-      kind: item?.kind,
-    });
-    fetchPromotion(
-      valueSearch,
-      item?.status,
-      0,
-      20,
-      item?.selected,
-      item?.brand,
-      state?.idService,
-      "",
-      typeSort,
-      state.group
-    )
-      .then((res) => {
-        setIsLoading(false);
-        setData(res?.data);
-        setTotal(res?.totalItem);
-      })
-      .catch((err) => {});
-  };
-  const onChangeService = (value) => {
-    setIsLoading(true);
-    saveToCookie("service_prmotion", value);
-    setState({ ...state, idService: value });
-    fetchPromotion(
-      valueSearch,
-      state?.status,
-      state?.startPage,
-      20,
-      state?.type,
-      state?.brand,
-      value,
-      "",
-      typeSort,
-      state.group
-    )
-      .then((res) => {
-        setIsLoading(false);
-        setData(res?.data);
-        setTotal(res?.totalItem);
-      })
-      .catch((err) => {});
-  };
-  const onChangeTypePromotion = (value, item) => {
-    saveToCookie("selected_promotion", item?.selected);
-    saveToCookie("brand_promotion", item?.brand);
-    saveToCookie("kind_promotion", value);
-    setState({
-      ...state,
-      type: item?.selected,
-      brand: item?.brand,
-      kind: value,
-    });
-    if (
-      state.status === "doing" &&
-      item?.selected === "code" &&
-      item?.brand === "guvi"
-    ) {
-      saveToCookie("value_promotion", "kmkh");
-      setState({
-        ...state,
-        value: "kmkh",
-        type: item?.selected,
-        brand: item?.brand,
-        kind: value,
-      });
-    } else if (
-      state.status === "doing" &&
-      item?.selected === "code" &&
-      item?.brand === "orther"
-    ) {
-      saveToCookie("value_promotion", "kmdtkh");
-      setState({
-        ...state,
-        value: "kmdtkh",
-        type: item?.selected,
-        brand: item?.brand,
-        kind: value,
-      });
-    } else if (
-      state.status === "doing" &&
-      item?.selected === "event" &&
-      item?.brand === ""
-    ) {
-      saveToCookie("value_promotion", "ctkmkh");
-      setState({
-        ...state,
-        value: "ctkmkh",
-        type: item?.selected,
-        brand: item?.brand,
-        kind: value,
-      });
-    } else if (
-      state.status === "upcoming" &&
-      item?.selected === "code" &&
-      item?.brand === "guvi"
-    ) {
-      saveToCookie("value_promotion", "kmckh");
-      setState({
-        ...state,
-        value: "kmckh",
-        type: item?.selected,
-        brand: item?.brand,
-        kind: value,
-      });
-    } else if (
-      state.status === "upcoming" &&
-      item?.selected === "code" &&
-      item?.brand === "orther"
-    ) {
-      saveToCookie("value_promotion", "kmdtckh");
-      setState({
-        ...state,
-        value: "kmdtckh",
-        type: item?.selected,
-        brand: item?.brand,
-        kind: value,
-      });
-    } else if (
-      state.status === "upcoming" &&
-      item?.selected === "event" &&
-      item?.brand === ""
-    ) {
-      saveToCookie("value_promotion", "ctkmckh");
-      setState({
-        ...state,
-        value: "ctkmckh",
-        type: item?.selected,
-        brand: item?.brand,
-        kind: value,
-      });
-    } else if (
-      state.status === "upcoming" ||
-      (state.status === "doing" && item?.selected === "" && item?.brand === "")
-    ) {
-      saveToCookie("value_promotion", "");
-      setState({
-        ...state,
-        value: "",
-        type: item?.selected,
-        brand: item?.brand,
-        kind: value,
-      });
-    }
-
-    fetchPromotion(
-      valueSearch,
-      state?.status,
-      0,
-      20,
-      item?.selected,
-      item?.brand,
-      state?.idService,
-      "",
-      typeSort,
-      state.group
-    )
-      .then((res) => {
-        setData(res?.data);
-        setTotal(res?.totalItem);
-      })
-      .catch((err) => {});
-  };
-  const onChangeShow = (id, active) => {
-    setIsLoading(true);
-    updatePromotion(id, {
-      is_show_in_app: false,
-    })
-      .then((res) => {
-        setIsLoading(false);
-        setState({ ...state, modalShowApp: active ? false : true });
-        fetchPromotion(
-          valueSearch,
-          state?.status,
-          state?.startPage,
-          20,
-          state?.type,
-          state?.brand,
-          state?.idService,
-          "",
-          typeSort,
-          state.group
-        )
-          .then((res) => {
-            setData(res?.data);
-            setTotal(res?.totalItem);
-          })
-          .catch((err) => {});
-      })
-      .catch((err) => {
-        setIsLoading(false);
-        errorNotify({
-          message: err?.message,
-        });
-      });
-  };
-  const onChangeGroupPromotion = (value) => {
-    setState({ ...state, group: value });
-    fetchPromotion(
-      valueSearch,
-      state?.status,
-      state?.startPage,
-      20,
-      state?.type,
-      state?.brand,
-      state?.idService,
-      "",
-      typeSort,
-      value
-    )
-      .then((res) => {
-        setData(res?.data);
-        setTotal(res?.totalItem);
-      })
-      .catch((err) => {});
-  };
   /* ~~~ Use effect ~~~ */
   // 1. Fetch dữ liệu bảng
   useEffect(() => {
-    setState({
-      ...state,
-      status: tabCookie == "" ? "doing" : tabCookie,
-      idService: serviceCookie === "" ? "" : serviceCookie,
-      type: selectCookie === " " ? "code" : selectCookie,
-      brand: brandCookie === "" ? "guvi" : brandCookie,
-      value: valueCookie === "" ? "kmkh" : valueCookie,
-      kind: kindCookie === "" ? "promotion" : kindCookie,
-    });
-    fetchPromotion(
-      "",
-      tabCookie == "" ? "doing" : tabCookie,
-      0,
-      20,
-      selectCookie === "" ? "code" : selectCookie,
-      brandCookie === "" ? "guvi" : brandCookie,
-      serviceCookie === "" ? "" : serviceCookie,
-      "",
-      typeSort,
-      state.group
-    )
-      .then((res) => {
-        console.log("check res >>>", res);
-        setData(res?.data);
-        setTotal(res?.totalItem);
-      })
-      .catch((err) => {});
-
-    getGroupPromotion(0, 20, "")
-      .then((res) => {
-        setGroupPromotion(res?.data);
-      })
-      .catch((err) => {});
+    fetchData();
+    fetchGroupPromotion();
   }, [
-    serviceCookie,
-    brandCookie,
-    selectCookie,
-    tabCookie,
-    kindCookie,
-    valueCookie,
+    startPage,
+    lengthPage,
     typeSort,
+    selectStatus,
+    selectPromotionType,
+    selectObject,
+    selectService,
+    selectGroupPromotionType,
+    valueSearch
   ]);
   /* ~~~ Other ~~~ */
   const filterContent = () => {
@@ -973,343 +333,63 @@ const ManagePromotions = () => {
       </div>
     );
   };
-  const searchContent = () => {
-   return (
-     <div>
-       <InputTextCustom
-         type="text"
-         placeHolderNormal="Tìm kiếm theo mã khuyến mãi"
-         onChange={(e) => {
-           handleSearch(e.target.value);
-         }}
-       />
-     </div>
-   );
-  }
-  /* ~~~ Main ~~~ */
-  return (
-    <div>
-      {width > 900 ? (
-        <div className="div-tab-promotion" ref={scrollRef}>
-          {PROMOTION_TAB?.map((item, index) => {
-            return (
-              <div
-                key={index}
-                className={
-                  item?.value === state?.value
-                    ? "div-tab-item-select"
-                    : "div-tab-item"
-                }
-                onClick={() => onChangeTab(item)}
-              >
-                <p className="text-tab">{item?.label}</p>
-              </div>
-            );
-          })}
-        </div>
-      ) : (
-        <Select
-          options={PROMOTION_TAB}
-          style={{ width: "100%" }}
-          value={state?.value}
-          onChange={(value, item) => onChangeTab(item)}
-        />
-      )}
-      <div className="div-header-promotion mt-4">
-        <Select
-          options={serviceList}
-          className="select-type-service"
-          value={state?.idService}
-          onChange={onChangeService}
-        />
-        <Select
-          options={TYPE_PRMOTION}
-          className="select-type-promotion"
-          value={state?.kind}
-          onChange={(e, item) => onChangeTypePromotion(e, item)}
-        />
-        <Select
-          className="select-type-promotion"
-          options={groupPromotionList}
-          value={state?.group}
-          onChange={(e, item) => onChangeGroupPromotion(e)}
-        />
-        <Input
-          placeholder={`${i18n.t("search_coupon", { lng: lang })}`}
-          type="text"
-          prefix={<SearchOutlined />}
-          className="input-search-promotion"
-          onChange={(e) => handleSearch(e.target.value)}
-        />
+  const searchContentLeft = () => {
+    return (
+      <div className="manange-promotion__filter-searching-left">
         {checkElement?.includes("create_promotion") && (
-          <>
-            <Button
-              onClick={() =>
-                navigate(`/promotion/manage-setting/create-promotion`)
-              }
-              className="btn-add-promotion-v2"
-            >
-              Thêm khuyến mãi
-            </Button>
-          </>
+          <ButtonCustom
+            onClick={() =>
+              navigate(`/promotion/manage-setting/create-promotion`)
+            }
+            label="Thêm khuyến mãi"
+          />
         )}
-        <Button
+        <ButtonCustom
           onClick={() =>
             navigate(`/promotion/manage-setting/edit-position-promotion`)
           }
-          className="btn-edit-position"
-        >
-          Chỉnh sửa vị trí
-        </Button>
-      </div>
-      <div className="mt-3">
-        <Table
-          columns={columns}
-          dataSource={data}
-          pagination={false}
-          rowKey={(record) => record._id}
-          rowSelection={{
-            selectedRowKeys,
-            onChange: (selectedRowKeys, selectedRows) => {
-              setSelectedRowKeys(selectedRowKeys);
-            },
-          }}
-          onRow={(record, rowIndex) => {
-            return {
-              onClick: (event) => {
-                setItemEdit(record);
-              },
-            };
-          }}
-          scroll={{
-            x: width <= 900 ? 1400 : 0,
-          }}
-        />
-        <div className="div-pagination p-2">
-          <p>
-            {`${i18n.t("total", { lng: lang })}`}: {total}
-          </p>
-          <div>
-            <Pagination
-              current={state?.currentPage}
-              onChange={onChange}
-              total={total}
-              showSizeChanger={false}
-              pageSize={20}
-            />
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <ModalCustom
-          isOpen={modal}
-          title={`${i18n.t("delete_promotion", { lng: lang })}`}
-          handleOk={() => onDelete(itemEdit?._id)}
-          handleCancel={toggle}
-          textOk={`${i18n.t("delete", { lng: lang })}`}
-          body={
-            <>
-              <p className="m-0">{`${i18n.t("want_delete_promotion", {
-                lng: lang,
-              })}`}</p>
-              <p className="text-name-modal">{itemEdit?.title?.[lang]}</p>
-            </>
-          }
+          label="Chỉnh sửa vị trí"
         />
       </div>
-      <div>
-        <ModalCustom
-          isOpen={modalActive}
-          title={
-            itemEdit?.is_active
-              ? `${i18n.t("lock_promotion", { lng: lang })}`
-              : `${i18n.t("unlock_promotion", { lng: lang })}`
-          }
-          handleOk={() => onActive(itemEdit?._id, itemEdit?.is_active)}
-          handleCancel={toggleActive}
-          textOk={
-            itemEdit?.is_active
-              ? `${i18n.t("lock", { lng: lang })}`
-              : `${i18n.t("unlock", { lng: lang })}`
-          }
-          body={
-            <>
-              <p>
-                {itemEdit?.is_active
-                  ? `${i18n.t("want_lock_promotion", { lng: lang })}`
-                  : `${i18n.t("want_unlock_promotion", { lng: lang })}`}
-              </p>
-              <p className="text-name-modal">{itemEdit?.title?.[lang]}</p>
-            </>
-          }
-        />
-        <ModalCustom
-          isOpen={state?.modalShowApp}
-          title={"Trạng thái hiện thị"}
-          handleOk={() => onChangeShow(itemEdit?._id, itemEdit?.is_show_in_app)}
-          handleCancel={() => setState({ ...state, modalShowApp: false })}
-          textOk={itemEdit?.is_show_in_app ? `Ẩn` : `Hiện`}
-          body={
-            <>
-              <p className="m-0">
-                {itemEdit?.is_show_in_app
-                  ? `Bạn có muốn ẩn khuyến mãi trên app`
-                  : `Bạn có muốn hiện thị khuyến mãi trên app`}
-              </p>
-              <p className="text-name-modal">{itemEdit?.code}</p>
-            </>
-          }
-        />
-      </div>
-      {isLoading && <LoadingPagination />}
+    );
+  };
+  const searchContentRight = () => {
+    return (
+      <div className="manange-promotion__filter-searching">
+      <InputTextCustom
+        type="text"
+        placeHolderNormal="Tìm kiếm theo mã khuyến mãi"
+        onChange={(e) => {
+          handleSearch(e.target.value);
+        }}
+      />
     </div>
-
-    // <div className="manange-promotion">
-    //   {/* Header */}
-    //   <div className="manange-promotion__header">
-    //     <span>Khuyến mãi</span>
-    //   </div>
-    //   <FilterData leftContent={searchContent()} />
-    //   {/* Filter */}
-    //   <FilterData
-    //     leftContent={filterContent()}
-    //     // rightContent={filterDateAndSearch()}
-    //   />
-    //   {/* Filter */}
-    //   {/* <FilterData
-    //   isTimeFilter
-    //   startDate={startDate}
-    //   endDate={endDate}
-    //   setStartDate={setStartDate}
-    //   setEndDate={setEndDate}
-    //   leftContent={filterByType()}
-    // /> */}
-    //   {/* Table */}
-    //   <div>
-    //   <DataTable
-    //     columns={columns}
-    //     data={data}
-    //     start={startPage}
-    //     pageSize={lengthPage}
-    //     setLengthPage={setLengthPage}
-    //     totalItem={total}
-    //     onCurrentPageChange={onChangePage}
-    //     scrollX={2400}
-    //     // actionColumn={addActionColumn}
-    //     // getItemRow={setItem}
-    //     // headerRightContent={
-    //     //   <div className="manage-top-up-with-draw__table--right-header">
-    //     //     <TransactionDrawer2
-    //     //       titleButton="Phiếu thu"
-    //     //       titleHeader="Phiếu thu"
-    //     //       onClick={handleTopUp}
-    //     //     />
-    //     //     <TransactionDrawer2
-    //     //       titleButton="Phiếu chi"
-    //     //       titleHeader="Phiếu chi"
-    //     //       onClick={handleWithdraw}
-    //     //     />
-    //     //   </div>
-    //     // }
-    //   />
-    // </div>
-    // </div>
+    )
+  }
+  /* ~~~ Main ~~~ */
+  return (
+    <div className="manange-promotion">
+      {/* Header */}
+      <div className="manange-promotion__header">
+        <span>Khuyến mãi</span>
+      </div>
+      <FilterData leftContent={searchContentLeft()} rightContent={searchContentRight()} />
+      {/* Filter */}
+      <FilterData leftContent={filterContent()} />
+      {/* Table */}
+      <div>
+        <DataTable
+          columns={columns}
+          data={data}
+          start={startPage}
+          pageSize={lengthPage}
+          setLengthPage={setLengthPage}
+          totalItem={total}
+          onCurrentPageChange={onChangePage}
+        />
+      </div>
+    </div>
   );
 };
 
 export default ManagePromotions;
-
-const TYPE_PRMOTION = [
-  {
-    value: "",
-    label: "Tất cả KM",
-    brand: "",
-    selected: "",
-  },
-  {
-    value: "promotion",
-    label: "Mã KM GUVI",
-    brand: "guvi",
-    selected: "code",
-  },
-  {
-    value: "orther",
-    label: "Mã KM Đối tác",
-    brand: "orther",
-    selected: "code",
-  },
-  {
-    value: "event",
-    label: "CTKM",
-    brand: "",
-    selected: "event",
-  },
-];
-
-const PROMOTION_TAB = [
-  {
-    value: "",
-    status: "",
-    label: `Tất cả khuyến mãi`,
-    selected: "",
-    brand: "",
-    kind: "",
-  },
-  {
-    value: "kmkh",
-    status: "doing",
-    label: `KM đang kích hoạt`,
-    selected: "code",
-    brand: "guvi",
-    kind: "promotion",
-  },
-  {
-    value: "kmckh",
-    status: "upcoming",
-    label: `KM chưa kích hoạt`,
-    selected: "code",
-    brand: "guvi",
-    kind: "promotion",
-  },
-  {
-    value: "kmdtkh",
-    status: "doing",
-    label: `KM Đối tác đang kích hoạt`,
-    selected: "code",
-    brand: "orther",
-    kind: "orther",
-  },
-  {
-    value: "kmdtckh",
-    status: "upcoming",
-    label: `KM Đối tác chưa kích hoạt`,
-    selected: "code",
-    brand: "orther",
-    kind: "orther",
-  },
-  {
-    value: "ctkmkh",
-    status: "doing",
-    label: `CTKM đang kích hoạt`,
-    selected: "event",
-    brand: "",
-    kind: "event",
-  },
-  {
-    value: "ctkmckh",
-    status: "upcoming",
-    label: `CTKM chưa kích hoạt`,
-    selected: "event",
-    brand: "",
-    kind: "event",
-  },
-  {
-    value: "kt",
-    status: "done",
-    label: `Kết thúc`,
-    selected: "",
-    brand: "",
-    kind: "",
-  },
-];

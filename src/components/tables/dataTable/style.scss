@@ -557,7 +557,7 @@ span {
     padding: 6px 8px;
     width: 100%;
     text-align: center;
-    border-radius: $borderRadiusFull;
+    border-radius: $borderRadiusM;
 
     &.pending {
       background-color: $colorExtraLightYellow;
@@ -606,7 +606,7 @@ span {
     width: 100%;
     color: $colorWhite;
     padding: 6px 8px;
-    border-radius: $borderRadiusFull;
+    border-radius: $borderRadiusM;
     text-align: center;
 
     &.withdraw {
@@ -657,7 +657,7 @@ span {
   align-items: center;
   justify-content: center;
   width: 100%;
-  border-radius: $borderRadiusFull;
+  border-radius: $borderRadiusM;
 
   &.customer {
     background-color: $colorMoreLightGray;
@@ -680,7 +680,7 @@ span {
     padding: 6px 8px;
     width: 100%;
     text-align: center;
-    border-radius: $borderRadiusFull;
+    border-radius: $borderRadiusM;
   }
 }
 
@@ -822,6 +822,126 @@ span {
     font-weight: $fontWeightXL;
     font-size: $textFontSizeM;
     color: $colorBlack;
+  }
+}
+
+/* 15. Trường hợp mã khuyến mãi */
+.case__promotion-code {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .case__promotion-code--brand {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .case__promotion-code--brand-sub {
+      font-size: $textFontSizeM;
+      font-weight: $fontWeightL;
+      color: $colorLightGray;
+    }
+
+    .case__promotion-code--brand-name {
+      font-size: $textFontSizeM;
+      font-weight: $fontWeightXL;
+      color: $colorBlack;
+      text-transform: uppercase;
+    }
+  }
+
+  .case__promotion-code--un-brand {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .case__promotion-code--un-brand-coupon {
+      font-size: $textFontSizeM;
+      font-weight: $fontWeightXL;
+      color: $colorBlack;
+    }
+
+    .case__promotion-code--un-brand-sub {
+      font-size: $textFontSizeM;
+      font-weight: $fontWeightL;
+      color: $colorLightGray;
+
+      .case__promotion-code--un-brand-sub-service {
+        padding-left: 4px;
+      }
+    }
+
+  }
+}
+
+/* 16. Trường hợp hình ảnh mã khuyến mãi */
+.case__promotion-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .case__promotion-image-picture {
+    height: 50px;
+    width: 50px;
+    border-radius: $borderRadiusM;
+    border: 1px solid $colorMoreLightGray;
+  }
+}
+
+/* 17. Trường hợp các tỉnh thành */
+.case__promotion-province {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .case__promotion-province--label {
+    padding: 6px 8px;
+    background-color: $colorMoreLightGray;
+    border-radius: $borderRadiusM;
+    color: $colorBlack;
+  }
+
+  .case__promotion-province--provinces {
+    display: flex;
+    flex-direction: column;
+    gap: $gapS;
+  }
+}
+
+/* 18. Trường hợp các trạng thái của khuyến mãi */
+.case__promotion-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+
+  .case__promotion-status--name {
+    font-weight: $fontWeightXL;
+    font-size: $textFontSizeM;
+    padding: 6px 8px;
+    width: 100%;
+    text-align: center;
+    border-radius: $borderRadiusM;
+
+    &.upcoming {
+      background-color: $colorExtraLightYellow;
+      color: $colorYellow;
+    }
+
+    &.doing {
+      background-color: $colorExtraLightGreen;
+      color: $colorGreen;
+    }
+
+    &.done,
+    &.out_of_date,
+    &.out_of_stock {
+      background-color: $colorExtraLightRed;
+      color: $colorRed;
+    }
   }
 }
 
