@@ -214,11 +214,8 @@ const EditPromotion = () => {
           reducedValue: res?.discount_value,
           checkMininum: res?.price_min_order > 0 ? 2 : 1,
           minimumOrder: res?.price_min_order,
-          isObjectCustomer: res?.is_id_customer
-            ? 3
-            : res?.is_id_group_customer
-            ? 2
-            : 1,
+          isObjectCustomer:
+            res?.id_customer.length > 0 ? 3 : res?.is_id_group_customer ? 2 : 1,
           isGroupCustomer: res?.is_id_group_customer,
           isCustomer: res?.is_id_customer,
           groupCustomer: res?.id_group_customer,

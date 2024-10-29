@@ -51,6 +51,11 @@ import InputLanguage from "../../../../components/inputLanguage";
 const { Option } = Select;
 
 const CreatePromotion = () => {
+  const service = useSelector(getService);
+  const province = useSelector(getProvince);
+  const lang = useSelector(getLanguageState);
+  const navigate = useNavigate();
+  /* ~~~ Value ~~~ */
   const [statePromo, setStatePromo] = useState({
     promoCode: "",
     isParrentPromotion: false,
@@ -140,31 +145,31 @@ const CreatePromotion = () => {
   });
   const [timeApply, setTimeApply] = useState(DATA_APPLY_TIME);
   const [isLoading, setIsLoading] = useState(false);
+  /* ~~~ List ~~~ */
   const options = [];
   const serviceOption = [];
   const cityOption = [];
   const groupPromotionOption = [];
-  const service = useSelector(getService);
-  const province = useSelector(getProvince);
-  const lang = useSelector(getLanguageState);
-  const navigate = useNavigate();
-  const selectAfter = (
-    <Select
-      defaultValue="VND"
-      style={{ width: 60 }}
-      onChange={(e) => {
-        if (e === "VND") {
-          setStatePromo({ ...statePromo, discountUnit: "amount" });
-        } else {
-          setStatePromo({ ...statePromo, discountUnit: "percent" });
-        }
-      }}
-    >
-      <Option value="VND">₫</Option>
-      <Option value="%">%</Option>
-    </Select>
-  );
-
+  dataGroupCustomer?.map((item) => {
+    return options.push({
+      label: item?.name,
+      value: item?._id,
+    });
+  });
+  province?.map((item) => {
+    return cityOption?.push({
+      value: item?.code,
+      label: item?.name,
+      district: item?.districts,
+    });
+  });
+  service.map((item) => {
+    return serviceOption.push({
+      label: item?.title?.[lang],
+      value: item?._id,
+    });
+  });
+  /* ~~~ Use effect ~~~ */
   useEffect(() => {
     getGroupCustomerApi(0, 10)
       .then((res) => {
@@ -181,7 +186,6 @@ const CreatePromotion = () => {
       })
       .catch((err) => {});
   }, []);
-
   statePromo?.dataGroupPromotion?.map((item) => {
     return groupPromotionOption?.push({
       value: item?._id,
@@ -196,28 +200,8 @@ const CreatePromotion = () => {
   //   });
   // });
 
-  dataGroupCustomer?.map((item) => {
-    return options.push({
-      label: item?.name,
-      value: item?._id,
-    });
-  });
-
-  province?.map((item) => {
-    return cityOption?.push({
-      value: item?.code,
-      label: item?.name,
-      district: item?.districts,
-    });
-  });
-
-  service.map((item) => {
-    return serviceOption.push({
-      label: item?.title?.[lang],
-      value: item?._id,
-    });
-  });
-
+ 
+  /* ~~~ Handle function ~~~ */
   const searchCustomer = _debounce((value) => {
     if (value) {
       searchCustomersApi(value)
@@ -467,7 +451,24 @@ const CreatePromotion = () => {
   //   });
   // };
 
-console.log("checking", statePromo.groupCustomer);
+  /* ~~~ Other ~~~ */
+  const selectAfter = (
+    <Select
+      defaultValue="VND"
+      style={{ width: 60 }}
+      onChange={(e) => {
+        if (e === "VND") {
+          setStatePromo({ ...statePromo, discountUnit: "amount" });
+        } else {
+          setStatePromo({ ...statePromo, discountUnit: "percent" });
+        }
+      }}
+    >
+      <Option value="VND">₫</Option>
+      <Option value="%">%</Option>
+    </Select>
+  );
+  /* ~~~ Main ~~~ */
   return (
     <>
       <div className="div-head-add-promotion">
