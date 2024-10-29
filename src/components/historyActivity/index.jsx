@@ -37,6 +37,7 @@ const HistoryActivity = (props) => {
       setChooseItem(item);
     }
   };
+  console.log("check data >>>", data);
   /* ~~~ Main ~~~ */
   return (
     <div className="history-activity">
@@ -84,7 +85,7 @@ const HistoryActivity = (props) => {
                     <IoSettings size={15} color="blue" />
                   )}
                 </div>
-                {index !== data.length - 1 && (
+                {index !== data?.length - 1 && (
                   <div className="history-activity__item--middle-line"></div>
                 )}
               </div>
@@ -167,7 +168,7 @@ const HistoryActivity = (props) => {
                       onClick={() => onChooseItem(item)}
                       className="history-activity__item--right-top-transiction-detail"
                     >
-                      {item?.id_collaborator && (
+                      {item?.id_collaborator.length > 0 && (
                         <span className="history-activity__item--right-top-transiction-detail-label">
                           Chi tiết
                           <IoArrowForward size={12} />
@@ -270,7 +271,7 @@ const HistoryActivity = (props) => {
         <div className="history-activity__empty">
           <img className="history-activity__empty--image" src={emptyData}></img>
           <span className="history-activity__empty--label">
-            Không có dữ liệu để hiển thịs
+            Không có dữ liệu để hiển thị
           </span>
         </div>
       )}
