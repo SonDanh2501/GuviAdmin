@@ -952,12 +952,21 @@ span {
   align-items: center;
 
   .case__normal-text--label {
+    text-align: center;
     font-weight: $fontWeightL;
     font-size: $textFontSizeM;
     color: $colorBlack;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
 
     &.uppercase {
       text-transform: uppercase;
+    }
+
+    &.bold {
+      font-weight: $fontWeightXL;;
     }
   }
 }

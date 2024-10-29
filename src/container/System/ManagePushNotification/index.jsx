@@ -30,18 +30,22 @@ import FilterData from "../../../components/filterData/filterData";
 import { CaretDownOutlined } from "@ant-design/icons";
 import { compareDateIsBefore } from "../../../utils/contant";
 import icons from "../../../utils/icons";
+import CustomHeaderDatatable from "../../../components/tables/tableHeader";
 
 const { IoCaretDown } = icons;
 
 const ManagePushNotification = () => {
+  const checkElement = useSelector(getElementState);
+  const lang = useSelector(getLanguageState);
+  const { width } = useWindowDimensions();
+  const toggle = () => setModal(!modal);
+  const toggleVerify = () => setModalVerify(!modalVerify);
+  /* ~~~ Value ~~~ */
   const [dataNotifications, setDataNotifications] = useState([]);
   const [itemEdit, setItemEdit] = useState([]);
   const [statusFilter, setStatusFilter] = useState("todo");
   const [modalVerify, setModalVerify] = useState(false);
   const [modal, setModal] = useState(false);
-  const checkElement = useSelector(getElementState);
-  const lang = useSelector(getLanguageState);
-  const { width } = useWindowDimensions();
   const dispatch = useDispatch();
   const [startPage, setStartPage] = useState(0);
   const [lengthPage, setLengthPage] = useState(
@@ -50,8 +54,67 @@ const ManagePushNotification = () => {
       : 20
   );
   const [isCreateNotification, setIsCreateNotification] = useState(false); // Giá trị cờ để kiểm tra có tạo thông báo không để fetch lại dữ liệu thông báo
-  const toggle = () => setModal(!modal);
-  const toggleVerify = () => setModalVerify(!modalVerify);
+  /* ~~~ List ~~~ */
+  // 1. Danh sách các cột của bảng
+  const columns = [
+    {
+      customTitle: (
+        <CustomHeaderDatatable title="STT" textToolTip="Số thứ tự" />
+      ),
+      dataIndex: "",
+      key: "ordinal",
+      width: 20,
+    },
+    {
+      customTitle: (
+        <CustomHeaderDatatable
+          title="Ngày tạo"
+          textToolTip="Ngày tạo của thông báo"
+        />
+      ),
+      dataIndex: "",
+      key: "date_create",
+      width: 20,
+    },
+    {
+      customTitle: (
+        <CustomHeaderDatatable
+          title="Tiêu đề"
+          textToolTip="Tiêu đề hiển thị của thông báo"
+        />
+      ),
+      dataIndex: "",
+      key: "notification_title",
+      width: 30,
+    },
+    {
+      customTitle: (
+        <CustomHeaderDatatable
+          title="Nội dung"
+          textToolTip="Nội dung chi tiết của thông báo"
+        />
+      ),
+      dataIndex: "body",
+      key: "text",
+      width: 40,
+    },
+    {
+      customTitle: (
+        <CustomHeaderDatatable
+          title="Ngày thông báo"
+          textToolTip="Ngày thông báo được gửi đến khách hàng"
+        />
+      ),
+      dataIndex: "body",
+      key: "notification_date_schedule",
+      width: 20,
+    },
+  ];
+  // 2. Danh sách các trạng thái của bộ lọc
+  const statusOptions = [
+    { code: "todo", label: "Đang chờ" },
+    { code: "done", label: "Đã xong" },
+  ];
   /* ~~~ Use effect ~~~ */
   // 1. Fetch dữ liệu thông báo
   useEffect(() => {
@@ -84,72 +147,6 @@ const ManagePushNotification = () => {
   const onChangePage = (value) => {
     setStartPage(value);
   };
-  const handleSelectStatus = ({ key }) => {
-    const findStatus = statusOptions.find((el) => el.key === key);
-    setStatusFilter(findStatus?.key);
-  };
-  const handleFilterData = (array, status) => {
-    let arrayFilter = [];
-    const today = moment();
-    if (status === "todo") {
-      array?.map((el) => {
-        if (compareDateIsBefore(el?.date_schedule, today) === false) {
-          arrayFilter.push(el);
-        }
-      });
-      return arrayFilter;
-    } else if (status === "done") {
-      array?.map((el) => {
-        if (compareDateIsBefore(el?.date_schedule, today) === true) {
-          arrayFilter.push(el);
-        }
-      });
-      return arrayFilter;
-    } else {
-      return array;
-    }
-  };
-  /* ~~~ List ~~~ */
-  // 1. Danh sách các cột của bảng
-  const columns = [
-    {
-      title: "STT",
-      dataIndex: "",
-      key: "ordinal",
-      width: 30,
-      fontSize: "text-size-M",
-    },
-    {
-      title: "Ngày tạo",
-      key: "date_create",
-      width: 30,
-      fontSize: "text-size-M",
-    },
-    {
-      title: "Tiêu đề",
-      key: "notification_title",
-      width: 100,
-      fontSize: "text-size-M",
-    },
-    {
-      title: "Nội dung",
-      dataIndex: "body",
-      key: "text",
-      width: 100,
-      fontSize: "text-size-M",
-    },
-    {
-      title: "Ngày thông báo",
-      key: "notification_date_schedule",
-      width: 30,
-      fontSize: "text-size-M",
-    },
-  ];
-  // 2. Danh sách các trạng thái của bộ lọc
-  const statusOptions = [
-    { code: "todo", label: "Đang chờ" },
-    { code: "done", label: "Đã xong" },
-  ];
   /* ~~~ Other ~~~ */
   const filterContent = () => {
     return (
@@ -219,7 +216,7 @@ const ManagePushNotification = () => {
   // };
   const onActive = (id, active) => {};
   const onDelete = (id) => {};
-
+  /* ~~~ Main ~~~ */
   return (
     <div className="manage-push-notification">
       {/* Header */}
@@ -298,16 +295,3 @@ const ManagePushNotification = () => {
 };
 
 export default ManagePushNotification;
-
-const DATA = [
-  {
-    id: 1,
-    title: "waiting",
-    value: "todo",
-  },
-  {
-    id: 2,
-    title: "done",
-    value: "done",
-  },
-];

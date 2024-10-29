@@ -243,14 +243,6 @@ const DataTable = (props) => {
           // Ngày tạo của sổ quỹ
           case "date_create":
             return (
-              // <div className="case__date-create">
-              //   <p className={`${item?.fontSize}`}>
-              //     {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}
-              //   </p>
-              //   <p className={`${item?.fontSize}`}>
-              //     {moment(new Date(data?.date_create)).format("HH:mm")}
-              //   </p>
-              // </div>
               <div className="case__date-create">
                 <span className="case__date-create-date">
                   {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}
@@ -1827,7 +1819,11 @@ const DataTable = (props) => {
             return <div className="case__transfer-status">{_text_status}</div>;
           }
           case "notification_title": {
-            return <span className="case__normal-text-old">{data?.title}</span>;
+            return (
+              <div className="case__normal-text">
+                <span className="case__normal-text--label bold">{data?.title}</span>
+              </div>
+            );
             break;
           }
           case "notification_content": {
@@ -1836,20 +1832,13 @@ const DataTable = (props) => {
           }
           case "notification_date_schedule": {
             return (
-              // <span className="case__normal-text-old">
-              //   {data?.date_schedule
-              //     ? moment(new Date(data?.date_schedule)).format(
-              //         "DD/MM/YYYY - HH:mm"
-              //       )
-              //     : ""}
-              // </span>
-              <div className="div-date-create">
-                <p className={`${item?.fontSize}`}>
+              <div className="case__date-create">
+                <span className="case__date-create-date">
                   {moment(new Date(data?.date_schedule)).format("DD/MM/YYYY")}
-                </p>
-                <p className={`${item?.fontSize}`}>
-                  {moment(new Date(data?.date_schedule)).format("HH:mm")}
-                </p>
+                </span>
+                <span className="case__date-create-time">
+                  {moment(new Date(data?.date_schedule)).format("HH:mm:ss")}
+                </span>
               </div>
             );
             break;
