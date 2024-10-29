@@ -20,7 +20,7 @@ const App = () => {
 
   {/*Check nếu chưa đăng nhập thì navigate tới trang login */}
   useEffect(() => {
-    if (!isCheckLogin && +currentPort === 3000) {
+    if (!isCheckLogin && +currentPort === 3001) {
       navigate("/auth/login");
     }
     dispatch(getServiceAction.getServiceRequest());
@@ -31,7 +31,7 @@ const App = () => {
   // return <>{!isCheckLogin ? <Auth /> : <Main />}</>;
   return (
     <>
-      {+currentPort === 3001 ? (
+      {+currentPort === 3000 ? (
         <Affiliate />
       ) : !isCheckLogin ? (
         <Auth />
