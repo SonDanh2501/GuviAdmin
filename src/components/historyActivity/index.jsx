@@ -37,7 +37,6 @@ const HistoryActivity = (props) => {
       setChooseItem(item);
     }
   };
-  console.log("check data >>>", data);
   /* ~~~ Main ~~~ */
   return (
     <div className="history-activity">
@@ -168,7 +167,7 @@ const HistoryActivity = (props) => {
                       onClick={() => onChooseItem(item)}
                       className="history-activity__item--right-top-transiction-detail"
                     >
-                      {item?.id_collaborator.length > 0 && (
+                      {item?.id_collaborator && (
                         <span className="history-activity__item--right-top-transiction-detail-label">
                           Chi tiết
                           <IoArrowForward size={12} />
