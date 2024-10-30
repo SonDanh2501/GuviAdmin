@@ -637,9 +637,6 @@ span {
       font-weight: $fontWeightL;
       color: $colorBlack;
       transition: 0.3s all ease;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
     }
 
     .case__information--info-phone {
@@ -691,9 +688,6 @@ span {
       color: $colorBlack;
       transition: 0.3s all ease;
       text-transform: capitalize;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
     }
 
     .case__create-by--person-phone {
@@ -936,11 +930,11 @@ span {
 /* Các trường chỉ hiển chữ mới */
 .case__normal-text {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  // justify-content: center;
+  // align-items: center;
 
   .case__normal-text--label {
-    text-align: center;
+    // text-align: center;
     font-weight: $fontWeightL;
     font-size: $textFontSizeM;
     color: $colorBlack;
