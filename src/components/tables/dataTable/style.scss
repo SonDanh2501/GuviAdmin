@@ -555,7 +555,7 @@ span {
     font-weight: $fontWeightXL;
     font-size: $textFontSizeM;
     padding: 6px 8px;
-    width: 100%;
+    // width: 100%;
     text-align: center;
     border-radius: $borderRadiusM;
 
@@ -602,8 +602,8 @@ span {
 
   .case__transfer-type-transfer--text {
     font-size: $textFontSizeM;
-    font-weight: $fontWeightXL;
-    width: 100%;
+    font-weight: $fontWeightL;
+    // width: 100%;
     color: $colorWhite;
     padding: 6px 8px;
     border-radius: $borderRadiusM;
@@ -629,24 +629,29 @@ span {
     display: flex;
     flex-direction: column;
     align-items: center;
+    transition: 0.3s all ease;
+
 
     .case__information--info-name {
       font-size: $textFontSizeM;
       font-weight: $fontWeightL;
-      color: $colorBlue;
+      color: $colorBlack;
+      transition: 0.3s all ease;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
-
-      &:hover {
-        color: $colorDarkBlue;
-      }
     }
 
     .case__information--info-phone {
       font-size: $textFontSizeM;
       font-weight: $fontWeightL;
       color: $colorLightGray
+    }
+
+    &:hover {
+      .case__information--info-name {
+        color: $colorBlue;
+      }
     }
   }
 }
@@ -656,29 +661,12 @@ span {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
   border-radius: $borderRadiusM;
 
-  &.customer {
-    background-color: $colorMoreLightGray;
-    color: $colorBlack;
-  }
-
-  &.collaborator {
-    background-color: $colorExtraLightOrange;
-    color: $colorOrange;
-  }
-
-  &.other {
-    background-color: $colorMoreLightGray;
-    color: $colorBlack;
-  }
-
   .case__type-account--label {
-    font-weight: $fontWeightXL;
+    font-weight: $fontWeightL;
     font-size: $textFontSizeM;
     padding: 6px 8px;
-    width: 100%;
     text-align: center;
     border-radius: $borderRadiusM;
   }
@@ -695,12 +683,12 @@ span {
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    transition: 0.5s all ease-out;
+    transition: 0.3s all ease;
 
     .case__create-by--person-name {
       font-size: $textFontSizeM;
       font-weight: $fontWeightL;
-      color: $colorBlue;
+      color: $colorBlack;
       transition: 0.3s all ease;
       text-transform: capitalize;
       overflow: hidden;
@@ -966,7 +954,7 @@ span {
     }
 
     &.bold {
-      font-weight: $fontWeightXL;;
+      font-weight: $fontWeightXL;
     }
   }
 }

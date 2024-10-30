@@ -566,8 +566,5 @@ export const convertPhoneNumber = (phoneNumber, length) => {
   
   const mask = '*'.repeat(length); 
   const visiblePart = phoneNumber.slice(phoneNumber.length - length); 
-  // console.log("check phoneNumber lenght", phoneNumber.length);
-  console.log("check phoneNumber", phoneNumber, visiblePart);
-
   return mask + visiblePart;
 }

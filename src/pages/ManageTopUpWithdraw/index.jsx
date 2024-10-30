@@ -1,14 +1,4 @@
-import { InfoCircleOutlined, SearchOutlined } from "@ant-design/icons";
-import {
-  Button,
-  Dropdown,
-  Input,
-  Pagination,
-  Popover,
-  Space,
-  Tabs,
-  TabPane,
-} from "antd";
+import { Button, Dropdown, Space } from "antd";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import _ from "lodash";
@@ -16,21 +6,15 @@ import { UilEllipsisV } from "@iconscout/react-unicons";
 import {
   cancelTransactionApi,
   createTransactionApi,
-  getListTransactionV2Api,
-  getTotalMoneyTransactionApi,
   getTotalTransactionApi,
   verifyTransactionApi,
   getListTransactionApi,
 } from "../../api/transaction";
-import { LENGTH_ITEM } from "../../constants";
 import { errorNotify, successNotify } from "../../helper/toast";
-import CommonFilter from "../../components/commonFilter";
 import {
-  getElementState,
   getLanguageState,
   getPermissionState,
 } from "../../redux/selectors/auth";
-import TransactionDrawer from "../../components/transactionDrawer";
 import DataTable from "../../components/tables/dataTable";
 import ModalCustom from "../../components/modalCustom";
 import { formatMoney } from "../../helper/formatMoney";
@@ -45,20 +29,10 @@ import { loadingAction } from "../../redux/actions/loading";
 import InputTextCustom from "../../components/inputCustom";
 
 const ManageTopUpWithdraw = (props) => {
-  let { width } = useWindowDimensions();
-  const permission = useSelector(getPermissionState);
+
   const [openModalCancel, setOpenModalCancel] = useState(false);
   const [openModalChangeStatus, setOpenModalChangeStatus] = useState(false);
-  const [returnFilter, setReturnFilter] = useState([]);
   const [valueSearch, setValueSearch] = useState("");
-  const [totalTransaction, setTotalTransaction] = useState([]);
-  // ---------------------------- xử lý data ------------------------------------ //
-  // List items trong dấu 3 chấm
-
-  // ---------------------------- action ------------------------------------ /
-  // NOTE
-
-  // NOTE
   const handleTopUp = (value) => {
     createTransaction({
       transfer_note: value?.note,
@@ -138,10 +112,12 @@ const ManageTopUpWithdraw = (props) => {
     setOpenModalChangeStatus(false);
   };
   /* ~~~~~~~~~~~~~~~~~~~~~~~~ SON ~~~~~~~~~~~~~~~~~~~~~~~~ */
-  /* ~~~ Value ~~~ */
   const { object } = props;
+  let { width } = useWindowDimensions();
+  const permission = useSelector(getPermissionState);
   const dispatch = useDispatch();
   const lang = useSelector(getLanguageState);
+  /* ~~~ Value ~~~ */
   const [selectStatus, setSelectStatus] = useState(""); // Giá trị lựa chọn trạng thái
   const [selectObject, setSelectObject] = useState(""); // Giá trị lựa chọn đối tượng (mặc định là đối tác)
   const [selectTransferType, setSelectTransferType] = useState(""); // Giá trị lựa chọn loại giao dịch
@@ -151,7 +127,6 @@ const ManageTopUpWithdraw = (props) => {
   const [total, setTotal] = useState(0); // Giá trị tổng các phần tử trong bảng
   const [startDate, setStartDate] = useState(""); // Giá trị ngày bắt đầu
   const [endDate, setEndDate] = useState(""); // Giá trị ngày kết thúc
-  const [tabStatus, setTabStatus] = useState(""); // Giá trị status khi chuyển tab
   const [selectFilter, setSelectFilter] = useState([
     { key: "status", code: "" },
     { key: "subject", code: "" },
@@ -177,19 +152,12 @@ const ManageTopUpWithdraw = (props) => {
     { code: "cancel", label: "Đã hủy", total: 0 },
   ]);
   // 2. Danh sách các đối tượng
-
-  // const objectList = [
-  // { code: "", label: "Tất cả" },
-  // { code: "collaborator", label: "Cộng tác viên" },
-  // { code: "customer", label: "Khách hàng" },
-  // { code: "other", label: "Khác" },
-  // ];
-  const [objectList, setObjectList] = useState([
+  const objectList = [
     { code: "", label: "Tất cả" },
-    { code: "collaborator", label: "Đối tác" },
+    { code: "collaborator", label: "Cộng tác viên" },
     { code: "customer", label: "Khách hàng" },
     { code: "other", label: "Khác" },
-  ]);
+  ];
   // 3. Danh sách các loại giao dịch
   const transferTypeList = [
     { code: "", label: "Tất cả" },
@@ -253,7 +221,7 @@ const ManageTopUpWithdraw = (props) => {
       ),
       dataIndex: "status",
       key: "transfer_status",
-      width: 40,
+      width: 35,
     },
     ...(object !== "other"
       ? [
@@ -281,7 +249,7 @@ const ManageTopUpWithdraw = (props) => {
             ),
             dataIndex: "",
             key: "type_account",
-            width: 40,
+            width: 35,
           },
         ]
       : []),
@@ -295,7 +263,7 @@ const ManageTopUpWithdraw = (props) => {
       ),
       dataIndex: "type_transfer",
       key: "type_transfer",
-      width: 40,
+      width: 35,
     },
     {
       customTitle: (
@@ -363,7 +331,7 @@ const ManageTopUpWithdraw = (props) => {
       ),
       dataIndex: "",
       key: "created_by",
-      width: 50,
+      width: 45,
     },
     {
       customTitle: (
@@ -385,7 +353,7 @@ const ManageTopUpWithdraw = (props) => {
       ),
       dataIndex: "date_verify_created",
       key: "date_verify",
-      width: 50,
+      width: 45,
     },
   ];
   // 7. Danh sách các hành động
@@ -458,8 +426,11 @@ const ManageTopUpWithdraw = (props) => {
   // 3. Hàm fetch số lượng total để hiển thị bên cạnh các tabs
   const fetchTotalData = async () => {
     try {
+      let selectFilterNoStatus = selectFilter.filter(
+        (el) => el.key !== "status"
+      );
       let query =
-        selectFilter.map((item) => `&${item?.key}=${item?.code}`).join("") +
+      selectFilterNoStatus.map((item) => `&${item?.key}=${item?.code}`).join("") +
         `&start_date=${startDate}&end_date=${endDate}`;
       const res = await getTotalTransactionApi(query, valueSearch);
       setStatusList((prevList) =>
@@ -469,7 +440,6 @@ const ManageTopUpWithdraw = (props) => {
         }))
       );
       const temp_arr = Object.values(res).map((i) => ({ value: i }));
-      setTotalTransaction(temp_arr);
     } catch (err) {
       console.log("Lỗi fetchTotalData: ", err);
     }
@@ -487,18 +457,15 @@ const ManageTopUpWithdraw = (props) => {
   useEffect(() => {
     if (startDate !== "" && endDate !== "") {
       fetchData();
+    }
+  }, [startPage, valueSearch, lengthPage, selectFilter, startDate, endDate]);
+  // 2. Fetch dữ liệu total
+  useEffect(() => {
+    if (startDate !== "" && endDate !== "") {
       fetchTotalData();
     }
-  }, [
-    startPage,
-    returnFilter,
-    valueSearch,
-    lengthPage,
-    selectFilter,
-    startDate,
-    endDate,
-  ]);
-  // 2. Cập nhật lại giá trị search
+  }, [valueSearch, selectFilter, startDate, endDate]);
+  // 3. Cập nhật lại giá trị search
   useEffect(() => {
     setSelectFilter((prevFilter) =>
       prevFilter.map((item) => {
@@ -714,7 +681,7 @@ const ManageTopUpWithdraw = (props) => {
           setLengthPage={setLengthPage}
           totalItem={total}
           onCurrentPageChange={onChangePage}
-          scrollX={2400}
+          scrollX={2300}
           actionColumn={addActionColumn}
           getItemRow={setItem}
           headerRightContent={
@@ -733,6 +700,7 @@ const ManageTopUpWithdraw = (props) => {
           }
         />
       </div>
+      {/* Modal */}
       <div>
         <ModalCustom
           isOpen={openModalCancel}
@@ -786,136 +754,6 @@ const ManageTopUpWithdraw = (props) => {
         />
       </div>
     </div>
-
-    // <div className="transfer-collaborator_container">
-    //   <h5>Sổ quỹ</h5>
-    //   {/* <div className="transfer-collaborator_total">
-    //     {statisticsTransition.map((item, index) => {
-    //       return (
-    //         <ItemTotal
-    //           key={index}
-    //           title={item.title}
-    //           description={item.description}
-    //           value={item.value}
-    //           convertMoney={item.convertMoney}
-    //         />
-    //       );
-    //     })}
-    //   </div> */}
-    //   Container của nạp, rút, tìm kiếm
-    //   <div className="transfer-collaborator_search">
-    //     {/*Container của hai button nạp và rút*/}
-    //     <div className="transfer-collaborator_transaction">
-    //       {/*Nạp tiền*/}
-    //       <TransactionDrawer2
-    //         titleButton="Phiếu thu"
-    //         titleHeader="Phiếu thu"
-    //         onClick={handleTopUp}
-    //       />
-    //       {/*Rút tiền*/}
-    //       <TransactionDrawer2
-    //         titleButton="Phiếu chi"
-    //         titleHeader="Phiếu chi"
-    //         onClick={handleWithdraw}
-    //       />
-    //     </div>
-    //     {/*Input search field*/}
-    //     <Input
-    //       placeholder={`${i18n.t("search_transaction", { lng: lang })}`}
-    //       prefix={<SearchOutlined />}
-    //       className="input-search"
-    //       onChange={(e) => {
-    //         handleSearch(e.target.value);
-    //       }}
-    //     />
-    //     {/*Button tìm kiếm*/}
-    //     <Button type="primary">Tìm kiếm</Button>
-    //   </div>
-    //   {/*Container của list of tab và các bộ lọc filter*/}
-    //   <div className="transfer-collaborator_header">
-    //     {/* <Tabs
-    //       itemTab={itemTabStatus}
-    //       onValueChangeTab={onChangeTab}
-    //       dataTotal={totalTransaction}
-    //     />
-    //     <CommonFilter
-    //       data={dataFilter}
-    //       setReturnFilter={setReturnFilter}
-    //       setDate={setSelectedDate}
-    //     /> */}
-    //   </div>
-    //   {/*Datatable component*/}
-    //   <div>
-    //     <DataTable
-    //       columns={columns}
-    //       data={data}
-    //       actionColumn={addActionColumn}
-    //       start={startPage}
-    //       pageSize={lengthPage}
-    //       setLengthPage={setLengthPage}
-    //       totalItem={total}
-    //       getItemRow={setItem}
-    //       onCurrentPageChange={onChangePage}
-    //       setOpenModalChangeStatus={setOpenModalChangeStatus}
-    //       setOpenModalCancel={setOpenModalCancel}
-    //       scrollX={2000}
-    //     />
-    //   </div>
-    //   {/* ********************** Modal custom ***************************** */}
-    //   {/*Pop up xác thực*/}
-    // <div>
-    //   <ModalCustom
-    //     isOpen={openModalCancel}
-    //     title={`Huỷ giao dịch`}
-    //     handleOk={handleCancelTransfer}
-    //     handleCancel={() => setOpenModalCancel(false)}
-    //     textOk={`Xác nhận`}
-    //     body={
-    //       <>
-    //         <p>Bạn có xác nhận muốn huỷ lệnh giao dịch</p>
-    //         <p>
-    //           Mã giao dịch: <span className="fw-500">{item?.id_view}</span>
-    //         </p>
-    //         <p>
-    //           Số tiền:{" "}
-    //           <span className="fw-500">{formatMoney(item?.money || 0)}</span>{" "}
-    //         </p>
-    //         <p>
-    //           <span className="fw-500">
-    //             {item?.id_collaborator?.full_name}
-    //           </span>
-    //         </p>
-    //       </>
-    //     }
-    //   />
-    // </div>
-    // <div>
-    //   <ModalCustom
-    //     isOpen={openModalChangeStatus}
-    //     title={`Duyệt giao dịch`}
-    //     handleOk={handleVerifyTransfer}
-    //     handleCancel={() => setOpenModalChangeStatus(false)}
-    //     textOk={`Xác nhận`}
-    //     body={
-    //       <>
-    //         <p>Bạn có xác nhận muốn duyệt lệnh giao dịch</p>
-    //         <p>
-    //           Mã giao dịch: <span className="fw-500">{item?.id_view}</span>
-    //         </p>
-    //         <p>
-    //           Số tiền:
-    //           <span className="fw-500">
-    //             {formatMoney(item?.money || 0)}
-    //           </span>{" "}
-    //         </p>
-    //         <p>
-    //           Nội dung: <span>{item?.transfer_note}</span>
-    //         </p>
-    //       </>
-    //     }
-    //   />
-    // </div>
-    // </div>
   );
 };
 

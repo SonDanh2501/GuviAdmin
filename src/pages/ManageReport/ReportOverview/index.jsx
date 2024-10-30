@@ -124,7 +124,7 @@ const ReportOverview = () => {
       setSameStartDate(new Date(tempSameStartDate).toISOString());
       setSameEndDate(new Date(tempSameEndDate).toISOString());
     }
-  }, [startDate]);
+  }, [startDate, endDate]);
 
   useEffect(() => {
     if (sameStartDate !== "") {
@@ -430,7 +430,6 @@ const ReportOverview = () => {
             <RangeDatePicker
               setStartDate={setStartDate}
               setEndDate={setEndDate}
-              onCancel={() => {}}
               defaults={"thirty_last"}
             />
           </div>

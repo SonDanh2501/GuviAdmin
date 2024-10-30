@@ -1925,19 +1925,14 @@ const DataTable = (props) => {
                   <Image
                     className="case__promotion-image-picture"
                     src={data?.thumbnail}
-                    preview={false}
+                    preview={true}
                   />
                 ) : data?.type_promotion === "code" &&
                   data?.type_discount === "partner_promotion" ? (
                   <Image
+                    className="case__promotion-image-picture"
                     src={data?.thumbnail}
-                    style={{
-                      width: 50,
-                      height: 50,
-                      borderRadius: 8,
-                      border: "0.5px solid #d6d6d6",
-                    }}
-                    preview={false}
+                    preview={true}
                   />
                 ) : null}
               </div>
@@ -2110,6 +2105,18 @@ const DataTable = (props) => {
                     </span>
                   </>
                 )}
+              </div>
+            );
+            break;
+          }
+          case "image": {
+            return (
+              <div className="case__promotion-image">
+                <Image
+                  className="case__promotion-image-picture"
+                  src={data[item?.dataIndex]}
+                  preview={true}
+                />
               </div>
             );
             break;

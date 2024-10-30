@@ -68,6 +68,17 @@ const ManagePushNotification = () => {
     {
       customTitle: (
         <CustomHeaderDatatable
+          title="Hình ảnh"
+          textToolTip="Thumbnail hiển thị của thông báo"
+        />
+      ),
+      dataIndex: "image_url",
+      key: "image",
+      width: 20,
+    },
+    {
+      customTitle: (
+        <CustomHeaderDatatable
           title="Ngày tạo"
           textToolTip="Ngày tạo của thông báo"
         />
@@ -115,38 +126,32 @@ const ManagePushNotification = () => {
     { code: "todo", label: "Đang chờ" },
     { code: "done", label: "Đã xong" },
   ];
-  /* ~~~ Use effect ~~~ */
-  // 1. Fetch dữ liệu thông báo
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        dispatch(loadingAction.loadingRequest(true));
-        const dataNotificationsFetch = await getListNotifications(
-          startPage,
-          lengthPage,
-          statusFilter
-        );
-        setDataNotifications(dataNotificationsFetch);
-      } catch (err) {
-        errorNotify({
-          message: err?.message,
-        });
-      } finally {
-        dispatch(loadingAction.loadingRequest(false));
-      }
-    };
-    // 1. Cách chạy 1
-    fetchData();
-    // 2. Cách chạy 2
-    // const timer = setTimeout(() => {
-    //   fetchData();
-    // }, 2000);
-    // return () => clearTimeout(timer);
-  }, [dispatch, startPage, lengthPage, statusFilter, isCreateNotification]);
   /* ~~~ Handle function ~~~ */
   const onChangePage = (value) => {
     setStartPage(value);
   };
+  const fetchData = async () => {
+    try {
+      dispatch(loadingAction.loadingRequest(true));
+      const res = await getListNotifications(
+        startPage,
+        lengthPage,
+        statusFilter
+      );
+      setDataNotifications(res);
+      dispatch(loadingAction.loadingRequest(false));
+    } catch (err) {
+      errorNotify({
+        message: err?.message,
+      });
+    }
+  }
+  /* ~~~ Use effect ~~~ */
+  // 1. Fetch dữ liệu thông báo
+  useEffect(() => {
+    fetchData();
+  }, [dispatch, startPage, lengthPage, statusFilter, isCreateNotification]);
+
   /* ~~~ Other ~~~ */
   const filterContent = () => {
     return (
@@ -216,6 +221,7 @@ const ManagePushNotification = () => {
   // };
   const onActive = (id, active) => {};
   const onDelete = (id) => {};
+
   /* ~~~ Main ~~~ */
   return (
     <div className="manage-push-notification">
