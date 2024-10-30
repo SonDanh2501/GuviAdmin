@@ -1214,7 +1214,11 @@ const DataTable = (props) => {
           case "text": {
             return (
               <Tooltip placement="top" title={data[item.dataIndex]}>
-                <div className="case__normal-text">
+                <div
+                  className={`case__normal-text ${
+                    item.position === "center" && "center"
+                  }`}
+                >
                   <span className="case__normal-text--label">
                     {data[item.dataIndex] || ""}
                   </span>
@@ -1828,8 +1832,14 @@ const DataTable = (props) => {
           }
           case "notification_title": {
             return (
-              <div className="case__normal-text">
-                <span className="case__normal-text--label bold">{data?.title}</span>
+              <div
+                className={`case__normal-text ${
+                  item.position === "center" && "center"
+                }`}
+              >
+                <span className="case__normal-text--label bold">
+                  {data?.title}
+                </span>
               </div>
             );
             break;
@@ -1840,7 +1850,11 @@ const DataTable = (props) => {
           }
           case "notification_date_schedule": {
             return (
-              <div className="case__date-create">
+              <div
+                className={`case__date-create ${
+                  item.position === "center" && "center"
+                }`}
+              >
                 <span className="case__date-create-date">
                   {moment(new Date(data?.date_schedule)).format("DD/MM/YYYY")}
                 </span>
@@ -1911,7 +1925,11 @@ const DataTable = (props) => {
           }
           case "type_promotion": {
             return (
-              <div className="case__normal-text">
+              <div
+                className={`case__normal-text ${
+                  item?.position === "center" && "center"
+                }`}
+              >
                 <span className="case__normal-text--label">
                   {data?.type_promotion === "code" &&
                   data?.type_discount === "order"
@@ -2030,7 +2048,11 @@ const DataTable = (props) => {
           }
           case "time_using_promotion": {
             return (
-              <div className="case__normal-text">
+              <div
+                className={`case__normal-text ${
+                  item.position === "center" && "center"
+                }`}
+              >
                 <span className="case__normal-text--label">
                   {data?.is_parrent_promotion
                     ? data?.total_used_promotion +
@@ -2046,7 +2068,11 @@ const DataTable = (props) => {
           }
           case "time_using_promotion": {
             return (
-              <div className="case__normal-text">
+              <div
+                className={`case__normal-text ${
+                  item.position === "center" && "center"
+                }`}
+              >
                 <span className="case__normal-text--label">
                   {data?.is_parrent_promotion
                     ? data?.total_used_promotion +
@@ -2062,27 +2088,35 @@ const DataTable = (props) => {
           }
           case "start_date_promotion": {
             return (
-              <div className="case__date-create">
+              <div
+                className={`case__date-create ${
+                  item.position === "center" && "center"
+                }`}
+              >
                 {data?.is_limit_date ? (
                   <>
                     <span className="case__date-create-date">
-                      {moment(new Date(data?.limit_start_date)).utc().format(
-                        "DD/MM/YYYY"
-                      )}
+                      {moment(new Date(data?.limit_start_date))
+                        .utc()
+                        .format("DD/MM/YYYY")}
                     </span>
                     <span className="case__date-create-time">
-                      {moment(new Date(data?.limit_start_date)).utc().format(
-                        "HH:mm:ss"
-                      )}
+                      {moment(new Date(data?.limit_start_date))
+                        .utc()
+                        .format("HH:mm:ss")}
                     </span>
                   </>
                 ) : (
                   <>
                     <span className="case__date-create-date">
-                      {moment(new Date(data?.date_create)).utc().format("DD/MM/YYYY")}
+                      {moment(new Date(data?.date_create))
+                        .utc()
+                        .format("DD/MM/YYYY")}
                     </span>
                     <span className="case__date-create-time">
-                      {moment(new Date(data?.date_create)).utc().format("HH:mm:ss")}
+                      {moment(new Date(data?.date_create))
+                        .utc()
+                        .format("HH:mm:ss")}
                     </span>
                   </>
                 )}
@@ -2092,18 +2126,18 @@ const DataTable = (props) => {
           }
           case "end_date_promotion": {
             return (
-              <div className="case__date-create">
+             <div className={`case__date-create ${item.position === "center" && "center"}`}>
                 {data?.is_limit_date ? (
                   <>
                     <span className="case__date-create-date">
-                      {moment(new Date(data?.limit_end_date)).utc().format(
-                        "DD/MM/YYYY"
-                      )}
+                      {moment(new Date(data?.limit_end_date))
+                        .utc()
+                        .format("DD/MM/YYYY")}
                     </span>
                     <span className="case__date-create-time">
-                      {moment(new Date(data?.limit_end_date)).utc().format(
-                        "HH:mm:ss"
-                      )}
+                      {moment(new Date(data?.limit_end_date))
+                        .utc()
+                        .format("HH:mm:ss")}
                     </span>
                   </>
                 ) : (
@@ -2131,11 +2165,26 @@ const DataTable = (props) => {
           }
           default: {
             return (
-              <div className="case__normal-text">
-                <span className="case__normal-text--label">
-                  {data[item.dataIndex] || ""}
-                </span>
-              </div>
+              <Tooltip placement="top" title={data[item.dataIndex]}>
+                <div
+                  className={`case__normal-text ${
+                    item.position === "center" && "center"
+                  }`}
+                >
+                  <span className="case__normal-text--label">
+                    {data[item.dataIndex] || ""}
+                  </span>
+                </div>
+              </Tooltip>
+              // <div
+              //   className={`case__normal-text ${
+              //     item.position === "center" && "center"
+              //   }`}
+              // >
+              //   <span className="case__normal-text--label">
+              //     {data[item.dataIndex] || ""}
+              //   </span>
+              // </div>
             );
           }
         }

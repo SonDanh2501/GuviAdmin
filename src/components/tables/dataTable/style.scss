@@ -814,14 +814,14 @@ span {
 .case__promotion-code {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  // align-items: center;
+  // justify-content: center;
 
   .case__promotion-code--brand {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    // align-items: center;
+    // justify-content: center;
 
     .case__promotion-code--brand-sub {
       font-size: $textFontSizeM;
@@ -840,8 +840,8 @@ span {
   .case__promotion-code--un-brand {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    // align-items: center;
+    // justify-content: center;
 
     .case__promotion-code--un-brand-coupon {
       font-size: $textFontSizeM;
@@ -907,7 +907,7 @@ span {
     font-weight: $fontWeightXL;
     font-size: $textFontSizeM;
     padding: 6px 8px;
-    width: 100%;
+    // width: 100%;
     text-align: center;
     border-radius: $borderRadiusM;
 
@@ -933,8 +933,7 @@ span {
 /* Các trường chỉ hiển chữ mới */
 .case__normal-text {
   display: flex;
-  // justify-content: center;
-  // align-items: center;
+
 
   .case__normal-text--label {
     // text-align: center;
@@ -952,6 +951,15 @@ span {
 
     &.bold {
       font-weight: $fontWeightXL;
+    }
+  }
+
+  &.center {
+    justify-content: center;
+    align-items: center;
+
+    .case__normal-text--label {
+      text-align: center;
     }
   }
 }

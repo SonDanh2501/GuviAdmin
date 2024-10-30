@@ -47,17 +47,18 @@ const ManagePromotions = () => {
   const [selectGroupPromotionType, setSelectGroupPromotionType] = useState(""); // Giá trị select của nhóm khuyến mãi
   const [selectStatus, setSelectStatus] = useState(""); // Giá trị select của trạng thái
   /* ~~~ List ~~~ */
-  const columns = [ 
+  const columns = [
     {
       customTitle: (
         <CustomHeaderDatatable
           title="Mã khuyến mãi"
           textToolTip="Mã để áp dụng khuyến mãi"
+          position="left"
         />
       ),
       dataIndex: "",
       key: "promotion_code",
-      width: 60,
+      width: 50,
     },
     {
       customTitle: (
@@ -69,6 +70,7 @@ const ManagePromotions = () => {
       dataIndex: "",
       key: "type_promotion",
       width: 20,
+      position: "center",
     },
     {
       customTitle: (
@@ -90,7 +92,7 @@ const ManagePromotions = () => {
       ),
       dataIndex: "",
       key: "area_promotion",
-      width: 20,
+      width: 25,
     },
     {
       customTitle: (
@@ -101,7 +103,7 @@ const ManagePromotions = () => {
       ),
       dataIndex: "",
       key: "status_promotion",
-      width: 30,
+      width: 25,
     },
     {
       customTitle: (
@@ -113,6 +115,7 @@ const ManagePromotions = () => {
       dataIndex: "",
       key: "time_using_promotion",
       width: 20,
+      position: "center",
     },
     {
       customTitle: (
@@ -124,6 +127,7 @@ const ManagePromotions = () => {
       dataIndex: "",
       key: "start_date_promotion",
       width: 25,
+      position: "center",
     },
     {
       customTitle: (
@@ -135,6 +139,7 @@ const ManagePromotions = () => {
       dataIndex: "",
       key: "end_date_promotion",
       width: 25,
+      position: "center",
     },
   ];
   // Danh sách các dịch vụ
