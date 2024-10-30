@@ -243,7 +243,11 @@ const DataTable = (props) => {
           // Ngày tạo của sổ quỹ
           case "date_create":
             return (
-              <div className="case__date-create">
+              <div
+                className={`case__date-create ${
+                  item?.position === "center" && "center"
+                }`}
+              >
                 <span className="case__date-create-date">
                   {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}
                 </span>
@@ -1515,7 +1519,11 @@ const DataTable = (props) => {
           }
           case "date_verify":
             return (
-              <div className="case__date-create">
+              <div
+                className={`case__date-create ${
+                  item?.position === "center" && "center"
+                }`}
+              >
                 <span className="case__date-create-date">
                   {data?.date_verify_created &&
                     moment(new Date(data?.date_verify_created)).format(

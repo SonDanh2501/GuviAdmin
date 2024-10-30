@@ -200,6 +200,7 @@ const ManageTopUpWithdraw = (props) => {
       dataIndex: "date_create",
       key: "date_create",
       width: 30,
+      position: "center",
     },
     {
       customTitle: (
@@ -354,6 +355,7 @@ const ManageTopUpWithdraw = (props) => {
       dataIndex: "date_verify_created",
       key: "date_verify",
       width: 45,
+      position: "center",
     },
   ];
   // 7. Danh sách các hành động
