@@ -53,6 +53,7 @@ const DataTable = (props) => {
     emptyText,
     headerRightContent,
     onCurrentPageChange,
+    loading,
   } = props;
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
@@ -77,7 +78,7 @@ const DataTable = (props) => {
   };
   const { scrollY } = useWindowScrollPositions();
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
   const [item, setItem] = useState(data[0]);
   const [currentPage, setCurrentPage] = useState(1);
   const [ordinalNumber, setOrdinalNumber] = useState(1);
@@ -129,7 +130,7 @@ const DataTable = (props) => {
     selectedRowKeys,
     onChange: onSelectChange,
   };
-  const hasSelected = selectedRowKeys.length > 0;
+  const hasSelected = selectedRowKeys?.length > 0;
 
   /* ~~~ Use effect ~~~ */
   // 1.
@@ -333,12 +334,13 @@ const DataTable = (props) => {
                 </p>
                 <div className="flex items-center gap-1">
                   <span className="font-normal">Hạng:</span>
-                  {data?.id_customer?.rank === "member" ? (
+                  {data?.id_customer?.rank === "member" &&
+                  data?.id_customer?.rank_point > 0 ? (
                     <span className="bg-orange-100 text-orange-500 border-orange-500 px-1 py-[1px] border-[1px] rounded-lg">
                       Thành viên
                     </span>
                   ) : data?.id_customer?.rank === "silver" ? (
-                    <span className="bg-stone-100 text-stone-500 border-stone-500 px-1 py-[1px] border-[1px] rounded-lg">
+                    <span className="bg-slate-200 text-slate-500 border-slate-500 px-1 py-[1px] border-[1px] rounded-lg">
                       Bạc
                     </span>
                   ) : data?.id_customer?.rank === "gold" ? (
@@ -350,12 +352,13 @@ const DataTable = (props) => {
                       Bạch kim
                     </span>
                   ) : data?.rank === "member" &&
-                    data?.id_group_customer?.length > 1 ? (
+                    data?.id_group_customer[0] ===
+                      "63a8730e6a5e979e0d637c6d" ? (
                     <span className="bg-orange-100 text-orange-500 border-orange-500 px-1 py-[1px] border-[1px] rounded-lg">
                       Thành viên
                     </span>
                   ) : data?.rank === "silver" ? (
-                    <span className="bg-slate-100 text-slate-500 border-slate-500 px-1 py-[1px] border-[1px] rounded-lg">
+                    <span className="bg-slate-200 text-slate-500 border-slate-500 px-1 py-[1px] border-[1px] rounded-lg">
                       Bạc
                     </span>
                   ) : data?.rank === "gold" ? (
@@ -946,14 +949,14 @@ const DataTable = (props) => {
           case "address":
             const temp = item.dataIndex.split(".");
             let getData = data[temp[0]];
-            for (let i = 1; i < temp.length; i++) {
+            for (let i = 1; i < temp?.length; i++) {
               if (getData === undefined || getData === null) {
                 getData = "";
                 break;
               }
               getData = getData[temp[i]];
             }
-            const indexSlice = getData.length - 75;
+            const indexSlice = getData?.length - 75;
             const viewAddress =
               indexSlice > 0 ? getData.slice(0, 75) + "..." : getData;
             return (
@@ -1231,7 +1234,7 @@ const DataTable = (props) => {
             linkRedirect = `/details-order/${data?.id_group_order}`;
             const max = item.maxLength || 75;
             let getDataView = data[item.dataIndex] || "";
-            const indexSlice = getDataView.length - max;
+            const indexSlice = getDataView?.length - max;
             const sliceData =
               indexSlice > 0 ? getDataView.slice(0, max) + "..." : getDataView;
             return (
@@ -1311,7 +1314,7 @@ const DataTable = (props) => {
             );
             return (
               <>
-                {getItemStatus.length > 0 ? (
+                {getItemStatus?.length > 0 ? (
                   <div
                     className={`current-status-handle ${getItemStatus[0]?.className}`}
                     onClick={() =>
@@ -2236,7 +2239,7 @@ const DataTable = (props) => {
   const calculateCurrentPage = (event) => {
     setCurrentPage(event);
     if (onCurrentPageChange) {
-      setIsLoading(true);
+      // setIsLoading(true);
       onCurrentPageChange(event * pageSize - pageSize);
     }
   };
@@ -2268,7 +2271,7 @@ const DataTable = (props) => {
   };
   // 5.
   const hideMiddleChars = (str) => {
-    const length = str.length;
+    const length = str?.length;
     const numStars = Math.floor(length / 2);
     const halfIndex = Math.floor((length - numStars) / 2);
 
@@ -2389,6 +2392,7 @@ const DataTable = (props) => {
           dataSource={data}
           pagination={false}
           scroll={scroll}
+          loading={loading || false}
           onRow={(record, rowIndex) => {
             return {
               onClick: (event) => {

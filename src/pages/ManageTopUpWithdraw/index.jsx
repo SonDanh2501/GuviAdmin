@@ -117,6 +117,7 @@ const ManageTopUpWithdraw = (props) => {
   const permission = useSelector(getPermissionState);
   const dispatch = useDispatch();
   const lang = useSelector(getLanguageState);
+  const [isLoading, setIsLoading] = useState(false);
   /* ~~~ Value ~~~ */
   const [selectStatus, setSelectStatus] = useState(""); // Giá trị lựa chọn trạng thái
   const [selectObject, setSelectObject] = useState(""); // Giá trị lựa chọn đối tượng (mặc định là đối tác)
@@ -408,7 +409,7 @@ const ManageTopUpWithdraw = (props) => {
   // 2. Hàm fetch dữ liệu
   const fetchData = async () => {
     try {
-      dispatch(loadingAction.loadingRequest(true));
+      setIsLoading(true)
       let query =
         selectFilter.map((item) => `&${item.key}=${item.code}`).join("") +
         `&start_date=${startDate}&end_date=${endDate}`;
@@ -420,7 +421,7 @@ const ManageTopUpWithdraw = (props) => {
       );
       setData(res?.data);
       setTotal(res?.totalItem);
-      dispatch(loadingAction.loadingRequest(false));
+      setIsLoading(false);
     } catch (err) {
       console.log("Lỗi fetchData: ", err);
     }
@@ -686,6 +687,7 @@ const ManageTopUpWithdraw = (props) => {
           scrollX={2300}
           actionColumn={addActionColumn}
           getItemRow={setItem}
+          loading={isLoading}
           headerRightContent={
             <div className="manage-top-up-with-draw__table--right-header">
               <TransactionDrawer2

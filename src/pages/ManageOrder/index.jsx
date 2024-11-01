@@ -45,57 +45,24 @@ import Tabs from "../../components/tabs/tabs1";
 import "./index.scss";
 
 const ManageOrder = () => {
-  const itemTab = [
-    {
-      label: "Tất cả đơn hàng",
-      value: "all",
-      key: 0,
-    },
-    {
-      label: "Đang chờ làm",
-      value: "pending",
-      key: 1,
-    },
-    {
-      label: "Đã nhận",
-      value: "confirm",
-      key: 2,
-    },
-    {
-      label: "Đang làm",
-      value: "doing",
-      key: 3,
-    },
-    {
-      label: "Đã huỷ",
-      value: "cancel",
-      key: 4,
-    },
-    {
-      label: "Hoàn thành",
-      value: "done",
-      key: 5,
-    },
-  ];
-
-  const [saveToCookie, readCookie] = useCookies();
+  const navigate = useNavigate();
   const checkElement = useSelector(getElementState);
+  const lang = useSelector(getLanguageState);
+  const service = useSelector(getService);
+  const province = useSelector(getProvince);
+  const user = useSelector(getUser);
+  const [saveToCookie, readCookie] = useCookies();
+  const [startPage, setStartPage] = useState(0);
   const [lengthPage, setLengthPage] = useState(
     JSON.parse(localStorage.getItem("linePerPage"))
       ? JSON.parse(localStorage.getItem("linePerPage")).value
       : 20
   );
-
-  // const [lengthPage, setLengthPage] = useState(20);
-  const lang = useSelector(getLanguageState);
-  const service = useSelector(getService);
-  const province = useSelector(getProvince);
-  const user = useSelector(getUser);
+  const toggle = () => setModal(!modal);
+  /* ~~~ Value ~~~ */
   const [name, setName] = useState("");
-  const [tab, setTab] = useState(itemTab[0].value);
   const [kind, setKind] = useState("");
   const [valueSearch, setValueSearch] = useState("");
-  const [startPage, setStartPage] = useState(0);
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
   const [type, setType] = useState("date_create");
@@ -103,18 +70,13 @@ const ManageOrder = () => {
   const [dataDistrict, setDataDistrict] = useState([]);
   const [district, setDistrict] = useState([]);
   const [checkCondition, setCheckCondition] = useState(false);
-  const [condition, setCondition] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [startDate, setStartDate] = useState(
     new Date("2022-12-31").toISOString()
   );
   const [endDate, setEndDate] = useState(moment().endOf("date").toISOString());
   const [item, setItem] = useState({ date_work: "" });
-  const toggle = () => setModal(!modal);
   const [modal, setModal] = useState(false);
-  const { width } = useWindowDimensions();
-  const { RangePicker } = DatePicker;
-  const navigate = useNavigate();
   const [reCallData, setReCallData] = useState(false);
   const [arrFilter, setArrFilter] = useState([]);
   const [detectLoading, setDetectLoading] = useState(null);
@@ -123,56 +85,45 @@ const ManageOrder = () => {
   const [cityLabel, setCityLabel] = useState("");
   const [districtLabel, setDistrictLabel] = useState([]);
   const [selectedDistrict, setSelectedDistrict] = useState([]);
-  useEffect(() => {
-    getJobList();
-    getTotal();
-  }, [
-    valueSearch,
-    startPage,
-    tab,
-    kind,
-    type,
-    startDate,
-    endDate,
-    city,
-    district,
-    reCallData,
-    lengthPage,
-  ]);
-
-  const handleSearch = useCallback(
-    _debounce((value) => {
-      // setIsLoading(true);
-      setDetectLoading(value);
-      setValueSearch(value);
-      // getJobList();
-    }, 1000),
-    []
-  );
-
-
-  console.log("check >>>", totalOrder);
-  const getJobList = () => {
-    getOrderApi(
-      valueSearch,
-      startPage,
-      lengthPage,
-      tab,
-      kind,
-      type,
-      startDate,
-      endDate,
-      city,
-      district
-    )
-      .then((res) => {
-        console.log("check response", res);
-        setData(res?.data);
-        setTotal(res?.totalItem);
-      })
-      .catch((err) => {});
-  };
-
+  /* ~~~ List ~~~ */
+  const itemTab = [
+    {
+      label: "Tất cả đơn hàng",
+      value: "all",
+      key: 0,
+    },
+    {
+      label: "Đang chờ thanh toán",
+      value: "processing",
+      key: 1,
+    },
+    {
+      label: "Đang chờ làm",
+      value: "pending",
+      key: 2,
+    },
+    {
+      label: "Đã nhận",
+      value: "confirm",
+      key: 3,
+    },
+    {
+      label: "Đang làm",
+      value: "doing",
+      key: 4,
+    },
+    {
+      label: "Hoàn thành",
+      value: "done",
+      key: 5,
+    },
+    {
+      label: "Đã huỷ",
+      value: "cancel",
+      key: 6,
+    },
+  ];
+  const [tab, setTab] = useState(itemTab[0].value);
   const columns = [
     {
       title: "STT",
@@ -246,8 +197,6 @@ const ManageOrder = () => {
       fontSize: "text-size-M",
     },
   ];
-
-  // Items list các option có thể chọn
   let items = [
     {
       key: "1",
@@ -314,72 +263,6 @@ const ManageOrder = () => {
   ];
   // Lọc những items list các option có thể chọn
   items = items.filter((x) => x.label !== false);
-
-  const addActionColumn = {
-    i18n_title: "",
-    dataIndex: "action",
-    key: "action",
-    fixed: "right",
-    width: 50,
-    render: () => (
-      <Space size="middle">
-        <Dropdown menu={{ items }} trigger={["click"]}>
-          <a>
-            <UilEllipsisV />
-          </a>
-        </Dropdown>
-      </Space>
-    ),
-  };
-
-  const deleteOrder = (id) => {
-    setIsLoading(true);
-    deleteOrderApi(id)
-      .then((res) => {
-        getOrderApi(
-          valueSearch,
-          startPage,
-          lengthPage,
-          tab,
-          kind,
-          type,
-          startDate,
-          endDate,
-          "",
-          ""
-        )
-          .then((res) => {
-            setData(res?.data);
-            setTotal(res?.totalItem);
-          })
-          .catch((err) => {});
-        setModal(false);
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        errorNotify({
-          message: err?.message,
-        });
-        setIsLoading(false);
-      });
-  };
-
-  const onChangeTab = (item) => {
-    setTab(item.value);
-    setCheckCondition(false);
-    setStartPage(0);
-    setDetectLoading(item);
-    saveToCookie("tab-order", item?.key);
-    saveToCookie("status-order", item?.value);
-    saveToCookie("order_scrolly", 0);
-    saveToCookie("start_order", 0);
-    saveToCookie("page_order", 1);
-  };
-
-  const onChangePage = (value) => {
-    setStartPage(value);
-  };
-
   const cityOptions = [];
   const districtOption = [];
   const optionsService = [];
@@ -443,7 +326,6 @@ const ManageOrder = () => {
       return;
     }
   });
-
   dataDistrict?.forEach((item, index) => {
     if (user?.area_manager_lv_2?.length === 0) {
       districtOption.push({
@@ -462,9 +344,39 @@ const ManageOrder = () => {
     }
   });
 
+  /* ~~~ Handle function ~~~ */
+  const handleSearch = useCallback(
+    _debounce((value) => {
+      // setIsLoading(true);
+      setDetectLoading(value);
+      setValueSearch(value);
+      // getJobList();
+    }, 1000),
+    []
+  );
+  const getJobList = () => {
+    getOrderApi(
+      valueSearch,
+      startPage,
+      lengthPage,
+      tab,
+      kind,
+      type,
+      startDate,
+      endDate,
+      city,
+      district
+    )
+      .then((res) => {
+        setData(res?.data);
+        setTotal(res?.totalItem);
+      })
+      .catch((err) => {});
+  };
   const getTotal = () => {
     getTotalOrder()
       .then((res) => {
+        console.log("check res >>> ", res);
         const temp_arr = [];
         for (let i of Object.values(res)) {
           temp_arr.push({ value: i });
@@ -474,6 +386,53 @@ const ManageOrder = () => {
       .then((err) => {
         console.log("err ", err);
       });
+  };
+  const deleteOrder = (id) => {
+    setIsLoading(true);
+    deleteOrderApi(id)
+      .then((res) => {
+        getOrderApi(
+          valueSearch,
+          startPage,
+          lengthPage,
+          tab,
+          kind,
+          type,
+          startDate,
+          endDate,
+          "",
+          ""
+        )
+          .then((res) => {
+            setData(res?.data);
+            setTotal(res?.totalItem);
+          })
+          .catch((err) => {});
+        setModal(false);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        errorNotify({
+          message: err?.message,
+        });
+        setIsLoading(false);
+      });
+  };
+
+  const onChangeTab = (item) => {
+    setTab(item.value);
+    setCheckCondition(false);
+    setStartPage(0);
+    setDetectLoading(item);
+    saveToCookie("tab-order", item?.key);
+    saveToCookie("status-order", item?.value);
+    saveToCookie("order_scrolly", 0);
+    saveToCookie("start_order", 0);
+    saveToCookie("page_order", 1);
+  };
+
+  const onChangePage = (value) => {
+    setStartPage(value);
   };
   const handleClickService = ({ key }) => {
     const found = optionsService.find((el) => el.key === key);
@@ -517,6 +476,41 @@ const ManageOrder = () => {
     setDistrictLabel(district_label_filter);
     setDistrict(district_filter);
   };
+  /* ~~~ Use effect ~~~ */
+  useEffect(() => {
+    getJobList();
+    getTotal();
+  }, [
+    valueSearch,
+    startPage,
+    tab,
+    kind,
+    type,
+    startDate,
+    endDate,
+    city,
+    district,
+    reCallData,
+    lengthPage,
+  ]);
+  /* ~~~ Other ~~~ */
+  const addActionColumn = {
+    i18n_title: "",
+    dataIndex: "action",
+    key: "action",
+    fixed: "right",
+    width: 50,
+    render: () => (
+      <Space size="middle">
+        <Dropdown menu={{ items }} trigger={["click"]}>
+          <a>
+            <UilEllipsisV />
+          </a>
+        </Dropdown>
+      </Space>
+    ),
+  };
+
   return (
     <div className="div-container-content">
       <div className="div-flex-row">
