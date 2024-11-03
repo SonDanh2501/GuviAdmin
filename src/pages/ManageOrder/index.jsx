@@ -92,24 +92,29 @@ const ManageOrder = () => {
       value: "all",
       key: 0,
     },
-    {
-      label: "Đang chờ thanh toán",
-      value: "processing",
-      key: 1,
-    },
+    // {
+    //   label: "Đang chờ thanh toán",
+    //   value: "processing",
+    //   key: 1,
+    // },
     {
       label: "Đang chờ làm",
       value: "pending",
-      key: 2,
+      key: 1,
     },
     {
       label: "Đã nhận",
       value: "confirm",
-      key: 3,
+      key: 2,
     },
     {
       label: "Đang làm",
       value: "doing",
+      key: 3,
+    },
+    {
+      label: "Đã huỷ",
+      value: "cancel",
       key: 4,
     },
     {
@@ -117,11 +122,7 @@ const ManageOrder = () => {
       value: "done",
       key: 5,
     },
-    {
-      label: "Đã huỷ",
-      value: "cancel",
-      key: 6,
-    },
+
   ];
   const [tab, setTab] = useState(itemTab[0].value);
   const columns = [
