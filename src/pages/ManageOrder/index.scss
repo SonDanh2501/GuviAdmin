@@ -66,8 +66,7 @@
   padding: 5px;
 }
 
-.date-picker-select-time {
-}
+.date-picker-select-time {}
 
 .select_horizontal_no_thumbnail {
   .item {
@@ -89,6 +88,7 @@
   img {
     width: 30px;
   }
+
   .item {
     cursor: pointer;
     display: flex;
@@ -108,6 +108,7 @@
   img {
     width: 30px;
   }
+
   .item {
     cursor: pointer;
     display: flex;
@@ -127,6 +128,7 @@
   img {
     width: 30px;
   }
+
   .item {
     cursor: pointer;
     display: flex;
@@ -144,10 +146,12 @@
 
 .multi_select_count_sofa,
 .multi_select_count_ac {
+
   // width: 40%;
   img {
     width: 30px;
   }
+
   .item {
     display: flex;
     box-sizing: border-box;
@@ -161,6 +165,7 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
+
     .container-title {
       display: flex;
       flex-direction: row;
@@ -168,6 +173,7 @@
       padding: 0px 10px 0px 10px;
       width: 100%;
     }
+
     .counter-optional {
       display: flex;
       flex-direction: row;
@@ -196,6 +202,7 @@
     flex-direction: row;
     align-items: center;
     justify-content: flex-start;
+
     p {
       margin: 0 10px 0px 0px;
     }
@@ -207,6 +214,7 @@
   flex-direction: row;
   justify-content: flex-start;
   margin: 10px 0px;
+
   .item-date-of-week {
     cursor: pointer;
     border-radius: 4px;
@@ -225,6 +233,7 @@
   flex-direction: row;
   justify-content: flex-start;
   margin: 10px 0px;
+
   .item {
     cursor: pointer;
     border-radius: 4px;
@@ -251,11 +260,13 @@ Select {
   background-color: #ffff;
   width: 80%;
   border: 1px solid #ffff;
+
   .div-item-address {
     display: flex;
     flex-direction: row;
     align-items: center;
     border-bottom: 1px solid #d1d1d1;
+
     .div-name-address {
       display: flex;
       flex-direction: column;
@@ -274,11 +285,13 @@ Select {
   background-color: #ffff;
   width: 80%;
   border: 1px solid #ffff;
+
   .div-item-address {
     display: flex;
     flex-direction: row;
     align-items: center;
     border-bottom: 1px solid #d1d1d1;
+
     .div-name-address {
       display: flex;
       flex-direction: column;
@@ -292,6 +305,7 @@ Select {
   flex-direction: row;
   justify-content: flex-start;
   margin: 8px 0px;
+
   .item {
     cursor: pointer;
     margin-right: 20px;
@@ -303,12 +317,13 @@ Select {
     border-radius: 8px;
     justify-content: center;
     padding-left: 8px;
+
     .title {
       font-weight: 500;
       font-size: 16px;
     }
-    .short-description {
-    }
+
+    .short-description {}
   }
 
   // .item-selected {
@@ -321,26 +336,34 @@ Select {
 
 .fee-order {
   max-width: 300px;
+
   .initial-fee {
     margin: 3px 0px !important;
   }
+
   .service-fee {
     margin: 3px 0px !important;
   }
+
   .event-promotion {
     margin: 3px 0px !important;
+
     p {
       color: $colorDiscount;
     }
   }
+
   .code-promotion {
     margin: 3px 0px !important;
+
     p {
       color: $colorDiscount;
     }
   }
+
   .final-fee {
     margin: 3px 0px !important;
+
     p {
       font-size: 18px;
       font-weight: 500;
@@ -350,20 +373,25 @@ Select {
 
 .date-detail-schedule {
   margin: 20px;
+
   .div-title-month {
     font-size: 20px;
     font-weight: 500;
   }
+
   .div-month {
     margin: 0px 0px 20px 0px;
+
     .column-week {
       .div-title-week {
         font-size: 17px;
         font-weight: 500;
       }
+
       .empty-date {
         margin: 40px 0px 0px 0px;
       }
+
       .div-date-schedule {
         cursor: pointer;
         text-align: center;
@@ -378,6 +406,65 @@ Select {
         background-color: $color1;
         color: #fff;
         border-radius: 50%;
+      }
+    }
+  }
+}
+
+.manage-order {
+  display: flex;
+  flex-direction: column;
+  gap: $gapL;
+  padding-bottom: 16px;
+
+  .manage-order__header {
+    span {
+      font-weight: $fontWeightXL;
+      font-size: $textFontSize3XL;
+      color: $colorBlack;
+    }
+  }
+
+
+  .manage-order__filter-content {
+    display: flex;
+    gap: $gapM;
+
+    .manage-order__filter-content--search-field {
+      width: 400px;
+      overflow: hidden;
+    }
+
+    .manage-order__filter-content--tab {
+      background-color: $colorMoreLightGray;
+      display: flex;
+      gap: $gapS;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 8px;
+      border-radius: $borderRadiusM;
+      cursor: pointer;
+      color: $colorBlack;
+      transition: 0.5s all ease-out;
+
+
+      .manage-order__filter-content--tab-label {
+        font-weight: $fontWeightL;
+        font-size: $textFontSizeM;
+      }
+
+      .manage-order__filter-content--tab-number {
+        background-color: $colorWhite;
+        padding: 2px 4px;
+        min-width: 20px;
+        border-radius: $borderRadiusFull;
+        color: $colorBlack;
+        text-align: center;
+      }
+
+      &.selected {
+        background-color: $colorViolet;
+        color: $colorWhite;
       }
     }
   }

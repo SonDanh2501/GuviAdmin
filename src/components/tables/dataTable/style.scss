@@ -508,6 +508,15 @@ span {
     font-weight: $fontWeightXL;
     font-size: $textFontSizeM;
   }
+
+  .case__status-text--processing {
+    padding: 6px 8px;
+    color: $colorOrange;
+    background-color: $colorExtraLightOrange;
+    border-radius: $borderRadiusM;
+    font-weight: $fontWeightXL;
+    font-size: $textFontSizeM;
+  }
 }
 
 /* 2. Trường hợp ngày giao dịch */

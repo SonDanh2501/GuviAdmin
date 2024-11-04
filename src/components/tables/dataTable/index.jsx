@@ -836,6 +836,8 @@ const DataTable = (props) => {
                       ? "case__status-text--confirm"
                       : data?.status === "doing"
                       ? "case__status-text--doing"
+                      : data?.status === "processing"
+                      ? "case__status-text--processing"
                       : "case__status-text--cancel"
                   }`}
                 >
@@ -847,6 +849,8 @@ const DataTable = (props) => {
                     ? `${i18n.t("doing", { lng: lang })}`
                     : data?.status === "done"
                     ? `${i18n.t("complete", { lng: lang })}`
+                    : data?.status === "processing"
+                    ? "Đang chờ thanh toán"
                     : `${i18n.t("cancel", { lng: lang })}`}
                 </span>
               </div>
