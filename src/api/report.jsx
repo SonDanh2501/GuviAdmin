@@ -246,7 +246,7 @@ export const getReportOrderDaily = (
   valueSort
 ) => {
   return axiosClient.get(
-    `/admin/report_mananger/report_order_dayly?start=${start}&length=${length}&start_date=${start_date}&end_date=${end_date}&typeSort=${type}&valueSort=${valueSort}`
+    `/admin/report_mananger/report_order_dayly?start=${start}&length=${length}&start_date=${start_date}&end_date=${end_date}&type=${type}&valueSort=${valueSort}`
   );
 };
 
