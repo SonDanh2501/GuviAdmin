@@ -2,6 +2,7 @@ import { Popover } from 'antd';
 import React from 'react'
 import { IoHelpCircleOutline } from "react-icons/io5";
 import './index.scss'
+import { formatMoney } from '../../../helper/formatMoney';
 
 const CustomHeaderDatatable = ({
     title,
@@ -23,31 +24,36 @@ const CustomHeaderDatatable = ({
         }`}
       >
         <div className="custom-table-header__label">
-          <span className="custom-table-header__label--title">{title}</span>
-          {textToolTip && (
-            <Popover
-              content={textToolTip}
-              placement="top"
-              overlayInnerStyle={{
-                backgroundColor: "white",
-              }}
+          <span className="custom-table-header__label--title">
+            {title}
+            {textToolTip && (
+              <Popover
+                content={textToolTip}
+                placement="top"
+                overlayInnerStyle={{
+                  backgroundColor: "white",
+                }}
+              >
+                <div>
+                  <IoHelpCircleOutline
+                    size={size ? size : 14}
+                    color={color ? color : "white"}
+                  />
+                </div>
+              </Popover>
+            )}
+          </span>
+          {subValue && (
+            <span
+              className="custom-table-header__sub-value"
+              style={{ color: title === "Doanh thu" ? "#eab308" : "none" }}
             >
-              <div>
-                <IoHelpCircleOutline
-                  size={size ? size : 14}
-                  color={color ? color : "white"}
-                />
-              </div>
-            </Popover>
-          )}
-        </div>
-        <div className="sub-value">
-          {subValue ? (
-            <p style={{ color: title === "Doanh thu" ? "#2463eb" : "none" }}>
-              {subValue}
-            </p>
-          ) : (
-            <div style={{ marginTop: "35px" }}></div>
+              {typeSubValue === "money"
+                ? formatMoney(subValue)
+                : typeSubValue === "percent"
+                ? subValue + " %"
+                : subValue}
+            </span>
           )}
         </div>
       </div>

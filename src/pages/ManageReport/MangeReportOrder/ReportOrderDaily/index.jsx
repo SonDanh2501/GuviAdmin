@@ -30,6 +30,7 @@ import { number_processing } from "../../../../helper/numberProcessing";
 import { CaretDownOutlined, CaretUpOutlined } from "@ant-design/icons";
 import "./styles.scss";
 import { IoHelpCircleOutline } from "react-icons/io5";
+import CustomHeaderDatatable from "../../../../components/tables/tableHeader";
 
 const ReportOrderDaily = () => {
   const headerDefault = {
@@ -239,73 +240,71 @@ const ReportOrderDaily = () => {
     );
   };
 
-  const CustomHeaderDatatable = ({
-    title,
-    subValue,
-    typeSubValue,
-    textToolTip,
-  }) => {
-    const content = <p>{textToolTip ? textToolTip : ""}</p>;
-    if (subValue)
-      subValue =
-        typeSubValue === "money"
-          ? formatMoney(subValue)
-          : typeSubValue === "percent"
-          ? subValue + " %"
-          : subValue;
-    if (title == "Giá vốn") subValue = "0 đ";
-    // console.log(subValue, "subValue");
-    return (
-      <React.Fragment>
-        <div className="header-table-custom">
-          <div className="title-report">
-            <p style={{ color: title === "Doanh thu" ? "#2463eb" : "none" }}>
-              {title}
-            </p>
-            {textToolTip ? (
-              <Popover
-                content={content}
-                placement="bottom"
-                overlayInnerStyle={{
-                  backgroundColor: "white",
-                }}
-              >
-                <div>
-                  <IoHelpCircleOutline
-                    color={`${title === "Doanh thu" ? "#2463eb" : "white"}`}
-                  />
-                  {/* <i
-                    style={{
-                      color: title === "Doanh thu" ? "#2463eb" : "none",
-                    }}
-                    class="uil uil-question-circle icon-question"
-                  ></i> */}
-                </div>
-              </Popover>
-            ) : (
-              <></>
-            )}
-          </div>
-          <div className="sub-value">
-            {subValue ? (
-              <p style={{ color: title === "Doanh thu" ? "#2463eb" : "none" }}>
-                {subValue}
-              </p>
-            ) : (
-              <div style={{ marginTop: "35px" }}></div>
-            )}
-          </div>
-        </div>
-      </React.Fragment>
-    );
-  };
+  // const CustomHeaderDatatable = ({
+  //   title,
+  //   subValue,
+  //   typeSubValue,
+  //   textToolTip,
+  // }) => {
+  //   const content = <p>{textToolTip ? textToolTip : ""}</p>;
+  //   if (subValue)
+  //     subValue =
+  //       typeSubValue === "money"
+  //         ? formatMoney(subValue)
+  //         : typeSubValue === "percent"
+  //         ? subValue + " %"
+  //         : subValue;
+  //   if (title == "Giá vốn") subValue = "0 đ";
+  //   // console.log(subValue, "subValue");
+  //   return (
+  //     <React.Fragment>
+  //       <div className="header-table-custom">
+  //         <div className="title-report">
+  //           <p style={{ color: title === "Doanh thu" ? "#2463eb" : "none" }}>
+  //             {title}
+  //           </p>
+  //           {textToolTip ? (
+  //             <Popover
+  //               content={content}
+  //               placement="bottom"
+  //               overlayInnerStyle={{
+  //                 backgroundColor: "white",
+  //               }}
+  //             >
+  //               <div>
+  //                 <IoHelpCircleOutline
+  //                   color={`${title === "Doanh thu" ? "#2463eb" : "white"}`}
+  //                 />
+  //                 {/* <i
+  //                   style={{
+  //                     color: title === "Doanh thu" ? "#2463eb" : "none",
+  //                   }}
+  //                   class="uil uil-question-circle icon-question"
+  //                 ></i> */}
+  //               </div>
+  //             </Popover>
+  //           ) : (
+  //             <></>
+  //           )}
+  //         </div>
+  //         <div className="sub-value">
+  //           {subValue ? (
+  //             <p style={{ color: title === "Doanh thu" ? "#2463eb" : "none" }}>
+  //               {subValue}
+  //             </p>
+  //           ) : (
+  //             <div style={{ marginTop: "35px" }}></div>
+  //           )}
+  //         </div>
+  //       </div>
+  //     </React.Fragment>
+  //   );
+  // };
 
   const columns = [
     {
       customTitle: (
-        <CustomHeaderDatatable
-          title={typeDate === "date_work" ? "Ngày làm" : "Ngày tạo"}
-        />
+        <CustomHeaderDatatable title="Ngày tạo" textToolTip="Ngày tạo" />
       ),
       dataIndex: "_id",
       key: "id_date_work",
@@ -313,17 +312,23 @@ const ReportOrderDaily = () => {
         typeDate === "date_create"
           ? "/report/manage-report/report-detail-order-date-create"
           : "/report/manage-report/report-detail-order-date-work",
-      width: 100,
+      width: 80,
       fontSize: "text-size-M text-weight-500",
+
     },
     {
       customTitle: (
-        <CustomHeaderDatatable title="Số ĐH" subValue={dataTotal?.total_item} />
+        <CustomHeaderDatatable
+          title="Số đơn hàng"
+          subValue={dataTotal?.total_item}
+          textToolTip="Tổng số lượng đơn hàng"
+        />
       ),
       dataIndex: "total_item",
       key: "number",
-      width: 50,
-      fontSize: "text-size-M text-weight-500",
+      width: 95,
+      fontSize: "text-size-M text-weight-500 text-center",
+
     },
     {
       customTitle: (
@@ -336,8 +341,7 @@ const ReportOrderDaily = () => {
       ),
       dataIndex: "total_gross_income",
       key: "money",
-      width: 120,
-      fontSize: "text-size-M text-weight-500",
+      width: 135,
     },
     {
       customTitle: (
@@ -350,8 +354,7 @@ const ReportOrderDaily = () => {
       ),
       dataIndex: "total_collabotator_fee",
       key: "money",
-      width: 120,
-      fontSize: "text-size-M text-weight-500",
+      width: 110,
     },
     {
       customTitle: (
@@ -364,8 +367,7 @@ const ReportOrderDaily = () => {
       ),
       dataIndex: "total_income",
       key: "money",
-      width: 120,
-      fontSize: "text-size-M text-color-1 text-weight-500",
+      width: 110,
     },
     {
       customTitle: (
@@ -378,8 +380,7 @@ const ReportOrderDaily = () => {
       ),
       dataIndex: "total_discount",
       key: "money",
-      width: 120,
-      fontSize: "text-size-M text-weight-500",
+      width: 110,
     },
 
     {
@@ -394,7 +395,6 @@ const ReportOrderDaily = () => {
       dataIndex: "total_net_income",
       key: "money",
       width: 120,
-      fontSize: "text-size-M text-weight-500",
     },
     {
       customTitle: (
@@ -407,8 +407,7 @@ const ReportOrderDaily = () => {
       ),
       dataIndex: "total_order_fee",
       key: "money",
-      width: 120,
-      fontSize: "text-size-M text-weight-500",
+      width: 110,
     },
     {
       customTitle: (
@@ -420,8 +419,7 @@ const ReportOrderDaily = () => {
       ),
       dataIndex: "cost_price",
       key: "money",
-      width: 120,
-      fontSize: "text-size-M text-weight-500",
+      width: 80,
     },
     {
       customTitle: (
@@ -434,8 +432,7 @@ const ReportOrderDaily = () => {
       ),
       dataIndex: "punish",
       key: "money",
-      width: 120,
-      fontSize: "text-size-M text-weight-500",
+      width: 110,
     },
     {
       customTitle: (
@@ -448,8 +445,7 @@ const ReportOrderDaily = () => {
       ),
       dataIndex: "total_net_income_business",
       key: "money",
-      width: 120,
-      fontSize: "text-size-M text-weight-500",
+      width: 110,
     },
     {
       customTitle: (
@@ -464,6 +460,7 @@ const ReportOrderDaily = () => {
       key: "percent",
       width: 90,
       fontSize: "text-size-M text-weight-500",
+
     },
     {
       customTitle: (
@@ -476,8 +473,7 @@ const ReportOrderDaily = () => {
       title: "Phí áp dụng",
       dataIndex: "total_service_fee",
       key: "money",
-      width: 120,
-      fontSize: "text-size-M text-weight-500",
+      width: 100,
     },
   ];
 
@@ -657,6 +653,7 @@ const ReportOrderDaily = () => {
             // detectLoading={detectLoading}
             // getItemRow={setItem}
             onCurrentPageChange={setStart}
+            scrollX = {1800}
           />
         </div>
       </div>

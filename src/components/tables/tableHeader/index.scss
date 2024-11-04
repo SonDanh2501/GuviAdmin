@@ -18,14 +18,26 @@
 
     .custom-table-header__label {
         display: flex;
+        flex-direction: column;
         gap: $gapXS;
         align-items: center;
 
         .custom-table-header__label--title {
+            display: flex;
+            align-items: center;
+            gap: $gapXS;
             font-size: $textFontSizeM;
             font-weight: $fontWeightXL;
             color: $colorWhite;
             text-transform: capitalize;
+        }
+        
+        .custom-table-header__sub-value {
+            display: flex;
+            width: 100%;
+            font-size: $textFontSizeM;
+            font-weight: $fontWeightL;
+            color: $colorWhite;
         }
     }
 }
