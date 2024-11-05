@@ -425,6 +425,14 @@ Select {
     }
   }
 
+  .manage-order__search {
+    display: flex;
+    gap: $gapM;
+    .manage-order__search-field { 
+      width: 400px;
+    }
+  }
+
 
   .manage-order__filter-content {
     display: flex;

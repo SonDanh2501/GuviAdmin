@@ -18,11 +18,6 @@
         display: flex;
         gap: $gapM;
 
-        .manage-top-up-with-draw__filter-content--search-field {
-            width: 400px;
-            overflow: hidden;
-        }
-
         .manage-top-up-with-draw__filter-content--tab {
             background-color: $colorMoreLightGray;
             display: flex;
@@ -60,6 +55,11 @@
     .manage-top-up-with-draw__table--right-header {
         display: flex;
         gap: $gapM;
+
+        .manage-top-up-with-draw__table--right-header--search-field {
+            width: 400px;
+            overflow: hidden;
+        }
     }
 
 }

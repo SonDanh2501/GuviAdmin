@@ -1,11 +1,8 @@
-
 import _debounce from "lodash/debounce";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getGroupPromotion } from "../../../api/configuration.jsx";
-import {
-  fetchPromotion,
-} from "../../../api/promotion.jsx";
+import { fetchPromotion } from "../../../api/promotion.jsx";
 import { errorNotify } from "../../../helper/toast.js";
 import {
   getElementState,
@@ -240,7 +237,7 @@ const ManagePromotions = () => {
         selectService,
         "",
         typeSort,
-        selectGroupPromotionType,
+        selectGroupPromotionType
       );
       setData(res?.data);
       setTotal(res?.totalItem);
@@ -284,7 +281,7 @@ const ManagePromotions = () => {
     selectObject,
     selectService,
     selectGroupPromotionType,
-    valueSearch
+    valueSearch,
   ]);
   /* ~~~ Other ~~~ */
   const filterContent = () => {
@@ -338,39 +335,20 @@ const ManagePromotions = () => {
       </div>
     );
   };
-  const searchContentLeft = () => {
+
+  const searchContentRight = () => {
     return (
-      <div className="manange-promotion__filter-searching-left">
-        {checkElement?.includes("create_promotion") && (
-          <ButtonCustom
-            onClick={() =>
-              navigate(`/promotion/manage-setting/create-promotion`)
-            }
-            label="Thêm khuyến mãi"
-          />
-        )}
-        <ButtonCustom
-          onClick={() =>
-            navigate(`/promotion/manage-setting/edit-position-promotion`)
-          }
-          label="Chỉnh sửa vị trí"
+      <div className="manange-promotion__filter-searching">
+        <InputTextCustom
+          type="text"
+          placeHolderNormal="Tìm kiếm theo mã khuyến mãi"
+          onChange={(e) => {
+            handleSearch(e.target.value);
+          }}
         />
       </div>
     );
   };
-  const searchContentRight = () => {
-    return (
-      <div className="manange-promotion__filter-searching">
-      <InputTextCustom
-        type="text"
-        placeHolderNormal="Tìm kiếm theo mã khuyến mãi"
-        onChange={(e) => {
-          handleSearch(e.target.value);
-        }}
-      />
-    </div>
-    )
-  }
   /* ~~~ Main ~~~ */
   return (
     <div className="manange-promotion">
@@ -378,7 +356,6 @@ const ManagePromotions = () => {
       <div className="manange-promotion__header">
         <span>Khuyến mãi</span>
       </div>
-      <FilterData leftContent={searchContentLeft()} rightContent={searchContentRight()} />
       {/* Filter */}
       <FilterData leftContent={filterContent()} />
       {/* Table */}
@@ -391,6 +368,33 @@ const ManagePromotions = () => {
           setLengthPage={setLengthPage}
           totalItem={total}
           onCurrentPageChange={onChangePage}
+          headerRightContent={
+            <div className="manange-promotion__filter-searching-left">
+              <div className="manange-promotion__filter-searching">
+                <InputTextCustom
+                  type="text"
+                  placeHolderNormal="Tìm kiếm theo mã khuyến mãi"
+                  onChange={(e) => {
+                    handleSearch(e.target.value);
+                  }}
+                />
+              </div>
+              {checkElement?.includes("create_promotion") && (
+                <ButtonCustom
+                  onClick={() =>
+                    navigate(`/promotion/manage-setting/create-promotion`)
+                  }
+                  label="Thêm khuyến mãi"
+                />
+              )}
+              <ButtonCustom
+                onClick={() =>
+                  navigate(`/promotion/manage-setting/edit-position-promotion`)
+                }
+                label="Chỉnh sửa vị trí"
+              />
+            </div>
+          }
         />
       </div>
     </div>

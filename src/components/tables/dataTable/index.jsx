@@ -45,7 +45,6 @@ const DataTable = (props) => {
     start,
     pageSize,
     totalItem,
-    detectLoading,
     setOpenModalChangeStatus,
     setOpenModalCancel,
     scrollX,
@@ -358,7 +357,7 @@ const DataTable = (props) => {
                       Thành viên
                     </span>
                   ) : data?.rank === "silver" ? (
-                    <span className="bg-slate-200 text-slate-500 border-slate-500 px-1 py-[1px] border-[1px] rounded-lg">
+                    <span className="bg-slate-100 text-slate-500 border-slate-500 px-1 py-[1px] border-[1px] rounded-lg">
                       Bạc
                     </span>
                   ) : data?.rank === "gold" ? (
@@ -370,8 +369,8 @@ const DataTable = (props) => {
                       Bạch kim
                     </span>
                   ) : (
-                    <span className="bg-stone-100 text-stone-500 border-stone-500 px-1 py-[1px] border-[1px] rounded-lg">
-                      Khách hàng mới
+                    <span className="bg-red-100 text-red-500 border-red-500 px-1 py-[1px] border-[1px] rounded-lg">
+                      Mới
                     </span>
                   )}
                 </div>
@@ -426,8 +425,12 @@ const DataTable = (props) => {
             break;
           case "date_work":
             return (
-              <div className="div-date-work">
-                <p className={`text-worktime ${item?.fontSize}`}>
+              <div
+                className={`case__date-create ${
+                  item?.position === "center" && "center"
+                }`}
+              >
+                <span className="case__date-create-date">
                   {moment(
                     new Date(
                       data?.date_work
@@ -435,8 +438,8 @@ const DataTable = (props) => {
                         : data?.date_work_schedule[0].date
                     )
                   ).format("DD/MM/YYYY")}
-                </p>
-                <p className={`text-worktime ${item?.fontSize}`}>
+                </span>
+                <span className="case__date-create-time">
                   {moment(
                     new Date(
                       data?.date_work
@@ -446,7 +449,7 @@ const DataTable = (props) => {
                   )
                     .locale(lang)
                     .format("dddd")}
-                </p>
+                </span>
               </div>
             );
             break;

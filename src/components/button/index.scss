@@ -5,7 +5,7 @@
     background-color: $colorViolet;
     border-radius: $borderRadiusM;
     transition: all 0.5s ease;
-    padding: 6px 8px;
+    padding: 9px 10px;
     border: 1px solid $colorViolet;
     border-radius: $borderRadiusM;
     font-size: $textFontSizeM;
@@ -94,8 +94,14 @@
 
             .button-custom-select__line,
             .button-custom-select__option {
+                display: flex;
+                gap: $gapL;
                 background-color: $colorMoreLightGray;
+                .button-custom-select__option--label {
+                    padding: 0 4px 0 4px;
+                }
             }
+
         }
     }
 

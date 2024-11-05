@@ -560,23 +560,7 @@ const ManageTopUpWithdraw = (props) => {
       </div>
     );
   };
-  const filterDateAndSearch = () => {
-    return (
-      <div className="manage-top-up-with-draw__filter-content">
-        <div className="manage-top-up-with-draw__filter-content--search-field">
-          <InputTextCustom
-            type="text"
-            placeHolderNormal={`${i18n.t("search_transaction", {
-              lng: lang,
-            })}`}
-            onChange={(e) => {
-              handleSearch(e.target.value);
-            }}
-          />
-        </div>
-      </div>
-    );
-  };
+
   const addActionColumn = {
     i18n_title: "",
     dataIndex: "action",
@@ -661,10 +645,7 @@ const ManageTopUpWithdraw = (props) => {
         <span>Sổ quỹ</span>
       </div>
       {/* Filter */}
-      <FilterData
-        leftContent={filterDateAndSearchRight()}
-        rightContent={filterDateAndSearch()}
-      />
+      <FilterData leftContent={filterDateAndSearchRight()} />
       {/* Filter */}
       <FilterData
         isTimeFilter
@@ -690,6 +671,17 @@ const ManageTopUpWithdraw = (props) => {
           loading={isLoading}
           headerRightContent={
             <div className="manage-top-up-with-draw__table--right-header">
+              <div className="manage-top-up-with-draw__table--right-header--search-field">
+                <InputTextCustom
+                  type="text"
+                  placeHolderNormal={`${i18n.t("search_transaction", {
+                    lng: lang,
+                  })}`}
+                  onChange={(e) => {
+                    handleSearch(e.target.value);
+                  }}
+                />
+              </div>
               <TransactionDrawer2
                 titleButton="Phiếu thu"
                 titleHeader="Phiếu thu"

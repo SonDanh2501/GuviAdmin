@@ -246,7 +246,7 @@ const InputTextCustom = (props) => {
                   {itemFound.label ? itemFound.label : itemFound.name}
                 </span>
                 {itemFound?.code === value && (
-                  <IoCheckmarkCircleSharp size={"20px"} />
+                  <IoCheckmarkCircleSharp size={"18px"} />
                 )}
               </div>
             ))
@@ -263,7 +263,7 @@ const InputTextCustom = (props) => {
               } hover:bg-violet-500/50 hover:text-white cursor-pointer p-2 mb-0.5 font-normal duration-300 flex items-center justify-between`}
             >
               <span key={index}>{item.label ? item.label : item.name}</span>
-              {item?.code === value && <IoCheckmarkCircleSharp size={"20px"} />}
+              {item?.code === value && <IoCheckmarkCircleSharp size={"18px"} />}
             </div>
           ))}
     </div>
@@ -334,7 +334,7 @@ const InputTextCustom = (props) => {
                 <span key={index}>{province?.name}</span>
                 {(province?.code === value?.code ||
                   province?.code === value) && (
-                  <IoCheckmarkCircleSharp size={"20px"} />
+                  <IoCheckmarkCircleSharp size={"18px"} />
                 )}
               </div>
             ))
@@ -359,7 +359,7 @@ const InputTextCustom = (props) => {
                 <span key={index}>{province?.name}</span>
                 {(province?.code === value?.code ||
                   province?.code === value) && (
-                  <IoCheckmarkCircleSharp size={"20px"} />
+                  <IoCheckmarkCircleSharp size={"18px"} />
                 )}
               </div>
             )
@@ -415,7 +415,7 @@ const InputTextCustom = (props) => {
               >
                 <span key={index}>{item?.name}</span>
                 {item?.code === value?.code && (
-                  <IoCheckmarkCircleSharp size={"20px"} />
+                  <IoCheckmarkCircleSharp size={"18px"} />
                 )}
               </div>
             ))
@@ -434,7 +434,7 @@ const InputTextCustom = (props) => {
             >
               <span key={index}>{item?.name}</span>
               {item?.code === value?.code && (
-                <IoCheckmarkCircleSharp size={"20px"} />
+                <IoCheckmarkCircleSharp size={"18px"} />
               )}
             </div>
           ))}
@@ -457,7 +457,7 @@ const InputTextCustom = (props) => {
           // })}`}
         >
           <span key={index}>{item?.title?.vi}</span>
-          {item?.is_select === true && <IoCheckmarkCircleSharp size={"20px"} />}
+          {item?.is_select === true && <IoCheckmarkCircleSharp size={"18px"} />}
         </div>
       ))}
     </div>
@@ -514,7 +514,7 @@ const InputTextCustom = (props) => {
               >
                 <span key={index}>{item?.name}</span>
                 {item?.is_select === true && (
-                  <IoCheckmarkCircleSharp size={"20px"} />
+                  <IoCheckmarkCircleSharp size={"18px"} />
                 )}
               </div>
             ))
@@ -538,7 +538,7 @@ const InputTextCustom = (props) => {
             >
               <span key={index}>{item?.name}</span>
               {item?.is_select === true && (
-                <IoCheckmarkCircleSharp size={"20px"} />
+                <IoCheckmarkCircleSharp size={"18px"} />
               )}
             </div>
           ))}
@@ -597,7 +597,7 @@ const InputTextCustom = (props) => {
           // })}`}
         >
           <span key={index}>{item?.label}</span>
-          {item?.is_select === true && <IoCheckmarkCircleSharp size={"20px"} />}
+          {item?.is_select === true && <IoCheckmarkCircleSharp size={"18px"} />}
         </div>
       ))}
     </div>

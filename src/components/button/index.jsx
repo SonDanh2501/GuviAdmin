@@ -7,6 +7,7 @@ const { IoCheckmarkCircleSharp, IoAddCircleOutline } = icons;
 
 const ButtonCustom = (props) => {
   const {
+    type,
     label,
     onClick,
     disable,
@@ -19,7 +20,6 @@ const ButtonCustom = (props) => {
     fullScreen,
   } = props;
   const [open, setOpen] = useState(false);
-
   const content = (
     <div className="button-custom-content">
       {options?.map((item, index) => (
@@ -45,11 +45,44 @@ const ButtonCustom = (props) => {
               {item?.total}
             </span>
           </span>
-          {item?.code === value && <IoCheckmarkCircleSharp size={"20px"} />}
+          {item?.code === value && <IoCheckmarkCircleSharp size={"18px"} />}
         </div>
       ))}
     </div>
   );
+  const contentMultiSelect =
+    type === "multiSelect" ? (
+      <div className="button-custom-content">
+        {options?.map((item, index) => (
+          <div
+            key={index}
+            onClick={() => handleMultiSelect(item.code)}
+            className={`button-custom-content__child ${
+              value.length > 0 && value.includes(item.code) ? "checked" : ""
+            }`}
+          >
+            <span className="button-custom-content__child--text">
+              {item.label || item.name}
+              {item?.total || item?.total === 0 ? (
+                <span
+                  className={`button-custom-content__child--text-number ${
+                    value.length > 0 && value.includes(item.code)
+                      ? "checked"
+                      : ""
+                  }`}
+                >
+                  {item.total}
+                </span>
+              ) : null}
+            </span>
+            {value.length > 0 && value.includes(item.code) && (
+              <IoCheckmarkCircleSharp size="18px" />
+            )}
+          </div>
+        ))}
+      </div>
+    ) : null;
+
   /* ~~~ Support fucntion ~~~ */
   const handleOpen = (newOpen) => {
     setOpen(newOpen);
@@ -67,7 +100,22 @@ const ButtonCustom = (props) => {
     setValueSelectedProps(valueSelect);
     handleClose();
   };
-
+  // 2. Hàm xử lý khi type === "multiSelect"
+  const handleMultiSelect = (valueSelect) => {
+    if (value?.length === 0) {
+      setValueSelectedProps([valueSelect]);
+    } else {
+      const found = value?.find((el) => el === valueSelect);
+      if (found) {
+        // Nếu có thì bỏ chọn
+        const result = value.filter((el) => el !== found);
+        setValueSelectedProps(result);
+      } else {
+        // Nếu không có thì thêm vào giá trị value
+        setValueSelectedProps([...value, valueSelect]);
+      }
+    }
+  }
   return (
     <div>
       {!options ? (
@@ -95,7 +143,7 @@ const ButtonCustom = (props) => {
             placement="bottomLeft"
             title={" "}
             open={disable ? false : open}
-            content={content}
+            content={type === "multiSelect" ? contentMultiSelect : content}
             arrow={false}
             onOpenChange={handleOpen}
           >
@@ -110,7 +158,21 @@ const ButtonCustom = (props) => {
               </span>
               <div className="button-custom-select__line"></div>
               <div className="button-custom-select__option">
-                <span>{options?.find((el) => el.code === value)?.label}</span>
+                {Array.isArray(value) && value.length > 0 ? (
+                  <span>
+                    {value.length > 2
+                      ? `${value.length} đã chọn`
+                      : options
+                          .filter((option) => value.includes(option.code))
+                          .map((el) => el.label)
+                          .join(", ")}
+                  </span>
+                ) : (
+                  <span>
+                    {options?.find((el) => el.code === value)?.label ||
+                      "Tất cả"}
+                  </span>
+                )}
               </div>
             </div>
           </Popover>
