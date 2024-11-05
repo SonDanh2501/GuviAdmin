@@ -1172,24 +1172,42 @@ const DataTable = (props) => {
           }
           case "id_collaborator": {
             return (
-              <p
-                className={`${item?.fontSize}`}
-                onClick={() =>
-                  navigate(
-                    `/report/manage-report/report-order-by-collaborator/${data?.id_collaborator._id}`,
-                    {
-                      state: {
-                        startDate: data?.start_date,
-                        endDate: data?.end_date,
-                        status: data?.status,
-                      },
-                    }
-                  )
-                }
+              // <p
+              //   className={`${item?.fontSize}`}
+              //   onClick={() =>
+              //     navigate(
+
+              //       `/report/manage-report/report-order-by-collaborator/${data?.id_collaborator._id}`,
+              //       {
+              //         state: {
+              //           startDate: data?.start_date,
+              //           endDate: data?.end_date,
+              //           status: data?.status,
+              //         },
+              //       }
+              //     )
+              //   }
+              // >
+              //   {" "}
+              //   {data?.id_collaborator.full_name}
+              // </p>
+              <Link
+                target="_blank"
+                to={{
+                  pathname: `/report/manage-report/report-order-by-collaborator/${data?.id_collaborator._id}`,
+                  state: {
+                    startDate: data?.start_date,
+                    endDate: data?.end_date,
+                    status: data?.status,
+                  },
+                }}
               >
-                {" "}
-                {data?.id_collaborator.full_name}
-              </p>
+                <div className="case__normal-text">
+                  <span className="case__normal-text--label">
+                    {data?.id_collaborator.full_name}
+                  </span>
+                </div>
+              </Link>
             );
             break;
           }
