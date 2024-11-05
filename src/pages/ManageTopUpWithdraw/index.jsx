@@ -162,8 +162,8 @@ const ManageTopUpWithdraw = (props) => {
   // 3. Danh sách các loại giao dịch
   const transferTypeList = [
     { code: "", label: "Tất cả" },
-    { code: "withdraw", label: "Rút" },
-    { code: "top_up", label: "Nạp" },
+    { code: "withdraw", label: "Phiếu chi" },
+    { code: "top_up", label: "Phiếu thu" },
   ];
   // 4. Danh sách các loại phương thức thanh toán
   const paymentMethodList = [
