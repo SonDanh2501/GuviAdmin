@@ -369,7 +369,7 @@ const DataTable = (props) => {
                       Bạch kim
                     </span>
                   ) : (
-                    <span className="bg-red-100 text-red-500 border-red-500 px-1 py-[1px] border-[1px] rounded-lg">
+                    <span className="bg-orange-500 text-white border-orange-500 px-1 py-[1px] border-[1px] rounded-lg">
                       Mới
                     </span>
                   )}
@@ -867,6 +867,8 @@ const DataTable = (props) => {
                     ? `${i18n.t("cash", { lng: lang })}`
                     : data?.payment_method === "point"
                     ? `${i18n.t("wallet_gpay", { lng: lang })}`
+                    : data?.payment_method === "momo"
+                    ? "Momo"
                     : ""}
                 </p>
                 <p className={`text-payment-method ${item?.fontSize}`}>

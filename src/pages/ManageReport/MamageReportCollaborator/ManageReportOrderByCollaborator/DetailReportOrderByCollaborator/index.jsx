@@ -476,14 +476,14 @@ const DetailReportOrderByCollaborator = () => {
         ),
       dataIndex: typeDate === "date_work" ? "date_work" : "date_create",
       key: "date_hour",
-      width: 50,
+      width: 100,
       fontSize: "text-size-M text-weight-500",
     },
     {
       customTitle: <HeaderInfo title="Mã đơn" />,
       dataIndex: "id_view",
       key: "text_link",
-      width: 90,
+      width: 150,
       fontSize: "text-size-M text-color-black text-weight-500",
     },
     {

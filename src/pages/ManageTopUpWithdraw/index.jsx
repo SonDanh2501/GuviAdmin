@@ -155,7 +155,7 @@ const ManageTopUpWithdraw = (props) => {
   // 2. Danh sách các đối tượng
   const objectList = [
     { code: "", label: "Tất cả" },
-    { code: "collaborator", label: "Cộng tác viên" },
+    { code: "collaborator", label: "Đối tác" },
     { code: "customer", label: "Khách hàng" },
     { code: "other", label: "Khác" },
   ];

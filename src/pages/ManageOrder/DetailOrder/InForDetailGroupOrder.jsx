@@ -195,6 +195,9 @@ const InForDetailGroupOrder = (props) => {
       if (dataGroup?.payment_method === "point") {
         setPaymentMethod("Ví G-pay");
       }
+      if (dataGroup?.payment_method === "momo") {
+        setPaymentMethod("Momo");
+      }
     }
   }, [dataGroup]);
 

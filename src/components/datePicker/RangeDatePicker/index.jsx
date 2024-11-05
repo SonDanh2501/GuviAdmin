@@ -15,6 +15,8 @@ const RangeDatePicker = (props) => {
   const { width } = useWindowDimensions();
   const lang = useSelector(getLanguageState);
   const {
+    startDate,
+    endDate,
     setStartDate,
     setEndDate,
     rangeDateDefaults,
