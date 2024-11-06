@@ -330,7 +330,6 @@ const DetailReportOrderByCollaborator = () => {
   const params = useParams();
   const id = params?.id;
   const { state } = useLocation();
-
   const [currentPage, setCurrentPage] = useState(1);
   const [startPage, setStartPage] = useState(0);
   const [lengthPage, setLengthPage] = useState(100);
@@ -401,7 +400,6 @@ const DetailReportOrderByCollaborator = () => {
       endDate,
       selectStatus
     );
-    console.log("CHECK response", res);
     setData(res?.data);
     setTotal(res?.totalItem);
     setDataTotal(res?.total[0]);
@@ -755,10 +753,12 @@ const DetailReportOrderByCollaborator = () => {
 
       <div className="div-flex-row-flex-start">
         <RangeDatePicker
+          startDateProps={state.startDate}
+          endDateProps={state.endDate}
           setStartDate={setStartDate}
           setEndDate={setEndDate}
-          onCancel={() => {}}
-          defaults={defaultRangeTime}
+          // onCancel={() => {}}
+          // defaults={defaultRangeTime}
         />
         <div className="div-same">
           <p className="m-0 text-date-same">

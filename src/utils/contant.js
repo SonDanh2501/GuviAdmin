@@ -16,6 +16,8 @@ import CB_BANK from "../assets/images/bank_cb.svg";
 import OCEAN_BANK from "../assets/images/bank_ocean.svg";
 import HD_BANK from "../assets/images/bank_hd.svg";
 import PVC_BANK from "../assets/images/bank_pvc.svg";
+import MSB_BANK from "../assets/images/bank_msb.svg";
+
 // Flag list
 import CHINA_FLAG from "../assets/images/flag_china.svg";
 import VIETNAM_FLAG from "../assets/images/flag_vietnam.svg";
@@ -290,6 +292,17 @@ export const bankList = [
     ),
     image: HD_BANK,
     name: "Ngân hàng thương mại cổ phần Phát triển Thành phố Hồ Chí Minh (HDBANK)",
+  },
+  {
+    code: "msb_bank",
+    label: (
+      <div style={{ gap: "12px" }} className="flex items-center">
+        <img className="w-6 h-6" src={MSB_BANK}></img>
+        <span className="text-xs font-normal">MSBANK</span>
+      </div>
+    ),
+    image: MSB_BANK,
+    name: "Ngân hàng thương mại cổ phần Hàng hải Việt Nam (MSB)",
   },
 ];
 /* 2. Danh sách các nước */

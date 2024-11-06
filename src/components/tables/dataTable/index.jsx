@@ -1194,14 +1194,14 @@ const DataTable = (props) => {
               //   {data?.id_collaborator.full_name}
               // </p>
               <Link
-                target="_blank"
+                // target="_blank"
                 to={{
                   pathname: `/report/manage-report/report-order-by-collaborator/${data?.id_collaborator._id}`,
-                  state: {
-                    startDate: data?.start_date,
-                    endDate: data?.end_date,
-                    status: data?.status,
-                  },
+                }}
+                state={{
+                  startDate: data?.start_date,
+                  endDate: data?.end_date,
+                  status: data?.status,
                 }}
               >
                 <div className="case__normal-text">

@@ -9,14 +9,14 @@ import useWindowDimensions from "../../../helper/useWindowDimensions";
 import "./index.scss";
 import icons from "../../../utils/icons";
 
-const { IoAddCircleOutline,IoCalendarOutline   } = icons;
+const { IoAddCircleOutline, IoCalendarOutline } = icons;
 
 const RangeDatePicker = (props) => {
   const { width } = useWindowDimensions();
   const lang = useSelector(getLanguageState);
   const {
-    startDate,
-    endDate,
+    startDateProps,
+    endDateProps,
     setStartDate,
     setEndDate,
     rangeDateDefaults,
@@ -139,7 +139,21 @@ const RangeDatePicker = (props) => {
           );
         }
       }
-    } else {
+    } 
+    // else if (startDateProps && endDateProps) {
+    //   const item = DATA_TAB[7]
+    //   setStart(moment(startDateProps));
+    //   setEnd(moment(endDateProps));
+    //   setStartCalendar(moment(startDateProps));
+    //   setEndCalendar(moment(endDateProps));
+    //   setValueTab(item.value);
+    //   calculateRangeDateLastTerm(
+    //     moment(startDateProps).diff(moment(startDateProps), item.type_range),
+    //     item,
+    //     caculateLenghtDayUntilNow(moment(startDateProps))
+    //   );
+    // } 
+    else {
       // Tìm giá trị trong các option có value tương ứng rangeDateDefaults
       const item = DATA_TAB[3];
       // Nếu có thì tính
@@ -554,6 +568,7 @@ const RangeDatePicker = (props) => {
     /*Hàm tìm ngày kết thúc và bắt đầu (dành cho các option thống kê nhanh) */
   }
   const calculateRangeDate = (rangeDate, typeRange) => {
+    // console.log("check rangeDate, typeRange", rangeDate);
     const startDate = moment()
       .subtract(rangeDate[0], typeRange)
       .startOf(typeRange)
@@ -687,6 +702,11 @@ const RangeDatePicker = (props) => {
     );
     setSelectedMonths(sortedMonths);
   };
+
+  // console.log("checking startDate >>>", start)
+  // console.log("checking endDate >>>", end);
+  // console.log("checking startDateProps >>>", startDateProps)
+  // console.log("checking endDateProps >>>", endDateProps)
 
   return (
     <div>
