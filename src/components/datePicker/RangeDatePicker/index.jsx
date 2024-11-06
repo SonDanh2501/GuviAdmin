@@ -48,7 +48,7 @@ const RangeDatePicker = (props) => {
         return (num < 10 ? "0" : "") + num;
       };
 
-    // console.log("CHECK TZO", tzo);
+    // 
     return date.toISOString();
     // date?.getFullYear() +
     // "-" +
@@ -97,6 +97,7 @@ const RangeDatePicker = (props) => {
     // ":" +
     // pad(Math.abs(tzo) % 60)
   };
+
   useEffect(() => {
     // var lenghtDaySelectedConvert;
     // Nếu truyền vào rangeDateDefaults (30 ngày trước)
@@ -146,12 +147,30 @@ const RangeDatePicker = (props) => {
     //   setEnd(moment(endDateProps));
     //   setStartCalendar(moment(startDateProps));
     //   setEndCalendar(moment(endDateProps));
-    //   setValueTab(item.value);
-    //   calculateRangeDateLastTerm(
-    //     moment(startDateProps).diff(moment(startDateProps), item.type_range),
-    //     item,
-    //     caculateLenghtDayUntilNow(moment(startDateProps))
-    //   );
+    //   // setValueTab(item.value);
+
+    //   // 
+    //   //   "check  moment(startDateProps)._d",
+    //   //   moment(startDateProps)._d
+    //   // );
+
+    //   if (moment(startDateProps)._d.setHours(0, 0, 0, 0) == moment(endDateProps)._d.setHours(0, 0, 0, 0)) {
+    //     calculateRangeDateLastTerm(
+    //       0,
+    //       tabTime,
+    //       caculateLenghtDayUntilNow(moment(startDateProps)._d),
+    //       caculateLenghtDayUntilNow(moment(endDateProps)._d)
+    //     );
+    //   }
+    //   // Thống kê nhiều ngày
+    //   else {
+    //     calculateRangeDateLastTerm(
+    //       moment(startDateProps)._d.diff(moment(endDateProps)._d, "days"),
+    //       tabTime,
+    //       caculateLenghtDayUntilNow(moment(endDateProps)._d),
+    //       caculateLenghtDayUntilNow(moment(endDateProps)._d)
+    //     );
+    //   }
     // } 
     else {
       // Tìm giá trị trong các option có value tương ứng rangeDateDefaults
@@ -241,7 +260,6 @@ const RangeDatePicker = (props) => {
   };
 
   const onChange = (value, event) => {
-    // setValueTab("setting")
     setStartCalendar(value[0]);
     setEndCalendar(value[1]);
     setStart(value[0]);
@@ -348,7 +366,7 @@ const RangeDatePicker = (props) => {
       } else {
         lengthDaySelectedConvert = lengthDaySelected + 1;
       }
-      // console.log("lengthDaySelectedConvert", lengthDaySelectedConvert);
+      // 
     } else if (item.type_range === "months" && selectedMonths?.length < 2) {
       if (lengthDaySelected < 0) {
         lengthDaySelectedConvert = (-lengthDaySelected + 1) * 2;
@@ -427,7 +445,7 @@ const RangeDatePicker = (props) => {
           ? lengthDayToCurrent + lengthDaySelectedConvert / 2
           : lengthDaySelectedConvert / 2;
         //
-        // console.log("check start", start);
+        // 
         for (let i = start; i <= lengthDayFinal - 1; i++) {
           var previousDay = moment()
             .subtract(i, item.type_range)
@@ -568,7 +586,7 @@ const RangeDatePicker = (props) => {
     /*Hàm tìm ngày kết thúc và bắt đầu (dành cho các option thống kê nhanh) */
   }
   const calculateRangeDate = (rangeDate, typeRange) => {
-    // console.log("check rangeDate, typeRange", rangeDate);
+    // 
     const startDate = moment()
       .subtract(rangeDate[0], typeRange)
       .startOf(typeRange)
@@ -703,10 +721,10 @@ const RangeDatePicker = (props) => {
     setSelectedMonths(sortedMonths);
   };
 
-  // console.log("checking startDate >>>", start)
-  // console.log("checking endDate >>>", end);
-  // console.log("checking startDateProps >>>", startDateProps)
-  // console.log("checking endDateProps >>>", endDateProps)
+  // 
+  // 
+  // 
+  // 
 
   return (
     <div>

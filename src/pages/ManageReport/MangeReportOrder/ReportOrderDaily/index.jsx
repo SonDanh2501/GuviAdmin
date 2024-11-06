@@ -139,7 +139,7 @@ const ReportOrderDaily = () => {
       endDate,
       typeDate,
       -1,
-      "date_work"
+      typeDate
     );
     setData(res.data);
     setTotal(res?.totalItem);
