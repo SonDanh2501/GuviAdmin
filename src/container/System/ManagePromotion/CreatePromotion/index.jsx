@@ -371,6 +371,7 @@ const CreatePromotion = () => {
       position: 0,
       district: [],
       timezone: "Asia/Ho_Chi_Minh",
+      is_id_customer: statePromo?.isCustomer,
       id_group_promotion:
         statePromo.ratioGroupPromotion === 2 ? statePromo.groupPromotion : [],
     })
@@ -468,6 +469,7 @@ const CreatePromotion = () => {
       <Option value="%">%</Option>
     </Select>
   );
+  console.log("check >>>", statePromo.isCustomer);
   /* ~~~ Main ~~~ */
   return (
     <>
