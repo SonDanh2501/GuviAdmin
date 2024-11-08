@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
@@ -88,6 +88,8 @@ const ManageConfiguration = () => {
             </div>
           );
         })}
+        <a href="https://guvico.com/guvi-app/?code=123">Link 1</a>
+        <a href="https://guvico.com/guvi-app?code=0389888952">Link 2</a>
       </div>
 
       {/* <SettingQrCode /> */}

@@ -5,7 +5,7 @@ import { getLanguageState } from '../../../../redux/selectors/auth';
 import useWindowDimensions from '../../../../helper/useWindowDimensions';
 import { formatMoney } from '../../../../helper/formatMoney';
 import { Popover, Select } from 'antd';
-import { getReportOrderByCustomer, getReportTotalOrderByCustomer } from '../../../../api/report';
+import { getReportFirstOrderByCustomer, getReportOrderByCustomer, getReportTotalFirstOrderByCustomer, getReportTotalOrderByCustomer } from '../../../../api/report';
 import RangeDatePicker from '../../../../components/datePicker/RangeDatePicker';
 import moment from 'moment';
 import CardMultiInfo from '../../../../components/card/cardMultiInfo';
@@ -343,7 +343,7 @@ const ReportFirstOrderByCustomer = () => {
   /* ~~~ Handle function ~~~ */
   // 1. Hàm fetch dữ liệu bảng
   const getDataReportOrderByCustomer = async () => {
-    const res = await getReportOrderByCustomer(
+    const res = await getReportFirstOrderByCustomer(
       startDate,
       endDate,
       typeCustomer,
@@ -359,15 +359,15 @@ const ReportFirstOrderByCustomer = () => {
   const getDataReportTotalOrderByCustomer = async () => {
     // Hàm sẽ trả về một mảng rồi các giá trị total và totalItem: tổng số lượng khách hàng
     const arrGetResult = await Promise.all([
-      getReportTotalOrderByCustomer(startDate, endDate, "new", typeDate),
-      getReportTotalOrderByCustomer(startDate, endDate, "old", typeDate),
-      getReportTotalOrderByCustomer(
+      getReportTotalFirstOrderByCustomer(startDate, endDate, "new", typeDate),
+      getReportTotalFirstOrderByCustomer(startDate, endDate, "old", typeDate),
+      getReportTotalFirstOrderByCustomer(
         sameStartDate,
         sameEndDate,
         "new",
         typeDate
       ),
-      getReportTotalOrderByCustomer(
+      getReportTotalFirstOrderByCustomer(
         sameStartDate,
         sameEndDate,
         "old",

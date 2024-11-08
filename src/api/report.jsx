@@ -296,13 +296,25 @@ export const getReportCustomerRatio = (start_date, end_date) => {
 
 export const getReportOrderByCustomer = (start_date, end_date, type_customer, type_date, start, length) => {
   return axiosClient.get(
-    `/admin/report_mananger/report_order_by_customer?start_date=${start_date}&end_date=${end_date}&type_customer=${type_customer}&type_date=${type_date}&start=${start}&length=${length}`
+    `api/admin/report_mananger/report_order_by_customer?start_date=${start_date}&end_date=${end_date}&type_customer=${type_customer}&type_date=${type_date}&start=${start}&length=${length}`
+  );
+};
+
+export const getReportFirstOrderByCustomer = (start_date, end_date, type_customer, type_date, start, length) => {
+  return axiosClient.get(
+    `api/admin/report_mananger/report_first_order_by_customer?start_date=${start_date}&end_date=${end_date}&type_customer=${type_customer}&type_date=${type_date}&start=${start}&length=${length}`
   );
 };
 
 export const getReportTotalOrderByCustomer = (start_date, end_date, type_customer, type_date) => {
   return axiosClient.get(
-    `/admin/report_mananger/report_total_order_by_customer?start_date=${start_date}&end_date=${end_date}&type_customer=${type_customer}&type_date=${type_date}`
+    `api/admin/report_mananger/report_total_order_by_customer?start_date=${start_date}&end_date=${end_date}&type_customer=${type_customer}&type_date=${type_date}`
+  );
+};
+
+export const getReportTotalFirstOrderByCustomer = (start_date, end_date, type_customer, type_date) => {
+  return axiosClient.get(
+    `api/admin/report_mananger/report_total_first_order_by_customer?start_date=${start_date}&end_date=${end_date}&type_customer=${type_customer}&type_date=${type_date}`
   );
 };
 

@@ -110,6 +110,7 @@ import ManageReward from "../pages/ManageReward";
 import TransferStaff from "../pages/ManageTopUpWithdraw/TransferStaff";
 import PunishDetail from "../pages/ManagePunish/PunishDetail";
 import TransferDetail from "../pages/ManageTopUpWithdraw/TransferDetail";
+import ReportFirstOrderByCustomer from "../pages/ManageReport/MangeReportOrder/ReportFirstOrderByCustomer";
 // import ManageFinance from "../pages/ManageFinance";
 
 const Admin = () => {
@@ -339,6 +340,10 @@ const Admin = () => {
       <Route
         path="/report/manage-report/report-order-day-of-week"
         element={<ReportOrderDayInWeek />}
+      />
+      <Route
+        path="/report/manage-report/report-first-order"
+        element={<ReportFirstOrderByCustomer />}
       />
       <Route
         path="/report/manage-report/report-order-daily/details"
