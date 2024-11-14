@@ -357,6 +357,7 @@ const ReportOrderByCustomer = () => {
       start,
       lengthPage
     );
+    console.log("check response >>>", res);
     setData(res.data);
     setTotal(res?.totalItem);
     setDataTotal(res?.total[0]);

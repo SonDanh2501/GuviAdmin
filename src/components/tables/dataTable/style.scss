@@ -386,7 +386,7 @@ span {
   box-shadow:
     rgba(67, 71, 85, 0.27) 0px 1px 0.25em,
     rgba(90, 125, 188, 0.05) 0px 0.75em 2em;
-  border-radius: $borderRadiusM;
+  border-radius: $borderRadiusL;
 
   // margin-top: 16px;
   // border: 2px solid black;
@@ -468,7 +468,7 @@ span {
     padding: 6px 8px;
     color: $colorYellow;
     background-color: $colorExtraLightYellow;
-    border-radius: $borderRadiusM;
+    border-radius: $borderRadiusL;
     font-weight: $fontWeightXL;
     font-size: $textFontSizeM;
   }
@@ -477,7 +477,7 @@ span {
     padding: 6px 8px;
     color: $colorGreen;
     background-color: $colorExtraLightGreen;
-    border-radius: $borderRadiusM;
+    border-radius: $borderRadiusL;
     font-weight: $fontWeightXL;
     font-size: $textFontSizeM;
   }
@@ -486,7 +486,7 @@ span {
     padding: 6px 8px;
     color: $colorBlue;
     background-color: $colorExtraLightBlue;
-    border-radius: $borderRadiusM;
+    border-radius: $borderRadiusL;
     font-weight: $fontWeightXL;
     font-size: $textFontSizeM;
   }
@@ -495,7 +495,7 @@ span {
     padding: 6px 8px;
     color: $colorBlue;
     background-color: $colorExtraLightBlue;
-    border-radius: $borderRadiusM;
+    border-radius: $borderRadiusL;
     font-weight: $fontWeightXL;
     font-size: $textFontSizeM;
   }
@@ -504,7 +504,7 @@ span {
     padding: 6px 8px;
     color: $colorRed;
     background-color: $colorExtraLightRed;
-    border-radius: $borderRadiusM;
+    border-radius: $borderRadiusL;
     font-weight: $fontWeightXL;
     font-size: $textFontSizeM;
   }
@@ -513,7 +513,7 @@ span {
     padding: 6px 8px;
     color: $colorOrange;
     background-color: $colorExtraLightOrange;
-    border-radius: $borderRadiusM;
+    border-radius: $borderRadiusL;
     font-weight: $fontWeightXL;
     font-size: $textFontSizeM;
   }
@@ -529,7 +529,7 @@ span {
 
 /* 3. Trường hợp kiểu giao dịch */
 .case__withdrawal-type-transfer {
-  border-radius: $borderRadiusM;
+  border-radius: $borderRadiusL;
   padding: 4px 8px;
   width: fit-content;
 
@@ -566,7 +566,7 @@ span {
     padding: 6px 8px;
     // width: 100%;
     text-align: center;
-    border-radius: $borderRadiusM;
+    border-radius: $borderRadiusL;
 
     &.pending {
       background-color: $colorExtraLightYellow;
@@ -615,7 +615,7 @@ span {
     // width: 100%;
     color: $colorWhite;
     padding: 6px 8px;
-    border-radius: $borderRadiusM;
+    border-radius: $borderRadiusL;
     text-align: center;
 
     &.withdraw {
@@ -667,14 +667,14 @@ span {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: $borderRadiusM;
+  border-radius: $borderRadiusL;
 
   .case__type-account--label {
     font-weight: $fontWeightL;
     font-size: $textFontSizeM;
     padding: 6px 8px;
     text-align: center;
-    border-radius: $borderRadiusM;
+    border-radius: $borderRadiusL;
   }
 }
 
@@ -881,7 +881,7 @@ span {
   .case__promotion-image-picture {
     height: 50px;
     width: 50px;
-    border-radius: $borderRadiusM;
+    border-radius: $borderRadiusL;
     border: 1px solid $colorMoreLightGray;
   }
 }
@@ -895,7 +895,7 @@ span {
   .case__promotion-province--label {
     padding: 6px 8px;
     background-color: $colorMoreLightGray;
-    border-radius: $borderRadiusM;
+    border-radius: $borderRadiusL;
     color: $colorBlack;
   }
 
@@ -919,7 +919,7 @@ span {
     padding: 6px 8px;
     // width: 100%;
     text-align: center;
-    border-radius: $borderRadiusM;
+    border-radius: $borderRadiusL;
 
     &.upcoming {
       background-color: $colorExtraLightYellow;

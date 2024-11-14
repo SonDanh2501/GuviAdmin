@@ -24,7 +24,7 @@ import { deleteOrderApi, getOrderApi, getTotalOrder } from "../../api/order";
 import { errorNotify } from "../../helper/toast";
 import InputTextCustom from "../../components/inputCustom";
 import ButtonCustom from "../../components/button";
-import FilterData from "../../components/filterData/filterData";
+import FilterData from "../../components/filterData";
 import "./index.scss";
 
 const ManageOrder = () => {
@@ -413,7 +413,34 @@ const ManageOrder = () => {
       </div>
     );
   };
-  const filterContent = () => {
+  const filterContentLeft = () => {
+    return (
+      <div className="manage-order__filter-content">
+        <div className="manage-order__search">
+            <div>
+              <ButtonCustom
+                label={`${i18n.t("create_order", { lng: lang })}`}
+                onClick={() =>
+                  navigate("/group-order/manage-order/create-order")
+                }
+              />
+            </div>
+            <div className="manage-order__search-field">
+              <InputTextCustom
+                type="text"
+                placeHolderNormal={`${i18n.t("search_transaction", {
+                  lng: lang,
+                })}`}
+                onChange={(e) => {
+                  handleSearch(e.target.value);
+                }}
+              />
+            </div>
+          </div>
+      </div>
+    );
+  };
+  const filterContentRight = () => {
     return (
       <div className="manage-order__filter-content">
         {/* Lọc theo loại dịch vụ */}
@@ -447,7 +474,7 @@ const ManageOrder = () => {
         </div>
       </div>
     );
-  };
+  }
   /* ~~~ Main ~~~ */
   return (
     <div className="manage-order">
@@ -458,7 +485,10 @@ const ManageOrder = () => {
       {/* Filter */}
       <FilterData leftContent={filterByStatus()} />
       {/* Filter */}
-      <FilterData leftContent={filterContent()} />
+      <FilterData
+        leftContent={filterContentLeft()}
+        rightContent={filterContentRight()}
+      />
       {/* Data table */}
       <DataTable
         columns={columns}
@@ -471,29 +501,6 @@ const ManageOrder = () => {
         getItemRow={setItem}
         onCurrentPageChange={onChangePage}
         loading={isLoading}
-        headerRightContent={
-          <div className="manage-order__search">
-            <div className="manage-order__search-field">
-              <InputTextCustom
-                type="text"
-                placeHolderNormal={`${i18n.t("search_transaction", {
-                  lng: lang,
-                })}`}
-                onChange={(e) => {
-                  handleSearch(e.target.value);
-                }}
-              />
-            </div>
-            <div>
-              <ButtonCustom
-                label={`${i18n.t("create_order", { lng: lang })}`}
-                onClick={() =>
-                  navigate("/group-order/manage-order/create-order")
-                }
-              />
-            </div>
-          </div>
-        }
       />
       <div>
         <ModalCustom

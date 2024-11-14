@@ -156,7 +156,7 @@
         gap: $gapXS;
         background-color: $colorExtraLightGray;
         padding: 8px;
-        border-radius: $borderRadiusM;
+        border-radius: $borderRadiusL;
 
         span {
           padding: 4px 8px;
@@ -186,7 +186,7 @@
         padding: 5px 9px 5px 20px;
         // border: 2px solid $colorMoreLightStone;
         background-color: $colorExtraLightGray;
-        border-radius: $borderRadiusM;
+        border-radius: $borderRadiusL;
 
         .add-push-notification__field--info-customer-text {
           font-weight: $fontWeightL;
@@ -283,7 +283,7 @@
     justify-content: center;
     width: 100%;
     height: 150px;
-    border-radius: $borderRadiusM;
+    border-radius: $borderRadiusL;
     border: 2px dashed #ccc;
     background-color: $colorExtraLightGray;
     cursor: pointer;

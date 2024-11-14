@@ -22,7 +22,7 @@ import TransactionDrawer2 from "../../components/transactionDrawer/TransactionDr
 import useWindowDimensions from "../../helper/useWindowDimensions";
 import i18n from "../../i18n";
 import "./index.scss";
-import FilterData from "../../components/filterData/filterData";
+import FilterData from "../../components/filterData";
 import ButtonCustom from "../../components/button";
 import CustomHeaderDatatable from "../../components/tables/tableHeader";
 import { loadingAction } from "../../redux/actions/loading";

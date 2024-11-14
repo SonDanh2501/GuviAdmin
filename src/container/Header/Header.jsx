@@ -7,7 +7,17 @@ import {
   MenuUnfoldOutlined,
   SmileOutlined,
 } from "@ant-design/icons";
-import { Dropdown, List, Select, Space, Opti, Tooltip, Drawer, Popover, Button } from "antd";
+import {
+  Dropdown,
+  List,
+  Select,
+  Space,
+  Opti,
+  Tooltip,
+  Drawer,
+  Popover,
+  Button,
+} from "antd";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -25,7 +35,7 @@ import {
   IoSunnyOutline,
   IoGlobeOutline,
   IoCaretForwardOutline,
-  IoPersonCircle, 
+  IoPersonCircle,
   IoPersonCircleOutline,
   IoLanguage,
 } from "react-icons/io5";
@@ -91,11 +101,14 @@ const Header = ({ onClick, hide }) => {
   };
 
   return (
-    <div className="div-container-header">
-      <div className="menu-icon" onClick={onClick}>
-        <IoMenu size={"18px"} />
+    <div className="header-navigation">
+      <div className="header-navigation__left">
+        <div className="header-navigation__left--icon" onClick={onClick}>
+          <IoMenu size={"18px"} />
+        </div>
+        <span className="header-navigation__left--version">Version 1.0.1</span>
       </div>
-      <div className="nav-header">
+      <div className="header-navigation__right">
         <Popover
           content={
             <div className="list">
@@ -121,30 +134,11 @@ const Header = ({ onClick, hide }) => {
             onMouseLeave={() => {
               setIsHover(false);
             }}
-            className="div-noti"
+            className="header-navigation__right--icon"
           >
             <IoLanguage size={"18px"} />
           </div>
         </Popover>
-        {/*Darkmode, lightmode*/}
-        {/* <Tooltip placement="bottom" title="Bật/tắt chế độ tối">
-          <div
-            onMouseEnter={() => {
-              setIsHover(true);
-            }}
-            onMouseLeave={() => {
-              setIsHover(false);
-            }}
-            className="div-noti"
-            onClick={() => setIsDarkMode(!isDarkMode)}
-          >
-            {isDarkMode ? (
-              <IoSunnyOutline size={"1.4rem"} />
-            ) : (
-              <IoSunny size={"1.4rem"} />
-            )}
-          </div>
-        </Tooltip> */}
         {/*Notification Drop Down Menu*/}
         <Tooltip placement="bottom" title="Thông báo">
           <div
@@ -154,42 +148,13 @@ const Header = ({ onClick, hide }) => {
             onMouseLeave={() => {
               setIsHover(false);
             }}
-            className="div-noti"
+            className="header-navigation__right--icon"
             onClick={() => setStatus(!status)}
           >
             <IoNotifications size={"18px"} />
           </div>
         </Tooltip>
-        {/* {status && (
-          <div className="list shadow-blue-400">
-            <List
-              itemLayout="horizontal"
-              dataSource={[1, 2, 3, 4]}
-              renderItem={(item) => {
-                return (
-                  <div onClick={() => setStatus(false)}>
-                    <a>Lee Minh dang</a>
-                  </div>
-                );
-              }}
-            />
-          </div>
-        )} */}
-        {/*Drop down select language */}
-        {/* <div
-          onClick={() => setIsSelectLanguage(!isSelectLanguage)}
-          className="div-language"
-        >
-          <img
-            src={
-              selectedLanguage === "vi"
-                ? logoCircleVN
-                : selectedLanguage === "en"
-                ? logoCircleUS
-                : logoCircleVN // Default value
-            }
-          ></img>
-        </div> */}
+
         {/*Sign Out Drop Down Menu*/}
         <Dropdown
           arrow={true}
@@ -200,12 +165,13 @@ const Header = ({ onClick, hide }) => {
           trigger={["click"]}
         >
           <span
-            className="flex items-center justify-center gap-2"
+            className="header-navigation__right--user-info"
             onClick={(e) => e.preventDefault()}
           >
-            {/* <img style={{ height: "26px" }} src={defaultAvatar}></img> */}
             <IoPersonCircle size="18px" color="#475569" />
-            <a className="text-name">{user?.full_name}</a>
+            <a className="header-navigation__right--user-info-name">
+              {user?.full_name}
+            </a>
             <CaretDownOutlined className="icon-down" />
           </span>
         </Dropdown>

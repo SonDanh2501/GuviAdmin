@@ -8,7 +8,7 @@
   justify-content: center;
   padding: 6px 4px;
   border: 1px solid $colorViolet;
-  border-radius: $borderRadiusM;
+  border-radius: $borderRadiusL;
   cursor: pointer;
   transition: 0.5s all ease;
   gap: $gapS;
@@ -25,7 +25,7 @@
   .range-date-picker__line {
     width: 1px;
     height: 20px;
-    border-radius: $borderRadiusM;
+    border-radius: $borderRadiusL;
     background-color: $colorMoreLightGray;
   }
 
@@ -35,9 +35,13 @@
     justify-content: center;
     padding: 4px 6px;
     background-color: $colorMoreLightGray;
-    border-radius: $borderRadiusM;
+    border-radius: $borderRadiusL;
 
     .range-date-picker__option--title {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: $gapXS;
       font-size: $textFontSizeM;
       font-weight: $fontWeightL;
     }
@@ -71,6 +75,7 @@
 }
 
 .div-body-modal {
+  background-color: black;
   display: flex;
   flex-direction: column;
   border: 1px solid #d6d6d6;
@@ -81,6 +86,10 @@
   background-color: white;
   padding: 0px;
   box-shadow: 2px 3px 2px rgb(216, 216, 216);
+  
+  &.right {
+    right: 225px;
+  }
 
   .div-main {
     display: flex;

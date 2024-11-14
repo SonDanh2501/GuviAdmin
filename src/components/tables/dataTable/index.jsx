@@ -30,6 +30,7 @@ import gold from "../../../assets/images/iconGold.svg";
 import member from "../../../assets/images/iconMember.svg";
 import platinum from "../../../assets/images/iconPlatinum.svg";
 import silver from "../../../assets/images/iconSilver.svg";
+import notFoundImage from "../../../assets/images/not_found_image.svg";
 import { useNavigate } from "react-router-dom";
 import SelectDefault from "../../Select/SelectDefault";
 import { IoAlertCircleOutline, IoHelpCircleOutline } from "react-icons/io5";
@@ -2186,7 +2187,7 @@ const DataTable = (props) => {
               <div className="case__promotion-image">
                 <Image
                   className="case__promotion-image-picture"
-                  src={data[item?.dataIndex]}
+                  src={data[item?.dataIndex] || notFoundImage}
                   preview={true}
                 />
               </div>

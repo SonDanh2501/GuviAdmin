@@ -11,7 +11,7 @@ import {
 import { getService } from "../../../redux/selectors/service.js";
 import "./styles.scss";
 import "./index.scss";
-import FilterData from "../../../components/filterData/filterData.jsx";
+import FilterData from "../../../components/filterData/index.jsx";
 import ButtonCustom from "../../../components/button/index.jsx";
 import InputTextCustom from "../../../components/inputCustom/index.jsx";
 import DataTable from "../../../components/tables/dataTable/index.jsx";

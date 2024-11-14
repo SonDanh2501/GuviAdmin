@@ -1,4 +1,4 @@
-import { Button } from "antd";
+import { Button, Popover } from "antd";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import Calendar from "react-calendar";
@@ -9,7 +9,7 @@ import useWindowDimensions from "../../../helper/useWindowDimensions";
 import "./index.scss";
 import icons from "../../../utils/icons";
 
-const { IoAddCircleOutline, IoCalendarOutline } = icons;
+const { IoAddCircleOutline, IoCalendarOutline, IoHelpCircleOutline } = icons;
 
 const RangeDatePicker = (props) => {
   const { width } = useWindowDimensions();
@@ -22,6 +22,7 @@ const RangeDatePicker = (props) => {
     rangeDateDefaults,
     rangeDatePrevious,
     disableFutureDay,
+    isRight,
   } = props;
   const [open, setOpen] = useState(false);
   const [start, setStart] = useState("");
@@ -741,22 +742,36 @@ const RangeDatePicker = (props) => {
           >
             {/* {title} {moment(toIsoString(startCalendar?._d)).format("DD/MM/YYYY")} -{" "}
             {moment(toIsoString(endCalendar?._d)).format("DD/MM/YYYY")} */}
-            {title}{" "}
-            {start._d
-              ? "(" + moment(toIsoString(start?._d)).format("DD/MM/YYYY")
-              : start
-              ? "(" + moment(toIsoString(start)).format("DD/MM/YYYY")
-              : ""}
-            {end._d
-              ? " - " + moment(toIsoString(end?._d)).format("DD/MM/YYYY") + ")"
-              : end
-              ? " - " + moment(toIsoString(end)).format("DD/MM/YYYY") + ")"
-              : ""}
+            {title}
+            <Popover
+              content={`${
+                start._d
+                  ? moment(toIsoString(start?._d)).format("DD/MM/YYYY")
+                  : start
+                  ? moment(toIsoString(start)).format("DD/MM/YYYY")
+                  : ""
+              }
+              ${
+                end._d
+                  ? " - " + moment(toIsoString(end?._d)).format("DD/MM/YYYY")
+                  : end
+                  ? " - " + moment(toIsoString(end)).format("DD/MM/YYYY")
+                  : ""
+              }`}
+              placement="top"
+              overlayInnerStyle={{
+                backgroundColor: "white",
+              }}
+            >
+              <div>
+                <IoHelpCircleOutline size={14} color={"black"} />
+              </div>
+            </Popover>
           </span>
         </div>
       </div>
       {open && (
-        <div className="div-body-modal">
+        <div className={`div-body-modal ${isRight && "right"}`}>
           {/*Main Container*/}
           <div className="div-main">
             {/*Left Container*/}

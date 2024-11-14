@@ -4,16 +4,16 @@
   display: flex;
   justify-content: space-between;
   gap: $gapL;
-  background-color: white;
+  background-color: $colorWhite;
   padding: 16px;
-  border-radius: $borderRadiusM;
+  border-radius: $borderRadiusL;
   width: 100%;
 
   .filter-data__left {
     display: flex;
     align-items: center;
     gap: $gapM;
-    width: 100%;
+    width: fit-content;
 
     .filter-data__left--date-time-picker {
       display: flex;
@@ -35,7 +35,7 @@
           justify-content: center;
           padding: 6px 8px;
           border: 1px solid $colorViolet;
-          border-radius: $borderRadiusM;
+          border-radius: $borderRadiusL;
           transition: 0.7s all ease;
           gap: $gapS;
 
@@ -51,7 +51,7 @@
           .filter-data__left--date-time-picker-label-period-time-line {
             width: 1px;
             height: 20px;
-            border-radius: $borderRadiusM;
+            border-radius: $borderRadiusL;
             background-color: $colorMoreLightGray;
           }
 
@@ -61,7 +61,7 @@
             justify-content: center;
             padding: 4px 8px;
             background-color: $colorMoreLightGray;
-            border-radius: $borderRadiusM;
+            border-radius: $borderRadiusL;
 
             .filter-data__left--date-time-picker-label-period-time-main-title {
               font-size: $textFontSizeM;
@@ -87,7 +87,64 @@
   .filter-data__right {
     display: flex;
     align-items: center;
-    justify-content: center;
-    // width: 30%;
+    gap: $gapM;
+    width: fit-content;
+
+    .filter-data__right--date-time-picker {
+      display: flex;
+      flex-direction: column;
+      gap: $gapXS;
+
+      span {
+        font-weight: $fontWeightXL;
+        font-size: $textFontSizeM;
+      }
+
+      .filter-data__right--date-time-picker-label {
+        display: flex;
+        gap: $gapS;
+
+        .filter-data__right--date-time-picker-label-period-time {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 6px 8px;
+          border: 1px solid $colorViolet;
+          border-radius: $borderRadiusL;
+          transition: 0.7s all ease;
+          gap: $gapS;
+
+          .filter-data__right--date-time-picker-label-period-time-sub {
+            display: flex;
+            gap: $gapXS;
+            align-items: center;
+            color: $colorViolet;
+            font-weight: $fontWeightXL;
+            font-size: $textFontSizeM;
+          }
+
+          .filter-data__right--date-time-picker-label-period-time-line {
+            width: 1px;
+            height: 20px;
+            border-radius: $borderRadiusL;
+            background-color: $colorMoreLightGray;
+          }
+
+          .filter-data__right--date-time-picker-label-period-time-main {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4px 8px;
+            background-color: $colorMoreLightGray;
+            border-radius: $borderRadiusL;
+
+            .filter-data__right--date-time-picker-label-period-time-main-title {
+              font-size: $textFontSizeM;
+              font-weight: $fontWeightL;
+            }
+          }
+        }
+      }
+    }
   }
 }

@@ -3,10 +3,10 @@
 .card-statistics-rating {
     display: flex;
     flex-direction: column;
-    background-color: #ffffff;
+    background-color: $colorWhite;
     width: 100%;
     border-radius: 12px;
-    padding: 10px 8px;
+    padding: 10px;
 
     .card-statistics-rating-label {
         display: flex;

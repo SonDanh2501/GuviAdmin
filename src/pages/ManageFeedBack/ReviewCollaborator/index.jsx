@@ -26,115 +26,76 @@ import CustomHeaderDatatable from "../../../components/tables/tableHeader";
 import CardStatistical from "../../../components/card/cardStatistical";
 import { IoStar } from "react-icons/io5";
 import { calculateNumberPercent } from "../../../utils/contant";
+import FilterData from "../../../components/filterData";
+import ButtonCustom from "../../../components/button";
+import InputTextCustom from "../../../components/inputCustom";
+import { errorNotify } from "../../../helper/toast";
+import CardCustomerSatisfication from "../../../components/card/cardCustomerSatisfication";
+import { getReportCustomerStatisfaction } from "../../../api/report";
 
 const ReviewCollaborator = () => {
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
-  const [data, setData] = useState([]);
-  const [star, setStar] = useState(0);
   const [startPage, setStartPage] = useState(0);
-  const [totalRating, setTotalRating] = useState({
-    totalFiveStar: 0,
-    totalFourStar: 0,
-    totalThreeStar: 0,
-    totalTwoStar: 0,
-    totalOneStar: 0,
-  });
-
   const [lengthPage, setLengthPage] = useState(
     JSON.parse(localStorage.getItem("linePerPage"))
       ? JSON.parse(localStorage.getItem("linePerPage")).value
       : 20
   );
+  /* ~~~ Value ~~~ */
+  const [data, setData] = useState([]);
+  const [star, setStar] = useState(0);
+  const [dataCustomerSatisfication, setDataCustomerSatisfication] = useState(
+    []
+  );
+  const [totalRating, setTotalRating] = useState([
+    {
+      total: 0,
+      percent: 0,
+      color: "rgb(34 197 94 / 0.25)",
+      colorIcon: "#008000",
+      label: "Đánh giá 5 sao",
+    },
+    {
+      total: 0,
+      percent: 0,
+      color: "rgb(132 204 22 / 0.25)",
+      colorIcon: "#2fc22f",
+      label: "Đánh giá 4 sao",
+    },
+    {
+      total: 0,
+      percent: 0,
+      color: "rgb(234 179 8 / 0.25)",
+      colorIcon: "#FFD700",
+      label: "Đánh giá 3 sao",
+    },
+    {
+      total: 0,
+      percent: 0,
+      color: "rgb(249 115 22 / 0.25)",
+      colorIcon: "#FFA500",
+      label: "Đánh giá 2 sao",
+    },
+    {
+      total: 0,
+      percent: 0,
+      color: "rgb(239 68 68 / 0.25)",
+      colorIcon: "#FF0000",
+      label: "Đánh giá 1 sao",
+    },
+  ]);
   const [valueSearch, setValueSearch] = useState("");
   const [detectLoading, setDetectLoading] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [totalItem, setTotalItem] = useState(0);
+
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  // const toggle = () => setModal(!modal);
   const [modal, setModal] = useState("");
   const [inputModal, setInputModal] = useState(null);
   const [item, setItem] = useState(null);
-
-  useEffect(() => {
-    if (startDate !== "") {
-      getReviewCollaborator();
-    }
-  }, [valueSearch, startPage, startDate, lengthPage]);
-
-  const handleSearch = useCallback(
-    _debounce((value) => {
-      setDetectLoading(value);
-      setValueSearch(value);
-    }, 500),
-    []
-  );
-
-  const getAllReviewCollaborator = async (lengthData) => {
-    const res = await getDataReviewCollaborator(
-      startPage,
-      lengthData,
-      startDate,
-      endDate,
-      star
-    );
-    calculateRating(res);
-  };
-
-  const getReviewCollaborator = async () => {
-    const res = await getDataReviewCollaborator(
-      startPage,
-      lengthPage,
-      startDate,
-      endDate,
-      star
-    );
-
-    for (let i = 0; i < res.data.length; i++) {
-      res.data[i]["service_title"] =
-        res.data[i].service._id._id === "654dd5598b3f1a21b7011e3f"
-          ? "Rèm - Thảm - Sofa"
-          : res.data[i].service._id.title.vi;
-
-      // res.data[i]["service_title"] = res.data[i].service._id.title.vi
-
-      res.data[i]["short_review"] = res.data[i].short_review.toString();
-      res.data[i]["full_name_user_system_handle_review"] = res.data[i]
-        .id_user_system_handle_review
-        ? res.data[i].id_user_system_handle_review.full_name
-        : "";
-
-      // res.data[i]["name_service"] = res.data[i].service._id.title.vi
-    }
-    //
-    getAllReviewCollaborator(res?.totalItem);
-    setData(res?.data);
-    setTotalItem(res?.totalItem);
-  };
-
-  const onChangePage = (value) => {
-    setStartPage(value);
-  };
-
-  const onChangePropsValue = async (props) => {
-    if (props.dataIndex === "status_handle_review") {
-      setModal("update_handle_review");
-    }
-  };
-
-  const processHandleReview = async (dataChange) => {
-    const payload = {
-      id_order: item._id,
-      note_admin: dataChange.note_admin,
-      status_handle_review: dataChange.status_handle_review,
-    };
-    //
-    await updateProcessHandleReview(payload);
-    getReviewCollaborator();
-    setModal("");
-  };
-
+  /* ~~~ List ~~~ */
   const columns = [
     {
       title: "STT",
@@ -247,29 +208,7 @@ const ReviewCollaborator = () => {
       width: 190,
       fontSize: "text-size-M",
     },
-
-    // {
-    //   title: "NV liên hệ",
-    //   dataIndex: "full_name_user_system_handle_review",
-    //   key: "other",
-    //   width: 110,
-    //   fontSize: "text-size-M",
-    // },
-    // {
-    //   i18n_title: "note",
-    //   dataIndex: "note_admin",
-    //   key: "text",
-    //   maxLength: 90,
-    //   width: 200,
-    //   fontSize: "text-size-M",
-    // },
   ];
-
-  const showModal = (key) => {
-    setModal(key);
-    //
-  };
-
   let items = [
     // {
     //   key: "0",
@@ -287,7 +226,109 @@ const ReviewCollaborator = () => {
   ];
 
   items = items.filter((x) => x.label !== false);
-
+  const ratingList = [
+    { code: 0, label: `${i18n.t("Tất cả", { lng: lang })}` },
+    { code: 5, label: `5 ${i18n.t("star", { lng: lang })}` },
+    { code: 4, label: `4 ${i18n.t("star", { lng: lang })}` },
+    { code: 3, label: `3 ${i18n.t("star", { lng: lang })}` },
+    { code: 2, label: `2 ${i18n.t("star", { lng: lang })}` },
+    { code: 1, label: `1 ${i18n.t("star", { lng: lang })}` },
+  ];
+  /* ~~~ Use effect ~~~ */
+  // 1. Fetch dữ liệu bảng
+  useEffect(() => {
+    if (startDate !== "" && endDate !== "") {
+      fetchReviewCollaborator();
+    }
+  }, [valueSearch, startPage, startDate, endDate, lengthPage, star]);
+  // 2. Fetch dữ liệu thống kê
+  useEffect(() => {
+    if (totalItem > 0) fetchAllReviewCollaborator(totalItem);
+  }, [valueSearch, startDate, endDate, totalItem]);
+  // 3. Fetch dữ liệu CSAT
+  useEffect(() => {
+    fetchCustomerSatisfactionReport();
+  }, [startDate, endDate]);
+  /* ~~~ Handle function ~~~ */
+  // 1. Fetch toàn bộ đánh giá để thống kê
+  const fetchAllReviewCollaborator = async (lengthData) => {
+    try {
+      const res = await getDataReviewCollaborator(
+        0,
+        lengthData,
+        startDate,
+        endDate,
+        star
+      );
+      calculateRating(res);
+    } catch (err) {
+      errorNotify({
+        message: err,
+      });
+    }
+  };
+  // 2. Fetch đánh giá theo phân trang
+  const fetchReviewCollaborator = async () => {
+    setIsLoading(true);
+    const res = await getDataReviewCollaborator(
+      startPage,
+      lengthPage,
+      startDate,
+      endDate,
+      star
+    );
+    for (let i = 0; i < res.data.length; i++) {
+      res.data[i]["service_title"] =
+        res.data[i].service._id._id === "654dd5598b3f1a21b7011e3f"
+          ? "Rèm - Thảm - Sofa"
+          : res.data[i].service._id.title.vi;
+      res.data[i]["short_review"] = res.data[i].short_review.toString();
+      res.data[i]["full_name_user_system_handle_review"] = res.data[i]
+        .id_user_system_handle_review
+        ? res.data[i].id_user_system_handle_review.full_name
+        : "";
+    }
+    setData(res?.data);
+    setTotalItem(res?.totalItem);
+    setIsLoading(false);
+  };
+  // 3. Hàm search
+  const handleSearch = useCallback(
+    _debounce((value) => {
+      setDetectLoading(value);
+      setValueSearch(value);
+    }, 500),
+    []
+  );
+  // 4. Fetch chỉ số CAST
+  const fetchCustomerSatisfactionReport = async () => {
+    const res = await getReportCustomerStatisfaction(startDate, endDate);
+    setDataCustomerSatisfication(res);
+  };
+  /* ~~~ Other ~~~ */
+  const onChangePage = (value) => {
+    setStartPage(value);
+  };
+  const onChangePropsValue = async (props) => {
+    if (props.dataIndex === "status_handle_review") {
+      setModal("update_handle_review");
+    }
+  };
+  const processHandleReview = async (dataChange) => {
+    const payload = {
+      id_order: item._id,
+      note_admin: dataChange.note_admin,
+      status_handle_review: dataChange.status_handle_review,
+    };
+    //
+    await updateProcessHandleReview(payload);
+    fetchReviewCollaborator();
+    setModal("");
+  };
+  const showModal = (key) => {
+    setModal(key);
+    //
+  };
   const addActionColumn = {
     i18n_title: "",
     dataIndex: "action",
@@ -303,9 +344,7 @@ const ReviewCollaborator = () => {
         </Dropdown>
       </Space>
     ),
-    
   };
-
   const calculateRating = (data) => {
     let totalFiveStarTemp = 0;
     let totalFourStarTemp = 0;
@@ -320,317 +359,114 @@ const ReviewCollaborator = () => {
       if (rating.star === 2) totalTwoStarTemp += 1;
       if (rating.star === 1) totalOneStarTemp += 1;
     });
-    setTotalRating({
-      // ...totalRating,
-      totalFiveStar: totalFiveStarTemp,
-      totalFourStar: totalFourStarTemp,
-      totalThreeStar: totalThreeStarTemp,
-      totalTwoStar: totalTwoStarTemp,
-      totalOneStar: totalOneStarTemp,
-    });
+    const totalRatings =
+      totalFiveStarTemp +
+      totalFourStarTemp +
+      totalThreeStarTemp +
+      totalTwoStarTemp +
+      totalOneStarTemp;
+    setTotalRating((prevTotalRating) => [
+      {
+        ...prevTotalRating[0],
+        total: totalFiveStarTemp,
+        percent: calculateNumberPercent(totalRatings, totalFiveStarTemp),
+      },
+      {
+        ...prevTotalRating[1],
+        total: totalFourStarTemp,
+        percent: calculateNumberPercent(totalRatings, totalFourStarTemp),
+      },
+      {
+        ...prevTotalRating[2],
+        total: totalThreeStarTemp,
+        percent: calculateNumberPercent(totalRatings, totalThreeStarTemp),
+      },
+      {
+        ...prevTotalRating[3],
+        total: totalTwoStarTemp,
+        percent: calculateNumberPercent(totalRatings, totalTwoStarTemp),
+      },
+      {
+        ...prevTotalRating[4],
+        total: totalOneStarTemp,
+        percent: calculateNumberPercent(totalRatings, totalOneStarTemp),
+      },
+    ]);
+  };
+  const filterLeftContent = () => {
+    return (
+      <div className="review-collaborator__searching">
+        <InputTextCustom
+          type="text"
+          placeHolderNormal="Tìm kiếm"
+          onChange={(e) => {
+            handleSearch(e.target.value);
+          }}
+        />
+      </div>
+    );
+  };
+  const filterRightContent = () => {
+    return (
+      <div>
+        <ButtonCustom
+          label="Loại đánh giá"
+          options={ratingList}
+          value={star}
+          setValueSelectedProps={setStar}
+        />
+      </div>
+    );
   };
 
-  const handleFilter = useCallback(
-    (star) => {
-      // setTotalRating({
-      //   totalFiveStar: 0,
-      //   totalFourStar: 0,
-      //   totalThreeStar: 0,
-      //   totalTwoStar: 0,
-      //   totalOneStar: 0,
-      // });
-
-      setStar(star);
-
-      getDataReviewCollaborator(
-        startPage,
-        totalItem,
-        startDate,
-        endDate,
-        star
-      ).then((res) => {
-        setData(res?.data);
-        calculateRating(res);
-        setTotalItem(res?.totalItem);
-      });
-    },
-    [startPage, lengthPage, startDate, endDate, star]
-  );
+  /* ~~~ Main ~~~ */
   return (
-    <>
-      <div className="div-container-content">
-        {/* Label */}
-        <div className="div-flex-row">
-          <div className="div-header-container">
-            <h4 className="title-cv">Đánh giá CTV</h4>
-          </div>
-          {/* <div className="btn-action-header"></div> */}
-        </div>
-        {/* Container cho total đánh giá */}
-        <div className="flex flex-row gap-8">
-          <CardStatistical
-            label="Đánh giá 5 sao"
-            totalStar={totalRating.totalFiveStar}
-            totalPercent={calculateNumberPercent(
-              totalItem,
-              totalRating.totalFiveStar
-            )}
-            color={"rgb(34 197 94 / 0.25)"}
-            icon_color={"#008000"}
-          />
-          <CardStatistical
-            label="Đánh giá 4 sao"
-            totalStar={totalRating.totalFourStar}
-            totalPercent={calculateNumberPercent(
-              totalItem,
-              totalRating.totalFourStar
-            )}
-            color={"rgb(132 204 22 / 0.25)"}
-            icon_color={"#2fc22f"}
-          />
-          <CardStatistical
-            label="Đánh giá 3 sao"
-            totalStar={totalRating.totalThreeStar}
-            totalPercent={calculateNumberPercent(
-              totalItem,
-              totalRating.totalThreeStar
-            )}
-            color={"rgb(234 179 8 / 0.25)"}
-            icon_color={"#FFD700"}
-          />
-          <CardStatistical
-            label="Đánh giá 2 sao"
-            totalStar={totalRating.totalTwoStar}
-            totalPercent={calculateNumberPercent(
-              totalItem,
-              totalRating.totalTwoStar
-            )}
-            color={"rgb(249 115 22 / 0.25)"}
-            icon_color={"#FFA500"}
-          />
-          <CardStatistical
-            label="Đánh giá 1 sao"
-            totalStar={totalRating.totalOneStar}
-            totalPercent={calculateNumberPercent(
-              totalItem,
-              totalRating.totalOneStar
-            )}
-            color={"rgb(239 68 68 / 0.25)"}
-            icon_color={"#FF0000"}
-          />
-          {/*<div className="w-1/5 rounded-xl bg-white card-shadow flex flex-col px-2 py-2.5">
-            <div className="flex px-2 py-3 items-center gap-2 h-1/3 bg-green-500/25 rounded-lg">
-              <IoStar
-                size="1.2rem"
-                color="#008000" // green
-                style={{ marginBottom: "2px" }}
-              />
-              <span className=" uppercase font-bold">Đánh giá 5 sao</span>
-            </div>
-            <div className="h-2/3 flex my-2">
-              <span className="w-1/2 flex flex-col items-center justify-center border-r-2">
-                <span>Số lượng</span>
-                <span className="font-bold">{totalRating.totalFiveStar}</span>
-              </span>
-              <span className="w-1/2 flex flex-col items-center justify-center">
-                <span>Chiếm</span>
-                <span className="font-bold">
-                  {calculateNumberPercent(totalItem, totalRating.totalFiveStar)}{" "}
-                  %
-                </span>
-              </span>
-            </div>
-          </div>
-           <div className="w-1/5 rounded-xl bg-white card-shadow flex flex-col px-2 py-2.5">
-            <div className="flex px-2 py-3 items-center gap-2 h-1/3 bg-lime-500/25 rounded-lg">
-              <IoStar
-                size="1.2rem"
-                color="#2fc22f" // light green
-                style={{ marginBottom: "2px" }}
-              />
-              <span className=" uppercase font-bold">Đánh giá 4 sao</span>
-            </div>
-            <div className="h-2/3 flex my-2">
-              <span className="w-1/2 flex flex-col items-center justify-center border-r-2">
-                <span>Số lượng</span>
-                <span className="font-bold">{totalRating.totalFourStar}</span>
-              </span>
-              <span className="w-1/2 flex flex-col items-center justify-center">
-                <span>Chiếm</span>
-                <span className="font-bold">
-                  {calculateNumberPercent(totalItem, totalRating.totalFourStar)}{" "}
-                  %
-                </span>
-              </span>
-            </div>
-          </div>
-          <div className="w-1/5 rounded-xl bg-white card-shadow flex flex-col px-2 py-2.5">
-            <div className="flex px-2 py-3 items-center gap-2 h-1/3 bg-yellow-500/25 rounded-lg">
-              <IoStar
-                size="1.2rem"
-                color="#FFD700"
-                style={{ marginBottom: "2px" }}
-              />
-              <span className=" uppercase font-bold">Đánh giá 3 sao</span>
-            </div>
-            <div className="h-2/3 flex my-2">
-              <span className="w-1/2 flex flex-col items-center justify-center border-r-2">
-                <span>Số lượng</span>
-                <span className="font-bold">{totalRating.totalThreeStar}</span>
-              </span>
-              <span className="w-1/2 flex flex-col items-center justify-center">
-                <span>Chiếm</span>
-                <span className="font-bold">
-                  {calculateNumberPercent(
-                    totalItem,
-                    totalRating.totalThreeStar
-                  )}{" "}
-                  %
-                </span>
-              </span>
-            </div>
-          </div>
-          <div className="w-1/5 rounded-xl bg-white card-shadow flex flex-col px-2 py-2.5">
-            <div className="flex px-2 py-3 items-center gap-2 h-1/3 bg-orange-500/25 rounded-lg">
-              <IoStar
-                size="1.2rem"
-                color="#FFA500" // orange
-                style={{ marginBottom: "2px" }}
-              />
-              <span className=" uppercase font-bold">Đánh giá 2 sao</span>
-            </div>
-            <div className="h-2/3 flex my-2">
-              <span className="w-1/2 flex flex-col items-center justify-center border-r-2">
-                <span>Số lượng</span>
-                <span className="font-bold">{totalRating.totalTwoStar}</span>
-              </span>
-              <span className="w-1/2 flex flex-col items-center justify-center">
-                <span>Chiếm</span>
-                <span className="font-bold">
-                  {calculateNumberPercent(totalItem, totalRating.totalTwoStar)}{" "}
-                  %
-                </span>
-              </span>
-            </div>
-          </div>
-          <div className="w-1/5 rounded-xl bg-white card-shadow flex flex-col px-2 py-2.5">
-            <div className="flex px-2 py-3 items-center gap-2 h-1/3 bg-red-500/25 rounded-lg">
-              <IoStar
-                size="1.2rem"
-                color="red"
-                style={{ marginBottom: "2px" }}
-              />
-              <span className=" uppercase font-bold">Đánh giá 1 sao</span>
-            </div>
-            <div className="h-2/3 flex my-2">
-              <span className="w-1/2 flex flex-col items-center justify-center border-r-2">
-                <span>Số lượng</span>
-                <span className="font-bold">{totalRating.totalOneStar}</span>
-              </span>
-              <span className="w-1/2 flex flex-col items-center justify-center">
-                <span>Chiếm</span>
-                <span className="font-bold">
-                  {calculateNumberPercent(totalItem, totalRating.totalOneStar)}{" "}
-                  %
-                </span>
-              </span>
-            </div>
-          </div> */}
-        </div>
-        <div className="bg-white rounded-xl my-4 p-4 card-shadow border-gray-300 border">
-          <div className="flex gap-6">
-            <div className="w-3/4 flex gap-4">
-              {/* Lịch */}
-              <div className="flex flex-col gap-1">
-                <div>
-                  <span className="font-bold">Khoảng thời gian</span>
-                </div>
-                <div className="flex gap-2">
-                  <RangeDatePicker
-                    setStartDate={setStartDate}
-                    setEndDate={setEndDate}
-                    onCancel={() => {}}
-                    defaults={"thirty_last"}
-                  />
-                  <div className="border rounded-md flex justify-center items-center px-[10px] py-[6.4px]">
-                    <p className="m-0 text-date-same">
-                      Khoảng ngày: {moment(startDate).format("DD/MM/YYYY")}-
-                      {moment(endDate).format("DD/MM/YYYY")}
-                    </p>
-                  </div>
-                </div>
-              </div>
-              {/* Bộ lọc */}
-              <div className="flex flex-col gap-1 min-w-[150px]">
-                <div>
-                  <span className="font-bold">Đánh giá</span>
-                </div>
-                <div className="">
-                  <Select
-                    value={star}
-                    // style={{ width: width <= 490 ? "100%" : "18%" }}
-                    onChange={handleFilter}
-                    style={{ width: "100%" }}
-                    options={[
-                      { value: 0, label: `${i18n.t("Tất cả", { lng: lang })}` },
-                      { value: 5, label: `5 ${i18n.t("star", { lng: lang })}` },
-                      { value: 4, label: `4 ${i18n.t("star", { lng: lang })}` },
-                      { value: 3, label: `3 ${i18n.t("star", { lng: lang })}` },
-                      { value: 2, label: `2 ${i18n.t("star", { lng: lang })}` },
-                      { value: 1, label: `1 ${i18n.t("star", { lng: lang })}` },
-                    ]}
-                    defaultValue={"Tất cả"}
-                  />
-                </div>
-              </div>
-            </div>
-            {/* Tìm kiếm  */}
-            <div className="w-1/4 flex flex-col gap-1">
-              <div>
-                <span className="font-bold">Tìm kiếm</span>
-              </div>
-              <div className="">
-                <Input
-                  placeholder={`${i18n.t("search", { lng: lang })}`}
-                  value={valueSearch}
-                  prefix={<SearchOutlined />}
-                  // className="input-search"
-                  onChange={(e) => {
-                    handleSearch(e.target.value);
-                    setValueSearch(e.target.value);
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-          {/* table */}
-          <div>
-            <DataTable
-              columns={columns}
-              data={data}
-              actionColumn={addActionColumn}
-              start={startPage}
-              pageSize={lengthPage}
-              totalItem={totalItem}
-              onCurrentPageChange={onChangePage}
-              detectLoading={detectLoading}
-              onChangeValue={onChangePropsValue}
-              setLengthPage={setLengthPage}
-              // onShowModal={onShowModal}
-              getItemRow={setItem}
-            />
-          </div>
-        </div>
+    <div className="review-collaborator">
+      {/* Header */}
+      <div className="review-collaborator__header">
+        <span>Đánh giá đối tác</span>
       </div>
-      <ModalNoteAdmin
-        isShow={modal === "update_handle_review" ? true : false}
-        item={item}
-        handleOk={(payload) => processHandleReview(payload)}
-        handleCancel={setModal}
+      {/* Thẻ CSAT */}
+      <div>
+        <CardCustomerSatisfication data={dataCustomerSatisfication[0]} />
+      </div>
+      {/* Các thẻ đánh giá */}
+      <div className="review-collaborator__statistic">
+        {totalRating.map((rating) => (
+          <CardStatistical
+            label={rating.label}
+            totalStar={rating.total}
+            totalPercent={rating.percent}
+            color={rating.color}
+            icon_color={rating.colorIcon}
+          />
+        ))}
+      </div>
+      {/* Filter */}
+      <FilterData
+        isTimeFilter={true}
+        setStartDate={setStartDate}
+        setEndDate={setEndDate}
+        leftContent={filterLeftContent()}
+        rightContent={filterRightContent()}
       />
-      {/* {isLoading && <LoadingPagination />} */}
-      {/* <DeleteModal isShow={(modal === "delete") ? true : false} item={item} handleOk={(payload) => processHandleReview(payload)} handleCancel={setModal}/> */}
-    </>
+      {/* Total */}
+      <DataTable
+        columns={columns}
+        data={data}
+        actionColumn={addActionColumn}
+        start={startPage}
+        pageSize={lengthPage}
+        totalItem={totalItem}
+        onCurrentPageChange={onChangePage}
+        loading={isLoading}
+        detectLoading={detectLoading}
+        onChangeValue={onChangePropsValue}
+        setLengthPage={setLengthPage}
+        // onShowModal={onShowModal}
+        getItemRow={setItem}
+      />
+    </div>
   );
 };
 

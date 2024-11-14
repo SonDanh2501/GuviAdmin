@@ -3,7 +3,7 @@
 
 .card-statistics {
     background-color: white;
-    border-radius: $borderRadiusM;
+    border-radius: $borderRadiusL;
 
     // Icon sử dụng trong card
     .card-statistics__icon {
@@ -156,7 +156,7 @@
                 .card-statistics__rating-overview--average-point-number-total {
                     background-color: $colorExtraLightYellow;
                     padding: 4px 6px;
-                    border-radius: $borderRadiusM;
+                    border-radius: $borderRadiusL;
                     font-size: $textFontSizeXL;
                     font-weight: $fontWeightXL;
                     color: $colorYellow;
@@ -602,7 +602,7 @@
                 .card-statistics__activity-history--activity-right-status {
                     width: fit-content;
                     padding: 4px 8px;
-                    border-radius: $borderRadiusM;
+                    border-radius: $borderRadiusL;
 
                     // margin-top: 4px;
                     &.collaborator {

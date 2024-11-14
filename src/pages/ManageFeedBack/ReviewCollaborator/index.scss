@@ -1,13 +1,41 @@
+@import "../../../@theme/style.scss";
 
+
+.review-collaborator {
+  display: flex;
+  flex-direction: column;
+  gap: $gapL;
+  padding-bottom: 16px;
+
+
+  .review-collaborator__header {
+    span {
+      font-weight: $fontWeightXL;
+      font-size: $textFontSize3XL;
+      color: $colorBlack;
+    }
+  }
+
+  
+  .review-collaborator__statistic {
+    display: flex;
+    flex-direction: row;
+    gap: $gapL;
+  }
+
+  .review-collaborator__searching {
+    width: 400px;
+  }
+}
 
 .progress-bar-cancel {
-    box-shadow: rgba(247, 55, 55, 0.56) 0px 1px 8px 0px;
+  box-shadow: rgba(247, 55, 55, 0.56) 0px 1px 8px 0px;
 }
 
 .progress-bar-success {
-    box-shadow: rgba(81, 250, 55, 0.56) 0px 1px 8px 0px;
+  box-shadow: rgba(81, 250, 55, 0.56) 0px 1px 8px 0px;
 }
 
 .progress-bar-rating {
-    box-shadow: rgb(239, 252, 9, 0.56) 0px 1px 8px 0px;
+  box-shadow: rgb(239, 252, 9, 0.56) 0px 1px 8px 0px;
 }

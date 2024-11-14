@@ -15,7 +15,7 @@
             font-weight: $fontWeightL;
             color: $colorBlack;
             background-color: $colorMoreLightGray;
-            border-radius: $borderRadiusM;
+            border-radius: $borderRadiusL;
             padding: 4px 8px;
         }
 
@@ -33,7 +33,7 @@
             .card__bar-chart--header-average-number {
                 // background-color: $colorExtraLightYellow;
                 padding: 4px 6px;
-                border-radius: $borderRadiusM;
+                border-radius: $borderRadiusL;
                 font-size: $textFontSizeXL;
                 font-weight: $fontWeightXL;
                 // color: $colorYellow;

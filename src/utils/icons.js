@@ -61,6 +61,7 @@ import {
   IoSettings,
   IoArrowForward,
 } from "react-icons/io5";
+import { FaRegFrown, FaRegMeh, FaRegSmile } from "react-icons/fa";
 
 const icons = {
   IoAlertOutline,
@@ -124,6 +125,10 @@ const icons = {
   IoColorWandOutline,
   IoSettings,
   IoArrowForward,
+  // Font Awesome 5
+  FaRegFrown,
+  FaRegMeh,
+  FaRegSmile,
 };
 
 export default icons;

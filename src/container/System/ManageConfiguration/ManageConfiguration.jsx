@@ -88,8 +88,8 @@ const ManageConfiguration = () => {
             </div>
           );
         })}
-        <a href="https://guvico.com/guvi-app/?code=123">Link 1</a>
-        <a href="https://guvico.com/guvi-app?code=0389888952">Link 2</a>
+        {/* <a href="https://guvico.com/guvi-app/?code=123">Link 1</a>
+        <a href="https://guvico.com/guvi-app?code=0389888952">Link 2</a> */}
       </div>
 
       {/* <SettingQrCode /> */}

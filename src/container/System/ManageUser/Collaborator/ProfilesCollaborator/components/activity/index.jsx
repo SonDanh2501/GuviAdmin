@@ -13,7 +13,7 @@ import i18n from "../../../../../../../i18n";
 import { loadingAction } from "../../../../../../../redux/actions/loading";
 import { getLanguageState } from "../../../../../../../redux/selectors/auth";
 import "./index.scss";
-import FilterData from "../../../../../../../components/filterData/filterData";
+import FilterData from "../../../../../../../components/filterData";
 import DataTable from "../../../../../../../components/tables/dataTable";
 import CardInfo from "../../../../../../../components/card";
 import CardTotalValue from "../../../../../../../components/card/cardTotalValue";

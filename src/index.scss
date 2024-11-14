@@ -22,7 +22,7 @@
 
 .card-table {
   background-color: $colorWhite;
-  border-radius: $borderRadiusM;
+  border-radius: $borderRadiusL;
   padding: 12px 20px;
    box-shadow:
     rgba(67, 71, 85, 0.27) 0px 1px 0.25em,
@@ -471,7 +471,7 @@
 }
 
 .ant-table-footer {
-  border-radius: $borderRadiusM !important;
+  border-radius: $borderRadiusL !important;
 }
 /* ~~~ Ant Design Progress ~~~ */
 .ant-progress-text {

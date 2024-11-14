@@ -318,6 +318,12 @@ export const getReportTotalFirstOrderByCustomer = (start_date, end_date, type_cu
   );
 };
 
+export const getReportCustomerStatisfaction = (start_date, end_date) => {
+  return axiosClient.get(
+    `api/admin/report_mananger/generate_customer_satisfaction_report?start_date=${start_date}&end_date=${end_date}`
+  )
+}
+
 export const getReportOrderByCollaborator = (start, length, start_date, end_date, status) => {
   return axiosClient.get(
     `/admin/report_mananger/report_order_by_collaborator?start_date=${start_date}&end_date=${end_date}&type_date=date_work&start=${start}&length=${length}&status=${status}`

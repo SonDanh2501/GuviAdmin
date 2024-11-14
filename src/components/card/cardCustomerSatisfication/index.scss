@@ -1,0 +1,74 @@
+@import "../../../@theme/style.scss";
+
+.card-customer-satisfication {
+    display: flex;
+    flex-direction: column;
+    background-color: $colorWhite;
+    width: fit-content;
+    border-radius: $borderRadiusL;
+    padding: 16px;
+
+    .card-customer-satisfication__icons {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding-bottom: 16px;
+        gap: $gapM;
+
+        .card-customer-satisfication__icons--icon-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            .card-customer-satisfication__icons--icon {
+                padding: 8px;
+                border: 2px solid $colorMoreLightGray;
+                border-radius: $borderRadiusL;
+                // border-top: 2px;
+            }
+
+            .card-customer-satisfication__icons--percent {
+                color: $colorBlack;
+                font-weight: $fontWeightXL;
+                font-size: $textFontSizeM;
+            }
+        }
+    }
+
+    .card-customer-satisfication__rating {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .card-customer-satisfication__rating--review {
+            font-weight: $fontWeightXL;
+            font-size: $textFontSizeM;
+            border-radius: $borderRadiusL;
+            color: $colorWhite;
+            padding: 8px;
+            margin-bottom: 4px;
+
+            &.greet {
+                background-color: $colorGreen;
+            }
+
+            &.good {
+                background-color: $colorLightGreen;
+            }
+
+            &.normal {
+                background-color: $colorOrange;
+            }
+
+            &.bad {
+                background-color: $colorRed;
+            }
+        }
+
+        .card-customer-satisfication__rating--sub {
+            font-weight: $fontWeightXL;
+            font-size: $textFontSizeM;
+            color: $colorLightGray;
+        }
+    }
+}

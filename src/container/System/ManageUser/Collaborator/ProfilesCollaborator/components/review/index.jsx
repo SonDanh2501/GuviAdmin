@@ -9,7 +9,7 @@ import i18n from "../../../../../../../i18n";
 import useWindowDimensions from "../../../../../../../helper/useWindowDimensions";
 import CardInfo from "../../../../../../../components/card";
 import DataTable from "../../../../../../../components/tables/dataTable";
-import FilterData from "../../../../../../../components/filterData/filterData";
+import FilterData from "../../../../../../../components/filterData";
 
 const Review = ({ id, totalReview }) => {
   const [timePeriod, setTimePeriod] = useState([]);

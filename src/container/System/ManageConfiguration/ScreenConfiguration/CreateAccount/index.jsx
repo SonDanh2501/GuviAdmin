@@ -117,8 +117,12 @@ const CreateAccount = () => {
       render: (data) => <a>{data?.email}</a>,
     },
     {
-      title: `${i18n.t("display_name", { lng: lang })}`,
+      title: `Họ và tên`,
       render: (data) => <a>{data?.full_name}</a>,
+    },
+    {
+      title: `Tên viết tắt`,
+      render: (data) => <a>{data?.name}</a>,
     },
     {
       title: `${i18n.t("permissions", { lng: lang })}`,

@@ -6,7 +6,7 @@ import moment from "moment";
 import { useSelector } from "react-redux";
 import { getLanguageState } from "../../../../../../../redux/selectors/auth";
 import i18n from "../../../../../../../i18n";
-import FilterData from "../../../../../../../components/filterData/filterData";
+import FilterData from "../../../../../../../components/filterData";
 import { CaretDownOutlined } from "@ant-design/icons";
 import icons from "../../../../../../../utils/icons";
 import DataTable from "../../../../../../../components/tables/dataTable";

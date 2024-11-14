@@ -26,7 +26,7 @@ import "./index.scss";
 import { getListNotifications } from "../../../api/notification";
 import ButtonCustom from "../../../components/button";
 import DataTable from "../../../components/tables/dataTable";
-import FilterData from "../../../components/filterData/filterData";
+import FilterData from "../../../components/filterData";
 import { CaretDownOutlined } from "@ant-design/icons";
 import { compareDateIsBefore } from "../../../utils/contant";
 import icons from "../../../utils/icons";

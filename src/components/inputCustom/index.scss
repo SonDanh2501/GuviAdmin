@@ -6,7 +6,7 @@
 
     .form-field__input {
         border: 2px solid $colorMoreLightStone;
-        border-radius: $borderRadiusM;
+        border-radius: $borderRadiusL;
         width: 100%;
         font-size: $textFontSizeL;
         line-height: $lineHeightL;
@@ -112,14 +112,14 @@
             width: 100%;
             height: 160px;
             border: 2px dashed $colorLightGray;
-            border-radius: $borderRadiusM;
+            border-radius: $borderRadiusL;
             cursor: pointer;
             background-color: $colorExtraLightGray;
             transition: 0.3s all ease-out;
 
             &.showing-image {
                 border: 0px;
-                border-radius: $borderRadiusM;
+                border-radius: $borderRadiusL;
             }
 
             &:hover {
@@ -133,7 +133,7 @@
             .form-field__text-area--container-image {
                 width: 100%;
                 height: 100%;
-                border-radius: $borderRadiusM;
+                border-radius: $borderRadiusL;
             }
 
             .form-field__text-area--container-content {

@@ -3,11 +3,11 @@
 .button-custom {
     color: $colorWhite;
     background-color: $colorViolet;
-    border-radius: $borderRadiusM;
+    border-radius: $borderRadiusL;
     transition: all 0.5s ease;
-    padding: 9px 10px;
+    padding: 10px 10px;
     border: 1px solid $colorViolet;
-    border-radius: $borderRadiusM;
+    border-radius: $borderRadiusL;
     font-size: $textFontSizeM;
     font-weight: $fontWeightXL;
     cursor: pointer;
@@ -41,7 +41,7 @@
 .button-custom-checked {
     color: $colorViolet;
     background-color: $colorWhite;
-    border-radius: $borderRadiusM;
+    border-radius: $borderRadiusL;
     border: 1px solid $colorViolet;
     transition: all 0.3s ease;
     padding: 8px 10px;
@@ -76,7 +76,7 @@
     justify-content: center;
     padding: 6px 4px;
     border: 1px solid $colorViolet;
-    border-radius: $borderRadiusM;
+    border-radius: $borderRadiusL;
     cursor: pointer;
     transition: 0.5s all ease;
     gap: $gapS;
@@ -121,7 +121,7 @@
     .button-custom-select__line {
         width: 1px;
         height: 20px;
-        border-radius: $borderRadiusM;
+        border-radius: $borderRadiusL;
         background-color: $colorMoreLightGray;
     }
 
@@ -131,7 +131,7 @@
         justify-content: center;
         padding: 4px 6px;
         background-color: $colorMoreLightGray;
-        border-radius: $borderRadiusM;
+        border-radius: $borderRadiusL;
 
         span {
             font-size: $textFontSizeM;
@@ -168,7 +168,7 @@
         color: $colorBlack;
         padding: 8px;
         cursor: pointer;
-        border-radius: $borderRadiusM;
+        border-radius: $borderRadiusL;
         transition: 0.3s all ease-out;
         margin-bottom: 4px;
 
@@ -194,7 +194,7 @@
             text-align: center;
             background-color: $colorMoreLightGray;
             padding: 2px 4px;
-            border-radius: $borderRadiusM;
+            border-radius: $borderRadiusL;
             font-weight: $fontWeightL;
             font-size: $textFontSizeM;
             min-width: 20px;

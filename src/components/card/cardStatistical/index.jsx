@@ -3,7 +3,7 @@ import { IoStar } from "react-icons/io5";
 import "./index.scss";
 
 const CardStatistical = (props) => {
-  const { label, color, icon_color, totalStar, totalPercent } = props
+  const { label, color, icon_color, totalStar, totalPercent } = props;
   return (
     <div className="card-statistics-rating card-shadow">
       <div

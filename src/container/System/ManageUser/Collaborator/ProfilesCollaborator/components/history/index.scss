@@ -319,7 +319,7 @@
     /* Bố cục của thẻ lịch sử dòng tiền */
     .collaborator-history__body--financial-history {
       background-color: $colorWhite;
-      border-radius: $borderRadiusM;
+      border-radius: $borderRadiusL;
       width: 100%;
       box-shadow: rgba(0, 0, 0, 0.24) 0px 1px 3px;
 
@@ -360,7 +360,7 @@
   justify-content: center;
   gap: $gapXS;
   background-color: $colorWhite;
-  border-radius: $borderRadiusM;
+  border-radius: $borderRadiusL;
   box-shadow:
     rgba(67, 71, 85, 0.27) 0px 1px 0.25em,
     rgba(90, 125, 188, 0.05) 0px 0.75em 2em;
