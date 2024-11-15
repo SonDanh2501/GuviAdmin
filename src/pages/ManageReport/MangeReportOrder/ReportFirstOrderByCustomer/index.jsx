@@ -31,7 +31,7 @@ const ReportFirstOrderByCustomer = () => {
   const [sameEndDate, setSameEndDate] = useState(""); // Giá trị thời gian tương ứng cho ngày kết thúc nhung lùi lại 1 tháng
   const [start, setStart] = useState(0);
   const [typeCustomer, setTypeCustomer] = useState("all");
-  const [typeDate, setTypeDate] = useState("date_work");
+  const [typeDate, setTypeDate] = useState("date_create");
   const [detectLoading, setDetectLoading] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   // 1. Các giá trị của khách hàng mới

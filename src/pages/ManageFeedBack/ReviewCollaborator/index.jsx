@@ -427,9 +427,9 @@ const ReviewCollaborator = () => {
         <span>Đánh giá đối tác</span>
       </div>
       {/* Thẻ CSAT */}
-      <div>
+      {/* <div>
         <CardCustomerSatisfication data={dataCustomerSatisfication[0]} />
-      </div>
+      </div> */}
       {/* Các thẻ đánh giá */}
       <div className="review-collaborator__statistic">
         {totalRating.map((rating) => (
