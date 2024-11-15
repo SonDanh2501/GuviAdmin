@@ -246,9 +246,9 @@ const ReviewCollaborator = () => {
     if (totalItem > 0) fetchAllReviewCollaborator(totalItem);
   }, [valueSearch, startDate, endDate, totalItem]);
   // 3. Fetch dữ liệu CSAT
-  useEffect(() => {
-    fetchCustomerSatisfactionReport();
-  }, [startDate, endDate]);
+  // useEffect(() => {
+  //   fetchCustomerSatisfactionReport();
+  // }, [startDate, endDate]);
   /* ~~~ Handle function ~~~ */
   // 1. Fetch toàn bộ đánh giá để thống kê
   const fetchAllReviewCollaborator = async (lengthData) => {
