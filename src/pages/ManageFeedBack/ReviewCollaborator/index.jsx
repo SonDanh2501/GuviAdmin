@@ -466,6 +466,13 @@ const ReviewCollaborator = () => {
         // onShowModal={onShowModal}
         getItemRow={setItem}
       />
+      {/* Modal Update Note */}
+      <ModalNoteAdmin
+        isShow={modal === "update_handle_review" ? true : false}
+        item={item}
+        handleOk={(payload) => processHandleReview(payload)}
+        handleCancel={setModal}
+      />
     </div>
   );
 };

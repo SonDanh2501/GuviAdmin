@@ -231,7 +231,7 @@ const ManageTopUpWithdraw = (props) => {
             customTitle: (
               <CustomHeaderDatatable
                 title="Thông tin tài khoản"
-                textToolTip="Thông tin tài khoản tài khoản ngân hàng của đối tác"
+                textToolTip="Thông tin cơ bản của tài khoản khách hàng/đối tác"
               />
             ),
             dataIndex: "",
