@@ -117,8 +117,12 @@ export const createOptionServiceApi = (data) => {
 };
 
 export const getCalculateFeeApi = (data) => {
+  // return axiosClient.post(
+  //   `/admin/group_order_manager/calculate_fee_group_order`,
+  //   data
+  // );
   return axiosClient.post(
-    `/admin/group-order-manager/calculate_fee_group_order`,
+    `/api/admin/group_order_manager/calculate_fee_group_order`,
     data
   );
 };

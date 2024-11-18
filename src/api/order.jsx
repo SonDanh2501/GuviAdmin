@@ -50,8 +50,12 @@ export const getHistoryOrderApi = (id, start, length, lang = "vi") => {
 };
 
 export const addCollaboratorToOrderApi = (id, data) => {
+  // return axiosClient.post(
+  //   `/admin/order_manager/add_collaborator_to_order/${id}?lang=vi`,
+  //   data
+  // );
   return axiosClient.post(
-    `/admin/order_manager/add_collaborator_to_order/${id}?lang=vi`,
+    `/api/admin/order_manager/add_collaborator_to_order/${id}?lang=vi`,
     data
   );
 };
@@ -64,7 +68,9 @@ export const changeCollaboratorToOrderApi = (id, data) => {
 };
 
 export const createOrderApi = (data) => {
-  return axiosClient.post(`/admin/group-order-manager/create`, data);
+  // return axiosClient.post(`/admin/group-order-manager/create`, data);
+  return axiosClient.post(`/api/admin/group_order_manager/create`, data);
+
 };
 
 export const getAddressCustomerApi = (id, start = 0, length = 10) => {
@@ -81,8 +87,12 @@ export const checkCodePromotionOrderApi = (id, data) => {
 };
 
 export const changeStatusOrderApi = (id, data) => {
+  // return axiosClient.post(
+  //   `/admin/order_manager/change_status_order/${id}?lang=vi`,
+  //   data
+  // );
   return axiosClient.post(
-    `/admin/order_manager/change_status_order/${id}?lang=vi`,
+    `/api/admin/order_manager/change_status_order/${id}?lang=vi`,
     data
   );
 };
