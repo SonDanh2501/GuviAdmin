@@ -24,7 +24,7 @@ export const store = createStore(reducers, applyMiddleware(sagaMiddleware));
 
 export const persistor = persistStore(store);
 sagaMiddleware.run(rootSaga);
-
+ 
 const AppLoading = memo(() => {
   const loading = useSelector(loadingSelector);
   return <LoadingPage loading={loading} />;
