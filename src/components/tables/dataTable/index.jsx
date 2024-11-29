@@ -1160,14 +1160,15 @@ const DataTable = (props) => {
           case "id_customer_report": {
             return (
               <p
+                style={{ cursor: "pointer" }}
                 className={`${item?.fontSize}`}
                 onClick={() =>
-                  navigate(`/profile-customer/${data?.id_customer._id}`, {
-                    state: { date: data?._id },
-                  })
+                  window.open(
+                    `/profile-customer/${data?.id_customer._id}`,
+                    "_blank"
+                  )
                 }
               >
-                {" "}
                 {data?.id_customer.full_name}
               </p>
             );
