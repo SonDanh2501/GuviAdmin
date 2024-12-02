@@ -17,3 +17,12 @@ export const removeToken = async () => {
     // error reading value
   }
 };
+
+export const setTokenAffiliate = async (token) =>
+  await localStorage.setItem("access_token_affiliate", JSON.stringify(token));
+
+export const removeTokenAffiliate = async () => {
+  try {
+    await localStorage.removeItem("access_token_affiliate");
+  } catch (e) {}
+};

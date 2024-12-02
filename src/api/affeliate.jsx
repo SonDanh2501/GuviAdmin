@@ -1,5 +1,5 @@
 import axiosClient from "../axios";
 
-export const checkActiveAffeliate = (payload) => {
-    return axiosClient.post("api/customer/auth/login_affiliate", payload);
+export const loginAffiliateApi = (payload) => {
+    return axiosClient.post("api/customer_web/auth/login", payload);
 }

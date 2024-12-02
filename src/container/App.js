@@ -7,7 +7,8 @@ import Main from "../layout/Main/index.jsx";
 import { getServiceAction } from "../redux/actions/service.js";
 import { getIsCheckLogin } from "../redux/selectors/auth";
 import "./App.scss";
-import Affiliate from "../layout/affiliate.js";
+import AuthAffiliate from "../layout/authAffiliate.js";
+import MainAffiliate from "../layout/MainAffiliate/index.jsx";
 
 // const port =  process.env.REACT_APP_PORT;
 
@@ -18,7 +19,9 @@ const App = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  {/*Check nếu chưa đăng nhập thì navigate tới trang login */}
+  {
+    /*Check nếu chưa đăng nhập thì navigate tới trang login */
+  }
   useEffect(() => {
     if (!isCheckLogin && +currentPort !== 3000) {
       navigate("/auth/login");
@@ -26,21 +29,18 @@ const App = () => {
     dispatch(getServiceAction.getServiceRequest());
   }, []);
 
-  {/*Nếu đăng nhập rồi thì navigation tới Main (chứa các layout) */}
-
-  // return <>{!isCheckLogin ? <Auth /> : <Main />}</>;
   return (
     <>
       {+currentPort === 3000 ? (
-        <Affiliate />
-      ) : !isCheckLogin ? (
+        <AuthAffiliate />
+      ) : // <MainAffiliate />
+      !isCheckLogin ? (
         <Auth />
       ) : (
         <Main />
       )}
     </>
   );
-
 };
 
 export default App;

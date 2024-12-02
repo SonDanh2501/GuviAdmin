@@ -1,12 +1,14 @@
 import axios from "axios";
 import { call, put, takeLatest } from "redux-saga/effects";
 import { getPermission, getUserByToken, loginApi } from "../../api/auth";
+import { loginAffiliateApi } from "../../api/affeliate";
 import { errorNotify, successNotify } from "../../helper/toast";
-import { setToken } from "../../helper/tokenHelper";
+import { setToken, setTokenAffiliate } from "../../helper/tokenHelper";
 import {
   getUserAction,
   languageAction,
   loginAction,
+  loginAffiliateAction,
   logoutAction,
   permissionAction,
 } from "../actions/auth";
@@ -50,6 +52,7 @@ function* loginSaga(action) {
     });
   }
 }
+
 function* logoutSaga(action) {
   try {
     yield put(logoutAction.logoutSuccess({ token: " " }));
@@ -63,6 +66,7 @@ function* logoutSaga(action) {
     yield put(loadingAction.loadingRequest(false));
   }
 }
+
 function* permissionSaga(action) {
   const checkElement = [];
   try {
@@ -85,6 +89,7 @@ function* permissionSaga(action) {
     yield put(loadingAction.loadingRequest(false));
   }
 }
+
 function* languageSaga(action) {
   try {
     yield put(
@@ -114,12 +119,53 @@ function* getUserSaga() {
   }
 }
 
+function* loginAffiliateSaga(action) {
+  try {
+    const response = yield call(loginAffiliateApi, action.payload.data);
+    setTokenAffiliate(response?.token);
+    // axios
+    //   .get(`${TestUrl}/admin/auth/get_permission_by_token`, {
+    //     headers: {
+    //       Authorization: `Bearer ${response?.token}`,
+    //     },
+    //   })
+    //   .then((res) => {
+    //     res?.data?.forEach((item) => {
+    //       if (item?.id_side_bar === "dashboard") {
+    //         return action.payload.naviga("/");
+    //       } else if (item?.id_side_bar === "guvi_job") {
+    //         return action.payload.naviga("/group-order/manage-order");
+    //       }
+    //     });
+    //   });
+    action.payload.naviga("/affiliate")
+    successNotify({
+      message: "Đăng nhập thành công",
+    });
+    yield put(
+      loginAffiliateAction.loginAffiliateSuccess({
+        token: response?.token,
+        // permission: permission,
+      })
+    );
+    yield put(loginAffiliateAction.loginAffiliateRequest(false));
+  } catch (err) {
+    yield put(loginAffiliateAction.loginAffiliateFailure(err));
+    yield put(loginAffiliateAction.loadingAffiliateRequest(false));
+    errorNotify({
+      message: err.message ? err.message  : "Đăng nhập không thành công, vui lòng thử lại sau.",
+    });
+  }
+}
+
 function* AuthSaga() {
   yield takeLatest(loginAction.loginRequest, loginSaga);
   yield takeLatest(logoutAction.logoutRequest, logoutSaga);
   yield takeLatest(permissionAction.permissionRequest, permissionSaga);
   yield takeLatest(languageAction.languageRequest, languageSaga);
   yield takeLatest(getUserAction.getUserRequest, getUserSaga);
+  yield takeLatest(loginAffiliateAction.loginAffiliateRequest, loginAffiliateSaga);
+
 }
 
 export default AuthSaga;

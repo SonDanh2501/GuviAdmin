@@ -37,7 +37,7 @@ const ReportOrderByCustomer = () => {
   const [sameEndDate, setSameEndDate] = useState(""); // Giá trị thời gian tương ứng cho ngày kết thúc nhung lùi lại 1 tháng
   const [start, setStart] = useState(0);
   const [typeCustomer, setTypeCustomer] = useState("all");
-  const [typeDate, setTypeDate] = useState("date_create");
+  const [typeDate, setTypeDate] = useState("date_work");
   const [detectLoading, setDetectLoading] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   // 1. Các giá trị của khách hàng mới
@@ -357,7 +357,6 @@ const ReportOrderByCustomer = () => {
       start,
       lengthPage
     );
-    console.log("check response >>>", res);
     setData(res.data);
     setTotal(res?.totalItem);
     setDataTotal(res?.total[0]);
@@ -482,6 +481,10 @@ const ReportOrderByCustomer = () => {
   const changeTypeCustomer = (value) => {
     setTypeCustomer(value);
   };
+
+  const changeTypeDate = (value) => {
+    setTypeDate(value);
+  };
   /* ~~~ Main ~~~ */
   return (
     <React.Fragment>
@@ -567,6 +570,15 @@ const ReportOrderByCustomer = () => {
               { value: "all", label: "Tất cả" },
               { value: "new", label: "Khách hàng mới" },
               { value: "old", label: "Khách hàng cũ" },
+            ]}
+          />
+          <Select
+            defaultValue="date_work"
+            style={{ width: 150 }}
+            onChange={changeTypeDate}
+            options={[
+              { value: "date_work", label: "Ngày làm" },
+              { value: "date_create", label: "Ngày tạo" },
             ]}
           />
         </div>

@@ -42,10 +42,15 @@ import {
 
 import logoVN from "../../assets/images/flag_vietnam.svg";
 import logoUS from "../../assets/images/flag_american.svg";
+import logoGuvi from "../../assets/images/LogoS.svg";
 import Sidebar from "../../layout/Slidebar";
+import icons from "../../utils/icons";
+
+const {IoPeopleOutline, IoHomeOutline, IoHome, IoPeople} = icons;
 const { Option } = Select;
 
 const Header = ({ onClick, hide }) => {
+  const currentPort = window.location.port;
   const dispatch = useDispatch();
   const [data, setDate] = useState([]);
   const [status, setStatus] = useState(false);
@@ -56,6 +61,7 @@ const Header = ({ onClick, hide }) => {
   const [selectedLanguage, setSelectedLanguage] = useState("");
   const [isHover, setIsHover] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isActivated, setIsActivated] = useState(0);
   const onLogout = () => {
     removeToken();
     dispatch(loadingAction.loadingRequest(true));
@@ -93,7 +99,6 @@ const Header = ({ onClick, hide }) => {
       key: "0",
     },
   ];
-
   const handleChange = (e) => {
     // console.log("check onclick ",e)
     setSelectedLanguage(e);
@@ -101,82 +106,143 @@ const Header = ({ onClick, hide }) => {
   };
 
   return (
-    <div className="header-navigation">
-      <div className="header-navigation__left">
-        <div className="header-navigation__left--icon" onClick={onClick}>
-          <IoMenu size={"18px"} />
-        </div>
-        <span className="header-navigation__left--version">Version 1.0.1</span>
-      </div>
-      <div className="header-navigation__right">
-        <Popover
-          content={
-            <div className="list">
-              <List
-                itemLayout="horizontal"
-                dataSource={languageItems}
-                renderItem={(item) => {
-                  return (
-                    <div className="">
-                      <a>{item.label}</a>
-                    </div>
-                  );
-                }}
-              />
+    <>
+      {+currentPort === 3001 ? (
+        <div className="header-navigation">
+          <div className="header-navigation__left">
+            <div className="header-navigation__left--icon" onClick={onClick}>
+              <IoMenu size={"18px"} />
             </div>
-          }
-          title="Ngôn ngữ"
-        >
-          <div
-            onMouseEnter={() => {
-              setIsHover(true);
-            }}
-            onMouseLeave={() => {
-              setIsHover(false);
-            }}
-            className="header-navigation__right--icon"
-          >
-            <IoLanguage size={"18px"} />
+            <span className="header-navigation__left--version">
+              Version 1.0.1
+            </span>
           </div>
-        </Popover>
-        {/*Notification Drop Down Menu*/}
-        <Tooltip placement="bottom" title="Thông báo">
-          <div
-            onMouseEnter={() => {
-              setIsHover(true);
-            }}
-            onMouseLeave={() => {
-              setIsHover(false);
-            }}
-            className="header-navigation__right--icon"
-            onClick={() => setStatus(!status)}
-          >
-            <IoNotifications size={"18px"} />
-          </div>
-        </Tooltip>
+          <div className="header-navigation__right">
+            <Popover
+              content={
+                <div className="list">
+                  <List
+                    itemLayout="horizontal"
+                    dataSource={languageItems}
+                    renderItem={(item) => {
+                      return (
+                        <div className="">
+                          <a>{item.label}</a>
+                        </div>
+                      );
+                    }}
+                  />
+                </div>
+              }
+              title="Ngôn ngữ"
+            >
+              <div
+                onMouseEnter={() => {
+                  setIsHover(true);
+                }}
+                onMouseLeave={() => {
+                  setIsHover(false);
+                }}
+                className="header-navigation__right--icon"
+              >
+                <IoLanguage size={"18px"} />
+              </div>
+            </Popover>
+            {/*Notification Drop Down Menu*/}
+            <Tooltip placement="bottom" title="Thông báo">
+              <div
+                onMouseEnter={() => {
+                  setIsHover(true);
+                }}
+                onMouseLeave={() => {
+                  setIsHover(false);
+                }}
+                className="header-navigation__right--icon"
+                onClick={() => setStatus(!status)}
+              >
+                <IoNotifications size={"18px"} />
+              </div>
+            </Tooltip>
 
-        {/*Sign Out Drop Down Menu*/}
-        <Dropdown
-          arrow={true}
-          placement="bottomCenter"
-          menu={{
-            items,
-          }}
-          trigger={["click"]}
-        >
-          <span
-            className="header-navigation__right--user-info"
-            onClick={(e) => e.preventDefault()}
-          >
-            <IoPersonCircle size="18px" color="#475569" />
-            <a className="header-navigation__right--user-info-name">
-              {user?.full_name}
-            </a>
-            <CaretDownOutlined className="icon-down" />
-          </span>
-        </Dropdown>
-      </div>
-    </div>
+            {/*Sign Out Drop Down Menu*/}
+            <Dropdown
+              arrow={true}
+              placement="bottomCenter"
+              menu={{
+                items,
+              }}
+              trigger={["click"]}
+            >
+              <span
+                className="header-navigation__right--user-info"
+                onClick={(e) => e.preventDefault()}
+              >
+                <IoPersonCircle size="18px" color="#475569" />
+                <a className="header-navigation__right--user-info-name">
+                  {user?.full_name}
+                </a>
+                <CaretDownOutlined className="icon-down" />
+              </span>
+            </Dropdown>
+          </div>
+        </div>
+      ) : (
+        <div className="header-navigation-affiliate">
+          <div className="header-navigation-affiliate__left">
+            <img
+              className="header-navigation-affiliate__logo"
+              src={logoGuvi}
+            ></img>
+
+            <span
+              onClick={() => {
+                navigate("/affiliate");
+                setIsActivated(0);
+              }}
+              className={`header-navigation-affiliate__button ${
+                isActivated === 0 && "activated"
+              }`}
+            >
+              <IoHome size="16px" />
+              Affiliate
+            </span>
+            <span
+              onClick={() => {
+                navigate("/referend-list");
+                setIsActivated(1);
+              }}
+              className={`header-navigation-affiliate__button ${
+                isActivated === 1 && "activated"
+              }`}
+            >
+              <IoPeople size="16px" />
+              DS người giới thiệu
+            </span>
+          </div>
+          <div className="header-navigation-affiliate__right">
+            <Dropdown
+              arrow={true}
+              placement="bottomCenter"
+              menu={{
+                items,
+              }}
+              trigger={["click"]}
+            >
+              <span
+                className="header-navigation__right--user-info"
+                onClick={(e) => e.preventDefault()}
+              >
+                <IoPersonCircle size="22px" color="#475569" />
+                <a className="header-navigation__right--user-info-name">
+                  {user?.full_name}
+                </a>
+                <CaretDownOutlined className="icon-down" />
+              </span>
+            </Dropdown>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

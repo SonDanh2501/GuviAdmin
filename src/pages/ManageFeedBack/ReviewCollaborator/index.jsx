@@ -119,13 +119,13 @@ const ReviewCollaborator = () => {
     {
       customTitle: (
         <CustomHeaderDatatable
-          title="Ngày tạo"
-          textToolTip="Thời gian đánh giá được tạo ra (thời điểm đánh giá khác với thời điểm đơn được tạo)"
+          title="Ngày đánh giá"
+          textToolTip="Thời gian đánh giá được tạo ra"
         />
       ),
       dataIndex: "date_create_review",
       key: "date_time",
-      width: 120,
+      width: 130,
       fontSize: "text-size-M",
     },
     {

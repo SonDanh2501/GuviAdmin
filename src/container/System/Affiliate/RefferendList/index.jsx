@@ -22,6 +22,7 @@ const {
   IoPeople,
   IoCash,
   IoReader,
+  IoCopy
 } = icons;
 
 const RefferendList = () => {
@@ -445,9 +446,47 @@ const RefferendList = () => {
           </div>
           {/* Lợi ích tham gia */}
           <div className="refferend-list-affiliate__content--right-share card-shadow">
-            <span className="refferend-list-affiliate__content--right-share-header">
-            Lợi ích khi tham gia chương trình Affiliate
-            </span>
+            <div className="refferend-list-affiliate__content--right-share-header">
+              <span className="">
+                Lợi ích khi tham gia chương trình Affiliate
+              </span>
+            </div>
+            <div className="refferend-list-affiliate__content--right-share-content">
+              <div className="refferend-list-affiliate__content--right-share-content-highlight">
+                <span className="refferend-list-affiliate__content--right-share-content-highlight-title">
+                  đ50.000
+                </span>
+                <span className="refferend-list-affiliate__content--right-share-content-highlight-sub-title">
+                  Đơn hoàn thành đầu tiên
+                </span>
+              </div>
+              <div className="refferend-list-affiliate__content--right-share-content-highlight">
+                <span className="refferend-list-affiliate__content--right-share-content-highlight-title">
+                  5%
+                </span>
+                <span className="refferend-list-affiliate__content--right-share-content-highlight-sub-title">
+                  Chiết khấu mỗi đơn
+                </span>
+              </div>
+              <div className="refferend-list-affiliate__content--right-share-content-share">
+                <span className="refferend-list-affiliate__content--right-share-content-share-header">
+                  Nhận chiết khấu ngay
+                  <IoCopy color="orange" />
+                </span>
+                <span className="refferend-list-affiliate__content--right-share-content-share-link">
+                  https://apps.apple.com/us/app/guvi
+                </span>
+              </div>
+              <div className="refferend-list-affiliate__content--right-share-content-share">
+                <span className="refferend-list-affiliate__content--right-share-content-share-header">
+                  Gửi voucher giảm giá
+                  <IoCopy color="orange" />
+                </span>
+                <span className="refferend-list-affiliate__content--right-share-content-share-link">
+                  https://apps.apple.com/us/app/guvi
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </div>

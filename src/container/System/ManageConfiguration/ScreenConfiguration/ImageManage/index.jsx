@@ -156,7 +156,7 @@ const ImageManage = () => {
         name="image"
         type="file"
         placeholder=""
-        accept={".jpg,.png,.jpeg"}
+        accept={".jpg,.png,.jpeg,.gif"}
         id="choose-image"
         onChange={onChangeThumbnail}
       />

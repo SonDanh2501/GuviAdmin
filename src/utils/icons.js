@@ -57,11 +57,28 @@ import {
   IoArrowDownCircleOutline,
   IoArrowUpCircleOutline,
   IoAddCircleOutline,
-  IoColorWandOutline,
   IoSettings,
   IoArrowForward,
+  IoHome,
+  IoLink,
+  IoPersonAdd,
+  IoPeople,
+  IoBagAdd,
+  IoChevronForward,
+  IoCopyOutline,
+  IoSwapHorizontal,
+  IoLogoFacebook,
+  IoLogoYoutube,
+  IoLogoTiktok,
+  IoColorWandOutline,
+  IoBagOutline,
+  IoCopy,
+  IoHomeOutline,
+  IoCash,
+  IoReader,
 } from "react-icons/io5";
 import { FaRegFrown, FaRegMeh, FaRegSmile } from "react-icons/fa";
+import { MdDoubleArrow } from "react-icons/md";
 
 const icons = {
   IoAlertOutline,
@@ -122,13 +139,31 @@ const icons = {
   IoArrowDownCircleOutline,
   IoArrowUpCircleOutline,
   IoAddCircleOutline,
-  IoColorWandOutline,
   IoSettings,
   IoArrowForward,
+  IoHome,
+  IoLink,
+  IoPersonAdd,
+  IoPeople,
+  IoBagAdd,
+  IoChevronForward,
+  IoCopyOutline,
+  IoSwapHorizontal,
+  IoLogoFacebook,
+  IoLogoYoutube,
+  IoLogoTiktok,
+  IoColorWandOutline,
+  IoBagOutline,
+  IoCopy,
+  IoHomeOutline,
+  IoCash,
+  IoReader,
   // Font Awesome 5
   FaRegFrown,
   FaRegMeh,
   FaRegSmile,
+  // Material Design icons
+  MdDoubleArrow,
 };
 
 export default icons;

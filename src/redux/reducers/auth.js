@@ -5,6 +5,7 @@ import {
   loginAction,
   logoutAction,
   permissionAction,
+  loginAffiliateAction
 } from "../actions/auth";
 import { getType } from "../actions/banner";
 
@@ -55,6 +56,21 @@ export default function LoginReducers(state = INIT_STATE.auth, action) {
       return {
         ...state,
       };
+    case getType(loginAffiliateAction.loginAffiliateRequest):
+      return { 
+        ...state
+      }
+    case getType(loginAffiliateAction.loginAffiliateSuccess):
+      return {
+        ...state,
+        token: action.payload.token,
+        isCheckLogin: true,
+        user: action.payload.user,
+      }
+    case getType(loginAffiliateAction.loginAffiliateFailure):
+      return { 
+        ...state
+      }
     default:
       return state;
   }

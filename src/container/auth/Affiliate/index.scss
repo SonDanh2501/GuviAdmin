@@ -71,13 +71,114 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
+
                 .login-affiliate__card--information-logo-image {
                     width: 25%;
                     height: 25%;
                 }
+
                 // height: 30%;
                 // width: 30%;
             }
+
+            .login-affiliate__card--information-line {
+                position: relative;
+                width: 50%;
+                height: 2px;
+                background-color: $colorExtraLightGray;
+                border-radius: $borderRadiusL;
+                margin: 0 auto;
+
+                .login-affiliate__card--information-line-other {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    color: $colorLightGray;
+                    background-color: $colorWhite; // Đặt màu nền để chữ không bị che bởi đường thẳng
+                    padding: 0 8px; // Tạo khoảng cách giữa chữ và viền nền
+                }
+            }
+
+            .login-affiliate__card--information-otp {
+                display: flex;
+
+                .login-affiliate__card--information-otp-label {
+                    font-size: $textFontSizeM;
+                    font-weight: $fontWeightL;
+                    color: $colorRed;
+                }
+
+                .login-affiliate__card--information-otp-digit {
+                    display: flex;
+                    gap: 10px;
+                    /* Adjust spacing between inputs */
+                    justify-content: center;
+                    align-items: center;
+
+                    .login-affiliate__card--information-otp-digit-number {
+                        width: 50px;
+                        height: 50px;
+                        font-size: 24px;
+                        text-align: center;
+                        border: 2px solid #ccc;
+                        /* Default border */
+                        border-radius: 8px;
+                        outline: none;
+                        transition: border-color 0.3s, box-shadow 0.3s;
+
+                    }
+                }
+            }
+
+
         }
     }
+}
+
+.login-affiliate__card--information-otp {
+    display: flex;
+    flex-direction: column;
+    gap: $gapM;
+
+    .login-affiliate__card--information-otp-label {
+        font-size: $textFontSizeM;
+        font-weight: $fontWeightL;
+        color: $colorBlack;
+        text-align: center;
+
+        &.high-light {
+            color: $colorOrange;
+            font-weight: $fontWeightXL;
+        }
+
+        &.clickable {
+            cursor: pointer;
+        }
+
+    }
+
+    .login-affiliate__card--information-otp-digit {
+        display: flex;
+        gap: $gapM;
+        justify-content: center;
+        align-items: center;
+
+        .login-affiliate__card--information-otp-digit-number {
+            width: 50px;
+            height: 50px;
+            font-size: $textFontSize3XL;
+            text-align: center;
+            border: 3px solid $colorMoreLightGray;
+            border-radius: 8px;
+            outline: none;
+            transition: all 0.3s ease;
+
+            &:focus {
+                border-color: $colorViolet;
+            }
+        }
+    }
+
+    .login-affiliate__card--information-otp-resend {}
 }

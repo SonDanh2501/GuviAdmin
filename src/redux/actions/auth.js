@@ -33,3 +33,9 @@ export const getUserAction = createActions({
   getUserSuccess: (payload) => payload,
   getUserFailure: (err) => err,
 });
+
+export const loginAffiliateAction = createActions({
+  loginAffiliateRequest: (payload) => payload,
+  loginAffiliateSuccess: (payload) => payload,
+  loginAffiliateFailure: (err) => err,
+});
