@@ -5,7 +5,8 @@ import {
   loginAction,
   logoutAction,
   permissionAction,
-  loginAffiliateAction
+  loginAffiliateAction,
+  loginAffiliateWithOTPAction,
 } from "../actions/auth";
 import { getType } from "../actions/banner";
 
@@ -57,20 +58,36 @@ export default function LoginReducers(state = INIT_STATE.auth, action) {
         ...state,
       };
     case getType(loginAffiliateAction.loginAffiliateRequest):
-      return { 
-        ...state
-      }
+      return {
+        ...state,
+      };
     case getType(loginAffiliateAction.loginAffiliateSuccess):
       return {
         ...state,
         token: action.payload.token,
         isCheckLogin: true,
         user: action.payload.user,
-      }
+      };
     case getType(loginAffiliateAction.loginAffiliateFailure):
-      return { 
-        ...state
-      }
+      return {
+        ...state,
+      };
+    case getType(loginAffiliateWithOTPAction.loginAffiliateWithOTPRequest):
+      return {
+        ...state,
+      };
+    case getType(
+      loginAffiliateWithOTPAction.loginAffiliateWithOTPSuccess
+    ):
+      return {
+        token: action.payload.token,
+        isCheckLogin: true,
+        user: action.payload.user,
+      };
+    case getType(loginAffiliateWithOTPAction.loginAffiliateWithOTPFailure):
+      return {
+        ...state,
+      };
     default:
       return state;
   }

@@ -85,7 +85,7 @@
                 position: relative;
                 width: 50%;
                 height: 2px;
-                background-color: $colorExtraLightGray;
+                background-color: $colorMoreLightGray;
                 border-radius: $borderRadiusL;
                 margin: 0 auto;
 
@@ -131,6 +131,7 @@
                 }
             }
 
+        
 
         }
     }
@@ -181,4 +182,11 @@
     }
 
     .login-affiliate__card--information-otp-resend {}
+}
+
+.login-affiliate__card--information-person {
+    display: flex;
+    flex-direction: column;
+    gap: $gapM;
+    padding: 12px;
 }

@@ -2,7 +2,15 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import useWindowDimensions from "../../helper/useWindowDimensions";
-import { Drawer, Layout, Menu, Button, theme, FloatButton, ConfigProvider } from "antd";
+import {
+  Drawer,
+  Layout,
+  Menu,
+  Button,
+  theme,
+  FloatButton,
+  ConfigProvider,
+} from "antd";
 import Sidebar from "../Slidebar";
 import SidebarAffiliate from "../SlidebarAffiliate/indes";
 import Admin from "../admin";
@@ -12,7 +20,7 @@ import Affiliate from "../affiliate";
 import icons from "../../utils/icons";
 
 const { IoLogoFacebook, IoLogoYoutube, IoLogoTiktok } = icons;
-const { Header, Footer,Sider, Content } = Layout; // Set content có trong Layout, ở đây là gồm 3 phần Header, Thanh Sider, Content
+const { Header, Footer, Sider, Content } = Layout; // Set content có trong Layout, ở đây là gồm 3 phần Header, Thanh Sider, Content
 
 const MainAffiliate = () => {
   const { width } = useWindowDimensions(); // Lấy độ rộng của màn hình hiển thị
@@ -34,11 +42,11 @@ const MainAffiliate = () => {
   };
   /* ~~~ Use effect ~~~ */
   // 1
-//   useEffect(() => {
-//     dispatch(permissionAction.permissionRequest({ navigate: navigate }));
-//     dispatch(getProvinceAction.getProvinceRequest());
-//     dispatch(getUserAction.getUserRequest());
-//   }, [dispatch, navigate]);
+  //   useEffect(() => {
+  //     dispatch(permissionAction.permissionRequest({ navigate: navigate }));
+  //     dispatch(getProvinceAction.getProvinceRequest());
+  //     dispatch(getUserAction.getUserRequest());
+  //   }, [dispatch, navigate]);
   // 2
   useEffect(() => {
     // Auto close sidebar
@@ -93,10 +101,9 @@ const MainAffiliate = () => {
             {/*Các navigate page trong admin */}
             <Affiliate />
           </Content>
-        
         </Layout>
       </Layout>
     </ConfigProvider>
   );
-}
+};
 export default MainAffiliate;

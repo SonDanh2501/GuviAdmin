@@ -58,6 +58,8 @@ const InputTextCustom = (props) => {
     valueUnit, // Phân vùng điện thoại
     setSearchValue, // Lấy giá trị search viết trên component truyền ngược lại component cha
     isPassword, // Giá trị text password (che dấu *)
+    describe, // Giá trị mô tả hỗ trợ
+
   } = props;
   // Lấy district (quận/huyện) từ giá trị province có được
   const tempDistrictArray = province?.find(
@@ -678,6 +680,7 @@ const InputTextCustom = (props) => {
   // 4. Lấy giá trị điện thoại đúng khi phân vùng (sau này sẽ cần làm lại đúng hơn, đang làm đỡ cho một mã vùng duy nhất là +84)
   useEffect(() => {
     if (type === "textValue") {
+      // const formattedPhone = phone.replace(/(\d{4})(\d{3})(\d{3})/, "$1-$2-$3");
       if (valueWithUnit && valueWithUnit?.includes(valueUnit)) {
         setValueWithUnit(value);
       } else {
@@ -711,6 +714,9 @@ const InputTextCustom = (props) => {
             {placeHolder}{" "}
             {required && <span className="form-field__label--required">*</span>}
           </label>
+          <>
+            <span>{describe}</span>
+          </>
         </>
       )}
       {/* File Field  */}

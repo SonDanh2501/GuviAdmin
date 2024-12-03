@@ -10,6 +10,7 @@ export const loginAction = createActions({
   loginFailure: (err) => err,
 });
 
+
 export const logoutAction = createActions({
   logoutRequest: (payload) => payload,
   logoutSuccess: (payload) => payload,
@@ -39,3 +40,10 @@ export const loginAffiliateAction = createActions({
   loginAffiliateSuccess: (payload) => payload,
   loginAffiliateFailure: (err) => err,
 });
+
+export const loginAffiliateWithOTPAction = createActions({
+  loginAffiliateWithOTPRequest: (payload) => payload,
+  loginAffiliateWithOTPSuccess: (payload) => payload,
+  loginAffiliateWithOTPFailure: (err) => err,
+});
+

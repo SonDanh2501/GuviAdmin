@@ -10,11 +10,8 @@ import "./App.scss";
 import AuthAffiliate from "../layout/authAffiliate.js";
 import MainAffiliate from "../layout/MainAffiliate/index.jsx";
 
-// const port =  process.env.REACT_APP_PORT;
-
 const App = () => {
   const currentPort = window.location.port;
-
   const isCheckLogin = useSelector(getIsCheckLogin);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -23,7 +20,10 @@ const App = () => {
     /*Check nếu chưa đăng nhập thì navigate tới trang login */
   }
   useEffect(() => {
-    if (!isCheckLogin && +currentPort !== 3000) {
+    if (!isCheckLogin && +currentPort === 3000) {
+      navigate("/auth/login-affiliate");
+    }
+    if (!isCheckLogin && +currentPort === 3001) {
       navigate("/auth/login");
     }
     dispatch(getServiceAction.getServiceRequest());
@@ -31,14 +31,12 @@ const App = () => {
 
   return (
     <>
-      {+currentPort === 3000 ? (
-        <AuthAffiliate />
-      ) : // <MainAffiliate />
-      !isCheckLogin ? (
-        <Auth />
+      {+currentPort === 3000 && isCheckLogin ? (
+        <MainAffiliate />
       ) : (
-        <Main />
+        <AuthAffiliate />
       )}
+      {+currentPort === 3001 && isCheckLogin ? <Main /> : <Auth />}
     </>
   );
 };
