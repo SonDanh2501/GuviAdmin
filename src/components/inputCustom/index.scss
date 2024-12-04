@@ -33,9 +33,19 @@
         font-family: $fontFamily;
 
 
+        &.have-describe {
+            top: 34%;
+        }
+
         .form-field__label--required {
             color: #EF4444;
         }
+    }
+
+    .form-field__describe {
+        width: 100%;
+        font-size: $textFontSizeM;
+        color: $colorLightGray;
     }
 
     .form-field__hide-image {

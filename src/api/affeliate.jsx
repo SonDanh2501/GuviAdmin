@@ -11,3 +11,7 @@ export const registerPhoneAffiliateApi = (payload) => {
 export const checkOTPAffiliateApi = (payload) => {
     return axiosClient.post("api/customer_web/auth/check_otp", payload);
 }
+
+export const registerAffiliateApi = (payload) => {
+    return axiosClient.post("api/customer_web/auth/register", payload);
+}

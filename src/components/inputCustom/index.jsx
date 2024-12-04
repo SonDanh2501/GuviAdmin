@@ -710,13 +710,14 @@ const InputTextCustom = (props) => {
             value={value}
             onChange={onChange}
           />
-          <label htmlFor=" " className="form-field__label">
+          <label
+            htmlFor=" "
+            className={`form-field__label ${describe && "have-describe"}`}
+          >
             {placeHolder}{" "}
             {required && <span className="form-field__label--required">*</span>}
           </label>
-          <>
-            <span>{describe}</span>
-          </>
+          <span className="form-field__describe">{describe}</span>
         </>
       )}
       {/* File Field  */}

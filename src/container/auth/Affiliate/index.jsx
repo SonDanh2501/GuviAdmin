@@ -3,9 +3,8 @@ import "./index.scss";
 import InputTextCustom from "../../../components/inputCustom";
 import ButtonCustom from "../../../components/button";
 import {
-  loginAffiliateApi,
   registerPhoneAffiliateApi,
-  checkOTPAffiliateApi,
+  registerAffiliateApi
 } from "../../../api/affeliate";
 import { useDispatch } from "react-redux";
 import logo from "../../../assets/images/Logo.svg";
@@ -30,6 +29,7 @@ const LoginAffiliate = () => {
   const [valuePassWord, setValuePassWord] = useState("");
   const [isSignUp, setIsSignUp] = useState(false);
   const [showModalSignUp, setShowModalSignUp] = useState(false);
+  // const [showModalRegisterInformation, set]
   const [secondsLeft, setSecondsLeft] = useState(60);
   const [isRunning, setIsRunning] = useState(false);
   const [limitOTP, setLimitOTP] = useState(10);
@@ -81,7 +81,7 @@ const LoginAffiliate = () => {
       });
     }
   };
-  // 3. Hàm check mã OTP
+  // 3. Hàm check mã OTP, nếu pass thì lưu lại token vào cookie
   const handleCheckOTP = async (payload) => {
     try {
       dispatch(loadingAction.loadingRequest(true));
@@ -99,6 +99,19 @@ const LoginAffiliate = () => {
       });
     }
   };
+  // 4. Hàm tạo tài khoản mới với những thông tin đã nhập
+  const handleRegisterAccount = async (payload) => {
+    try {
+      const res = await registerAffiliateApi(payload);
+
+    }
+    catch (err) {
+      errorNotify({
+        message: message.err,
+      });
+    }
+
+  }
 
   const handleCancel = () => {
     setShowModalSignUp(false);
@@ -268,7 +281,7 @@ const LoginAffiliate = () => {
           {/* Modal nhập thông tin cá nhân */}
           <Modal
             title="Nhập thông tin cá nhân"
-            onCancel={() => setIsPassOtp(false)}
+            // onCancel={() => {set}}
             onOk={() =>
               handleCheckOTP({
                 phone: valuePhoneNumber,
@@ -283,6 +296,13 @@ const LoginAffiliate = () => {
             <div className="login-affiliate__card--information-person">
               <InputTextCustom
                 type="text"
+                value={valueName}
+                placeHolder="Họ và tên"
+                onChange={(e) => setValueName(e.target.value)}
+                required={true}
+              />
+              <InputTextCustom
+                type="text"
                 value={valuePassWordSave}
                 placeHolder="Mật khẩu"
                 onChange={(e) => setValuePassWordSave(e.target.value)}
@@ -292,16 +312,9 @@ const LoginAffiliate = () => {
               <InputTextCustom
                 type="text"
                 value={valueName}
-                placeHolder="Họ và tên"
-                onChange={(e) => setValueName(e.target.value)}
-                required={true}
-              />
-              <InputTextCustom
-                type="text"
-                value={valueName}
                 placeHolder="Mã giới thiệu"
                 onChange={(e) => setValueName(e.target.value)}
-                describe = {"Nhập mã giới thiệu để nhận ngay voucher giảm 25.000đ"}
+                describe="Nhập mã của người giới thiệu"
               />
             </div>
           </Modal>

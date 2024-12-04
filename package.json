@@ -1,3 +1,4 @@
+
 {
   "name": "client",
   "version": "0.1.0",
@@ -16,8 +17,10 @@
     "antd": "~5.16.4",
     "axios": "~0.21.1",
     "bootstrap": "~4.6.0",
+    "cross-env": "~7.0.3",
     "crypto-js": "~4.2.0",
     "date-fns": "~2.29.3",
+    "dotenv-cli": "~7.4.4",
     "draft-js": "~0.11.7",
     "file-saver": "~2.0.5",
     "filereader": "~0.10.3",
@@ -58,10 +61,10 @@
     "yup": "~0.32.11"
   },
   "scripts": {
-    "start": "concurrently \"yarn start:3000\" \"yarn start:3001\"",
-    "start:3000": "set PORT=3000 && react-scripts start",
-    "start:3001": "set PORT=3001 && react-scripts start",
-    "build": "react-scripts build",
+    "start:affiliate": "dotenv -e .env cross-env PORT=$REACT_APP_PORT_AFFILIATE react-scripts start", 
+    "start:main": "dotenv -e .env cross-env PORT=$REACT_APP_PORT_MAIN react-scripts start", 
+    "start:all": "concurrently \"dotenv -e .env cross-env PORT=$REACT_APP_PORT_AFFILIATE react-scripts start\" \"dotenv -e .env cross-env PORT=$REACT_APP_PORT_MAIN react-scripts start\"",
+    "build": "cross-env REACT_APP_PORT_AFFILIATE=$REACT_APP_PORT_AFFILIATE react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
