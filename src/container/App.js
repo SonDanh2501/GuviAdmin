@@ -20,10 +20,14 @@ const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!isCheckLogin && currentPort === AffiliatePort) {
-      navigate("/auth/login-affiliate");
-    }
-    if (!isCheckLogin && currentPort === MainPort) {
+    // if (!isCheckLogin && currentPort === AffiliatePort) {
+    //   navigate("/auth/login-affiliate");
+    // }
+    // if (!isCheckLogin && currentPort === MainPort) {
+    //   navigate("/auth/login");
+    // }
+
+    if (!isCheckLogin) {
       navigate("/auth/login");
     }
     dispatch(getServiceAction.getServiceRequest());
@@ -31,12 +35,13 @@ const App = () => {
 
   return (
     <>
-      {currentPort === AffiliatePort && isCheckLogin ? (
+      {/* {currentPort === AffiliatePort && isCheckLogin ? (
         <MainAffiliate />
       ) : (
         <AuthAffiliate />
       )}
-      {currentPort === MainPort && isCheckLogin ? <Main /> : <Auth />}
+      {currentPort === MainPort && isCheckLogin ? <Main /> : <Auth />} */}
+      {isCheckLogin ? <Main /> : <Auth />}
     </>
   );
 };

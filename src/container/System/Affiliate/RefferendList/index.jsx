@@ -22,7 +22,7 @@ const {
   IoPeople,
   IoCash,
   IoReader,
-  IoCopy
+  IoCopy,
 } = icons;
 
 const RefferendList = () => {
@@ -34,66 +34,80 @@ const RefferendList = () => {
           {/* Tổng người giới thiệu */}
           <div className="refferend-list-affiliate__content--left-card card-shadow">
             <div className="refferend-list-affiliate__content--left-card-content">
-              {/* Header */}
-              <span className="refferend-list-affiliate__content--left-card-content-header">
-                Tổng người giới thiệu
-              </span>
-              {/* Đơn vị */}
-              <span className="refferend-list-affiliate__content--left-card-content-unit">
-                10 <span className="label">người</span>
-              </span>
-              {/* Tháng trước */}
-              <span className="refferend-list-affiliate__content--left-card-content-previous">
-                30 ngày trước: 2 người
-              </span>
-            </div>
-            <div>
-              <div className="refferend-list-affiliate__content--left-icon blue">
+              {/* label và value */}
+              <div className="refferend-list-affiliate__content--left-card-content-describe">
+                <span className="refferend-list-affiliate__content--left-card-content-describe-label">
+                  Tổng người giới thiệu
+                </span>
+                <span className="refferend-list-affiliate__content--left-card-content-describe-value">
+                  10 <span className="unit">người</span>
+                </span>
+              </div>
+              {/* icon */}
+              <div className="refferend-list-affiliate__content--left-card-content-icon blue">
                 <IoPeople />
               </div>
+            </div>
+            {/* So với 30 ngày trước */}
+            <div className="refferend-list-affiliate__content--left-card-previous">
+              <span>30 ngày trước: 2 người</span>
             </div>
           </div>
           {/* Tổng tiền nhận được */}
           <div className="refferend-list-affiliate__content--left-card card-shadow">
             <div className="refferend-list-affiliate__content--left-card-content">
-              {/* Header */}
-              <span className="refferend-list-affiliate__content--left-card-content-header">
-                Tổng tiền
-              </span>
-              {/* Đơn vị */}
-              <span className="refferend-list-affiliate__content--left-card-content-unit">
-                150.000 <span className="label">VNĐ</span>
-              </span>
-              {/* Tháng trước */}
-              <span className="refferend-list-affiliate__content--left-card-content-previous">
-                30 ngày trước: 50.000 VNĐ
-              </span>
-            </div>
-            <div>
-              <div className="refferend-list-affiliate__content--left-icon green">
+              {/* label và value */}
+              <div className="refferend-list-affiliate__content--left-card-content-describe">
+                <span className="refferend-list-affiliate__content--left-card-content-describe-label">
+                  Tổng tiền
+                </span>
+                <span className="refferend-list-affiliate__content--left-card-content-describe-value">
+                  150.000 <span className="unit">VNĐ</span>
+                </span>
+              </div>
+              {/* icon */}
+              <div className="refferend-list-affiliate__content--left-card-content-icon green">
                 <IoCash />
               </div>
+            </div>
+            {/* So với 30 ngày trước */}
+            <div className="refferend-list-affiliate__content--left-card-previous">
+              <span>30 ngày trước: 50.000 VNĐ</span>
             </div>
           </div>
           {/* Tổng đơn hoàn thành */}
           <div className="refferend-list-affiliate__content--left-card card-shadow">
             <div className="refferend-list-affiliate__content--left-card-content">
-              {/* Header */}
-              <span className="refferend-list-affiliate__content--left-card-content-header">
-                Tổng đơn giới thiệu
-              </span>
-              {/* Đơn vị */}
-              <span className="refferend-list-affiliate__content--left-card-content-unit">
-                15 <span className="label">đơn</span>
-              </span>
-              {/* Tháng trước */}
-              <span className="refferend-list-affiliate__content--left-card-content-previous">
-                30 ngày trước: 3 đơn
-              </span>
-            </div>
-            <div>
-              <div className="refferend-list-affiliate__content--left-icon yellow">
+              {/* label và value */}
+              <div className="refferend-list-affiliate__content--left-card-content-describe">
+                <span className="refferend-list-affiliate__content--left-card-content-describe-label">
+                  Tổng đơn giới thiệu
+                </span>
+                <span className="refferend-list-affiliate__content--left-card-content-describe-value">
+                  15 <span className="unit">đơn</span>
+                </span>
+              </div>
+              {/* icon */}
+              <div className="refferend-list-affiliate__content--left-card-content-icon yellow">
                 <IoReader />
+              </div>
+            </div>
+            {/* So với 30 ngày trước */}
+            <div className="refferend-list-affiliate__content--left-card-previous">
+              <span>30 ngày trước: 2 đơn</span>
+            </div>
+          </div>
+          {/* Mã giới thiệu không phải mã link */}
+          <div className="refferend-list-affiliate__content--left-card no-padding card-shadow">
+            <div className="refferend-list-affiliate__content--left-card-header">
+              <span>Cách giới thiệu</span>
+            </div>
+            <div className="refferend-list-affiliate__content--left-card-body">
+              <div className="refferend-list-affiliate__content--left-card-body-steps">
+                <span className="refferend-list-affiliate__content--left-card-body-steps-circle ">
+                  1
+                </span>
+                <span className="">Chia sẻ đường link của bạn</span>
               </div>
             </div>
           </div>
@@ -139,7 +153,7 @@ const RefferendList = () => {
             </div>
             {selectTab === 0 ? (
               <>
-                {Array.from({ length: 5 }).map((_, index) => (
+                {Array.from({ length: 10 }).map((_, index) => (
                   <div className="refferend-list-affiliate__content--middle-content-history-receiving">
                     {/* Left */}
                     <div className="refferend-list-affiliate__content--middle-content-history-receiving-left">
@@ -210,7 +224,7 @@ const RefferendList = () => {
               </>
             ) : selectTab === 1 ? (
               <>
-                {Array.from({ length: 5 }).map((_, index) => (
+                {Array.from({ length: 10 }).map((_, index) => (
                   <div className="refferend-list-affiliate__content--middle-content-deposit-withdraw">
                     {/* Left */}
                     <div className="refferend-list-affiliate__content--middle-content-deposit-withdraw-left">

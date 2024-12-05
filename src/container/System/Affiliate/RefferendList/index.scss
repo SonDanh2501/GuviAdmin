@@ -12,13 +12,13 @@
         display: flex;
         padding: 16px;
         gap: $gapL;
-        width: 90%;
+        width: 95%;
 
         .refferend-list-affiliate__content--left {
             display: flex;
             flex-direction: column;
             gap: $gapL;
-            width: 15%;
+            width: 20%;
             height: fit-content;
             // background-color: yellow;
 
@@ -52,40 +52,113 @@
 
             .refferend-list-affiliate__content--left-card {
                 display: flex;
-                justify-content: space-between;
-                background-color: $colorWhite;
+                flex-direction: column;
                 padding: 12px;
+                background-color: $colorWhite;
                 border-radius: $borderRadiusL;
+                
+                &.no-padding {
+                    padding: 0px;
+                }
 
-                .refferend-list-affiliate__content--left-card-content {
+                .refferend-list-affiliate__content--left-card-header {
                     display: flex;
-                    flex-direction: column;
-                    gap: $gapXS;
+                    align-items: center;
+                    justify-content: space-between;
+                    border-bottom: 2px solid $colorExtraLightGray;
+                    padding: 12px 12px;
 
-                    .refferend-list-affiliate__content--left-card-content-header {
-                        font-weight: $fontWeightXL;
+                    span {
                         font-size: $textFontSizeM;
+                        font-weight: $fontWeightXL;
                         color: $colorBlack;
                     }
+                }
 
-                    .refferend-list-affiliate__content--left-card-content-unit {
-                        font-weight: $fontWeightXL;
-                        font-size: $textFontSize3XL;
-                        color: $colorBlack;
+                .refferend-list-affiliate__content--left-card-body {
+                    display: flex;
+                    flex-direction: column;
+                    padding: 12px;
 
-                        .label {
-                            font-weight: $fontWeightL;
+                    .refferend-list-affiliate__content--left-card-body-steps {
+                        display: flex;
+                        align-items: center;
+
+                        .refferend-list-affiliate__content--left-card-body-steps-circle {
+                            width: 8px;
+                            height: 8px;
+                            border-radius: $borderRadiusFull;
+                            background-color: $colorBlue;
+
+                        }
+                    }
+                }
+                .refferend-list-affiliate__content--left-card-content {
+                    display: flex;
+                    justify-content: space-between;
+
+                    .refferend-list-affiliate__content--left-card-content-describe {
+                        display: flex;
+                        flex-direction: column;
+                        gap: $gapXS;
+
+                        .refferend-list-affiliate__content--left-card-content-describe-label {
                             font-size: $textFontSizeM;
+                            font-weight: $fontWeightXL;
                             color: $colorBlack;
+                        }
+
+                        .refferend-list-affiliate__content--left-card-content-describe-value {
+                            font-size: $textFontSize3XL;
+                            font-weight: $fontWeightXL;
+                            color: $colorBlack;
+                            .unit {
+                                font-size: $textFontSizeM;
+                                font-weight: $fontWeightL;
+                                color: $colorBlack;
+                            }
                         }
                     }
 
-                    .refferend-list-affiliate__content--left-card-content-previous {
-                        font-weight: $fontWeightL;
+                    .refferend-list-affiliate__content--left-card-content-icon {
+                        padding: 8px;
+                        font-size: $textFontSize3XL;
+                        border-radius: $borderRadiusFull;
+                        width: fit-content;
+                        height: fit-content;
+
+                        &.blue {
+                            color: $colorBlue;
+                            background-color: $colorExtraLightBlue;
+                        }
+        
+        
+                        &.red {
+                            color: $colorRed;
+                            background-color: $colorExtraLightRed;
+                        }
+        
+                        &.yellow {
+                            color: $colorYellow;
+                            background-color: $colorExtraLightYellow;
+                        }
+        
+        
+                        &.green {
+                            color: $colorGreen;
+                            background-color: $colorExtraLightGreen;
+                        }
+                    }
+                }
+
+                .refferend-list-affiliate__content--left-card-previous {
+                    span {
                         font-size: $textFontSizeM;
+                        font-weight: $fontWeightL;
                         color: $colorLightGray;
                     }
                 }
+
             }
 
             .refferend-list-affiliate__content--left-icon {
@@ -665,7 +738,7 @@
         }
 
         .refferend-list-affiliate__content--right {
-            width: 25%;
+            width: 20%;
             height: 100px;
             display: flex;
             flex-direction: column;
@@ -792,6 +865,7 @@
                         display: flex;
                         flex-direction: column;
                         cursor: pointer;
+
                         .refferend-list-affiliate__content--right-share-content-share-header {
                             display: flex;
                             gap: $gapS;
@@ -878,51 +952,51 @@
         justify-content: center;
         height: fit-content;
         width: 100%;
-    
+
         .refferend-list-affiliate__content {
             display: flex;
             flex-direction: column;
             padding: 16px;
             gap: $gapL;
             width: 100%;
-    
+
             .refferend-list-affiliate__content--left {
                 display: flex;
                 // flex-direction: column;
                 gap: $gapL;
                 width: 100%;
                 height: fit-content;
-            
+
                 .refferend-list-affiliate__content--left-card {
                     display: flex;
                     justify-content: space-between;
                     background-color: $colorWhite;
                     padding: 12px;
                     border-radius: $borderRadiusL;
-    
+
                     .refferend-list-affiliate__content--left-card-content {
                         display: flex;
                         flex-direction: column;
                         gap: $gapXS;
-    
+
                         .refferend-list-affiliate__content--left-card-content-header {
-                            font-weight: $fontWeightXL;
+                            font-weight: $fontWeightL;
                             font-size: $textFontSizeM;
                             color: $colorBlack;
                         }
-    
+
                         .refferend-list-affiliate__content--left-card-content-unit {
                             font-weight: $fontWeightXL;
                             font-size: $textFontSize3XL;
                             color: $colorBlack;
-    
+
                             .label {
                                 font-weight: $fontWeightL;
                                 font-size: $textFontSizeM;
                                 color: $colorBlack;
                             }
                         }
-    
+
                         .refferend-list-affiliate__content--left-card-content-previous {
                             font-weight: $fontWeightL;
                             font-size: $textFontSizeM;
@@ -930,48 +1004,48 @@
                         }
                     }
                 }
-    
+
                 .refferend-list-affiliate__content--left-icon {
                     padding: 8px;
                     font-size: $textFontSize3XL;
                     border-radius: $borderRadiusFull;
-    
+
                     &.blue {
                         color: $colorBlue;
                         background-color: $colorExtraLightBlue;
                     }
-    
-    
+
+
                     &.red {
                         color: $colorRed;
                         background-color: $colorExtraLightRed;
                     }
-    
+
                     &.yellow {
                         color: $colorYellow;
                         background-color: $colorExtraLightYellow;
                     }
-    
-    
+
+
                     &.green {
                         color: $colorGreen;
                         background-color: $colorExtraLightGreen;
                     }
                 }
-    
+
             }
-    
+
             .refferend-list-affiliate__content--middle {
                 display: flex;
                 flex-direction: column;
                 gap: $gapL;
                 width: 100%;
                 height: fit-content;
-    
+
                 .refferend-list-affiliate__content--middle-content {
                     border-radius: $borderRadiusL;
                     background-color: $colorWhite;
-    
+
                     .refferend-list-affiliate__content--middle-content-header {
                         display: flex;
                         flex-direction: column;
@@ -980,17 +1054,17 @@
                         gap: $gapS;
                         border-bottom: 2px solid $colorExtraLightGray;
                         padding: 12px;
-    
+
                         span {
                             font-size: $textFontSizeM;
                             font-weight: $fontWeightXL;
                             color: $colorBlack;
                         }
-    
+
                         .refferend-list-affiliate__content--middle-content-header-options {
                             display: flex;
                             gap: $gapS;
-    
+
                             .refferend-list-affiliate__content--middle-content-header-options-tab {
                                 padding: 6px 8px;
                                 background-color: $colorMoreLightGray;
@@ -998,7 +1072,7 @@
                                 border-radius: $borderRadiusL;
                                 cursor: pointer;
                                 transition: 0.3s all ease;
-    
+
                                 &.activated {
                                     background-color: $colorPurple;
                                     color: $colorWhite;
@@ -1006,11 +1080,11 @@
                             }
                         }
                     }
-    
+
                     .refferend-list-affiliate__content--middle-content-history-receiving {
                         display: flex;
                         padding: 16px;
-    
+
                         .refferend-list-affiliate__content--middle-content-history-receiving-left {
                             width: 20%;
                             display: flex;
@@ -1018,12 +1092,12 @@
                             align-items: center;
                             padding-top: 1px;
                             background-color: yello;
-    
+
                             .refferend-list-affiliate__content--middle-content-history-receiving-left-time {
                                 font-size: $textFontSizeM;
                                 font-weight: $fontWeightXL;
                             }
-    
+
                             .refferend-list-affiliate__content--middle-content-history-receiving-left-date {
                                 font-size: $textFontSizeM;
                                 font-weight: $fontWeightL;
@@ -1032,46 +1106,46 @@
                                 text-transform: capitalize;
                             }
                         }
-    
+
                         .refferend-list-affiliate__content--middle-content-history-receiving-middle {
                             width: 10%;
                             align-items: center;
                             display: flex;
                             flex-direction: column;
                             margin-bottom: -32px;
-    
+
                             .refferend-list-affiliate__content--middle-content-history-receiving-middle-icon {
                                 padding: 8px 8px;
                                 width: fit-content;
                                 height: fit-content;
                                 border-radius: $borderRadiusFull;
-    
+
                                 &.up {
                                     background-color: $colorExtraLightGreen;
                                 }
-    
+
                                 &.down {
                                     background-color: $colorExtraLightRed;
                                 }
-    
+
                                 &.setting {
                                     background-color: $colorExtraLightBlue;
                                 }
                             }
-    
+
                             .refferend-list-affiliate__content--middle-content-history-receiving-middle-line {
                                 width: 2px;
                                 height: 100%;
                                 background-color: $colorExtraLightGray;
                             }
                         }
-    
+
                         .refferend-list-affiliate__content--middle-content-history-receiving-right {
                             display: flex;
                             flex-direction: column;
                             align-items: center;
                             width: 75%;
-    
+
                             .refferend-list-affiliate__content--middle-content-history-receiving-right-top {
                                 display: flex;
                                 justify-content: space-between;
@@ -1081,17 +1155,17 @@
                                 margin-left: 8px;
                                 width: 100%;
                                 min-height: 55px;
-    
+
                                 .refferend-list-affiliate__content--middle-content-history-receiving-right-top-title {
                                     font-size: $textFontSizeM;
                                     font-weight: $fontWeightXL;
                                 }
-    
+
                                 .refferend-list-affiliate__content--middle-content-history-receiving-right-top-money {
                                     display: flex;
                                     align-items: center;
                                     gap: $gapXS;
-    
+
                                     .refferend-list-affiliate__content--middle-content-history-receiving-right-top-money-title {
                                         font-size: $textFontSizeM;
                                         font-weight: $fontWeightL;
@@ -1099,13 +1173,13 @@
                                         opacity: $opacityM;
                                     }
                                 }
-    
+
                                 .refferend-list-affiliate__content--middle-content-history-receiving-right-top-transiction {
                                     display: flex;
                                     flex-direction: column;
                                     justify-content: space-between;
                                     align-items: end;
-    
+
                                     // padding-top: 4px;
                                     .refferend-list-affiliate__content--middle-content-history-receiving-right-top-transiction-number {
                                         font-size: $textFontSizeM;
@@ -1114,23 +1188,23 @@
                                         width: fit-content;
                                         border-radius: $borderRadiusL;
                                         white-space: nowrap;
-    
+
                                         &.up {
                                             color: $colorGreen;
                                             background-color: $colorExtraLightGreen;
                                         }
-    
+
                                         &.down {
                                             color: $colorRed;
                                             background-color: $colorExtraLightRed;
                                         }
                                     }
-    
+
                                     .refferend-list-affiliate__content--middle-content-history-receiving-right-top-transiction-detail {
                                         display: flex;
                                         align-items: center;
                                         gap: $gapXS;
-    
+
                                         .refferend-list-affiliate__content--middle-content-history-receiving-right-top-transiction-detail-label {
                                             display: flex;
                                             align-items: center;
@@ -1138,16 +1212,16 @@
                                             transition: all 0.3s ease;
                                             text-decoration: none;
                                             cursor: pointer;
-    
+
                                             &:hover {
                                                 color: $colorBlue
                                             }
                                         }
-    
+
                                     }
                                 }
                             }
-    
+
                             .refferend-list-affiliate__content--middle-content-history-receiving-right-bottom {
                                 display: grid;
                                 grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -1168,20 +1242,20 @@
                                 /* Ensures content is hidden when height is 0 */
                                 opacity: 1;
                                 /* Default opacity */
-    
+
                                 .refferend-list-affiliate__content--middle-content-history-receiving-right-bottom-item {
                                     display: flex;
                                     align-items: center;
-    
+
                                     .refferend-list-affiliate__content--middle-content-history-receiving-right-bottom-item-label {
                                         margin-right: 4px;
                                     }
-    
+
                                     .refferend-list-affiliate__content--middle-content-history-receiving-right-bottom-item-link {
                                         color: $colorBlue;
                                     }
                                 }
-    
+
                                 &.hidden {
                                     height: 0;
                                     opacity: 0;
@@ -1190,11 +1264,11 @@
                             }
                         }
                     }
-    
+
                     .refferend-list-affiliate__content--middle-content-deposit-withdraw {
                         display: flex;
                         padding: 16px;
-    
+
                         .refferend-list-affiliate__content--middle-content-deposit-withdraw-left {
                             width: 20%;
                             display: flex;
@@ -1202,12 +1276,12 @@
                             align-items: center;
                             padding-top: 1px;
                             background-color: yello;
-    
+
                             .refferend-list-affiliate__content--middle-content-deposit-withdraw-left-time {
                                 font-size: $textFontSizeM;
                                 font-weight: $fontWeightXL;
                             }
-    
+
                             .refferend-list-affiliate__content--middle-content-deposit-withdraw-left-date {
                                 font-size: $textFontSizeM;
                                 font-weight: $fontWeightL;
@@ -1216,46 +1290,46 @@
                                 text-transform: capitalize;
                             }
                         }
-    
+
                         .refferend-list-affiliate__content--middle-content-deposit-withdraw-middle {
                             width: 10%;
                             align-items: center;
                             display: flex;
                             flex-direction: column;
                             margin-bottom: -32px;
-    
+
                             .refferend-list-affiliate__content--middle-content-deposit-withdraw-middle-icon {
                                 padding: 8px 8px;
                                 width: fit-content;
                                 height: fit-content;
                                 border-radius: $borderRadiusFull;
-    
+
                                 &.up {
                                     background-color: $colorExtraLightGreen;
                                 }
-    
+
                                 &.down {
                                     background-color: $colorExtraLightRed;
                                 }
-    
+
                                 &.setting {
                                     background-color: $colorExtraLightBlue;
                                 }
                             }
-    
+
                             .refferend-list-affiliate__content--middle-content-deposit-withdraw-middle-line {
                                 width: 2px;
                                 height: 100%;
                                 background-color: $colorExtraLightGray;
                             }
                         }
-    
+
                         .refferend-list-affiliate__content--middle-content-deposit-withdraw-right {
                             display: flex;
                             flex-direction: column;
                             align-items: center;
                             width: 75%;
-    
+
                             .refferend-list-affiliate__content--middle-content-deposit-withdraw-right-top {
                                 display: flex;
                                 justify-content: space-between;
@@ -1265,17 +1339,17 @@
                                 margin-left: 8px;
                                 width: 100%;
                                 min-height: 55px;
-    
+
                                 .refferend-list-affiliate__content--middle-content-deposit-withdraw-right-top-title {
                                     font-size: $textFontSizeM;
                                     font-weight: $fontWeightXL;
                                 }
-    
+
                                 .refferend-list-affiliate__content--middle-content-deposit-withdraw-right-top-money {
                                     display: flex;
                                     align-items: center;
                                     gap: $gapXS;
-    
+
                                     .refferend-list-affiliate__content--middle-content-deposit-withdraw-right-top-money-title {
                                         font-size: $textFontSizeM;
                                         font-weight: $fontWeightL;
@@ -1283,13 +1357,13 @@
                                         opacity: $opacityM;
                                     }
                                 }
-    
+
                                 .refferend-list-affiliate__content--middle-content-deposit-withdraw-right-top-transiction {
                                     display: flex;
                                     flex-direction: column;
                                     justify-content: space-between;
                                     align-items: end;
-    
+
                                     // padding-top: 4px;
                                     .refferend-list-affiliate__content--middle-content-deposit-withdraw-right-top-transiction-number {
                                         font-size: $textFontSizeM;
@@ -1298,23 +1372,23 @@
                                         width: fit-content;
                                         border-radius: $borderRadiusL;
                                         white-space: nowrap;
-    
+
                                         &.up {
                                             color: $colorGreen;
                                             background-color: $colorExtraLightGreen;
                                         }
-    
+
                                         &.down {
                                             color: $colorRed;
                                             background-color: $colorExtraLightRed;
                                         }
                                     }
-    
+
                                     .refferend-list-affiliate__content--middle-content-deposit-withdraw-right-top-transiction-detail {
                                         display: flex;
                                         align-items: center;
                                         gap: $gapXS;
-    
+
                                         .refferend-list-affiliate__content--middle-content-deposit-withdraw-right-top-transiction-detail-label {
                                             display: flex;
                                             align-items: center;
@@ -1322,16 +1396,16 @@
                                             transition: all 0.3s ease;
                                             text-decoration: none;
                                             cursor: pointer;
-    
+
                                             &:hover {
                                                 color: $colorBlue
                                             }
                                         }
-    
+
                                     }
                                 }
                             }
-    
+
                             .refferend-list-affiliate__content--middle-content-deposit-withdraw-right-bottom {
                                 display: grid;
                                 grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -1352,20 +1426,20 @@
                                 /* Ensures content is hidden when height is 0 */
                                 opacity: 1;
                                 /* Default opacity */
-    
+
                                 .refferend-list-affiliate__content--middle-content-deposit-withdraw-right-bottom-item {
                                     display: flex;
                                     align-items: center;
-    
+
                                     .refferend-list-affiliate__content--middle-content-deposit-withdraw-right-bottom-item-label {
                                         margin-right: 4px;
                                     }
-    
+
                                     .refferend-list-affiliate__content--middle-content-deposit-withdraw-right-bottom-item-link {
                                         color: $colorBlue;
                                     }
                                 }
-    
+
                                 &.hidden {
                                     height: 0;
                                     opacity: 0;
@@ -1374,13 +1448,13 @@
                             }
                         }
                     }
-    
+
                     .refferend-list-affiliate__content--middle-content-refferend-list {
                         display: flex;
                         flex-direction: column;
                         gap: $gapL;
                         padding: 16px;
-    
+
                         .refferend-list-affiliate__content--middle-content-refferend-list-person {
                             display: flex;
                             flex-direction: column;
@@ -1389,74 +1463,74 @@
                             border-radius: $borderRadiusL;
                             border: 2px solid $colorMoreLightGray;
                             gap: $gapS;
-    
+
                             .refferend-list-affiliate__content--middle-content-refferend-list-person-info {
                                 display: flex;
                                 justify-content: space-between;
                                 width: 100%;
-    
+
                                 .refferend-list-affiliate__content--middle-content-refferend-list-person-info-left {
                                     display: flex;
                                     align-items: center;
                                     gap: $gapS;
-    
+
                                     .refferend-list-affiliate__content--middle-content-refferend-list-person-info-left-avatar {
                                         height: 80px;
                                         width: 80px;
                                     }
-    
+
                                     .refferend-list-affiliate__content--middle-content-refferend-list-person-info-left-text {
                                         display: flex;
                                         flex-direction: column;
-    
+
                                         .refferend-list-affiliate__content--middle-content-refferend-list-person-info-left-text-name {
                                             font-weight: $fontWeightXL;
                                             font-size: $textFontSizeL;
                                             color: $colorBlack;
                                         }
-    
+
                                         .refferend-list-affiliate__content--middle-content-refferend-list-person-info-left-text-date {
                                             font-weight: $fontWeightL;
                                             font-size: $textFontSizeM;
                                             color: $colorLightGray;
-    
+
                                             .hight-light {
                                                 color: $colorBlack;
                                             }
                                         }
-    
+
                                         .refferend-list-affiliate__content--middle-content-refferend-list-person-info-left-text-total {
                                             display: flex;
                                             gap: $gapXS;
-    
+
                                             .value {
                                                 font-weight: $fontWeightL;
                                                 font-size: $textFontSizeM;
                                                 color: $colorLightGray;
                                             }
-    
+
                                         }
                                     }
                                 }
-    
+
                                 .refferend-list-affiliate__content--middle-content-refferend-list-person-info-right {
                                     span {
                                         padding: 8px;
-    
+
                                         border-radius: $borderRadiusL;
-    
+
                                         &.yellow {
                                             background-color: $colorExtraLightYellow;
                                             color: $colorYellow;
                                         }
-    
-    
+
+
                                         &.blue {
                                             background-color: $colorExtraLightBlue;
                                             color: $colorBlue;
                                         }
-    
-    
+
+
                                         &.green {
                                             background-color: $colorExtraLightGreen;
                                             color: $colorGreen;
@@ -1464,28 +1538,28 @@
                                     }
                                 }
                             }
-    
+
                             .refferend-list-affiliate__content--middle-content-refferend-list-person-progress-bar {
                                 display: flex;
                                 // background-color: red;
                                 width: 100%;
                                 gap: $gapL;
-    
+
                                 .refferend-list-affiliate__content--middle-content-refferend-list-person-progress-bar-container {
                                     flex: 1;
                                     height: 12px;
                                     background-color: $colorExtraLightGray;
                                     // border: 2px solid black;
                                     border-radius: $borderRadiusFull;
-    
+
                                     &.yellow {
                                         background-color: $colorYellow;
                                     }
-    
+
                                     &.blue {
                                         background-color: $colorBlue;
                                     }
-    
+
                                     &.green {
                                         background-color: $colorGreen;
                                     }
@@ -1493,13 +1567,13 @@
                             }
                         }
                     }
-    
+
                     .refferend-list-affiliate__content--middle-content-icon {
                         display: flex;
                         align-items: center;
                         justify-content: center;
                     }
-    
+
                     .refferend-list-affiliate__content--middle-content-pagination {
                         display: flex;
                         justify-content: space-between;
@@ -1508,14 +1582,14 @@
                     }
                 }
             }
-    
+
             .refferend-list-affiliate__content--right {
                 width: 100%;
                 height: fit-content;
                 display: flex;
                 flex-direction: column;
                 gap: $gapL;
-    
+
                 .refferend-list-affiliate__content--right-bank {
                     display: flex;
                     flex-direction: column;
@@ -1523,31 +1597,31 @@
                     background-color: $colorWhite ;
                     border-radius: $borderRadiusL;
                     padding: 12px 12px;
-    
+
                     .refferend-list-affiliate__content--right-bank-top {
                         display: flex;
                         justify-content: space-between;
-    
+
                         .refferend-list-affiliate__content--right-bank-top-left {
                             display: flex;
                             flex-direction: column;
                             gap: $gapXS;
-    
+
                             .refferend-list-affiliate__content--right-bank-top-left-current {
                                 font-size: $textFontSizeL;
                                 font-weight: $fontWeightL;
                             }
-    
+
                             .refferend-list-affiliate__content--right-bank-top-left-money {
                                 font-size: $textFontSize3XL;
                                 font-weight: $fontWeightXL;
                             }
                         }
-    
+
                         .refferend-list-affiliate__content--right-bank-top-right {
                             display: flex;
                             align-items: center;
-    
+
                             .refferend-list-affiliate__content--right-bank-top-right-withdraw {
                                 padding: 8px;
                                 background-color: $colorPurple;
@@ -1558,23 +1632,23 @@
                             }
                         }
                     }
-    
+
                     .refferend-list-affiliate__content--right-bank-line {
                         width: 100%;
                         height: 2px;
                         background-color: $colorMoreLightGray;
                     }
-    
+
                     .refferend-list-affiliate__content--right-bank-bottom {
                         display: flex;
                         gap: $gapS;
-    
+
                         .refferend-list-affiliate__content--right-bank-bottom-withdraw {
                             font-size: $textFontSize3XL;
                             font-weight: $fontWeightXL;
                             color: $colorBlack;
                         }
-    
+
                         .refferend-list-affiliate__content--right-bank-bottom-sub {
                             font-size: $textFontSizeL;
                             font-weight: $fontWeightL;
@@ -1582,33 +1656,33 @@
                         }
                     }
                 }
-    
+
                 .refferend-list-affiliate__content--right-share {
                     display: flex;
                     flex-direction: column;
                     background-color: $colorWhite ;
                     border-radius: $borderRadiusL;
-    
+
                     .refferend-list-affiliate__content--right-share-header {
                         display: flex;
                         align-items: center;
                         justify-content: space-between;
                         border-bottom: 2px solid $colorExtraLightGray;
                         padding: 12px 12px;
-    
+
                         span {
                             font-size: $textFontSizeM;
                             font-weight: $fontWeightXL;
                             color: $colorBlack;
                         }
                     }
-    
+
                     .refferend-list-affiliate__content--right-share-content {
                         display: flex;
                         flex-direction: column;
                         gap: $gapL;
                         padding: 12px;
-    
+
                         .refferend-list-affiliate__content--right-share-content-highlight {
                             display: flex;
                             gap: $gapXS;
@@ -1619,24 +1693,25 @@
                             height: 100px;
                             background-color: $colorPurple;
                             border-radius: $borderRadiusL;
-    
+
                             .refferend-list-affiliate__content--right-share-content-highlight-title {
                                 font-size: $textFontSize3XL;
                                 font-weight: $fontWeightXL;
                                 color: $colorOrange;
                             }
-    
+
                             .refferend-list-affiliate__content--right-share-content-highlight-sub-title {
                                 font-size: $textFontSizeM;
                                 font-weight: $fontWeightL;
                                 color: $colorWhite;
                             }
                         }
-    
+
                         .refferend-list-affiliate__content--right-share-content-share {
                             display: flex;
                             flex-direction: column;
                             cursor: pointer;
+
                             .refferend-list-affiliate__content--right-share-content-share-header {
                                 display: flex;
                                 gap: $gapS;
@@ -1645,7 +1720,7 @@
                                 font-weight: $fontWeightXL;
                                 color: $colorBlack;
                             }
-    
+
                             .refferend-list-affiliate__content--right-share-content-share-link {
                                 font-size: $textFontSizeM;
                                 font-weight: $fontWeightL;
@@ -1656,7 +1731,7 @@
                 }
             }
         }
-    
+
         .refferend-list-affiliate__footer {
             display: flex;
             flex-direction: column;
@@ -1665,7 +1740,7 @@
             width: 100%;
             height: 300px;
             background-color: black;
-    
+
             .refferend-list-affiliate__footer--content {
                 display: flex;
                 gap: 40px;
@@ -1673,39 +1748,39 @@
                 width: 80%;
                 height: 100%;
                 padding-top: 32px;
-    
+
                 .refferend-list-affiliate__footer--content-information {
                     display: flex;
                     flex-direction: column;
                     align-items: center;
                     gap: $gapL;
-    
+
                     .refferend-list-affiliate__footer--content-information-header {
                         font-weight: $fontWeightXL;
                         font-size: $textFontSizeL;
                         color: $colorWhite;
                     }
-    
+
                     .refferend-list-affiliate__footer--content-information-description {
                         font-weight: $fontWeightL;
                         font-size: $textFontSizeL;
                         color: $colorWhite;
                     }
-    
+
                     .refferend-list-affiliate__footer--content-information-image {
                         height: 48px;
                         width: fit-content;
                     }
                 }
             }
-    
+
             .refferend-list-affiliate__footer--content-copy-right {
                 text-align: center;
                 width: 100%;
                 border-top: 1px solid gray;
                 background-color: black;
                 padding: 12px 0px;
-    
+
                 .refferend-list-affiliate__footer--content-copy-right-label {
                     font-size: $textFontSizeL;
                     font-weight: $fontWeightL;

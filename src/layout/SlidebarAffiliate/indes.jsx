@@ -55,7 +55,7 @@ const SidebarAffiliate = ({ hide }) => {
               iconSize: 18, // Icon size {default 14}
               collapsedIconSize: 18, // Icon size when collapse
               itemBorderRadius: 4, // Border của item
-              itemMarginInline: 12, // Margin của item
+              itemMarginInline: 0, // Margin của item
               /* ~~~ Only color ~~~ */
               itemColor: "#475569", // Màu của item
               /* Color hover*/

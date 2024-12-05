@@ -41,12 +41,6 @@ const MainAffiliate = () => {
     }
   };
   /* ~~~ Use effect ~~~ */
-  // 1
-  //   useEffect(() => {
-  //     dispatch(permissionAction.permissionRequest({ navigate: navigate }));
-  //     dispatch(getProvinceAction.getProvinceRequest());
-  //     dispatch(getUserAction.getUserRequest());
-  //   }, [dispatch, navigate]);
   // 2
   useEffect(() => {
     // Auto close sidebar
@@ -68,37 +62,40 @@ const MainAffiliate = () => {
       }}
     >
       <Layout hasSider style={{ overflowX: "hidden" }}>
+        <Drawer
+          open={isOpenDrawler}
+          width={200}
+          onClose={() => setIsOpenDrawler(false)}
+          placement="left"
+          headerStyle={{
+            height: 30,
+            paddingLeft: 0,
+            display: "none",
+            margin: 0,
+          }}
+        >
+          <SidebarAffiliate hide={true} />
+        </Drawer>
         <Layout
           style={{
-            // marginLeft: width > 1280 ? (collapsed ? 80 : 200) : 0,
-            // transitionDuration: "100ms",
             height: "100vh",
           }}
         >
           <Header
             style={{
-              // padding: 0,
-              // padding: 0,
-              // padding: "0px 145px",
+              padding: "0px",
               background: "#FCFEFF",
               borderBottom: "2px solid #E2E9F1",
-              // boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
             }}
           >
-            {/*Component for header*/}
             <HeaderBar onClick={() => handleClickSideBar()} hide={collapsed} />
           </Header>
           <Content
             style={{
-              // paddingTop: "20px",
-              // margin: "20px",
-              // padding: "20px",
               overflow: "auto",
             }}
           >
-            {/*Button để scroll to top page*/}
             <FloatButton.BackTop />
-            {/*Các navigate page trong admin */}
             <Affiliate />
           </Content>
         </Layout>

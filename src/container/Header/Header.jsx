@@ -49,8 +49,11 @@ import icons from "../../utils/icons";
 const {IoPeopleOutline, IoHomeOutline, IoHome, IoPeople} = icons;
 const { Option } = Select;
 
+const MainPort = Number(process.env.REACT_APP_PORT_MAIN);
+const AffiliatePort = Number(process.env.REACT_APP_PORT_AFFILIATE);
+
 const Header = ({ onClick, hide }) => {
-  const currentPort = window.location.port;
+  const currentPort = Number(window.location.port);
   const dispatch = useDispatch();
   const [data, setDate] = useState([]);
   const [status, setStatus] = useState(false);
@@ -100,14 +103,13 @@ const Header = ({ onClick, hide }) => {
     },
   ];
   const handleChange = (e) => {
-    // console.log("check onclick ",e)
     setSelectedLanguage(e);
     dispatch(languageAction.languageRequest({ language: e }));
   };
 
   return (
     <>
-      {+currentPort === 3001 ? (
+      {currentPort === MainPort && (
         <div className="header-navigation">
           <div className="header-navigation__left">
             <div className="header-navigation__left--icon" onClick={onClick}>
@@ -186,14 +188,20 @@ const Header = ({ onClick, hide }) => {
             </Dropdown>
           </div>
         </div>
-      ) : (
+      )}
+      {currentPort === AffiliatePort && (
         <div className="header-navigation-affiliate">
           <div className="header-navigation-affiliate__left">
+            <div
+              className="header-navigation-affiliate__icon"
+              onClick={onClick}
+            >
+              <IoMenu />
+            </div>
             <img
               className="header-navigation-affiliate__logo"
               src={logoGuvi}
             ></img>
-
             <span
               onClick={() => {
                 navigate("/");

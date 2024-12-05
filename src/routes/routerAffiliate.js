@@ -19,7 +19,7 @@ const routerAffiliate = [
     <Link style={{ textDecoration: "none" }} to="/affiliate">
       Affiliate
     </Link>,
-    "/affiliate",
+    "/",
     <IoHome />,
     null,
     "dashboard"
