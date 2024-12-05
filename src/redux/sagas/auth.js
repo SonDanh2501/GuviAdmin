@@ -1,7 +1,11 @@
 import axios from "axios";
 import { call, put, takeLatest } from "redux-saga/effects";
 import { getPermission, getUserByToken, loginApi } from "../../api/auth";
-import { loginAffiliateApi, checkOTPAffiliateApi } from "../../api/affeliate";
+import {
+  loginAffiliateApi,
+  checkOTPAffiliateApi,
+  registerAffiliateApi,
+} from "../../api/affeliate";
 import { errorNotify, successNotify } from "../../helper/toast";
 import { setToken, setTokenAffiliate } from "../../helper/tokenHelper";
 import {
@@ -151,15 +155,16 @@ function* loginAffiliateSaga(action) {
 
 function* loginAffiliateWithOTPSaga(action) {
   try {
-    const response = yield call(checkOTPAffiliateApi, action.payload.data);
+    const response = yield call(registerAffiliateApi, action.payload.data);
     setTokenAffiliate(response?.token);
     action.payload.naviga("/");
     successNotify({
-      message: "Đăng nhập thành công bằng số điện thoại",
+      message: "Tạo tài khoản và đăng nhập thành công",
     });
     yield put(
       loginAffiliateWithOTPAction.loginAffiliateWithOTPSuccess({
         token: response?.token,
+        user: action.payload.user
       })
     );
     yield put(loginAffiliateWithOTPAction.loginAffiliateWithOTPRequest(false));
@@ -167,9 +172,7 @@ function* loginAffiliateWithOTPSaga(action) {
     yield put(loginAffiliateAction.loginAffiliateWithOTPFailure(err));
     yield put(loginAffiliateAction.loginAffiliateWithOTPRequest(false));
     errorNotify({
-      message: err.message
-        ? err.message
-        : "Đăng nhập không thành công, vui lòng thử lại sau.",
+      message: err.message ? err.message : "Tạo tài khoản không thành công",
     });
   }
 }

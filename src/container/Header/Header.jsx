@@ -196,7 +196,7 @@ const Header = ({ onClick, hide }) => {
 
             <span
               onClick={() => {
-                navigate("/affiliate");
+                navigate("/");
                 setIsActivated(0);
               }}
               className={`header-navigation-affiliate__button ${

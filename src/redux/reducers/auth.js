@@ -80,6 +80,7 @@ export default function LoginReducers(state = INIT_STATE.auth, action) {
       loginAffiliateWithOTPAction.loginAffiliateWithOTPSuccess
     ):
       return {
+        ...state,
         token: action.payload.token,
         isCheckLogin: true,
         user: action.payload.user,
