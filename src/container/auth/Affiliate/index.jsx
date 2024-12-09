@@ -138,14 +138,11 @@ const LoginAffiliate = () => {
     }
   };
   // 6. Nhớ viết phần đăng nhập từ app nhấn vào
-  const [a, setA] = useState("");
   const getIsCheckLogin = () => {
-    const currentData = localStorage.getItem("auth");
+    const currentData = localStorage.getItem("persist:auth");
     const formatData = JSON.parse(currentData);
 
     if (formatData?.token.length > 0 && formatData?.isCheckLogin === "true") {
-      // console.log("check formatData", formatData.token);
-      // setA(formatData.isCheckLogin)
       dispatch(loadingAction.loadingRequest(true));
       dispatch(
         loginWithOnlyTokenAction.loginWithOnlyTokenRequest({

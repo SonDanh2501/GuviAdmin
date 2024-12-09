@@ -71,12 +71,12 @@ function* loginWithTokenSaga(action) {
     successNotify({
       message: "Đăng nhập thành công",
     });
-    // yield put(
-    //   loginWithOnlyTokenAction.loginWithOnlyTokenSuccess({
-    //     token: response?.token,
-    //     // permission: permission,
-    //   })
-    // );
+    action.payload.naviga("/");
+    yield put(
+      loginWithOnlyTokenAction.loginWithOnlyTokenSuccess({
+        token: action.payload.token,
+      })
+    );
     yield put(loadingAction.loadingRequest(false));
   } catch (err) {
     yield put(loginWithOnlyTokenAction.loginWithOnlyTokenFailure(err));
