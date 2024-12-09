@@ -58,7 +58,7 @@ const OverView = () => {
           </div>
           <div className="affiliate-overview__affieliate-guide--content-line">
             <div className="affiliate-overview__affieliate-guide--content-line-icon">
-              <IoSwapHorizontal size="40px" color="#9ca3af" />
+              <IoSwapHorizontal color="#9ca3af" />
             </div>
           </div>
           <div className="affiliate-overview__affieliate-guide--content-left">
@@ -87,7 +87,7 @@ const OverView = () => {
             <div className="affiliate-overview__service--content-steps-step">
               {/* Icon */}
               <div className="affiliate-overview__service--content-steps-step-icon">
-                <IoLink size="48px" color="#f97316" />
+                <IoLink color="#f97316" />
               </div>
               {/* Header */}
               <span className="affiliate-overview__service--content-steps-step-header">
@@ -99,12 +99,12 @@ const OverView = () => {
               {/* Description */}
             </div>
             <div className="affiliate-overview__service--content-steps-icon">
-              <MdDoubleArrow size="44px" color="#f97316" />
+              <MdDoubleArrow color="#f97316" />
             </div>
             <div className="affiliate-overview__service--content-steps-step">
               {/* Icon */}
               <div className="affiliate-overview__service--content-steps-step-icon">
-                <IoPeopleOutline size="48px" color="#f97316" />
+                <IoPeopleOutline color="#f97316" />
               </div>
               {/* Header */}
               <span className="affiliate-overview__service--content-steps-step-header">
@@ -116,12 +116,12 @@ const OverView = () => {
               {/* Description */}
             </div>
             <div className="affiliate-overview__service--content-steps-icon">
-              <MdDoubleArrow size="44px" color="#f97316" />
+              <MdDoubleArrow color="#f97316" />
             </div>
             <div className="affiliate-overview__service--content-steps-step">
               {/* Icon */}
               <div className="affiliate-overview__service--content-steps-step-icon">
-                <IoBagOutline size="48px" color="#f97316" />
+                <IoBagOutline color="#f97316" />
               </div>
               {/* Header */}
               <span className="affiliate-overview__service--content-steps-step-header">
@@ -200,14 +200,16 @@ const OverView = () => {
             <span className="affiliate-overview__footer--content-information-header">
               Tải ứng dụng
             </span>
-            <img
-              className="affiliate-overview__footer--content-information-image"
-              src={chStoreImage}
-            ></img>
-            <img
-              className="affiliate-overview__footer--content-information-image"
-              src={appleStoreImage}
-            ></img>
+            <div className="affiliate-overview__footer--content-information-image-container">
+              <img
+                className="affiliate-overview__footer--content-information-image"
+                src={chStoreImage}
+              ></img>
+              <img
+                className="affiliate-overview__footer--content-information-image"
+                src={appleStoreImage}
+              ></img>
+            </div>
             <img
               className="affiliate-overview__footer--content-information-image"
               src={copyRightImage}
@@ -218,9 +220,11 @@ const OverView = () => {
             <span className="affiliate-overview__footer--content-information-header">
               Liên hệ với GUVI
             </span>
-            <IoLogoFacebook size="40px" color="white" />
-            <IoLogoTiktok size="40px" color="white" />
-            <IoLogoYoutube size="40px" color="white" />
+            <div className="affiliate-overview__footer--content-information-image-container">
+              <IoLogoFacebook size="40px" color="white" />
+              <IoLogoTiktok size="40px" color="white" />
+              <IoLogoYoutube size="40px" color="white" />
+            </div>
           </div>
         </div>
         {/* Copy right */}

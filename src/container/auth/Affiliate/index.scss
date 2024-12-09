@@ -134,6 +134,7 @@
 
             .login-affiliate__card--information-forgot-password {
                 display: flex;
+                flex-direction: column;
                 align-items: center;
                 justify-content: center;
                 gap: $gapXS;
@@ -161,7 +162,7 @@
     flex-direction: column;
     gap: $gapM;
 
-    .login-affiliate__card--information-otp-label {
+    .login-affiliate__card--information-forgot-password {
         font-size: $textFontSizeM;
         font-weight: $fontWeightL;
         color: $colorBlack;

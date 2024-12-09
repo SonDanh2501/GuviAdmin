@@ -87,6 +87,7 @@ const MainAffiliate = () => {
         >
           <Header
             style={{
+              height: `${width < 640 ? "40px" : "55px"}`,
               padding: "0px",
               background: "#FCFEFF",
               borderBottom: "2px solid #E2E9F1",

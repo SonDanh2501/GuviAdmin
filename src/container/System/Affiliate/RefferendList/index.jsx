@@ -38,6 +38,10 @@ const {
 } = icons;
 
 const RefferendList = () => {
+  const currentData = localStorage.getItem("access_token");
+  const formatData = JSON.parse(currentData);
+  const currentData1 = localStorage.getItem("persist:auth");
+  const formatData1 = JSON.parse(currentData1);
   const dispatch = useDispatch();
   /* ~~~ Value ~~~ */
   const [selectTab, setSelectTab] = useState(0);
@@ -121,7 +125,7 @@ const RefferendList = () => {
         message: err?.message,
       });
     }
-  }
+  };
   /* ~~~ Use effect ~~~ */
   // 1. Lấy thông tin khách hàng đang đăng nhập hiện tại (việc gọi API này để tránh việc token khi bị mã hóa sẽ bị lộ những thông tin nhạy cảm)
   useEffect(() => {
@@ -139,6 +143,8 @@ const RefferendList = () => {
   return (
     <div className="refferend-list-affiliate">
       <div className="refferend-list-affiliate__content">
+        {/* <span>{formatData}</span>
+        <span className="">{formatData1?.token}</span> */}
         <div className="refferend-list-affiliate__content--left">
           {/* Tổng người giới thiệu */}
           <div className="refferend-list-affiliate__content--left-card card-shadow">
@@ -352,7 +358,7 @@ const RefferendList = () => {
                     selectTab === 2 && "activated"
                   }`}
                 >
-                  Danh sách người giới thiệu
+                  DS người giới thiệu
                 </span>
               </div>
             </div>
@@ -528,9 +534,7 @@ const RefferendList = () => {
                       </div>
                       <div className="refferend-list-affiliate__content--middle-content-refferend-list-person-info-right yellow">
                         {/* Status */}
-                        <span className="yellow">
-                          Bước 1: Đăng ký tài khoản
-                        </span>
+                        <span className="yellow">Đăng ký tài khoản</span>
                       </div>
                     </div>
                     {/* Progress bar */}
@@ -569,7 +573,7 @@ const RefferendList = () => {
                       </div>
                       <div className="refferend-list-affiliate__content--middle-content-refferend-list-person-info-right ">
                         {/* Status */}
-                        <span className="blue">Bước 2: Đặt đơn đầu tiên</span>
+                        <span className="blue">Đặt đơn đầu tiên</span>
                       </div>
                     </div>
                     {/* Progress bar */}
@@ -608,9 +612,7 @@ const RefferendList = () => {
                       </div>
                       <div className="refferend-list-affiliate__content--middle-content-refferend-list-person-info-right">
                         {/* Status */}
-                        <span className="green">
-                          Bước 3: Đặt đơn hoàn thành
-                        </span>
+                        <span className="green">Đặt đơn hoàn thành</span>
                       </div>
                     </div>
                     {/* Progress bar */}
@@ -709,60 +711,59 @@ const RefferendList = () => {
           </div>
         </div>
       </div>
-      <div className="refferend-list-affiliate__footer">
-        <div className="refferend-list-affiliate__footer--content">
+      <div className="affiliate-overview__footer">
+        <div className="affiliate-overview__footer--content">
           {/* Address */}
-          <div className="refferend-list-affiliate__footer--content-information">
-            <span className="refferend-list-affiliate__footer--content-information-header">
+          <div className="affiliate-overview__footer--content-information">
+            <span className="affiliate-overview__footer--content-information-header">
               CÔNG TY TNHH GIẢI PHÁP CÔNG NGHỆ GUVI
             </span>
-            <span className="refferend-list-affiliate__footer--content-information-description">
+            <span className="affiliate-overview__footer--content-information-description">
               Văn phòng: 137D đường số 11, Phường Trường Thọ, TP. Thủ Đức, TP.
-              Hồ Chí Minh
+              Hồ Chí Minh{" "}
             </span>
-            <span className="refferend-list-affiliate__footer--content-information-description">
-              Chi nhánh Hà Nội: NV 4.7 Liền Kề Hải Âu, Khu Đô Thị Cầu Bươu,
-              Thanh Trì, Hà Nội
+            <span className="affiliate-overview__footer--content-information-description">
+              Hotline: 1900 0027
             </span>
-            <span className="refferend-list-affiliate__footer--content-information-description">
-              Chi nhánh Đà Nẵng: 27 Trần Lê, Hoà Xuân, Cẩm Lệ, Đà Nẵng
-            </span>
-            <span className="refferend-list-affiliate__footer--content-information-description">
-              Chi nhánh Bình Dương: 106 Đường Nguyễn Văn Lộng, TP.Thủ Dầu Một,
-              Bình Dương
+            <span className="affiliate-overview__footer--content-information-description">
+              Email: cskh@guvico.com - marketing@guvico.com
             </span>
           </div>
           {/* Download app */}
-          <div className="refferend-list-affiliate__footer--content-information">
-            <span className="refferend-list-affiliate__footer--content-information-header">
+          <div className="affiliate-overview__footer--content-information">
+            <span className="affiliate-overview__footer--content-information-header">
               Tải ứng dụng
             </span>
+            <div className="affiliate-overview__footer--content-information-image-container">
+              <img
+                className="affiliate-overview__footer--content-information-image"
+                src={chStoreImage}
+              ></img>
+              <img
+                className="affiliate-overview__footer--content-information-image"
+                src={appleStoreImage}
+              ></img>
+            </div>
             <img
-              className="refferend-list-affiliate__footer--content-information-image"
-              src={chStoreImage}
-            ></img>
-            <img
-              className="refferend-list-affiliate__footer--content-information-image"
-              src={appleStoreImage}
-            ></img>
-            <img
-              className="refferend-list-affiliate__footer--content-information-image"
+              className="affiliate-overview__footer--content-information-image"
               src={copyRightImage}
             ></img>
           </div>
           {/* Contact */}
-          <div className="refferend-list-affiliate__footer--content-information">
-            <span className="refferend-list-affiliate__footer--content-information-header">
+          <div className="affiliate-overview__footer--content-information">
+            <span className="affiliate-overview__footer--content-information-header">
               Liên hệ với GUVI
             </span>
-            <IoLogoFacebook size="40px" color="white" />
-            <IoLogoTiktok size="40px" color="white" />
-            <IoLogoYoutube size="40px" color="white" />
+            <div className="affiliate-overview__footer--content-information-image-container">
+              <IoLogoFacebook size="40px" color="white" />
+              <IoLogoTiktok size="40px" color="white" />
+              <IoLogoYoutube size="40px" color="white" />
+            </div>
           </div>
         </div>
         {/* Copy right */}
-        <div className="refferend-list-affiliate__footer--content-copy-right">
-          <span className="refferend-list-affiliate__footer--content-copy-right-label">
+        <div className="affiliate-overview__footer--content-copy-right">
+          <span className="affiliate-overview__footer--content-copy-right-label">
             @ 2024 Công ty TNHH Giải pháp Công nghệ Guvi sở hữu bản quyền.
           </span>
         </div>

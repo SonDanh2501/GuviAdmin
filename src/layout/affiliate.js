@@ -9,6 +9,7 @@ const Affiliate = () => {
       <Routes>
         <Route path="/" element={<OverView />} />
         <Route path="/referend-list" element={<RefferendList />} />
+        <Route path="*" element={<OverView />} />
       </Routes>
     </div>
   );

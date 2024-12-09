@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import icons from "../utils/icons";
 
-const { IoHome,IoPersonOutline } = icons;
+const { IoHome, IoPerson } = icons;
 
 function getItem(label, key, icon, children, type) {
   return {
@@ -30,7 +30,7 @@ const routerAffiliate = [
       DS đã giới thiệu
     </Link>,
     "/referend-list",
-    <IoPersonOutline />,
+    <IoPerson />,
     null,
     "dashboard"
   ),

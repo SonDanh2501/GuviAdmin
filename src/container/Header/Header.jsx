@@ -18,7 +18,7 @@ import {
   Popover,
   Button,
 } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { removeToken } from "../../helper/tokenHelper";
@@ -58,6 +58,7 @@ const AffiliatePort = Number(process.env.REACT_APP_PORT_AFFILIATE);
 
 const Header = ({ onClick, hide }) => {
   const currentPort = Number(window.location.port);
+  const urlPath = window.location.pathname
   const dispatch = useDispatch();
   const [data, setDate] = useState([]);
   const [status, setStatus] = useState(false);
@@ -117,6 +118,10 @@ const Header = ({ onClick, hide }) => {
     dispatch(languageAction.languageRequest({ language: e }));
   };
 
+  useEffect(() => {
+    if (urlPath.substring(1) === "") setIsActivated(1);
+    if (urlPath.substring(1) === "referend-list") setIsActivated(2);
+  },[])
   return (
     <>
       {currentPort === MainPort && (
@@ -215,10 +220,10 @@ const Header = ({ onClick, hide }) => {
             <span
               onClick={() => {
                 navigate("/");
-                setIsActivated(0);
+                setIsActivated(1);
               }}
               className={`header-navigation-affiliate__button ${
-                isActivated === 0 && "activated"
+                isActivated === 1 && "activated"
               }`}
             >
               <IoHome size="16px" />
@@ -227,14 +232,14 @@ const Header = ({ onClick, hide }) => {
             <span
               onClick={() => {
                 navigate("/referend-list");
-                setIsActivated(1);
+                setIsActivated(2);
               }}
               className={`header-navigation-affiliate__button ${
-                isActivated === 1 && "activated"
+                isActivated === 2 && "activated"
               }`}
             >
               <IoPeople size="16px" />
-              DS người giới thiệu
+              DS người giới thiệu 
             </span>
           </div>
           <div className="header-navigation-affiliate__right">

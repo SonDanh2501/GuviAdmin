@@ -141,12 +141,11 @@ const LoginAffiliate = () => {
   const getIsCheckLogin = () => {
     const currentData = localStorage.getItem("persist:auth");
     const formatData = JSON.parse(currentData);
-
     if (formatData?.token.length > 0 && formatData?.isCheckLogin === "true") {
       dispatch(loadingAction.loadingRequest(true));
       dispatch(
         loginWithOnlyTokenAction.loginWithOnlyTokenRequest({
-          token: "formatData.token",
+          token: formatData?.token,
           naviga: navigate,
         })
       );
@@ -222,7 +221,6 @@ const LoginAffiliate = () => {
 
   return (
     <div className="login-affiliate">
-      {/* <span>hello{a}</span> */}
       <div className="login-affiliate__card card-shadow">
         <div className="login-affiliate__card--information">
           {/* Label đăng nhập */}
