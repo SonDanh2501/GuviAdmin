@@ -132,6 +132,24 @@
                 }
             }
 
+            .login-affiliate__card--information-forgot-password {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: $gapXS;
+
+                .login-affiliate__card--information-forgot-password-label {
+                    font-size: $textFontSizeM;
+                    font-weight: $fontWeightL;
+                    color: $colorBlack;
+                }
+                .login-affiliate__card--information-forgot-password-button {
+                    cursor: pointer;
+                    font-size: $textFontSizeM;
+                    font-weight: $fontWeightXL;
+                    color: $colorViolet;
+                }
+            }
         
 
         }

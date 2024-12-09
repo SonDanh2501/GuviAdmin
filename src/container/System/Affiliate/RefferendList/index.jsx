@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./index.scss";
 
 import icons from "../../../../utils/icons";
-import { Pagination, Popover, Tooltip } from "antd";
+import { message, Pagination, Popover, Tooltip } from "antd";
 import { Link } from "react-router-dom";
 
 import appleStoreImage from "../../../../assets/images/apple_store.svg";
@@ -10,6 +10,17 @@ import chStoreImage from "../../../../assets/images/google_play.svg";
 import appScreenImage from "../../../../assets/images/app_screen.png";
 import copyRightImage from "../../../../assets/images/copy_right.png";
 import notFoundImage from "../../../../assets/images/not_found_image.svg";
+import affiliateLogo from "../../../../assets/images/affiliate_guide.svg";
+import {
+  getCustomerInfoAffiliateApi,
+  getRandomReferralCodeApi,
+  updateReferralCodeApi,
+  getListReferralPersonApi,
+  getListActivityAffiliateApi,
+} from "../../../../api/affeliate";
+import { errorNotify, successNotify } from "../../../../helper/toast";
+import { useDispatch } from "react-redux";
+import { loadingAction } from "../../../../redux/actions/loading";
 
 const {
   IoChevronDown,
@@ -23,10 +34,108 @@ const {
   IoCash,
   IoReader,
   IoCopy,
+  IoRefresh,
 } = icons;
 
 const RefferendList = () => {
+  const dispatch = useDispatch();
+  /* ~~~ Value ~~~ */
   const [selectTab, setSelectTab] = useState(0);
+  const [valueUserInfo, setValueUserInfo] = useState([]);
+  const [isChangeReferralCode, setIsChangeReferralCode] = useState(false);
+  const [valueReferralCode, setValueReferralCode] = useState("");
+  const [dataListReferralPerson, setDataListReferralPerson] = useState([]);
+  const [dataHistoryDiscount, setDataHistoryDiscount] = useState([]);
+  const [startPage, setStartPage] = useState(0);
+  const [lengthPage, setLengthPage] = useState(
+    JSON.parse(localStorage.getItem("linePerPage"))
+      ? JSON.parse(localStorage.getItem("linePerPage")).value
+      : 20
+  );
+  /* ~~~ Handle function ~~~ */
+  // 1. Hàm fetch thông tin của khách hàng hiện tại
+  const fetchCustomerInfo = async () => {
+    try {
+      const res = await getCustomerInfoAffiliateApi();
+      setValueUserInfo(res);
+    } catch (err) {
+      errorNotify({
+        message: err?.message,
+      });
+    }
+  };
+  // 2. Hàm random mã giới thiệu mới
+  const getRandomReferralCodeAndUpdate = async () => {
+    try {
+      dispatch(loadingAction.loadingRequest(true));
+      const randomReferralCode = await getRandomReferralCodeApi();
+      updateReferralCode(randomReferralCode.referral_code);
+      successNotify({
+        message: "Tạo mã ngẫu nhiên mới thành công",
+      });
+      dispatch(loadingAction.loadingRequest(false));
+    } catch (err) {
+      // console.log("check err ", err.message);
+      errorNotify({
+        message: err?.message + ", xin thử lại sau vài giây",
+      });
+      dispatch(loadingAction.loadingRequest(false));
+    }
+  };
+  // 3. Hàm thay đổi mã giới thiệu
+  const updateReferralCode = async (code) => {
+    try {
+      const res = await updateReferralCodeApi({ referral_code: code });
+      setIsChangeReferralCode(false);
+      setValueReferralCode("");
+      fetchCustomerInfo();
+      successNotify({
+        message: "Thay đổi mã giới thiệu thành công",
+      });
+    } catch (err) {
+      errorNotify({
+        message: err?.message + ", xin thử lại sau vài giây",
+      });
+    }
+  };
+  // 4. Hàm fetch danh sách những người giới thiệu của khách hàng (cần check lại dữ liệu hiển thị sao để sửa những chỗ hard code)
+  const fetchListReferralPerson = async () => {
+    try {
+      const res = await getListReferralPersonApi(0, 10);
+      console.log("check danh sách những người giới thiệu >>>", res);
+      setDataListReferralPerson(res);
+    } catch (err) {
+      errorNotify({
+        message: err?.message,
+      });
+    }
+  };
+  // 5. Hàm fetch danh sách nhận chiết khấu của khách hàng
+  const fetchHistoryDiscount = async () => {
+    try {
+      const res = await getListActivityAffiliateApi(0, 10);
+      console.log("check lịch sử nhận chiết khấu >>>", res);
+      setDataHistoryDiscount(res);
+    } catch (err) {
+      errorNotify({
+        message: err?.message,
+      });
+    }
+  }
+  /* ~~~ Use effect ~~~ */
+  // 1. Lấy thông tin khách hàng đang đăng nhập hiện tại (việc gọi API này để tránh việc token khi bị mã hóa sẽ bị lộ những thông tin nhạy cảm)
+  useEffect(() => {
+    fetchCustomerInfo();
+    fetchListReferralPerson();
+    fetchHistoryDiscount();
+  }, []);
+  /* ~~~ Other  ~~~ */
+  const copyToClipBoard = (text) => {
+    navigator.clipboard.writeText(text);
+    successNotify({
+      message: `Sao chép thành công ${text}`,
+    });
+  };
   return (
     <div className="refferend-list-affiliate">
       <div className="refferend-list-affiliate__content">
@@ -103,11 +212,107 @@ const RefferendList = () => {
               <span>Cách giới thiệu</span>
             </div>
             <div className="refferend-list-affiliate__content--left-card-body">
+              <div className="refferend-list-affiliate__content--left-card-body-image">
+                <img
+                  className="refferend-list-affiliate__content--left-card-body-image"
+                  src={affiliateLogo}
+                ></img>
+              </div>
               <div className="refferend-list-affiliate__content--left-card-body-steps">
-                <span className="refferend-list-affiliate__content--left-card-body-steps-circle ">
+                <div className="refferend-list-affiliate__content--left-card-body-steps-circle">
                   1
+                </div>
+
+                <div className="refferend-list-affiliate__content--left-card-body-steps-step">
+                  <span>Chia sẻ đường link của bạn</span>
+                </div>
+              </div>
+              <div className="refferend-list-affiliate__content--left-card-body-steps">
+                <div className="refferend-list-affiliate__content--left-card-body-steps-circle">
+                  2
+                </div>
+                <span className="refferend-list-affiliate__content--left-card-body-steps-step">
+                  Người được giới thiệu hoàn thành đơn đầu tiên
                 </span>
-                <span className="">Chia sẻ đường link của bạn</span>
+              </div>
+              <div className="refferend-list-affiliate__content--left-card-body-steps">
+                <div className="refferend-list-affiliate__content--left-card-body-steps-circle">
+                  3
+                </div>
+                <span className="refferend-list-affiliate__content--left-card-body-steps-step">
+                  Bạn nhận ngay 5% chiết khấu của đơn hoàn thành
+                </span>
+              </div>
+              <div className="refferend-list-affiliate__content--left-card-body-code">
+                <Tooltip title="Nhận ngay chiết khấu 5%">
+                  <div className="refferend-list-affiliate__content--left-card-body-code-content">
+                    <span className="refferend-list-affiliate__content--left-card-body-code-content-label">
+                      {valueUserInfo?.referral_code}
+                    </span>
+                    <span
+                      onClick={() =>
+                        copyToClipBoard(valueUserInfo?.referral_code)
+                      }
+                      className="refferend-list-affiliate__content--left-card-body-code-content-copy"
+                    >
+                      Sao chép
+                    </span>
+                  </div>
+                </Tooltip>
+                <Tooltip title="Gửi voucher cho người được giới thiệu">
+                  <div className="refferend-list-affiliate__content--left-card-body-code-content">
+                    <span className="refferend-list-affiliate__content--left-card-body-code-content-label">
+                      {valueUserInfo?.promotional_referral_code}
+                    </span>
+                    <span
+                      onClick={() =>
+                        copyToClipBoard(
+                          valueUserInfo?.promotional_referral_code
+                        )
+                      }
+                      className="refferend-list-affiliate__content--left-card-body-code-content-copy"
+                    >
+                      Sao chép
+                    </span>
+                  </div>
+                </Tooltip>
+                {isChangeReferralCode && (
+                  <div className="refferend-list-affiliate__content--left-card-body-code-content">
+                    <input
+                      value={valueReferralCode}
+                      onChange={(e) => setValueReferralCode(e.target.value)}
+                      placeholder="Nhập mã mới"
+                      className="refferend-list-affiliate__content--left-card-body-code-content-input"
+                    ></input>
+                    <span
+                      onClick={() => {
+                        updateReferralCode(valueReferralCode);
+                      }}
+                      className="refferend-list-affiliate__content--left-card-body-code-content-copy"
+                    >
+                      Lưu
+                    </span>
+                  </div>
+                )}
+                {!isChangeReferralCode && (
+                  <div
+                    onClick={() => setIsChangeReferralCode(true)}
+                    className="refferend-list-affiliate__content--left-card-body-code-random"
+                  >
+                    <span className="refferend-list-affiliate__content--left-card-body-code-random-label">
+                      Chỉnh sửa mã giới thiệu
+                    </span>
+                  </div>
+                )}
+
+                <div
+                  onClick={() => getRandomReferralCodeAndUpdate()}
+                  className="refferend-list-affiliate__content--left-card-body-code-random"
+                >
+                  <span className="refferend-list-affiliate__content--left-card-body-code-random-label">
+                    Tạo mã mới ngẫu nhiên
+                  </span>
+                </div>
               </div>
             </div>
           </div>
@@ -174,7 +379,7 @@ const RefferendList = () => {
 
                       <div
                         className={`refferend-list-affiliate__content--middle-content-history-receiving-middle-line ${
-                          index === 4 && "hidden"
+                          index === 9 && "hidden"
                         }`}
                       ></div>
                     </div>
@@ -488,7 +693,7 @@ const RefferendList = () => {
                   <IoCopy color="orange" />
                 </span>
                 <span className="refferend-list-affiliate__content--right-share-content-share-link">
-                  https://apps.apple.com/us/app/guvi
+                  {valueUserInfo?.referral_link}
                 </span>
               </div>
               <div className="refferend-list-affiliate__content--right-share-content-share">
@@ -497,7 +702,7 @@ const RefferendList = () => {
                   <IoCopy color="orange" />
                 </span>
                 <span className="refferend-list-affiliate__content--right-share-content-share-link">
-                  https://apps.apple.com/us/app/guvi
+                  {valueUserInfo?.promotional_referral_link}
                 </span>
               </div>
             </div>

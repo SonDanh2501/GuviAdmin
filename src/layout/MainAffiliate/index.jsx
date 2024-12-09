@@ -18,6 +18,7 @@ import HeaderBar from "../../container/Header/Header";
 import Affiliate from "../affiliate";
 
 import icons from "../../utils/icons";
+import { getUserAffiliateAction } from "../../redux/actions/auth";
 
 const { IoLogoFacebook, IoLogoYoutube, IoLogoTiktok } = icons;
 const { Header, Footer, Sider, Content } = Layout; // Set content có trong Layout, ở đây là gồm 3 phần Header, Thanh Sider, Content
@@ -41,6 +42,9 @@ const MainAffiliate = () => {
     }
   };
   /* ~~~ Use effect ~~~ */
+  useEffect(() => {
+    dispatch(getUserAffiliateAction.getUserAffiliateRequest());
+  }, [dispatch])
   // 2
   useEffect(() => {
     // Auto close sidebar

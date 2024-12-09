@@ -7,6 +7,9 @@ import {
   permissionAction,
   loginAffiliateAction,
   loginAffiliateWithOTPAction,
+  logoutAffiliateAction,
+  getUserAffiliateAction,
+  loginWithOnlyTokenAction,
 } from "../actions/auth";
 import { getType } from "../actions/banner";
 
@@ -24,6 +27,21 @@ export default function LoginReducers(state = INIT_STATE.auth, action) {
         user: action.payload.user,
       };
     case getType(loginAction.loginFailure):
+      return {
+        ...state,
+      };
+    case getType(loginWithOnlyTokenAction.loginWithOnlyTokenRequest):
+      return {
+        ...state,
+      };
+    case getType(loginWithOnlyTokenAction.loginWithOnlyTokenSuccess):
+      return {
+        ...state,
+        token: action.payload.token,
+        isCheckLogin: true,
+        user: action.payload.user,
+      };
+    case getType(loginWithOnlyTokenAction.loginWithOnlyTokenFailure):
       return {
         ...state,
       };
@@ -76,9 +94,7 @@ export default function LoginReducers(state = INIT_STATE.auth, action) {
       return {
         ...state,
       };
-    case getType(
-      loginAffiliateWithOTPAction.loginAffiliateWithOTPSuccess
-    ):
+    case getType(loginAffiliateWithOTPAction.loginAffiliateWithOTPSuccess):
       return {
         ...state,
         token: action.payload.token,
@@ -88,6 +104,25 @@ export default function LoginReducers(state = INIT_STATE.auth, action) {
     case getType(loginAffiliateWithOTPAction.loginAffiliateWithOTPFailure):
       return {
         ...state,
+      };
+    case getType(logoutAffiliateAction.logoutAffiliateRequest):
+      return {
+        ...state,
+      };
+    case getType(logoutAffiliateAction.logoutAffiliateSuccess):
+      return {
+        ...state,
+        token: action.payload.token,
+        isCheckLogin: false,
+      };
+    case getType(logoutAffiliateAction.logoutAffiliateFailure):
+      return {
+        ...state,
+      };
+    case getType(getUserAffiliateAction.getUserAffiliateSuccess):
+      return {
+        ...state,
+        user: action.payload.user,
       };
     default:
       return state;

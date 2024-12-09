@@ -5,16 +5,20 @@ import {
   loginAffiliateApi,
   checkOTPAffiliateApi,
   registerAffiliateApi,
+  getCustomerInfoAffiliateApi,
 } from "../../api/affeliate";
 import { errorNotify, successNotify } from "../../helper/toast";
-import { setToken, setTokenAffiliate } from "../../helper/tokenHelper";
+import { setToken } from "../../helper/tokenHelper";
 import {
   getUserAction,
+  getUserAffiliateAction,
   languageAction,
   loginAction,
   loginAffiliateAction,
   loginAffiliateWithOTPAction,
+  loginWithOnlyTokenAction,
   logoutAction,
+  logoutAffiliateAction,
   permissionAction,
 } from "../actions/auth";
 import { loadingAction } from "../actions/loading";
@@ -52,6 +56,30 @@ function* loginSaga(action) {
     yield put(loadingAction.loadingRequest(false));
   } catch (err) {
     yield put(loginAction.loginFailure(err));
+    yield put(loadingAction.loadingRequest(false));
+    errorNotify({
+      message: err.message
+        ? err.message
+        : "Đăng nhập không thành công, vui lòng thử lại sau.",
+    });
+  }
+}
+
+function* loginWithTokenSaga(action) {
+  try {
+    setToken(action.payload.token);
+    successNotify({
+      message: "Đăng nhập thành công",
+    });
+    // yield put(
+    //   loginWithOnlyTokenAction.loginWithOnlyTokenSuccess({
+    //     token: response?.token,
+    //     // permission: permission,
+    //   })
+    // );
+    yield put(loadingAction.loadingRequest(false));
+  } catch (err) {
+    yield put(loginWithOnlyTokenAction.loginWithOnlyTokenFailure(err));
     yield put(loadingAction.loadingRequest(false));
     errorNotify({
       message: err.message
@@ -130,7 +158,7 @@ function* getUserSaga() {
 function* loginAffiliateSaga(action) {
   try {
     const response = yield call(loginAffiliateApi, action.payload.data);
-    setTokenAffiliate(response?.token);
+    setToken(response?.token);
     action.payload.naviga("/");
     successNotify({
       message: "Đăng nhập thành công",
@@ -138,17 +166,14 @@ function* loginAffiliateSaga(action) {
     yield put(
       loginAffiliateAction.loginAffiliateSuccess({
         token: response?.token,
-        // permission: permission,
       })
     );
-    yield put(loginAffiliateAction.loginAffiliateRequest(false));
+    yield put(loadingAction.loadingRequest(false));
   } catch (err) {
     yield put(loginAffiliateAction.loginAffiliateFailure(err));
-    yield put(loginAffiliateAction.loadingAffiliateRequest(false));
+    yield put(loadingAction.loadingRequest(false));
     errorNotify({
-      message: err.message
-        ? err.message
-        : "Đăng nhập không thành công, vui lòng thử lại sau.",
+      message: err.message || "Đăng nhập không thành công",
     });
   }
 }
@@ -156,7 +181,7 @@ function* loginAffiliateSaga(action) {
 function* loginAffiliateWithOTPSaga(action) {
   try {
     const response = yield call(registerAffiliateApi, action.payload.data);
-    setTokenAffiliate(response?.token);
+    setToken(response?.token);
     action.payload.naviga("/");
     successNotify({
       message: "Tạo tài khoản và đăng nhập thành công",
@@ -164,7 +189,6 @@ function* loginAffiliateWithOTPSaga(action) {
     yield put(
       loginAffiliateWithOTPAction.loginAffiliateWithOTPSuccess({
         token: response?.token,
-        user: action.payload.user
       })
     );
     yield put(loginAffiliateWithOTPAction.loginAffiliateWithOTPRequest(false));
@@ -177,6 +201,34 @@ function* loginAffiliateWithOTPSaga(action) {
   }
 }
 
+function* logoutAffiliateSaga(action) {
+  try {
+    yield put(logoutAffiliateAction.logoutAffiliateSuccess({ token: " " }));
+    successNotify({
+      message: "Đã đăng xuất",
+    });
+    action.payload("/auth/login-affiliate", { replace: true });
+    yield put(loadingAction.loadingRequest(false));
+  } catch (err) {
+    yield put(logoutAffiliateAction.logoutAffiliateFailure(err));
+    yield put(loadingAction.loadingRequest(false));
+  }
+}
+
+function* getUserAffiliateSaga() {
+  try {
+    const response = yield call(getCustomerInfoAffiliateApi);
+    yield put(
+      getUserAffiliateAction.getUserAffiliateSuccess({
+        user: response,
+      })
+    );
+    yield put(loadingAction.loadingRequest(false));
+  } catch (err) {
+    yield put(getUserAffiliateAction.getUserAffiliateFailure(err));
+    yield put(loadingAction.loadingRequest(false));
+  }
+}
 function* AuthSaga() {
   yield takeLatest(loginAction.loginRequest, loginSaga);
   yield takeLatest(logoutAction.logoutRequest, logoutSaga);
@@ -190,6 +242,18 @@ function* AuthSaga() {
   yield takeLatest(
     loginAffiliateWithOTPAction.loginAffiliateWithOTPRequest,
     loginAffiliateWithOTPSaga
+  );
+  yield takeLatest(
+    logoutAffiliateAction.logoutAffiliateRequest,
+    logoutAffiliateSaga
+  );
+  yield takeLatest(
+    getUserAffiliateAction.getUserAffiliateRequest,
+    getUserAffiliateSaga
+  );
+  yield takeLatest(
+    loginWithOnlyTokenAction.loginWithOnlyTokenRequest,
+    loginWithTokenSaga
   );
 }
 

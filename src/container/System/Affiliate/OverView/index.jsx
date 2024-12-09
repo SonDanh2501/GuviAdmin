@@ -36,181 +36,47 @@ const OverView = () => {
     });
   };
   return (
-    // <div className="affiliate-overview">
-    //   {/* Card steps */}
-    //   <div className="affiliate-overview__cards-step">
-    //     {/* Card 1 */}
-    //     <div
-    //       onMouseOver={() => {
-    //         setIsSelectCard(0);
-    //       }}
-    //       className={`affiliate-overview__cards-step-card card-shadow ${
-    //         isSelectCard === 0 && "select-card"
-    //       } `}
-    //     >
-    //       {/* Icon */}
-    //       <div className="affiliate-overview__cards-step-card--icon">
-    //         <IoLink size={24} />
-    //       </div>
-    //       {/* Label */}
-    //       <span className="affiliate-overview__cards-step-card--label">
-    //         Chia sẽ đường link
-    //       </span>
-    //       <span className="affiliate-overview__cards-step-card--sub-label">
-    //         Nhanh chóng và dễ dàng chia sẻ, copy và gửi người muốn giới thiệu
-    //       </span>
-    //     </div>
-    //     {/* Card 2 */}
-    //     <div
-    //       onMouseOver={() => {
-    //         setIsSelectCard(1);
-    //       }}
-    //       className={`affiliate-overview__cards-step-card card-shadow ${
-    //         isSelectCard === 1 && "select-card"
-    //       } `}
-    //     >
-    //       {/* Icon */}
-    //       <div className="affiliate-overview__cards-step-card--icon">
-    //         <IoPeople size={24} />
-    //       </div>
-    //       {/* Label */}
-    //       <span className="affiliate-overview__cards-step-card--label">
-    //         Giới thiệu thành công
-    //       </span>
-    //       <span className="affiliate-overview__cards-step-card--sub-label">
-    //         Người được giới thiệu theo đường dẫn được chia sẽ và tải ứng dụng và
-    //         đăng ký
-    //       </span>
-    //     </div>
-    //     {/* Card 3 */}
-    //     <div
-    //       onMouseOver={() => {
-    //         setIsSelectCard(2);
-    //       }}
-    //       className={`affiliate-overview__cards-step-card card-shadow ${
-    //         isSelectCard === 2 && "select-card"
-    //       } `}
-    //     >
-    //       {/* Icon */}
-    //       <div className="affiliate-overview__cards-step-card--icon">
-    //         <IoBagAdd size={24} />
-    //       </div>
-    //       {/* Label */}
-    //       <span className="affiliate-overview__cards-step-card--label">
-    //         Nhận chiết khấu
-    //       </span>
-    //       <span className="affiliate-overview__cards-step-card--sub-label">
-    //         Nhận ngay 5% chiết khấu khi người được giới thiệu hoàn thành đơn
-    //         hàng
-    //       </span>
-    //     </div>
-    //   </div>
-    //   {/* Thẻ giới thiệu tổng */}
-    //   <div className="affiliate-overview__image-wrapper card-shadow">
-    //     <img
-    //       className="affiliate-overview__image-wrapper--image"
-    //       src={Banner}
-    //       alt="Mô tả hình ảnh"
-    //     />
-    //     <div className="affiliate-overview__image-wrapper--overlay"></div>
-    //   </div>
-    //   {/* Các đường link chia sẻ khác */}
-    //   <div className="affiliate-overview__links card-shadow">
-    //     <span className="affiliate-overview__links--label">
-    //       Các đường link chia sẻ
-    //     </span>
-    //     <div className="affiliate-overview__links-wrapper">
-    //       {/* Link 1 */}
-    //       <div className="affiliate-overview__links--link">
-    //         <span className="affiliate-overview__links--link-header">
-    //           Nhận ngay chiết khấu
-    //         </span>
-    //         <div className="affiliate-overview__links--link-body">
-    //           <span className="affiliate-overview__links--link-body-text">
-    //             Giới thiệu và nhận ngay <span className="high-light">5%</span>{" "}
-    //             cho các đơn thành công của người được giới thiệu. Nếu là đơn đầu
-    //             tiên sẽ được thưởng thêm{" "}
-    //             <span className="high-light">50.000 VNĐ</span>
-    //           </span>
-    //           <div
-    //             onClick={() => handleCopyLink()}
-    //             className="affiliate-overview__links--link-body-navigate-link"
-    //           >
-    //             <span>Link:</span>
-    //             <a>https://play.google.com/store</a>
-    //             <IoCopyOutline color="orange" />
-    //           </div>
-    //         </div>
-    //       </div>
-    //       {/* Line */}
-    //       <div className="affiliate-overview__links--link-line">
-    //         <div className="affiliate-overview__links--link-line-icon">
-    //           <IoSwapHorizontal size="20px" color="orange" />
-    //         </div>
-    //       </div>
-    //       {/* Link 2 */}
-    //       <div className="affiliate-overview__links--link">
-    //         <span className="affiliate-overview__links--link-header">
-    //           Gửi voucher cho người được giới thiệu
-    //         </span>
-    //         <div className="affiliate-overview__links--link-body">
-    //           <span className="affiliate-overview__links--link-body-text">
-    //             Gửi voucher đến người được giới thiệu và nhận{" "}
-    //             <span className="high-light">5%</span> bắt đầu từ đơn thứ 2
-    //             thành công của người được giới thiệu. Nếu là đơn đầu tiên sẽ
-    //             được thưởng thêm <span className="high-light">50.000đ</span>
-    //           </span>
-    //           <div
-    //             onClick={() => handleCopyLink()}
-    //             className="affiliate-overview__links--link-body-navigate-link"
-    //           >
-    //             <span>Link:</span>
-    //             <a>https://play.google.com/store</a>
-    //             <IoCopyOutline color="orange" />
-    //           </div>
-    //         </div>
-    //       </div>
-    //     </div>
-    //   </div>
-    // </div>
     <div className="affiliate-overview">
-      {/* Landing Page */}
-      <div className="affiliate-overview__landing-page">
-        <div className="affiliate-overview__landing-page--content">
-          <div className="affiliate-overview__landing-page--content-left">
-            <span className="affiliate-overview__landing-page--content-left-header">
-              <span className="affiliate-overview__landing-page--content-left-header-orange">
-                Gu
-              </span>
-              <span className="affiliate-overview__landing-page--content-left-header-purple">
-                vi
-              </span>{" "}
-              {/* <img
-                className="affiliate-overview__landing-page--content-left-header-logo"
-                src={logoGuvi}
-              ></img> */}
-              ứng dụng giúp việc tiện lợi
+      {/* Affieliate Guide */}
+      <div className="affiliate-overview__affieliate-guide">
+        <div className="affiliate-overview__affieliate-guide--content">
+          <div className="affiliate-overview__affieliate-guide--content-left">
+            <span className="affiliate-overview__affieliate-guide--content-left-header">
+              Nhận ngay chiết khấu
             </span>
-            <span className="affiliate-overview__landing-page--content-left-description">
-              Đặt lịch giúp việc theo giờ tại GUVI thật dễ dàng, nhanh chóng,
-              tiết kiệm và chuyên nghiệp.
+            <span className="affiliate-overview__affieliate-guide--content-left-description">
+              Giới thiệu và nhận ngay <span className="high-light">5%</span> cho
+              các đơn thành công của người được giới thiệu. Nếu là đơn đầu tiên
+              sẽ được thưởng thêm <span className="high-light">50.000đ</span>
             </span>
-            {/* <div className="affiliate-overview__landing-page--content-left-line"></div> */}
-            <div className="affiliate-overview__landing-page--content-left-download">
-              <img src={chStoreImage}></img>
-              <img src={appleStoreImage}></img>
+            <span className="affiliate-overview__affieliate-guide--content-left-link-title">
+              Đường dẫn:
+            </span>
+            <span className="affiliate-overview__affieliate-guide--content-left-link">
+              https://apps.apple.com/us/app/guvi <IoCopy color="#f97316" />
+            </span>
+          </div>
+          <div className="affiliate-overview__affieliate-guide--content-line">
+            <div className="affiliate-overview__affieliate-guide--content-line-icon">
+              <IoSwapHorizontal size="40px" color="#9ca3af" />
             </div>
           </div>
-          <div className="affiliate-overview__landing-page--content-right">
-            <div className="affiliate-overview__landing-page--content-right-circle">
-              <img
-                className="affiliate-overview__landing-page--content-right-circle-image"
-                src={appScreenImage}
-              ></img>
-              <div className="affiliate-overview__landing-page--content-right-circle-icon circle bottom-left"></div>
-              <div className="affiliate-overview__landing-page--content-right-circle-icon line_1 top-right"></div>
-              <div className="affiliate-overview__landing-page--content-right-circle-icon line_2 top-right"></div>
-            </div>
+          <div className="affiliate-overview__affieliate-guide--content-left">
+            <span className="affiliate-overview__affieliate-guide--content-left-header">
+              Nhận ngày voucher giảm giá
+            </span>
+            <span className="affiliate-overview__affieliate-guide--content-left-description">
+              Gửi voucher đến người được giới thiệu và nhận{" "}
+              <span className="high-light">5%</span> bắt đầu từ đơn thứ 2 thành
+              công của người được giới thiệu. Nếu là đơn đầu tiên sẽ được thưởng
+              thêm <span className="high-light">50.000đ</span>
+            </span>
+            <span className="affiliate-overview__affieliate-guide--content-left-link-title">
+              Đường dẫn:
+            </span>
+            <span className="affiliate-overview__affieliate-guide--content-left-link">
+              https://apps.apple.com/us/app/guvi <IoCopy color="#f97316" />
+            </span>
           </div>
         </div>
       </div>
@@ -270,46 +136,43 @@ const OverView = () => {
           </div>
         </div>
       </div>
-      {/* Affieliate Guide */}
-      <div className="affiliate-overview__affieliate-guide">
-        <div className="affiliate-overview__affieliate-guide--content">
-          <div className="affiliate-overview__affieliate-guide--content-left">
-            <span className="affiliate-overview__affieliate-guide--content-left-header">
-              Nhận ngay chiết khấu
+      {/* Landing Page */}
+      <div className="affiliate-overview__landing-page">
+        <div className="affiliate-overview__landing-page--content">
+          <div className="affiliate-overview__landing-page--content-left">
+            <span className="affiliate-overview__landing-page--content-left-header">
+              <span className="affiliate-overview__landing-page--content-left-header-orange">
+                Gu
+              </span>
+              <span className="affiliate-overview__landing-page--content-left-header-purple">
+                vi
+              </span>{" "}
+              {/* <img
+                className="affiliate-overview__landing-page--content-left-header-logo"
+                src={logoGuvi}
+              ></img> */}
+              ứng dụng giúp việc tiện lợi
             </span>
-            <span className="affiliate-overview__affieliate-guide--content-left-description">
-              Giới thiệu và nhận ngay <span className="high-light">5%</span> cho
-              các đơn thành công của người được giới thiệu. Nếu là đơn đầu tiên
-              sẽ được thưởng thêm <span className="high-light">50.000đ</span>
+            <span className="affiliate-overview__landing-page--content-left-description">
+              Đặt lịch giúp việc theo giờ tại GUVI thật dễ dàng, nhanh chóng,
+              tiết kiệm và chuyên nghiệp.
             </span>
-            <span className="affiliate-overview__affieliate-guide--content-left-link-title">
-              Đường dẫn:
-            </span>
-            <span className="affiliate-overview__affieliate-guide--content-left-link">
-              https://apps.apple.com/us/app/guvi <IoCopy color="#f97316" />
-            </span>
-          </div>
-          <div className="affiliate-overview__affieliate-guide--content-line">
-            <div className="affiliate-overview__affieliate-guide--content-line-icon">
-              <IoSwapHorizontal size="40px" color="#9ca3af" />
+            {/* <div className="affiliate-overview__landing-page--content-left-line"></div> */}
+            <div className="affiliate-overview__landing-page--content-left-download">
+              <img src={chStoreImage}></img>
+              <img src={appleStoreImage}></img>
             </div>
           </div>
-          <div className="affiliate-overview__affieliate-guide--content-left">
-            <span className="affiliate-overview__affieliate-guide--content-left-header">
-              Nhận ngày voucher giảm giá
-            </span>
-            <span className="affiliate-overview__affieliate-guide--content-left-description">
-              Gửi voucher đến người được giới thiệu và nhận{" "}
-              <span className="high-light">5%</span> bắt đầu từ đơn thứ 2 thành
-              công của người được giới thiệu. Nếu là đơn đầu tiên sẽ được thưởng
-              thêm <span className="high-light">50.000đ</span>
-            </span>
-            <span className="affiliate-overview__affieliate-guide--content-left-link-title">
-              Đường dẫn:
-            </span>
-            <span className="affiliate-overview__affieliate-guide--content-left-link">
-              https://apps.apple.com/us/app/guvi <IoCopy color="#f97316" />
-            </span>
+          <div className="affiliate-overview__landing-page--content-right">
+            <div className="affiliate-overview__landing-page--content-right-circle">
+              <img
+                className="affiliate-overview__landing-page--content-right-circle-image"
+                src={appScreenImage}
+              ></img>
+              <div className="affiliate-overview__landing-page--content-right-circle-icon circle bottom-left"></div>
+              <div className="affiliate-overview__landing-page--content-right-circle-icon line_1 top-right"></div>
+              <div className="affiliate-overview__landing-page--content-right-circle-icon line_2 top-right"></div>
+            </div>
           </div>
         </div>
       </div>

@@ -10,6 +10,11 @@ export const loginAction = createActions({
   loginFailure: (err) => err,
 });
 
+export const loginWithOnlyTokenAction = createActions({
+  loginWithOnlyTokenRequest: (payload) => payload,
+  loginWithOnlyTokenSuccess: (payload) => payload,
+  loginWithOnlyTokenFailure: (err) => err,
+});
 
 export const logoutAction = createActions({
   logoutRequest: (payload) => payload,
@@ -35,6 +40,7 @@ export const getUserAction = createActions({
   getUserFailure: (err) => err,
 });
 
+// Affiliate
 export const loginAffiliateAction = createActions({
   loginAffiliateRequest: (payload) => payload,
   loginAffiliateSuccess: (payload) => payload,
@@ -47,3 +53,14 @@ export const loginAffiliateWithOTPAction = createActions({
   loginAffiliateWithOTPFailure: (err) => err,
 });
 
+export const logoutAffiliateAction = createActions({
+  logoutAffiliateRequest: (payload) => payload,
+  logoutAffiliateSuccess: (payload) => payload,
+  logoutAffiliateFailure: (err) => err,
+});
+
+export const getUserAffiliateAction = createActions({
+  getUserAffiliateRequest: (payload) => payload,
+  getUserAffiliateSuccess: (payload) => payload,
+  getUserAffiliateFailure: (err) => err,
+});

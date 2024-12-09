@@ -22,7 +22,11 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { removeToken } from "../../helper/tokenHelper";
-import { languageAction, logoutAction } from "../../redux/actions/auth";
+import {
+  languageAction,
+  logoutAction,
+  logoutAffiliateAction,
+} from "../../redux/actions/auth";
 import { loadingAction } from "../../redux/actions/loading";
 import { getLanguageState, getUser } from "../../redux/selectors/auth";
 import "./Header.scss";
@@ -46,7 +50,7 @@ import logoGuvi from "../../assets/images/LogoS.svg";
 import Sidebar from "../../layout/Slidebar";
 import icons from "../../utils/icons";
 
-const {IoPeopleOutline, IoHomeOutline, IoHome, IoPeople} = icons;
+const { IoPeopleOutline, IoHomeOutline, IoHome, IoPeople } = icons;
 const { Option } = Select;
 
 const MainPort = Number(process.env.REACT_APP_PORT_MAIN);
@@ -66,9 +70,15 @@ const Header = ({ onClick, hide }) => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isActivated, setIsActivated] = useState(0);
   const onLogout = () => {
-    removeToken();
-    dispatch(loadingAction.loadingRequest(true));
-    dispatch(logoutAction.logoutRequest(navigate));
+    if (currentPort === MainPort) {
+      removeToken();
+      dispatch(loadingAction.loadingRequest(true));
+      dispatch(logoutAction.logoutRequest(navigate));
+    } else {
+      removeToken();
+      dispatch(loadingAction.loadingRequest(true));
+      dispatch(logoutAffiliateAction.logoutAffiliateRequest(navigate));
+    }
   };
   const languageItems = [
     {

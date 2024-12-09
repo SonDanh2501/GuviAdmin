@@ -56,7 +56,7 @@
                 padding: 12px;
                 background-color: $colorWhite;
                 border-radius: $borderRadiusL;
-                
+
                 &.no-padding {
                     padding: 0px;
                 }
@@ -79,20 +79,108 @@
                     display: flex;
                     flex-direction: column;
                     padding: 12px;
+                    gap: $gapM;
+
+                    .refferend-list-affiliate__content--left-card-body-image {
+                        width: 100%;
+                        height: 100px;
+                        background-color: #FDE17D;
+                        border-radius: $borderRadiusL;
+                    }
 
                     .refferend-list-affiliate__content--left-card-body-steps {
                         display: flex;
                         align-items: center;
+                        gap: $gapS;
 
                         .refferend-list-affiliate__content--left-card-body-steps-circle {
-                            width: 8px;
-                            height: 8px;
+                            position: relative;
+                            width: 28px;
+                            height: 28px;
                             border-radius: $borderRadiusFull;
-                            background-color: $colorBlue;
+                            background-color: $colorViolet;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            color: white;
+                            font-size: $textFontSizeM;
+                        }
+
+                        .refferend-list-affiliate__content--left-card-body-steps-line {}
+
+                        .refferend-list-affiliate__content--left-card-body-steps-step {
+                            width: 85%;
+
+                            span {
+                                font-weight: $fontWeightL;
+                                font-size: $textFontSizeM;
+                                color: $colorBlack;
+                            }
 
                         }
                     }
+
+                    .refferend-list-affiliate__content--left-card-body-code {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: center;
+                        gap: $gapL;
+
+                        .refferend-list-affiliate__content--left-card-body-code-content {
+                            display: flex;
+                            justify-content: space-between;
+                            padding: 12px 24px;
+                            width: 90%;
+                            background-color: $colorMoreLightViolet;
+                            border-radius: $borderRadiusFull;
+
+                            .refferend-list-affiliate__content--left-card-body-code-content-label {
+                                font-size: $textFontSizeM;
+                                font-weight: $fontWeightXL;
+                                color: $colorBlack;
+                            }
+
+                            .refferend-list-affiliate__content--left-card-body-code-content-copy {
+                                font-size: $textFontSizeM;
+                                font-weight: $fontWeightXL;
+                                color: $colorViolet;
+                                cursor: pointer;
+                            }
+
+                            .refferend-list-affiliate__content--left-card-body-code-content-input {
+                                background-color: transparent;
+                                outline: none;
+                                font-size: $textFontSizeM;
+                                font-weight: $fontWeightXL;
+                                color: $colorBlack;
+                                width: 70%;
+                            }
+                        }
+
+                        .refferend-list-affiliate__content--left-card-body-code-random {
+                            display: flex;
+                            justify-content: center;
+                            padding: 12px 24px;
+                            width: 90%;
+                            background-color: $colorViolet;
+                            border-radius: $borderRadiusFull;
+                            cursor: pointer;
+                            transition: all 0.3s ease-out;
+
+                            &:hover {
+                                background-color: $colorDarkViolet;
+                            }
+                            
+                            .refferend-list-affiliate__content--left-card-body-code-random-label {
+                                font-size: $textFontSizeM;
+                                font-weight: $fontWeightXL;
+                                color: $colorWhite;
+                            }
+                        }
+                    }
                 }
+
                 .refferend-list-affiliate__content--left-card-content {
                     display: flex;
                     justify-content: space-between;
@@ -112,6 +200,7 @@
                             font-size: $textFontSize3XL;
                             font-weight: $fontWeightXL;
                             color: $colorBlack;
+
                             .unit {
                                 font-size: $textFontSizeM;
                                 font-weight: $fontWeightL;
@@ -131,19 +220,19 @@
                             color: $colorBlue;
                             background-color: $colorExtraLightBlue;
                         }
-        
-        
+
+
                         &.red {
                             color: $colorRed;
                             background-color: $colorExtraLightRed;
                         }
-        
+
                         &.yellow {
                             color: $colorYellow;
                             background-color: $colorExtraLightYellow;
                         }
-        
-        
+
+
                         &.green {
                             color: $colorGreen;
                             background-color: $colorExtraLightGreen;
@@ -228,7 +317,7 @@
                             transition: 0.3s all ease;
 
                             &.activated {
-                                background-color: $colorPurple;
+                                background-color: $colorViolet;
                                 color: $colorWhite;
                             }
                         }
@@ -778,7 +867,7 @@
 
                         .refferend-list-affiliate__content--right-bank-top-right-withdraw {
                             padding: 8px;
-                            background-color: $colorPurple;
+                            background-color: $colorViolet;
                             border-radius: $borderRadiusL;
                             color: $colorWhite;
                             font-weight: $fontWeightXL;
@@ -845,7 +934,7 @@
                         justify-content: center;
                         width: 100%;
                         height: 100px;
-                        background-color: $colorPurple;
+                        background-color: $colorMoreLightViolet;
                         border-radius: $borderRadiusL;
 
                         .refferend-list-affiliate__content--right-share-content-highlight-title {
@@ -856,8 +945,8 @@
 
                         .refferend-list-affiliate__content--right-share-content-highlight-sub-title {
                             font-size: $textFontSizeM;
-                            font-weight: $fontWeightL;
-                            color: $colorWhite;
+                            font-weight: $fontWeightXL;
+                            color: $colorBlack;
                         }
                     }
 
@@ -876,6 +965,13 @@
                         }
 
                         .refferend-list-affiliate__content--right-share-content-share-link {
+                            display: inline-block;
+                            max-width: 300px;
+                            white-space: nowrap;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            vertical-align: middle;
+                            cursor: pointer;
                             font-size: $textFontSizeM;
                             font-weight: $fontWeightL;
                             color: $colorLightGray;
@@ -1074,7 +1170,7 @@
                                 transition: 0.3s all ease;
 
                                 &.activated {
-                                    background-color: $colorPurple;
+                                    background-color: $colorViolet;
                                     color: $colorWhite;
                                 }
                             }
@@ -1624,7 +1720,7 @@
 
                             .refferend-list-affiliate__content--right-bank-top-right-withdraw {
                                 padding: 8px;
-                                background-color: $colorPurple;
+                                background-color: $colorViolet;
                                 border-radius: $borderRadiusL;
                                 color: $colorWhite;
                                 font-weight: $fontWeightXL;
@@ -1691,7 +1787,7 @@
                             justify-content: center;
                             width: 100%;
                             height: 100px;
-                            background-color: $colorPurple;
+                            background-color: $colorViolet;
                             border-radius: $borderRadiusL;
 
                             .refferend-list-affiliate__content--right-share-content-highlight-title {

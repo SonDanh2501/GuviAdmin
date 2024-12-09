@@ -7,6 +7,9 @@ import {
   registerAffiliateApi,
   loginAffiliateApi,
   checkOTPAffiliateApi,
+  forgotPasswordAffiliateApi,
+  sendOtpAffiliateApi,
+  updatePasswordAffiliateApi,
 } from "../../../api/affeliate";
 import { useDispatch } from "react-redux";
 import logo from "../../../assets/images/Logo.svg";
@@ -17,6 +20,7 @@ import { loadingAction } from "../../../redux/actions/loading";
 import {
   loginAffiliateAction,
   loginAffiliateWithOTPAction,
+  loginWithOnlyTokenAction,
 } from "../../../redux/actions/auth";
 import { useNavigate } from "react-router-dom";
 
@@ -27,10 +31,12 @@ const LoginAffiliate = () => {
   const navigate = useNavigate();
   const [isSignUp, setIsSignUp] = useState(false); // Giá trị xác định hiện form đăng nhập hay form đăng ký
   const [valuePhone, setValuePhone] = useState(""); // Giá trị điện thoại đăng nhập/đăng ký
+  const [valuePhoneForgot, setValuePhoneForgot] = useState(""); // Giá trị điện thoại để quên mật khẩu
   const [valuePassword, setValuePassword] = useState(""); // Giá trị mật khẩu đăng nhập/đăng ký
+  const [valuePasswordRetype, setValuePasswordRetype] = useState(""); // Giá trị nhập lại mật khẩu đăng nhập/đăng ký
   const [valueName, setValueName] = useState(""); // Giá trị tên đăng ký
   const [valueFullName, setValueFullName] = useState(""); // Giá trị họ và tên đăng ký
-  const [valueInvitedCode, setValueInvitedCode] = useState(""); // Giá trị mã giới thiệu
+  // const [valueInvitedCode, setValueInvitedCode] = useState(""); // Giá trị mã giới thiệu
   const [valueEmail, setValueEmail] = useState(""); // Giá trị email đăng ký
   const [secondsLeft, setSecondsLeft] = useState(60); // Giá trị giờ đếm để được gửi một OTP mới
   const [isRunning, setIsRunning] = useState(false); // Giá trị xác định bộ đếm có đang chạy hay không
@@ -38,6 +44,9 @@ const LoginAffiliate = () => {
   const [showModalSignUp, setShowModalSignUp] = useState(false); // Giá trị hiển thị modal đăng ký
   const [showModalRegisterInformation, setShowModalRegisterInformation] =
     useState(false); // Giá trị hiển thị modal nhập thông tin tài khoản mới
+  const [showModalForgotPassword, setShowModalForgotPassword] = useState(false); // Giá trị hiển thị modal quên mật khẩu
+  const [showModalUpdatePassword, setShowModalUpdatePassword] = useState(false); // Giá trị hiển thị modal nhập mật khẩu mới
+  const [isForgotPassword, setIsForgotPassword] = useState(false); // Giá trị kiểm trị là đang quên mật khẩu hay đăng nhập/đăng ký
   /* ~~~ Use effect ~~~ */
   useEffect(() => {
     if (isRunning && secondsLeft > 0) {
@@ -53,23 +62,19 @@ const LoginAffiliate = () => {
 
   /* ~~~ Handle function ~~~ */
   // 1. Hàm đăng nhập
-  const handleLoginAffiliate = useCallback(
-    (e) => {
-      dispatch(loadingAction.loadingRequest(true));
-      dispatch(
-        loginAffiliateAction.loginAffiliateRequest({
-          data: {
-            phone: valuePhone,
-            password: valuePassword,
-            code_phone_area: "+84",
-          },
-          naviga: navigate,
-        })
-      );
-      dispatch(loadingAction.loadingRequest(false));
-    },
-    [dispatch, navigate, valuePhone, valuePassword]
-  );
+  const handleLoginAffiliate = async (phone, password) => {
+    dispatch(loadingAction.loadingRequest(true));
+    dispatch(
+      loginAffiliateAction.loginAffiliateRequest({
+        data: {
+          phone: phone,
+          password: password,
+          code_phone_area: "+84",
+        },
+        naviga: navigate,
+      })
+    );
+  };
   // 2. Hàm gửi mã OTP
   const handleSendOTP = async (payload) => {
     try {
@@ -88,7 +93,11 @@ const LoginAffiliate = () => {
       dispatch(loadingAction.loadingRequest(true));
       const res = await checkOTPAffiliateApi(payload);
       setSaveToken(res.token);
-      setShowModalRegisterInformation(true);
+      if (isForgotPassword) {
+        setShowModalUpdatePassword(true);
+      } else {
+        setShowModalRegisterInformation(true);
+      }
       setShowModalSignUp(false);
       dispatch(loadingAction.loadingRequest(false));
     } catch (err) {
@@ -117,10 +126,62 @@ const LoginAffiliate = () => {
     }
   };
   // 5. Hàm gửi lại mã OTP
-  const handleResendOTP = () => {
-    setSecondsLeft(30);
-    setIsRunning(true);
+  const handleResendOTP = async (payload) => {
+    try {
+      const res = await sendOtpAffiliateApi(payload);
+      setSecondsLeft(60);
+      setIsRunning(true);
+    } catch (err) {
+      errorNotify({
+        message: err.message,
+      });
+    }
   };
+  // 6. Nhớ viết phần đăng nhập từ app nhấn vào
+  const [a, setA] = useState("");
+  const getIsCheckLogin = () => {
+    const currentData = localStorage.getItem("auth");
+    const formatData = JSON.parse(currentData);
+
+    if (formatData?.token.length > 0 && formatData?.isCheckLogin === "true") {
+      // console.log("check formatData", formatData.token);
+      // setA(formatData.isCheckLogin)
+      dispatch(loadingAction.loadingRequest(true));
+      dispatch(
+        loginWithOnlyTokenAction.loginWithOnlyTokenRequest({
+          token: "formatData.token",
+          naviga: navigate,
+        })
+      );
+    }
+  };
+  // 7. Hàm quên mật khẩu
+  const handleForgotPassword = async (payload) => {
+    try {
+      const res = await forgotPasswordAffiliateApi(payload);
+      setShowModalSignUp(true);
+      setIsForgotPassword(true);
+    } catch (err) {
+      errorNotify({
+        message: err.message,
+      });
+    }
+  };
+  // 8. Hàm cập nhật mật khẩu
+  const handleUpdatePassword = async (payload) => {
+    try {
+      const res = await updatePasswordAffiliateApi(payload);
+      handleLoginAffiliate(valuePhoneForgot, valuePassword);
+    } catch (err) {
+      errorNotify({
+        message: err.message,
+      });
+    }
+  };
+
+  useEffect(() => {
+    getIsCheckLogin();
+  }, []);
   //
   /* ~~~ Other ~~~ */
   const inputRefs = useRef([]);
@@ -151,8 +212,20 @@ const LoginAffiliate = () => {
     }
   };
 
+  const handleChangeToSignUp = () => {
+    setIsSignUp(true);
+    setValuePhone("");
+    setValuePassword("");
+  };
+
+  const handleChangeToSignIn = () => {
+    setIsSignUp(false);
+    setValuePassword("");
+  };
+
   return (
     <div className="login-affiliate">
+      {/* <span>hello{a}</span> */}
       <div className="login-affiliate__card card-shadow">
         <div className="login-affiliate__card--information">
           {/* Label đăng nhập */}
@@ -186,7 +259,7 @@ const LoginAffiliate = () => {
               <ButtonCustom
                 fullScreen={true}
                 label="Đăng nhập"
-                onClick={handleLoginAffiliate}
+                onClick={() => handleLoginAffiliate(valuePhone, valuePassword)}
               />
               <div className="login-affiliate__card--information-line">
                 <span className="login-affiliate__card--information-line-other">
@@ -197,7 +270,7 @@ const LoginAffiliate = () => {
                 fullScreen={true}
                 label="Đăng ký"
                 style="normal"
-                onClick={() => setIsSignUp(true)}
+                onClick={() => handleChangeToSignUp()}
               />
             </>
           ) : (
@@ -228,17 +301,28 @@ const LoginAffiliate = () => {
                 fullScreen={true}
                 label="Đăng nhập"
                 style="normal"
-                onClick={() => setIsSignUp(false)}
+                onClick={() => handleChangeToSignIn()}
               />
             </>
           )}
+          <div className="login-affiliate__card--information-forgot-password">
+            <span className="login-affiliate__card--information-forgot-password-label">
+              Bạn quên mật khẩu hiện tại?
+            </span>
+            <span
+              onClick={() => setShowModalForgotPassword(true)}
+              className="login-affiliate__card--information-forgot-password-button"
+            >
+              Quên mật khẩu
+            </span>
+          </div>
           {/* Modal OTP */}
           <Modal
             title="Xác thực mã OTP"
             onCancel={() => setShowModalSignUp(false)}
             onOk={() =>
               handleCheckOTP({
-                phone: valuePhone,
+                phone: valuePhone.length > 0 ? valuePhone : valuePhoneForgot,
                 code_phone_area: "+84",
                 code: otp.join(""),
               })
@@ -249,7 +333,7 @@ const LoginAffiliate = () => {
           >
             <div className="login-affiliate__card--information-otp">
               <span className="login-affiliate__card--information-otp-label">
-                Nhập mã gồm 6 số đã gửi tới SMS thông qua số (+84) 123456789
+                Nhập mã gồm 6 số đã gửi tới SMS thông qua số (+84) {valuePhone}
               </span>
               <div className="login-affiliate__card--information-otp-digit">
                 {Array.from({ length: 6 }, (_, index) => (
@@ -274,7 +358,12 @@ const LoginAffiliate = () => {
               ) : (
                 <span
                   className="login-affiliate__card--information-otp-label high-light clickable"
-                  onClick={() => handleResendOTP()}
+                  onClick={() =>
+                    handleResendOTP({
+                      phone: valuePhone,
+                      code_phone_area: "+84",
+                    })
+                  }
                 >
                   Gửi lại mã
                 </span>
@@ -290,14 +379,14 @@ const LoginAffiliate = () => {
             onOk={() =>
               handleRegisterAccount({
                 token: saveToken,
-                name: valueName,
+                name: "",
                 full_name: valueFullName,
                 email: valueEmail,
                 phone: valuePhone,
                 password: valuePassword,
                 code_phone_area: "+84",
                 code: otp.join(""),
-                code_inviter: valueInvitedCode,
+                // code_inviter: valueInvitedCode,
               })
             }
             okText={"Xác nhận"}
@@ -311,14 +400,13 @@ const LoginAffiliate = () => {
                 placeHolder="Email"
                 onChange={(e) => setValueEmail(e.target.value)}
               />
-              <InputTextCustom
+              {/* <InputTextCustom
                 type="text"
                 value={valueName}
                 placeHolder="Tên"
                 onChange={(e) => setValueName(e.target.value)}
                 required={true}
-              />
-
+              /> */}
               <InputTextCustom
                 type="text"
                 value={valueFullName}
@@ -333,12 +421,61 @@ const LoginAffiliate = () => {
                 required={true}
                 isPassword={true}
               />
+            </div>
+          </Modal>
+          {/* Modal quên mật khẩu */}
+          <Modal
+            title="Quên mật khẩu"
+            onCancel={() => {
+              setShowModalForgotPassword(false);
+            }}
+            onOk={() =>
+              handleForgotPassword({
+                phone: valuePhoneForgot,
+                code_phone_area: "+84",
+              })
+            }
+            okText={"Xác nhận"}
+            cancelText={"Hủy"}
+            open={showModalForgotPassword}
+          >
+            <div className="login-affiliate__card--information-person">
               <InputTextCustom
                 type="text"
-                value={valueInvitedCode}
-                placeHolder="Mã giới thiệu"
-                onChange={(e) => setValueInvitedCode(e.target.value)}
-                describe="Nhập mã của người giới thiệu"
+                value={valuePhoneForgot}
+                placeHolder="Số điện thoại hiện tại"
+                onChange={(e) => setValuePhoneForgot(e.target.value)}
+              />
+            </div>
+          </Modal>
+          {/* Modal nhập mật khẩu mới */}
+          <Modal
+            title="Nhập mật khẩu mới"
+            onCancel={() => {
+              setShowModalUpdatePassword(false);
+            }}
+            onOk={() =>
+              handleUpdatePassword({
+                token: saveToken,
+                password: valuePassword,
+              })
+            }
+            okText={"Xác nhận"}
+            cancelText={"Hủy"}
+            open={showModalUpdatePassword}
+          >
+            <div className="login-affiliate__card--information-person">
+              <InputTextCustom
+                type="text"
+                value={valuePassword}
+                placeHolder="Nhập mật khẩu mới"
+                onChange={(e) => setValuePassword(e.target.value)}
+              />
+              <InputTextCustom
+                type="text"
+                value={valuePasswordRetype}
+                placeHolder="Nhập lại mật khẩu"
+                onChange={(e) => setValuePasswordRetype(e.target.value)}
               />
             </div>
           </Modal>
