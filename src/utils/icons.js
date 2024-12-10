@@ -76,7 +76,8 @@ import {
   IoHomeOutline,
   IoCash,
   IoReader,
-  IoRefresh ,
+  IoRefresh,
+  IoChatboxEllipses,
 } from "react-icons/io5";
 import { FaRegFrown, FaRegMeh, FaRegSmile } from "react-icons/fa";
 import { MdDoubleArrow } from "react-icons/md";
@@ -160,6 +161,7 @@ const icons = {
   IoCash,
   IoReader,
   IoRefresh,
+  IoChatboxEllipses,
   // Font Awesome 5
   FaRegFrown,
   FaRegMeh,

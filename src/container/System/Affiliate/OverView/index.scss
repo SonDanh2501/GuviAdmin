@@ -290,6 +290,9 @@
                 }
 
                 .affiliate-overview__affieliate-guide--content-left-link-title {
+                    display: flex;
+                    gap: $gapXS;
+                    align-items: center;
                     font-size: 16px;
                     font-weight: $fontWeightXL;
                     color: $colorBlack;
@@ -298,12 +301,15 @@
 
                 .affiliate-overview__affieliate-guide--content-left-link {
                     display: flex;
-                    gap: $gapL;
-                    align-items: center;
+                    max-width: 500px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    vertical-align: middle;
                     cursor: pointer;
                     font-size: 16px;
                     font-weight: $fontWeightL;
-                    color: $colorGray;
+                    color: $colorLightGray;
                 }
             }
 
@@ -373,6 +379,12 @@
                 .affiliate-overview__footer--content-information-image {
                     height: 48px;
                     width: fit-content;
+                }
+
+                .affiliate-overview__footer--content-information-image-container {
+                    display: flex;
+                    flex-direction: column;
+                    gap: $gapL;
                 }
             }
         }
@@ -770,6 +782,12 @@
                     .affiliate-overview__footer--content-information-image {
                         height: 48px;
                         width: fit-content;
+                    }
+
+                    .affiliate-overview__footer--content-information-image-container {
+                        display: flex;
+                        flex-direction: column;
+                        gap: $gapL;
                     }
                 }
             }
@@ -1184,6 +1202,7 @@
 
                     .affiliate-overview__footer--content-information-image-container {
                         display: flex;
+                        flex-direction: row;
                         gap: $gapL;
                     }
                 }

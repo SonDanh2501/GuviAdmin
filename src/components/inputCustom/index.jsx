@@ -19,6 +19,7 @@ import icons from "../../utils/icons";
 
 import secretImage from "../../assets/images/preview_image.png";
 import notFoundImage from "../../assets/images/not_found_image.svg";
+import { formatMoney, formatNumber } from "../../helper/formatMoney";
 
 const {
   IoCheckmarkCircleSharp,
@@ -59,7 +60,7 @@ const InputTextCustom = (props) => {
     setSearchValue, // Lấy giá trị search viết trên component truyền ngược lại component cha
     isPassword, // Giá trị text password (che dấu *)
     describe, // Giá trị mô tả hỗ trợ
-
+    isNumber, // Giá trị format lại text nếu là số
   } = props;
   // Lấy district (quận/huyện) từ giá trị province có được
   const tempDistrictArray = province?.find(
@@ -707,7 +708,7 @@ const InputTextCustom = (props) => {
             name={name ? name : ""}
             className="form-field__input"
             placeholder={placeHolderNormal ? placeHolderNormal : " "}
-            value={value}
+            value={isNumber ? formatNumber(value) : value}
             onChange={onChange}
           />
           <label

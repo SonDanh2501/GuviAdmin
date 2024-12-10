@@ -9,6 +9,8 @@ import chStoreImage from "../../../../assets/images/google_play.svg";
 import appScreenImage from "../../../../assets/images/app_screen.png";
 import copyRightImage from "../../../../assets/images/copy_right.png";
 import logoGuvi from "../../../../assets/images/LogoS.svg";
+import { useSelector } from "react-redux";
+import { getUser } from "../../../../redux/selectors/auth";
 const {
   IoLink,
   IoPersonAdd,
@@ -28,6 +30,7 @@ const {
 } = icons;
 
 const OverView = () => {
+  const user = useSelector(getUser);
   const [isSelectCard, setIsSelectCard] = useState(0);
 
   const handleCopyLink = () => {
@@ -51,9 +54,10 @@ const OverView = () => {
             </span>
             <span className="affiliate-overview__affieliate-guide--content-left-link-title">
               Đường dẫn:
+              <IoCopy color="#f97316" />
             </span>
             <span className="affiliate-overview__affieliate-guide--content-left-link">
-              https://apps.apple.com/us/app/guvi <IoCopy color="#f97316" />
+              {user.referral_link}
             </span>
           </div>
           <div className="affiliate-overview__affieliate-guide--content-line">
@@ -73,9 +77,10 @@ const OverView = () => {
             </span>
             <span className="affiliate-overview__affieliate-guide--content-left-link-title">
               Đường dẫn:
+              <IoCopy color="#f97316" />
             </span>
             <span className="affiliate-overview__affieliate-guide--content-left-link">
-              https://apps.apple.com/us/app/guvi <IoCopy color="#f97316" />
+              {user.promotional_referral_link}
             </span>
           </div>
         </div>
