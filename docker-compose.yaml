@@ -10,6 +10,6 @@ services:
     ports:
       - ${PORT}:${PORT}
     restart: always
-    command: serve -s build
+    command: sh -c "serve -s build -l 3000 & serve -s build -l 3001"
     env_file:
       - .env
