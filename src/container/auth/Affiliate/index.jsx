@@ -47,6 +47,7 @@ const LoginAffiliate = () => {
   const [showModalForgotPassword, setShowModalForgotPassword] = useState(false); // Giá trị hiển thị modal quên mật khẩu
   const [showModalUpdatePassword, setShowModalUpdatePassword] = useState(false); // Giá trị hiển thị modal nhập mật khẩu mới
   const [isForgotPassword, setIsForgotPassword] = useState(false); // Giá trị kiểm trị là đang quên mật khẩu hay đăng nhập/đăng ký
+  const [valuePhoneArea, setValuePhoneArea] = useState("+84"); // Giá trị phân vùng
   /* ~~~ Use effect ~~~ */
   useEffect(() => {
     if (isRunning && secondsLeft > 0) {
@@ -69,7 +70,7 @@ const LoginAffiliate = () => {
         data: {
           phone: phone,
           password: password,
-          code_phone_area: "+84",
+          code_phone_area: valuePhoneArea,
         },
         naviga: navigate,
       })
@@ -139,7 +140,6 @@ const LoginAffiliate = () => {
   };
   // 6. Nhớ viết phần đăng nhập từ app nhấn vào
   const getIsCheckLogin = () => {
-    console.log("check running >>>");
     const currentData = localStorage.getItem("authApp");
     const formatData = JSON.parse(currentData);
     if (formatData?.token.length > 0 && formatData?.isCheckLogin === "true") {
@@ -238,7 +238,8 @@ const LoginAffiliate = () => {
             <>
               <InputTextCustom
                 type="textValue"
-                valueUnit="(+84)"
+                valueUnit={valuePhoneArea}
+                onChangeValueUnit={(e) => setValuePhoneArea(e.target.value)}
                 value={valuePhone}
                 placeHolder="Số điện thoại"
                 onChange={(e) => setValuePhone(e.target.value)}
@@ -284,7 +285,7 @@ const LoginAffiliate = () => {
                 onClick={() =>
                   handleSendOTP({
                     phone: valuePhone,
-                    code_phone_area: "+84",
+                    code_phone_area: valuePhoneArea,
                   })
                 }
               />
@@ -319,7 +320,7 @@ const LoginAffiliate = () => {
             onOk={() =>
               handleCheckOTP({
                 phone: valuePhone.length > 0 ? valuePhone : valuePhoneForgot,
-                code_phone_area: "+84",
+                code_phone_area: valuePhoneArea,
                 code: otp.join(""),
               })
             }
@@ -357,7 +358,7 @@ const LoginAffiliate = () => {
                   onClick={() =>
                     handleResendOTP({
                       phone: valuePhone,
-                      code_phone_area: "+84",
+                      code_phone_area: valuePhoneArea,
                     })
                   }
                 >
@@ -380,7 +381,7 @@ const LoginAffiliate = () => {
                 email: valueEmail,
                 phone: valuePhone,
                 password: valuePassword,
-                code_phone_area: "+84",
+                code_phone_area: valuePhoneArea,
                 code: otp.join(""),
                 // code_inviter: valueInvitedCode,
               })
@@ -428,7 +429,7 @@ const LoginAffiliate = () => {
             onOk={() =>
               handleForgotPassword({
                 phone: valuePhoneForgot,
-                code_phone_area: "+84",
+                code_phone_area: valuePhoneArea,
               })
             }
             okText={"Xác nhận"}

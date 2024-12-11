@@ -57,6 +57,7 @@ const InputTextCustom = (props) => {
     notShowPreviewImage, // Giá trị (boolean) hiển thị hay không preview image
     limitShows, // Hiển thị max là bao nhiêu lựa chọn
     valueUnit, // Phân vùng điện thoại
+    onChangeValueUnit, // Hàm change của unit
     setSearchValue, // Lấy giá trị search viết trên component truyền ngược lại component cha
     isPassword, // Giá trị text password (che dấu *)
     describe, // Giá trị mô tả hỗ trợ
@@ -77,7 +78,6 @@ const InputTextCustom = (props) => {
   });
   const [open, setOpen] = useState(false);
   const [hideImage, setHideImage] = useState(false);
-  const [valueWithUnit, setValueWithUnit] = useState("");
   const [selectArea, setSelectArea] = useState("");
 
   // ~~~ Support Handle fucntion ~~~
@@ -678,19 +678,7 @@ const InputTextCustom = (props) => {
       setValueArrayProps(tempDistrictArray);
     }
   }, [tempDistrictArray]);
-  // 4. Lấy giá trị điện thoại đúng khi phân vùng (sau này sẽ cần làm lại đúng hơn, đang làm đỡ cho một mã vùng duy nhất là +84)
-  useEffect(() => {
-    if (type === "textValue") {
-      // const formattedPhone = phone.replace(/(\d{4})(\d{3})(\d{3})/, "$1-$2-$3");
-      if (valueWithUnit && valueWithUnit?.includes(valueUnit)) {
-        setValueWithUnit(value);
-      } else {
-        const tempValue = valueUnit + " " + value;
-        setValueWithUnit(tempValue);
-      }
-    }
-  }, [value]);
-  // 5. Gán giá trị search cho một biến ở component cha
+  // 4. Gán giá trị search cho một biến ở component cha
   useEffect(() => {
     if (setSearchValue) {
       setSearchValue(searchInput);
@@ -1171,13 +1159,29 @@ const InputTextCustom = (props) => {
             disabled={disable}
             className="form-field__input"
             placeholder=" "
-            value={valueWithUnit}
+            value={value}
             onChange={onChange}
           />
           <label htmlFor=" " className="form-field__label">
             {placeHolder}{" "}
             {required && <span className="form-field__label--required">*</span>}
           </label>
+          <div className="form-field__image">
+            {/* <span className="form-field__image--plus">+</span> */}
+            <input
+              value={valueUnit}
+              onChange={onChangeValueUnit}
+              className="form-field__image--number"
+            ></input>
+            {/* <img
+              className="form-field__image--img"
+              src={
+                options?.find((el) => el.code === value)?.image
+                  ? options?.find((el) => el.code === value)?.image
+                  : notFoundImage
+              }
+            /> */}
+          </div>
         </>
       )}
       {/* Multi Select Field */}

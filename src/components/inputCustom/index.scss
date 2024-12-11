@@ -74,13 +74,23 @@
         border-left: 2px solid #eee;
 
         .form-field__image--number {
-            color: #6b7280;
-            opacity: $opacityS;
+            width: 28px;
+            height: 28px;
+            color: $colorBlack;
+            outline: none;
+            font-weight: $fontWeightL;
+            font-size: $textFontSizeM;
         }
 
         .form-field__image--img {
             width: 28px;
             height: 28px;
+        }
+
+        .form-field__image--plus {
+            font-weight: $fontWeightL;
+            font-size: $textFontSizeM;
+            color: $colorBlack;
         }
 
 
