@@ -549,7 +549,6 @@ const RefferendList = () => {
                 <div className="refferend-list-affiliate__content--left-card-body-steps-circle">
                   1
                 </div>
-
                 <div className="refferend-list-affiliate__content--left-card-body-steps-step">
                   <span>Chia sẻ đường link của bạn</span>
                 </div>
@@ -615,7 +614,9 @@ const RefferendList = () => {
                       onClick={() => {
                         updateReferralCode(valueReferralCode);
                       }}
-                      className="refferend-list-affiliate__content--left-card-body-code-content-copy"
+                      className={`refferend-list-affiliate__content--left-card-body-code-content-copy ${
+                        valueReferralCode.length < "not-allow-save"
+                      }`}
                     >
                       Lưu
                     </span>
@@ -986,13 +987,13 @@ const RefferendList = () => {
                   Nhận chiết khấu ngay
                   <IoCopy
                     onClick={() =>
-                      copyToClipBoard(valueUserInfo?.referral_link)
+                      copyToClipBoard(valueUserInfo?.referral_link || "")
                     }
                     color="orange"
                   />
                 </span>
                 <span className="refferend-list-affiliate__content--right-share-content-share-link">
-                  {valueUserInfo?.referral_link}
+                  {valueUserInfo?.referral_link || ""}
                 </span>
               </div>
               <div className="refferend-list-affiliate__content--right-share-content-share">
@@ -1000,13 +1001,15 @@ const RefferendList = () => {
                   Gửi voucher giảm giá
                   <IoCopy
                     onClick={() =>
-                      copyToClipBoard(valueUserInfo?.promotional_referral_link)
+                      copyToClipBoard(
+                        valueUserInfo?.promotional_referral_link || ""
+                      )
                     }
                     color="orange"
                   />
                 </span>
                 <span className="refferend-list-affiliate__content--right-share-content-share-link">
-                  {valueUserInfo?.promotional_referral_link}
+                  {valueUserInfo?.promotional_referral_link || ""}
                 </span>
               </div>
             </div>

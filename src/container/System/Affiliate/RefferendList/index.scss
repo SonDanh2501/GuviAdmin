@@ -146,6 +146,11 @@
                                 font-weight: $fontWeightXL;
                                 color: $colorViolet;
                                 cursor: pointer;
+
+                                &.not-allow-save {
+                                    color: $colorLightGray;
+                                    cursor: not-allowed;
+                                }
                             }
 
                             .refferend-list-affiliate__content--left-card-body-code-content-input {

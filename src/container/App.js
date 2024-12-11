@@ -28,7 +28,6 @@ const App = () => {
     }
     if (!isCheckLogin && currentPort === MainPort) {
       navigate("/auth/login");
-      dispatch(getServiceAction.getServiceRequest());
     }
     if (
       !isCheckLogin &&
@@ -37,7 +36,6 @@ const App = () => {
         currentUrlName === "admin-test")
     ) {
       navigate("/auth/login");
-      dispatch(getServiceAction.getServiceRequest());
     }
     if (
       !isCheckLogin &&
@@ -47,6 +45,7 @@ const App = () => {
     ) {
       navigate("/auth/login-affiliate");
     }
+    dispatch(getServiceAction.getServiceRequest());
   }, []);
 
   /* Việc check theo currentPort chỉ phù hợp cho chạy local thì mới lấy ra được 
