@@ -381,19 +381,18 @@ const RefferendList = () => {
     }
   };
   // 9. Hàm kiểm tra tài khoản ngân hàng
-  const checkBankAccountExist = async() => {
+  const checkBankAccountExist = async () => {
     try {
       const res = await checkBankAccountExistApi();
       if (res) {
         setIsCheckBankExist(true);
       }
-    }
-     catch (err) {
+    } catch (err) {
       errorNotify({
         message: err.message,
       });
-     }
-  }
+    }
+  };
   const onChangePage = (value) => {
     setStartPage(value);
   };
@@ -610,16 +609,20 @@ const RefferendList = () => {
                       placeholder="Nhập mã mới"
                       className="refferend-list-affiliate__content--left-card-body-code-content-input"
                     ></input>
-                    <span
-                      onClick={() => {
-                        updateReferralCode(valueReferralCode);
-                      }}
-                      className={`refferend-list-affiliate__content--left-card-body-code-content-copy ${
-                        valueReferralCode.length < "not-allow-save"
-                      }`}
-                    >
-                      Lưu
-                    </span>
+                    {valueReferralCode.length <= 0 ? (
+                      <span className="refferend-list-affiliate__content--left-card-body-code-content-copy not-allow-save">
+                        Lưu
+                      </span>
+                    ) : (
+                      <span
+                        onClick={() => {
+                          updateReferralCode(valueReferralCode);
+                        }}
+                        className="refferend-list-affiliate__content--left-card-body-code-content-copy"
+                      >
+                        Lưu
+                      </span>
+                    )}
                   </div>
                 )}
                 {!isChangeReferralCode && (

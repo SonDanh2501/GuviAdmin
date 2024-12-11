@@ -146,10 +146,16 @@
                                 font-weight: $fontWeightXL;
                                 color: $colorViolet;
                                 cursor: pointer;
+                                transition: all 0.3s ease-out;
 
+                                
                                 &.not-allow-save {
                                     color: $colorLightGray;
                                     cursor: not-allowed;
+                                }
+
+                                &:hover {
+                                    color: $colorDarkViolet;
                                 }
                             }
 
