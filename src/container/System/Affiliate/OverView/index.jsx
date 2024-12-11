@@ -58,12 +58,12 @@ const OverView = () => {
               Đường dẫn:
               <IoCopy
                 style={{ cursor: "pointer" }}
-                onClick={() => copyToClipBoard(user.referral_link)}
+                onClick={() => copyToClipBoard(user?.referral_link || "")}
                 color="#f97316"
               />
             </span>
             <span className="affiliate-overview__affieliate-guide--content-left-link">
-              {user.referral_link}
+              {user?.referral_link || ""}
             </span>
           </div>
           <div className="affiliate-overview__affieliate-guide--content-line">
@@ -85,12 +85,14 @@ const OverView = () => {
               Đường dẫn:
               <IoCopy
                 style={{ cursor: "pointer" }}
-                onClick={() => copyToClipBoard(user.promotional_referral_link)}
+                onClick={() =>
+                  copyToClipBoard(user?.promotional_referral_link || "")
+                }
                 color="#f97316"
               />
             </span>
             <span className="affiliate-overview__affieliate-guide--content-left-link">
-              {user.promotional_referral_link}
+              {user?.promotional_referral_link || ""}
             </span>
           </div>
         </div>
