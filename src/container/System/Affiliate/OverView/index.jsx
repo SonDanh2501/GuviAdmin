@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import icons from "../../../../utils/icons";
 import "./index.scss";
 import ButtonCustom from "../../../../components/button";
-import { errorNotify, infoNotify } from "../../../../helper/toast";
+import { errorNotify, infoNotify, successNotify } from "../../../../helper/toast";
 
 import appleStoreImage from "../../../../assets/images/apple_store.svg";
 import chStoreImage from "../../../../assets/images/google_play.svg";
@@ -31,16 +31,18 @@ const {
 
 const OverView = () => {
   const user = useSelector(getUser);
-  const [isSelectCard, setIsSelectCard] = useState(0);
-
-  const handleCopyLink = () => {
-    infoNotify({
-      message: "Copy đường link chia sẻ thành công",
-    });
+  /* ~~~ Other ~~~ */
+  const copyToClipBoard = (text) => {
+    if (text && text.length > 0) {
+      navigator.clipboard.writeText(text);
+      successNotify({
+        message: `Sao chép thành công`,
+      });
+    }
   };
   return (
     <div className="affiliate-overview">
-      {/* Affieliate Guide */}
+      {/* Hai đường link chia sẻ */}
       <div className="affiliate-overview__affieliate-guide">
         <div className="affiliate-overview__affieliate-guide--content">
           <div className="affiliate-overview__affieliate-guide--content-left">
@@ -54,7 +56,11 @@ const OverView = () => {
             </span>
             <span className="affiliate-overview__affieliate-guide--content-left-link-title">
               Đường dẫn:
-              <IoCopy color="#f97316" />
+              <IoCopy
+                style={{ cursor: "pointer" }}
+                onClick={() => copyToClipBoard(user.referral_link)}
+                color="#f97316"
+              />
             </span>
             <span className="affiliate-overview__affieliate-guide--content-left-link">
               {user.referral_link}
@@ -67,7 +73,7 @@ const OverView = () => {
           </div>
           <div className="affiliate-overview__affieliate-guide--content-left">
             <span className="affiliate-overview__affieliate-guide--content-left-header">
-              Nhận ngày voucher giảm giá
+              Nhận ngay voucher giảm giá
             </span>
             <span className="affiliate-overview__affieliate-guide--content-left-description">
               Gửi voucher đến người được giới thiệu và nhận{" "}
@@ -77,7 +83,11 @@ const OverView = () => {
             </span>
             <span className="affiliate-overview__affieliate-guide--content-left-link-title">
               Đường dẫn:
-              <IoCopy color="#f97316" />
+              <IoCopy
+                style={{ cursor: "pointer" }}
+                onClick={() => copyToClipBoard(user.promotional_referral_link)}
+                color="#f97316"
+              />
             </span>
             <span className="affiliate-overview__affieliate-guide--content-left-link">
               {user.promotional_referral_link}
@@ -85,7 +95,7 @@ const OverView = () => {
           </div>
         </div>
       </div>
-      {/* Service of GUVI */}
+      {/* Cách để tham gia chương trình */}
       <div className="affiliate-overview__service">
         <div className="affiliate-overview__service--content">
           <div className="affiliate-overview__service--content-steps">
@@ -141,7 +151,7 @@ const OverView = () => {
           </div>
         </div>
       </div>
-      {/* Landing Page */}
+      {/* Trang bìa */}
       <div className="affiliate-overview__landing-page">
         <div className="affiliate-overview__landing-page--content">
           <div className="affiliate-overview__landing-page--content-left">

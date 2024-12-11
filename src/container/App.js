@@ -29,6 +29,10 @@ const App = () => {
     dispatch(getServiceAction.getServiceRequest());
   }, []);
 
+  console.log("check currentPort >>> ", currentPort);
+  console.log("check MainPort >>>", MainPort)
+  console.log("check AffiliatePort >>>", AffiliatePort)
+  console.log("check isCheckLogin >>>", isCheckLogin);
   return (
     <>
       {currentPort === AffiliatePort && isCheckLogin ? (

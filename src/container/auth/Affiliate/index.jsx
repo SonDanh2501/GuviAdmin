@@ -139,6 +139,7 @@ const LoginAffiliate = () => {
   };
   // 6. Nhớ viết phần đăng nhập từ app nhấn vào
   const getIsCheckLogin = () => {
+    console.log("check running >>>");
     const currentData = localStorage.getItem("authApp");
     const formatData = JSON.parse(currentData);
     if (formatData?.token.length > 0 && formatData?.isCheckLogin === "true") {

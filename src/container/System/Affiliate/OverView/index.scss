@@ -13,7 +13,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        height: 85vh;
+        height: 95vh;
         width: 100%;
         background-color: #F9F9FB;
 
@@ -175,7 +175,7 @@
         justify-content: center;
         height: 300px;
         width: 100%;
-        background: linear-gradient(-45deg, $colorLightRed, $colorDarkPurple, $colorLitleLightPurple , $colorPurple);
+        background-color: $colorDarkPurple;
         background-size: 400% 400%; // Đặt kích thước background lớn hơn
         animation: animate 10s ease infinite;
 
@@ -249,7 +249,7 @@
         align-items: center;
         justify-content: center;
         width: 100%;
-        height: 550px;
+        height: 420px;
         background-color: #F9F9FB;
 
         .affiliate-overview__affieliate-guide--content {
@@ -293,7 +293,7 @@
                     display: flex;
                     gap: $gapXS;
                     align-items: center;
-                    font-size: 16px;
+                    font-size: $textFontSizeXL;
                     font-weight: $fontWeightXL;
                     color: $colorBlack;
                 }
@@ -584,7 +584,7 @@
             justify-content: center;
             height: 300px;
             width: 100%;
-            background: linear-gradient(-45deg, $colorLightRed, $colorDarkPurple, $colorLitleLightPurple , $colorPurple);
+            background-color: $colorDarkPurple;
             background-size: 400% 400%; // Đặt kích thước background lớn hơn
             animation: animate 10s ease infinite;
 
@@ -990,7 +990,7 @@
             height: fit-content;
             padding: 24px;
             width: 100%;
-            background: linear-gradient(-45deg, $colorLightRed, $colorDarkPurple, $colorLitleLightPurple , $colorPurple);
+            background-color: $colorDarkPurple;
             background-size: 400% 400%; // Đặt kích thước background lớn hơn
             animation: animate 10s ease infinite;
 
