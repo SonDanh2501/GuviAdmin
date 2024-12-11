@@ -8,7 +8,8 @@ services:
       - .:/app
       - /app/node_modules
     ports:
-      - ${PORT}:${PORT}
+      - ${REACT_APP_PORT_AFFILIATE}:${REACT_APP_PORT_AFFILIATE}
+      - ${REACT_APP_PORT_MAIN}:${REACT_APP_PORT_MAIN}
     restart: always
     command: sh -c "serve -s build -l 3000 & serve -s build -l 3001"
     env_file:
