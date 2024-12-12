@@ -138,7 +138,7 @@ const LoginAffiliate = () => {
       });
     }
   };
-  // 6. Nhớ viết phần đăng nhập từ app nhấn vào
+  // 6. Hàm kiểm tra đăng nhập mỗi lần vào trang login
   const getIsCheckLogin = () => {
     const currentData = localStorage.getItem("authApp");
     const formatData = JSON.parse(currentData);

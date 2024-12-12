@@ -14,6 +14,7 @@
 
     &:hover {
         background-color: $colorDarkPurple;
+        border-color: $colorDarkPurple;
     }
 
     &.disable {
@@ -24,12 +25,13 @@
     }
 
     &.normal {
-        background-color: $colorExtraLightGray;
+        background-color: $colorMoreLightGray;
         color: $colorGray;
-        border-color: $colorExtraLightGray;
+        border-color: $colorMoreLightGray;
 
         &:hover {
-            background-color: $colorMoreLightGray;
+            background-color: $colorLightGray;
+            color: $colorWhite
         }
     }
 

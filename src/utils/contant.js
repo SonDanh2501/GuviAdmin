@@ -550,7 +550,7 @@ export const moveElement = (array, position, conditionFind) => {
 export const sortList = (list,valueSort) => {
   return list.sort((a, b) => a[valueSort].localeCompare(b[valueSort]));
 }
-/* 5. Hàm thiết lập mảng giá trị thành mảng phù hợp cho inputCustome */
+/* 5. Hàm thiết lập mảng giá trị thành mảng phù hợp cho InputTextCustom */
 export const formatArray = (array, code, label, subLabel) => {
   const updatedArray = array.map((item) => {
     return {

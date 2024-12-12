@@ -152,7 +152,7 @@ export const editTimeOrderScheduleApi = (id, data) => {
   );
 };
 
-export const searchOrderApi = (start = 0, length = 20, query) => {
+export const searchOrderApi = (start, length, query) => {
   return axiosClient.get(
     `/admin/order_manager/search_order?lang=vi&start=${start}&length=${length}&${query}`
   );

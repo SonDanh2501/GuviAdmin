@@ -1,4 +1,4 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getElementState, getLanguageState } from "../../redux/selectors/auth";
 import {
   Button,
@@ -10,6 +10,7 @@ import {
   Select,
   DatePicker,
 } from "antd";
+import _, { filter } from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
 import _debounce from "lodash/debounce";
 import useWindowDimensions from "../../helper/useWindowDimensions";
@@ -25,21 +26,14 @@ import RangeDatePicker from "../datePicker/RangeDatePicker";
 import dayjs from "dayjs";
 import { range } from "lodash";
 import { searchOrderApi } from "../../api/order";
+import ButtonCustom from "../button";
+import "./index.scss";
+import InputTextCustom from "../inputCustom";
+import { formatArray } from "../../utils/contant";
+
+import punishTicketImage from "../../assets/images/punish_ticket.svg";
+import { loadingAction } from "../../redux/actions/loading";
 const PunishDrawer = (props) => {
-  const checkElement = useSelector(getElementState);
-  const lang = useSelector(getLanguageState);
-  const { width } = useWindowDimensions();
-  const reasonOption = [];
-  // ---------------------------- usestate ------------------------------------ //
-  const [name, setName] = useState("");
-  const [open, setOpen] = useState(false);
-  const [reason, setReason] = useState();
-  const [data, setData] = useState([]);
-  const [value, setValue] = useState();
-  const [dataPunishPolicy, setDataPunishPolicy] = useState([]);
-  const [defaultPolicy, setDefaultPolicy] = useState(null);
-  const [disableDate, setDisableDate] = useState(true);
-  const [idViewOrder, setIdViewOrder] = useState("");
   const {
     type,
     setDataT,
@@ -50,6 +44,27 @@ const PunishDrawer = (props) => {
     onClick,
     defaultWallet,
   } = props;
+  const dispatch = useDispatch();
+  const checkElement = useSelector(getElementState);
+  const lang = useSelector(getLanguageState);
+  const { width } = useWindowDimensions();
+  const reasonOption = [];
+  const titleInput =
+    subject === "collaborator"
+      ? "Cộng tác viên"
+      : subject === "customer"
+      ? "Khách hàng"
+      : "Nhân viên";
+  /* ~~~ Value ~~~ */
+  const [name, setName] = useState("");
+  const [open, setOpen] = useState(false);
+  const [reason, setReason] = useState();
+  const [data, setData] = useState([]);
+  const [value, setValue] = useState();
+  const [dataPunishPolicy, setDataPunishPolicy] = useState([]);
+  const [defaultPolicy, setDefaultPolicy] = useState(null);
+  const [disableDate, setDisableDate] = useState(true);
+  const [idViewOrder, setIdViewOrder] = useState("");
   const [state, setState] = useState({
     money: 0,
     note: "",
@@ -65,28 +80,55 @@ const PunishDrawer = (props) => {
   });
   const [startDate, setStartDate] = useState("");
   const [dataSearchOrder, setDataSearchOrder] = useState([]);
-  // ---------------------------- xử lý data ------------------------------------//
-  const titleInput =
-    subject === "collaborator"
-      ? "Cộng tác viên"
-      : subject === "customer"
-      ? "Khách hàng"
-      : "Nhân viên";
-  // --------------------------- action ------------------------------------- //
 
+  const [isLoading, setIsLoading] = useState(false);
+  const [valueCollaborator, setValueCollaborator] = useState(""); // Giá trị id của đối tác khi chọn
+  const [valueCollaboratorSearch, setValueCollaboratorSearch] = useState(""); // Giá trị tìm kiếm của đối tác
+  const [valueListCollaborator, setValueListCollaborator] = useState([]); // Giá trị danh sách các đối tác theo tìm kiếm
+
+  const [valueOrder, setValueOrder] = useState(""); // Giá trị id của đơn hàng liên quan
+  const [valueOrderSearch, setValueOrderSearch] = useState(""); // Giá trị tìm kiếm của ca làm
+  const [valueListOrder, setValueListOrder] = useState([]); // Giá trị danh sách các ca làm liên quan
+
+  const [valueReasonPunish, setValueReasonPunish] = useState(""); // Giá trị lý do phạt
+  const [valueReasonPunishList, setValueReasonPunishList] = useState([]); // Giá trị danh sách lý do phạt
+
+  const [valuePunishDescribe, setValuePunishDescribe] = useState(""); // Giá trị nội dung phạt
+  /* ~~~ Handle function ~~~ */
+  // 1. Hàm mở drawer
   const showDrawer = () => {
     setOpen(true);
   };
+  // 2. Hàm đóng drawer
   const onClose = () => {
     setOpen(false);
   };
+  // 3. Hàm tìm kiếm đối tác
+  const handleSearchCollaborator = useCallback(
+    _.debounce(async (nameCollaborator) => {
+      if (nameCollaborator.length > 0) {
+        const dataCollaboratorFetch = await fetchCollaborators(
+          lang,
+          0,
+          20,
+          "",
+          nameCollaborator,
+          ""
+        );
+        setValueListCollaborator(dataCollaboratorFetch?.data || []);
+      } else {
+        setValueListCollaborator([]);
+      }
+    }, 500),
+    []
+  );
   const searchCollaborator = useCallback(
     _debounce((value) => {
-      setName(value);
+      setValueCollaborator(value);
       if (value) {
         fetchCollaborators(lang, 0, 20, "", value, "")
           .then((res) => {
-            setData(res.data);
+            setValueListCollaborator(res.data);
             if (value === "") {
               setState({ ...state, data: [] });
             } else {
@@ -103,6 +145,7 @@ const PunishDrawer = (props) => {
     }, 500),
     [state]
   );
+  // 4. Hàm tìm kiếm khách hàng
   const searchCustomer = useCallback(
     _debounce((value) => {
       setName(value);
@@ -126,65 +169,69 @@ const PunishDrawer = (props) => {
     }, 500),
     [state]
   );
-
-  const searchOrder = useCallback(
-    _debounce((value) => {
+  // 5. Hàm tìm kiếm ca làm liên quan
+  const handleSearchOrder = useCallback(
+    _.debounce(async (value) => {
       if (value) {
         const _query = `search=${value.toString()}`;
-        searchOrderApi(0, 20, _query)
-          .then((res) => {
-            if (value === "") {
-              setDataSearchOrder([]);
-            } else {
-              setDataSearchOrder(res);
-            }
-          })
-          .catch((err) => {});
+        const res = await searchOrderApi(0, 20, _query);
+        if (value === "") {
+          setValueListOrder([]);
+        } else {
+          setValueListOrder(res?.data);
+        }
       }
-      setState({ ...state, id_order: "" });
     }, 500),
-    [state]
+    []
   );
-
-  const getPunishPolicy = () => {
-    getListPunishTicketPolicyApi()
-      .then((res) => {
-        const arr = [];
-        for (let i of res?.data) {
-          const temp = {
-            _id: i?._id,
-            value: i?.title.vi,
-            punish_moneyh: i?.punish_money,
-            id_view: i?.id_view,
-            label: `${i?.id_view} - ${i?.title.vi}`,
-            action_lock: i?.action_lock,
-          };
-          arr.push(temp);
+  // 6. Hàm fetch các lý do phạt
+  const fetchPunishPolicyList = async () => {
+    try {
+      const res = await getListPunishTicketPolicyApi();
+      const arr = [];
+      for (let i of res?.data) {
+        const temp = {
+          _id: i?._id,
+          value: i?.title.vi,
+          punish_moneyh: i?.punish_money,
+          id_view: i?.id_view,
+          label: `${i?.id_view} - ${i?.title.vi}`,
+          action_lock: i?.action_lock,
+        };
+        arr.push(temp);
+      }
+      setDataPunishPolicy(arr); // Biến cũ
+      setValueReasonPunishList(arr);
+      if (arr.length) {
+        setState({
+          ...state,
+          money: arr[0]?.punish_money,
+          id_punish_policy: arr[0]?._id,
+        });
+        setDefaultPolicy(arr[0]);
+        if (arr[0].action_lock !== "unset") {
+          setDisableDate(false);
         }
-        setDataPunishPolicy(arr);
-        if (arr.length) {
-          setState({
-            ...state,
-            money: arr[0]?.punish_money,
-            id_punish_policy: arr[0]?._id,
-          });
-          setDefaultPolicy(arr[0]);
-          if (arr[0].action_lock !== "unset") {
-            setDisableDate(false);
-          }
-        }
-      })
-      .catch((err) => {
-        console.log("err ", err);
-      });
+      }
+    } catch (err) {
+      console.log("err", err);
+    }
   };
-
-  // ----------------------------- UseEffect ----------------------------------- //
+  /* ~~~ Use effect ~~~ */
   useEffect(() => {
-    getPunishPolicy();
+    fetchPunishPolicyList();
   }, []);
-
-  // ----------------------------- UI ----------------------------------- //
+  useEffect(() => {
+    if (valueCollaboratorSearch) {
+      handleSearchCollaborator(valueCollaboratorSearch);
+    }
+  }, [valueCollaboratorSearch]);
+  useEffect(() => {
+    if (valueOrderSearch) {
+      handleSearchOrder(valueOrderSearch);
+    }
+  }, [valueOrderSearch]);
+  /* ~~~ Main ~~~ */
   return (
     <div>
       <Button onClick={showDrawer} type="primary">
@@ -192,185 +239,99 @@ const PunishDrawer = (props) => {
       </Button>
       <Drawer
         title={titleHeader}
-        width={width > 490 ? 500 : 300}
+        placement="right"
+        width={400}
+        closable={false}
         onClose={onClose}
         open={open}
-        bodyStyle={{
-          paddingBottom: 80,
-        }}
-        headerStyle={{ height: 50 }}
-      >
-        <div className="modal-body">
-          <div>
-            <InputCustom
-              title={titleInput}
-              placeholder={`${i18n.t("search", { lng: lang })}`}
-              value={name}
-              onChange={(e) => {
-                subject === "customer" && searchCustomer(e.target.value);
-                subject === "collaborator" &&
-                  searchCollaborator(e.target.value);
-                //  searchStaff(e.target.value);
-                setName(e.target.value);
-              }}
-              error={state?.errorName}
-            />
-            {state?.data.length > 0 && (
-              <List type={"unstyled"} className="list-item">
-                {state?.data?.map((item, index) => {
-                  return (
-                    <div
-                      key={index}
-                      onClick={(e) => {
-                        setState({
-                          ...state,
-                          id_collaborator: item?._id,
-                          data: [],
-                        });
-                        setName(item?.full_name);
-                      }}
-                    >
-                      <a>
-                        {item?.full_name} - {item?.phone} - {item?.id_view}
-                      </a>
-                    </div>
-                  );
-                })}
-              </List>
-            )}
-          </div>
-
-          <div className="div-money">
-            <p>Lý do phạt</p>
-            <Select
-              defaultValue={defaultPolicy}
-              style={{ width: "100%" }}
-              onChange={(e, option) => {
-                setState({
-                  ...state,
-                  money: option?.punish_money,
-                  id_punish_policy: option?._id,
+        footer={
+          <div className="punish-drawer__footer">
+            <ButtonCustom
+              label="Tạo lệnh phạt"
+              onClick={() => {
+                onclose();
+                onClick({
+                  id_order: valueOrder,
+                  id_collaborator: valueCollaborator,
+                  id_punish_policy: valueReasonPunish,
+                  note_admin: valuePunishDescribe,
+                  date_start_lock_time: "",
                 });
-                if (option?.action_lock !== "unset") {
-                  setDisableDate(false);
-                } else {
-                  setDisableDate(true);
-                }
               }}
-              options={dataPunishPolicy}
+              fullScreen={true}
+            />
+            <ButtonCustom
+              label="Hủy"
+              onClick={onClose}
+              style="normal"
+              fullScreen={true}
             />
           </div>
-          {!disableDate && (
-            <div className="div-money">
-              <p>Chọn thời gian bắt đầu phạt</p>
-              <DatePicker
-                disabled={disableDate}
-                format="YYYY-MM-DD HH:mm:ss"
-                showTime={{
-                  defaultValue: dayjs("00:00:00", "HH:mm:ss"),
-                }}
-                onChange={(date, dateString) => {
-                  setState({
-                    ...state,
-                    start_date: new Date(date).toISOString(),
-                  });
-                }}
-              />
-            </div>
-          )}
-          <div className="div-money">
-            <div>
-              <InputCustom
-                title={"Ca làm liên quan"}
-                placeholder={`${i18n.t("search", { lng: lang })}`}
-                value={idViewOrder}
-                onChange={(e) => {
-                  searchOrder(e.target.value);
-                  setIdViewOrder(e.target.value);
-                }}
-                error={state?.errorName}
-              />
-              {dataSearchOrder.length > 0 && (
-                <List type={"unstyled"} className="list-item">
-                  {dataSearchOrder.map((item, index) => {
-                    return (
-                      <div
-                        key={index}
-                        onClick={(e) => {
-                          setState({
-                            ...state,
-                            id_order: item?._id,
-                          });
-                          setDataSearchOrder([]);
-                          setIdViewOrder(item?.id_view);
-                        }}
-                      >
-                        <a>{item?.id_view}</a>
-                      </div>
-                    );
-                  })}
-                </List>
-              )}
-            </div>
+        }
+      >
+        <div className="punish-drawer__body">
+          <div className="punish-drawer__body--image">
+            <img
+              className="punish-drawer__body--image-container"
+              src={punishTicketImage}
+            ></img>
           </div>
-          <div className="mt-2">
-            <InputCustom
-              title={`Nội dung`}
-              value={state?.note}
-              onChange={(e) => setState({ ...state, note: e.target.value })}
-              textArea={true}
+          <div className="punish-drawer__body--child">
+            <InputTextCustom
+              type="select"
+              value={valueCollaborator}
+              options={
+                valueListCollaborator
+                  ? formatArray(
+                      valueListCollaborator,
+                      "_id",
+                      "full_name",
+                      "phone"
+                    )
+                  : []
+              }
+              placeHolder="Đối tác"
+              searchField={true}
+              setSearchValue={setValueCollaboratorSearch}
+              setValueSelectedProps={setValueCollaborator}
             />
           </div>
-          <Button
-            className="btn-confirm-drawer"
-            type="primary"
-            onClick={() => {
-              onClose();
-              setState({
-                money: defaultPolicy?.punish_money,
-                note: defaultPolicy?.value,
-                data: [],
-                name: "",
-                errorName: "",
-                errorMoney: "",
-                id_collaborator: "",
-                id_punish_policy: defaultPolicy?._id,
-                id_order: "",
-                start_date: "",
-              });
-              setName("");
-              setDataSearchOrder([]);
-              onClick(state);
-              setIdViewOrder("");
-            }}
-          >
-            {titleButton}
-          </Button>
-          {/* <CustomButton
-            title={titleButton}
-            className="float-left btn-add-t"
-            type="button"
-            onClick={() => {
-              onClose(); 
-
-              setState({
-                money: defaultPolicy?.punish_money,
-                note: defaultPolicy?.value,
-                data: [],
-                name: "",
-                errorName: "",
-                errorMoney: "",
-                id_collaborator: "",
-                id_punish_policy: defaultPolicy?._id,
-                id_order: "",
-                start_date: "",
-              });
-              setName("");
-              setDataSearchOrder([]);
-              onClick(state);
-              setIdViewOrder("");
-            }}
-          /> */}
+          <div className="punish-drawer__body--child">
+            <InputTextCustom
+              type="select"
+              value={valueReasonPunish}
+              options={
+                valueReasonPunishList
+                  ? formatArray(valueReasonPunishList, "_id", "label")
+                  : []
+              }
+              placeHolder="Lý do phạt"
+              setValueSelectedProps={setValueReasonPunish}
+            />
+          </div>
+          <div className="punish-drawer__body--child">
+            <InputTextCustom
+              type="select"
+              value={valueOrder}
+              options={
+                valueListOrder
+                  ? formatArray(valueListOrder, "_id", "id_view")
+                  : []
+              }
+              placeHolder="Ca làm liên quan"
+              searchField={true}
+              setSearchValue={setValueOrderSearch}
+              setValueSelectedProps={setValueOrder}
+            />
+          </div>
+          <div className="punish-drawer__body--child">
+            <InputTextCustom
+              type="textArea"
+              value={valuePunishDescribe}
+              placeHolder="Nội dung phạt"
+              onChange={(e) => setValuePunishDescribe(e.target.value)}
+            />
+          </div>
         </div>
       </Drawer>
     </div>

@@ -30,6 +30,8 @@ const {
   IoClose,
   IoCalendar,
   IoCloudUploadOutline,
+  IoWarning,
+  IoAlertCircleOutline,
 } = icons;
 
 const InputTextCustom = (props) => {
@@ -229,46 +231,65 @@ const InputTextCustom = (props) => {
           )}
         </div>
       )}
-      {searchInput.length > 0 && type === "select" && !setSearchValue
-        ? options
-            .filter((el) =>
-              el.name.toLowerCase().includes(searchInput.toLowerCase())
-            )
-            .map((itemFound, index) => (
-              <div
-                onClick={() => {
-                  handldeSelected(itemFound.value);
-                }}
-                style={{ borderRadius: "6px" }}
-                className={`${
-                  itemFound?.code === value &&
-                  "bg-violet-500 font-bold text-white"
-                } hover:bg-violet-500/50 hover:text-white cursor-pointer p-2 mb-0.5 font-normal duration-300 flex items-center justify-between`}
-              >
-                <span key={index}>
-                  {itemFound.label ? itemFound.label : itemFound.name}
-                </span>
-                {itemFound?.code === value && (
-                  <IoCheckmarkCircleSharp size={"18px"} />
-                )}
-              </div>
-            ))
-        : options &&
-          options.length > 0 &&
-          options.map((item, index) => (
+      {searchInput.length > 0 && type === "select" && !setSearchValue ? (
+        options
+          .filter((el) =>
+            el.name.toLowerCase().includes(searchInput.toLowerCase())
+          )
+          .map((itemFound, index) => (
             <div
               onClick={() => {
-                handldeSelected(item.code);
+                handldeSelected(itemFound.value);
               }}
               style={{ borderRadius: "6px" }}
               className={`${
-                item?.code === value && "bg-violet-500 font-bold text-white"
+                itemFound?.code === value &&
+                "bg-violet-500 font-bold text-white"
               } hover:bg-violet-500/50 hover:text-white cursor-pointer p-2 mb-0.5 font-normal duration-300 flex items-center justify-between`}
             >
-              <span key={index}>{item.label ? item.label : item.name}</span>
-              {item?.code === value && <IoCheckmarkCircleSharp size={"18px"} />}
+              <span key={index}>
+                {itemFound.label ? itemFound.label : itemFound.name}
+              </span>
+              {itemFound?.code === value && (
+                <IoCheckmarkCircleSharp size={"18px"} />
+              )}
             </div>
-          ))}
+          ))
+      ) : options && options.length > 0 ? (
+        options.map((item, index) => (
+          <div
+            onClick={() => {
+              handldeSelected(item.code);
+            }}
+            style={{ borderRadius: "6px" }}
+            className={`${
+              item?.code === value && "bg-violet-500 font-bold text-white"
+            } hover:bg-violet-500/50 hover:text-white cursor-pointer p-2 mb-0.5 font-normal duration-300 flex items-center justify-between`}
+          >
+            <span key={index}>{item.label ? item.label : item.name}</span>
+            {item?.code === value && <IoCheckmarkCircleSharp size={"18px"} />}
+          </div>
+        ))
+      ) : (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "4px",
+            padding: "12px",
+            backgroundColor: "#f3f4f6",
+            borderRadius: "8px",
+          }}
+        >
+          <span
+            style={{ color: "#43464b", fontSize: "12px", fontWeight: "400" }}
+          >
+            Không có dữ liệu
+          </span>
+          <IoAlertCircleOutline color="#43464b" />
+        </div>
+      )}
     </div>
   );
   // 2. Content khi type === "calendar"
@@ -684,7 +705,7 @@ const InputTextCustom = (props) => {
       setSearchValue(searchInput);
     }
   }, [searchInput]);
-  
+
   return (
     <div className="form-field" ref={refContainer}>
       {/* Input Field  */}

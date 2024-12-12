@@ -291,13 +291,19 @@ const RefferendList = () => {
   // 3. Hàm thay đổi mã giới thiệu
   const updateReferralCode = async (code) => {
     try {
-      const res = await updateReferralCodeApi({ referral_code: code });
-      setIsChangeReferralCode(false);
-      setValueReferralCode("");
-      fetchCustomerInfo();
-      successNotify({
-        message: "Thay đổi mã giới thiệu thành công",
-      });
+      if (code.length > 11) {
+        errorNotify({
+          message: "Vui lòng nhập mã không quá 11 ký tự",
+        });
+      } else {
+        const res = await updateReferralCodeApi({ referral_code: code });
+        setIsChangeReferralCode(false);
+        setValueReferralCode("");
+        fetchCustomerInfo();
+        successNotify({
+          message: "Thay đổi mã giới thiệu thành công",
+        });
+      }
     } catch (err) {
       errorNotify({
         message: err?.message + ", xin thử lại sau vài giây",
@@ -308,7 +314,7 @@ const RefferendList = () => {
   const fetchListReferralPerson = async () => {
     try {
       const res = await getListReferralPersonApi(0, 10);
-      // console.log("check danh sách những người giới thiệu >>>", res);
+      console.log("check danh sách những người giới thiệu >>>", res);
       setDataListReferralPerson(res);
     } catch (err) {
       errorNotify({
