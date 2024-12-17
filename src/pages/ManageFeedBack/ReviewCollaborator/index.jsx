@@ -44,6 +44,7 @@ const ReviewCollaborator = () => {
   );
   /* ~~~ Value ~~~ */
   const [data, setData] = useState([]);
+
   const [star, setStar] = useState(0);
   const [dataCustomerSatisfication, setDataCustomerSatisfication] = useState(
     []

@@ -581,3 +581,12 @@ export const convertPhoneNumber = (phoneNumber, length) => {
   const visiblePart = phoneNumber.slice(phoneNumber.length - length); 
   return mask + visiblePart;
 }
+
+/* 8. Hàm lấy chữ cái đầu của hai từ cuối và cuối  */
+
+export const getInitials = (name) => {
+  const nameParts = name.split(" ");
+  const firstInitial = nameParts[0][0];
+  const lastInitial = nameParts[nameParts.length - 1][0];
+  return `${firstInitial}${lastInitial}`;
+};

@@ -486,6 +486,9 @@ const ManageOrder = () => {
       <FilterData leftContent={filterByStatus()} />
       {/* Filter */}
       <FilterData
+        isTimeFilter={true}
+        setStartDate={setStartDate}
+        setEndDate={setEndDate}
         leftContent={filterContentLeft()}
         rightContent={filterContentRight()}
       />

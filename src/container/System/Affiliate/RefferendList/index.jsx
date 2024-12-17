@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import "./index.scss";
 import _ from "lodash";
 
@@ -34,8 +34,9 @@ import i18n from "../../../../i18n";
 import { getLanguageState, getUser } from "../../../../redux/selectors/auth";
 import ButtonCustom from "../../../../components/button";
 import { formatMoney, formatNumber } from "../../../../helper/formatMoney";
-import { bankList, sortList } from "../../../../utils/contant";
-
+import { bankList, getInitials, sortList } from "../../../../utils/contant";
+import referralPolicy from "../../../../assets/images/referral-policy.svg";
+import overViewAffilaite from "../../../../assets/images/overViewAffiliate.svg";
 const {
   IoChevronDown,
   IoSettings,
@@ -52,9 +53,53 @@ const {
   IoTime,
   IoCalendar,
   IoChatboxEllipses,
+  IoArrowForward,
+  IoLocation,
+  IoArrowUpCircleOutline,
+  IoArrowUp,
+  MdDoubleArrow,
+  IoAdd,
 } = icons;
 
 const RefferendList = () => {
+  const sliderRef = useRef(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startPos, setStartPos] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
+
+  const onMouseDown = (e) => {
+    setIsDragging(true);
+    setStartPos(e.pageX - sliderRef.current.offsetLeft);
+    setScrollLeft(sliderRef.current.scrollLeft);
+  };
+  const onMouseLeave = () => {
+    setIsDragging(false);
+  };
+  const onMouseUp = () => {
+    setIsDragging(false);
+  };
+  const onMouseMove = (e) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    const x = e.pageX - sliderRef.current.offsetLeft;
+    const walk = (x - startPos) * 2; // Số pixel để cuộn
+    sliderRef.current.scrollLeft = scrollLeft - walk;
+  };
+  // Xử lý sự kiện cảm ứng
+  const onTouchStart = (e) => {
+    setIsDragging(true);
+    setStartPos(e.touches[0].pageX - sliderRef.current.offsetLeft);
+    setScrollLeft(sliderRef.current.scrollLeft);
+  };
+  const onTouchEnd = () => {
+    setIsDragging(false);
+  };
+  const onTouchMove = (e) => {
+    if (!isDragging) return;
+    const x = e.touches[0].pageX - sliderRef.current.offsetLeft;
+    const walk = (x - startPos) * 2; // Số pixel để cuộn
+    sliderRef.current.scrollLeft = scrollLeft - walk;
+  };
   const user = useSelector(getUser);
   const currentData = localStorage.getItem("access_token");
   const formatData = JSON.parse(currentData);
@@ -257,6 +302,21 @@ const RefferendList = () => {
     //   width: 45,
     //   position: "center",
     // },
+  ];
+  // 7. Danh sách các bước hướng dẫn
+  const shareLinkSteps = [
+    {
+      id: 1,
+      step: "Chia sẻ đường link của bạn cho những người muốn giới thiệu",
+    },
+    {
+      id: 2,
+      step: "Người được giới thiệu hoàn thành đơn hàng của họ sau khi nhập mã giới thiệu",
+    },
+    {
+      id: 3,
+      step: "Nhận chiết khấu 5% từ những đơn hàng hoàn thành",
+    },
   ];
   /* ~~~ Handle function ~~~ */
   // 1. Hàm fetch thông tin của khách hàng hiện tại
@@ -464,16 +524,14 @@ const RefferendList = () => {
     return Number(tempMoney);
   };
 
-  console.log("check valueUserInfo", valueUserInfo);
   /* ~~~ Main  ~~~ */
   return (
     <div className="refferend-list-affiliate">
       <div className="refferend-list-affiliate__content">
-        {/* <span>{formatData}</span>
-        <span className="">{formatData1?.token}</span> */}
         <div className="refferend-list-affiliate__content--left">
-          {/* Tổng người giới thiệu */}
-          <div className="refferend-list-affiliate__content--left-card card-shadow">
+          {/* Total person introduced */}
+          <div className="refferend-list-affiliate__content--left-card border-left-highlight border-red card-shadow">
+            {/* Số lượng thống kê */}
             <div className="refferend-list-affiliate__content--left-card-content">
               {/* label và value */}
               <div className="refferend-list-affiliate__content--left-card-content-describe">
@@ -485,7 +543,7 @@ const RefferendList = () => {
                 </span>
               </div>
               {/* icon */}
-              <div className="refferend-list-affiliate__content--left-card-content-icon blue">
+              <div className="refferend-list-affiliate__content--left-card-content-icon red">
                 <IoPeople />
               </div>
             </div>
@@ -494,8 +552,8 @@ const RefferendList = () => {
               <span>30 ngày trước: 2 người</span>
             </div>
           </div>
-          {/* Tổng tiền nhận được */}
-          <div className="refferend-list-affiliate__content--left-card card-shadow">
+          {/* Total money received */}
+          <div className="refferend-list-affiliate__content--left-card border-left-highlight border-blue card-shadow">
             <div className="refferend-list-affiliate__content--left-card-content">
               {/* label và value */}
               <div className="refferend-list-affiliate__content--left-card-content-describe">
@@ -507,7 +565,7 @@ const RefferendList = () => {
                 </span>
               </div>
               {/* icon */}
-              <div className="refferend-list-affiliate__content--left-card-content-icon green">
+              <div className="refferend-list-affiliate__content--left-card-content-icon blue">
                 <IoCash />
               </div>
             </div>
@@ -516,98 +574,87 @@ const RefferendList = () => {
               <span>30 ngày trước: 50.000 VNĐ</span>
             </div>
           </div>
-          {/* Tổng đơn hoàn thành */}
-          <div className="refferend-list-affiliate__content--left-card card-shadow">
+          {/* Total order */}
+          <div className="refferend-list-affiliate__content--left-card border-left-highlight border-green card-shadow">
+            {/* Số lượng thống kê */}
             <div className="refferend-list-affiliate__content--left-card-content">
               {/* label và value */}
               <div className="refferend-list-affiliate__content--left-card-content-describe">
                 <span className="refferend-list-affiliate__content--left-card-content-describe-label">
-                  Tổng đơn giới thiệu
+                  Tổng đơn
                 </span>
                 <span className="refferend-list-affiliate__content--left-card-content-describe-value">
                   15 <span className="unit">đơn</span>
                 </span>
               </div>
               {/* icon */}
-              <div className="refferend-list-affiliate__content--left-card-content-icon yellow">
+              <div className="refferend-list-affiliate__content--left-card-content-icon green">
                 <IoReader />
               </div>
             </div>
             {/* So với 30 ngày trước */}
             <div className="refferend-list-affiliate__content--left-card-previous">
-              <span>30 ngày trước: 2 đơn</span>
+              <span>30 ngày trước: 3 đơn</span>
             </div>
           </div>
-          {/* Mã giới thiệu không phải mã link */}
+          {/* Guide for invite new person */}
           <div className="refferend-list-affiliate__content--left-card no-padding card-shadow">
             <div className="refferend-list-affiliate__content--left-card-header">
               <span>Cách giới thiệu</span>
             </div>
             <div className="refferend-list-affiliate__content--left-card-body">
+              {/* Ảnh bìa */}
               <div className="refferend-list-affiliate__content--left-card-body-image">
                 <img
                   className="refferend-list-affiliate__content--left-card-body-image"
                   src={affiliateLogo}
                 ></img>
               </div>
-              <div className="refferend-list-affiliate__content--left-card-body-steps">
-                <div className="refferend-list-affiliate__content--left-card-body-steps-circle">
-                  1
+              {shareLinkSteps?.map((el, index) => (
+                <div className="refferend-list-affiliate__content--left-card-body-steps">
+                  <div className="refferend-list-affiliate__content--left-card-body-steps-count">
+                    <div className="refferend-list-affiliate__content--left-card-body-steps-count-circle">
+                      {index + 1}
+                    </div>
+                    {index < shareLinkSteps.length - 1 && (
+                      <div className="refferend-list-affiliate__content--left-card-body-steps-count-line"></div>
+                    )}
+                  </div>
+                  <div className="refferend-list-affiliate__content--left-card-body-steps-step">
+                    <span>{el.step}</span>
+                  </div>
                 </div>
-                <div className="refferend-list-affiliate__content--left-card-body-steps-step">
-                  <span>Chia sẻ đường link của bạn</span>
-                </div>
-              </div>
-              <div className="refferend-list-affiliate__content--left-card-body-steps">
-                <div className="refferend-list-affiliate__content--left-card-body-steps-circle">
-                  2
-                </div>
-                <span className="refferend-list-affiliate__content--left-card-body-steps-step">
-                  Người được giới thiệu hoàn thành đơn đầu tiên
-                </span>
-              </div>
-              <div className="refferend-list-affiliate__content--left-card-body-steps">
-                <div className="refferend-list-affiliate__content--left-card-body-steps-circle">
-                  3
-                </div>
-                <span className="refferend-list-affiliate__content--left-card-body-steps-step">
-                  Bạn nhận ngay 5% chiết khấu của đơn hoàn thành
-                </span>
-              </div>
+              ))}
+              {/* Mã sao chép */}
               <div className="refferend-list-affiliate__content--left-card-body-code">
-                <Tooltip title="Nhận ngay chiết khấu 5%">
-                  <div className="refferend-list-affiliate__content--left-card-body-code-content">
-                    <span className="refferend-list-affiliate__content--left-card-body-code-content-label">
-                      {valueUserInfo?.referral_code}
-                    </span>
-                    <span
-                      onClick={() =>
-                        copyToClipBoard(valueUserInfo?.referral_code)
-                      }
-                      className="refferend-list-affiliate__content--left-card-body-code-content-copy"
-                    >
-                      Sao chép
-                    </span>
-                  </div>
-                </Tooltip>
-                <Tooltip title="Gửi voucher cho người được giới thiệu">
-                  <div className="refferend-list-affiliate__content--left-card-body-code-content">
-                    <span className="refferend-list-affiliate__content--left-card-body-code-content-label">
-                      {valueUserInfo?.promotional_referral_code}
-                    </span>
-                    <span
-                      onClick={() =>
-                        copyToClipBoard(
-                          valueUserInfo?.promotional_referral_code
-                        )
-                      }
-                      className="refferend-list-affiliate__content--left-card-body-code-content-copy"
-                    >
-                      Sao chép
-                    </span>
-                  </div>
-                </Tooltip>
-                {isChangeReferralCode && (
+                <div className="refferend-list-affiliate__content--left-card-body-code-content">
+                  <span className="refferend-list-affiliate__content--left-card-body-code-content-label">
+                    {valueUserInfo?.referral_code}
+                  </span>
+                  <span
+                    onClick={() =>
+                      copyToClipBoard(valueUserInfo?.referral_code)
+                    }
+                    className="refferend-list-affiliate__content--left-card-body-code-content-copy"
+                  >
+                    Sao chép
+                  </span>
+                </div>
+                <div className="refferend-list-affiliate__content--left-card-body-code-content">
+                  <span className="refferend-list-affiliate__content--left-card-body-code-content-label">
+                    {valueUserInfo?.promotional_referral_code}
+                  </span>
+                  <span
+                    onClick={() =>
+                      copyToClipBoard(valueUserInfo?.promotional_referral_code)
+                    }
+                    className="refferend-list-affiliate__content--left-card-body-code-content-copy"
+                  >
+                    Sao chép
+                  </span>
+                </div>
+                {/* Thay đổi mã code */}
+                {/* {isChangeReferralCode && (
                   <div className="refferend-list-affiliate__content--left-card-body-code-content">
                     <input
                       value={valueReferralCode}
@@ -640,14 +687,21 @@ const RefferendList = () => {
                       Chỉnh sửa mã giới thiệu
                     </span>
                   </div>
-                )}
-
-                <div
+                )} */}
+                {/* <div
                   onClick={() => getRandomReferralCodeAndUpdate()}
                   className="refferend-list-affiliate__content--left-card-body-code-random"
                 >
                   <span className="refferend-list-affiliate__content--left-card-body-code-random-label">
                     Tạo mã mới ngẫu nhiên
+                  </span>
+                </div> */}
+                <div
+                  // onClick={() => getRandomReferralCodeAndUpdate()}
+                  className="refferend-list-affiliate__content--left-card-body-code-random"
+                >
+                  <span className="refferend-list-affiliate__content--left-card-body-code-random-label">
+                    Chia sẻ ngay
                   </span>
                 </div>
               </div>
@@ -655,16 +709,16 @@ const RefferendList = () => {
           </div>
         </div>
         <div className="refferend-list-affiliate__content--middle">
-          {/* Danh sách người giới thiệu */}
+          {/* Container for: overview, history receive money, withdrawal request */}
           <div className="refferend-list-affiliate__content--middle-content card-shadow">
             {/* Header */}
             <div className="refferend-list-affiliate__content--middle-content-header">
               <span>
                 {selectTab === 0
-                  ? "Lịch sử nhận chiết khấu"
+                  ? "Giới thiệu chương trình"
                   : selectTab === 1
-                  ? "Lịch sử yêu cầu rút tiền"
-                  : "Danh sách những người giới thiệu"}
+                  ? "Lịch sử nhận chiết khấu"
+                  : "Lịch sử yêu cầu rút"}
               </span>
               <div className="refferend-list-affiliate__content--middle-content-header-options">
                 <span
@@ -673,7 +727,7 @@ const RefferendList = () => {
                     selectTab === 0 && "activated"
                   }`}
                 >
-                  Lịch sử chiết khấu
+                  Giới thiệu chung
                 </span>
                 <span
                   onClick={() => setSelectTab(1)}
@@ -681,7 +735,7 @@ const RefferendList = () => {
                     selectTab === 1 && "activated"
                   }`}
                 >
-                  Yêu cầu rút tiền
+                  Lịch sử nhận chiết khấu
                 </span>
                 <span
                   onClick={() => setSelectTab(2)}
@@ -689,11 +743,12 @@ const RefferendList = () => {
                     selectTab === 2 && "activated"
                   }`}
                 >
-                  DS người giới thiệu
+                  Yêu cầu rút
                 </span>
               </div>
             </div>
-            {selectTab === 0 ? (
+            {selectTab === 1 ? (
+              // History receive money
               <>
                 {Array.from({ length: 10 }).map((_, index) => (
                   <div className="refferend-list-affiliate__content--middle-content-history-receiving">
@@ -764,7 +819,8 @@ const RefferendList = () => {
                   />
                 </div>
               </>
-            ) : selectTab === 1 ? (
+            ) : selectTab === 2 ? (
+              // Withdrawal request list
               <>
                 <div style={{ padding: "12px" }}>
                   <DataTable
@@ -795,127 +851,86 @@ const RefferendList = () => {
                 </div>
               </>
             ) : (
+              // Reference person list
               <>
                 <div className="refferend-list-affiliate__content--middle-content-refferend-list">
-                  <div className="refferend-list-affiliate__content--middle-content-refferend-list-person">
-                    {/* Info */}
-                    <div className="refferend-list-affiliate__content--middle-content-refferend-list-person-info">
-                      <div className="refferend-list-affiliate__content--middle-content-refferend-list-person-info-left">
-                        {/* Avatar */}
-                        <img
-                          className="refferend-list-affiliate__content--middle-content-refferend-list-person-info-left-avatar"
-                          src={notFoundImage}
-                        ></img>
-                        {/* Info */}
-                        <div className="refferend-list-affiliate__content--middle-content-refferend-list-person-info-left-text">
-                          <span className="refferend-list-affiliate__content--middle-content-refferend-list-person-info-left-text-name">
-                            Danh Trường Sơn
-                          </span>
-                          <span className="refferend-list-affiliate__content--middle-content-refferend-list-person-info-left-text-date">
-                            Ngày kích hoạt:{" "}
-                            <span className="hight-light">29 Thg 11, 2024</span>
-                          </span>
-                          <span className="refferend-list-affiliate__content--middle-content-refferend-list-person-info-left-text-date">
-                            Số đơn: <span className="hight-light">0 đơn</span>
-                          </span>
-                          <span className="refferend-list-affiliate__content--middle-content-refferend-list-person-info-left-text-date">
-                            Tổng tiền:{" "}
-                            <span className="hight-light">0 vnđ</span>
-                          </span>
+                  <div className="refferend-list-affiliate__content--middle-content-refferend-list-container">
+                    <div
+                      ref={sliderRef}
+                      onMouseDown={onMouseDown}
+                      onMouseLeave={onMouseLeave}
+                      onMouseUp={onMouseUp}
+                      onMouseMove={onMouseMove}
+                      onTouchStart={onTouchStart}
+                      onTouchEnd={onTouchEnd}
+                      onTouchMove={onTouchMove}
+                      className="refferend-list-affiliate__content--middle-content-refferend-list-container-persons"
+                    >
+                      {Array.from({ length: 8 }).map((_, index) => (
+                        <div className={`refferend-list-affiliate__content--middle-content-refferend-list-container-persons-person ${index === 0 && "not-first-item"}`}>
+                          <div className="refferend-list-affiliate__content--middle-content-refferend-list-container-persons-person-value">
+                            <div className="refferend-list-affiliate__content--middle-content-refferend-list-container-persons-person-value-unit">
+                              <span className="refferend-list-affiliate__content--middle-content-refferend-list-container-persons-person-value-unit-label">
+                                Số đơn
+                              </span>
+                              <span className="refferend-list-affiliate__content--middle-content-refferend-list-container-persons-person-value-unit-number">
+                                15
+                              </span>
+                            </div>
+                          </div>
+                          <div className="refferend-list-affiliate__content--middle-content-refferend-list-container-persons-person-info">
+                            <span className="refferend-list-affiliate__content--middle-content-refferend-list-container-persons-person-info-name">
+                              {getInitials("Danh Trường Sơn")}
+                            </span>
+                          </div>
+                          <div className="refferend-list-affiliate__content--middle-content-refferend-list-container-persons-person-counting newest-person">
+                            <span>Người giới thiệu {index + 1}</span>
+                            <span className="refferend-list-affiliate__content--middle-content-refferend-list-container-persons-person-counting-phone">
+                              *** *** 0027
+                            </span>
+                          </div>
                         </div>
-                      </div>
-                      <div className="refferend-list-affiliate__content--middle-content-refferend-list-person-info-right yellow">
-                        {/* Status */}
-                        <span className="yellow">Đăng ký tài khoản</span>
-                      </div>
+                      ))}
                     </div>
-                    {/* Progress bar */}
-                    <div className="refferend-list-affiliate__content--middle-content-refferend-list-person-progress-bar">
-                      <div className="refferend-list-affiliate__content--middle-content-refferend-list-person-progress-bar-container card-shadow yellow"></div>
-                      <div className="refferend-list-affiliate__content--middle-content-refferend-list-person-progress-bar-container card-shadow"></div>
-                      <div className="refferend-list-affiliate__content--middle-content-refferend-list-person-progress-bar-container card-shadow"></div>
-                    </div>
-                  </div>
-                  <div className="refferend-list-affiliate__content--middle-content-refferend-list-person">
-                    {/* Info */}
-                    <div className="refferend-list-affiliate__content--middle-content-refferend-list-person-info">
-                      <div className="refferend-list-affiliate__content--middle-content-refferend-list-person-info-left">
-                        {/* Avatar */}
+                    <div className="refferend-list-affiliate__content--middle-content-refferend-list-container-note">
+                      {/* Half left */}
+                      <div className="refferend-list-affiliate__content--middle-content-refferend-list-container-note-child">
+                        <span className="refferend-list-affiliate__content--middle-content-refferend-list-container-note-child-header">
+                          Lưu ý khi thực hiện rút tiền rút tiền:
+                        </span>
+                        <span>
+                          1. Số tiền tối thiểu để yêu cầu lệnh rút là{" "}
+                          <span className="high-light">500.000</span> VNĐ.
+                        </span>
+                        <span>
+                          2. Sau khi thực hiện giao dịch, vui lòng đợi{" "}
+                          <span className="high-light">GUVI</span> xác nhận giao
+                          dịch của bạn.
+                        </span>
+                        <span>
+                          3. Để được duyệt nhanh hơn bạn nên giao dịch vào giờ
+                          hành chính. Những giao dịch sau{" "}
+                          <span className="high-light">17h</span> giờ và{" "}
+                          <span className="high-light">thứ 7, chủ nhật</span> sẽ
+                          được ghi nhận vào ngày thứ 2 tuần sau.
+                        </span>
+                        <span>
+                          4. Xin vui lòng liên hệ GUVI vào số hotline:{" "}
+                          <span className="high-light">1900.0027</span> nếu bạn
+                          chưa được xác nhận thanh toán sau 72 giờ.
+                        </span>
+                      </div>
+                      {/* Half right */}
+                      <div className="refferend-list-affiliate__content--middle-content-refferend-list-container-note-image">
                         <img
-                          className="refferend-list-affiliate__content--middle-content-refferend-list-person-info-left-avatar"
-                          src={notFoundImage}
+                          className="refferend-list-affiliate__content--middle-content-refferend-list-container-note-image-child"
+                          src={overViewAffilaite}
                         ></img>
-                        {/* Info */}
-                        <div className="refferend-list-affiliate__content--middle-content-refferend-list-person-info-left-text">
-                          <span className="refferend-list-affiliate__content--middle-content-refferend-list-person-info-left-text-name">
-                            Đặng Tuấn Tú
-                          </span>
-                          <span className="refferend-list-affiliate__content--middle-content-refferend-list-person-info-left-text-date">
-                            Ngày kích hoạt:{" "}
-                            <span className="hight-light">29 Thg 11, 2024</span>
-                          </span>
-                          <span className="refferend-list-affiliate__content--middle-content-refferend-list-person-info-left-text-date">
-                            Số đơn: <span className="hight-light">0 đơn</span>
-                          </span>
-                          <span className="refferend-list-affiliate__content--middle-content-refferend-list-person-info-left-text-date">
-                            Tổng tiền:{" "}
-                            <span className="hight-light">0 vnđ</span>
-                          </span>
-                        </div>
                       </div>
-                      <div className="refferend-list-affiliate__content--middle-content-refferend-list-person-info-right ">
-                        {/* Status */}
-                        <span className="blue">Đặt đơn đầu tiên</span>
-                      </div>
-                    </div>
-                    {/* Progress bar */}
-                    <div className="refferend-list-affiliate__content--middle-content-refferend-list-person-progress-bar">
-                      <div className="refferend-list-affiliate__content--middle-content-refferend-list-person-progress-bar-container card-shadow blue"></div>
-                      <div className="refferend-list-affiliate__content--middle-content-refferend-list-person-progress-bar-container card-shadow blue"></div>
-                      <div className="refferend-list-affiliate__content--middle-content-refferend-list-person-progress-bar-container card-shadow"></div>
-                    </div>
-                  </div>
-                  <div className="refferend-list-affiliate__content--middle-content-refferend-list-person">
-                    {/* Info */}
-                    <div className="refferend-list-affiliate__content--middle-content-refferend-list-person-info">
-                      <div className="refferend-list-affiliate__content--middle-content-refferend-list-person-info-left">
-                        {/* Avatar */}
-                        <img
-                          className="refferend-list-affiliate__content--middle-content-refferend-list-person-info-left-avatar"
-                          src={notFoundImage}
-                        ></img>
-                        {/* Info */}
-                        <div className="refferend-list-affiliate__content--middle-content-refferend-list-person-info-left-text">
-                          <span className="refferend-list-affiliate__content--middle-content-refferend-list-person-info-left-text-name">
-                            Nguyễn Lê
-                          </span>
-                          <span className="refferend-list-affiliate__content--middle-content-refferend-list-person-info-left-text-date">
-                            Ngày kích hoạt:{" "}
-                            <span className="hight-light">29 Thg 11, 2024</span>
-                          </span>
-                          <span className="refferend-list-affiliate__content--middle-content-refferend-list-person-info-left-text-date">
-                            Số đơn: <span className="hight-light">0 đơn</span>
-                          </span>
-                          <span className="refferend-list-affiliate__content--middle-content-refferend-list-person-info-left-text-date">
-                            Tổng tiền:{" "}
-                            <span className="hight-light">0 vnđ</span>
-                          </span>
-                        </div>
-                      </div>
-                      <div className="refferend-list-affiliate__content--middle-content-refferend-list-person-info-right">
-                        {/* Status */}
-                        <span className="green">Đặt đơn hoàn thành</span>
-                      </div>
-                    </div>
-                    {/* Progress bar */}
-                    <div className="refferend-list-affiliate__content--middle-content-refferend-list-person-progress-bar">
-                      <div className="refferend-list-affiliate__content--middle-content-refferend-list-person-progress-bar-container card-shadow green"></div>
-                      <div className="refferend-list-affiliate__content--middle-content-refferend-list-person-progress-bar-container card-shadow green"></div>
-                      <div className="refferend-list-affiliate__content--middle-content-refferend-list-person-progress-bar-container card-shadow green"></div>
                     </div>
                   </div>
                 </div>
-                <div className="refferend-list-affiliate__content--middle-content-pagination">
+                {/* <div className="refferend-list-affiliate__content--middle-content-pagination">
                   <div></div>
                   <Pagination
                     current={0}
@@ -924,102 +939,171 @@ const RefferendList = () => {
                     showSizeChanger={false}
                     // pageSize={pageSize}
                   />
-                </div>
+                </div> */}
               </>
             )}
           </div>
         </div>
         <div className="refferend-list-affiliate__content--right">
-          {/* Tài khoản ngân hàng */}
+          {/* Bank card */}
           <div className="refferend-list-affiliate__content--right-bank card-shadow">
-            <div className="refferend-list-affiliate__content--right-bank-top">
-              <div className="refferend-list-affiliate__content--right-bank-top-left">
-                <span className="refferend-list-affiliate__content--right-bank-top-left-current">
-                  Hiện có
-                </span>
-                <span className="refferend-list-affiliate__content--right-bank-top-left-money">
-                  {formatMoney(user.a_pay)}
-                </span>
-              </div>
-              <div className="refferend-list-affiliate__content--right-bank-top-right">
-                <button
-                  onClick={() => setShowModalWithdrawal(true)}
-                  className="refferend-list-affiliate__content--right-bank-top-right-withdraw"
-                >
+            {isCheckBankExist ? (
+              <>
+                <div className="refferend-list-affiliate__content--right-bank-content">
+                  {/* Đầu */}
+                  <div className="refferend-list-affiliate__content--right-bank-content-top">
+                    <div className="refferend-list-affiliate__content--right-bank-content-top-circle">
+                      <div className="refferend-list-affiliate__content--right-bank-content-top-circle-shape red"></div>
+                      <div className="refferend-list-affiliate__content--right-bank-content-top-circle-shape orange"></div>
+                    </div>
+                    <div className="refferend-list-affiliate__content--right-bank-content-top-location">
+                      <IoLocation className="refferend-list-affiliate__content--right-bank-content-top-location-icon" />
+                      <span className="refferend-list-affiliate__content--right-bank-content-top-location-label">
+                        Viet Nam
+                      </span>
+                    </div>
+                  </div>
+                  {/* Giữa */}
+                  <div className="refferend-list-affiliate__content--right-bank-content-middle">
+                    {/* Thông tin số 1 */}
+                    <div className="refferend-list-affiliate__content--right-bank-content-middle-info">
+                      <span className="refferend-list-affiliate__content--right-bank-content-middle-info-label">
+                        Số thẻ
+                      </span>
+                      <span className="refferend-list-affiliate__content--right-bank-content-middle-info-value">
+                        1234 **** 5678
+                      </span>
+                    </div>
+                    {/* Thông tin số 2 */}
+                    <div className="refferend-list-affiliate__content--right-bank-content-middle-info">
+                      <span className="refferend-list-affiliate__content--right-bank-content-middle-info-label">
+                        Số dư
+                      </span>
+                      <span className="refferend-list-affiliate__content--right-bank-content-middle-info-value">
+                        1.000.000 VNĐ
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div className="refferend-list-affiliate__content--right-bank-bottom">
+                  <span className="refferend-list-affiliate__content--right-bank-bottom-name">
+                    DANH TRUONG SON
+                  </span>
+                  <div
+                    onClick={() => setShowModalWithdrawal(true)}
+                    className="refferend-list-affiliate__content--right-bank-bottom-icon"
+                  >
+                    <Tooltip placement="top" title="Rút tiền">
+                      <div className="refferend-list-affiliate__content--right-bank-bottom-icon-icon">
+                        <IoArrowUp color="black" />
+                      </div>
+                    </Tooltip>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="refferend-list-affiliate__content--right-bank-content">
+                  {/* Đầu */}
+                  <div className="refferend-list-affiliate__content--right-bank-content-top">
+                    <div className="refferend-list-affiliate__content--right-bank-content-top-circle">
+                      <div className="refferend-list-affiliate__content--right-bank-content-top-circle-shape red"></div>
+                      <div className="refferend-list-affiliate__content--right-bank-content-top-circle-shape orange"></div>
+                    </div>
+                    <div className="refferend-list-affiliate__content--right-bank-content-top-location">
+                      <IoLocation className="refferend-list-affiliate__content--right-bank-content-top-location-icon" />
+                      <span className="refferend-list-affiliate__content--right-bank-content-top-location-label">
+                        Viet Nam
+                      </span>
+                    </div>
+                  </div>
+                  {/* Giữa */}
+                  <div className="refferend-list-affiliate__content--right-bank-content-middle">
+                    {/* Thông tin số 1 */}
+                    <div className="refferend-list-affiliate__content--right-bank-content-middle-info">
+                      <span className="refferend-list-affiliate__content--right-bank-content-middle-info-label">
+                        Số thẻ
+                      </span>
+                      <span className="refferend-list-affiliate__content--right-bank-content-middle-info-value">
+                        Chưa đăng ký
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div className="refferend-list-affiliate__content--right-bank-bottom">
+                  <span className="refferend-list-affiliate__content--right-bank-bottom-name">
+                    NHẬP THÔNG TIN TK NGÂN HÀNG
+                  </span>
+                  <div className="refferend-list-affiliate__content--right-bank-bottom-icon">
+                    <Tooltip placement="top" title="Nhập thông tin">
+                      <div
+                        onClick={() => setShowModalBankInfo(true)}
+                        className="refferend-list-affiliate__content--right-bank-bottom-icon-icon"
+                      >
+                        <IoAdd color="black" />
+                      </div>
+                    </Tooltip>
+                    {/* <span className="refferend-list-affiliate__content--right-bank-bottom-icon-label">
                   Rút tiền
-                </button>
-              </div>
-            </div>
-            <div className="refferend-list-affiliate__content--right-bank-line"></div>
-            <div className="refferend-list-affiliate__content--right-bank-bottom">
-              <div>
-                <span className="refferend-list-affiliate__content--right-bank-bottom-withdraw">
-                  0đ
-                </span>
-                <span className="refferend-list-affiliate__content--right-bank-bottom-sub">
-                  đã rút
-                </span>
-              </div>
-              {!isCheckBankExist && (
-                <span onClick={() => setShowModalBankInfo(true)}>
-                  Thông tin TK ngân hàng
-                </span>
-              )}
-            </div>
+                </span> */}
+                  </div>
+                </div>
+              </>
+            )}
           </div>
-          {/* Lợi ích tham gia */}
-          <div className="refferend-list-affiliate__content--right-share card-shadow">
-            <div className="refferend-list-affiliate__content--right-share-header">
-              <span className="">
-                Lợi ích khi tham gia chương trình Affiliate
+          {/* Event policy */}
+          <div className="refferend-list-affiliate__content--right-referral-policy">
+            <img
+              className="refferend-list-affiliate__content--right-referral-policy-image"
+              src={referralPolicy}
+            ></img>
+            <div className="refferend-list-affiliate__content--right-referral-policy-content">
+              <span className="refferend-list-affiliate__content--right-referral-policy-content-header">
+                Chính sách chương trình
+              </span>
+              <span className="refferend-list-affiliate__content--right-referral-policy-content-describe">
+                Vui lòng đọc chính sách của chương trình trước khi tham gia
+              </span>
+              <span className="refferend-list-affiliate__content--right-referral-policy-content-read-more">
+                Đọc thêm <IoArrowForward />
               </span>
             </div>
+          </div>
+          {/* Benefit of join the event */}
+          <div className="refferend-list-affiliate__content--right-share card-shadow">
+            {/* Header */}
+            <div className="refferend-list-affiliate__content--right-share-header">
+              <span className="">Đường dẫn chia sẻ của chương trình</span>
+            </div>
+            {/* Content */}
             <div className="refferend-list-affiliate__content--right-share-content">
-              <div className="refferend-list-affiliate__content--right-share-content-highlight">
-                <span className="refferend-list-affiliate__content--right-share-content-highlight-title">
-                  đ50.000
-                </span>
-                <span className="refferend-list-affiliate__content--right-share-content-highlight-sub-title">
-                  Đơn hoàn thành đầu tiên
-                </span>
-              </div>
-              <div className="refferend-list-affiliate__content--right-share-content-highlight">
-                <span className="refferend-list-affiliate__content--right-share-content-highlight-title">
-                  5%
-                </span>
-                <span className="refferend-list-affiliate__content--right-share-content-highlight-sub-title">
-                  Chiết khấu mỗi đơn
-                </span>
-              </div>
+              {/* Nhận ngay chiết khấu */}
               <div className="refferend-list-affiliate__content--right-share-content-share">
-                <span className="refferend-list-affiliate__content--right-share-content-share-header">
-                  Nhận chiết khấu ngay
-                  <IoCopy
-                    onClick={() =>
-                      copyToClipBoard(valueUserInfo?.referral_link || "")
-                    }
-                    color="orange"
-                  />
-                </span>
-                <span className="refferend-list-affiliate__content--right-share-content-share-link">
-                  {valueUserInfo?.referral_link || ""}
-                </span>
+                <div className="refferend-list-affiliate__content--right-share-content-share-header">
+                  <span>Nhận chiết khấu ngay:</span>
+                </div>
+                <div className="refferend-list-affiliate__content--right-share-content-share-link">
+                  <span className="refferend-list-affiliate__content--right-share-content-share-link-url">
+                    {valueUserInfo?.referral_link || ""}
+                  </span>
+                  <span className="refferend-list-affiliate__content--right-share-content-share-link-url-copy">
+                    Sao chép
+                  </span>
+                </div>
               </div>
+              {/* Gửi voucher giảm giá ngay */}
               <div className="refferend-list-affiliate__content--right-share-content-share">
-                <span className="refferend-list-affiliate__content--right-share-content-share-header">
-                  Gửi voucher giảm giá
-                  <IoCopy
-                    onClick={() =>
-                      copyToClipBoard(
-                        valueUserInfo?.promotional_referral_link || ""
-                      )
-                    }
-                    color="orange"
-                  />
-                </span>
-                <span className="refferend-list-affiliate__content--right-share-content-share-link">
-                  {valueUserInfo?.promotional_referral_link || ""}
-                </span>
+                <div className="refferend-list-affiliate__content--right-share-content-share-header">
+                  <span>Gửi voucher giảm giá ngay:</span>
+                </div>
+                <div className="refferend-list-affiliate__content--right-share-content-share-link">
+                  <span className="refferend-list-affiliate__content--right-share-content-share-link-url">
+                    {valueUserInfo?.promotional_referral_link || ""}
+                  </span>
+                  <span className="refferend-list-affiliate__content--right-share-content-share-link-url-copy">
+                    Sao chép
+                  </span>
+                </div>
               </div>
             </div>
           </div>

@@ -81,6 +81,7 @@ import {
   IoWarning,
   IoAlertCircle,
   IoAlertCircleOutline,
+  IoLocation,
 } from "react-icons/io5";
 import { FaRegFrown, FaRegMeh, FaRegSmile } from "react-icons/fa";
 import { MdDoubleArrow } from "react-icons/md";
@@ -168,6 +169,7 @@ const icons = {
   IoWarning,
   IoAlertCircle,
   IoAlertCircleOutline,
+  IoLocation,
   // Font Awesome 5
   FaRegFrown,
   FaRegMeh,

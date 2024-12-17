@@ -9,8 +9,23 @@ import chStoreImage from "../../../../assets/images/google_play.svg";
 import appScreenImage from "../../../../assets/images/app_screen.png";
 import copyRightImage from "../../../../assets/images/copy_right.png";
 import logoGuvi from "../../../../assets/images/LogoS.svg";
+import referralHorizontalImage from "../../../../assets/images/referralHorizontal.svg";
+import promotionReferralHorizontalImage from "../../../../assets/images/promotionReferralHorizontal.svg";
+import guideStepImage from "../../../../assets/images/guideStep.svg";
+import aboutGuviAffiliateImage from "../../../../assets/images/aboutGuvi.svg";
+import headerAffiliateImage from "../../../../assets/images/headerAffiliate.svg";
+import logoGuviImage from "../../../../assets/images/LogoS.svg";
+import giupViecTheoGioImage from "../../../../assets/images/giupviectheogio.svg";
+import donDepCoDinhImage from "../../../../assets/images/dondepcodinh.svg";
+import tongVeSinhImage from "../../../../assets/images/tongvesinh.svg";
+import veSinhRemThamImage from "../../../../assets/images/vesinhrt.svg";
+import veSinhMayLanh from "../../../../assets/images/vesinhmaylanh.svg";
+import guideStepVerticalImage from "../../../../assets/images/guideStepVertical.svg";
+
 import { useSelector } from "react-redux";
 import { getUser } from "../../../../redux/selectors/auth";
+import { Modal } from "antd";
+import useWindowDimensions from "../../../../helper/useWindowDimensions";
 const {
   IoLink,
   IoPersonAdd,
@@ -30,7 +45,9 @@ const {
 } = icons;
 
 const OverView = () => {
+  const { width } = useWindowDimensions();
   const user = useSelector(getUser);
+  const [modalPopup, setModalPopup] = useState(true);
   /* ~~~ Other ~~~ */
   const copyToClipBoard = (text) => {
     if (text && text.length > 0) {
@@ -42,156 +59,102 @@ const OverView = () => {
   };
   return (
     <div className="affiliate-overview">
-      {/* Hai đường link chia sẻ */}
-      <div className="affiliate-overview__affieliate-guide">
-        <div className="affiliate-overview__affieliate-guide--content">
-          <div className="affiliate-overview__affieliate-guide--content-left">
-            <span className="affiliate-overview__affieliate-guide--content-left-header">
-              Nhận ngay chiết khấu
-            </span>
-            <span className="affiliate-overview__affieliate-guide--content-left-description">
-              Giới thiệu và nhận ngay <span className="high-light">5%</span> cho
-              các đơn thành công của người được giới thiệu. Nếu là đơn đầu tiên
-              sẽ được thưởng thêm <span className="high-light">50.000đ</span>
-            </span>
-            <span className="affiliate-overview__affieliate-guide--content-left-link-title">
-              Đường dẫn:
-              <IoCopy
-                style={{ cursor: "pointer" }}
-                onClick={() => copyToClipBoard(user?.referral_link || "")}
-                color="#f97316"
-              />
-            </span>
-            <span className="affiliate-overview__affieliate-guide--content-left-link">
-              {user?.referral_link || ""}
-            </span>
+      {/* Link share*/}
+      <div className="affiliate-overview__guide">
+        <div className="affiliate-overview__guide--content">
+          <div className="affiliate-overview__guide--content-child">
+            <img
+              className="affiliate-overview__guide--content-child-image"
+              src={referralHorizontalImage}
+            ></img>
           </div>
-          <div className="affiliate-overview__affieliate-guide--content-line">
-            <div className="affiliate-overview__affieliate-guide--content-line-icon">
+          <div className="affiliate-overview__guide--content-line">
+            <div className="affiliate-overview__guide--content-line-icon">
               <IoSwapHorizontal color="#9ca3af" />
             </div>
           </div>
-          <div className="affiliate-overview__affieliate-guide--content-left">
-            <span className="affiliate-overview__affieliate-guide--content-left-header">
-              Nhận ngay voucher giảm giá
-            </span>
-            <span className="affiliate-overview__affieliate-guide--content-left-description">
-              Gửi voucher đến người được giới thiệu và nhận{" "}
-              <span className="high-light">5%</span> bắt đầu từ đơn thứ 2 thành
-              công của người được giới thiệu. Nếu là đơn đầu tiên sẽ được thưởng
-              thêm <span className="high-light">50.000đ</span>
-            </span>
-            <span className="affiliate-overview__affieliate-guide--content-left-link-title">
-              Đường dẫn:
-              <IoCopy
-                style={{ cursor: "pointer" }}
-                onClick={() =>
-                  copyToClipBoard(user?.promotional_referral_link || "")
-                }
-                color="#f97316"
-              />
-            </span>
-            <span className="affiliate-overview__affieliate-guide--content-left-link">
-              {user?.promotional_referral_link || ""}
-            </span>
+          <div className="affiliate-overview__guide--content-child">
+            <img
+              className="affiliate-overview__guide--content-child-image"
+              src={promotionReferralHorizontalImage}
+            ></img>
           </div>
         </div>
       </div>
-      {/* Cách để tham gia chương trình */}
+      {/* Guide join event */}
       <div className="affiliate-overview__service">
-        <div className="affiliate-overview__service--content">
-          <div className="affiliate-overview__service--content-steps">
-            <div className="affiliate-overview__service--content-steps-step">
-              {/* Icon */}
-              <div className="affiliate-overview__service--content-steps-step-icon">
-                <IoLink color="#f97316" />
-              </div>
-              {/* Header */}
-              <span className="affiliate-overview__service--content-steps-step-header">
-                Chia sẻ đường link
-              </span>
-              <span className="affiliate-overview__service--content-steps-step-description">
-                Copy và chia sẻ đường link đến những người muốn giới thiệu
-              </span>
-              {/* Description */}
-            </div>
-            <div className="affiliate-overview__service--content-steps-icon">
-              <MdDoubleArrow color="#f97316" />
-            </div>
-            <div className="affiliate-overview__service--content-steps-step">
-              {/* Icon */}
-              <div className="affiliate-overview__service--content-steps-step-icon">
-                <IoPeopleOutline color="#f97316" />
-              </div>
-              {/* Header */}
-              <span className="affiliate-overview__service--content-steps-step-header">
-                Giới thiệu thành công
-              </span>
-              <span className="affiliate-overview__service--content-steps-step-description">
-                Người được giới thiệu hoàn thành đơn hàng đầu tiên
-              </span>
-              {/* Description */}
-            </div>
-            <div className="affiliate-overview__service--content-steps-icon">
-              <MdDoubleArrow color="#f97316" />
-            </div>
-            <div className="affiliate-overview__service--content-steps-step">
-              {/* Icon */}
-              <div className="affiliate-overview__service--content-steps-step-icon">
-                <IoBagOutline color="#f97316" />
-              </div>
-              {/* Header */}
-              <span className="affiliate-overview__service--content-steps-step-header">
-                Nhận chiết khấu
-              </span>
-              <span className="affiliate-overview__service--content-steps-step-description">
-                Nhận ngay 5% chiết khấu khi người được giới thiệu hoàn thành đơn
-                hàng
-              </span>
-              {/* Description */}
-            </div>
-          </div>
-        </div>
+        {width > 1280 ? (
+          <img
+            className="affiliate-overview__service--step"
+            src={guideStepImage}
+          ></img>
+        ) : (
+          <img
+            className="affiliate-overview__service--step"
+            src={guideStepVerticalImage}
+          ></img>
+        )}
       </div>
-      {/* Trang bìa */}
+      {/* Introduce about guvi */}
       <div className="affiliate-overview__landing-page">
-        <div className="affiliate-overview__landing-page--content">
-          <div className="affiliate-overview__landing-page--content-left">
-            <span className="affiliate-overview__landing-page--content-left-header">
-              <span className="affiliate-overview__landing-page--content-left-header-orange">
-                Gu
-              </span>
-              <span className="affiliate-overview__landing-page--content-left-header-purple">
-                vi
-              </span>{" "}
-              {/* <img
-                className="affiliate-overview__landing-page--content-left-header-logo"
-                src={logoGuvi}
-              ></img> */}
-              ứng dụng giúp việc tiện lợi
-            </span>
-            <span className="affiliate-overview__landing-page--content-left-description">
-              Đặt lịch giúp việc theo giờ tại GUVI thật dễ dàng, nhanh chóng,
-              tiết kiệm và chuyên nghiệp.
-            </span>
-            {/* <div className="affiliate-overview__landing-page--content-left-line"></div> */}
-            <div className="affiliate-overview__landing-page--content-left-download">
-              <img src={chStoreImage}></img>
-              <img src={appleStoreImage}></img>
-            </div>
+        {/* Header */}
+        <div className="affiliate-overview__landing-page--header">
+          <div>
+            <img
+              className="affiliate-overview__landing-page--header-logo"
+              src={logoGuviImage}
+            ></img>
           </div>
-          <div className="affiliate-overview__landing-page--content-right">
-            <div className="affiliate-overview__landing-page--content-right-circle">
-              <img
-                className="affiliate-overview__landing-page--content-right-circle-image"
-                src={appScreenImage}
-              ></img>
-              <div className="affiliate-overview__landing-page--content-right-circle-icon circle bottom-left"></div>
-              <div className="affiliate-overview__landing-page--content-right-circle-icon line_1 top-right"></div>
-              <div className="affiliate-overview__landing-page--content-right-circle-icon line_2 top-right"></div>
-            </div>
+          <div className="affiliate-overview__landing-page--header-label">
+            <span className="affiliate-overview__landing-page--header-label">
+              Ứng dụng giúp việc tiện lợi - linh hoạt
+            </span>
           </div>
         </div>
+        <div className="affiliate-overview__landing-page--about">
+          <img src={aboutGuviAffiliateImage}></img>
+        </div>
+        {width > 1280 ? (
+          <div className="affiliate-overview__landing-page--line-icon">
+            <div className="affiliate-overview__landing-page--line-icon-child">
+              <img src={giupViecTheoGioImage}></img>
+            </div>
+            <div className="affiliate-overview__landing-page--line-icon-child">
+              <img src={donDepCoDinhImage}></img>
+            </div>
+            <div className="affiliate-overview__landing-page--line-icon-child">
+              <img src={tongVeSinhImage}></img>
+            </div>
+            <div className="affiliate-overview__landing-page--line-icon-child">
+              <img src={veSinhRemThamImage}></img>
+            </div>
+            <div className="affiliate-overview__landing-page--line-icon-child">
+              <img src={veSinhMayLanh}></img>
+            </div>
+          </div>
+        ) : (
+          <>
+            <div className="affiliate-overview__landing-page--line-icon">
+              <div className="affiliate-overview__landing-page--line-icon-child">
+                <img src={giupViecTheoGioImage}></img>
+              </div>
+              <div className="affiliate-overview__landing-page--line-icon-child">
+                <img src={donDepCoDinhImage}></img>
+              </div>
+              <div className="affiliate-overview__landing-page--line-icon-child">
+                <img src={tongVeSinhImage}></img>
+              </div>
+            </div>
+            <div className="affiliate-overview__landing-page--line-icon">
+              <div className="affiliate-overview__landing-page--line-icon-child">
+                <img src={veSinhRemThamImage}></img>
+              </div>
+              <div className="affiliate-overview__landing-page--line-icon-child">
+                <img src={veSinhMayLanh}></img>
+              </div>
+            </div>
+          </>
+        )}
       </div>
       {/* Footer */}
       <div className="affiliate-overview__footer">
