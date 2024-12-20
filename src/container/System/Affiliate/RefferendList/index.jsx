@@ -610,7 +610,8 @@ const RefferendList = () => {
                   Tổng người giới thiệu
                 </span>
                 <span className="refferend-list-affiliate__content--left-card-content-describe-value">
-                  {dataListReferralPerson?.totalItem || 0}{" "}
+                  {/* {dataListReferralPerson?.totalItem || 0}{" "} */}
+                  {valueUserInfo?.total_referral_person}{" "}
                   <span className="unit">người</span>
                 </span>
               </div>
@@ -622,7 +623,8 @@ const RefferendList = () => {
             {/* So với 30 ngày gần đây */}
             <div className="refferend-list-affiliate__content--left-card-previous">
               <span>
-                30 ngày gần đây: {valueUserInfo?.total_referral_person} người
+                30 ngày gần đây:{" "}
+                {valueUserInfo?.total_referral_person_30_days_ago} người
               </span>
             </div>
           </div>
@@ -635,7 +637,8 @@ const RefferendList = () => {
                   Tổng tiền
                 </span>
                 <span className="refferend-list-affiliate__content--left-card-content-describe-value">
-                  150.000 <span className="unit">VNĐ</span>
+                  {formatNumber(valueUserInfo?.total_discount || 0)}{" "}
+                  <span className="unit">VNĐ</span>
                 </span>
               </div>
               {/* icon */}
@@ -647,7 +650,8 @@ const RefferendList = () => {
             <div className="refferend-list-affiliate__content--left-card-previous">
               <span>
                 30 ngày gần đây:{" "}
-                {formatNumber(valueUserInfo?.total_discount || 0)} VNĐ
+                {formatNumber(valueUserInfo?.total_discount_30_days_ago || 0)}{" "}
+                VNĐ{" "}
               </span>
             </div>
           </div>
@@ -661,10 +665,7 @@ const RefferendList = () => {
                   Tổng đơn
                 </span>
                 <span className="refferend-list-affiliate__content--left-card-content-describe-value">
-                  {dataListReferralPerson?.data?.reduce(
-                    (sum, item) => sum + (item.total_done_order || 0),
-                    0
-                  )}{" "}
+                  {valueUserInfo?.total_number_orders}{" "}
                   <span className="unit">đơn</span>
                 </span>
               </div>
@@ -675,7 +676,10 @@ const RefferendList = () => {
             </div>
             {/* So với 30 ngày gần đây */}
             <div className="refferend-list-affiliate__content--left-card-previous">
-              <span>30 ngày gần đây: 3 đơn</span>
+              <span>
+                30 ngày gần đây:{" "}
+                {valueUserInfo?.total_number_orders_30_days_ago} đơn
+              </span>
             </div>
           </div>
           {/* Guide for invite new person */}
