@@ -2,9 +2,9 @@ export const SELECT_TIME = [
   {
     label: "",
     time: [
-      { id: "0530", label: "05:30", config_value: "HH:mm:ss", value: "" },
-      { id: "0600", label: "06:00", config_value: "HH:mm:ss", value: "" },
-      { id: "0630", label: "06:30", config_value: "HH:mm:ss", value: "" },
+      // { id: "0530", label: "05:30", config_value: "HH:mm:ss", value: "" },
+      // { id: "0600", label: "06:00", config_value: "HH:mm:ss", value: "" },
+      // { id: "0630", label: "06:30", config_value: "HH:mm:ss", value: "" },
       { id: "0700", label: "07:00", config_value: "HH:mm:ss", value: "" },
       { id: "0730", label: "07:30", config_value: "HH:mm:ss", value: "" },
       { id: "0800", label: "08:00", config_value: "HH:mm:ss", value: "" },

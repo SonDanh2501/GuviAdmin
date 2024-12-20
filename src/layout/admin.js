@@ -263,6 +263,10 @@ const Admin = () => {
         element={<ManageTopUpWithdraw object="customer" />}
       />
       <Route
+        path="/transaction/manage-transaction/affiliate"
+        element={<ManageTopUpWithdraw object="affiliate" />}
+      />
+      <Route
         path="/transaction/manage-transaction/other"
         element={<ManageTopUpWithdraw object="other" />}
       />

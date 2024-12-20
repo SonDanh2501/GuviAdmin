@@ -105,4 +105,25 @@ export const getActivityHistoryTransactionApi = (id) => {
   );
 };
 
+export const getListTransactionAffiliateAdminApi = (
+  start,
+  length,
+  query,
+  search
+) => {
+  return axiosClient.get(
+    `api/admin/transaction_manager/get_list_affiliate?start=${start}&length=${length}&search=${search}${query}`
+  );
+};
 
+export const cancelTransactionAffiliateAdminApi = (id) => {
+  return axiosClient.post(
+    `api/admin/transaction_manager/cancel_transaction/${id}`
+  );
+}
+
+export const verifyTransactionAffiliateAdminApi = (id) => {
+  return axiosClient.post(
+    `api/admin/transaction_manager/verify_transaction/${id}`
+  );
+};

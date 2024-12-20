@@ -1,4 +1,4 @@
-import { Button, Dropdown, Space } from "antd";
+import { Button, Dropdown, message, Space } from "antd";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import _ from "lodash";
@@ -9,6 +9,9 @@ import {
   getTotalTransactionApi,
   verifyTransactionApi,
   getListTransactionApi,
+  getListTransactionAffiliateAdminApi,
+  verifyTransactionAffiliateAdminApi,
+  cancelTransactionAffiliateAdminApi,
 } from "../../api/transaction";
 import { errorNotify, successNotify } from "../../helper/toast";
 import {
@@ -29,7 +32,6 @@ import { loadingAction } from "../../redux/actions/loading";
 import InputTextCustom from "../../components/inputCustom";
 
 const ManageTopUpWithdraw = (props) => {
-
   const [openModalCancel, setOpenModalCancel] = useState(false);
   const [openModalChangeStatus, setOpenModalChangeStatus] = useState(false);
   const [valueSearch, setValueSearch] = useState("");
@@ -78,38 +80,77 @@ const ManageTopUpWithdraw = (props) => {
       });
   };
   // Action từ chối (hủy) lệnh giao dịch
-  const handleCancelTransfer = () => {
-    cancelTransactionApi(item?._id)
-      .then((res) => {
-        fetchData();
-        successNotify({
-          message: "Huỷ lệnh giao dịch thành công",
-        });
-        fetchData();
-      })
-      .catch((err) => {
-        errorNotify({
-          message: "Huỷ lệnh giao dịch thất bại \n" + err?.message,
-        });
+  const handleCancelTransfer = async () => {
+    try {
+      const res = await cancelTransactionApi(item?._id);
+      successNotify({
+        message: "Huỷ lệnh giao dịch thành công",
       });
-    setOpenModalCancel(false);
+      setOpenModalCancel(false);
+      fetchData();
+    } catch (err) {
+      errorNotify({
+        message: "Hủy lệnh giao dịch thất bại \n" + err?.message,
+      });
+    }
+  };
+  // Action từ chối (hủy) lệnh giao dịch afffiliate
+  const handleCancelAffiliateTransfer = async () => {
+    try {
+      const res = await cancelTransactionAffiliateAdminApi(item?._id);
+      successNotify({
+        message: "Huỷ lệnh giao dịch thành công",
+      });
+      setOpenModalCancel(false);
+      fetchDataAffiliate();
+    } catch (err) {
+      errorNotify({
+        message: "Hủy lệnh giao dịch thất bại \n" + err?.message,
+      });
+    }
   };
   // Action đồng ý lệnh giao dịch
-  const handleVerifyTransfer = () => {
-    verifyTransactionApi(item?._id)
-      .then((res) => {
-        successNotify({
-          message: "Duyệt lệnh thành công",
-        });
-        fetchData();
-      })
-
-      .catch((err) => {
-        errorNotify({
-          message: "Duyệt lệnh giao dịch thất bại \n" + err?.message,
-        });
+  const handleVerifyTransfer = async () => {
+    // verifyTransactionApi(item?._id)
+    //   .then((res) => {
+    //     successNotify({
+    //       message: "Duyệt lệnh thành công",
+    //     });
+    //     fetchData();
+    //   })
+    //   .catch((err) => {
+    //     errorNotify({
+    //       message: "Duyệt lệnh giao dịch thất bại \n" + err?.message,
+    //     });
+    //   });
+    // setOpenModalChangeStatus(false);
+    try {
+      const res = await verifyTransactionApi(item?._id);
+      successNotify({
+        message: "Duyệt lệnh thành công",
       });
-    setOpenModalChangeStatus(false);
+      await fetchData();
+    } catch (err) {
+      errorNotify({
+        message: "Duyệt lệnh giao dịch thất bại \n" + err?.message,
+      });
+    }
+  };
+  // Action đồng ý lệnh giao dịch affiliate
+  const handleVerifyAffiliateTransfer = async () => {
+    try {
+      console.log("check item?._id", item?._id);
+      const res = await verifyTransactionAffiliateAdminApi(item?._id);
+      successNotify({
+        message: "Duyệt lệnh thành công",
+      });
+      await fetchDataAffiliate();
+      setOpenModalChangeStatus(false);
+    } catch (err) {
+      errorNotify({
+        message: "Duyệt lệnh giao dịch thất bại \n" + err?.message,
+      });
+    }
   };
   /* ~~~~~~~~~~~~~~~~~~~~~~~~ SON ~~~~~~~~~~~~~~~~~~~~~~~~ */
   const { object } = props;
@@ -409,7 +450,7 @@ const ManageTopUpWithdraw = (props) => {
   // 2. Hàm fetch dữ liệu
   const fetchData = async () => {
     try {
-      setIsLoading(true)
+      setIsLoading(true);
       let query =
         selectFilter.map((item) => `&${item.key}=${item.code}`).join("") +
         `&start_date=${startDate}&end_date=${endDate}`;
@@ -433,8 +474,9 @@ const ManageTopUpWithdraw = (props) => {
         (el) => el.key !== "status"
       );
       let query =
-      selectFilterNoStatus.map((item) => `&${item?.key}=${item?.code}`).join("") +
-        `&start_date=${startDate}&end_date=${endDate}`;
+        selectFilterNoStatus
+          .map((item) => `&${item?.key}=${item?.code}`)
+          .join("") + `&start_date=${startDate}&end_date=${endDate}`;
       const res = await getTotalTransactionApi(query, valueSearch);
       setStatusList((prevList) =>
         prevList.map((item) => ({
@@ -455,11 +497,36 @@ const ManageTopUpWithdraw = (props) => {
     }, 500),
     []
   );
+  // 5. Hàm fetch dữ liệu của affiliate
+  const fetchDataAffiliate = async () => {
+    try {
+      setIsLoading(true);
+      let query =
+        selectFilter.map((item) => `&${item.key}=${item.code}`).join("") +
+        `&start_date=${startDate}&end_date=${endDate}`;
+      const res = await getListTransactionAffiliateAdminApi(
+        startPage,
+        lengthPage,
+        query,
+        valueSearch
+      );
+      setData(res?.data);
+      setTotal(res?.totalItem);
+      setIsLoading(false);
+    } catch (err) {
+      console.log("Lỗi fetchData: ", err);
+    }
+  };
   /* ~~~ Use effect ~~~ */
   // 1. Fetch dữ liệu bảng
   useEffect(() => {
+    console.log("check object >>>", object);
     if (startDate !== "" && endDate !== "") {
-      fetchData();
+      if (object !== "affiliate") {
+        fetchData();
+      } else {
+        fetchDataAffiliate();
+      }
     }
   }, [startPage, valueSearch, lengthPage, selectFilter, startDate, endDate]);
   // 2. Fetch dữ liệu total
@@ -476,7 +543,7 @@ const ManageTopUpWithdraw = (props) => {
           return { ...item, code: selectStatus };
         } else if (item.key === "subject") {
           // return { ...item, code: selectObject };
-          return { ...item, code: object };
+          return { ...item, code: object !== "affiliate" ? object : "" };
         } else if (item.key === "type_transfer") {
           return { ...item, code: selectTransferType };
         } else if (item.key === "payment_out") {
@@ -497,6 +564,72 @@ const ManageTopUpWithdraw = (props) => {
   ]);
   /* ~~~ Other ~~~ */
   const filterByType = () => {
+    return (
+      <div className="manage-top-up-with-draw__table--right-header">
+        <TransactionDrawer2
+          titleButton="Phiếu thu"
+          titleHeader="Phiếu thu"
+          onClick={handleTopUp}
+        />
+        <TransactionDrawer2
+          titleButton="Phiếu chi"
+          titleHeader="Phiếu chi"
+          onClick={handleWithdraw}
+        />
+        {/* <div className="manage-top-up-with-draw__table--right-header--search-field">
+          <InputTextCustom
+            type="text"
+            placeHolderNormal={`${i18n.t("search_transaction", {
+              lng: lang,
+            })}`}
+            onChange={(e) => {
+              handleSearch(e.target.value);
+            }}
+          />
+        </div> */}
+      </div>
+      // <div className="manage-top-up-with-draw__filter-content">
+      //   {/* Lọc theo loại đối tượng */}
+      //   <div>
+      //     <ButtonCustom
+      //       label="Đối tượng"
+      //       options={objectList}
+      //       value={object}
+      //       setValueSelectedProps={setSelectObject}
+      //       disable={true}
+      //     />
+      //   </div>
+      //   {/* Lọc theo loại giao dịch */}
+      //   <div>
+      //     <ButtonCustom
+      //       label="Loại giao dịch"
+      //       options={transferTypeList}
+      //       value={selectTransferType}
+      //       setValueSelectedProps={setSelectTransferType}
+      //     />
+      //   </div>
+      //   {/* Lọc theo loại phương thức thanh toán */}
+      //   <div>
+      //     <ButtonCustom
+      //       label="Phương thức thanh toán"
+      //       options={paymentMethodList}
+      //       value={selectPaymentMetod}
+      //       setValueSelectedProps={setSelectPaymentMetod}
+      //     />
+      //   </div>
+      //   {/* Lọc theo loại ví vào */}
+      //   <div>
+      //     <ButtonCustom
+      //       label="Vào ví"
+      //       options={walletTypeList}
+      //       value={selectWalletType}
+      //       setValueSelectedProps={setSelectWalletMetod}
+      //     />
+      //   </div>
+      // </div>
+    );
+  };
+  const filterByTypeRight = () => {
     return (
       <div className="manage-top-up-with-draw__filter-content">
         {/* Lọc theo loại đối tượng */}
@@ -542,25 +675,46 @@ const ManageTopUpWithdraw = (props) => {
   const filterDateAndSearchRight = () => {
     return (
       <div className="manage-top-up-with-draw__filter-content">
-        {statusList?.map((el) => (
-          <div
-            onClick={() => setSelectStatus(el.code)}
-            className={`manage-top-up-with-draw__filter-content--tab ${
-              selectStatus === el.code && "selected"
-            }`}
-          >
-            <span className="manage-top-up-with-draw__filter-content--tab-label">
-              {el?.label}
-            </span>
-            <span className="manage-top-up-with-draw__filter-content--tab-number">
-              {el?.total}
-            </span>
-          </div>
-        ))}
+        {object !== "affiliate" &&
+          statusList?.map((el) => (
+            <div
+              onClick={() => setSelectStatus(el.code)}
+              className={`manage-top-up-with-draw__filter-content--tab ${
+                selectStatus === el.code && "selected"
+              }`}
+            >
+              <span className="manage-top-up-with-draw__filter-content--tab-label">
+                {el?.label}
+              </span>
+              <span className="manage-top-up-with-draw__filter-content--tab-number">
+                {el?.total}
+              </span>
+            </div>
+          ))}
+        {object === "affiliate" &&
+          statusList
+            ?.filter(
+              (status) =>
+                status.code !== "transferred" && status.code !== "pending"
+            )
+            .map((el) => (
+              <div
+                onClick={() => setSelectStatus(el.code)}
+                className={`manage-top-up-with-draw__filter-content--tab ${
+                  selectStatus === el.code && "selected"
+                }`}
+              >
+                <span className="manage-top-up-with-draw__filter-content--tab-label">
+                  {el?.label}
+                </span>
+                <span className="manage-top-up-with-draw__filter-content--tab-number">
+                  {el?.total}
+                </span>
+              </div>
+            ))}
       </div>
     );
   };
-
   const addActionColumn = {
     i18n_title: "",
     dataIndex: "action",
@@ -637,6 +791,7 @@ const ManageTopUpWithdraw = (props) => {
       );
     },
   };
+
   /* ~~~ Main ~~~ */
   return (
     <div className="manage-top-up-with-draw">
@@ -653,7 +808,8 @@ const ManageTopUpWithdraw = (props) => {
         endDate={endDate}
         setStartDate={setStartDate}
         setEndDate={setEndDate}
-        leftContent={filterByType()}
+        leftContent={object !== "affiliate" ? filterByType() : ""}
+        rightContent={object !== "affiliate" ? filterByTypeRight() : ""}
       />
       {/* Table */}
       <div>
@@ -682,16 +838,6 @@ const ManageTopUpWithdraw = (props) => {
                   }}
                 />
               </div>
-              <TransactionDrawer2
-                titleButton="Phiếu thu"
-                titleHeader="Phiếu thu"
-                onClick={handleTopUp}
-              />
-              <TransactionDrawer2
-                titleButton="Phiếu chi"
-                titleHeader="Phiếu chi"
-                onClick={handleWithdraw}
-              />
             </div>
           }
         />
@@ -701,7 +847,11 @@ const ManageTopUpWithdraw = (props) => {
         <ModalCustom
           isOpen={openModalCancel}
           title={`Huỷ giao dịch`}
-          handleOk={handleCancelTransfer}
+          handleOk={
+            object !== "affiliate"
+              ? handleCancelTransfer
+              : handleCancelAffiliateTransfer
+          }
           handleCancel={() => setOpenModalCancel(false)}
           textOk={`Xác nhận`}
           body={
@@ -727,7 +877,11 @@ const ManageTopUpWithdraw = (props) => {
         <ModalCustom
           isOpen={openModalChangeStatus}
           title={`Duyệt giao dịch`}
-          handleOk={handleVerifyTransfer}
+          handleOk={
+            object !== "affiliate"
+              ? handleVerifyTransfer
+              : handleVerifyAffiliateTransfer
+          }
           handleCancel={() => setOpenModalChangeStatus(false)}
           textOk={`Xác nhận`}
           body={

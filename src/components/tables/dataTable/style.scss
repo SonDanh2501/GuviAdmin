@@ -625,6 +625,10 @@ span {
     &.top-up {
       background-color: $colorGreen;
     }
+
+    &.other {
+      background-color: $colorLightGray;
+    }
   }
 }
 

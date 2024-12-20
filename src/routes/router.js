@@ -797,6 +797,18 @@ const router = [
         null,
         null
       ),
+      /* 4. Sổ quỹ (khách affiliate) */
+      getItem(
+        <Link
+          style={{ textDecoration: "none" }}
+          to="/transaction/manage-transaction/affiliate"
+        >
+          Thu chi affiliate
+        </Link>,
+        "/transaction/manage-transaction/affiliate",
+        null,
+        null
+      ),
 
       // getItem(
       //   "CTV",

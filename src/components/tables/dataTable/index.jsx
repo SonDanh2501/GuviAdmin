@@ -1460,13 +1460,14 @@ const DataTable = (props) => {
               reward: "Thưởng",
               punish: "Phạt",
               pay_service: "Thanh toán dịch vụ",
+              withdraw_affiliate: "Phiếu chi affiliate"
             };
             const type_transfer = typeTransferMap[data?.type_transfer] || "";
             return (
               <div className="case__transfer-type-transfer">
                 <span
                   className={`case__transfer-type-transfer--text ${
-                    data?.type_transfer === "withdraw" ? "withdraw" : "top-up"
+                    data?.type_transfer === "withdraw" ? "withdraw" : data?.type_transfer === "top-up" ? "top-up" : "other"
                   }`}
                 >
                   {type_transfer}

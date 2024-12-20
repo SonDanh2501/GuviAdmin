@@ -2,30 +2,47 @@ import React, { useState } from "react";
 import icons from "../../../../utils/icons";
 import "./index.scss";
 import ButtonCustom from "../../../../components/button";
-import { errorNotify, infoNotify, successNotify } from "../../../../helper/toast";
+import {
+  errorNotify,
+  infoNotify,
+  successNotify,
+} from "../../../../helper/toast";
 
 import appleStoreImage from "../../../../assets/images/apple_store.svg";
 import chStoreImage from "../../../../assets/images/google_play.svg";
 import appScreenImage from "../../../../assets/images/app_screen.png";
 import copyRightImage from "../../../../assets/images/copy_right.png";
 import logoGuvi from "../../../../assets/images/LogoS.svg";
-import referralHorizontalImage from "../../../../assets/images/referralHorizontal.svg";
-import promotionReferralHorizontalImage from "../../../../assets/images/promotionReferralHorizontal.svg";
-import guideStepImage from "../../../../assets/images/guideStep.svg";
-import aboutGuviAffiliateImage from "../../../../assets/images/aboutGuvi.svg";
-import headerAffiliateImage from "../../../../assets/images/headerAffiliate.svg";
+// import referralHorizontalImage from "../../../../assets/images/referralHorizontal.svg";
+ import referralHorizontalImage from "../../../../assets/images/referralHorizontal.png";
+// import promotionReferralHorizontalImage from "../../../../assets/images/promotionReferralHorizontal.svg";
+import promotionReferralHorizontalImage from "../../../../assets/images/promotionReferralHorizontal.png";
+// import guideStepImage from "../../../../assets/images/guideStep.svg";
+import guideStepImage from "../../../../assets/images/guideStep.png";
+// import aboutGuviAffiliateImage from "../../../../assets/images/aboutGuvi.svg";
+import aboutGuviAffiliateImage from "../../../../assets/images/aboutGuvi.png";
+// import logoGuviImage from "../../../../assets/images/LogoS.svg";
 import logoGuviImage from "../../../../assets/images/LogoS.svg";
-import giupViecTheoGioImage from "../../../../assets/images/giupviectheogio.svg";
-import donDepCoDinhImage from "../../../../assets/images/dondepcodinh.svg";
-import tongVeSinhImage from "../../../../assets/images/tongvesinh.svg";
-import veSinhRemThamImage from "../../../../assets/images/vesinhrt.svg";
-import veSinhMayLanh from "../../../../assets/images/vesinhmaylanh.svg";
-import guideStepVerticalImage from "../../../../assets/images/guideStepVertical.svg";
+// import giupViecTheoGioImage from "../../../../assets/images/giupviectheogio.svg";
+import giupViecTheoGioImage from "../../../../assets/images/giupviectheogio.png";
+// import donDepCoDinhImage from "../../../../assets/images/dondepcodinh.svg";
+import donDepCoDinhImage from "../../../../assets/images/dondepcodinh.png";
+// import tongVeSinhImage from "../../../../assets/images/tongvesinh.svg";
+import tongVeSinhImage from "../../../../assets/images/tongvesinh.png";
+// import veSinhRemThamImage from "../../../../assets/images/vesinhrt.svg";
+import veSinhRemThamImage from "../../../../assets/images/vesinhrt.png";
+// import veSinhMayLanh from "../../../../assets/images/vesinhmaylanh.svg";
+import veSinhMayLanh from "../../../../assets/images/vesinhmaylanh.png";
+// import guideStepVerticalImage from "../../../../assets/images/guideStepVertical.svg";
+import guideStepVerticalImage from "../../../../assets/images/guideStepVertical.png";
+// import headerAffiliateImage from "../../../../assets/images/headerAffiliate.svg";
+import headerAffiliateImage from "../../../../assets/images/headerAffiliate.png";
 
 import { useSelector } from "react-redux";
 import { getUser } from "../../../../redux/selectors/auth";
 import { Modal } from "antd";
 import useWindowDimensions from "../../../../helper/useWindowDimensions";
+import { useNavigate } from "react-router-dom";
 const {
   IoLink,
   IoPersonAdd,
@@ -46,6 +63,7 @@ const {
 
 const OverView = () => {
   const { width } = useWindowDimensions();
+  const navigate = useNavigate();
   const user = useSelector(getUser);
   const [modalPopup, setModalPopup] = useState(true);
   /* ~~~ Other ~~~ */
@@ -59,6 +77,27 @@ const OverView = () => {
   };
   return (
     <div className="affiliate-overview">
+      {width < 480 && (
+        <>
+          <div className="affiliate-overview__header">
+            <img src={headerAffiliateImage}></img>
+          </div>
+          <div className="affiliate-overview__tab">
+            <div
+              onClick={() => navigate("/")}
+              className="affiliate-overview__tab--button activated"
+            >
+              <span>Affiliate</span>
+            </div>
+            <div
+              onClick={() => navigate("/referend-list")}
+              className="affiliate-overview__tab--button"
+            >
+              <span>Danh sách</span>
+            </div>
+          </div>
+        </>
+      )}
       {/* Link share*/}
       <div className="affiliate-overview__guide">
         <div className="affiliate-overview__guide--content">
@@ -83,7 +122,7 @@ const OverView = () => {
       </div>
       {/* Guide join event */}
       <div className="affiliate-overview__service">
-        {width > 1280 ? (
+        {width > 1024 ? (
           <img
             className="affiliate-overview__service--step"
             src={guideStepImage}
@@ -114,7 +153,7 @@ const OverView = () => {
         <div className="affiliate-overview__landing-page--about">
           <img src={aboutGuviAffiliateImage}></img>
         </div>
-        {width > 1280 ? (
+        {width > 768 ? (
           <div className="affiliate-overview__landing-page--line-icon">
             <div className="affiliate-overview__landing-page--line-icon-child">
               <img src={giupViecTheoGioImage}></img>
@@ -181,12 +220,24 @@ const OverView = () => {
               Tải ứng dụng
             </span>
             <div className="affiliate-overview__footer--content-information-image-container">
-              <img
-                className="affiliate-overview__footer--content-information-image"
+            <img
+                onClick={() =>
+                  window.open(
+                    "https://play.google.com/store/apps/details?id=com.guvico_customer",
+                    "_blank"
+                  )
+                }
+                className="refferend-list-affiliate__footer--content-information-image"
                 src={chStoreImage}
               ></img>
               <img
-                className="affiliate-overview__footer--content-information-image"
+                onClick={() =>
+                  window.open(
+                    "https://apps.apple.com/us/app/guvi-gi%C3%BAp-vi%E1%BB%87c-theo-gi%E1%BB%9D/id6443966297",
+                    "_blank"
+                  )
+                }
+                className="refferend-list-affiliate__footer--content-information-image"
                 src={appleStoreImage}
               ></img>
             </div>
