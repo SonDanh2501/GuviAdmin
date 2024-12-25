@@ -138,38 +138,30 @@
 
   .header-navigation-affiliate__right {
     display: flex;
-    margin-right: 25px;
-    flex-direction: row;
     align-items: center;
-    justify-content: space-between;
-    width: auto;
-    height: 100%;
     gap: $gapXS;
 
-
-    .header-navigation__right--icon {
-      position: relative;
-      color: #475569;
-      cursor: pointer;
-      padding: 0.6rem;
-      border-radius: 100%;
-      transition-duration: 300ms;
-
-      &:hover {
-        color: #8b5cf6;
-        background-color: #f4f4f6;
-      }
+    .header-navigation-affiliate__right--icon {
+      font-size: 24px;
+      color: $colorBlack;
     }
 
-    .header-navigation__right--user-info {
+    .header-navigation-affiliate__right--info {
       display: flex;
       align-items: center;
-      justify-content: center;
       gap: $gapXS;
 
-      .header-navigation__right--user-info-name {
+      .eader-navigation-affiliate__right--info-name {
         font-size: $textFontSizeM;
-        font-weight: $fontWeightL;
+        font-weight: $fontWeightXL;
+        color: $colorBlack;
+        cursor: pointer;
+
+      }
+      .header-navigation-affiliate__right--info-icon-down {
+        display: flex;
+        align-items: center;
+        font-size: 32px;
         color: $colorBlack;
       }
     }
@@ -193,10 +185,10 @@
     }
 
     .header-navigation-affiliate__button {
-      display: none;
+      display: flex;
       gap: $gapXS;
       // align-items: center;
-      padding: 9px 12px;
+      padding: 4px 8px;
       width: fit-content;
       height: fit-content;
       background-color: $colorWhite;
@@ -246,38 +238,30 @@
 
     .header-navigation-affiliate__right {
       display: flex;
-      margin-right: 25px;
-      flex-direction: row;
       align-items: center;
-      justify-content: space-between;
-      width: auto;
-      height: 100%;
       gap: $gapXS;
-
-
-      .header-navigation__right--icon {
-        position: relative;
-        color: #475569;
-        cursor: pointer;
-        padding: 0.6rem;
-        border-radius: 100%;
-        transition-duration: 300ms;
-
-        &:hover {
-          color: #8b5cf6;
-          background-color: #f4f4f6;
-        }
+  
+      .header-navigation-affiliate__right--icon {
+        font-size: 20px;
+        color: $colorBlack;
       }
-
-      .header-navigation__right--user-info {
+  
+      .header-navigation-affiliate__right--info {
         display: flex;
         align-items: center;
-        justify-content: center;
         gap: $gapXS;
-
-        .header-navigation__right--user-info-name {
+  
+        .eader-navigation-affiliate__right--info-name {
           font-size: $textFontSizeM;
-          font-weight: $fontWeightL;
+          font-weight: $fontWeightXL;
+          color: $colorBlack;
+          cursor: pointer;
+
+        }
+        .header-navigation-affiliate__right--info-icon-down {
+          display: flex;
+          align-items: center;
+          font-size: 20px;
           color: $colorBlack;
         }
       }

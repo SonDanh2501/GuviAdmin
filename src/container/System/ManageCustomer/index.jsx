@@ -275,7 +275,7 @@ const ManageCustomer = () => {
     },
     [startPage, status, idGroup, lang, lengthPage]
   );
-  console.log("tabs", dataTab);
+  
   return (
     <>
       <div className="div-container-content">

@@ -14,7 +14,7 @@ import appScreenImage from "../../../../assets/images/app_screen.png";
 import copyRightImage from "../../../../assets/images/copy_right.png";
 import logoGuvi from "../../../../assets/images/LogoS.svg";
 // import referralHorizontalImage from "../../../../assets/images/referralHorizontal.svg";
- import referralHorizontalImage from "../../../../assets/images/referralHorizontal.png";
+import referralHorizontalImage from "../../../../assets/images/referralHorizontal.png";
 // import promotionReferralHorizontalImage from "../../../../assets/images/promotionReferralHorizontal.svg";
 import promotionReferralHorizontalImage from "../../../../assets/images/promotionReferralHorizontal.png";
 // import guideStepImage from "../../../../assets/images/guideStep.svg";
@@ -37,6 +37,8 @@ import veSinhMayLanh from "../../../../assets/images/vesinhmaylanh.png";
 import guideStepVerticalImage from "../../../../assets/images/guideStepVertical.png";
 // import headerAffiliateImage from "../../../../assets/images/headerAffiliate.svg";
 import headerAffiliateImage from "../../../../assets/images/headerAffiliate.png";
+import fivePercentageImage from "../../../../assets/images/fivePercentage.png";
+import tenPercentageImage from "../../../../assets/images/tenPercentage.png";
 
 import { useSelector } from "react-redux";
 import { getUser } from "../../../../redux/selectors/auth";
@@ -102,10 +104,49 @@ const OverView = () => {
       <div className="affiliate-overview__guide">
         <div className="affiliate-overview__guide--content">
           <div className="affiliate-overview__guide--content-child">
-            <img
-              className="affiliate-overview__guide--content-child-image"
-              src={referralHorizontalImage}
-            ></img>
+            <div className="affiliate-overview__guide--content-child-share-link">
+              <div className="affiliate-overview__guide--content-child-share-link-left">
+                <div className="affiliate-overview__guide--content-child-share-link-left-header">
+                  <div className="affiliate-overview__guide--content-child-share-link-left-header-number">
+                    <img src={fivePercentageImage}></img>
+                  </div>
+                  <div className="affiliate-overview__guide--content-child-share-link-left-header-describe">
+                    <span className="affiliate-overview__guide--content-child-share-link-left-header-describe-label">
+                      Chiết khấu
+                    </span>
+                    <span className="affiliate-overview__guide--content-child-share-link-left-header-describe-child">
+                      Từ đơn đầu tiên
+                    </span>
+                  </div>
+                </div>
+                <div
+                  onClick={() => copyToClipBoard(user?.referral_link)}
+                  className="affiliate-overview__guide--content-child-share-link-left-copy"
+                >
+                  <div className="affiliate-overview__guide--content-child-share-link-left-copy-icon">
+                    <IoCopyOutline />
+                  </div>
+                  <span className="affiliate-overview__guide--content-child-share-link-left-copy-label">
+                    COPY
+                  </span>
+                </div>
+              </div>
+              <div className="affiliate-overview__guide--content-child-share-link-right">
+                <span className="affiliate-overview__guide--content-child-share-link-right-header">
+                  Chiết khấu ngay
+                </span>
+                <span className="affiliate-overview__guide--content-child-share-link-right-describe">
+                  Giới thiệu và nhận ngay{" "}
+                  <span className="high-light">5% hoa hồng</span> từ các đơn
+                  thành công của người được giới thiệu
+                </span>
+                <span className="affiliate-overview__guide--content-child-share-link-right-describe">
+                  Thưởng thêm <span className="high-light">50.000đ</span> vào ví
+                  G-pay khi người được giới thiệu hoàn thành{" "}
+                  <span className="high-light">đơn đầu tiên.</span>
+                </span>
+              </div>
+            </div>
           </div>
           <div className="affiliate-overview__guide--content-line">
             <div className="affiliate-overview__guide--content-line-icon">
@@ -113,10 +154,53 @@ const OverView = () => {
             </div>
           </div>
           <div className="affiliate-overview__guide--content-child">
-            <img
-              className="affiliate-overview__guide--content-child-image"
-              src={promotionReferralHorizontalImage}
-            ></img>
+            <div className="affiliate-overview__guide--content-child-share-link">
+              <div className="affiliate-overview__guide--content-child-share-link-right">
+                <span className="affiliate-overview__guide--content-child-share-link-right-header">
+                  Tặng voucher
+                </span>
+                <span className="affiliate-overview__guide--content-child-share-link-right-describe">
+                  <span className="high-light">Gửi voucher</span> đến người được
+                  giới thiệu và <span className="high-light">nhận 5%</span> hoa
+                  hồng bắt đầu <span className="high-light">từ đơn</span> thành
+                  công <span className="high-light">thứ 2</span> của người đó.
+                </span>
+                <span className="affiliate-overview__guide--content-child-share-link-right-describe">
+                  Thưởng thêm <span className="high-light">50.000đ</span> vào ví
+                  G-pay khi người được giới thiệu hoàn thành{" "}
+                  <span className="high-light">đơn đầu tiên.</span>
+                </span>
+              </div>
+              <div className="affiliate-overview__guide--content-child-share-link-left">
+                <div className="affiliate-overview__guide--content-child-share-link-left-header">
+                  <div className="affiliate-overview__guide--content-child-share-link-left-header-number">
+                    <img src={tenPercentageImage}></img>
+                  </div>
+                  <div className="affiliate-overview__guide--content-child-share-link-left-header-describe">
+                    <span className="affiliate-overview__guide--content-child-share-link-left-header-describe-label">
+                      Gửi tặng
+                    </span>
+                    <span className="affiliate-overview__guide--content-child-share-link-left-header-describe-label">
+                      voucher
+                    </span>
+                    <span className="affiliate-overview__guide--content-child-share-link-left-header-describe-child">
+                      Cho đơn đầu tiên
+                    </span>
+                  </div>
+                </div>
+                <div
+                  onClick={() => copyToClipBoard(user?.promotional_referral_link)}
+                  className="affiliate-overview__guide--content-child-share-link-left-copy"
+                >
+                  <div className="affiliate-overview__guide--content-child-share-link-left-copy-icon">
+                    <IoCopyOutline />
+                  </div>
+                  <span className="affiliate-overview__guide--content-child-share-link-left-copy-label">
+                    COPY
+                  </span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -220,7 +304,7 @@ const OverView = () => {
               Tải ứng dụng
             </span>
             <div className="affiliate-overview__footer--content-information-image-container">
-            <img
+              <img
                 onClick={() =>
                   window.open(
                     "https://play.google.com/store/apps/details?id=com.guvico_customer",

@@ -68,9 +68,11 @@ function* loginSaga(action) {
 function* loginWithTokenSaga(action) {
   try {
     setToken(action.payload.token);
-    successNotify({
-      message: "Đăng nhập thành công",
-    });
+    if (action.payload.isApp !== "true") {
+      successNotify({
+        message: "Đăng nhập thành công",
+      });
+    }
     action.payload.naviga("/");
     yield put(
       loginWithOnlyTokenAction.loginWithOnlyTokenSuccess({

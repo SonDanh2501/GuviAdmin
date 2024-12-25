@@ -2,7 +2,15 @@ import moment from "moment";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { Button, FloatButton, Image, Pagination, Progress, Switch } from "antd";
+import {
+  Button,
+  FloatButton,
+  Image,
+  message,
+  Pagination,
+  Progress,
+  Switch,
+} from "antd";
 import {
   fetchCustomerById,
   getInviteCustomerById,
@@ -22,9 +30,14 @@ import i18n from "../../../../../i18n";
 import { loadingAction } from "../../../../../redux/actions/loading";
 import { getLanguageState } from "../../../../../redux/selectors/auth";
 import "./index.scss";
+import { update } from "lodash";
+import ButtonCustom from "../../../../../components/button";
 // core components
 
 const DetailsProfile = ({ id }) => {
+  const lang = useSelector(getLanguageState);
+  const dispatch = useDispatch();
+  /* ~~~ Value ~~~ */
   const [name, setName] = useState("");
   const [mail, setMail] = useState("");
   const [birthday, setBirthday] = useState("");
@@ -38,82 +51,73 @@ const DetailsProfile = ({ id }) => {
   const [totalInvite, setTotalInvite] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isStaff, setIsStaff] = useState(false);
-  const dispatch = useDispatch();
-  const lang = useSelector(getLanguageState);
-
-  useEffect(() => {
-    dispatch(loadingAction.loadingRequest(true));
-    fetchCustomerById(id)
-      .then((res) => {
-        setData(res);
-        setName(res?.full_name);
-        setMail(res?.email);
-        setBirthday(res?.birthday ? res?.birthday?.slice(0, 10) : "");
-        setGender(res?.gender);
-        setIsStaff(res?.is_staff);
-        dispatch(loadingAction.loadingRequest(false));
-      })
-      .catch((err) => dispatch(loadingAction.loadingRequest(false)));
-
-    getInviteCustomerById(id, 0, 20)
-      .then((res) => {
-        setDataInvite(res?.data);
-        setTotalInvite(res?.totalItem);
-      })
-      .catch((err) => {});
-  }, [id, dispatch]);
-
-  useEffect(() => {
-    if (data?.rank_point < 100) {
-      setRank(`${i18n.t("member", { lng: lang })}`);
-      setCheckRank("member");
-    } else if (data?.rank_point >= 100 && data?.rank_point < 300) {
-      setRank(`${i18n.t("silver", { lng: lang })}`);
-      setCheckRank("silver");
-    } else if (data?.rank_point >= 300 && data?.rank_point < 1500) {
-      setRank(`${i18n.t("gold", { lng: lang })}`);
-      setCheckRank("gold");
-    } else if (data?.rank_point > 1500) {
-      setRank(`${i18n.t("platinum", { lng: lang })}`);
-      setCheckRank("platinum");
+  const [bankName, setBankName] = useState(""); // Giá trị tên ngân hàng
+  const [bankNumber, setBankNumber] = useState(""); // Giá trị số tài khoản ngân hàng
+  const [bankHolderName, setBankHolderName] = useState(""); // Giá trị tên của chủ thẻ
+  /* ~~~ Handle function ~~~ */
+  // 1. Hàm fetch thông tin của khách hàng
+  const fetchCustomerInfo = async (id) => {
+    try {
+      dispatch(loadingAction.loadingRequest(true));
+      const res = await fetchCustomerById(id);
+      setData(res);
+      setName(res?.full_name);
+      setMail(res?.email);
+      setBirthday(res?.birthday ? res?.birthday?.slice(0, 10) : "");
+      setGender(res?.gender);
+      setIsStaff(res?.is_staff);
+      setBankName(res?.bank_account ? res?.bank_account?.bank_name : "");
+      setBankNumber(res?.bank_account ? res?.bank_account?.account_number : "");
+      setBankHolderName(
+        res?.bank_account ? res?.bank_account?.account_holder : ""
+      );
+      dispatch(loadingAction.loadingRequest(false));
+    } catch (err) {
+      errorNotify({
+        message: err?.message,
+      });
     }
-    setRankPoint(data?.rank_point);
-  }, [data, lang]);
-
-  const updateUser = () => {
-    dispatch(loadingAction.loadingRequest(true));
-    const birth = moment(new Date(birthday)).toISOString();
-    updateCustomer(data?._id, {
-      phone: data?.phone,
-      email: mail,
-      full_name: name,
-      gender: gender,
-      birthday: birthday !== "" ? birth : "",
-    })
-      .then((res) => {
-        successNotify({
-          message: `${i18n.t("update_success_info", { lng: lang })}`,
-        });
-        fetchCustomerById(id)
-          .then((res) => {
-            setData(res);
-            setName(res?.full_name);
-            setMail(res?.email);
-            setBirthday(res?.birthday ? res?.birthday?.slice(0, 10) : "");
-            setGender(res?.gender);
-            setIsStaff(res?.is_staff);
-            dispatch(loadingAction.loadingRequest(false));
-          })
-          .catch((err) => {
-            errorNotify({
-              message: err?.message,
-            });
-            dispatch(loadingAction.loadingRequest(false));
-          });
-      })
-      .catch((err) => {});
   };
-
+  // 2. Hàm fetch danh sách những người giới thiệu của khách hàng
+  const fetchInvitedListOfCustomer = async () => {
+    try {
+      dispatch(loadingAction.loadingRequest(true));
+      const res = await getInviteCustomerById(id, 0, 20);
+      setDataInvite(res?.data);
+      setTotalInvite(res?.totalItem);
+      dispatch(loadingAction.loadingRequest(false));
+    } catch (err) {
+      errorNotify({
+        message: err?.message,
+      });
+    }
+  };
+  // 2. Hàm cập nhật thông tin của khách hàng
+  const handleUpdateUser = async () => {
+    try {
+      dispatch(loadingAction.loadingRequest(true));
+      const birth = moment(new Date(birthday)).toISOString();
+      const res = await updateCustomer(data?._id, {
+        phone: data?.phone,
+        email: mail,
+        full_name: name,
+        gender: gender,
+        birthday: birthday !== "" ? birth : "",
+        bank_name: bankName,
+        account_number: bankNumber,
+        account_holder: bankHolderName,
+      });
+      successNotify({
+        message: `${i18n.t("update_success_info", { lng: lang })}`,
+      });
+      fetchCustomerInfo(id);
+    } catch (err) {
+      errorNotify({
+        message: err?.message,
+      });
+    }
+  };
+  // 3. Hàm bật/tắt là nhân viên
   const onIsStaff = useCallback(() => {
     setIsLoading(true);
     setIsStaffCustomerApi(id, { is_staff: isStaff ? false : true })
@@ -137,9 +141,6 @@ const DetailsProfile = ({ id }) => {
         setIsLoading(false);
       });
   }, [isStaff, id]);
-
-  const age = moment().diff(data?.birthday, "years");
-
   const onChange = (page) => {
     setCurrentPage(page);
     const lengthData = dataInvite.length < 20 ? 20 : dataInvite.length;
@@ -152,6 +153,34 @@ const DetailsProfile = ({ id }) => {
       .catch((err) => {});
   };
 
+  /* ~~~ Use effect ~~~ */
+  // 1. Fetch thông tin khách hàng
+  useEffect(() => {
+    fetchCustomerInfo(id);
+    fetchInvitedListOfCustomer();
+  }, [id, dispatch]);
+  // 2. Kiểm tra mức rank hiện tại của khách hàng
+  useEffect(() => {
+    if (data?.rank_point < 100) {
+      setRank(`${i18n.t("member", { lng: lang })}`);
+      setCheckRank("member");
+    } else if (data?.rank_point >= 100 && data?.rank_point < 300) {
+      setRank(`${i18n.t("silver", { lng: lang })}`);
+      setCheckRank("silver");
+    } else if (data?.rank_point >= 300 && data?.rank_point < 1500) {
+      setRank(`${i18n.t("gold", { lng: lang })}`);
+      setCheckRank("gold");
+    } else if (data?.rank_point > 1500) {
+      setRank(`${i18n.t("platinum", { lng: lang })}`);
+      setCheckRank("platinum");
+    }
+    setRankPoint(data?.rank_point);
+  }, [data, lang]);
+
+  /* ~~~ Other ~~~ */
+  const age = moment().diff(data?.birthday, "years");
+
+  /* ~~~ Main ~~~ */
   return (
     <>
       <div className="div-profile-customer">
@@ -224,7 +253,7 @@ const DetailsProfile = ({ id }) => {
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                style={{ width: "80%" }}
+                style={{ width: "100%" }}
               />
               <InputCustom
                 title={`${i18n.t("gender", { lng: lang })}`}
@@ -245,16 +274,14 @@ const DetailsProfile = ({ id }) => {
                     label: `${i18n.t("female", { lng: lang })}`,
                   },
                 ]}
-                style={{ width: "80%" }}
+                style={{ width: "100%" }}
               />
               <InputCustom
                 title={`${i18n.t("phone", { lng: lang })}`}
                 value={data?.phone}
                 disabled={true}
-                style={{ width: "80%" }}
+                style={{ width: "100%" }}
               />
-            </div>
-            <div className="div-right">
               <InputCustom
                 title={`${i18n.t("birthday", { lng: lang })}`}
                 type="date"
@@ -271,6 +298,29 @@ const DetailsProfile = ({ id }) => {
                 onChange={(e) => setMail(e.target.value)}
                 style={{ width: "100%" }}
               />
+            </div>
+            <div className="div-right">
+              <InputCustom
+                title="Tên chủ thẻ"
+                type="text"
+                value={bankHolderName}
+                onChange={(e) => setBankHolderName(e.target.value)}
+                style={{ width: "100%" }}
+              />
+              <InputCustom
+                title={"Tên ngân hàng"}
+                type="text"
+                value={bankName}
+                onChange={(e) => setBankName(e.target.value)}
+                style={{ width: "100%" }}
+              />
+              <InputCustom
+                title="Số tài khoản thẻ ngân hàng"
+                type="email"
+                value={bankNumber}
+                onChange={(e) => setBankNumber(e.target.value)}
+                style={{ width: "100%" }}
+              />
               <div className="mt-3 div-staff">
                 <p className="label-staff">Nhân viên</p>
                 <Switch
@@ -284,9 +334,13 @@ const DetailsProfile = ({ id }) => {
               </div>
             </div>
           </div>
-          <Button className="btn-update-customer" onClick={updateUser}>
+          {/* <Button className="btn-update-customer" onClick={updateUser}>
             {`${i18n.t("update", { lng: lang })}`}
-          </Button>
+          </Button> */}
+          <ButtonCustom
+            label="Cập nhật"
+            onClick={() => handleUpdateUser()}
+          ></ButtonCustom>
         </div>
       </div>
 

@@ -587,6 +587,26 @@
                             }
                         }
                     }
+
+                    .refferend-list-affiliate__content--middle-content-history-receiving-not-found {
+                        display: flex;
+                        flex-direction: column;
+                        width: 100%;
+                        align-items: center;
+                        justify-content: center;
+
+                        img {
+                            height: 100px;
+                            width: 100%;
+                        }
+
+                        .refferend-list-affiliate__content--middle-content-history-receiving-not-found-label {
+                            font-size: $textFontSizeM;
+                            font-weight: $fontWeightXL;
+                            color: $colorBlack;
+                            font-style: italic;
+                        }
+                    }
                 }
 
                 .refferend-list-affiliate__content--middle-content-deposit-withdraw {
@@ -781,9 +801,9 @@
                         display: flex;
                         position: relative;
                         flex-direction: column;
-                        width: 100%;
+                        width: 727px;
+                        overflow-x: hidden;
                         height: fit-content;
-                        max-width: fit-content;
                         border: 1px solid $colorViolet;
                         border-radius: $borderRadiusL;
 
@@ -793,12 +813,9 @@
                             align-items: center;
                             overflow-x: hidden;
                             white-space: nowrap;
-                            /* Ngăn các phần tử con xuống dòng */
                             max-width: 100%;
-                            /* Đảm bảo giữ nguyên kích thước phần tử cha */
                             padding: 16px;
                             border-radius: $borderRadiusL;
-                            // gap: $gapL;
 
                             .refferend-list-affiliate__content--middle-content-refferend-list-container-persons-person {
                                 display: flex;
@@ -1003,6 +1020,8 @@
                     padding-bottom: 16px;
                     padding-right: 16px;
                 }
+
+                
             }
         }
 
@@ -1961,6 +1980,8 @@
                                 }
                             }
                         }
+
+          
                     }
 
                     .refferend-list-affiliate__content--middle-content-deposit-withdraw {
@@ -3569,7 +3590,7 @@
 
                                             .refferend-list-affiliate__content--middle-content-refferend-list-container-persons-person-value-unit-label {
                                                 font-weight: $fontWeightL;
-                                                font-size: $textFontSizeM;
+                                                font-size: $textFontSizeS;
                                                 color: $colorGray;
                                                 font-style: italic;
                                                 padding: 0px 4px;

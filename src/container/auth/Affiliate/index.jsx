@@ -148,6 +148,7 @@ const LoginAffiliate = () => {
         loginWithOnlyTokenAction.loginWithOnlyTokenRequest({
           token: formatData?.token,
           naviga: navigate,
+          isApp: JSON.parse(localStorage.getItem("authApp"))?.isApp,
         })
       );
     }
@@ -330,7 +331,8 @@ const LoginAffiliate = () => {
           >
             <div className="login-affiliate__card--information-otp">
               <span className="login-affiliate__card--information-otp-label">
-                Nhập mã gồm 6 số đã gửi tới SMS thông qua số (+84) {valuePhone}
+                Nhập mã gồm 6 số đã gửi tới SMS thông qua số (+84){" "}
+                <span className="bold">{valuePhone}</span>
               </span>
               <div className="login-affiliate__card--information-otp-digit">
                 {Array.from({ length: 6 }, (_, index) => (

@@ -27,7 +27,7 @@ export const createCustomer = (payload) => {
 };
 export const updateCustomer = (id, payload) => {
   return axiosClient.post(
-    `/admin/customer_manager/edit_item/${id}?lang=vi`,
+    `api/admin/customer_manager/edit_item/${id}?lang=vi`,
     payload
   );
 };

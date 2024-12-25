@@ -101,36 +101,7 @@
                 }
             }
 
-            .login-affiliate__card--information-otp {
-                display: flex;
 
-                .login-affiliate__card--information-otp-label {
-                    font-size: $textFontSizeM;
-                    font-weight: $fontWeightL;
-                    color: $colorRed;
-                }
-
-                .login-affiliate__card--information-otp-digit {
-                    display: flex;
-                    gap: 10px;
-                    /* Adjust spacing between inputs */
-                    justify-content: center;
-                    align-items: center;
-
-                    .login-affiliate__card--information-otp-digit-number {
-                        width: 50px;
-                        height: 50px;
-                        font-size: 24px;
-                        text-align: center;
-                        border: 2px solid #ccc;
-                        /* Default border */
-                        border-radius: 8px;
-                        outline: none;
-                        transition: border-color 0.3s, box-shadow 0.3s;
-
-                    }
-                }
-            }
 
             .login-affiliate__card--information-forgot-password {
                 display: flex;
@@ -209,4 +180,53 @@
     flex-direction: column;
     gap: $gapM;
     padding: 12px;
+    
+}
+
+.login-affiliate__card--information-person-footer {
+    padding: 0 12px;
+}
+
+.login-affiliate__card--information-otp {
+    display: flex;
+
+    .login-affiliate__card--information-otp-label {
+        font-size: $textFontSizeM;
+        font-weight: $fontWeightL;
+        color: $colorBlack;
+
+        &.high-light {
+            color: $colorOrange;
+            font-weight: $fontWeightXL;
+        }
+
+        &.clickable {
+            cursor: pointer;
+        }
+
+        .bold {
+            font-weight: $fontWeightXL;
+        }
+    }
+
+    .login-affiliate__card--information-otp-digit {
+        display: flex;
+        gap: 10px;
+        /* Adjust spacing between inputs */
+        justify-content: center;
+        align-items: center;
+
+        .login-affiliate__card--information-otp-digit-number {
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+            text-align: center;
+            border: 2px solid #ccc;
+            /* Default border */
+            border-radius: 8px;
+            outline: none;
+            transition: border-color 0.3s, box-shadow 0.3s;
+
+        }
+    }
 }

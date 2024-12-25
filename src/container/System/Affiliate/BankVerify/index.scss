@@ -1,0 +1,104 @@
+@import "../../../../@theme/style.scss";
+
+.bank-verify {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    width: 100%;
+    height: 100vh;
+
+    .bank-verify__modal {
+        display: flex;
+        flex-direction: column;
+        gap: $gapL;
+        align-items: center;
+        background-color: $colorWhite;
+        border-radius: $borderRadiusL;
+        box-shadow:
+            rgba(67, 71, 85, 0.27) 0px 1px 0.25em,
+            rgba(90, 125, 188, 0.05) 0px 0.75em 2em;
+        padding: 24px;
+        width: 400px;
+        height: fit-content;
+
+        .bank-verify__modal--success-icon {
+            background-color: $colorExtraLightGreen;
+            padding: 10px;
+            border-radius: $borderRadiusFull;
+            box-shadow:
+                rgba(0, 128, 0, 0.27) 0px 1px 0.25em,
+                /* Màu xanh lá cây với độ trong suốt 0.27 */
+                rgba(0, 128, 0, 0.05) 0px 0.75em 2em;
+            /* Màu xanh lá cây với độ trong suốt 0.05 */
+
+
+            .bank-verify__modal--success-icon-inside {
+                padding: 4px;
+                background-color: $colorGreen;
+                border-radius: $borderRadiusFull;
+
+            }
+        }
+
+        .bank-verify__modal--label {
+            font-size: $textFontSize3XL;
+            font-weight: 700;
+            color: $colorBlack;
+        }
+
+        .bank-verify__modal--info {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            padding-top: 12px;
+
+            .bank-verify__modal--info-child {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                gap: $gapL;
+         
+                .bank-verify__modal--info-child-header {
+                    width: 100%;
+
+                    span {
+                        font-size: $textFontSizeXL;
+                        font-weight: 400;
+                        color: $colorLightGray;
+                    }
+                }
+
+                .bank-verify__modal--info-child-content {
+                    width: 100%;
+
+                    span {
+                        font-size: $textFontSizeXL;
+                        font-weight: 500;
+                        color: $colorBlack;
+                    }
+                }
+            }
+        }
+
+        .bank-verify__modal--back {
+            display: flex;
+            align-items: center;
+            gap: $gapS;
+            cursor: pointer;
+
+            .bank-verify__modal--back-icon {
+                font-size: $textFontSizeL;
+                color: $colorLightGray;
+            }
+
+            .bank-verify__modal--back-label {
+                font-size: $textFontSizeL;
+                font-weight: $fontWeightL;
+                color: $colorLightGray;
+            }
+
+        }
+    }
+}

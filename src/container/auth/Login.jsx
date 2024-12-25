@@ -51,7 +51,7 @@ const Login = () => {
             {/*Image Right Side*/}
             <Image preview={false} src={logo} className="img-logo" />
             {/*Header Text Right Side*/}
-            <p className="title-login">Đăng nhập hệ thống Guvi DEV</p>
+            <p className="title-login">Đăng nhập hệ thống Guvi</p>
           </div>
           {/*Submit Information*/}
           <form onSubmit={onLogin}>
