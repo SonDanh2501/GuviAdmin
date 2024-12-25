@@ -149,6 +149,89 @@ const Header = ({ onClick, hide }) => {
   }, []);
   return (
     <>
+       {(currentPort === MainPort ||
+        currentUrlName === "admin" ||
+        currentUrlName === "admin-dev" ||
+        currentUrlName === "admin-test") && (
+        <div className="header-navigation">
+          <div className="header-navigation__left">
+            <div className="header-navigation__left--icon" onClick={onClick}>
+              <IoMenu size={"18px"} />
+            </div>
+            <span className="header-navigation__left--version">
+              Version 1.0.1
+            </span>
+          </div>
+          <div className="header-navigation__right">
+            <Popover
+              content={
+                <div className="list">
+                  <List
+                    itemLayout="horizontal"
+                    dataSource={languageItems}
+                    renderItem={(item) => {
+                      return (
+                        <div className="">
+                          <a>{item.label}</a>
+                        </div>
+                      );
+                    }}
+                  />
+                </div>
+              }
+              title="Ngôn ngữ"
+            >
+              <div
+                onMouseEnter={() => {
+                  setIsHover(true);
+                }}
+                onMouseLeave={() => {
+                  setIsHover(false);
+                }}
+                className="header-navigation__right--icon"
+              >
+                <IoLanguage size={"18px"} />
+              </div>
+            </Popover>
+            {/*Notification Drop Down Menu*/}
+            <Tooltip placement="bottom" title="Thông báo">
+              <div
+                onMouseEnter={() => {
+                  setIsHover(true);
+                }}
+                onMouseLeave={() => {
+                  setIsHover(false);
+                }}
+                className="header-navigation__right--icon"
+                onClick={() => setStatus(!status)}
+              >
+                <IoNotifications size={"18px"} />
+              </div>
+            </Tooltip>
+
+            {/*Sign Out Drop Down Menu*/}
+            <Dropdown
+              arrow={true}
+              placement="bottomCenter"
+              menu={{
+                items,
+              }}
+              trigger={["click"]}
+            >
+              <span
+                className="header-navigation__right--user-info"
+                onClick={(e) => e.preventDefault()}
+              >
+                <IoPersonCircle size="18px" color="#475569" />
+                <a className="header-navigation__right--user-info-name">
+                  {user?.full_name}
+                </a>
+                <CaretDownOutlined className="icon-down" />
+              </span>
+            </Dropdown>
+          </div>
+        </div>
+      )}
       {(currentPort === AffiliatePort ||
         currentUrlName === "affiliate" ||
         currentUrlName === "affiliate-dev" ||
