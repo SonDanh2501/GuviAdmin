@@ -11,7 +11,7 @@
 
     .affiliate-overview__header {
         background-color: #F9F9FB;
-        padding-bottom: 16px;
+        padding-bottom: 4px;
     }
 
     .affiliate-overview__tab {
@@ -274,6 +274,7 @@
                 background: linear-gradient(to bottom, #71109c 0%, #7d15cb 0%, #db7acc 100%); // màu background gradient 
                 background-clip: text;
                 color: transparent;
+                text-align: center;
             }
         }
 
@@ -393,11 +394,6 @@
         height: fit-content;
         width: 100%;
         background-color: black;
-
-        .affiliate-overview__header {
-            background-color: #F9F9FB;
-            padding-bottom: 16px;
-        }
 
         .affiliate-overview__tab {
             display: flex;
@@ -762,11 +758,6 @@
         width: 100%;
         background-color: black;
 
-        .affiliate-overview__header {
-            background-color: #F9F9FB;
-            padding-bottom: 16px;
-        }
-
         .affiliate-overview__tab {
             display: flex;
             padding: 12px;
@@ -1009,6 +1000,7 @@
                     background: linear-gradient(to bottom, #71109c 0%, #7d15cb 0%, #db7acc 100%); // màu background gradient 
                     background-clip: text;
                     color: transparent;
+                    text-align: center;
                 }
             }
 
@@ -1376,7 +1368,7 @@
                     text-align: center;
                     width: 100%;
                     font-weight: $fontWeightXL;
-                    font-size: $textFontSize3XL;
+                    font-size: 32px;
                     background: linear-gradient(to bottom, #71109c 0%, #7d15cb 0%, #db7acc 100%); // màu background gradient 
                     background-clip: text;
                     color: transparent;
@@ -2490,8 +2482,8 @@
                 // background-color: blue;
 
                 .affiliate-overview__landing-page--header-logo {
-                    width: 130px;
-                    height: 50px;
+                    width: 110px;
+                    height: 40px;
                 }
 
                 .affiliate-overview__landing-page--header-label {
@@ -2511,8 +2503,8 @@
                 align-items: center;
                 justify-content: center;
                 width: fit-content;
-                height: fit-content;
-                scale: 1;
+                height: 200px;
+                scale: 1.7;
                 background-color: transparent;
             }
 
@@ -2524,7 +2516,7 @@
                 width: 100%;
 
                 .affiliate-overview__landing-page--line-icon-child {
-                    width: 15%;
+                    width: 30%;
                     // background-color: yellow;
                 }
             }
@@ -2864,8 +2856,8 @@
                 // background-color: blue;
 
                 .affiliate-overview__landing-page--header-logo {
-                    width: 130px;
-                    height: 50px;
+                    width: 110px;
+                    height: 40px;
                 }
 
                 .affiliate-overview__landing-page--header-label {
@@ -2885,8 +2877,8 @@
                 align-items: center;
                 justify-content: center;
                 width: fit-content;
-                height: fit-content;
-                scale: 1;
+                height: 200px;
+                scale: 1.5;
                 background-color: transparent;
             }
 
@@ -2898,7 +2890,7 @@
                 width: 100%;
 
                 .affiliate-overview__landing-page--line-icon-child {
-                    width: 15%;
+                    width: 30%;
                     // background-color: yellow;
                 }
             }

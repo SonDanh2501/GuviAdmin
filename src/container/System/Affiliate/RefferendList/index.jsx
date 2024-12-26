@@ -617,6 +617,9 @@ const RefferendList = () => {
                     Sao chép
                   </span>
                 </div>
+                <div className="refferend-list-affiliate__content--left-card-body-code-describe">
+                  <span>Mã nhận chiết khấu ngay</span>
+                </div>
                 <div className="refferend-list-affiliate__content--left-card-body-code-content">
                   <span className="refferend-list-affiliate__content--left-card-body-code-content-label">
                     {valueUserInfo?.promotional_referral_code}

@@ -84,7 +84,7 @@ const OverView = () => {
           <div className="affiliate-overview__header">
             <img src={headerAffiliateImage}></img>
           </div>
-          <div className="affiliate-overview__tab">
+          {/* <div className="affiliate-overview__tab">
             <div
               onClick={() => navigate("/")}
               className="affiliate-overview__tab--button activated"
@@ -97,7 +97,7 @@ const OverView = () => {
             >
               <span>Danh sách</span>
             </div>
-          </div>
+          </div> */}
         </>
       )}
       {/* Link share*/}
