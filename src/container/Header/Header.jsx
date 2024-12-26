@@ -134,10 +134,10 @@ const Header = ({ onClick, hide }) => {
   };
   useEffect(() => {
     if (
-      currentPort !== MainPort &&
-      (currentUrlName !== "admin" ||
-        currentUrlName !== "admin-dev" ||
-        currentUrlName !== "admin-test")
+      currentPort === AffiliatePort ||
+      currentUrlName === "affiliate" ||
+      currentUrlName === "affiliate-dev" ||
+      currentUrlName === "affiliate-test"
     ) {
       fetchCustomerInfo();
     }
