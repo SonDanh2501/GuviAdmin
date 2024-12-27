@@ -854,7 +854,7 @@ const DataTable = (props) => {
                     : data?.status === "done"
                     ? `${i18n.t("complete", { lng: lang })}`
                     : data?.status === "processing"
-                    ? "Đang chờ thanh toán"
+                    ? "Chờ thanh toán"
                     : `${i18n.t("cancel", { lng: lang })}`}
                 </span>
               </div>

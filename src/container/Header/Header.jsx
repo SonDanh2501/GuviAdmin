@@ -75,8 +75,14 @@ const Header = ({ onClick, hide }) => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isActivated, setIsActivated] = useState(0);
   const [valueUserInfo, setValueUserInfo] = useState([]);
-  const onLogout = () => {
-    if (currentPort === MainPort) {
+
+  const onLogout = async () => {
+    if (
+      currentPort === MainPort ||
+      currentUrlName === "admin" ||
+      currentUrlName === "admin-dev" ||
+      currentUrlName === "admin-test"
+    ) {
       removeToken();
       dispatch(loadingAction.loadingRequest(true));
       dispatch(logoutAction.logoutRequest(navigate));
@@ -114,7 +120,7 @@ const Header = ({ onClick, hide }) => {
   ];
   const items = [
     {
-      label: <a onClick={onLogout}>Logout</a>,
+      label: <span onClick={() => onLogout()}>Logout</span>,
       key: "0",
     },
   ];
@@ -149,7 +155,7 @@ const Header = ({ onClick, hide }) => {
   }, []);
   return (
     <>
-       {(currentPort === MainPort ||
+      {(currentPort === MainPort ||
         currentUrlName === "admin" ||
         currentUrlName === "admin-dev" ||
         currentUrlName === "admin-test") && (
@@ -275,7 +281,10 @@ const Header = ({ onClick, hide }) => {
             }}
             trigger={["click"]}
           >
-            <div className="header-navigation-affiliate__right">
+            <div
+              // onClick={(e) => e.preventDefault()}
+              className="header-navigation-affiliate__right"
+            >
               <div className="header-navigation-affiliate__right--icon">
                 <IoPersonCircle />
               </div>

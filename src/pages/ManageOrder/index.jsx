@@ -63,8 +63,8 @@ const ManageOrder = () => {
   // 1. Danh sách các trạng thái của đơn hàng
   const [statusList, setStatusList] = useState([
     { code: "all", label: "Tất cả", total: 0 },
-    { code: "processing", label: "Đang chờ thanh toán", total: 0 },
-    { code: "pending", label: "Đang chờ làm", total: 0 },
+    { code: "processing", label: "Chờ thanh toán", total: 0 },
+    { code: "pending", label: "Đang Chờ làm", total: 0 },
     { code: "confirm", label: "Đã nhận", total: 0 },
     { code: "doing", label: "Đang làm", total: 0 },
     { code: "done", label: "Hoàn thành", total: 0 },
@@ -425,7 +425,7 @@ const ManageOrder = () => {
                 }
               />
             </div>
-            <div className="manage-order__search-field">
+            {/* <div className="manage-order__search-field">
               <InputTextCustom
                 type="text"
                 placeHolderNormal={`${i18n.t("search_transaction", {
@@ -435,7 +435,7 @@ const ManageOrder = () => {
                   handleSearch(e.target.value);
                 }}
               />
-            </div>
+            </div> */}
           </div>
       </div>
     );
@@ -504,6 +504,21 @@ const ManageOrder = () => {
         getItemRow={setItem}
         onCurrentPageChange={onChangePage}
         loading={isLoading}
+        headerRightContent={
+          <div className="manage-order__search">
+            <div className="manage-order__search-field">
+              <InputTextCustom
+                type="text"
+                placeHolderNormal={`${i18n.t("search_transaction", {
+                  lng: lang,
+                })}`}
+                onChange={(e) => {
+                  handleSearch(e.target.value);
+                }}
+              />
+            </div>
+          </div>
+        }
       />
       <div>
         <ModalCustom

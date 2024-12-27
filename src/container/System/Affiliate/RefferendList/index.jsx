@@ -94,6 +94,18 @@ const RefferendList = () => {
   // Hàm kiểm tra khi nào cuộn tới cuối
   const checkIfEnd = () => {
     if (sliderRef.current) {
+      console.log(
+        "check 1 >",
+        sliderRef.current.scrollLeft
+      );
+      console.log(
+        "check 2 >",
+        sliderRef.current.clientWidth 
+      );
+      console.log(
+        "check 3 >",
+        sliderRef.current.scrollWidth
+      );
       const atEnd =
         sliderRef.current.scrollLeft + sliderRef.current.clientWidth + 5 >=
         sliderRef.current.scrollWidth; // Cộng thêm 5 vì tránh việc lệch số vài thập phân
@@ -265,6 +277,7 @@ const RefferendList = () => {
   // 1. Hàm fetch thông tin của khách hàng hiện tại
   const fetchCustomerInfo = async () => {
     try {
+      console.log("check running");
       const res = await getCustomerInfoAffiliateApi();
       setValueUserInfo(res);
     } catch (err) {
@@ -392,6 +405,7 @@ const RefferendList = () => {
       });
       setShowModalBankInfo(false);
       fetchCustomerInfo();
+      checkBankAccountExist();
     } catch (err) {
       errorNotify({
         message: err.message,
@@ -487,6 +501,8 @@ const RefferendList = () => {
     return Number(tempMoney);
   };
 
+
+  console.log("check isCheckBankExist >>> ", isCheckBankExist);
   /* ~~~ Main  ~~~ */
   return (
     <div className="refferend-list-affiliate">
@@ -618,7 +634,7 @@ const RefferendList = () => {
                   </span>
                 </div>
                 <div className="refferend-list-affiliate__content--left-card-body-code-describe">
-                  <span>Mã nhận chiết khấu ngay</span>
+                  <span>Mã nhận chiết khấu</span>
                 </div>
                 <div className="refferend-list-affiliate__content--left-card-body-code-content">
                   <span className="refferend-list-affiliate__content--left-card-body-code-content-label">
@@ -632,6 +648,9 @@ const RefferendList = () => {
                   >
                     Sao chép
                   </span>
+                </div>
+                <div className="refferend-list-affiliate__content--left-card-body-code-describe">
+                  <span>Mã gửi voucher 15%</span>
                 </div>
                 {/* Thay đổi mã code */}
                 {/* {isChangeReferralCode && (
@@ -1483,19 +1502,27 @@ const RefferendList = () => {
             </div>
             {/* Body */}
             <div className="refferend-list-affiliate__share-link--example-body">
+              <span>️️🎉 Tải ứng dụng GUVI để nhận ngay chiết khấu ️🎉</span>
               <span>
-                🌟 Khám phá ngay ứng dụng GUVI ! Nhấn ➡️
-                {valueUserInfo?.promotional_referral_link} tải ngay ứng dụng
-                GUVI để nhận ngay những ưu đãi hấp dẫn và tiết kiệm cực kỳ lớn!
-                🎉 Click {valueUserInfo?.referral_link} để cùng tôi kiếm tiền
-                một cách dễ dàng 🤝!
+                - Nhấn{" "}
+                <span className="high-light">
+                  {valueUserInfo?.referral_link}
+                </span>{" "}
+                để cùng tôi kiếm thêm thu nhập một cách dễ dàng 🤝!
+              </span>
+              <span>
+                - Nhấn{" "}
+                <span className="high-light">
+                  {valueUserInfo?.promotional_referral_link}
+                </span>{" "}
+                để nhận ngay voucher giảm giá đơn đầu tiên ❤️! 
               </span>
             </div>
           </div>
           <div className="refferend-list-affiliate__share-link--social">
             <div className="refferend-list-affiliate__share-link--social-child">
               <FacebookShareButton
-                url={valueUserInfo?.referral_link}
+                url={"https://www.guvico.com/"}
                 hashtag="#guvi #giup_viec_nha"
               >
                 <FacebookIcon size={48} round={true}></FacebookIcon>

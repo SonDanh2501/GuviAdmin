@@ -128,7 +128,7 @@
                         flex-direction: column;
                         align-items: center;
                         justify-content: center;
-                        gap: 0;
+                        gap: $gapXS;
                         // margin-top: 12px;
 
                         .refferend-list-affiliate__content--left-card-body-code-content {
@@ -207,6 +207,7 @@
                                 font-size: $textFontSizeM;
                                 font-weight: $fontWeightL;
                                 color: $colorLightGray;
+                                opacity: 0.8;
                                 font-style: italic;
                             }
                             
@@ -412,6 +413,9 @@
                             border-radius: $borderRadiusL;
                             cursor: pointer;
                             transition: 0.3s all ease;
+                            font-size: $textFontSizeM;
+                            font-weight: $fontWeightXL;
+                            text-align: center;
 
                             &.activated {
                                 background-color: $colorViolet;
@@ -829,7 +833,7 @@
                             overflow-x: hidden;
                             white-space: nowrap;
                             max-width: 100%;
-                            padding: 16px;
+                            padding: 12px 0px;
                             border-radius: $borderRadiusL;
 
                             .refferend-list-affiliate__content--middle-content-refferend-list-container-persons-person {
@@ -1536,7 +1540,7 @@
                             flex-direction: column;
                             align-items: center;
                             justify-content: center;
-                            gap: $gapM;
+                            gap: $gapXS;
                             // margin-top: 12px;
 
                             .refferend-list-affiliate__content--left-card-body-code-content {
@@ -2205,7 +2209,7 @@
                                 /* Ngăn các phần tử con xuống dòng */
                                 max-width: 100%;
                                 /* Đảm bảo giữ nguyên kích thước phần tử cha */
-                                padding: 16px;
+                                padding: 12px 0px;
                                 border-radius: $borderRadiusL;
                                 // gap: $gapL;
 
@@ -2903,7 +2907,7 @@
                             flex-direction: column;
                             align-items: center;
                             justify-content: center;
-                            gap: $gapM;
+                            gap: $gapXS;
                             // margin-top: 12px;
 
                             .refferend-list-affiliate__content--left-card-body-code-content {
@@ -3168,7 +3172,7 @@
                             gap: $gapS;
 
                             .refferend-list-affiliate__content--middle-content-header-options-tab {
-                                padding: 6px 8px;
+                                padding: 6px 4px;
                                 background-color: $colorMoreLightGray;
                                 color: $colorBlack;
                                 border-radius: $borderRadiusL;
@@ -3575,7 +3579,7 @@
                                 overflow-x: hidden;
                                 white-space: nowrap;
                                 max-width: 100%;
-                                padding: 16px;
+                                padding: 12px 0px;
                                 border-radius: $borderRadiusL;
 
                                 .refferend-list-affiliate__content--middle-content-refferend-list-container-persons-person {
@@ -4285,7 +4289,22 @@
         }
 
         .refferend-list-affiliate__share-link--example-body {
+            display: flex;
+            flex-direction: column;
             padding: 8px;
+        
+            span {
+                font-size: $textFontSizeM;
+                font-weight: $fontWeightL;
+                color: $colorBlack;
+                
+                .high-light {
+                    font-size: $textFontSizeM;
+                    font-weight: $fontWeightL;
+                    color: $colorViolet;
+                }
+            }
+        
         }
     }
 
