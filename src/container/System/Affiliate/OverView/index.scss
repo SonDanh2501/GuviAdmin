@@ -105,8 +105,13 @@
                                 height: 100%;
                                 width: 50%;
 
-                                img {
-                                    width: 135px;
+                                .affiliate-overview__guide--content-child-share-link-left-header-number-discount {
+                                    width: 120px;
+                                    height: 170px;
+                                }
+
+                                .affiliate-overview__guide--content-child-share-link-left-header-number-voucher {
+                                    width: 150px;
                                     height: 170px;
                                 }
                             }
@@ -486,9 +491,14 @@
                                     height: 100%;
                                     width: 50%;
 
-                                    img {
-                                        width: 130px;
-                                        height: 160px;
+                                    .affiliate-overview__guide--content-child-share-link-left-header-number-discount {
+                                        width: 100px;
+                                        height: 170px;
+                                    }
+    
+                                    .affiliate-overview__guide--content-child-share-link-left-header-number-voucher {
+                                        width: 200px;
+                                        height: 170px;
                                     }
                                 }
 
@@ -849,9 +859,14 @@
                                     height: 100%;
                                     width: 50%;
 
-                                    img {
-                                        width: 130px;
+                                    .affiliate-overview__guide--content-child-share-link-left-header-number-discount {
+                                        width: 100px;
                                         height: 160px;
+                                    }
+    
+                                    .affiliate-overview__guide--content-child-share-link-left-header-number-voucher {
+                                        width: 200px;
+                                        height: 170px;
                                     }
                                 }
 
@@ -1221,8 +1236,13 @@
                                     height: 100%;
                                     width: 50%;
 
-                                    img {
-                                        width: 140px;
+                                    .affiliate-overview__guide--content-child-share-link-left-header-number-discount {
+                                        width: 120px;
+                                        height: 190px;
+                                    }
+    
+                                    .affiliate-overview__guide--content-child-share-link-left-header-number-voucher {
+                                        width: 180px;
                                         height: 190px;
                                     }
                                 }
@@ -1596,9 +1616,15 @@
                                     height: 100%;
                                     width: 50%;
 
-                                    img {
-                                        width: 130px;
-                                        height: 180px;
+                                 
+                                    .affiliate-overview__guide--content-child-share-link-left-header-number-discount {
+                                        width: 120px;
+                                        height: 190px;
+                                    }
+    
+                                    .affiliate-overview__guide--content-child-share-link-left-header-number-voucher {
+                                        width: 180px;
+                                        height: 190px;
                                     }
                                 }
 
@@ -1970,7 +1996,12 @@
                                     height: 100%;
                                     width: 50%;
 
-                                    img {
+                                    .affiliate-overview__guide--content-child-share-link-left-header-number-discount {
+                                        width: 100px;
+                                        height: 150px;
+                                    }
+    
+                                    .affiliate-overview__guide--content-child-share-link-left-header-number-voucher {
                                         width: 100px;
                                         height: 150px;
                                     }
@@ -2344,8 +2375,13 @@
                                     height: 100%;
                                     width: 50%;
 
-                                    img {
-                                        width: 60px;
+                                    .affiliate-overview__guide--content-child-share-link-left-header-number-discount {
+                                        width: 50px;
+                                        height: 90px;
+                                    }
+    
+                                    .affiliate-overview__guide--content-child-share-link-left-header-number-voucher {
+                                        width: 75px;
                                         height: 90px;
                                     }
                                 }
@@ -2489,7 +2525,7 @@
                 .affiliate-overview__landing-page--header-label {
                     text-transform: uppercase;
                     text-align: center;
-                    width: 100%;
+                    width: 60%;
                     font-weight: $fontWeightXL;
                     font-size: $textFontSize3XL;
                     background: linear-gradient(to bottom, #71109c 0%, #7d15cb 0%, #db7acc 100%); // màu background gradient 
@@ -2718,8 +2754,13 @@
                                     height: 100%;
                                     width: 50%;
 
-                                    img {
-                                        width: 45px;
+                                    .affiliate-overview__guide--content-child-share-link-left-header-number-discount {
+                                        width: 50px;
+                                        height: 65px;
+                                    }
+    
+                                    .affiliate-overview__guide--content-child-share-link-left-header-number-voucher {
+                                        width: 80px;
                                         height: 65px;
                                     }
                                 }
@@ -2863,7 +2904,7 @@
                 .affiliate-overview__landing-page--header-label {
                     text-transform: uppercase;
                     text-align: center;
-                    width: 100%;
+                    width: 70%;
                     font-weight: $fontWeightXL;
                     font-size: $textFontSize3XL;
                     background: linear-gradient(to bottom, #71109c 0%, #7d15cb 0%, #db7acc 100%); // màu background gradient 

@@ -251,13 +251,14 @@
         align-items: center;
         gap: $gapXS;
   
-        .eader-navigation-affiliate__right--info-name {
+        .header-navigation-affiliate__right--info-name {
           font-size: $textFontSizeM;
           font-weight: $fontWeightXL;
           color: $colorBlack;
           cursor: pointer;
-
+          display: none;
         }
+
         .header-navigation-affiliate__right--info-icon-down {
           display: flex;
           align-items: center;

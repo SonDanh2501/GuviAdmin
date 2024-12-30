@@ -95,20 +95,18 @@ const RefferendList = () => {
   const checkIfEnd = () => {
     if (sliderRef.current) {
       console.log(
-        "check 1 >",
+        "check running scrollLeft >>> ",
         sliderRef.current.scrollLeft
       );
       console.log(
-        "check 2 >",
-        sliderRef.current.clientWidth 
+        "check running sliderRef.current.scrollWidth - sliderRef.current.clientWidth - 5 >>> ",
+        sliderRef.current.scrollWidth - sliderRef.current.clientWidth
       );
-      console.log(
-        "check 3 >",
-        sliderRef.current.scrollWidth
-      );
+
       const atEnd =
-        sliderRef.current.scrollLeft + sliderRef.current.clientWidth + 5 >=
-        sliderRef.current.scrollWidth; // Cộng thêm 5 vì tránh việc lệch số vài thập phân
+        sliderRef.current.scrollLeft >=
+          sliderRef.current.scrollWidth - sliderRef.current.clientWidth &&
+        sliderRef.current.scrollLeft !== 0; // Trừ đi 5 để tránh sai số
       setIsEnd(atEnd);
     }
   };
@@ -277,7 +275,6 @@ const RefferendList = () => {
   // 1. Hàm fetch thông tin của khách hàng hiện tại
   const fetchCustomerInfo = async () => {
     try {
-      console.log("check running");
       const res = await getCustomerInfoAffiliateApi();
       setValueUserInfo(res);
     } catch (err) {
@@ -501,8 +498,6 @@ const RefferendList = () => {
     return Number(tempMoney);
   };
 
-
-  console.log("check isCheckBankExist >>> ", isCheckBankExist);
   /* ~~~ Main  ~~~ */
   return (
     <div className="refferend-list-affiliate">
@@ -976,7 +971,7 @@ const RefferendList = () => {
                       }`}
                     >
                       <div className="refferend-list-affiliate__content--middle-content-refferend-list-container-navigate-icon left">
-                        <MdDoubleArrow style={{ rotate: "180deg" }} />
+                        <MdDoubleArrow className="rotate-left" />
                       </div>
                     </div>
                     <div
@@ -1515,7 +1510,7 @@ const RefferendList = () => {
                 <span className="high-light">
                   {valueUserInfo?.promotional_referral_link}
                 </span>{" "}
-                để nhận ngay voucher giảm giá đơn đầu tiên ❤️! 
+                để nhận ngay voucher giảm giá đơn đầu tiên ❤️!
               </span>
             </div>
           </div>

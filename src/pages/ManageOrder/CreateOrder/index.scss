@@ -1,4 +1,7 @@
 @import "../index.scss";
+@import "../../../@theme/style.scss";
+
+
 .container-collaborator-by-customer {
   display: flex;
   box-sizing: border-box;
@@ -6,6 +9,7 @@
   padding-right: 20px;
   padding: 5px;
 }
+
 .div-list-collaborator_toggle-switch {
   display: flex;
   flex-direction: row;
@@ -13,20 +17,24 @@
   padding-right: 20px;
   padding: 5px;
 }
+
 .div-note-collaborator {
   p {
     padding: 5px 0px;
   }
 }
+
 .div-select-collaborator {
   p {
     padding: 5px 0px;
   }
 }
+
 .div-list-address-default_title {
   padding: 5px 0px;
   color: black;
 }
+
 .div-item-address {
   display: flex;
   flex-direction: row;
@@ -34,15 +42,18 @@
   border-bottom: 1px solid black;
   align-items: center;
 }
+
 .icon-map-address {
   margin-right: 10px;
 }
+
 .item-address {
   padding: 5px 5px;
   border: 1px solid;
   margin-bottom: 5px;
   border-radius: 4px;
 }
+
 .item-tip-ctv {
   border: 1px solid #212529;
   padding: 5px;
@@ -53,14 +64,77 @@
   justify-content: center;
   align-items: center;
 }
+
 .create-order_tip {
   display: flex;
   flex-direction: row;
+
   div {
     margin-right: 1rem;
   }
 }
+
 .item-tip-ctv_selected {
   background-color: var(--selected-color);
   color: var(--white-color);
+}
+
+
+
+// Son Css
+
+.cotainer-create-order {
+  display: flex;
+  gap: $gapL;
+  height: 100%;
+  width: 100%;
+  background-color: transparent;
+
+  .container-create-order__info {
+    height: 100%;
+    width: 60%;
+    background-color: $colorWhite;
+    border-radius: $borderRadiusL;
+  }
+
+  .container-create-order__bill {
+    height: 100%;
+    width: 40%;
+    background-color: $colorWhite;
+    border-radius: $borderRadiusL;
+
+    .container-create-order__bill--header {
+      width: 100%;
+      height: fit-content;
+      
+      .container-create-order__bill--header-tag {
+        position: relative;
+        background-color: $colorViolet;
+        width: 100%;
+        height: fit-content;
+        border-bottom-right-radius: 20px;
+        border-top-left-radius: 16px;
+        padding: 4px 12px 4px 8px;
+  
+        span {
+          font-size: $textFontSizeM;
+          font-weight: $fontWeightXL;
+          color: $colorWhite;
+        }
+      }
+     
+      .container-create-order__bill--header-logo {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        margin-top: -25px;
+        transform: translateX(-50%);
+        
+        img {
+          height: 50px;
+          width: 50px;
+        }
+      }
+    }
+  }
 }

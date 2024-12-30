@@ -108,7 +108,10 @@ const OverView = () => {
               <div className="affiliate-overview__guide--content-child-share-link-left">
                 <div className="affiliate-overview__guide--content-child-share-link-left-header">
                   <div className="affiliate-overview__guide--content-child-share-link-left-header-number">
-                    <img src={fivePercentageImage}></img>
+                    <img
+                      className="affiliate-overview__guide--content-child-share-link-left-header-number-discount"
+                      src={fivePercentageImage}
+                    ></img>
                   </div>
                   <div className="affiliate-overview__guide--content-child-share-link-left-header-describe">
                     <span className="affiliate-overview__guide--content-child-share-link-left-header-describe-label">
@@ -174,7 +177,10 @@ const OverView = () => {
               <div className="affiliate-overview__guide--content-child-share-link-left">
                 <div className="affiliate-overview__guide--content-child-share-link-left-header">
                   <div className="affiliate-overview__guide--content-child-share-link-left-header-number">
-                    <img src={tenPercentageImage}></img>
+                    <img
+                      className="affiliate-overview__guide--content-child-share-link-left-header-number-voucher"
+                      src={tenPercentageImage}
+                    ></img>
                   </div>
                   <div className="affiliate-overview__guide--content-child-share-link-left-header-describe">
                     <span className="affiliate-overview__guide--content-child-share-link-left-header-describe-label">
@@ -189,7 +195,9 @@ const OverView = () => {
                   </div>
                 </div>
                 <div
-                  onClick={() => copyToClipBoard(user?.promotional_referral_link)}
+                  onClick={() =>
+                    copyToClipBoard(user?.promotional_referral_link)
+                  }
                   className="affiliate-overview__guide--content-child-share-link-left-copy"
                 >
                   <div className="affiliate-overview__guide--content-child-share-link-left-copy-icon">

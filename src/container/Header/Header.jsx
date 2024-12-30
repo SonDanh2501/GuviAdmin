@@ -289,7 +289,7 @@ const Header = ({ onClick, hide }) => {
                 <IoPersonCircle />
               </div>
               <div className="header-navigation-affiliate__right--info">
-                <span className="eader-navigation-affiliate__right--info-name">
+                <span className="header-navigation-affiliate__right--info-name">
                   {valueUserInfo?.full_name}
                 </span>
                 <div className="header-navigation-affiliate__right--info-icon-down">
