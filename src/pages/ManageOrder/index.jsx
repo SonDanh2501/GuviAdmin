@@ -26,6 +26,7 @@ import InputTextCustom from "../../components/inputCustom";
 import ButtonCustom from "../../components/button";
 import FilterData from "../../components/filterData";
 import "./index.scss";
+import { select } from "redux-saga/effects";
 
 const ManageOrder = () => {
   const navigate = useNavigate();
@@ -58,6 +59,7 @@ const ManageOrder = () => {
   const [selectService, setSelectService] = useState(""); // Giá trị lựa chọn dịch vụ
   const [selectCity, setSelectCity] = useState(""); // Giá trị lựa chọn thành phố/tỉnh
   const [selectDistrict, setSelectDistrict] = useState([]); // Giá trị lựa chọn quận/huyện
+  const [selectPaymentMethod, setSelectPaymentMethod] = useState(""); // Giá trị lựa chọn phương thức thanh toán
 
   /* ~~~ List ~~~ */
   // 1. Danh sách các trạng thái của đơn hàng
@@ -70,6 +72,15 @@ const ManageOrder = () => {
     { code: "done", label: "Hoàn thành", total: 0 },
     { code: "cancel", label: "Đã hủy", total: 0 },
   ]);
+  const paymentMethodList = [
+    { code: "all", label: "Tất cả" },
+    { code: "cash", label: "Tiền mặt" },
+    { code: "point", label: "Ví G-pay" },
+    { code: "momo", label: "Momo" },
+    { code: "vnpay", label: "VNPAY-QR" },
+    { code: "vnbank", label: "VNPAY-ATM" },
+    { code: "intcard", label: "Thẻ quốc tế" },
+  ];
   // 2. Danh sách các loại dịch vụ
   const serviceList = [{ code: "", label: "Tất cả" }];
   service.forEach((item) => {
@@ -119,6 +130,7 @@ const ManageOrder = () => {
   });
   // 4. Danh sách các loại quận/huyện của thành phố/tỉnh
   const [districtList, setDistrictList] = useState([]);
+    // 4. Danh sách các loại quận/huyện của thành phố/tỉnh
   // 5. Danh sách các cột trong bảng
   const columns = [
     {
@@ -271,7 +283,8 @@ const ManageOrder = () => {
         startDate,
         endDate,
         selectCity,
-        selectDistrict
+        selectDistrict,
+        selectPaymentMethod
       );
       setData(res?.data);
       setTotal(res?.totalItem);
@@ -350,11 +363,12 @@ const ManageOrder = () => {
     selectService,
     selectCity,
     selectDistrict,
+    selectPaymentMethod,
   ]);
   // 2. Fetch dữ liệu tổng
   useEffect(() => {
     getTotal();
-  }, [valueSearch, selectStatus, selectService, selectCity, selectDistrict]);
+  }, [valueSearch, selectStatus, selectService, selectCity, selectDistrict, selectPaymentMethod]);
   // 3. Set giá trị quận/huyện khi thành phố/tỉnh thay đổi
   useEffect(() => {
     const found = cityList?.find((el) => el.code === +selectCity);
@@ -417,15 +431,13 @@ const ManageOrder = () => {
     return (
       <div className="manage-order__filter-content">
         <div className="manage-order__search">
-            <div>
-              <ButtonCustom
-                label={`${i18n.t("create_order", { lng: lang })}`}
-                onClick={() =>
-                  navigate("/group-order/manage-order/create-order")
-                }
-              />
-            </div>
-            {/* <div className="manage-order__search-field">
+          <div>
+            <ButtonCustom
+              label={`${i18n.t("create_order", { lng: lang })}`}
+              onClick={() => navigate("/group-order/manage-order/create-order")}
+            />
+          </div>
+          {/* <div className="manage-order__search-field">
               <InputTextCustom
                 type="text"
                 placeHolderNormal={`${i18n.t("search_transaction", {
@@ -436,14 +448,13 @@ const ManageOrder = () => {
                 }}
               />
             </div> */}
-          </div>
+        </div>
       </div>
     );
   };
   const filterContentRight = () => {
     return (
       <div className="manage-order__filter-content">
-        {/* Lọc theo loại dịch vụ */}
         <div>
           <ButtonCustom
             label="Dịch vụ"
@@ -452,7 +463,6 @@ const ManageOrder = () => {
             setValueSelectedProps={setSelectService}
           />
         </div>
-        {/* Lọc theo loại thành phố */}
         <div>
           <ButtonCustom
             label="Thành phố/Tỉnh"
@@ -461,7 +471,6 @@ const ManageOrder = () => {
             setValueSelectedProps={setSelectCity}
           />
         </div>
-        {/* Lọc theo loại quận/huyện */}
         <div>
           <ButtonCustom
             label="Quận/huyện"
@@ -472,9 +481,17 @@ const ManageOrder = () => {
             type="multiSelect"
           />
         </div>
+        <div>
+        <ButtonCustom
+            label="PTTT"
+            options={paymentMethodList}
+            value={selectPaymentMethod}
+            setValueSelectedProps={setSelectPaymentMethod}
+          />
+        </div>
       </div>
     );
-  }
+  };
   /* ~~~ Main ~~~ */
   return (
     <div className="manage-order">

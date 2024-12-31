@@ -10,10 +10,11 @@ export const getOrderApi = (
   startDate,
   endDate,
   city,
-  district
+  district,
+  payment_method
 ) => {
   return axiosClient.get(
-    `/admin/statistic/job_lists?search=${search}&start=${start}&length=${length}&status=${status}&id_service=${service}&type_sort=${type}&start_date=${startDate}&end_date=${endDate}&city=${city}&district=${district}`
+    `/admin/statistic/job_lists?search=${search}&start=${start}&length=${length}&status=${status}&id_service=${service}&type_sort=${type}&start_date=${startDate}&end_date=${endDate}&city=${city}&district=${district}&payment_method=${payment_method}`
   );
 };
 

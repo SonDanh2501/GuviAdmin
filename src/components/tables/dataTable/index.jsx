@@ -870,6 +870,12 @@ const DataTable = (props) => {
                     ? `${i18n.t("wallet_gpay", { lng: lang })}`
                     : data?.payment_method === "momo"
                     ? "Momo"
+                    : data?.payment_method === "vnpay"
+                    ? "VNPAY-QR"
+                    : data?.payment_method === "vnbank"
+                    ? "VNPAY-ATM"
+                    : data?.payment_method === "intcard"
+                    ? "Thẻ quốc tế"
                     : ""}
                 </p>
                 <p className={`text-payment-method ${item?.fontSize}`}>
