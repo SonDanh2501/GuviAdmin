@@ -88,14 +88,14 @@ export const checkCodePromotionOrderApi = (id, data) => {
 };
 
 export const changeStatusOrderApi = (id, data) => {
-  // return axiosClient.post(
-  //   `/admin/order_manager/change_status_order/${id}?lang=vi`,
-  //   data
-  // );
   return axiosClient.post(
-    `/api/admin/order_manager/change_status_order/${id}?lang=vi`,
+    `/admin/order_manager/change_status_order/${id}?lang=vi`,
     data
   );
+  // return axiosClient.post(
+  //   `/api/admin/order_manager/change_status_order/${id}?lang=vi`,
+  //   data
+  // );
 };
 
 export const cancelGroupOrderApi = (id, data) => {
