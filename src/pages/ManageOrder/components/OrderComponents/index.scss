@@ -1,17 +1,18 @@
 @import "../../../../@theme/style.scss";
 
+
 .detail-bill-container {
     display: flex;
     flex-direction: column;
-    gap: $gapS;
-    padding: 16px;
     background-color: $colorWhite;
     border-radius: $borderRadiusXL;
+    padding: 16px;
+    gap: $gapS;
 
     .detail-bill-container__child {
         display: flex;
-        justify-content: space-between;
         align-items: center;
+        justify-content: space-between;
 
         .detail-bill-container__child--label {
             font-size: $textFontSizeM;
@@ -19,6 +20,8 @@
             color: $colorBlack;
 
             .detail-bill-container__child--label-promotion-code {
+                font-size: $textFontSizeM;
+                font-weight: $fontWeightL;
                 color: $colorBlue;
             }
         }
@@ -30,6 +33,12 @@
 
             &.minus {
                 color: $colorRed;
+            }
+
+            &.price-before-discount {
+                font-weight: $fontWeightL;
+                color: $colorLightGray;
+                text-decoration: line-through;
             }
         }
     }
@@ -43,14 +52,13 @@
             font-weight: $fontWeightXL;
             color: $colorBlack;
         }
-
+        
         .detail-bill-container__child-list--child {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding-left: 12px;
-            padding-top: 8px;
-
+            
             .detail-bill-container__child-list--child-label {
                 font-size: $textFontSizeM;
                 font-weight: $fontWeightL;
@@ -68,8 +76,8 @@
     .detail-bill-container__child-final-price {
         display: flex;
         justify-content: space-between;
-        border-top: 1px solid $colorGray;
         padding-top: 8px;
+        border-top: 1px solid $colorGray;
 
         .detail-bill-container__child-final-price-label {
             font-size: $textFontSizeM;
