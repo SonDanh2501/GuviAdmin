@@ -173,8 +173,13 @@ const PunishDrawer = (props) => {
   const handleSearchOrder = useCallback(
     _.debounce(async (value) => {
       if (value) {
-        const _query = `search=${value.toString()}`;
-        const res = await searchOrderApi(0, 20, _query);
+        console.log("check valueCollaborator", valueCollaborator);
+        const res = await searchOrderApi(
+          0,
+          20,
+          value.toString(),
+          valueCollaborator
+        );
         if (value === "") {
           setValueListOrder([]);
         } else {
@@ -182,7 +187,7 @@ const PunishDrawer = (props) => {
         }
       }
     }, 500),
-    []
+    [valueCollaborator]
   );
   // 6. Hàm fetch các lý do phạt
   const fetchPunishPolicyList = async () => {
@@ -231,6 +236,7 @@ const PunishDrawer = (props) => {
       handleSearchOrder(valueOrderSearch);
     }
   }, [valueOrderSearch]);
+  console.log("check valueCollaborator >>>", valueCollaborator);
   /* ~~~ Main ~~~ */
   return (
     <div>

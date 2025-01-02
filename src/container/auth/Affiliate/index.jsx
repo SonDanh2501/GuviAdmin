@@ -63,8 +63,7 @@ const LoginAffiliate = () => {
 
   /* ~~~ Handle function ~~~ */
   // 1. Hàm đăng nhập
-  const handleLoginAffiliate = async (phone, password) => {
-    dispatch(loadingAction.loadingRequest(true));
+  const handleLoginAffiliate = (phone, password) => {
     dispatch(
       loginAffiliateAction.loginAffiliateRequest({
         data: {
@@ -168,6 +167,7 @@ const LoginAffiliate = () => {
   // 8. Hàm cập nhật mật khẩu
   const handleUpdatePassword = async (payload) => {
     try {
+      console.log("check");
       const res = await updatePasswordAffiliateApi(payload);
       handleLoginAffiliate(valuePhoneForgot, valuePassword);
     } catch (err) {
@@ -221,6 +221,7 @@ const LoginAffiliate = () => {
     setValuePassword("");
   };
 
+  console.log("check running 1")
   return (
     <div className="login-affiliate">
       <div className="login-affiliate__card card-shadow">

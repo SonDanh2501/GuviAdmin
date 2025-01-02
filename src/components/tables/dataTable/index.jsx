@@ -1921,7 +1921,7 @@ const DataTable = (props) => {
                       {data?.brand}
                     </span>
                     <span className="case__promotion-code--brand-sub">
-                      Tài trợ khuyến mãi này
+                      Tài trợ khuyến mãi này: {data?.code}
                     </span>
                   </div>
                 ) : (
@@ -1999,7 +1999,13 @@ const DataTable = (props) => {
                     src={data?.thumbnail}
                     preview={true}
                   />
-                ) : null}
+                ) : (
+                  <Image
+                    className="case__promotion-image-picture"
+                    src={notFoundImage}
+                    preview={true}
+                  />
+                )}
               </div>
             );
             break;
@@ -2036,7 +2042,7 @@ const DataTable = (props) => {
             switch (data?.status) {
               case "upcoming":
                 _text_status = (
-                  <span className="case__promotion-status--name holding">
+                  <span className="case__promotion-status--name upcoming">
                     {`${i18n.t("upcoming", {
                       lng: lang,
                     })}`}
