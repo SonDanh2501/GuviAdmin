@@ -173,21 +173,15 @@ const PunishDrawer = (props) => {
   const handleSearchOrder = useCallback(
     _.debounce(async (value) => {
       if (value) {
-        console.log("check valueCollaborator", valueCollaborator);
-        const res = await searchOrderApi(
-          0,
-          20,
-          value.toString(),
-          valueCollaborator
-        );
+        const res = await searchOrderApi(0, 20, value.toString());
         if (value === "") {
           setValueListOrder([]);
         } else {
-          setValueListOrder(res?.data);
+          setValueListOrder(res?.data || res);
         }
       }
     }, 500),
-    [valueCollaborator]
+    []
   );
   // 6. Hàm fetch các lý do phạt
   const fetchPunishPolicyList = async () => {
@@ -236,7 +230,6 @@ const PunishDrawer = (props) => {
       handleSearchOrder(valueOrderSearch);
     }
   }, [valueOrderSearch]);
-  console.log("check valueCollaborator >>>", valueCollaborator);
   /* ~~~ Main ~~~ */
   return (
     <div>
@@ -255,7 +248,7 @@ const PunishDrawer = (props) => {
             <ButtonCustom
               label="Tạo lệnh phạt"
               onClick={() => {
-                onclose();
+                onClose();
                 onClick({
                   id_order: valueOrder,
                   id_collaborator: valueCollaborator,
@@ -321,7 +314,13 @@ const PunishDrawer = (props) => {
               value={valueOrder}
               options={
                 valueListOrder
-                  ? formatArray(valueListOrder, "_id", "id_view")
+                  ? formatArray(
+                      valueListOrder,
+                      "_id",
+                      "id_view",
+                      "index_search_customer",
+                      0
+                    )
                   : []
               }
               placeHolder="Ca làm liên quan"

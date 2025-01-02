@@ -563,12 +563,14 @@ export const sortList = (list,valueSort) => {
   return list.sort((a, b) => a[valueSort].localeCompare(b[valueSort]));
 }
 /* 5. Hàm thiết lập mảng giá trị thành mảng phù hợp cho InputTextCustom */
-export const formatArray = (array, code, label, subLabel) => {
+export const formatArray = (array, code, label, subLabel, child) => {
   const updatedArray = array.map((item) => {
     return {
       ...item,
       code: item[code],
-      label: subLabel ? item[label] + " " + item[subLabel] : item[label],
+      label: subLabel
+        ? item[label] + " - " + (child ? item[subLabel][child] : item[subLabel])
+        : item[label],
     };
   });
   return updatedArray; 
