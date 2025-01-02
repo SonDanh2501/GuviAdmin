@@ -469,7 +469,6 @@ const CreatePromotion = () => {
       <Option value="%">%</Option>
     </Select>
   );
-  console.log("check >>>", statePromo.isCustomer);
   /* ~~~ Main ~~~ */
   return (
     <>
@@ -624,6 +623,37 @@ const CreatePromotion = () => {
               </div>
             )}
           </div>
+          {/* <div className="div-input">
+            <p className="title-input">VNPAY</p>
+            <Radio.Group
+              value={statePromo?.ratioGroupPromotion}
+              onChange={(e) =>
+                setStatePromo({
+                  ...statePromo,
+                  ratioGroupPromotion: e.target.value,
+                })
+              }
+              style={{
+                marginTop: 10,
+              }}
+            >
+              <Space direction="vertical">
+                <Radio value={1}>Sử dụng trong app</Radio>
+                <Radio value={2}>Khác</Radio>
+                <Radio value={3}>Thông tin</Radio>
+              </Space>
+            </Radio.Group>
+            {statePromo?.ratioGroupPromotion === 2 && (
+              <Select
+                style={{ marginTop: 10 }}
+                options={groupPromotionOption}
+                mode="multiple"
+                onChange={(e) =>
+                  setStatePromo({ ...statePromo, groupPromotion: e })
+                }
+              />
+            )}
+          </div> */}
           <div className="div-input">
             <p className="title-input">Nhóm khuyến mãi</p>
             <Radio.Group

@@ -1,0 +1,98 @@
+@import "../../../../@theme/style.scss";
+
+.detail-bill-container {
+    display: flex;
+    flex-direction: column;
+    gap: $gapS;
+    padding: 16px;
+    background-color: $colorWhite;
+    border-radius: $borderRadiusXL;
+
+    .detail-bill-container__child {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .detail-bill-container__child--label {
+            font-size: $textFontSizeM;
+            font-weight: $fontWeightXL;
+            color: $colorBlack;
+
+            .detail-bill-container__child--label-promotion-code {
+                color: $colorBlue;
+            }
+        }
+
+        .detail-bill-container__child--content {
+            font-size: $textFontSizeM;
+            font-weight: $fontWeightL;
+            color: $colorBlack;
+
+            &.minus {
+                color: $colorRed;
+            }
+        }
+    }
+
+    .detail-bill-container__child-list {
+        display: flex;
+        flex-direction: column;
+
+        .detail-bill-container__child-list--label {
+            font-size: $textFontSizeM;
+            font-weight: $fontWeightXL;
+            color: $colorBlack;
+        }
+
+        .detail-bill-container__child-list--child {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-left: 12px;
+            padding-top: 8px;
+
+            .detail-bill-container__child-list--child-label {
+                font-size: $textFontSizeM;
+                font-weight: $fontWeightL;
+                color: $colorBlack;
+            }
+
+            .detail-bill-container__child-list--child-content {
+                font-size: $textFontSizeM;
+                font-weight: $fontWeightL;
+                color: $colorRed;
+            }
+        }
+    }
+
+    .detail-bill-container__child-final-price {
+        display: flex;
+        justify-content: space-between;
+        border-top: 1px solid $colorGray;
+        padding-top: 8px;
+
+        .detail-bill-container__child-final-price-label {
+            font-size: $textFontSizeM;
+            font-weight: $fontWeightXL;
+            color: $colorBlack;
+        }
+
+        .detail-bill-container__child-final-price-container {
+            display: flex;
+            flex-direction: column;
+
+            .detail-bill-container__child-final-price-container-before-discount {
+                font-size: $textFontSizeM;
+                font-weight: $fontWeightL;
+                color: $colorLightGray;
+                text-decoration: line-through;
+            }
+
+            .detail-bill-container__child-final-price-container-final-price {
+                font-size: $textFontSizeM;
+                font-weight: $fontWeightXL;
+                color: $colorBlack;
+            }
+        }
+    }
+}

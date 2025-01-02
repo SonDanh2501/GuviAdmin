@@ -176,15 +176,11 @@ function* loginAffiliateSaga(action) {
         token: response?.token,
       })
     );
-    yield put(loadingAction.loadingRequest(false));
   } catch (err) {
     yield put(loginAffiliateAction.loginAffiliateFailure(err));
-    yield put(loginAffiliateAction.loginAffiliateRequest(false));
     errorNotify({
       message: err.message || "Đăng nhập không thành công",
     });
-  } finally {
-    yield put(loadingAction.loadingRequest(false));
   }
 }
 

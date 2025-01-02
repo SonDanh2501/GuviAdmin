@@ -465,6 +465,14 @@ const ManageOrder = () => {
         </div>
         <div>
           <ButtonCustom
+            label="Phương thức thanh toán"
+            options={paymentMethodList}
+            value={selectPaymentMethod}
+            setValueSelectedProps={setSelectPaymentMethod}
+          />
+        </div>
+        <div>
+          <ButtonCustom
             label="Thành phố/Tỉnh"
             options={cityList}
             value={selectCity}
@@ -479,14 +487,6 @@ const ManageOrder = () => {
             setValueSelectedProps={setSelectDistrict}
             disable={districtList?.length > 0 ? false : true}
             type="multiSelect"
-          />
-        </div>
-        <div>
-        <ButtonCustom
-            label="PTTT"
-            options={paymentMethodList}
-            value={selectPaymentMethod}
-            setValueSelectedProps={setSelectPaymentMethod}
           />
         </div>
       </div>

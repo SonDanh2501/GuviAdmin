@@ -94,23 +94,29 @@
     height: 100%;
     width: 60%;
     background-color: $colorWhite;
-    border-radius: $borderRadiusL;
+    border-radius: $borderRadiusXL;
   }
 
   .container-create-order__bill {
-    height: 100%;
+    height: fit-content;
     width: 40%;
     background-color: $colorWhite;
-    border-radius: $borderRadiusL;
+    border-radius: $borderRadiusXL;
+    display: flex;
+    flex-direction: column;
+    gap: $gapL;
 
     .container-create-order__bill--header {
+      position: relative;
       width: 100%;
       height: fit-content;
+      display: flex;
+      flex-direction: column;
+      gap: $gapL;
       
       .container-create-order__bill--header-tag {
-        position: relative;
         background-color: $colorViolet;
-        width: 100%;
+        width: fit-content;
         height: fit-content;
         border-bottom-right-radius: 20px;
         border-top-left-radius: 16px;
@@ -125,14 +131,76 @@
      
       .container-create-order__bill--header-logo {
         position: absolute;
-        top: 0;
+        top: 10%;
         left: 50%;
-        margin-top: -25px;
-        transform: translateX(-50%);
-        
+        transform: translate(-50%, -50%);
+        background-color: $colorViolet;
+        border-radius: $borderRadiusL;
+
         img {
-          height: 50px;
-          width: 50px;
+          height: 45px;
+          width: 45px;
+        }
+      }
+
+      .container-create-order__bill--header-payment-method {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+
+        .container-create-order__bill--header-payment-method-option {
+          font-size: $textFontSizeM;
+          font-weight: $fontWeightXL;
+          color: $colorBlack;
+          text-transform: uppercase;
+        }
+
+        .container-create-order__bill--header-payment-method-time {
+          font-size: $textFontSizeM;
+          font-weight: $fontWeightL;
+          color: $colorLightGray;
+        }
+      }
+    }
+
+    .container-create-order__bill--line {
+      position: relative;
+
+      .container-create-order__bill--line-dashed {
+        // border: none;
+        // border-top: 1px dashed black;
+        background: repeating-linear-gradient(90deg,
+              /* góc của đường thẳng (ngang) */
+              transparent, transparent 10px,
+              $colorLightGray 10px,
+              /* bắt đầu màu đen */
+              $colorLightGray 15px
+              /* chiều rộng của ô đen */
+            );
+        width: 100%;
+        height: 1px;
+        background-color: transparent;
+      }
+      
+      .container-create-order__bill--line-circle {
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        border-radius: $borderRadiusFull;
+        background-color: #E9EDF7;
+
+        &.left {
+          top: 0;
+          left: 0;
+          transform: translate(-50%, -50%);
+        }
+
+        &.right {
+          top: 0;
+          right: 0;
+          transform: translate(50%, -50%);
         }
       }
     }

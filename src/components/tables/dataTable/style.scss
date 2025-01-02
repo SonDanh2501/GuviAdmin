@@ -906,6 +906,7 @@ span {
   .case__promotion-province--provinces {
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: $gapS;
   }
 }
