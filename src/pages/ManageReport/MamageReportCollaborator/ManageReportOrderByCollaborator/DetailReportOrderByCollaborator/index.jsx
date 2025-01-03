@@ -753,8 +753,8 @@ const DetailReportOrderByCollaborator = () => {
 
       <div className="div-flex-row-flex-start">
         <RangeDatePicker
-          startDateProps={state.startDate}
-          endDateProps={state.endDate}
+          startDateProps={startDate}
+          endDateProps={endDate}
           setStartDate={setStartDate}
           setEndDate={setEndDate}
           // onCancel={() => {}}

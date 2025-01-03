@@ -121,7 +121,7 @@ const ReviewCollaborator = () => {
       customTitle: (
         <CustomHeaderDatatable
           title="Ngày đánh giá"
-          textToolTip="Thời gian đánh giá được tạo ra"
+          textToolTip="Ngày đánh giá được tạo bởi khách hàng"
         />
       ),
       dataIndex: "date_create_review",

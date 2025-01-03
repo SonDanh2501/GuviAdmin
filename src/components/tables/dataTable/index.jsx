@@ -1109,9 +1109,15 @@ const DataTable = (props) => {
           }
           case "percent": {
             return (
-              <p className={`text-address-customer ${item?.fontSize}`}>
-                {data[item.dataIndex]} %
-              </p>
+              <div
+                className={`case__normal-text ${
+                  item.position === "center" && "center"
+                }`}
+              >
+                <span className="case__normal-text--label bold">
+                  {data[item.dataIndex]} %
+                </span>
+              </div>
             );
             break;
           }
@@ -1202,7 +1208,7 @@ const DataTable = (props) => {
               //   {data?.id_collaborator.full_name}
               // </p>
               <Link
-                // target="_blank"
+                target="_blank"
                 to={{
                   pathname: `/report/manage-report/report-order-by-collaborator/${data?.id_collaborator._id}`,
                 }}
@@ -1371,7 +1377,22 @@ const DataTable = (props) => {
           }
           case "number": {
             const dataView = data[item.dataIndex] || 0;
-            return <p className={`${item?.fontSize}`}> {dataView}</p>;
+            return (
+              <div
+                className={`case__normal-text ${
+                  item.position === "center" && "center"
+                }`}
+              >
+                <span className="case__normal-text--label bold">
+                  {dataView}
+                </span>
+              </div>
+              // <div className="case__normal-text">
+              //   <span className="case__normal-text--label"> {dataView}</span>
+              // </div>
+            );
+ 
+            // return <p className={`${item?.fontSize}`}> {dataView}</p>;
             break;
           }
           case "hour_date": {
@@ -1473,7 +1494,7 @@ const DataTable = (props) => {
               <div className="case__transfer-type-transfer">
                 <span
                   className={`case__transfer-type-transfer--text ${
-                    data?.type_transfer === "withdraw" ? "withdraw" : data?.type_transfer === "top-up" ? "top-up" : "other"
+                    data?.type_transfer === "withdraw" ? "withdraw" : data?.type_transfer === "top_up" ? "top-up" : "other"
                   }`}
                 >
                   {type_transfer}

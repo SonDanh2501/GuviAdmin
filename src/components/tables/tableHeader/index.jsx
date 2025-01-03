@@ -45,7 +45,13 @@ const CustomHeaderDatatable = ({
           </span>
           {subValue && (
             <span
-              className="custom-table-header__sub-value"
+              className={`custom-table-header__sub-value ${
+                position === "left"
+                  ? "left"
+                  : position === "right"
+                  ? "right"
+                  : "center"
+              }`}
               style={{ color: title === "Doanh thu" ? "#eab308" : "none" }}
             >
               {typeSubValue === "money"

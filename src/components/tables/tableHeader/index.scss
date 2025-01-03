@@ -38,6 +38,18 @@
             font-size: $textFontSizeM;
             font-weight: $fontWeightL;
             color: $colorWhite;
+
+            &.left {
+                justify-content: start;
+            }
+        
+            &.center {
+                justify-content: center;
+            }
+        
+            &.right {
+                justify-content: end;
+            }
         }
     }
 }

@@ -10,6 +10,7 @@ import RangeDatePicker from '../../../../components/datePicker/RangeDatePicker';
 import moment from 'moment';
 import CardMultiInfo from '../../../../components/card/cardMultiInfo';
 import DataTable from '../../../../components/tables/dataTable';
+import CustomHeaderDatatable from '../../../../components/tables/tableHeader';
 
 const ReportFirstOrderByCustomer = () => {
   const lang = useSelector(getLanguageState);
@@ -31,7 +32,9 @@ const ReportFirstOrderByCustomer = () => {
   const [sameEndDate, setSameEndDate] = useState(""); // Giá trị thời gian tương ứng cho ngày kết thúc nhung lùi lại 1 tháng
   const [start, setStart] = useState(0);
   const [typeCustomer, setTypeCustomer] = useState("all");
-  const [typeDate, setTypeDate] = useState("date_create");
+  const [typeDate, setTypeDate] = useState("date_work");
+  const [typeStatus, setTypeStatus] = useState("all");
+
   const [detectLoading, setDetectLoading] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   // 1. Các giá trị của khách hàng mới
@@ -75,62 +78,6 @@ const ReportFirstOrderByCustomer = () => {
     ],
   });
   /* ~~~ List ~~~ */
-  const CustomHeaderDatatable = ({
-    title,
-    subValue,
-    typeSubValue,
-    textToolTip,
-  }) => {
-    const content = <p>{textToolTip ? textToolTip : ""}</p>;
-    if (subValue)
-      subValue =
-        typeSubValue === "money"
-          ? formatMoney(subValue)
-          : typeSubValue === "percent"
-          ? subValue + " %"
-          : subValue;
-    if (title == "Giá vốn") subValue = "0 đ";
-    return (
-      <React.Fragment>
-        <div className="header-table-custom">
-          <div className="title-report">
-            <p style={{ color: title === "Doanh thu" ? "#2463eb" : "none" }}>
-              {title}
-            </p>
-            {textToolTip ? (
-              <Popover
-                content={content}
-                placement="bottom"
-                overlayInnerStyle={{
-                  backgroundColor: "white",
-                }}
-              >
-                <div>
-                  <i
-                    style={{
-                      color: title === "Doanh thu" ? "#2463eb" : "none",
-                    }}
-                    class="uil uil-question-circle icon-question"
-                  ></i>
-                </div>
-              </Popover>
-            ) : (
-              <></>
-            )}
-          </div>
-          <div className="sub-value">
-            {subValue ? (
-              <p style={{ color: title === "Doanh thu" ? "#2463eb" : "none" }}>
-                {subValue}
-              </p>
-            ) : (
-              <div style={{ marginTop: "35px" }}></div>
-            )}
-          </div>
-        </div>
-      </React.Fragment>
-    );
-  };
   // 1. Danh sách các cột của bảng
   const columns = [
     {
@@ -146,7 +93,8 @@ const ReportFirstOrderByCustomer = () => {
       ),
       dataIndex: "total_item",
       key: "number",
-      width: 50,
+      width: 70,
+      position: "center",
       fontSize: "text-size-M text-weight-500",
     },
     {
@@ -160,7 +108,7 @@ const ReportFirstOrderByCustomer = () => {
       ),
       dataIndex: "total_gross_income",
       key: "money",
-      width: 120,
+      width: 150,
       fontSize: "text-size-M text-weight-500",
     },
     {
@@ -217,7 +165,7 @@ const ReportFirstOrderByCustomer = () => {
       ),
       dataIndex: "total_net_income",
       key: "money",
-      width: 120,
+      width: 130,
       fontSize: "text-size-M text-weight-500",
     },
     {
@@ -286,7 +234,8 @@ const ReportFirstOrderByCustomer = () => {
       ),
       dataIndex: "percent_income",
       key: "percent",
-      width: 90,
+      width: 110,
+      position: "center",
       fontSize: "text-size-M text-weight-500",
     },
     {
@@ -318,14 +267,14 @@ const ReportFirstOrderByCustomer = () => {
       getDataReportOrderByCustomer();
       getDataReportTotalOrderByCustomer();
     }
-  }, [sameStartDate, sameEndDate, lengthPage]);
+  }, [sameStartDate, sameEndDate, lengthPage, typeStatus, typeDate]);
   // 2. Fetch dữ liệu bảng (thừa, coi viết lại cho đúng)
   useEffect(() => {
     if (startDate !== "") {
       setDetectLoading(start + typeCustomer);
       getDataReportOrderByCustomer();
     }
-  }, [start, typeCustomer, lengthPage]);
+  }, [start, typeCustomer, typeDate, typeStatus, lengthPage]);
   // 3. Tính kì trước nhưng chỉ giới hạn là theo tháng (sai, sửa lại nốt là chạy theo chính xác theo mốc thời gian đã chọn,
   // rangDatePicker có trả về thời gian bắt đầu và thời gian kết thúc của kì trước, lấy ra mà xài là done)
   useEffect(() => {
@@ -343,35 +292,52 @@ const ReportFirstOrderByCustomer = () => {
   /* ~~~ Handle function ~~~ */
   // 1. Hàm fetch dữ liệu bảng
   const getDataReportOrderByCustomer = async () => {
+    setIsLoading(true)
     const res = await getReportFirstOrderByCustomer(
       startDate,
       endDate,
       typeCustomer,
       typeDate,
+      typeStatus,
       start,
       lengthPage
     );
     setData(res.data);
     setTotal(res?.totalItem);
     setDataTotal(res?.total[0]);
+    setIsLoading(false)
   };
   // 2. Hàm fetch các giá trị của hai thẻ thống kê, sau khi có giá trị rồi thì tính toán và lưu lại
   const getDataReportTotalOrderByCustomer = async () => {
     // Hàm sẽ trả về một mảng rồi các giá trị total và totalItem: tổng số lượng khách hàng
     const arrGetResult = await Promise.all([
-      getReportTotalFirstOrderByCustomer(startDate, endDate, "new", typeDate),
-      getReportTotalFirstOrderByCustomer(startDate, endDate, "old", typeDate),
+      getReportTotalFirstOrderByCustomer(
+        startDate,
+        endDate,
+        "new",
+        typeDate,
+        typeStatus
+      ),
+      getReportTotalFirstOrderByCustomer(
+        startDate,
+        endDate,
+        "old",
+        typeDate,
+        typeStatus
+      ),
       getReportTotalFirstOrderByCustomer(
         sameStartDate,
         sameEndDate,
         "new",
-        typeDate
+        typeDate,
+        typeStatus
       ),
       getReportTotalFirstOrderByCustomer(
         sameStartDate,
         sameEndDate,
         "old",
-        typeDate
+        typeDate,
+        typeStatus
       ),
     ]);
 
@@ -475,6 +441,14 @@ const ReportFirstOrderByCustomer = () => {
   const changeTypeCustomer = (value) => {
     setTypeCustomer(value);
   };
+
+  const changeTypeDate = (value) => {
+    setTypeDate(value);
+  };
+
+  const changeTypeStatus = (value) => {
+    setTypeStatus(value);
+  };
   /* ~~~ Main ~~~ */
   return (
     <div>
@@ -521,7 +495,7 @@ const ReportFirstOrderByCustomer = () => {
               secondInfo={customerOld.secondInfo}
             />
           </div>
-          <div className="div-flex-row">
+          <div style={{ display: "flex", gap: "8px", padding: "8px 0px" }}>
             <Select
               defaultValue="all"
               style={{ width: 150 }}
@@ -530,6 +504,26 @@ const ReportFirstOrderByCustomer = () => {
                 { value: "all", label: "Tất cả" },
                 { value: "new", label: "Khách hàng mới" },
                 { value: "old", label: "Khách hàng cũ" },
+              ]}
+            />
+            <Select
+              defaultValue="date_work"
+              style={{ width: 150 }}
+              onChange={changeTypeDate}
+              options={[
+                { value: "date_work", label: "Ngày làm" },
+                { value: "date_create", label: "Ngày tạo" },
+              ]}
+            />
+            <Select
+              defaultValue="all"
+              style={{ width: 150 }}
+              onChange={changeTypeStatus}
+              options={[
+                { value: "all", label: "Tất cả" },
+                { value: "done", label: "Hoàn thành" },
+                { value: "doing", label: "Đang làm" },
+                { value: "confirm", label: "Đã nhận" },
               ]}
             />
           </div>
@@ -544,8 +538,10 @@ const ReportFirstOrderByCustomer = () => {
               setLengthPage={setLengthPage}
               totalItem={total}
               detectLoading={detectLoading}
+              loading={isLoading}
               // getItemRow={setItem}
               onCurrentPageChange={setStart}
+              scrollX= {1800}
             />
           </div>
         </div>

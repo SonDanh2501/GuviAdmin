@@ -130,6 +130,7 @@ const ManageTopUpWithdraw = (props) => {
         message: "Duyệt lệnh thành công",
       });
       await fetchData();
+      setOpenModalChangeStatus(false);
     } catch (err) {
       errorNotify({
         message: "Duyệt lệnh giao dịch thất bại \n" + err?.message,
