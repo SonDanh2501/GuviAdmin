@@ -1,5 +1,5 @@
 @import "../../index.scss";
-
+@import "../../../../@theme/style.scss";
 // .extend-kind {
 //   color: #000000 !important;
 //   border: 1px solid #dedede !important;
@@ -7,3 +7,189 @@
 //   padding: 4px;
 //   border-radius: 5px;
 // }
+
+.service-component {
+    display: flex;
+
+    .service-component__container {
+        display: flex;
+        flex-direction: column;
+        gap: $gapM;
+
+        .service-component__container--child {
+            display: flex;
+            flex-direction: column;
+            gap: $gapM;
+
+            .service-component__container--child-label {
+                font-size: $textFontSizeM;
+                font-weight: $fontWeightXL;
+                color: $colorBlack;
+            }
+
+            .service-component__container--child-content {
+                display: flex;
+                flex-direction: column;
+                gap: $gapM;
+            }
+        }
+    }
+}
+
+.service-component__time--select {
+    display: flex;
+    flex-direction: column;
+    padding: 8px 4px;
+    background-color: $colorWhite;
+    border-radius: $borderRadiusL;
+    // border: 1px solid $colorLightGray;
+    width: fit-content;
+    align-items: center;
+    width: 85px;
+    height: 74px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px 0px, rgba(0, 0, 0, 0.2) 0px 0px 3px 0px;
+    cursor: pointer;
+    transition: all 0.3s ease-out;
+
+    &:hover {
+        background-color: $colorLightViolet;
+        box-shadow: rgba(139, 92, 246, 0.5) 0px 0px 10px 0px, rgba(139, 92, 246, 0.7) 0px 0px 3px 0px;
+
+        .service-component__time--select-label {
+            color: $colorBlack;
+        }
+
+        .service-component__time--select-sub-label {
+            color: $colorLightGray;
+        }
+    }
+
+    &.selected {
+        background-color: $colorViolet;
+        box-shadow: rgba(139, 92, 246, 0.5) 0px 0px 10px 0px, rgba(139, 92, 246, 0.7) 0px 0px 3px 0px;
+
+        .service-component__time--select-label {
+            color: $colorLightOrange;
+        }
+
+        .service-component__time--select-sub-label {
+            color: $colorWhite;
+        }
+    }
+
+    .service-component__time--select-label {
+        text-align: center;
+        font-weight: $fontWeightXL;
+        font-size: $textFontSizeM;
+        color: $colorBlack;
+    }
+
+    .service-component__time--select-sub-label {
+        text-align: center;
+        font-weight: $fontWeightL;
+        font-size: $textFontSizeM;
+        color: $colorLightGray;
+    }
+
+    .service-component__time--select-image {
+        width: 20px;
+        height: 20px;
+        border-radius: $borderRadiusL;
+    }
+
+}
+
+.service-component__extra-service {
+    display: flex;
+    flex-direction: column;
+    padding: 8px 4px;
+    background-color: $colorWhite;
+    border-radius: $borderRadiusL;
+    // border: 1px solid $colorLightGray;
+    width: fit-content;
+    align-items: center;
+    width: 85px;
+    height: 74px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px 0px, rgba(0, 0, 0, 0.2) 0px 0px 3px 0px;
+    cursor: pointer;
+    transition: all 0.3s ease-out;
+
+    &:hover {
+        background-color: $colorLightViolet;
+        box-shadow: rgba(139, 92, 246, 0.5) 0px 0px 10px 0px, rgba(139, 92, 246, 0.7) 0px 0px 3px 0px;
+
+        .service-component__extra-service--label {
+            color: $colorBlack;
+        }
+
+        .service-component__extra-service--sub-label {
+            color: $colorLightGray;
+        }
+    }
+
+    &.selected {
+        background-color: $colorViolet;
+        box-shadow: rgba(139, 92, 246, 0.5) 0px 0px 10px 0px, rgba(139, 92, 246, 0.7) 0px 0px 3px 0px;
+
+        .service-component__extra-service--label {
+            color: $colorLightOrange;
+        }
+
+        .service-component__extra-service--sub-label {
+            color: $colorWhite;
+        }
+    }
+
+    .service-component__extra-service--label {
+        text-align: center;
+        font-weight: $fontWeightXL;
+        font-size: $textFontSizeM;
+        color: $colorBlack;
+    }
+
+    .service-component__extra-service--sub-label {
+        text-align: center;
+        font-weight: $fontWeightL;
+        font-size: $textFontSizeM;
+        color: $colorLightGray;
+    }
+
+    .service-component__extra-service--image {
+        width: 22px;
+        height: 22px;
+        border-radius: $borderRadiusL;
+    }
+
+}
+
+.service-component__switch {
+    display: flex;
+    gap: $gapM;
+    align-items: center;
+    &.last-item {
+        border-left: 1px solid $colorLightGray;
+        padding-left: 8px;
+    }
+}
+
+// Thời gian
+.select_horizontal_no_thumbnail {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    gap: $gapL;
+}
+
+// Dịch vụ thêm
+.multi_select_horizontal_thumbnail {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    gap: $gapL;
+}
+
+// Tùy chọn thêm
+.option_toggle_switch {
+    display: flex;
+    gap: $gapL;
+}

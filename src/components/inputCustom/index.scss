@@ -1,10 +1,10 @@
 @import "../../@theme/style.scss";
 
 // Container chứa input
-.form-field {
+.input-custom {
     position: relative;
 
-    .form-field__input {
+    .input-custom__input {
         border: 2px solid $colorMoreLightStone;
         border-radius: $borderRadiusL;
         width: 100%;
@@ -19,7 +19,7 @@
         color: $colorBlack;
     }
 
-    .form-field__label {
+    .input-custom__label {
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
@@ -37,18 +37,18 @@
             top: 34%;
         }
 
-        .form-field__label--required {
+        .input-custom__label--required {
             color: #EF4444;
         }
     }
 
-    .form-field__describe {
+    .input-custom__describe {
         width: 100%;
         font-size: $textFontSizeM;
         color: $colorLightGray;
     }
 
-    .form-field__hide-image {
+    .input-custom__hide-image {
         position: absolute;
         top: 11px;
         right: 11.5px;
@@ -59,7 +59,7 @@
         border-bottom-right-radius: 3px;
     }
 
-    .form-field__image {
+    .input-custom__image {
         display: flex;
         gap: 6px;
         cursor: pointer;
@@ -73,7 +73,7 @@
         border-bottom-right-radius: 2.5px;
         border-left: 2px solid #eee;
 
-        .form-field__image--number {
+        .input-custom__image--number {
             width: 28px;
             height: 28px;
             color: $colorBlack;
@@ -82,12 +82,12 @@
             font-size: $textFontSizeM;
         }
 
-        .form-field__image--img {
+        .input-custom__image--img {
             width: 28px;
             height: 28px;
         }
 
-        .form-field__image--plus {
+        .input-custom__image--plus {
             font-weight: $fontWeightL;
             font-size: $textFontSizeM;
             color: $colorBlack;
@@ -97,34 +97,35 @@
 
     }
 
-    .form-field__icon {
+    .input-custom__icon {
         position: absolute;
         top: 12px;
         right: 18px;
     }
 
-    .form-field__input:focus {
-        border-color: #6a5af9;
+    .input-custom__input:focus {
+        border-color: $colorViolet;
     }
 
-    .form-field__input:not(:placeholder-shown)+.form-field__label,
+    .input-custom__input:not(:placeholder-shown)+.input-custom__label,
 
-    .form-field__input:focus+.form-field__label {
+    .input-custom__input:focus+.input-custom__label {
         top: 0;
         left: 11px;
         padding: 0 10px;
         display: inline-block;
         background-color: white;
-        color: #6a5af9;
+        color: $colorViolet;
+        font-weight: $fontWeightXL;
     }
 
-    .form-field__text-area {
+    .input-custom__text-area {
         display: flex;
         align-items: center;
         justify-content: center;
 
         // width: 100%;
-        .form-field__text-area--container {
+        .input-custom__text-area--container {
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -145,18 +146,18 @@
             &:hover {
                 border-color: $colorViolet;
 
-                .form-field__text-area--container-content .form-field__text-area--container-content-main-icon {
+                .input-custom__text-area--container-content .input-custom__text-area--container-content-main-icon {
                     color: $colorViolet;
                 }
             }
 
-            .form-field__text-area--container-image {
+            .input-custom__text-area--container-image {
                 width: 100%;
                 height: 100%;
                 border-radius: $borderRadiusL;
             }
 
-            .form-field__text-area--container-content {
+            .input-custom__text-area--container-content {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
@@ -165,14 +166,14 @@
                 padding-bottom: 24px;
 
 
-                .form-field__text-area--container-content-main-icon {
+                .input-custom__text-area--container-content-main-icon {
                     transition: 0.3s all ease-out;
                     font-size: 32px;
                     color: $colorGray;
 
                 }
 
-                .form-field__text-area--container-content-main-text {
+                .input-custom__text-area--container-content-main-text {
                     margin-bottom: 8px;
                     font-size: $textFontSizeM;
                     color: $colorGray;
@@ -182,25 +183,76 @@
                     }
                 }
 
-                .form-field__text-area--container-content-main-sub {
+                .input-custom__text-area--container-content-main-sub {
                     font-style: italic;
                     color: $colorGray;
                 }
             }
 
-            .form-field__text-area--container-input {
+            .input-custom__text-area--container-input {
                 display: none;
             }
         }
     }
 }
 
-.form-label-unit {
-    position: absolute;
-    top: 14px;
-    left: 12px;
-}
+.input-custom-content {
+    display: flex;
+    flex-direction: column;
 
+    .input-custom-content__child {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 8px;
+        margin-bottom: 4px;
+        transition: all 0.3s ease-in;
+        border-radius: $borderRadiusL;
+        cursor: pointer;
+
+        span {
+            font-weight: $fontWeightL;
+            color: $colorBlack;
+        }
+
+        &.selected {
+            background-color: $colorViolet;
+            color: $colorWhite;
+
+            span {
+                font-weight: $fontWeightXL;
+                color: $colorWhite;
+            }
+        }
+
+        &:hover {
+            background-color: $colorLightViolet;
+            color: $colorBlack;
+
+            span {
+                font-weight: $fontWeightL;
+                color: $colorBlack;
+            }
+        }
+
+    }
+
+    .input-custom-content__no-data {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 12px;
+        gap: $gapXS;
+        background-color: $colorExtraLightGray;
+        border-radius: $borderRadiusL;
+        
+        .input-custom-content__no-data--label {
+            color: $colorBlack;
+            font-size: $textFontSizeM;
+            font-weight: $fontWeightL;
+        }
+    }
+}
 
 input[type=file]::file-selector-button {
     margin-right: 10px;

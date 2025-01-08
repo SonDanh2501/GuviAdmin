@@ -284,7 +284,27 @@ const ManagePromotions = () => {
     valueSearch,
   ]);
   /* ~~~ Other ~~~ */
-  const filterContent = () => {
+  const filterContentLeft = () => {
+    return (
+      <div className="manange-promotion__filter-content">
+        {checkElement?.includes("create_promotion") && (
+          <ButtonCustom
+            onClick={() =>
+              navigate(`/promotion/manage-setting/create-promotion`)
+            }
+            label="Thêm khuyến mãi"
+          />
+        )}
+        <ButtonCustom
+          onClick={() =>
+            navigate(`/promotion/manage-setting/edit-position-promotion`)
+          }
+          label="Chỉnh sửa vị trí"
+        />
+      </div>
+    );
+  };
+  const filterContentRight = () => {
     return (
       <div className="manange-promotion__filter-content">
         {/* Lọc theo loại dịch vụ */}
@@ -336,6 +356,32 @@ const ManagePromotions = () => {
     );
   };
 
+  const createPromotionContent = () => {
+    <div className="manange-promotion__filter-searching-left">
+      <div className="manange-promotion__filter-searching">
+        <InputTextCustom
+          type="text"
+          placeHolderNormal="Tìm kiếm theo mã khuyến mãi"
+          onChange={(e) => {
+            handleSearch(e.target.value);
+          }}
+        />
+      </div>
+      {checkElement?.includes("create_promotion") && (
+        <ButtonCustom
+          onClick={() => navigate(`/promotion/manage-setting/create-promotion`)}
+          label="Thêm khuyến mãi"
+        />
+      )}
+      <ButtonCustom
+        onClick={() =>
+          navigate(`/promotion/manage-setting/edit-position-promotion`)
+        }
+        label="Chỉnh sửa vị trí"
+      />
+    </div>;
+  };
+
   const searchContentRight = () => {
     return (
       <div className="manange-promotion__filter-searching">
@@ -357,7 +403,10 @@ const ManagePromotions = () => {
         <span>Khuyến mãi</span>
       </div>
       {/* Filter */}
-      <FilterData leftContent={filterContent()} />
+      <FilterData
+        leftContent={filterContentLeft()}
+        rightContent={filterContentRight()}
+      />
       {/* Table */}
       <div>
         <DataTable
@@ -379,20 +428,6 @@ const ManagePromotions = () => {
                   }}
                 />
               </div>
-              {checkElement?.includes("create_promotion") && (
-                <ButtonCustom
-                  onClick={() =>
-                    navigate(`/promotion/manage-setting/create-promotion`)
-                  }
-                  label="Thêm khuyến mãi"
-                />
-              )}
-              <ButtonCustom
-                onClick={() =>
-                  navigate(`/promotion/manage-setting/edit-position-promotion`)
-                }
-                label="Chỉnh sửa vị trí"
-              />
             </div>
           }
         />

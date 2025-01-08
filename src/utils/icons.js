@@ -10,6 +10,7 @@ import {
   IoCloseCircleOutline,
   IoFlagOutline,
   IoHeartOutline,
+  IoHeart,
   IoHelpCircleOutline,
   IoHourglassOutline,
   IoLogoUsd,
@@ -83,9 +84,12 @@ import {
   IoAlertCircleOutline,
   IoLocation,
   IoShareOutline,
+  IoRestaurant,
 } from "react-icons/io5";
-import { FaRegFrown, FaRegMeh, FaRegSmile } from "react-icons/fa";
-import { MdDoubleArrow } from "react-icons/md";
+import { FaRegFrown, FaRegMeh, FaRegSmile, FaDog } from "react-icons/fa";
+import { MdDoubleArrow, MdChair } from "react-icons/md";
+import { TbAirConditioning,TbIroningFilled  } from "react-icons/tb";
+import { PiCookingPotFill } from "react-icons/pi";
 
 const icons = {
   IoAlertOutline,
@@ -172,12 +176,21 @@ const icons = {
   IoAlertCircleOutline,
   IoLocation,
   IoShareOutline,
+  IoHeart,
+  IoRestaurant,
   // Font Awesome 5
   FaRegFrown,
   FaRegMeh,
   FaRegSmile,
+  FaDog,
   // Material Design icons
   MdDoubleArrow,
+  MdChair,
+  // Tabler Icons
+  TbAirConditioning,
+  TbIroningFilled,
+  // Phosphor Icons
+  PiCookingPotFill,
 };
 
 export default icons;

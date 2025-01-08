@@ -1,4 +1,4 @@
-import { Button, Checkbox, Drawer, Image, List } from "antd";
+import { Button, Checkbox, Drawer, Image, List, message } from "antd";
 import _debounce from "lodash/debounce";
 import React, { memo, useCallback, useState } from "react";
 import { useSelector } from "react-redux";
@@ -9,7 +9,7 @@ import {
   getOrderApi,
 } from "../../../api/order";
 import InputCustom from "../../../components/textInputCustom";
-import { errorNotify } from "../../../helper/toast";
+import { errorNotify, successNotify } from "../../../helper/toast";
 import i18n from "../../../i18n";
 import {
   getElementState,
@@ -33,6 +33,11 @@ const AddCollaboratorOrder = (props) => {
   const [name, setName] = useState("");
   const [id, setId] = useState("");
   const [check, setCheck] = useState(true);
+  const [lengthPage, setLengthPage] = useState(
+    JSON.parse(localStorage.getItem("linePerPage"))
+      ? JSON.parse(localStorage.getItem("linePerPage")).value
+      : 20
+  );
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
   const showDrawer = () => {
@@ -68,64 +73,79 @@ const AddCollaboratorOrder = (props) => {
     [idCustomer]
   );
 
-  const addCollaboratorToOrder = useCallback(() => {
+  // Hàm thêm đối tác vào đơn hàng
+  const handleAddCollaboratorToOrder = async () => {
+    try {
+      const res = await addCollaboratorToOrderApi(idOrder, {
+        id_collaborator: id,
+        check_time: check,
+      });
+      successNotify({
+        message: "Thêm đối tác vào đơn hàng thành công",
+      });
+      setIsLoading(false);
+      setOpen(false);
+      handleGetOrders();
+    } catch (err) {
+      errorNotify({
+        message: err?.message || err,
+      });
+      handleGetOrders();
+    }
+  };
+
+  // Hàm thay đổi đối tác của đơn hàng
+  const handleChangeCollaboratorToOrder = async () => {
+    try {
+      const res = await changeCollaboratorToOrderApi(idOrder, {
+        id_collaborator: id,
+        check_time: check,
+      });
+      successNotify({
+        message: "Thay đổi đối tác cho đơn hàng thành công",
+      });
+      setIsLoading(false);
+      setOpen(false);
+      handleGetOrders();
+    } catch (err) {
+      errorNotify({
+        message: err?.message || err,
+      });
+      handleGetOrders();
+    }
+  }
+
+  // Hàm fetch lại dữ liệu đơn hàng
+  const handleGetOrders = async () => {
+    try {
+      const res = await getOrderApi(
+        "",
+        startPage,
+        lengthPage,
+        type,
+        "",
+        kind,
+        "",
+        "",
+        "",
+        "",
+        ""
+      );
+      setData(res?.data);
+      setTotal(res?.totalItem);
+    } catch (err) {
+      errorNotify({
+        message: err?.message || err,
+      });
+    }
+  };
+
+  const handleEditCollaboratorToOrder = useCallback(() => {
     setIsLoading(true);
     if (status === "confirm") {
-      changeCollaboratorToOrderApi(idOrder, {
-        id_collaborator: id,
-        check_time: check,
-      })
-        .then((res) => {
-          setIsLoading(false);
-          setOpen(false);
-          getOrderApi("", startPage, 20, type, kind, "", "", "", "", "")
-            .then((res) => {
-              setData(res?.data);
-              setTotal(res?.totalItem);
-            })
-            .catch((err) => {});
-        })
-        .catch((err) => {
-          errorNotify({
-            message: err?.message,
-          });
-          setIsLoading(false);
-          setOpen(false);
-          getOrderApi("", startPage, 20, type, kind, "", "", "", "", "")
-            .then((res) => {
-              setData(res?.data);
-              setTotal(res?.totalItem);
-            })
-            .catch((err) => {});
-        });
+      handleChangeCollaboratorToOrder();
     } else {
-      addCollaboratorToOrderApi(idOrder, {
-        id_collaborator: id,
-        check_time: check,
-      })
-        .then((res) => {
-          setIsLoading(false);
-          setOpen(false);
-          getOrderApi("", startPage, 20, type, kind, "", "", "", "", "")
-            .then((res) => {
-              setData(res?.data);
-              setTotal(res?.totalItem);
-            })
-            .catch((err) => {});
-        })
-        .catch((err) => {
-          errorNotify({
-            message: err?.message,
-          });
-          setIsLoading(false);
-          setOpen(false);
-          getOrderApi("", startPage, 20, type, kind, "", "", "", "", "")
-            .then((res) => {
-              setData(res?.data);
-              setTotal(res?.totalItem);
-            })
-            .catch((err) => {});
-        });
+      handleAddCollaboratorToOrder()
     }
   }, [id, idOrder, startPage, type, kind, check]);
 
@@ -237,7 +257,7 @@ const AddCollaboratorOrder = (props) => {
           {id && (
             <Button
               className="btn-add-collaborator-order"
-              onClick={addCollaboratorToOrder}
+              onClick={handleEditCollaboratorToOrder}
             >
               {status === "confirm"
                 ? `${i18n.t("change_ctv", {

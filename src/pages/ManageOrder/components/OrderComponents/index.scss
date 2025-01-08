@@ -40,6 +40,10 @@
                 color: $colorLightGray;
                 text-decoration: line-through;
             }
+
+            &.high-light {
+                color: $colorBlue
+            }
         }
     }
 
@@ -52,13 +56,14 @@
             font-weight: $fontWeightXL;
             color: $colorBlack;
         }
-        
+
         .detail-bill-container__child-list--child {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding-left: 12px;
-            
+            padding-top: 8px;
+
             .detail-bill-container__child-list--child-label {
                 font-size: $textFontSizeM;
                 font-weight: $fontWeightL;
@@ -87,6 +92,7 @@
 
         .detail-bill-container__child-final-price-container {
             display: flex;
+            align-items: end;
             flex-direction: column;
 
             .detail-bill-container__child-final-price-container-before-discount {
@@ -103,4 +109,68 @@
             }
         }
     }
+}
+
+.infos-bill-container {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: $gapS;
+
+    .infos-bill-container__title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .infos-bill-container__title--service {
+            font-weight: $fontWeightXL;
+            font-size: $textFontSizeM;
+            color: $colorBlack;
+        }
+    }
+
+    .infos-bill-container__table {
+        display: grid;
+        grid-template-columns: 3fr repeat(3, 1fr);
+        // border-bottom: 1px solid $colorLightGray;
+        padding: 8px;
+        border-radius: $borderRadiusL;
+        background-color: $colorMoreLightGray;
+
+        .infos-bill-container__table-header {
+            font-size: $textFontSizeM;
+            font-weight: $fontWeightXL;
+            color: $colorBlack;
+
+            &.align-end {
+                text-align: end;
+            }
+
+            &.align-center {
+                text-align: center;
+            }
+        }
+    }
+
+    .infos-bill-container__row {
+        display: grid;
+        grid-template-columns: 3fr repeat(3, 1fr);
+        padding: 0px 8px;
+
+        .infos-bill-container__row--label {
+            font-weight: $fontWeightL;
+            font-size: $textFontSizeM;
+            color: $colorBlack;
+
+            &.align-end {
+                text-align: end;
+            }
+
+            &.align-center {
+                text-align: center;
+            }
+        }
+    }
+
+
 }

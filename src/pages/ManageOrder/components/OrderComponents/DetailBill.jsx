@@ -4,6 +4,7 @@ import { formatMoney } from "../../../../helper/formatMoney";
 import { getLanguageState } from "../../../../redux/selectors/auth";
 import { Button, Drawer } from "antd";
 import { format } from "date-fns";
+import "./index.scss";
 
 const DetailBill = (props) => {
   const {
@@ -26,83 +27,105 @@ const DetailBill = (props) => {
   const onOpen = () => {
     setIsOpenDrawer(true);
   };
-  console.log("detail ", date_work_schedule);
   return (
-    <div className="detail-bill_container">
-      <div className="div-flex-row">
-        <h6>Thông tin thanh toán đơn hàng</h6>
+    <div className="detail-bill-container">
+      <div className="detail-bill-container__child">
+        <span className="detail-bill-container__child--label">
+          Thông tin thanh toán đơn hàng
+        </span>
         {total_date_work > 1 && date_work_schedule && (
-          <p
-            className="detail-bill_detail-date"
+          <span
+            className="detail-bill-container__child--content high-light"
             onClick={onOpen}
-          >{`Chi tiết ngày làm >>>`}</p>
+          >
+            Chi tiết ngày làm
+          </span>
         )}
       </div>
-
       {payment_method && (
-        <div className="div-flex-row">
-          <p className="fw-500">Thanh toán</p>
-          <p className="fz-16 fw-500">{payment_method}</p>
+        <div className="detail-bill-container__child">
+          <span className="detail-bill-container__child--label">
+            Thanh toán
+          </span>
+          <span className="detail-bill-container__child--content">
+            {payment_method}
+          </span>
         </div>
       )}
       {total_date_work > 1 && (
-        <div className="div-flex-row">
-          <p className="fw-500">Số buổi</p>
-          <p>{total_date_work}</p>
+        <div className="detail-bill-container__child">
+          <span className="detail-bill-container__child--label">Số buổi</span>
+          <span className="detail-bill-container__child--content">
+            {total_date_work}
+          </span>
         </div>
       )}
-      <div className="div-flex-row">
-        <p className="fw-500">Tạm tính</p>
-        <p>{formatMoney(initial_fee)}</p>
+      <div className="detail-bill-container__child">
+        <span className="detail-bill-container__child--label">Tạm tính</span>
+        <span className="detail-bill-container__child--content">
+          {formatMoney(initial_fee)}
+        </span>
       </div>
       {code_promotion && (
-        <div className="div-flex-row">
-          <p className="fw-500">
-            Khuyến mãi &nbsp;&nbsp;
-            <span className="detail-bill_p-code-promotion">
+        <div className="detail-bill-container__child">
+          <span className="detail-bill-container__child--label">
+            Khuyến mãi: &nbsp;
+            <span className="detail-bill-container__child--label-promotion-code">
               {code_promotion?.code}
             </span>
-          </p>
-          <p className="detail-bill_p-discount">
+          </span>
+          <span className="detail-bill-container__child--content minus">
             - {formatMoney(code_promotion?.discount)}
-          </p>
+          </span>
         </div>
       )}
       {event_promotion && event_promotion.length > 0 && (
-        <>
-          <p className="fw-500">Chương trình khuyến mãi</p>
-          <ul>
-            {event_promotion.map((item, index) => {
-              const _title = item?._id?.title
-                ? item?._id?.title[lang]
-                : item?.title[lang];
-              return (
-                <li key={index} className="div-flex-row">
-                  <p> - {_title}</p>
-                  <p className="detail-bill_p-discount">
-                    - {formatMoney(item?.discount)}
-                  </p>
-                </li>
-              );
-            })}
-          </ul>
-        </>
-      )}
-      <div className="div-flex-row">
-        <p className="fw-500">Phí dịch vụ</p>
-        <p>{formatMoney(service_fee)}</p>
-      </div>
-      {tip_collaborator !== 0 && (
-        <div className="div-flex-row">
-          <p className="fw-500">Tiền tip</p>
-          <p>{formatMoney(tip_collaborator)}</p>
+        <div className="detail-bill-container__child-list">
+          <span className="detail-bill-container__child-list--label">
+            Chương trình khuyến mãi
+          </span>
+          {event_promotion.map((item, index) => {
+            const _title = item?._id?.title
+              ? item?._id?.title[lang]
+              : item?.title[lang];
+            return (
+              <div className="detail-bill-container__child-list--child">
+                <span className="detail-bill-container__child-list--child-label">
+                  - {_title}
+                </span>
+                <span className="detail-bill-container__child-list--child-content">
+                  - {formatMoney(item?.discount)}
+                </span>
+              </div>
+            );
+          })}
         </div>
       )}
-      <div className="div-flex-row detail-bill_last-item">
-        <p className="fw-500">Tổng tiền</p>
-        <div>
-          <del>{formatMoney(total_fee)}</del>
-          <p className="detail-bill_p-final-fee">{formatMoney(final_fee)}</p>
+      <div className="detail-bill-container__child">
+        <span className="detail-bill-container__child--label">Phí dịch vụ</span>
+        <span className="detail-bill-container__child--content">
+          {formatMoney(service_fee)}
+        </span>
+      </div>
+      {tip_collaborator !== 0 && (
+        <div className="detail-bill-container__child">
+          <span className="detail-bill-container__child--label">Tiền tip</span>
+          <span className="detail-bill-container__child--content">
+            {formatMoney(tip_collaborator)}
+          </span>
+        </div>
+      )}
+      <div className="detail-bill-container__child-final-price">
+        <span className="detail-bill-container__child-final-price-label">
+          Tổng tiền
+        </span>
+        <div className="detail-bill-container__child-final-price-container">
+          <span className="detail-bill-container__child-final-price-container-before-discount">
+            {formatMoney(total_fee)}
+          </span>
+          <span className="detail-bill-container__child-final-price-container-final-price">
+            {formatMoney(final_fee)}
+          </span>
         </div>
       </div>
       <Drawer title="Chi tiết ngày làm" onClose={onClose} open={isOpenDrawer}>

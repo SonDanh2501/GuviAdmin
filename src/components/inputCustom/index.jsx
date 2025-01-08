@@ -64,6 +64,7 @@ const InputTextCustom = (props) => {
     isPassword, // Giá trị text password (che dấu *)
     describe, // Giá trị mô tả hỗ trợ
     isNumber, // Giá trị format lại text nếu là số
+    contentChild, // Giá trị những phần tử bên ngoài để hiển thị thêm
   } = props;
   // Lấy district (quận/huyện) từ giá trị province có được
   const tempDistrictArray = province?.find(
@@ -190,12 +191,11 @@ const InputTextCustom = (props) => {
       }
     }
   };
-
   // ~~~ Content for input !=== "text" ~~~
   // 1. Content khi type === "select"
   const content = (
-    <div className="flex flex-col">
-      {searchField && (
+    <div className="input-custom-content">
+      {/* {searchField && (
         <div
           className="w-full"
           style={{ position: "relative", paddingBottom: "2px" }}
@@ -230,7 +230,8 @@ const InputTextCustom = (props) => {
             />
           )}
         </div>
-      )}
+      )} */}
+      {contentChild}
       {searchInput.length > 0 && type === "select" && !setSearchValue ? (
         options
           .filter((el) =>
@@ -241,11 +242,10 @@ const InputTextCustom = (props) => {
               onClick={() => {
                 handldeSelected(itemFound.value);
               }}
-              style={{ borderRadius: "6px" }}
-              className={`${
-                itemFound?.code === value &&
-                "bg-violet-500 font-bold text-white"
-              } hover:bg-violet-500/50 hover:text-white cursor-pointer p-2 mb-0.5 font-normal duration-300 flex items-center justify-between`}
+              className={`
+                input-custom-content__child ${
+                  itemFound?.code === value && "selected"
+                } `}
             >
               <span key={index}>
                 {itemFound.label ? itemFound.label : itemFound.name}
@@ -261,30 +261,17 @@ const InputTextCustom = (props) => {
             onClick={() => {
               handldeSelected(item.code);
             }}
-            style={{ borderRadius: "6px" }}
-            className={`${
-              item?.code === value && "bg-violet-500 font-bold text-white"
-            } hover:bg-violet-500/50 hover:text-white cursor-pointer p-2 mb-0.5 font-normal duration-300 flex items-center justify-between`}
+            className={`input-custom-content__child ${
+              item?.code === value && "selected"
+            } `}
           >
             <span key={index}>{item.label ? item.label : item.name}</span>
             {item?.code === value && <IoCheckmarkCircleSharp size={"18px"} />}
           </div>
         ))
       ) : (
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: "4px",
-            padding: "12px",
-            backgroundColor: "#f3f4f6",
-            borderRadius: "8px",
-          }}
-        >
-          <span
-            style={{ color: "#43464b", fontSize: "12px", fontWeight: "400" }}
-          >
+        <div className="input-custom-content__no-data">
+          <span className="input-custom-content__no-data--label">
             Không có dữ liệu
           </span>
           <IoAlertCircleOutline color="#43464b" />
@@ -707,7 +694,7 @@ const InputTextCustom = (props) => {
   }, [searchInput]);
 
   return (
-    <div className="form-field" ref={refContainer}>
+    <div className="input-custom" ref={refContainer}>
       {/* Input Field  */}
       {type === "text" && (
         <>
@@ -715,19 +702,21 @@ const InputTextCustom = (props) => {
             type={isPassword ? "password" : "text"}
             disabled={disable}
             name={name ? name : ""}
-            className="form-field__input"
+            className="input-custom__input"
             placeholder={placeHolderNormal ? placeHolderNormal : " "}
             value={isNumber ? formatNumber(value) : value}
             onChange={onChange}
           />
           <label
             htmlFor=" "
-            className={`form-field__label ${describe && "have-describe"}`}
+            className={`input-custom__label ${describe && "have-describe"}`}
           >
             {placeHolder}{" "}
-            {required && <span className="form-field__label--required">*</span>}
+            {required && (
+              <span className="input-custom__label--required">*</span>
+            )}
           </label>
-          <span className="form-field__describe">{describe}</span>
+          <span className="input-custom__describe">{describe}</span>
         </>
       )}
       {/* File Field  */}
@@ -743,19 +732,19 @@ const InputTextCustom = (props) => {
             multiple={multiple}
             disabled={disable}
             type="file"
-            className="form-field__input"
+            className="input-custom__input"
             placeholder=" "
             accept={".jpg,.png,.jpeg"}
             onChange={onChangeImage}
           />
-          <label htmlFor=" " className="form-field__label">
+          <label htmlFor=" " className="input-custom__label">
             {placeHolder}
           </label>
           <div
             onClick={() => {
               setHideImage(!hideImage);
             }}
-            className="form-field__hide-image"
+            className="input-custom__hide-image"
           >
             <IoChevronDownOutline color="#999" />
           </div>
@@ -885,25 +874,26 @@ const InputTextCustom = (props) => {
               <input
                 disabled={disable}
                 type="text"
-                className="form-field__input"
+                className="input-custom__input"
                 style={{ cursor: "pointer" }}
                 placeholder=" "
                 value={
-                  options?.find((el) => el.code === value)?.name &&
-                  options?.find((el) => el.code === value)?.name !== "unknow"
-                    ? options?.find((el) => el.code === value)?.name
-                    : options?.find((el) => el.code === value)?.label
+                  // options?.find((el) => el.code === value)?.name &&
+                  // options?.find((el) => el.code === value)?.name !== "unknow"
+                  options?.find((el) => el.code === value)?.label ||
+                  options?.find((el) => el.code === value)?.name
                 }
-                readOnly
+                readOnly={searchField ? false : true}
+                onChange={onChange}
               />
-              <label htmlFor=" " className="form-field__label">
+              <label htmlFor=" " className="input-custom__label">
                 {placeHolder}
               </label>
             </div>
             {previewImage ? (
-              <div className="form-field__image">
+              <div className="input-custom__image">
                 <img
-                  className="form-field__image--img"
+                  className="input-custom__image--img"
                   src={
                     options?.find((el) => el.code === value)?.image
                       ? options?.find((el) => el.code === value)?.image
@@ -913,7 +903,7 @@ const InputTextCustom = (props) => {
               </div>
             ) : (
               <IoChevronDown
-                className="form-field__icon"
+                className="input-custom__icon"
                 size="14px"
                 color="#999"
               />
@@ -946,18 +936,18 @@ const InputTextCustom = (props) => {
               <input
                 style={{ cursor: "pointer" }}
                 type="text"
-                className="form-field__input"
+                className="input-custom__input"
                 placeholder=" "
                 value={moment(value).format("DD/MM/YYYY")}
                 // onChange={(el) => printData(el)}
                 disabled={disable}
                 readOnly
               />
-              <label htmlFor=" " className="form-field__label">
+              <label htmlFor=" " className="input-custom__label">
                 {placeHolder}
               </label>
               <IoCalendar
-                className="form-field__icon"
+                className="input-custom__icon"
                 size="14px"
                 color="#999"
               />
@@ -989,7 +979,7 @@ const InputTextCustom = (props) => {
               <input
                 style={{ cursor: "pointer" }}
                 type="text"
-                className="form-field__input"
+                className="input-custom__input"
                 placeholder=" "
                 // value={province.find((el))}
                 value={
@@ -999,11 +989,11 @@ const InputTextCustom = (props) => {
                 }
                 readOnly
               />
-              <label htmlFor=" " className="form-field__label">
+              <label htmlFor=" " className="input-custom__label">
                 {placeHolder}
               </label>
               <IoChevronDown
-                className="form-field__icon"
+                className="input-custom__icon"
                 size="14px"
                 color="#999"
               />
@@ -1037,7 +1027,7 @@ const InputTextCustom = (props) => {
                 style={{ cursor: "pointer" }}
                 disabled={disable}
                 type="text"
-                className="form-field__input"
+                className="input-custom__input"
                 placeholder=" "
                 // disabled={selectProvince?.code ? false : true}
                 // value={
@@ -1053,11 +1043,11 @@ const InputTextCustom = (props) => {
                 // onChange={(el) => printData(el)}
                 readOnly
               />
-              <label htmlFor=" " className="form-field__label">
+              <label htmlFor=" " className="input-custom__label">
                 {placeHolder}
               </label>
               <IoChevronDown
-                className="form-field__icon"
+                className="input-custom__icon"
                 size="14px"
                 color="#999"
               />
@@ -1088,7 +1078,7 @@ const InputTextCustom = (props) => {
             <div>
               <input
                 type="text"
-                className="form-field__input"
+                className="input-custom__input"
                 placeholder=" "
                 value={
                   matchedItems &&
@@ -1106,11 +1096,11 @@ const InputTextCustom = (props) => {
                 // onChange={(el) => printData(el)}
                 readOnly
               />
-              <label htmlFor=" " className="form-field__label">
+              <label htmlFor=" " className="input-custom__label">
                 {placeHolder}
               </label>
               <IoChevronDown
-                className="form-field__icon"
+                className="input-custom__icon"
                 size="14px"
                 color="#999"
               />
@@ -1143,7 +1133,7 @@ const InputTextCustom = (props) => {
                 // style={{ pointerEvents: "none" }}
                 disabled={disable}
                 type="text"
-                className="form-field__input"
+                className="input-custom__input"
                 placeholder=" "
                 value={
                   matchedItems &&
@@ -1161,11 +1151,11 @@ const InputTextCustom = (props) => {
                 // onChange={(el) => printData(el)}
                 readOnly
               />
-              <label htmlFor=" " className="form-field__label">
+              <label htmlFor=" " className="input-custom__label">
                 {placeHolder}
               </label>
               <IoChevronDown
-                className="form-field__icon"
+                className="input-custom__icon"
                 size="14px"
                 color="#999"
               />
@@ -1178,24 +1168,26 @@ const InputTextCustom = (props) => {
         <>
           <input
             disabled={disable}
-            className="form-field__input"
+            className="input-custom__input"
             placeholder=" "
             value={value}
             onChange={onChange}
           />
-          <label htmlFor=" " className="form-field__label">
+          <label htmlFor=" " className="input-custom__label">
             {placeHolder}{" "}
-            {required && <span className="form-field__label--required">*</span>}
+            {required && (
+              <span className="input-custom__label--required">*</span>
+            )}
           </label>
-          <div className="form-field__image">
-            {/* <span className="form-field__image--plus">+</span> */}
+          <div className="input-custom__image">
+            {/* <span className="input-custom__image--plus">+</span> */}
             <input
               value={valueUnit}
               onChange={onChangeValueUnit}
-              className="form-field__image--number"
+              className="input-custom__image--number"
             ></input>
             {/* <img
-              className="form-field__image--img"
+              className="input-custom__image--img"
               src={
                 options?.find((el) => el.code === value)?.image
                   ? options?.find((el) => el.code === value)?.image
@@ -1230,7 +1222,7 @@ const InputTextCustom = (props) => {
                 // style={{ pointerEvents: "none" }}
                 disabled={disable}
                 type="text"
-                className="form-field__input"
+                className="input-custom__input"
                 placeholder=" "
                 value={
                   matchedItems &&
@@ -1248,11 +1240,11 @@ const InputTextCustom = (props) => {
                 // onChange={(el) => printData(el)}
                 readOnly
               />
-              <label htmlFor=" " className="form-field__label">
+              <label htmlFor=" " className="input-custom__label">
                 {placeHolder}
               </label>
               <IoChevronDown
-                className="form-field__icon"
+                className="input-custom__icon"
                 size="14px"
                 color="#999"
               />
@@ -1266,46 +1258,48 @@ const InputTextCustom = (props) => {
           {/* <input
 type=""
 disabled={disable}
-className="form-field__input"
+className="input-custom__input"
 placeholder=" "
 value={valueWithUnit}
 onChange={onChange}1` ` ` `   10ou v41`1  
 /> */}
           <textarea
             rows="2"
-            className="form-field__input"
+            className="input-custom__input"
             onChange={onChange}
             placeholder=" "
             value={value}
           ></textarea>
-          <label htmlFor=" " className="form-field__label">
+          <label htmlFor=" " className="input-custom__label">
             {placeHolder}{" "}
-            {required && <span className="form-field__label--required">*</span>}
+            {required && (
+              <span className="input-custom__label--required">*</span>
+            )}
           </label>
         </>
       )}
       {/* Drag and Drop File */}
       {type === "fileArea" && (
-        <div className="form-field__text-area">
+        <div className="input-custom__text-area">
           <label
             for="dropzone-file"
-            className={`form-field__text-area--container ${
+            className={`input-custom__text-area--container ${
               value && "showing-image"
             }`}
           >
             {value ? (
               <img
-                className="form-field__text-area--container-image"
+                className="input-custom__text-area--container-image"
                 src={value}
               />
             ) : (
-              <div className="form-field__text-area--container-content">
-                <IoCloudUploadOutline className="form-field__text-area--container-content-main-icon" />
-                <div className="form-field__text-area--container-content-main-text">
+              <div className="input-custom__text-area--container-content">
+                <IoCloudUploadOutline className="input-custom__text-area--container-content-main-icon" />
+                <div className="input-custom__text-area--container-content-main-text">
                   <span className="text-bold">Nhấn để tải ảnh lên</span>
                   <span> hoặc kéo và thả ảnh vào đây</span>
                 </div>
-                <p className="form-field__text-area--container-content-main-sub">
+                <p className="input-custom__text-area--container-content-main-sub">
                   PNG, JPG (Tối đa 1MB, tỷ lệ 2:1)
                 </p>
               </div>
@@ -1313,7 +1307,7 @@ onChange={onChange}1` ` ` `   10ou v41`1
             <input
               id="dropzone-file"
               type="file"
-              className="form-field__text-area--container-input"
+              className="input-custom__text-area--container-input"
               onChange={onChangeImage}
             />
           </label>

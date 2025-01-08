@@ -14,6 +14,11 @@ import moment from "moment";
 import { TYPE_VIEW_OPTIONAL_SERVICE } from "../../../../@core/constant/service.constant.js";
 import "./index.scss";
 import { formatMoney } from "../../../../helper/formatMoney.js";
+import laundryServiceImage from "../../../../assets/images/laundryService.svg";
+import cookingServiceImage from "../../../../assets/images/cookingService.svg";
+import vacuumingServiceImage from "../../../../assets/images/vacuumingService.svg";
+import bringToolServiceImage from "../../../../assets/images/bringToolService.svg";
+
 const ServiceComponent = (props) => {
   const { serviceData } = props;
 
@@ -148,24 +153,31 @@ const ServiceComponent = (props) => {
     }
   };
 
+  // Thời lượng
   const SelectHorizontalNoThumbnail = ({ optionalService }) => {
     return (
-      <>
-        {optionalService.extend_optional.map((extend, index) => (
-          <div
-            key={index}
-            className={`${
-              extend.selected === true ? "item-selected" : ""
-            } item`}
-            onClick={() => {
-              clickSelectExtend(optionalService.type, extend);
-            }}
-          >
-            <p>{extend.title.vi}</p>
-            <p>{extend.description.vi}</p>
-          </div>
-        ))}
-      </>
+      <div className="select_horizontal_no_thumbnail">
+        {sortingTimeWork(optionalService.extend_optional).map(
+          (extend, index) => (
+            <div
+              key={index}
+              className={`service-component__time--select ${
+                extend.selected === true && "selected"
+              }`}
+              onClick={() => {
+                clickSelectExtend(optionalService.type, extend);
+              }}
+            >
+              <span className="service-component__time--select-label">
+                {extend.title.vi}
+              </span>
+              <span className="service-component__time--select-sub-label">
+                {extend.description.vi}
+              </span>
+            </div>
+          )
+        )}
+      </div>
     );
   };
 
@@ -212,32 +224,63 @@ const ServiceComponent = (props) => {
     );
   };
 
+  // Dịch vụ thêm
   const MultiSelectHorizomtalThumbnail = ({ optionalService }) => {
     return (
-      <>
+      <div className="multi_select_horizontal_thumbnail">
         {optionalService.extend_optional.map((extend, index) => (
           <div
             key={index}
-            className={`${extend.selected ? "item-selected" : ""} item`}
+            className={`service-component__extra-service ${
+              extend.selected === true && "selected"
+            }`}
             onClick={() => {
               clickMultiSelectExtend(optionalService.type, extend);
             }}
           >
-            <p>{extend.title.vi}</p>
-            <p>{extend.description.vi}</p>
+            <img
+              className="service-component__extra-service--image"
+              src={
+                index === 0
+                  ? laundryServiceImage
+                  : index === 1
+                  ? cookingServiceImage
+                  : index === 2
+                  ? bringToolServiceImage
+                  : index === 3
+                  ? vacuumingServiceImage
+                  : ""
+              }
+            ></img>
+            <span className="service-component__extra-service--label">
+              {extend.title.vi === "Mang máy hút bụi"
+                ? "Máy hút bụi"
+                : extend.title.vi}
+            </span>
+            <span className="service-component__extra-service--sub-label">
+              {extend.description.vi}
+            </span>
           </div>
         ))}
-      </>
+      </div>
     );
   };
 
+  // Tùy chọn thêm (Ưu tiên người làm yêu thích, nhà có thú cưng, ...)
   const OptionToggleSwitch = ({ optionalService }) => {
     return (
-      <>
+      <div className="option_toggle_switch">
         {optionalService.extend_optional.map((extend, index) => (
-          <div key={index} className="div-flex-row">
-            <p>{extend.title.vi}</p>
+          <div
+            key={index}
+            className={`service-component__switch ${
+              index === optionalService.extend_optional.length - 1 &&
+              "last-item"
+            }`}
+          >
+            <span>{extend.title.vi}</span>
             <Switch
+              size="small"
               checked={extend.selected}
               onChange={() => {
                 toggleSwitchExtend(optionalService.type, extend);
@@ -245,7 +288,7 @@ const ServiceComponent = (props) => {
             />
           </div>
         ))}
-      </>
+      </div>
     );
   };
 
@@ -305,39 +348,47 @@ const ServiceComponent = (props) => {
     );
   };
 
+  /* ~~~ Other ~~~ */
+  // Hàm sắp xếp lại thời lượng của ca làm (tăng dần)
+  const sortingTimeWork = (array) => {
+    return array?.sort((a, b) => a.estimate - b.estimate);
+  };
+
+  console.log("check service.optional_service ", service?.optional_service);
   return (
     <React.Fragment>
       {service !== null && (
-        <>
-          <div className="div-flex-row">
-            <div className="optional-service div-flex-column">
-              {service.optional_service.map((item, index) => (
-                <div key={index} className="div-flex-column">
-                  <p className="fw-500"> {item.title.vi}</p>
-                  <div className={TYPE_VIEW_OPTIONAL_SERVICE[item.type]}>
-                    {item.type === "select_horizontal_no_thumbnail" ? (
-                      <SelectHorizontalNoThumbnail optionalService={item} />
-                    ) : item.type === "select_horizontal_thumbnail" ? (
-                      <SelectHorizontalThumbnail optionalService={item} />
-                    ) : item.type === "multi_select_horizontal_thumbnail" ? (
-                      <MultiSelectHorizomtalThumbnail optionalService={item} />
-                    ) : item.type === "option_toggle_switch" ? (
-                      <OptionToggleSwitch optionalService={item} />
-                    ) : item.type === "single_select_horizontal_thumbnail" ? (
-                      <SingleSelectHorizontalThumbnail optionalService={item} />
-                    ) : item.type === "multi_select_count_sofa" ? (
-                      <MultiSelectCountSofa optionalService={item} />
-                    ) : item.type === "multi_select_count_ac" ? (
-                      <MultiSelectCountSofa optionalService={item} />
-                    ) : (
-                      <></>
-                    )}
-                  </div>
+        <div className="service-component">
+          <div className="service-component__container">
+            {service.optional_service.map((item, index) => (
+              <div key={index} className="service-component__container--child">
+                <span className="service-component__container--child-label">
+                  {item.title.vi}
+                </span>
+                {/* <div className={TYPE_VIEW_OPTIONAL_SERVICE[item.type]}> */}
+                <div className="">
+                  {item.type === "select_horizontal_no_thumbnail" ? (
+                    <SelectHorizontalNoThumbnail optionalService={item} />
+                  ) : item.type === "select_horizontal_thumbnail" ? (
+                    <SelectHorizontalThumbnail optionalService={item} />
+                  ) : item.type === "multi_select_horizontal_thumbnail" ? (
+                    <MultiSelectHorizomtalThumbnail optionalService={item} />
+                  ) : item.type === "option_toggle_switch" ? (
+                    <OptionToggleSwitch optionalService={item} />
+                  ) : item.type === "single_select_horizontal_thumbnail" ? (
+                    <SingleSelectHorizontalThumbnail optionalService={item} />
+                  ) : item.type === "multi_select_count_sofa" ? (
+                    <MultiSelectCountSofa optionalService={item} />
+                  ) : item.type === "multi_select_count_ac" ? (
+                    <MultiSelectCountSofa optionalService={item} />
+                  ) : (
+                    <></>
+                  )}
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
-        </>
+        </div>
       )}
     </React.Fragment>
   );

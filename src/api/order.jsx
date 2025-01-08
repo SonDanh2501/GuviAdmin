@@ -56,14 +56,14 @@ export const addCollaboratorToOrderApi = (id, data) => {
   //   data
   // );
   return axiosClient.post(
-    `/admin/order_manager/add_collaborator_to_order/${id}?lang=vi`,
+    `api/admin/order_manager/add_collaborator_to_order/${id}?lang=vi`,
     data
   );
 };
 
 export const changeCollaboratorToOrderApi = (id, data) => {
   return axiosClient.post(
-    `/admin/order_manager/change_collaborator/${id}?lang=vi`,
+    `api/admin/order_manager/change_collaborator/${id}?lang=vi`,
     data
   );
 };
@@ -89,7 +89,7 @@ export const checkCodePromotionOrderApi = (id, data) => {
 
 export const changeStatusOrderApi = (id, data) => {
   return axiosClient.post(
-    `/admin/order_manager/change_status_order/${id}?lang=vi`,
+    `api/admin/order_manager/change_status_order/${id}?lang=vi`,
     data
   );
   // return axiosClient.post(

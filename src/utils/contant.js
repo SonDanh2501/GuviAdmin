@@ -563,17 +563,36 @@ export const sortList = (list,valueSort) => {
   return list.sort((a, b) => a[valueSort].localeCompare(b[valueSort]));
 }
 /* 5. Hàm thiết lập mảng giá trị thành mảng phù hợp cho InputTextCustom */
-export const formatArray = (array, code, label, subLabel, child) => {
-  const updatedArray = array.map((item) => {
-    return {
-      ...item,
-      code: item[code],
-      label: subLabel
-        ? item[label] + " - " + (child ? item[subLabel][child] : item[subLabel])
-        : item[label],
-    };
+// export const formatArray = (array, code, label, subLabel, child) => {
+//   const updatedArray = array.map((item) => {
+//     return {
+//       ...item,
+//       code: item[code],
+//       label: subLabel
+//         ? item[label] + " - " + (child ? item[subLabel][child] : item[subLabel])
+//         : item[label],
+//     };
+//   });
+//   return updatedArray; 
+// };
+export const formatArray = (array, code, labelList, indexList) => {
+  const updatedArray = array?.map((item) => {
+    const label =
+      Array.isArray(labelList) && labelList.length > 0
+        ? labelList
+            .map((key, idx) => {
+              if (Array.isArray(item[key])) {
+                return indexList[idx] !== undefined
+                  ? item[key][indexList[idx]]
+                  : item[key][0];
+              }
+              return item[key];
+            })
+            .join(" - ")
+        : "";
+    return { ...item, code: item[code], label: label };
   });
-  return updatedArray; 
+  return updatedArray;
 };
 /* 6. Hàm so sánh hai mốc thời gian */
 export const compareDateIsBefore = (firstDate, secondDate) => { 

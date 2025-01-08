@@ -68,28 +68,23 @@ function* loginSaga(action) {
 
 function* loginWithTokenSaga(action) {
   try {
-    setToken(action.payload.token);
-    if (action.payload.isApp !== "true") {
+    setToken(action?.payload?.token);
+    if (action?.payload?.isApp !== "true") {
       successNotify({
         message: "Đăng nhập thành công",
       });
     }
-    action.payload.naviga("/");
+    action?.payload?.naviga("/");
     yield put(
       loginWithOnlyTokenAction.loginWithOnlyTokenSuccess({
-        token: action.payload.token,
+        token: action?.payload?.token,
       })
     );
-    yield put(loadingAction.loadingRequest(false));
   } catch (err) {
     yield put(loginWithOnlyTokenAction.loginWithOnlyTokenFailure(err));
     errorNotify({
-      message: err.message
-        ? err.message
-        : "Đăng nhập không thành công, vui lòng thử lại sau.",
+      message: err.message || err
     });
-  } finally {
-    yield put(loadingAction.loadingRequest(false));
   }
 }
 

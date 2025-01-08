@@ -552,6 +552,32 @@
 .ant-drawer-body {
   padding: 16px !important;
 }
+
+/* ~~~ Ant Design Switch ~~~ */
+.ant-switch {
+  background-color: $colorMoreLightGray !important;
+}
+
+.ant-switch-checked {
+  background-color: $colorDarkViolet !important;
+}
+
+/* Màu trắng của vòng tròn khi switch được bật */
+// .ant-switch-checked .ant-switch-handle {
+//   background-color: #ffffff !important;
+// }
+// .ant-switch-inner {
+//   background-color: red;
+
+//   .ant-switch-inner-checked {
+//     background-color: blue;
+//   }
+
+//   .ant-switch-inner-unchecked {
+//     background-color: yellow;
+//   }
+// }
+
 // Ant Design Select
 // .ant-select-selector {
 //   height: 32px !important; /* Điều chỉnh chiều cao */

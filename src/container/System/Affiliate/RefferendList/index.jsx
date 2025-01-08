@@ -514,7 +514,7 @@ const RefferendList = () => {
                 </span>
                 <span className="refferend-list-affiliate__content--left-card-content-describe-value">
                   {/* {dataListReferralPerson?.totalItem || 0}{" "} */}
-                  {valueUserInfo?.total_referral_person}{" "}
+                  {valueUserInfo?.total_referral_person || 0}{" "}
                   <span className="unit">người</span>
                 </span>
               </div>
@@ -527,7 +527,7 @@ const RefferendList = () => {
             <div className="refferend-list-affiliate__content--left-card-previous">
               <span>
                 30 ngày gần đây:{" "}
-                {valueUserInfo?.total_referral_person_30_days_ago} người
+                {valueUserInfo?.total_referral_person_30_days_ago || 0} người
               </span>
             </div>
           </div>
@@ -617,7 +617,7 @@ const RefferendList = () => {
               <div className="refferend-list-affiliate__content--left-card-body-code">
                 <div className="refferend-list-affiliate__content--left-card-body-code-content">
                   <span className="refferend-list-affiliate__content--left-card-body-code-content-label">
-                    {valueUserInfo?.referral_code}
+                    {valueUserInfo?.referral_code || ""}
                   </span>
                   <span
                     onClick={() =>
@@ -633,7 +633,7 @@ const RefferendList = () => {
                 </div>
                 <div className="refferend-list-affiliate__content--left-card-body-code-content">
                   <span className="refferend-list-affiliate__content--left-card-body-code-content-label">
-                    {valueUserInfo?.promotional_referral_code}
+                    {valueUserInfo?.promotional_referral_code || ""}
                   </span>
                   <span
                     onClick={() =>

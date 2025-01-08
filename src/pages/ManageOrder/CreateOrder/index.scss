@@ -83,7 +83,7 @@
 
 // Son Css
 
-.cotainer-create-order {
+.container-create-order {
   display: flex;
   gap: $gapL;
   height: 100%;
@@ -91,87 +91,255 @@
   background-color: transparent;
 
   .container-create-order__info {
-    height: 100%;
-    width: 60%;
-    background-color: $colorWhite;
-    border-radius: $borderRadiusXL;
-  }
-
-  .container-create-order__bill {
-    height: fit-content;
-    width: 40%;
-    background-color: $colorWhite;
-    border-radius: $borderRadiusXL;
     display: flex;
     flex-direction: column;
-    gap: $gapL;
+    gap: $gapM;
+    height: 100%;
+    width: 65%;
+    background-color: $colorWhite;
+    border-radius: $borderRadiusXL;
+    padding: 16px;
 
-    .container-create-order__bill--header {
-      position: relative;
-      width: 100%;
-      height: fit-content;
+    .container-create-order__info--container {
+      display: flex;
+      gap: $gapL;
+
+      .container-create-order__info--container-child {
+        width: 100%;
+      }
+    }
+
+    .container-create-order__info--service {
       display: flex;
       flex-direction: column;
-      gap: $gapL;
-      
-      .container-create-order__bill--header-tag {
-        background-color: $colorViolet;
-        width: fit-content;
-        height: fit-content;
-        border-bottom-right-radius: 20px;
-        border-top-left-radius: 16px;
-        padding: 4px 12px 4px 8px;
-  
-        span {
-          font-size: $textFontSizeM;
-          font-weight: $fontWeightXL;
-          color: $colorWhite;
-        }
-      }
-     
-      .container-create-order__bill--header-logo {
-        position: absolute;
-        top: 10%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background-color: $colorViolet;
-        border-radius: $borderRadiusL;
+      gap: $gapM;
 
-        img {
-          height: 45px;
-          width: 45px;
-        }
+      .container-create-order__info--service-label {
+        font-weight: $fontWeightXL;
+        font-size: $textFontSizeM;
+        color: $colorBlack;
       }
 
-      .container-create-order__bill--header-payment-method {
+      .container-create-order__info--service-container {
         display: flex;
-        flex-direction: column;
-        text-align: center;
-        justify-content: center;
-        align-items: center;
+        flex-wrap: wrap;
+        gap: $gapL;
 
-        .container-create-order__bill--header-payment-method-option {
-          font-size: $textFontSizeM;
-          font-weight: $fontWeightXL;
-          color: $colorBlack;
-          text-transform: uppercase;
-        }
+        .container-create-order__info--service-container-child {
+          display: flex;
+          flex-direction: column;
+          padding: 8px 4px;
+          background-color: $colorWhite;
+          border-radius: $borderRadiusL;
+          // border: 1px solid $colorLightGray;
+          width: fit-content;
+          align-items: center;
+          width: 85px;
+          height: 74px;
+          gap: $gapXS;
+          box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px 0px, rgba(0, 0, 0, 0.2) 0px 0px 3px 0px;
+          cursor: pointer;
+          transition: all 0.3s ease-out;
 
-        .container-create-order__bill--header-payment-method-time {
-          font-size: $textFontSizeM;
-          font-weight: $fontWeightL;
-          color: $colorLightGray;
+          &:hover {
+            background-color: $colorLightViolet;
+            box-shadow: rgba(139, 92, 246, 0.5) 0px 0px 10px 0px, rgba(139, 92, 246, 0.7) 0px 0px 3px 0px;
+
+            .container-create-order__info--service-container-child-icon {
+              color: $colorBlack;
+            }
+
+            .container-create-order__info--service-container-child-label {
+              color: $colorBlack;
+            }
+          }
+
+          &.selected {
+            background-color: $colorViolet;
+            box-shadow: rgba(139, 92, 246, 0.5) 0px 0px 10px 0px, rgba(139, 92, 246, 0.7) 0px 0px 3px 0px;
+
+            .container-create-order__info--service-container-child-icon {
+              color: $colorLightOrange;
+            }
+
+            .container-create-order__info--service-container-child-label {
+              color: $colorWhite;
+            }
+          }
+
+          .container-create-order__info--service-container-child-icon {
+            display: flex;
+            align-items: center;
+            font-size: $textFontSize2XL;
+            color: $colorBlack;
+          }
+
+          .container-create-order__info--service-container-child-label {
+            text-align: center;
+            font-weight: $fontWeightL;
+            font-size: $textFontSizeM;
+            color: $colorBlack;
+          }
         }
       }
     }
 
-    .container-create-order__bill--line {
-      position: relative;
+    .container-create-order__info--time {
+      display: flex;
+      flex-direction: column;
+      gap: $gapL;
 
-      .container-create-order__bill--line-dashed {
-        // border: none;
-        // border-top: 1px dashed black;
-        background: repeating-linear-gradient(90deg,
+      .container-create-order__info--time-label {
+        font-weight: $fontWeightXL;
+        font-size: $textFontSizeM;
+        color: $colorBlack;
+      }
+
+      .container-create-order__info--time-container {
+        display: flex;
+        gap: $gapL;
+
+        .container-create-order__info--time-container-child {
+          display: flex;
+          flex-direction: column;
+          padding: 8px;
+          background-color: $colorWhite;
+          border-radius: $borderRadiusL;
+          // border: 1px solid $colorLightGray;
+          width: fit-content;
+          align-items: center;
+          width: 118px;
+          gap: $gapXS;
+          box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px 0px, rgba(0, 0, 0, 0.2) 0px 0px 3px 0px;
+          cursor: pointer;
+          transition: all 0.3s ease-out;
+
+          &:hover {
+            background-color: $colorViolet;
+            box-shadow: rgba(139, 92, 246, 0.5) 0px 0px 10px 0px, rgba(139, 92, 246, 0.7) 0px 0px 3px 0px;
+
+            .container-create-order__info--time-container-child-icon {
+              color: $colorWhite;
+            }
+
+            .container-create-order__info--time-container-child-label {
+              color: $colorWhite;
+            }
+          }
+
+          &.selected {
+            background-color: $colorViolet;
+            box-shadow: rgba(139, 92, 246, 0.5) 0px 0px 10px 0px, rgba(139, 92, 246, 0.7) 0px 0px 3px 0px;
+
+            .container-create-order__info--time-container-child-icon {
+              color: $colorWhite;
+            }
+
+            .container-create-order__info--time-container-child-label {
+              color: $colorWhite;
+            }
+          }
+
+          .container-create-order__info--time-container-child-icon {
+            display: flex;
+            align-items: center;
+            font-size: $textFontSize2XL;
+            color: $colorBlack;
+          }
+
+          .container-create-order__info--time-container-child-label {
+            text-align: center;
+            font-weight: $fontWeightL;
+            font-size: $textFontSizeM;
+            color: $colorBlack;
+          }
+        }
+      }
+    }
+  }
+
+  .container-create-order__bill {
+    height: fit-content;
+    width: 35%;
+    background-color: transparent;
+    border-radius: $borderRadiusXL;
+    display: flex;
+    flex-direction: column;
+    gap: $gapXL;
+
+    .container-create-order__bill--price {
+      width: 100%;
+      height: fit-content;
+      border-radius: $borderRadiusXL;
+      background-color: $colorWhite;
+
+      .container-create-order__bill--price-header {
+        position: relative;
+        width: 100%;
+        height: fit-content;
+        display: flex;
+        flex-direction: column;
+        gap: $gapL;
+
+        .container-create-order__bill--price-header-tag {
+          background-color: $colorViolet;
+          width: fit-content;
+          height: fit-content;
+          border-bottom-right-radius: 20px;
+          border-top-left-radius: 16px;
+          padding: 4px 12px 4px 8px;
+
+          span {
+            font-size: $textFontSizeM;
+            font-weight: $fontWeightXL;
+            color: $colorWhite;
+          }
+        }
+
+        .container-create-order__bill--price-header-logo {
+          position: absolute;
+          top: 10%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background-color: $colorViolet;
+          border-radius: $borderRadiusL;
+
+          img {
+            height: 45px;
+            width: 45px;
+          }
+        }
+
+        .container-create-order__bill--price-header-payment-method {
+          display: flex;
+          flex-direction: column;
+          text-align: center;
+          justify-content: center;
+          align-items: center;
+          padding-bottom: 8px;
+
+          .container-create-order__bill--price-header-payment-method-option {
+            font-size: $textFontSizeM;
+            font-weight: $fontWeightXL;
+            color: $colorBlack;
+            text-transform: uppercase;
+          }
+
+          .container-create-order__bill--price-header-payment-method-time {
+            font-size: $textFontSizeM;
+            font-weight: $fontWeightL;
+            color: $colorLightGray;
+          }
+        }
+      }
+
+      .container-create-order__bill--price-line {
+        position: relative;
+
+        .container-create-order__bill--price-line-dashed {
+          // border: none;
+          // border-top: 1px dashed black;
+          background: repeating-linear-gradient(90deg,
               /* góc của đường thẳng (ngang) */
               transparent, transparent 10px,
               $colorLightGray 10px,
@@ -179,30 +347,193 @@
               $colorLightGray 15px
               /* chiều rộng của ô đen */
             );
+          width: 100%;
+          height: 1px;
+          background-color: transparent;
+        }
+
+        .container-create-order__bill--price-line-circle {
+          position: absolute;
+          width: 30px;
+          height: 30px;
+          border-radius: $borderRadiusFull;
+          background-color: #E9EDF7;
+
+          &.left {
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+          }
+
+          &.right {
+            top: 0;
+            right: 0;
+            transform: translate(50%, -50%);
+          }
+        }
+      }
+    }
+
+    .container-create-order__bill--detail {
+      width: 100%;
+      height: fit-content;
+      border-radius: $borderRadiusXL;
+      background-color: $colorWhite;
+
+      .container-create-order__bill--detail-header {
+        position: relative;
         width: 100%;
-        height: 1px;
-        background-color: transparent;
-      }
-      
-      .container-create-order__bill--line-circle {
-        position: absolute;
-        width: 30px;
-        height: 30px;
-        border-radius: $borderRadiusFull;
-        background-color: #E9EDF7;
+        height: fit-content;
+        display: flex;
+        justify-content: space-between;
+        gap: $gapL;
 
-        &.left {
-          top: 0;
-          left: 0;
-          transform: translate(-50%, -50%);
+        .container-create-order__bill--detail-header-tag {
+          background-color: $colorViolet;
+          width: fit-content;
+          height: fit-content;
+          border-bottom-right-radius: 20px;
+          border-top-left-radius: 16px;
+          padding: 4px 12px 4px 8px;
+
+          span {
+            font-size: $textFontSizeM;
+            font-weight: $fontWeightXL;
+            color: $colorWhite;
+          }
         }
 
-        &.right {
-          top: 0;
-          right: 0;
-          transform: translate(50%, -50%);
+        .container-create-order__bill--detail-header-options {
+          display: flex;
+          align-items: center;
+          gap: $gapM;
+          padding-right: 16px;
+
+          .container-create-order__bill--detail-header-options-note {
+            padding: 8px 4px;
+            border-bottom-left-radius: $borderRadiusL;
+            border-bottom-right-radius: $borderRadiusL;
+
+            &.pet {
+              background-color: $colorExtraLightBlue;
+              color: $colorBlue;
+            }
+
+            &.favorite-collaborator {
+              background-color: $colorExtraLightRed;
+              color: $colorRed;
+            }
+
+            .container-create-order__bill--detail-header-options-note-icon {
+              font-size: $textFontSize2XL;
+            }
+
+
+          }
         }
       }
+
+      .container-create-order__bill--detail-label {
+        display: flex;
+        align-self: center;
+        justify-content: center;
+        padding: 8px 0px;
+
+        span {
+          font-size: $textFontSizeM;
+          font-weight: $fontWeightXL;
+          color: $colorBlack;
+          text-transform: uppercase;
+        }
+      }
+
+      .container-create-order__bill--detail-line {
+        position: relative;
+
+        .container-create-order__bill--detail-line-dashed {
+          // border: none;
+          // border-top: 1px dashed black;
+          background: repeating-linear-gradient(90deg,
+              /* góc của đường thẳng (ngang) */
+              transparent, transparent 10px,
+              $colorLightGray 10px,
+              /* bắt đầu màu đen */
+              $colorLightGray 15px
+              /* chiều rộng của ô đen */
+            );
+          width: 100%;
+          height: 1px;
+          background-color: transparent;
+        }
+
+        .container-create-order__bill--detail-line-circle {
+          position: absolute;
+          width: 30px;
+          height: 30px;
+          border-radius: $borderRadiusFull;
+          background-color: #E9EDF7;
+
+          &.left {
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+          }
+
+          &.right {
+            top: 0;
+            right: 0;
+            transform: translate(50%, -50%);
+          }
+        }
+      }
+    }
+
+  }
+}
+
+.container-create-order__content-child {
+  display: flex;
+  margin-bottom: 4px;
+
+  .container-create-order__content-child--default-address {
+    display: flex;
+    align-items: center;
+    gap: $gapS;
+    padding: 0px 8px;
+    border-radius: $borderRadiusL;
+
+    span {
+      color: $colorBlack;
+      font-size: $textFontSizeM;
+      font-weight: $fontWeightL;
+    }
+  }
+
+  .container-create-order__content-child--add-address {
+    display: flex;
+    align-items: center;
+    gap: $gapXS;
+    border-left: 1px solid $colorLightGray;
+    width: fit-content;
+    padding: 0px 8px;
+    cursor: pointer;
+    transition: all 0.3s ease-out;
+
+    &:hover {
+      span {
+        color: $colorDarkViolet;
+      }
+    }
+
+    span {
+      color: $colorViolet;
+      font-size: $textFontSizeM;
+      font-weight: $fontWeightL;
+      transition: all 0.3s ease-out;
+    }
+
+    .container-create-order__content-child--add-address-icon {
+      color: $colorViolet;
     }
   }
 }

@@ -15,7 +15,7 @@ import { useDispatch } from "react-redux";
 import logo from "../../../assets/images/Logo.svg";
 import icons from "../../../utils/icons";
 import { message, Modal } from "antd";
-import { errorNotify } from "../../../helper/toast";
+import { errorNotify, successNotify } from "../../../helper/toast";
 import { loadingAction } from "../../../redux/actions/loading";
 import {
   loginAffiliateAction,
@@ -138,10 +138,10 @@ const LoginAffiliate = () => {
     }
   };
   // 6. Hàm kiểm tra đăng nhập mỗi lần vào trang login
-  const getIsCheckLogin = () => {
+  const getIsCheckLogin = async () => {
     const currentData = localStorage.getItem("authApp");
     const formatData = JSON.parse(currentData);
-    if (formatData?.token.length > 0 && formatData?.isCheckLogin === "true") {
+    if (formatData?.token && formatData?.isCheckLogin === "true") {
       dispatch(loadingAction.loadingRequest(true));
       dispatch(
         loginWithOnlyTokenAction.loginWithOnlyTokenRequest({

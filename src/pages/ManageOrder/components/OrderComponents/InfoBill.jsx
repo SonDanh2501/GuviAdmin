@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { formatMoney } from "../../../../helper/formatMoney";
 import { getLanguageState } from "../../../../redux/selectors/auth";
 import { Button } from "antd";
-
+import "./index.scss";
 const InfoBill = (props) => {
   const { data, title, handleCancel, titleService } = props;
   const lang = useSelector(getLanguageState);
@@ -20,26 +20,30 @@ const InfoBill = (props) => {
     setTotalDateWork(data?.date_work_schedule.length);
   }, [data]);
   return (
-    <div className="info-bill-container b-shadow">
-      <div className="info-bill-container_title">
-        <div className="info-bill-container_title-service">
-          {/* {title && (
+    <div className="infos-bill-container">
+      <div className="infos-bill-container__title">
+        {/* {title && (
             <p className="info-bill-container_title-service_title">{title}</p>
           )} */}
-          {titleService && <span>{titleService}</span>}
-        </div>
+        {titleService && (
+          <span className="infos-bill-container__title--service">
+            {titleService}
+          </span>
+        )}
+
         {handleCancel && (
           <Button type="primary" danger onClick={handleCancel}>
             Huỷ Đơn hàng
           </Button>
         )}
       </div>
-
-      <div className="gird-3-1-1-1 info-bill_header">
-        <p>Mô tả</p>
-        <p>Giá</p>
-        <p>Số lượng</p>
-        <p className="text-align-end">Thành tiền</p>
+      <div className="infos-bill-container__table">
+        <span className="infos-bill-container__table-header">Mô tả</span>
+        <span className="infos-bill-container__table-header align-end">Giá</span>
+        <span className="infos-bill-container__table-header align-center">Số lượng</span>
+        <span className="infos-bill-container__table-header align-end">
+          Thành tiền
+        </span>
       </div>
       {arrExtend?.map((item, index) => {
         let _pricePerItem = item?.price;
@@ -67,23 +71,33 @@ const InfoBill = (props) => {
           _pricePerItem = 0;
         }
         return (
-          <div key={index} className="gird-3-1-1-1 info-bill_item b-shadow-2">
+          <div key={index} className="infos-bill-container__row">
             <div>
-              <p>
+              <span className="infos-bill-container__row--label">
                 {titleService === "Vệ sinh máy lạnh" && "Treo tường - "}
                 {item?.title[lang]} {item?.kind === "leather" && "(da)"}{" "}
                 {item?.kind === "fabric" && "(vải/nỉ)"}
-              </p>
-              <p>{_description}</p>
+              </span>
+              {_description && (
+                <span className="infos-bill-container__row--label">{`(${_description})`}</span>
+              )}
             </div>
             {_pricePerItem !== 0 ? (
-              <p>{formatMoney(_pricePerItem)}</p>
+              <span className="infos-bill-container__row--label align-end">
+                {formatMoney(_pricePerItem)}
+              </span>
             ) : (
               <p></p>
             )}
-            {_count !== 0 && <p>{_count}</p>}
+            {_count !== 0 && (
+              <span className="infos-bill-container__row--label align-center">
+                {_count}
+              </span>
+            )}
             {_price !== 0 && (
-              <p className="text-align-end">{formatMoney(_price)}</p>
+              <span className="infos-bill-container__row--label align-end">
+                {formatMoney(_price)}
+              </span>
             )}
           </div>
         );

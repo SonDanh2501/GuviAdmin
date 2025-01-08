@@ -225,11 +225,6 @@ const PunishDrawer = (props) => {
       handleSearchCollaborator(valueCollaboratorSearch);
     }
   }, [valueCollaboratorSearch]);
-  useEffect(() => {
-    if (valueOrderSearch) {
-      handleSearchOrder(valueOrderSearch);
-    }
-  }, [valueOrderSearch]);
   /* ~~~ Main ~~~ */
   return (
     <div>
@@ -317,15 +312,18 @@ const PunishDrawer = (props) => {
                   ? formatArray(
                       valueListOrder,
                       "_id",
-                      "id_view",
-                      "index_search_customer",
-                      0
+                      [
+                        "id_view",
+                        "index_search_customer",
+                        "index_search_customer",
+                      ],
+                      [undefined, 1, 0]
                     )
                   : []
               }
               placeHolder="Ca làm liên quan"
               searchField={true}
-              setSearchValue={setValueOrderSearch}
+              onChange={(e) => handleSearchOrder(e.target.value)}
               setValueSelectedProps={setValueOrder}
             />
           </div>
