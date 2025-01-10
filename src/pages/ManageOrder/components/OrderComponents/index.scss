@@ -8,6 +8,8 @@
     border-radius: $borderRadiusXL;
     padding: 16px;
     gap: $gapS;
+    max-height: fit-content;
+    overflow-y: auto;
 
     .detail-bill-container__child {
         display: flex;
@@ -43,6 +45,11 @@
 
             &.high-light {
                 color: $colorBlue
+            }
+
+            &.detail {
+                cursor: pointer;
+                color: $colorLightGray
             }
         }
     }
@@ -135,7 +142,7 @@
         // border-bottom: 1px solid $colorLightGray;
         padding: 8px;
         border-radius: $borderRadiusL;
-        background-color: $colorMoreLightGray;
+        background-color: $colorExtraLightGray;
 
         .infos-bill-container__table-header {
             font-size: $textFontSizeM;
@@ -173,4 +180,146 @@
     }
 
 
+}
+
+@media screen and (max-width: 1550px) {
+    .detail-bill-container {
+        display: flex;
+        flex-direction: column;
+        background-color: $colorWhite;
+        border-radius: $borderRadiusXL;
+        padding: 16px;
+        gap: $gapS;
+        max-height: 340px;
+        overflow-y: auto;
+
+        .detail-bill-container__child {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            .detail-bill-container__child--label {
+                font-size: $textFontSizeM;
+                font-weight: $fontWeightXL;
+                color: $colorBlack;
+
+                .detail-bill-container__child--label-promotion-code {
+                    font-size: $textFontSizeM;
+                    font-weight: $fontWeightL;
+                    color: $colorBlue;
+                }
+            }
+
+            .detail-bill-container__child--content {
+                font-size: $textFontSizeM;
+                font-weight: $fontWeightL;
+                color: $colorBlack;
+
+                &.minus {
+                    color: $colorRed;
+                }
+
+                &.price-before-discount {
+                    font-weight: $fontWeightL;
+                    color: $colorLightGray;
+                    text-decoration: line-through;
+                }
+
+                &.high-light {
+                    color: $colorBlue
+                }
+
+                &.detail {
+                    cursor: pointer;
+                    color: $colorLightGray
+                }
+            }
+        }
+
+        .detail-bill-container__child-list {
+            display: flex;
+            flex-direction: column;
+
+            .detail-bill-container__child-list--label {
+                font-size: $textFontSizeM;
+                font-weight: $fontWeightXL;
+                color: $colorBlack;
+            }
+
+            .detail-bill-container__child-list--child {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding-left: 12px;
+                padding-top: 8px;
+
+                .detail-bill-container__child-list--child-label {
+                    font-size: $textFontSizeM;
+                    font-weight: $fontWeightL;
+                    color: $colorBlack;
+                }
+
+                .detail-bill-container__child-list--child-content {
+                    font-size: $textFontSizeM;
+                    font-weight: $fontWeightL;
+                    color: $colorRed;
+                }
+            }
+        }
+
+        .detail-bill-container__child-final-price {
+            display: flex;
+            justify-content: space-between;
+            padding-top: 8px;
+            border-top: 1px solid $colorGray;
+
+            .detail-bill-container__child-final-price-label {
+                font-size: $textFontSizeM;
+                font-weight: $fontWeightXL;
+                color: $colorBlack;
+            }
+
+            .detail-bill-container__child-final-price-container {
+                display: flex;
+                align-items: end;
+                flex-direction: column;
+
+                .detail-bill-container__child-final-price-container-before-discount {
+                    font-size: $textFontSizeM;
+                    font-weight: $fontWeightL;
+                    color: $colorLightGray;
+                    text-decoration: line-through;
+                }
+
+                .detail-bill-container__child-final-price-container-final-price {
+                    font-size: $textFontSizeM;
+                    font-weight: $fontWeightXL;
+                    color: $colorBlack;
+                }
+            }
+        }
+    }
+}
+
+// Thanh scroll-bar
+.detail-bill-container::-webkit-scrollbar {
+    width: 0.7em;
+}
+
+.detail-bill-container::-webkit-scrollbar-track {
+    background-color: transparent;
+    margin-block: 2em;
+    border-radius: 8px;
+}
+
+.detail-bill-container::-webkit-scrollbar-thumb {
+    // border-radius: $borderRadiusFull;
+    border-top-left-radius: $borderRadiusFull;
+    border-bottom-left-radius: $borderRadiusFull;
+    border-right: 4px white solid;
+    background-color: $colorExtraLightGray;
+}
+
+.detail-bill-container::-webkit-scrollbar-thumb:hover {
+    background-color: $colorMoreLightGray;
 }

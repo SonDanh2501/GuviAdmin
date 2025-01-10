@@ -938,7 +938,11 @@ const InputTextCustom = (props) => {
                 type="text"
                 className="input-custom__input"
                 placeholder=" "
-                value={moment(value).format("DD/MM/YYYY")}
+                value={
+                  value !== null && value !== "" && value !== undefined
+                    ? moment(value).format("DD/MM/YYYY")
+                    : ``
+                }
                 // onChange={(el) => printData(el)}
                 disabled={disable}
                 readOnly

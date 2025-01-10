@@ -18,7 +18,9 @@ import laundryServiceImage from "../../../../assets/images/laundryService.svg";
 import cookingServiceImage from "../../../../assets/images/cookingService.svg";
 import vacuumingServiceImage from "../../../../assets/images/vacuumingService.svg";
 import bringToolServiceImage from "../../../../assets/images/bringToolService.svg";
+import icons from "../../../../utils/icons.js";
 
+const { TbIroningFilled, PiCookingPotFill, FaToolbox, GiVacuumCleaner } = icons;
 const ServiceComponent = (props) => {
   const { serviceData } = props;
 
@@ -181,24 +183,29 @@ const ServiceComponent = (props) => {
     );
   };
 
+  // Loại hình kinh doanh
   const SingleSelectHorizontalThumbnail = ({ optionalService }) => {
     return (
-      <>
+      <div className="single_select_horizontal_thumbnail">
         {optionalService.extend_optional.map((extend, index) => (
           <div
             key={index}
-            className={`${
-              extend.selected === true ? "item-selected" : ""
-            } item`}
+            className={`service-component__time--select ${
+              extend.selected === true && "selected"
+            }`}
             onClick={() => {
               clickSelectExtend(optionalService.type, extend);
             }}
           >
-            <p>{extend.title.vi}</p>
-            <p>{extend.description.vi}</p>
+            <span className="service-component__time--select-label">
+              {extend.title.vi}
+            </span>
+            <span className="service-component__time--select-sub-label">
+              {extend.description.vi}
+            </span>
           </div>
         ))}
-      </>
+      </div>
     );
   };
 
@@ -238,7 +245,7 @@ const ServiceComponent = (props) => {
               clickMultiSelectExtend(optionalService.type, extend);
             }}
           >
-            <img
+            {/* <img
               className="service-component__extra-service--image"
               src={
                 index === 0
@@ -251,15 +258,31 @@ const ServiceComponent = (props) => {
                   ? vacuumingServiceImage
                   : ""
               }
-            ></img>
+            ></img> */}
+            <div className="service-component__extra-service--icon">
+              {extend?.title.vi === "Ủi đồ" ? (
+                <TbIroningFilled />
+              ) : extend?.title.vi === "Nấu ăn" ? (
+                <PiCookingPotFill />
+              ) : extend?.title.vi === "Mang theo dụng cụ" ? (
+                <FaToolbox />
+              ) : extend?.title.vi === "Mang máy hút bụi" ? (
+                <GiVacuumCleaner />
+              ) : (
+                ""
+              )}
+            </div>
+
             <span className="service-component__extra-service--label">
               {extend.title.vi === "Mang máy hút bụi"
                 ? "Máy hút bụi"
                 : extend.title.vi}
             </span>
-            <span className="service-component__extra-service--sub-label">
-              {extend.description.vi}
-            </span>
+            {extend.title.vi !== "Mang theo dụng cụ" && (
+              <span className="service-component__extra-service--sub-label">
+                {extend.description.vi}
+              </span>
+            )}
           </div>
         ))}
       </div>
@@ -294,7 +317,7 @@ const ServiceComponent = (props) => {
 
   const MultiSelectCountSofa = ({ optionalService }) => {
     return (
-      <>
+      <div className="multi_select_count_sofa">
         {optionalService.extend_optional.map((extend, index) => (
           <div key={index} className={` item`}>
             <div className="container-title">
@@ -344,7 +367,7 @@ const ServiceComponent = (props) => {
             )}
           </div>
         ))}
-      </>
+      </div>
     );
   };
 
@@ -354,7 +377,6 @@ const ServiceComponent = (props) => {
     return array?.sort((a, b) => a.estimate - b.estimate);
   };
 
-  console.log("check service.optional_service ", service?.optional_service);
   return (
     <React.Fragment>
       {service !== null && (

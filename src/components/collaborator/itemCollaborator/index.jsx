@@ -1,9 +1,15 @@
 import { useCallback, useEffect, useState } from "react";
-import "./styles.scss";
+import "./index.scss";
 import { formatMoney } from "../../../helper/formatMoney";
+import { renderStarFromNumber } from "../../../utils/contant";
+import icons from "../../../utils/icons";
+
+const {IoStar} = icons
+
 const ItemCollaborator = (data) => {
   const infoCollaborator = data?.data;
   const onPress = data?.onClick;
+  const selectedId = data?.selected
   const {
     full_name,
     star,
@@ -13,22 +19,73 @@ const ItemCollaborator = (data) => {
     work_wallet,
     phone,
   } = infoCollaborator;
+
   return (
     <div
       onClickCapture={onPress}
-      className={`item-collaborator-container  item-collaborator-container_disabled`}
+      className={`collaborate-card ${
+        data?.data._id === selectedId && "selected"
+      }`}
     >
-      {avatar && <img src={`${avatar}`} className="item-collaborator-avatar" />}
-      <div className="info">
-        <p>{full_name}</p>
-        <div className="item-collaborator_container-star">
-          <p>{star}</p>
-          <i class="uil uil-star icon-star"></i>
-          <p>{phone}</p>
+      {/* Header */}
+      <div className="collaborate-card__header">
+        {/* Left */}
+        <div className="collaborate-card__header--left">
+          <img
+            className="collaborate-card__header--left-avatar"
+            src={avatar}
+          ></img>
+          {/* Thông tin */}
+          <div className="collaborate-card__header--left-info">
+            <span className="collaborate-card__header--left-info-name">
+              {full_name}{" "}
+              <span className="collaborate-card__header--left-info-name-star">
+                {`(${star}`}{" "}
+                <IoStar color="orange" style={{ paddingTop: "3px" }} /> {`)`}
+              </span>
+            </span>
+            <span className="collaborate-card__header--left-info-phone">
+              {phone}
+            </span>
+          </div>
         </div>
-        <p>{id_view} </p>
-        <p>Ví CV: {formatMoney(work_wallet)}</p>
-        <p>Ví Rút: {formatMoney(collaborator_wallet)}</p>
+        {/* Right */}
+        <div className="collaborate-card__header--right">
+          <input
+            style={{
+              accentColor: "#8b5cf6",
+              height: "14px",
+              width: "14px",
+            }}
+            type="checkbox"
+            checked={data?.data._id === selectedId ? true : false}
+          ></input>
+        </div>
+      </div>
+      {/* Footer */}
+      <div className="collaborate-card__footer">
+        <div className="collaborate-card__footer--child ">
+          <span className="collaborate-card__footer--child-header">
+            Ví đối tác
+          </span>
+          <span className="collaborate-card__footer--child-number">
+            {formatMoney(work_wallet)}
+          </span>
+        </div>
+        <div className="collaborate-card__footer--child ">
+          <span className="collaborate-card__footer--child-header">Ví rút</span>
+          <span className="collaborate-card__footer--child-number">
+            {formatMoney(collaborator_wallet)}
+          </span>
+        </div>
+        <div className="collaborate-card__footer--child ">
+          <span className="collaborate-card__footer--child-header">
+            Mã đối tác
+          </span>
+          <span className="collaborate-card__footer--child-number">
+            {id_view}
+          </span>
+        </div>
       </div>
     </div>
   );

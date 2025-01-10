@@ -1,0 +1,94 @@
+@import "../../../@theme/style.scss";
+
+.collaborate-card {
+    display: flex;
+    flex-direction: column;
+    background-color: $colorWhite;
+    border-radius: $borderRadiusL;
+    border: 1px solid transparent;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+    min-width: 280px;
+    transition: all 0.3s ease-out;
+
+    &.selected {
+        border: 1px solid $colorViolet;
+        transform: scale(1.02);
+    }
+
+    .collaborate-card__header {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 8px 0px 8px;
+
+        .collaborate-card__header--left {
+            display: flex;
+            align-items: center;
+            gap: $gapS;
+
+            .collaborate-card__header--left-avatar {
+                width: 40px;
+                height: 40px;
+                border-radius: $borderRadiusFull;
+            }
+
+            .collaborate-card__header--left-info {
+                display: flex;
+                flex-direction: column;
+
+                .collaborate-card__header--left-info-name {
+                    display: flex;
+                    align-items: center;
+                    gap: $gapXS;
+                    font-size: $textFontSizeM;
+                    font-weight: $fontWeightXL;
+                    color: $colorBlack;
+
+                    .collaborate-card__header--left-info-name-star {
+                        display: flex;
+                        font-size: $textFontSizeM;
+                        font-weight: $fontWeightXL;
+                        color: $colorBlack;
+                    }
+                }
+
+                .collaborate-card__header--left-info-phone {
+                    font-size: $textFontSizeM;
+                    font-weight: $fontWeightL;
+                    color: $colorLightGray;
+                }
+            }
+        }
+
+        .collaborate-card__header--right {}
+    }
+
+    .collaborate-card__footer {
+        display: flex;
+        align-items: center;
+        gap: $gapM;
+        padding: 8px;
+
+        .collaborate-card__footer--child {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: $colorMoreLightGray;
+            border-radius: $borderRadiusL;
+            min-width: 80px;
+
+            .collaborate-card__footer--child-header {
+                font-size: $textFontSizeM;
+                font-weight: $fontWeightXL;
+                color: $colorBlack;
+                line-height: 1.3;
+            }
+
+            .collaborate-card__footer--child-number {
+                font-size: $textFontSizeM;
+                font-weight: $fontWeightL;
+                color: $colorBlack;
+                line-height: 1.3;
+            }
+        }
+    }
+}

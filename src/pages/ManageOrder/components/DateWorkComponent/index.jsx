@@ -20,6 +20,7 @@ import {
   PAYMENT_METHOD,
 } from "../../../../@core/constant/service.constant.js";
 import "./index.scss";
+import InputTextCustom from "../../../../components/inputCustom/index.jsx";
 
 const DateWorkComponent = (props) => {
   const { serviceData, setPaymentMethod, setIsChoicePaymentMethod } = props;
@@ -217,178 +218,167 @@ const DateWorkComponent = (props) => {
   };
 
   return (
-    <React.Fragment>
-      {service !== null ? (
-        <>
-          <div className="optional-service div-flex-column">
-            <div className="date-component div-flex-column">
-              {service.type === "schedule" ? (
-                <>
-                  <div className="date-schedule div-flex-column">
-                    <div>
-                      <p className="f-500">Ngày làm trong tuần</p>
-                      <div className="content-date-of-week">
-                        {DATE_OF_WEEK.map((item, index) => (
-                          <div
-                            key={index}
-                            className={`${
-                              dateOfWeek.findIndex((x) => x === item.value) > -1
-                                ? "item-selected"
-                                : ""
-                            } item-date-of-week`}
-                            onClick={() => {
-                              onClickDateOfWeek(item.value);
-                            }}
-                          >
-                            <p>{item.label}</p>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div className="div-flex-column">
-                      {listTimeQuickSelect.map((groupTime, index) => (
-                        <div
-                          key={index}
-                          className="div-flex-row flex-justify-content-flex-start flex-wrap"
-                        >
-                          {groupTime.time.map((item, index) => (
-                            <div
-                              key={index}
-                              className={`${
-                                item.value === time ? "item-selected" : ""
-                              } div-select-time`}
-                              onClick={() => {
-                                setTime(item.value);
-                              }}
-                            >
-                              {item.label}
-                            </div>
-                          ))}
-                        </div>
-                      ))}
-                    </div>
-
-                    <div>
-                      <p>Gói tháng</p>
-                      <div className="content-month-schedule">
-                        {MONTH_SCHEDULE.map((item, index) => (
-                          <div
-                            key={index}
-                            className={`${
-                              monthSchedule === item.value
-                                ? "item-selected"
-                                : ""
-                            } item`}
-                            onClick={() => {
-                              onClickMonthSchedule(item.value);
-                            }}
-                          >
-                            <p>{item.label}</p>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    <Button
+    <div>
+      {service !== null && (
+        <div className="date-work-component">
+          {service.type === "schedule" ? (
+            // Giúp việc cố định
+            <div className="date-work-component__schedule">
+              <div className="date-work-component__schedule--container">
+                <span className="date-work-component__schedule--container-label">
+                  Ngày làm trong tuần
+                </span>
+                <div className="date-work-component__schedule--container-date-in-week">
+                  {DATE_OF_WEEK.map((item, index) => (
+                    <div
+                      key={index}
+                      className={`date-work-component__schedule--container-date-in-week-child ${
+                        dateOfWeek.findIndex((x) => x === item.value) > -1 &&
+                        "selected"
+                      }`}
                       onClick={() => {
-                        setIsOpenDetailSchedule(!isOpenDetailSchedule);
+                        onClickDateOfWeek(item.value);
                       }}
                     >
-                      Xem lịch làm việc
-                    </Button>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div className="date-loop div-flex-column">
-                    <div>
-                      <p className="fw-500">Chọn ngày làm</p>
-                      <DatePicker
-                        style={{ width: "100%" }}
-                        format={"DD/MM/YYYY"}
-                        onChange={setDate}
-                        className="date-picker-select-time"
-                      />
+                      <span>{item.label}</span>
                     </div>
-
-                    <div className="div-flex-column">
-                      <p className="fw-500">Chọn giờ làm</p>
-                      {listTimeQuickSelect.map((groupTime, index) => (
+                  ))}
+                </div>
+              </div>
+              <div className="date-work-component__schedule--time">
+                <span className="date-work-component__schedule--time-label">
+                  Chọn thời gian làm
+                </span>
+                <div className="date-work-component__schedule--time-list">
+                  {listTimeQuickSelect.time.map((item, index) => (
+                    <div
+                      key={index}
+                      className={`date-work-component__schedule--time-list-child ${
+                        item.label === time && "selected"
+                      } `}
+                      onClick={() => {
+                        setTime(item.label);
+                      }}
+                    >
+                      <span>{item.label}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="date-work-component__schedule--month">
+                <div className="date-work-component__schedule--month-header">
+                  <span className="date-work-component__schedule--month-header-label">
+                    Gói tháng
+                  </span>
+                  <button
+                    className="date-work-component__schedule--month-header-review"
+                    onClick={() => {
+                      setIsOpenDetailSchedule(!isOpenDetailSchedule);
+                    }}
+                  >
+                    Xem lịch làm việc
+                  </button>
+                </div>
+                <div className="date-work-component__schedule--month-container">
+                  {MONTH_SCHEDULE.map((item, index) => (
+                    <div
+                      key={index}
+                      className={`date-work-component__schedule--month-container-child ${
+                        monthSchedule === item.value && "selected"
+                      }`}
+                      onClick={() => {
+                        onClickMonthSchedule(item.value);
+                      }}
+                    >
+                      <span>{item.label}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ) : (
+            // Giúp việc theo giờ
+            <div className="date-work-component__time-section">
+              <div className="date-work-component__time-section--date">
+                <span className="date-work-component__time-section--date-label">
+                  Chọn ngày làm
+                </span>
+                {/* <DatePicker
+                  style={{ width: "100%" }}
+                  format={"DD/MM/YYYY"}
+                  onChange={setDate}
+                  className="date-picker-select-time"
+                /> */}
+                <InputTextCustom
+                  type="date"
+                  value={date}
+                  placeHolder="Ngày làm"
+                  setValueSelectedProps={setDate}
+                />
+              </div>
+              <div className="date-work-component__time-section--date">
+                <span className="date-work-component__time-section--date-label">
+                  Chọn giờ làm
+                </span>
+                <div className="date-work-component__time-section--date-list">
+                  {listTimeQuickSelect.time.map((el, index) => (
+                    <div
+                      onClick={() => setTime(el.label)}
+                      key={index}
+                      className={`date-work-component__time-section--date-list-child ${
+                        el.label === time && "selected"
+                      } `}
+                    >
+                      <span>{el.label}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              {/* Lặp lại theo tuần */}
+              {service.type === "loop" ? (
+                <div className="date-work-component__time-section--loop">
+                  <div className="date-work-component__time-section--loop-title">
+                    <span className="date-work-component__time-section--loop-title-label">
+                      Lặp lại theo tuần
+                    </span>
+                    <Switch
+                      size="small"
+                      disabled={!timeSchedule.length > 0}
+                      checked={service.is_auto_order}
+                      onChange={() => {
+                        onChangeLoopDate(!service.is_auto_order);
+                      }}
+                    />
+                    {!timeSchedule.length > 0 && (
+                      <span className="date-work-component__time-section--loop-title-warning">{`(Vui lòng chọn thời gian làm việc trước khi tích vào đây)`}</span>
+                    )}
+                  </div>
+                  {service.is_auto_order && (
+                    <div className="date-work-component__time-section--loop-date-in-week">
+                      {DATE_OF_WEEK.map((item, index) => (
                         <div
                           key={index}
-                          className="div-flex-row flex-justify-content-flex-start flex-wrap"
+                          className={`date-work-component__time-section--loop-date-in-week-child ${
+                            dateOfWeek.findIndex((x) => x === item.value) >
+                              -1 && "selected"
+                          } `}
+                          onClick={() => {
+                            onClickDateOfWeek(item.value);
+                          }}
                         >
-                          {groupTime.time.map((item, index) => (
-                            <div
-                              key={index}
-                              className={`${
-                                item.value === time ? "item-selected" : ""
-                              } div-select-time`}
-                              onClick={() => {
-                                console.log("ahhahassdas");
-                                setTime(item.value);
-                              }}
-                            >
-                              {item.label}
-                            </div>
-                          ))}
+                          <span>{item.label}</span>
                         </div>
                       ))}
                     </div>
-
-                    {service.type === "loop" ? (
-                      <>
-                        <div className="date-of-week">
-                          <div className="div-active-loop-week">
-                            <p className="fw-500">Lặp lại theo tuần</p>
-                            <Switch
-                              disabled={!timeSchedule.length > 0}
-                              checked={service.is_auto_order}
-                              onChange={() => {
-                                onChangeLoopDate(!service.is_auto_order);
-                              }}
-                            />
-                            {!timeSchedule.length > 0 && (
-                              <p className="warning-loop">{`(Vui lòng chọn thời gian làm việc trước khi tích vào đây)`}</p>
-                            )}
-                          </div>
-                          {service.is_auto_order && (
-                            <div className="content-date-of-week">
-                              {DATE_OF_WEEK.map((item, index) => (
-                                <div
-                                  key={index}
-                                  className={`${
-                                    dateOfWeek.findIndex(
-                                      (x) => x === item.value
-                                    ) > -1
-                                      ? "item-selected"
-                                      : ""
-                                  } item-date-of-week`}
-                                  onClick={() => {
-                                    onClickDateOfWeek(item.value);
-                                  }}
-                                >
-                                  <p>{item.label}</p>
-                                </div>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      </>
-                    ) : (
-                      <></>
-                    )}
-                  </div>
-                </>
+                  )}
+                </div>
+              ) : (
+                <></>
               )}
             </div>
-          </div>
-        </>
-      ) : (
-        <></>
+          )}
+        </div>
       )}
-
       <Drawer
         title={`Chi tiết lịch làm việc`}
         placement="right"
@@ -448,7 +438,7 @@ const DateWorkComponent = (props) => {
           ))}
         </div>
       </Drawer>
-    </React.Fragment>
+    </div>
   );
 };
 

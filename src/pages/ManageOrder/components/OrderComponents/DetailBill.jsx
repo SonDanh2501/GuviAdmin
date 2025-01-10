@@ -18,9 +18,13 @@ const DetailBill = (props) => {
     total_date_work,
     payment_method,
     date_work_schedule,
+    subtotal_fee,
+    tax,
+    net_income,
   } = props;
   const lang = useSelector(getLanguageState);
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
+  const [isShowDetail, setIsShowDetail] = useState(false);
   const onClose = () => {
     setIsOpenDrawer(false);
   };
@@ -41,6 +45,7 @@ const DetailBill = (props) => {
             Chi tiết ngày làm
           </span>
         )}
+        <span onClick= {() => setIsShowDetail(!isShowDetail)}className="detail-bill-container__child--content detail">Chi tiết</span>
       </div>
       {payment_method && (
         <div className="detail-bill-container__child">
@@ -66,6 +71,17 @@ const DetailBill = (props) => {
           {formatMoney(initial_fee)}
         </span>
       </div>
+      {isShowDetail && (
+        <div className="detail-bill-container__child">
+          <span className="detail-bill-container__child--label">
+            Giá trị đơn hàng
+          </span>
+          <span className="detail-bill-container__child--content">
+            {formatMoney(subtotal_fee)}
+          </span>
+        </div>
+      )}
+
       {code_promotion && (
         <div className="detail-bill-container__child">
           <span className="detail-bill-container__child--label">
@@ -115,6 +131,15 @@ const DetailBill = (props) => {
           </span>
         </div>
       )}
+      {isShowDetail && (
+        <div className="detail-bill-container__child">
+          <span className="detail-bill-container__child--label">Thuế</span>
+          <span className="detail-bill-container__child--content">
+            {formatMoney(tax)}
+          </span>
+        </div>
+      )}
+
       <div className="detail-bill-container__child-final-price">
         <span className="detail-bill-container__child-final-price-label">
           Tổng tiền
@@ -128,6 +153,16 @@ const DetailBill = (props) => {
           </span>
         </div>
       </div>
+      {isShowDetail && (
+        <div className="detail-bill-container__child">
+          <span className="detail-bill-container__child--label">
+            Thu nhập ròng
+          </span>
+          <span className="detail-bill-container__child--content">
+            {formatMoney(net_income)}
+          </span>
+        </div>
+      )}
       <Drawer title="Chi tiết ngày làm" onClose={onClose} open={isOpenDrawer}>
         <div>
           <div className="detail-bill_detail-date-work_header">

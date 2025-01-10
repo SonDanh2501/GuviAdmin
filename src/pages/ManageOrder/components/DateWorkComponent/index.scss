@@ -1,6 +1,314 @@
 @import "../../index.scss";
+@import "../../../../@theme/style.scss";
 
 .warning-loop {
   padding-left: 10px;
   color: $colorError !important;
+}
+
+.date-work-component {
+  display: flex;
+
+  .date-work-component__time-section {
+    display: flex;
+    flex-direction: column;
+    gap: $gapM;
+    
+    .date-work-component__time-section--date {
+      display: flex;
+      flex-direction: column;
+      gap: $gapM;
+      
+      .date-work-component__time-section--date-label {
+        font-size: $textFontSizeM;
+        font-weight: $fontWeightXL;
+        color: $colorBlack;
+      }
+
+      .date-work-component__time-section--date-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: $gapM;
+        
+        .date-work-component__time-section--date-list-child {
+          background-color: $colorWhite;
+          padding: 8px;
+          border-radius: $borderRadiusL;
+          box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px 0px, rgba(0, 0, 0, 0.2) 0px 0px 3px 0px;
+          cursor: pointer;
+          transition: all 0.3s ease-out;
+
+          span {
+            font-size: $textFontSizeM;
+            font-weight: $fontWeightL;
+            color: $colorBlack;
+          }
+
+          &:hover {
+            background-color: $colorMoreLightViolet;
+            // box-shadow: rgba(139, 92, 246, 0.5) 0px 0px 10px 0px, rgba(139, 92, 246, 0.7) 0px 0px 3px 0px;
+
+            span {
+              color: $colorBlack;
+            }
+          }
+
+          &.selected {
+            background-color: $colorViolet;
+            // box-shadow: rgba(139, 92, 246, 0.5) 0px 0px 10px 0px, rgba(139, 92, 246, 0.7) 0px 0px 3px 0px;
+
+            span {
+              color: $colorWhite;
+              font-weight: $fontWeightXL;
+            }
+          }
+        }
+      }
+    }
+
+    .date-work-component__time-section--loop {
+      display: flex;
+      flex-direction: column;
+      gap: $gapM;
+      
+      .date-work-component__time-section--loop-title {
+        display: flex;
+        gap: $gapM;
+
+        .date-work-component__time-section--loop-title-label {
+          font-size: $textFontSizeM;
+          font-weight: $fontWeightXL;
+          color: $colorBlack;
+        }
+        
+        .date-work-component__time-section--loop-title-warning {
+          font-size: $textFontSizeM;
+          font-weight: $fontWeightL;
+          color: $colorRed;
+        }
+      }
+
+      .date-work-component__time-section--loop-date-in-week {
+        display: flex;
+        flex-wrap: wrap;
+        gap: $gapL;
+
+        .date-work-component__time-section--loop-date-in-week-child {
+          background-color: $colorWhite;
+          padding: 8px 12px;
+          border-radius: $borderRadiusL;
+          box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px 0px, rgba(0, 0, 0, 0.2) 0px 0px 3px 0px;
+          cursor: pointer;
+          transition: all 0.3s ease-out;
+
+          span {
+            font-size: $textFontSizeM;
+            font-weight: $fontWeightL;
+            color: $colorBlack;
+          }
+
+          &:hover {
+            background-color: $colorLightViolet;
+            // box-shadow: rgba(139, 92, 246, 0.5) 0px 0px 10px 0px, rgba(139, 92, 246, 0.7) 0px 0px 3px 0px;
+
+            span {
+              color: $colorBlack;
+            }
+          }
+
+          &.selected {
+            background-color: $colorViolet;
+            // box-shadow: rgba(139, 92, 246, 0.5) 0px 0px 10px 0px, rgba(139, 92, 246, 0.7) 0px 0px 3px 0px;
+
+            span {
+              color: $colorWhite;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .date-work-component__schedule {
+    display: flex;
+    flex-direction: column;
+    gap: $gapM;
+
+    .date-work-component__schedule--container {
+      display: flex;
+      flex-direction: column;
+      gap: $gapM;
+
+      .date-work-component__schedule--container-label {
+        font-size: $textFontSizeM;
+        font-weight: $fontWeightXL;
+        color: $colorBlack;
+      }
+
+      .date-work-component__schedule--container-date-in-week {
+        display: flex;
+        flex-wrap: wrap;
+        gap: $gapL;
+
+        .date-work-component__schedule--container-date-in-week-child {
+          background-color: $colorWhite;
+          padding: 8px 12px;
+          border-radius: $borderRadiusL;
+          box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px 0px, rgba(0, 0, 0, 0.2) 0px 0px 3px 0px;
+          cursor: pointer;
+          transition: all 0.3s ease-out;
+
+          span {
+            font-size: $textFontSizeM;
+            font-weight: $fontWeightL;
+            color: $colorBlack;
+          }
+
+          &:hover {
+            background-color: $colorLightViolet;
+            // box-shadow: rgba(139, 92, 246, 0.5) 0px 0px 10px 0px, rgba(139, 92, 246, 0.7) 0px 0px 3px 0px;
+
+            span {
+              color: $colorBlack;
+            }
+          }
+
+          &.selected {
+            background-color: $colorViolet;
+            // box-shadow: rgba(139, 92, 246, 0.5) 0px 0px 10px 0px, rgba(139, 92, 246, 0.7) 0px 0px 3px 0px;
+
+            span {
+              color: $colorWhite;
+            }
+          }
+        }
+      }
+    }
+
+    .date-work-component__schedule--time {
+      display: flex;
+      flex-direction: column;
+      gap: $gapM;
+
+      .date-work-component__schedule--time-label {
+        font-size: $textFontSizeM;
+        font-weight: $fontWeightXL;
+        color: $colorBlack;
+      }
+
+      .date-work-component__schedule--time-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: $gapL;
+
+        .date-work-component__schedule--time-list-child {
+          background-color: $colorWhite;
+          padding: 8px;
+          border-radius: $borderRadiusL;
+          box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px 0px, rgba(0, 0, 0, 0.2) 0px 0px 3px 0px;
+          cursor: pointer;
+          transition: all 0.3s ease-out;
+
+          span {
+            font-size: $textFontSizeM;
+            font-weight: $fontWeightL;
+            color: $colorBlack;
+          }
+
+          &:hover {
+            background-color: $colorMoreLightViolet;
+            // box-shadow: rgba(139, 92, 246, 0.5) 0px 0px 10px 0px, rgba(139, 92, 246, 0.7) 0px 0px 3px 0px;
+
+            span {
+              color: $colorBlack;
+            }
+          }
+
+          &.selected {
+            background-color: $colorViolet;
+            // box-shadow: rgba(139, 92, 246, 0.5) 0px 0px 10px 0px, rgba(139, 92, 246, 0.7) 0px 0px 3px 0px;
+
+            span {
+              color: $colorWhite;
+              font-weight: $fontWeightXL;
+            }
+          }
+        }
+      }
+    }
+
+    .date-work-component__schedule--month {
+      display: flex;
+      flex-direction: column;
+      gap: $gapM;
+
+      .date-work-component__schedule--month-header {
+        display: flex;
+        align-items: center;
+        gap: $gapM;
+
+        .date-work-component__schedule--month-header-label {
+          font-size: $textFontSizeM;
+          font-weight: $fontWeightXL;
+          color: $colorBlack;
+        }
+
+        .date-work-component__schedule--month-header-review {
+          padding: 4px;
+          font-size: $textFontSizeM;
+          font-weight: $fontWeightL;
+          color: $colorViolet;
+          border: 1px solid $colorViolet;
+          border-radius: $borderRadiusL;
+          transition: all 0.3s ease-out;
+
+          &:hover {
+            background-color: $colorViolet;
+            color: $colorWhite;
+          }
+        }
+   
+      }
+
+      .date-work-component__schedule--month-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: $gapL;
+
+        .date-work-component__schedule--month-container-child {
+          background-color: $colorWhite;
+          padding: 12px;
+          border-radius: $borderRadiusL;
+          box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px 0px, rgba(0, 0, 0, 0.2) 0px 0px 3px 0px;
+          cursor: pointer;
+          transition: all 0.3s ease-out;
+
+          span {
+            font-size: $textFontSizeM;
+            font-weight: $fontWeightL;
+            color: $colorBlack;
+          }
+
+          &:hover {
+            background-color: $colorMoreLightViolet;
+            // box-shadow: rgba(139, 92, 246, 0.5) 0px 0px 10px 0px, rgba(139, 92, 246, 0.7) 0px 0px 3px 0px;
+
+            span {
+              color: $colorBlack;
+            }
+          }
+
+          &.selected {
+            background-color: $colorViolet;
+            // box-shadow: rgba(139, 92, 246, 0.5) 0px 0px 10px 0px, rgba(139, 92, 246, 0.7) 0px 0px 3px 0px;
+
+            span {
+              color: $colorWhite;
+              font-weight: $fontWeightXL;
+            }
+          }
+        }
+      }
+    }
+  }
 }

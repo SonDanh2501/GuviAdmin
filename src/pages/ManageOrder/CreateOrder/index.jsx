@@ -65,6 +65,7 @@ import InputCustom from "../../../components/textInputCustom/index.jsx";
 import InputTextCustom from "../../../components/inputCustom/index.jsx";
 import _, { filter } from "lodash";
 import { formatArray } from "../../../utils/contant.js";
+import ButtonCustom from "../../../components/button/index.jsx";
 
 var AES = require("crypto-js/aes");
 const { TextArea } = Input;
@@ -91,7 +92,6 @@ const CreateOrder = () => {
   const [payloadOrder, setPayloadOrder] = useState(null);
   const [dateWorkSchedule, setDateWorkSchedule] = useState([]);
   const [paymentMethod, setPaymentMethod] = useState(PAYMENT_METHOD[0].value);
-  const [collaborator, setCollaborator] = useState(null);
   const [listCollaborator, setListCollaborator] = useState([]);
   const [listShowCodePromotion, setListShowCodePromotion] = useState([]);
   const [selectCodePromotion, setSelectCodePromotion] = useState(null);
@@ -105,7 +105,6 @@ const CreateOrder = () => {
   const [netIncomeCollaborator, setNetIncomeCollaborator] = useState(0);
   const [platformFee, setPlatformFee] = useState(0);
   const [totalDiscount, setTotalDiscount] = useState(0);
-  const [note, setNote] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [collaboratorFavourite, setCollaboratorFavourite] = useState([]);
   const [collaboratorBlock, setCollaboratorBlock] = useState([]);
@@ -114,25 +113,39 @@ const CreateOrder = () => {
     totalRecently: 0,
     totalBlock: 0,
   });
-  const [isShowCollaborator, setIsShowCollaborator] = useState(false);
-  const [tempValueCollaborator, setTempValueCollaborator] = useState("");
   const [isChoicePaymentMethod, setIsChoicePaymentMethod] = useState(true);
   const [modal, setModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [isShowAddressDefault, setIsShowAddressDefault] = useState(true); // Hiển thị danh sách những địa chỉ mặc định của khách hàng
-  const [isShowTipCollaborator, setIsShowTipCollaborator] = useState(false);
   const [infoBill, setInfoBill] = useState();
-  const [isShowAddressSearch, setIsShowAddressSearch] = useState(true); // Hiển thị danh sách những địa chỉ đã tìm kiếm
   // SON Value
+  const [collaborator, setCollaborator] = useState(null); // Giá trị thông tin id của đối tác
+  const [tempValueCollaborator, setTempValueCollaborator] = useState(""); // Giá trị để hiển thị họ tên - mã đối tác - số điện thoại của đối tác (cần có cái này vì giá trị truyền lên api chỉ là id của đối tác)
   const [selectCustomerValue, setSelectCustomerValue] = useState(""); // Giá trị thông tin khách hàng lựa chọn
   const [selectAddressValueTemp, setSelectAddressValueTemp] = useState(""); // Giá trị thông tin địa chỉ của khách hàng để hiển thị
   const [newAddressValue, setNewAddressValue] = useState(null); // Giá trị thông tin địa chỉ của khách hàng để tạo địa chỉ mặc định
   const [valueAddrressEncode, setValueAddressEncode] = useState(null); // Giá trị thông tin địa chỉ của khách hàng nhưng sau khi encode
+  const [valueNoteForCollaborator, setValueNoteForCollaborator] = useState(""); // Giá trị thông tin ghi chú cho đối tác (nếu có)
+  const [valueSubtotalFee, setValueSubTotalFee] = useState(""); // Giá trị đơn hàng
+  const [valueTax, setValueTax] = useState(""); // Giá trị thuế
+  const [valueNetIncome, setValueNetIncome] = useState(""); // Giá trị thu nhập ròng
   /* ~~~ List ~~~ */
   const [listCustomer, setListCustomer] = useState([]); // Giá trị danh sách những khách hàng tìm kiếm
   const [listAddress, setListAddress] = useState([]); // Giá trị danh sách những địa chỉ đã tìm kiếm
   const [listAddressDefault, setListAddressDefault] = useState([]); // Giá trị danh sách những địa chỉ đã lưu của khách hàng
+  const listMoneyTipForCollaborator = [
+    { id: 0, amount: 2000 },
+    { id: 1, amount: 5000 },
+    { id: 2, amount: 10000 },
+    { id: 3, amount: 20000 },
+    { id: 4, amount: 50000 },
+  ]; // Một vài giá trị tiền típ nhanh
 
+  /* ~~~ Flag ~~~ */
+  const [isShowCollaborator, setIsShowCollaborator] = useState(false); // Hiển thị danh sách những đối tác yêu thích
+  const [isShowAddressDefault, setIsShowAddressDefault] = useState(true); // Hiển thị danh sách những địa chỉ mặc định của khách hàng
+  const [isShowTipCollaborator, setIsShowTipCollaborator] = useState(false); // Hiển thị tiền tip cho đối tác
+  const [isShowAddressSearch, setIsShowAddressSearch] = useState(true); // Hiển thị danh sách những địa chỉ đã tìm kiếm
+  const [isDetailBill, setIsDetailBill] = useState(false); // Hiển thị chi tiết hóa đơn
   /* ~~~ Handle function ~~~ */
   // const getDataListCustomer = async (search) => {
   //   const res = await searchCustomersApi(search);
@@ -204,11 +217,9 @@ const CreateOrder = () => {
       setIsShowAddressDefault(false);
     } else {
       // Trường hợp chọn địa chỉ mặc định sẵn có: tìm kiếm trong listAddressDefault để lọc ra
-      console.log("check newValue >>>", newValue);
       const address = listAddressDefault.filter(
         (item) => item._id === newValue
       )[0];
-      console.log("check address found >>>", address);
       if (address) {
         const tempAddres = JSON.stringify({
           lat: address.lat,
@@ -269,7 +280,42 @@ const CreateOrder = () => {
       });
     }
   };
-
+  // Hàm tìm kiếm đối tác
+  const handleSearchCollaborator = useCallback(
+    _debounce(async (newValue) => {
+      try {
+        const res = await fetchCollaborators(
+          "vi",
+          0,
+          50,
+          "online",
+          newValue,
+          ""
+        );
+        setIsShowCollaborator(false);
+        setListCollaborator(res?.data);
+      } catch (err) {
+        errorNotify({ message: err?.message || err });
+      }
+    }, 500),
+    []
+  );
+  // Hàm tạo đơn
+  const handleCreateOrder = async () => {
+    try {
+      setIsLoading(true);
+      const res = await createOrderApi(payloadOrder);
+      setIsLoading(false);
+      navigate("/group-order/manage-order");
+      successNotify({
+        message: "Tạo đơn hàng thành công",
+      });
+    } catch (err) {
+      errorNotify({
+        message: err?.message || err,
+      });
+    }
+  };
   /* ~~~ Use effect ~~~ */
   useEffect(() => {
     if (selectService !== null) {
@@ -331,7 +377,7 @@ const CreateOrder = () => {
         tempPayload["code_promotion"] = selectCodePromotion.toString() || "";
       if (collaborator !== null) tempPayload["id_collaborator"] = collaborator;
       tempPayload["type_address_work"] = "house";
-      tempPayload["note"] = note;
+      tempPayload["note"] = valueNoteForCollaborator;
       tempPayload["tip_collaborator"] = tipCollaborator;
       setPayloadOrder(tempPayload);
     }
@@ -344,7 +390,7 @@ const CreateOrder = () => {
     selectCodePromotion,
     collaborator,
     serviceData,
-    note,
+    valueNoteForCollaborator,
     tipCollaborator,
   ]);
   useEffect(() => {
@@ -374,10 +420,17 @@ const CreateOrder = () => {
   }, [listEventPromotion, resultCodePromotion, infoBill]);
   useEffect(() => {
     if (selectAddressValueTemp.trim() !== "") {
-      const findAddress = listAddress.find(
-        (el) => el.place_id === selectAddressValueTemp
-      );
-      handleChangeAddress(findAddress);
+      if (isShowAddressDefault) {
+        const findAddress = listAddressDefault.find(
+          (el) => el._id === selectAddressValueTemp
+        );
+        handleChangeAddress(findAddress._id);
+      } else {
+        const findAddress = listAddress.find(
+          (el) => el.place_id === selectAddressValueTemp
+        );
+        handleChangeAddress(findAddress);
+      }
     }
   }, [selectAddressValueTemp]);
   useEffect(() => {
@@ -447,18 +500,6 @@ const CreateOrder = () => {
     return res;
   };
 
-  const getDataListCollaborator = async (search) => {
-    const res = await fetchCollaborators("vi", 0, 50, "online", search, "");
-    setListCollaborator(res.data);
-  };
-
-  const handleSearchCollaborator = useCallback(
-    _debounce((newValue) => {
-      getDataListCollaborator(newValue);
-    }, 500),
-    []
-  );
-
   const handleChangeCustomer = (newValue) => {
     setSelectCustomerValue(newValue);
   };
@@ -514,6 +555,9 @@ const CreateOrder = () => {
           info: res,
           date_work_schedule: res?.date_work_schedule,
         });
+        setValueSubTotalFee(res?.subtotal_fee);
+        setValueNetIncome(res?.net_income);
+        setValueTax(res?.value_added_tax);
         // ------------------------- tính giá trị service fee--------------------------------------- //
         let _service_fee = 0;
         res?.service_fee?.map((item) => {
@@ -526,24 +570,6 @@ const CreateOrder = () => {
         if (err?.field === "code_promotion") {
           setSelectCodePromotion(null);
         }
-        errorNotify({
-          message: err?.message,
-        });
-      });
-  };
-
-  const createOrder = () => {
-    setIsLoading(true);
-    createOrderApi(payloadOrder)
-      .then((res) => {
-        setIsLoading(false);
-        navigate("/group-order/manage-order");
-        successNotify({
-          message: "Tạo đơn hàng thành công",
-        });
-      })
-      .catch((err) => {
-        setIsLoading(false);
         errorNotify({
           message: err?.message,
         });
@@ -568,6 +594,7 @@ const CreateOrder = () => {
       setTipCollaborator(_amount);
     }
   };
+  // Hàm chọn/hủy chọn mã khuyến mãi
   const handleChoosePromotion = (_code_promotion) => {
     if (selectCodePromotion !== _code_promotion) {
       setSelectCodePromotion(_code_promotion);
@@ -581,308 +608,381 @@ const CreateOrder = () => {
 
   /* ~~~ Main ~~~ */
   return (
-    <>
-      <React.Fragment>
-        <div className="div-container-content">
-          <div className="div-flex-row">
-            <div className="div-header-container">
-              <h4 className="title-cv">Tạo đơn</h4>
-            </div>
-            <div className="btn-action-header"></div>
+    <div className="container-create-order">
+      {/* Container bên trái */}
+      <div className="container-create-order__info card-shadow">
+        <div className="container-create-order__info--container">
+          <div className="container-create-order__info--container-child">
+            <span className="container-create-order__info--container-child-label">
+              Thông tin khách hàng
+            </span>
+            <InputTextCustom
+              type="select"
+              value={selectCustomerValue}
+              options={
+                listCustomer
+                  ? formatArray(listCustomer, "_id", [
+                      "id_view",
+                      "full_name",
+                      "phone",
+                    ])
+                  : []
+              }
+              placeHolder="Khách hàng"
+              searchField={true}
+              onChange={(e) => handleSearchCustomer(e.target.value)}
+              setValueSelectedProps={setSelectCustomerValue}
+            />
           </div>
-          <div className="div-flex-row">
-            <div className="content-create-order">
-              <div className="div-flex-column">
-                <p className="fw-500">Khách hàng</p>
-                <Select
-                  showSearch
-                  defaultActiveFirstOption={false}
-                  suffixIcon={null}
-                  filterOption={false}
-                  onSearch={handleSearchCustomer}
-                  onChange={handleChangeCustomer}
-                  options={listCustomer.map((d) => ({
-                    value: d._id,
-                    label: `${d.id_view} - ${d.full_name} - ${d.phone}`,
-                  }))}
-                  placeholder={"Nhập tên hoặc SĐT khách hàng"}
-                />
-              </div>
-
-              <div className="div-flex-column">
-                <p className="fw-500">Địa chỉ</p>
-                <TextArea
-                  placeholder="Nhập địa chỉ"
-                  autoSize={{
-                    minRows: 1,
-                    maxRows: 6,
-                  }}
-                  onChange={(e) => {
-                    handleSearchAddress(e.target.value);
-                    setSelectAddressValueTemp(e.target.value);
-                  }}
-                  value={selectAddressValueTemp}
-                  style={{ fontSize: 12 }}
-                />
-                {isShowAddressSearch &&
-                  listAddress.map((item, index) => {
-                    return (
-                      <div
-                        key={index}
-                        className="item-address"
-                        onClick={() => handleChangeAddress(item)}
-                      >
-                        <p>{item?.address}</p>
-                      </div>
-                    );
-                  })}
-                {selectCustomerValue && newAddressValue && (
-                  <Button
-                    className="button-address"
-                    onClick={handleAddNewAddressCustomer}
-                  >
-                    Thêm địa chỉ mới cho KH
-                  </Button>
-                )}
-              </div>
-
-              <>
-                <div className="div-flex-row">
-                  <p className="fw-500">Địa chỉ mặc định</p>
-                  <Switch
-                    size="small"
-                    value={isShowAddressDefault}
-                    checked={isShowAddressDefault}
-                    onChange={handleChangeAddressDefault}
-                  />
-                </div>
-
-                {isShowAddressDefault &&
-                  listAddressDefault.map((item, index) => {
-                    return (
-                      <div
-                        onClick={() => handleChangeAddress(item?._id)}
-                        className="item-address"
-                        key={index}
-                      >
-                        <p>{item?.address}</p>
-                      </div>
-                    );
-                  })}
-              </>
-
-              <div className="div-flex-column">
-                <p className="fw-500">Dịch vụ</p>
-                <Select
-                  onChange={handleChangeService}
-                  value={selectService}
-                  options={service.map((d) => ({
-                    value: d._id,
-                    label: `${d.title.vi}`,
-                  }))}
-                />
-              </div>
-
-              <div className="div-flex-column">
-                <ServiceComponent
-                  serviceData={serviceData}
-                  changeService={(value) => {
-                    changeService(value);
-                  }}
-                ></ServiceComponent>
-                <DateWorkComponent
-                  serviceData={serviceData}
-                  changeTimeSchedule={setDateWorkSchedule}
-                  setPaymentMethod={setPaymentMethod}
-                  setIsChoicePaymentMethod={setIsChoicePaymentMethod}
-                />
-                {/* -------------------- Phương thức thanh toán (nếu đơn hàng cố định thì không hiển thị mà mặc định là 'point') -------------------- */}
-                <div className="div-flex-column">
-                  <p className="fw-500">Phương thức thanh toán</p>
-                  <Select
-                    onChange={handleChangePaymentMethod}
-                    value={paymentMethod}
-                    options={PAYMENT_METHOD}
-                    disabled={!isChoicePaymentMethod}
-                  />
-                </div>
-                {/* -------------------- Phương thức thanh toán -------------------- */}
-                {/* -------------------- Chọn Cộng Tác Viên ------------------------ */}
-                <div className="div-select-collaborator">
-                  <p className="fw-500">Cộng tác viên</p>
-                  <Select
-                    showSearch
-                    style={{ width: "100%" }}
-                    defaultActiveFirstOption={false}
-                    suffixIcon={null}
-                    filterOption={false}
-                    value={
-                      tempValueCollaborator !== ""
-                        ? tempValueCollaborator
-                        : undefined
-                    }
-                    onSearch={handleSearchCollaborator}
-                    onChange={handleChangeCollaborator}
-                    onFocus={onFocusSelectCollaborator}
-                    onClear={handleOnclearCollaborator}
-                    allowClear={() => <div>xoa</div>}
-                    options={listCollaborator.map((d) => ({
-                      value: d._id,
-                      label: `${d.id_view} - ${d.full_name} - ${d.phone}`,
-                    }))}
-                    placeholder={"Nhập tên hoặc SĐT CTV"}
-                  />
-                </div>
-                <div className="div-list-collaborator_toggle-switch">
-                  <p className="fw-500">Danh sách CTV yêu thích</p>
-                  <Switch
-                    disabled={!selectCustomerValue}
-                    checked={isShowCollaborator}
-                    onChange={() => setIsShowCollaborator(!isShowCollaborator)}
-                  />
-                </div>
-
-                {isShowCollaborator && (
-                  <div className="container-collaborator-by-selectCustomerValue">
-                    <div>
-                      <p className="fw-500">CTV yêu thích</p>
-                      {collaboratorFavourite.map((item, index) => {
-                        return (
-                          <ItemCollaborator
-                            onClick={() => chooseCollaborator(item)}
-                            key={index}
-                            data={item}
-                          />
-                        );
-                      })}
-                    </div>
-                  </div>
-                )}
-              </div>
-              {/* -------------------- Chọn Cộng Tác Viên ------------------------ */}
-              {isShowTipCollaborator && (
-                <div>
-                  <h6>Tip cho ctv</h6>
-                  <InputNumber
-                    placeholder="Nhập số tiền tip cho ctv"
-                    min={0}
-                    max={50000}
-                    value={tipCollaborator}
-                    defaultValue={0}
-                    onChange={onBonusTipCollaborator}
-                    formatter={(value) =>
-                      `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                    }
-                    parser={(value) => value.replace(/\đ\s?|(,*)/g, "")}
-                    style={{ width: 150, marginBottom: 15 }}
-                  />
-                  <div className="create-order_tip">
-                    {arrTipCTV.map((item, index) => {
-                      return (
-                        <div
-                          onClick={() => onBonusTipCollaborator(item.amount)}
-                          key={index}
-                          className={`item-tip-ctv ${
-                            tipCollaborator === item.amount &&
-                            "item-tip-ctv_selected"
-                          } `}
-                        >
-                          <p>{formatMoney(item.amount | 0)}</p>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-              <div className="div-note-collaborator">
-                <p>Ghi chú cho CTV</p>
-                <TextArea
-                  allowClear
-                  rows={4}
-                  value={note}
-                  onChange={(event) => {
-                    setNote(event.target.value);
-                  }}
-                  placeholder="Nhập ghi chú cho CTV (nếu có)"
-                />
-              </div>
-
-              <div className="list-code-promotion-available">
-                {listShowCodePromotion.map((item, index) => (
-                  <div
-                    key={index}
-                    className={`${
-                      selectCodePromotion !== null &&
-                      item?.code === selectCodePromotion
-                        ? "item-selected"
-                        : ""
-                    } item`}
-                    onClick={() => handleChoosePromotion(item?.code)}
-                  >
-                    <p className="title">{item.code}</p>
-                    <p>- {formatMoney(item.discount_max_price | 0)}</p>
-                    <p>
-                      {item?.discount_unit === "amount"
-                        ? "Giảm trực tiếp"
-                        : "Phần trăm"}
-                    </p>
-                  </div>
-                ))}
-              </div>
-              <h6>Chi tiết hoá đơn</h6>
-              <InfoBill
-                data={infoBill}
-                titleService={serviceData?.title?.vi}
-                title={"Thông tin dịch vụ đã chọn"}
-              />
-              <br />
-              <DetailBill
-                code_promotion={resultCodePromotion}
-                event_promotion={listEventPromotion}
-                tip_collaborator={tipCollaborator}
-                service_fee={serviceFee}
-                total_fee={totalFee}
-                final_fee={finalFee}
-                initial_fee={initialFee}
-                platform_fee={platformFee}
-                net_income_collaborator={netIncomeCollaborator}
-                total_date_work={dateWorkSchedule.length}
-                payment_method={paymentMethod === "cash" ? "Tiền mặt" : "G-pay"}
-                date_work_schedule={infoBill?.date_work_schedule}
-              />
-            </div>
-          </div>
-
-          <div className="div-flex-row">
-            <Button
-              onClick={() => {
-                createOrder();
+          <div className="container-create-order__info--container-child">
+            <span className="container-create-order__info--container-child-label">
+              Thông tin địa chỉ
+            </span>
+            <InputTextCustom
+              type="select"
+              value={selectAddressValueTemp}
+              options={
+                isShowAddressDefault
+                  ? formatArray(listAddressDefault, "_id", ["address"])
+                  : isShowAddressSearch
+                  ? formatArray(listAddress, "place_id", ["address"])
+                  : []
+              }
+              placeHolder="Địa chỉ"
+              searchField={true}
+              onChange={(e) => {
+                handleSearchAddress(e.target.value);
+                setSelectAddressValueTemp(e.target.value);
               }}
-            >
-              Đăng việc
-            </Button>
+              setValueSelectedProps={setSelectAddressValueTemp}
+              contentChild={
+                <div className="container-create-order__content-child">
+                  <div className="container-create-order__content-child--default-address">
+                    <span>Địa chỉ mặc định</span>
+                    <Switch
+                      size="small"
+                      value={isShowAddressDefault}
+                      onChange={handleChangeAddressDefault}
+                      checked={isShowAddressDefault}
+                    />
+                  </div>
+                  {selectCustomerValue && newAddressValue && (
+                    <div
+                      onClick={() => handleAddNewAddressCustomer()}
+                      className="container-create-order__content-child--add-address"
+                    >
+                      <div className="container-create-order__content-child--add-address-icon">
+                        <IoAddCircleOutline />
+                      </div>
+                      <span>Thêm địa chỉ mới cho khách hàng</span>
+                    </div>
+                  )}
+                </div>
+              }
+            />
           </div>
         </div>
-        {isLoading && <LoadingPagination />}
-        {/* <ModalCustom
-        title={errorMessage}
-        isOpen={modal}
-        handleCancel={() => setModal(false)}
-        handleOk={() => setModal(false)}
-        textOk="OK"
-      /> */}
-      </React.Fragment>
-      {/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */}
-    </>
+        {/* Loại dịch vụ */}
+        <div className="container-create-order__info--service">
+          <span className="container-create-order__info--service-label">
+            Loại dịch vụ
+          </span>
+          <div className="container-create-order__info--service-container">
+            {service.map((el, index) => (
+              <div
+                onClick={() => setSelectService(el?._id)}
+                className={`container-create-order__info--service-container-child ${
+                  el?._id === selectService && "selected"
+                }`}
+              >
+                <div className="container-create-order__info--service-container-child-icon">
+                  {el?.kind === "giup_viec_co_dinh" ? (
+                    <IoCalendar />
+                  ) : el?.kind === "giup_viec_theo_gio" ? (
+                    <IoTime />
+                  ) : el?.kind === "tong_ve_sinh" ? (
+                    <IoHome />
+                  ) : el?.kind === "phuc_vu_nha_hang" ? (
+                    <IoRestaurant />
+                  ) : el?.kind === "rem_tham_sofa" ? (
+                    <MdChair />
+                  ) : (
+                    <TbAirConditioning />
+                  )}
+                </div>
+                <span className="container-create-order__info--service-container-child-label">
+                  {el?.title?.vi}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+        {/* Thời lượng, dịch vụ, thời lượng, ...*/}
+        <ServiceComponent
+          serviceData={serviceData}
+          changeService={(value) => {
+            changeService(value);
+          }}
+        />
+        {/* Chọn ngày làm, lặp lại theo tuần, ... */}
+        <DateWorkComponent
+          serviceData={serviceData}
+          changeTimeSchedule={setDateWorkSchedule}
+          setPaymentMethod={setPaymentMethod}
+          setIsChoicePaymentMethod={setIsChoicePaymentMethod}
+        />
+        {/* Container chọn phương thức thanh toán và cộng tấc viên */}
+        <div className="container-create-order-flex">
+          {/* Phương thức thanh toán */}
+          <div className="container-create-order__info--paymemnt-method">
+            <span className="container-create-order__info--paymemnt-method-label">
+              Chọn phương thức thanh toán
+            </span>
+            <InputTextCustom
+              type="select"
+              value={paymentMethod}
+              options={formatArray(PAYMENT_METHOD, "value", ["label"])}
+              placeHolder="Phương thức thanh toán"
+              disabled={!isChoicePaymentMethod}
+              setValueSelectedProps={setPaymentMethod}
+            />
+          </div>
+          {/* Chọn công tác viên */}
+          <div className="container-create-order__info-select-collaborator">
+            <div className="container-create-order__info-select-collaborator--label">
+              <span className="container-create-order__info-select-collaborator--label-header">
+                Chọn công tác viên
+              </span>
+              <div className="container-create-order__info-select-collaborator--label-favourite-collaborator">
+                <span>{`( Đối tác yêu thích`}</span>
+                <Switch
+                  size="small"
+                  disabled={!selectCustomerValue}
+                  checked={isShowCollaborator}
+                  onChange={() => setIsShowCollaborator(!isShowCollaborator)}
+                />
+                <span>{`)`}</span>
+              </div>
+            </div>
+            <InputTextCustom
+              type="select"
+              value={collaborator}
+              options={formatArray(listCollaborator, "_id", [
+                "id_view",
+                "full_name",
+                "phone",
+              ])}
+              placeHolder="Công tác viên"
+              searchField={true}
+              onChange={(e) => handleSearchCollaborator(e.target.value)}
+              setValueSelectedProps={setCollaborator}
+            />
+          </div>
+        </div>
+        {/* Danh sách đối tác yêu thích */}
+        {isShowCollaborator && (
+          <div className="container-create-order__info--favorite-collaborator-list">
+            {collaboratorFavourite.map((item, index) => {
+              return (
+                <ItemCollaborator
+                  onClick={() => chooseCollaborator(item)}
+                  key={index}
+                  data={item}
+                  selected={collaborator}
+                />
+              );
+            })}
+          </div>
+        )}
+        {/* Tiền típ */}
+        <div className="container-create-order__info--tip">
+          <div className="container-create-order__info--tip-header">
+            <span className="container-create-order__info--tip-header-label">
+              Tiền tip cho đối tác
+            </span>
+            <div className="container-create-order__info--tip-header-suggest">
+              {listMoneyTipForCollaborator.map((item, index) => (
+                <div
+                  onClick={() => onBonusTipCollaborator(item.amount)}
+                  key={index}
+                  className={`container-create-order__info--tip-header-suggest-child ${
+                    tipCollaborator === item.amount && "selected"
+                  }`}
+                >
+                  <span>{formatMoney(item?.amount) || 0}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          <InputTextCustom
+            type="text"
+            value={tipCollaborator}
+            placeHolder="Tiền tip"
+            isNumber={true}
+            onChange={(e) => setTipCollaborator(e.target.value)}
+          />
+        </div>
+        {/* Ghi chú */}
+        <div className="container-create-order__info--note">
+          <span>Ghi chú cho đối tác</span>
+          <InputTextCustom
+            type="textArea"
+            value={valueNoteForCollaborator}
+            placeHolder="Nhập ghi chú cho đối tác (nếu có)"
+            onChange={(e) => setValueNoteForCollaborator(e.target.value)}
+          />
+          {/* <InputTextCustom
+              type="textArea"
+              value={valuePunishDescribe}
+              placeHolder="Nội dung phạt"
+              onChange={(e) => setValuePunishDescribe(e.target.value)}
+            /> */}
+        </div>
+        {/* Voucher giảm giá */}
+        <div className="container-create-order__info--voucher">
+          <span className="container-create-order__info--voucher-label">
+            Mã khuyến mãi
+          </span>
+          <div className="container-create-order__info--voucher-container">
+            {listShowCodePromotion.map((item, index) => (
+              <div
+                key={index}
+                className={`container-create-order__info--voucher-container-child ${
+                  selectCodePromotion !== null &&
+                  item?.code === selectCodePromotion &&
+                  "selected"
+                }`}
+                onClick={() => handleChoosePromotion(item?.code)}
+              >
+                <span className="container-create-order__info--voucher-container-child-code">
+                  {item.code}
+                </span>
+                <span className="container-create-order__info--voucher-container-child-money">
+                  - {formatMoney(item.discount_max_price | 0)}
+                </span>
+                <span className="container-create-order__info--voucher-container-child-sub-label">
+                  {item?.discount_unit === "amount"
+                    ? "Giảm trực tiếp"
+                    : "Phần trăm"}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+        {/* Đăng việc */}
+        <ButtonCustom
+          label="Đăng việc"
+          // fullScreen={true}
+          onClick={() => handleCreateOrder()}
+        />
+      </div>
+      {/* Container bên phải */}
+      <div className="container-create-order__bill">
+        {/* Chi tiết hóa đơn*/}
+        <div className="container-create-order__bill--detail card-shadow">
+          {/* Header */}
+          <div className="container-create-order__bill--detail-header">
+            <div className="container-create-order__bill--detail-header-tag">
+              <span>Chi tiết hóa đơn</span>
+            </div>
+            <div className="container-create-order__bill--detail-header-options">
+              {/* {listExtend.find(
+                (el) => el._id === "63228cc0c091fbf906916376"
+              ) && (
+                <div className="container-create-order__bill--detail-header-options-note pet">
+                  <span className="container-create-order__bill--detail-header-options-note-icon">
+                    <FaDog />
+                  </span>
+                </div>
+              )}
+              {listExtend.find(
+                (el) => el._id === "63228caac091fbf906916373"
+              ) && (
+                <div className="container-create-order__bill--detail-header-options-note favorite-collaborator ">
+                  <span className="container-create-order__bill--detail-header-options-note-icon">
+                    <IoHeart />
+                  </span>
+                </div>
+              )} */}
+            </div>
+          </div>
+          <div className="container-create-order__bill--detail-label">
+            <span>{serviceData?.title?.vi}</span>
+          </div>
+          {/* Line */}
+          <div className="container-create-order__bill--detail-line">
+            {/* <div className="container-create-order__bill--detail-line-circle left"></div> */}
+            <div className="container-create-order__bill--detail-line-dashed"></div>
+            {/* <div className="container-create-order__bill--detail-line-circle right"></div> */}
+          </div>
+          {/* Content */}
+          <div>
+            <InfoBill
+              data={infoBill}
+              // titleService={serviceData?.title?.vi}
+              title={"Thông tin dịch vụ đã chọn"}
+            />
+          </div>
+        </div>
+        {/* Thông tin bán hàng */}
+        <div className="container-create-order__bill--price card-shadow">
+          {/* Header */}
+          <div className="container-create-order__bill--price-header">
+            <div className="container-create-order__bill--price-header-tag">
+              <div className="container-create-order__bill--price-header-tag-info">
+                <span>Thông tin thanh toán</span>
+              </div>
+              {/* <div
+                onClick={() => setIsDetailBill(!isDetailBill)}
+                className="container-create-order__bill--price-header-tag-detail"
+              >
+                <span>{isDetailBill ? "Ẩn" : "Chi tiết"}</span>
+              </div> */}
+            </div>
+            <div className="container-create-order__bill--price-header-logo">
+              <img src={logoNoBackGroundImage}></img>
+            </div>
+            <div className="container-create-order__bill--price-header-payment-method">
+              <span className="container-create-order__bill--price-header-payment-method-option">
+                Thanh toán bằng{" "}
+                {paymentMethod === "cash" ? "Tiền mặt" : "G-pay"}
+              </span>
+              <span className="container-create-order__bill--price-header-payment-method-time">
+                {moment(new Date()).format("DD MMMM, YYYY, HH:MM")}
+              </span>
+            </div>
+          </div>
+          {/* Line */}
+          <div className="container-create-order__bill--price-line">
+            <div className="container-create-order__bill--price-line-circle left"></div>
+            <div className="container-create-order__bill--price-line-dashed"></div>
+            <div className="container-create-order__bill--price-line-circle right"></div>
+          </div>
+          {/* Content */}
+          <div>
+            <DetailBill
+              code_promotion={resultCodePromotion}
+              event_promotion={listEventPromotion}
+              tip_collaborator={tipCollaborator}
+              service_fee={serviceFee}
+              total_fee={totalFee}
+              final_fee={finalFee}
+              initial_fee={initialFee}
+              platform_fee={platformFee}
+              net_income_collaborator={netIncomeCollaborator}
+              subtotal_fee={valueSubtotalFee}
+              tax={valueTax}
+              net_income={valueNetIncome}
+              total_date_work={dateWorkSchedule.length}
+              // payment_method={paymentMethod === "cash" ? "Tiền mặt" : "G-pay"}
+              date_work_schedule={infoBill?.date_work_schedule}
+              show_detail={isDetailBill}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 
 export default CreateOrder;
-
-const arrTipCTV = [
-  { id: 0, amount: 2000 },
-  { id: 1, amount: 5000 },
-  { id: 2, amount: 10000 },
-  { id: 3, amount: 20000 },
-  { id: 4, amount: 50000 },
-];

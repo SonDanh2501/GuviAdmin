@@ -90,6 +90,8 @@ import { FaRegFrown, FaRegMeh, FaRegSmile, FaDog } from "react-icons/fa";
 import { MdDoubleArrow, MdChair } from "react-icons/md";
 import { TbAirConditioning,TbIroningFilled  } from "react-icons/tb";
 import { PiCookingPotFill } from "react-icons/pi";
+import { FaToolbox } from "react-icons/fa6";
+import { GiVacuumCleaner } from "react-icons/gi";
 
 const icons = {
   IoAlertOutline,
@@ -191,6 +193,10 @@ const icons = {
   TbIroningFilled,
   // Phosphor Icons
   PiCookingPotFill,
+  // Fa Icons
+  FaToolbox,
+  // Gi Icons
+  GiVacuumCleaner,
 };
 
 export default icons;

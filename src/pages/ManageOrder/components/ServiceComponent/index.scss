@@ -45,15 +45,16 @@
     // border: 1px solid $colorLightGray;
     width: fit-content;
     align-items: center;
+    justify-content: center;
     width: 85px;
-    height: 74px;
+    height: 76px;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px 0px, rgba(0, 0, 0, 0.2) 0px 0px 3px 0px;
     cursor: pointer;
     transition: all 0.3s ease-out;
 
     &:hover {
         background-color: $colorLightViolet;
-        box-shadow: rgba(139, 92, 246, 0.5) 0px 0px 10px 0px, rgba(139, 92, 246, 0.7) 0px 0px 3px 0px;
+        // box-shadow: rgba(139, 92, 246, 0.5) 0px 0px 10px 0px, rgba(139, 92, 246, 0.7) 0px 0px 3px 0px;
 
         .service-component__time--select-label {
             color: $colorBlack;
@@ -66,10 +67,11 @@
 
     &.selected {
         background-color: $colorViolet;
-        box-shadow: rgba(139, 92, 246, 0.5) 0px 0px 10px 0px, rgba(139, 92, 246, 0.7) 0px 0px 3px 0px;
+        // box-shadow: rgba(139, 92, 246, 0.5) 0px 0px 10px 0px, rgba(139, 92, 246, 0.7) 0px 0px 3px 0px;
 
         .service-component__time--select-label {
-            color: $colorLightOrange;
+            font-weight: $fontWeightXL;
+            color: $colorWhite;
         }
 
         .service-component__time--select-sub-label {
@@ -79,7 +81,7 @@
 
     .service-component__time--select-label {
         text-align: center;
-        font-weight: $fontWeightXL;
+        font-weight: $fontWeightL;
         font-size: $textFontSizeM;
         color: $colorBlack;
     }
@@ -109,14 +111,14 @@
     width: fit-content;
     align-items: center;
     width: 85px;
-    height: 74px;
+    height: 76px;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px 0px, rgba(0, 0, 0, 0.2) 0px 0px 3px 0px;
     cursor: pointer;
     transition: all 0.3s ease-out;
 
     &:hover {
         background-color: $colorLightViolet;
-        box-shadow: rgba(139, 92, 246, 0.5) 0px 0px 10px 0px, rgba(139, 92, 246, 0.7) 0px 0px 3px 0px;
+        // box-shadow: rgba(139, 92, 246, 0.5) 0px 0px 10px 0px, rgba(139, 92, 246, 0.7) 0px 0px 3px 0px;
 
         .service-component__extra-service--label {
             color: $colorBlack;
@@ -125,24 +127,32 @@
         .service-component__extra-service--sub-label {
             color: $colorLightGray;
         }
+
+        .service-component__extra-service--icon {
+            color: $colorBlack;
+        }
     }
 
     &.selected {
         background-color: $colorViolet;
-        box-shadow: rgba(139, 92, 246, 0.5) 0px 0px 10px 0px, rgba(139, 92, 246, 0.7) 0px 0px 3px 0px;
+        // box-shadow: rgba(139, 92, 246, 0.5) 0px 0px 10px 0px, rgba(139, 92, 246, 0.7) 0px 0px 3px 0px;
 
         .service-component__extra-service--label {
-            color: $colorLightOrange;
+            color: $colorWhite;
         }
 
         .service-component__extra-service--sub-label {
+            color: $colorWhite;
+        }
+
+        .service-component__extra-service--icon {
             color: $colorWhite;
         }
     }
 
     .service-component__extra-service--label {
         text-align: center;
-        font-weight: $fontWeightXL;
+        font-weight: $fontWeightL;
         font-size: $textFontSizeM;
         color: $colorBlack;
     }
@@ -154,9 +164,8 @@
         color: $colorLightGray;
     }
 
-    .service-component__extra-service--image {
-        width: 22px;
-        height: 22px;
+    .service-component__extra-service--icon {
+        font-size: $textFontSize3XL;
         border-radius: $borderRadiusL;
     }
 
@@ -166,6 +175,7 @@
     display: flex;
     gap: $gapM;
     align-items: center;
+
     &.last-item {
         border-left: 1px solid $colorLightGray;
         padding-left: 8px;
@@ -191,5 +201,21 @@
 // Tùy chọn thêm
 .option_toggle_switch {
     display: flex;
+    gap: $gapL;
+}
+
+// Loại hình kinh doanh
+.single_select_horizontal_thumbnail {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    gap: $gapL;
+}
+
+// Vệ sinh rèm thảm sofa
+.multi_select_count_sofa {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
     gap: $gapL;
 }

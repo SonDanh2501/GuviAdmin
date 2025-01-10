@@ -88,7 +88,6 @@
   gap: $gapL;
   height: 100%;
   width: 100%;
-  background-color: transparent;
 
   .container-create-order__info {
     display: flex;
@@ -99,13 +98,24 @@
     background-color: $colorWhite;
     border-radius: $borderRadiusXL;
     padding: 16px;
+    overflow-y: auto;
+    scrollbar-gutter: stable;
 
     .container-create-order__info--container {
       display: flex;
       gap: $gapL;
 
       .container-create-order__info--container-child {
+        display: flex;
+        flex-direction: column;
+        gap: $gapM;
         width: 100%;
+
+        .container-create-order__info--container-child-label {
+          font-size: $textFontSizeM;
+          font-weight: $fontWeightXL;
+          color: $colorBlack;
+        }
       }
     }
 
@@ -135,7 +145,7 @@
           width: fit-content;
           align-items: center;
           width: 85px;
-          height: 74px;
+          height: 76px;
           gap: $gapXS;
           box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px 0px, rgba(0, 0, 0, 0.2) 0px 0px 3px 0px;
           cursor: pointer;
@@ -143,7 +153,7 @@
 
           &:hover {
             background-color: $colorLightViolet;
-            box-shadow: rgba(139, 92, 246, 0.5) 0px 0px 10px 0px, rgba(139, 92, 246, 0.7) 0px 0px 3px 0px;
+            // box-shadow: rgba(139, 92, 246, 0.5) 0px 0px 10px 0px, rgba(139, 92, 246, 0.7) 0px 0px 3px 0px;
 
             .container-create-order__info--service-container-child-icon {
               color: $colorBlack;
@@ -156,10 +166,10 @@
 
           &.selected {
             background-color: $colorViolet;
-            box-shadow: rgba(139, 92, 246, 0.5) 0px 0px 10px 0px, rgba(139, 92, 246, 0.7) 0px 0px 3px 0px;
+            // box-shadow: rgba(139, 92, 246, 0.5) 0px 0px 10px 0px, rgba(139, 92, 246, 0.7) 0px 0px 3px 0px;
 
             .container-create-order__info--service-container-child-icon {
-              color: $colorLightOrange;
+              color: $colorWhite;
             }
 
             .container-create-order__info--service-container-child-label {
@@ -216,7 +226,7 @@
 
           &:hover {
             background-color: $colorViolet;
-            box-shadow: rgba(139, 92, 246, 0.5) 0px 0px 10px 0px, rgba(139, 92, 246, 0.7) 0px 0px 3px 0px;
+            // box-shadow: rgba(139, 92, 246, 0.5) 0px 0px 10px 0px, rgba(139, 92, 246, 0.7) 0px 0px 3px 0px;
 
             .container-create-order__info--time-container-child-icon {
               color: $colorWhite;
@@ -229,7 +239,7 @@
 
           &.selected {
             background-color: $colorViolet;
-            box-shadow: rgba(139, 92, 246, 0.5) 0px 0px 10px 0px, rgba(139, 92, 246, 0.7) 0px 0px 3px 0px;
+            // box-shadow: rgba(139, 92, 246, 0.5) 0px 0px 10px 0px, rgba(139, 92, 246, 0.7) 0px 0px 3px 0px;
 
             .container-create-order__info--time-container-child-icon {
               color: $colorWhite;
@@ -256,12 +266,213 @@
         }
       }
     }
+
+    .container-create-order__info--paymemnt-method {
+      display: flex;
+      width: 100%;
+      flex-direction: column;
+      gap: $gapM;
+
+      .container-create-order__info--paymemnt-method-label {
+        font-size: $textFontSizeM;
+        font-weight: $fontWeightXL;
+      }
+    }
+
+    .container-create-order__info-select-collaborator {
+      display: flex;
+      width: 100%;
+      flex-direction: column;
+      gap: $gapM;
+
+      .container-create-order__info-select-collaborator--label {
+        display: flex;
+        align-items: center;
+        gap: $gapS;
+
+        .container-create-order__info-select-collaborator--label-header {
+          font-size: $textFontSizeM;
+          font-weight: $fontWeightXL;
+          color: $colorBlack;
+        }
+
+        .container-create-order__info-select-collaborator--label-favourite-collaborator {
+          display: flex;
+          align-items: center;
+          gap: $gapXS;
+
+          span {
+            font-size: $textFontSizeM;
+            font-weight: $fontWeightL;
+            color: $colorLightGray;
+          }
+        }
+      }
+    }
+
+    .container-create-order__info--favorite-collaborator-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: $gapL;
+    }
+
+    .container-create-order__info--tip {
+      display: flex;
+      flex-direction: column;
+      gap: $gapM;
+
+      .container-create-order__info--tip-header {
+        display: flex;
+        gap: $gapM;
+        align-items: center;
+
+        .container-create-order__info--tip-header-label {
+          font-size: $textFontSizeM;
+          font-weight: $fontWeightXL;
+          color: $colorBlack;
+        }
+
+        .container-create-order__info--tip-header-suggest {
+          display: flex;
+          gap: $gapM;
+
+          .container-create-order__info--tip-header-suggest-child {
+            padding: 4px 8px;
+            border: 1px solid $colorLightGray;
+            border-radius: $borderRadiusL;
+            background-color: $colorWhite;
+            transition: all 0.3s ease-out;
+            cursor: pointer;
+
+            &.selected {
+              border-color: $colorViolet;
+              background-color: $colorViolet;
+              // box-shadow: rgba(139, 92, 246, 0.5) 0px 0px 10px 0px, rgba(139, 92, 246, 0.7) 0px 0px 3px 0px;
+
+              span {
+                color: $colorWhite;
+                font-weight: $fontWeightXL;
+              }
+            }
+
+            span {
+              font-size: $textFontSizeM;
+              font-weight: $fontWeightL;
+              color: $colorBlack;
+            }
+
+            &:hover {
+              border-color: $colorViolet;
+              background-color: $colorViolet;
+
+              span {
+                color: $colorWhite;
+              }
+            }
+          }
+        }
+      }
+
+    }
+
+    .container-create-order__info--note {
+      display: flex;
+      flex-direction: column;
+      gap: $gapM;
+
+      span {
+        font-size: $textFontSizeM;
+        font-weight: $fontWeightXL;
+        color: $colorBlack;
+      }
+    }
+
+    .container-create-order__info--voucher {
+      display: flex;
+      flex-direction: column;
+      gap: $gapM;
+
+      .container-create-order__info--voucher-label {
+        font-size: $fontWeightL;
+        font-weight: $fontWeightXL;
+        color: $colorBlack;
+      }
+
+      .container-create-order__info--voucher-container {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: $gapL;
+
+        .container-create-order__info--voucher-container-child {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          border: 1px solid $colorViolet;
+          border-radius: $borderRadiusL;
+          background-color: $colorWhite;
+          padding: 4px 8px;
+          transition: all 0.3s ease-out;
+          cursor: pointer;
+
+          .container-create-order__info--voucher-container-child-code {
+            font-size: $textFontSizeM;
+            font-weight: $fontWeightXL;
+            color: $colorOrange;
+          }
+
+          .container-create-order__info--voucher-container-child-money {
+            font-size: $textFontSizeM;
+            font-weight: $fontWeightXL;
+            color: $colorBlack;
+          }
+
+          .container-create-order__info--voucher-container-child-sub-label {
+            font-size: $textFontSizeM;
+            font-weight: $fontWeightL;
+            color: $colorLightGray;
+          }
+
+          &:hover {
+            background-color: $colorViolet;
+
+            .container-create-order__info--voucher-container-child-code {
+              color: $colorWhite;
+            }
+
+            .container-create-order__info--voucher-container-child-money {
+              color: $colorWhite;
+            }
+
+            .container-create-order__info--voucher-container-child-sub-label {
+              color: $colorWhite;
+            }
+          }
+
+          &.selected {
+            background-color: $colorViolet;
+
+            .container-create-order__info--voucher-container-child-code {
+              color: $colorWhite;
+            }
+
+            .container-create-order__info--voucher-container-child-money {
+              color: $colorWhite;
+            }
+
+            .container-create-order__info--voucher-container-child-sub-label {
+              color: $colorWhite;
+            }
+          }
+        }
+      }
+
+    }
   }
 
   .container-create-order__bill {
-    height: fit-content;
+    height: 100%;
     width: 35%;
-    background-color: transparent;
     border-radius: $borderRadiusXL;
     display: flex;
     flex-direction: column;
@@ -281,20 +492,42 @@
         flex-direction: column;
         gap: $gapL;
 
-        .container-create-order__bill--price-header-tag {
-          background-color: $colorViolet;
-          width: fit-content;
-          height: fit-content;
-          border-bottom-right-radius: 20px;
-          border-top-left-radius: 16px;
-          padding: 4px 12px 4px 8px;
+        .container-create-order__bill--price-header-tag  {
+          display: flex;
+          justify-content: space-between;
 
-          span {
-            font-size: $textFontSizeM;
-            font-weight: $fontWeightXL;
-            color: $colorWhite;
+          .container-create-order__bill--price-header-tag-info {
+            background-color: $colorViolet;
+            width: fit-content;
+            height: fit-content;
+            border-bottom-right-radius: 20px;
+            border-top-left-radius: 16px;
+            padding: 4px 12px 4px 8px;
+  
+            span {
+              font-size: $textFontSizeM;
+              font-weight: $fontWeightXL;
+              color: $colorWhite;
+            }
+          }
+
+          .container-create-order__bill--price-header-tag-detail {
+            background-color: $colorExtraLightGray;
+            width: fit-content;
+            height: fit-content;
+            border-bottom-left-radius: 20px;
+            border-top-right-radius: 16px;
+            padding: 4px 12px 4px 12px;
+            cursor: pointer;
+
+            span {
+              font-size: $textFontSizeM;
+              font-weight: $fontWeightL;
+              color: $colorLightGray;
+            }
           }
         }
+
 
         .container-create-order__bill--price-header-logo {
           position: absolute;
@@ -372,11 +605,13 @@
           }
         }
       }
+
     }
 
     .container-create-order__bill--detail {
       width: 100%;
       height: fit-content;
+
       border-radius: $borderRadiusXL;
       background-color: $colorWhite;
 
@@ -536,4 +771,33 @@
       color: $colorViolet;
     }
   }
+}
+
+.container-create-order-flex {
+  display: flex;
+  width: 100%;
+  gap: $gapL;
+}
+
+// Thanh scroll-bar
+.container-create-order__info::-webkit-scrollbar {
+  width: 0.7em;
+}
+
+.container-create-order__info::-webkit-scrollbar-track {
+  background-color: transparent;
+  margin-block: 2em;
+  border-radius: 8px;
+}
+
+.container-create-order__info::-webkit-scrollbar-thumb {
+  // border-radius: $borderRadiusFull;
+  border-top-left-radius: $borderRadiusFull;
+  border-bottom-left-radius: $borderRadiusFull;
+  border-right: 4px white solid;
+  background-color: $colorExtraLightGray;
+}
+
+.container-create-order__info::-webkit-scrollbar-thumb:hover {
+  background-color: $colorMoreLightGray;
 }
