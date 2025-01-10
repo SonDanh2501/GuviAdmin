@@ -1227,8 +1227,8 @@ const Information = ({ data, idCTV, setData, id }) => {
                         ? formatArray(
                             dataCollaborator,
                             "_id",
-                            "full_name",
-                            "phone"
+                            ["full_name",
+                            "phone"]
                           )
                         : []
                     }

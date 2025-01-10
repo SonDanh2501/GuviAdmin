@@ -1487,7 +1487,8 @@ const DataTable = (props) => {
               reward: "Thưởng",
               punish: "Phạt",
               pay_service: "Thanh toán dịch vụ",
-              withdraw_affiliate: "Phiếu chi affiliate"
+              withdraw_affiliate: "Affiliate",
+              order_payment: "Phiếu thu", 
             };
             const type_transfer = typeTransferMap[data?.type_transfer] || "";
             return (

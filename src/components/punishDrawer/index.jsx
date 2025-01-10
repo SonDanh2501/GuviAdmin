@@ -220,11 +220,6 @@ const PunishDrawer = (props) => {
   useEffect(() => {
     fetchPunishPolicyList();
   }, []);
-  useEffect(() => {
-    if (valueCollaboratorSearch) {
-      handleSearchCollaborator(valueCollaboratorSearch);
-    }
-  }, [valueCollaboratorSearch]);
   /* ~~~ Main ~~~ */
   return (
     <div>
@@ -276,17 +271,16 @@ const PunishDrawer = (props) => {
               value={valueCollaborator}
               options={
                 valueListCollaborator
-                  ? formatArray(
-                      valueListCollaborator,
-                      "_id",
+                  ? formatArray(valueListCollaborator, "_id", [
                       "full_name",
-                      "phone"
-                    )
+                      "phone",
+                    ])
                   : []
               }
               placeHolder="Đối tác"
               searchField={true}
               setSearchValue={setValueCollaboratorSearch}
+              onChange={(e) => handleSearchCollaborator(e.target.value)}
               setValueSelectedProps={setValueCollaborator}
             />
           </div>
@@ -296,7 +290,7 @@ const PunishDrawer = (props) => {
               value={valueReasonPunish}
               options={
                 valueReasonPunishList
-                  ? formatArray(valueReasonPunishList, "_id", "label")
+                  ? formatArray(valueReasonPunishList, "_id", ["label"])
                   : []
               }
               placeHolder="Lý do phạt"

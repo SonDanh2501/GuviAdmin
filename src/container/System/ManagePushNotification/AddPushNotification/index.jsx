@@ -471,7 +471,7 @@ const AddPushNotification = ( props) => {
                 disable={listCustomers?.length > 0 ? true : false}
                 value={groupCustomer}
                 multiSelectOptions={
-                  options ? formatArray(options, "value", "label") : []
+                  options ? formatArray(options, "value", ["label"]) : []
                 }
                 placeHolder="Nhóm khách hàng"
                 limitShows={2}

@@ -206,6 +206,7 @@ const ManageTopUpWithdraw = (props) => {
     { code: "", label: "Tất cả" },
     { code: "withdraw", label: "Phiếu chi" },
     { code: "top_up", label: "Phiếu thu" },
+    { code: "order_payment", label: "Phiếu thu VNPAY" },
   ];
   // 4. Danh sách các loại phương thức thanh toán
   const paymentMethodList = [
@@ -521,7 +522,6 @@ const ManageTopUpWithdraw = (props) => {
   /* ~~~ Use effect ~~~ */
   // 1. Fetch dữ liệu bảng
   useEffect(() => {
-    console.log("check object >>>", object);
     if (startDate !== "" && endDate !== "") {
       if (object !== "affiliate") {
         fetchData();
