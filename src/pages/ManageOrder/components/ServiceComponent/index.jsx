@@ -14,10 +14,6 @@ import moment from "moment";
 import { TYPE_VIEW_OPTIONAL_SERVICE } from "../../../../@core/constant/service.constant.js";
 import "./index.scss";
 import { formatMoney } from "../../../../helper/formatMoney.js";
-import laundryServiceImage from "../../../../assets/images/laundryService.svg";
-import cookingServiceImage from "../../../../assets/images/cookingService.svg";
-import vacuumingServiceImage from "../../../../assets/images/vacuumingService.svg";
-import bringToolServiceImage from "../../../../assets/images/bringToolService.svg";
 import icons from "../../../../utils/icons.js";
 
 const { TbIroningFilled, PiCookingPotFill, FaToolbox, GiVacuumCleaner } = icons;

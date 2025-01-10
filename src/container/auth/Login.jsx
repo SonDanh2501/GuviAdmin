@@ -3,7 +3,7 @@ import { useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import login from "../../assets/images/login.png";
-import logo from "../../assets/images/logo.jpg";
+import logo from "../../assets/images/Logo.svg";
 import { loginAction } from "../../redux/actions/auth";
 import { loadingAction } from "../../redux/actions/loading";
 import "./Login.scss";
