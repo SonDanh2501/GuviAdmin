@@ -15,7 +15,6 @@ import {
 } from "react-share";
 import appleStoreImage from "../../../../assets/images/apple_store.svg";
 import chStoreImage from "../../../../assets/images/google_play.svg";
-import appScreenImage from "../../../../assets/images/app_screen.png";
 import copyRightImage from "../../../../assets/images/copy_right.png";
 import affiliateLogo from "../../../../assets/images/affiliate_guide.svg";
 import {
