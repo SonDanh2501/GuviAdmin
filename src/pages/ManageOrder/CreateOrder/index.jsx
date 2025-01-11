@@ -38,6 +38,8 @@ import {
   Switch,
   InputNumber,
   message,
+  Tooltip,
+  Modal,
 } from "antd";
 import circleLogoImage from "../../../assets/images/Logo.svg";
 import logoNoBackGroundImage from "../../../assets/images/logoNoBackGround.svg";
@@ -66,6 +68,7 @@ import InputTextCustom from "../../../components/inputCustom/index.jsx";
 import _, { filter } from "lodash";
 import { formatArray } from "../../../utils/contant.js";
 import ButtonCustom from "../../../components/button/index.jsx";
+import { loadingAction } from "../../../redux/actions/loading.js";
 
 var AES = require("crypto-js/aes");
 const { TextArea } = Input;
@@ -80,9 +83,11 @@ const {
   MdChair,
   IoRestaurant,
   TbAirConditioning,
+  IoHelpCircleOutline,
 } = icons;
 
 const CreateOrder = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const service = useSelector(getService);
   /* ~~~ Value ~~~ */
@@ -105,7 +110,6 @@ const CreateOrder = () => {
   const [netIncomeCollaborator, setNetIncomeCollaborator] = useState(0);
   const [platformFee, setPlatformFee] = useState(0);
   const [totalDiscount, setTotalDiscount] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
   const [collaboratorFavourite, setCollaboratorFavourite] = useState([]);
   const [collaboratorBlock, setCollaboratorBlock] = useState([]);
   const [total, setTotal] = useState({
@@ -303,9 +307,9 @@ const CreateOrder = () => {
   // Hàm tạo đơn
   const handleCreateOrder = async () => {
     try {
-      setIsLoading(true);
+      dispatch(loadingAction.loadingRequest(true));
       const res = await createOrderApi(payloadOrder);
-      setIsLoading(false);
+      dispatch(loadingAction.loadingRequest(false));
       navigate("/group-order/manage-order");
       successNotify({
         message: "Tạo đơn hàng thành công",
@@ -316,6 +320,73 @@ const CreateOrder = () => {
       });
     }
   };
+  // Hàm tính toán tiền của đơn hàng
+  // const calculateFeeGroupOrder = async (payload) => {
+  //   getCalculateFeeApi(payload)
+  //     .then((res) => {
+  //       // console.log("ress caculate ", res);
+  // setListEventPromotion(res?.event_promotion);
+  // setResultCodePromotion(res?.code_promotion);
+  // setTotalFee(res?.total_fee);
+  // setInitialFee(res?.initial_fee);
+  // setFinalFee(res?.final_fee);
+  // setTipCollaborator(res?.tip_collaborator);
+  // setInfoBill({
+  //   info: res,
+  //   date_work_schedule: res?.date_work_schedule,
+  // });
+  // setValueSubTotalFee(res?.subtotal_fee);
+  // setValueNetIncome(res?.net_income);
+  // setValueTax(res?.value_added_tax);
+  // // ------------------------- tính giá trị service fee--------------------------------------- //
+  // let _service_fee = 0;
+  // res?.service_fee?.map((item) => {
+  //   _service_fee += item?.fee;
+  // });
+  // setServiceFee(_service_fee);
+  // })
+  //     .catch((err) => {
+  //       console.log("err ", err);
+        // if (err?.field === "code_promotion") {
+        //   setSelectCodePromotion(null);
+        // }
+  //       errorNotify({
+  //         message: err?.message,
+  //       });
+  //     });
+  // };
+  const calculateFeeGroupOrder = async (payload) => {
+    try {
+      console.log("check running");
+      const res = await getCalculateFeeApi(payload);
+      setListEventPromotion(res?.event_promotion);
+      setResultCodePromotion(res?.code_promotion);
+      setTotalFee(res?.total_fee);
+      setInitialFee(res?.initial_fee);
+      setFinalFee(res?.final_fee);
+      setTipCollaborator(res?.tip_collaborator);
+      setInfoBill({
+        info: res,
+        date_work_schedule: res?.date_work_schedule,
+      });
+      setValueSubTotalFee(res?.subtotal_fee);
+      setValueNetIncome(res?.net_income);
+      setValueTax(res?.value_added_tax);
+      let _service_fee = 0;
+      res?.service_fee?.map((item) => {
+        _service_fee += item?.fee;
+      });
+      setServiceFee(_service_fee);
+    } catch (err) {
+      errorMessage({
+        message: err?.message || err,
+      });
+      if (err?.field === "code_promotion") {
+        setSelectCodePromotion(null);
+      }
+    }
+  };
+
   /* ~~~ Use effect ~~~ */
   useEffect(() => {
     if (selectService !== null) {
@@ -541,41 +612,6 @@ const CreateOrder = () => {
     setListExtend(temp);
   };
 
-  const calculateFeeGroupOrder = (payload) => {
-    getCalculateFeeApi(payload)
-      .then((res) => {
-        // console.log("ress caculate ", res);
-        setListEventPromotion(res?.event_promotion);
-        setResultCodePromotion(res?.code_promotion);
-        setTotalFee(res?.total_fee);
-        setInitialFee(res?.initial_fee);
-        setFinalFee(res?.final_fee);
-        setTipCollaborator(res?.tip_collaborator);
-        setInfoBill({
-          info: res,
-          date_work_schedule: res?.date_work_schedule,
-        });
-        setValueSubTotalFee(res?.subtotal_fee);
-        setValueNetIncome(res?.net_income);
-        setValueTax(res?.value_added_tax);
-        // ------------------------- tính giá trị service fee--------------------------------------- //
-        let _service_fee = 0;
-        res?.service_fee?.map((item) => {
-          _service_fee += item?.fee;
-        });
-        setServiceFee(_service_fee);
-      })
-      .catch((err) => {
-        console.log("err ", err);
-        if (err?.field === "code_promotion") {
-          setSelectCodePromotion(null);
-        }
-        errorNotify({
-          message: err?.message,
-        });
-      });
-  };
-
   const chooseCollaborator = (collaborator) => {
     setListCollaborator([collaborator]);
     setCollaborator(collaborator._id);
@@ -607,6 +643,7 @@ const CreateOrder = () => {
   };
 
   /* ~~~ Main ~~~ */
+  console.log("check infoBill >>>", infoBill);
   return (
     <div className="container-create-order">
       {/* Container bên trái */}
@@ -630,7 +667,7 @@ const CreateOrder = () => {
               }
               placeHolder="Khách hàng"
               searchField={true}
-              onChange={(e) => handleSearchCustomer(e.target.value)}
+              onChange={handleSearchCustomer}
               setValueSelectedProps={setSelectCustomerValue}
             />
           </div>
@@ -642,19 +679,21 @@ const CreateOrder = () => {
               type="select"
               value={selectAddressValueTemp}
               options={
-                isShowAddressDefault
+                isShowAddressDefault && listAddressDefault.length > 0
                   ? formatArray(listAddressDefault, "_id", ["address"])
-                  : isShowAddressSearch
+                  : isShowAddressSearch && listAddress.length > 0
                   ? formatArray(listAddress, "place_id", ["address"])
                   : []
               }
               placeHolder="Địa chỉ"
               searchField={true}
-              onChange={(e) => {
-                handleSearchAddress(e.target.value);
-                setSelectAddressValueTemp(e.target.value);
-              }}
+              onChange={handleSearchAddress}
+              // onChange={(e) => {
+              //   handleSearchAddress(e.target.value);
+              //   setSelectAddressValueTemp(e.target.value);
+              // }}
               setValueSelectedProps={setSelectAddressValueTemp}
+              related={listAddressDefault.length > 0 ? true : false}
               contentChild={
                 <div className="container-create-order__content-child">
                   <div className="container-create-order__content-child--default-address">
@@ -687,7 +726,7 @@ const CreateOrder = () => {
           <span className="container-create-order__info--service-label">
             Loại dịch vụ
           </span>
-          <div className="container-create-order__info--service-container">
+          {/* <div className="container-create-order__info--service-container">
             {service.map((el, index) => (
               <div
                 onClick={() => setSelectService(el?._id)}
@@ -715,7 +754,14 @@ const CreateOrder = () => {
                 </span>
               </div>
             ))}
-          </div>
+          </div> */}
+          <InputTextCustom
+            type="select"
+            value={selectService}
+            placeHolder="Dịch vụ"
+            options={formatArray(service, "_id", ["title"], ["vi"])}
+            setValueSelectedProps={setSelectService}
+          />
         </div>
         {/* Thời lượng, dịch vụ, thời lượng, ...*/}
         <ServiceComponent
@@ -774,7 +820,7 @@ const CreateOrder = () => {
               ])}
               placeHolder="Công tác viên"
               searchField={true}
-              onChange={(e) => handleSearchCollaborator(e.target.value)}
+              onChange={handleSearchCollaborator}
               setValueSelectedProps={setCollaborator}
             />
           </div>
@@ -874,6 +920,14 @@ const CreateOrder = () => {
           label="Đăng việc"
           // fullScreen={true}
           onClick={() => handleCreateOrder()}
+          disable={
+            serviceData !== null &&
+            selectCustomerValue !== null &&
+            dateWorkSchedule.length > 0 &&
+            valueAddrressEncode !== null
+              ? false
+              : true
+          }
         />
       </div>
       {/* Container bên phải */}
@@ -936,7 +990,11 @@ const CreateOrder = () => {
                 onClick={() => setIsDetailBill(!isDetailBill)}
                 className="container-create-order__bill--price-header-tag-detail"
               >
-                <span>{isDetailBill ? "Ẩn" : "Chi tiết"}</span>
+                <Tooltip title="Chi tiết hóa đơn" trigger="hover">
+                  <span>
+                    <IoHelpCircleOutline />
+                  </span>
+                </Tooltip>
               </div> */}
             </div>
             <div className="container-create-order__bill--price-header-logo">

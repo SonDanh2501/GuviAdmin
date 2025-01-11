@@ -512,7 +512,7 @@
           }
 
           .container-create-order__bill--price-header-tag-detail {
-            background-color: $colorExtraLightGray;
+            background-color: $colorMoreLightGray;
             width: fit-content;
             height: fit-content;
             border-bottom-left-radius: 20px;
@@ -521,9 +521,9 @@
             cursor: pointer;
 
             span {
-              font-size: $textFontSizeM;
+              font-size: $textFontSizeXL;
               font-weight: $fontWeightL;
-              color: $colorLightGray;
+              color: $colorBlack;
             }
           }
         }

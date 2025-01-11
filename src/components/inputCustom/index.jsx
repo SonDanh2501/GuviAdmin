@@ -65,7 +65,9 @@ const InputTextCustom = (props) => {
     describe, // Giá trị mô tả hỗ trợ
     isNumber, // Giá trị format lại text nếu là số
     contentChild, // Giá trị những phần tử bên ngoài để hiển thị thêm
+    related, // Giá trị liên quan để mở 
   } = props;
+
   // Lấy district (quận/huyện) từ giá trị province có được
   const tempDistrictArray = province?.find(
     (el) => el?.code === value
@@ -82,6 +84,7 @@ const InputTextCustom = (props) => {
   const [open, setOpen] = useState(false);
   const [hideImage, setHideImage] = useState(false);
   const [selectArea, setSelectArea] = useState("");
+  const [valueSearch, setValueSearch] = useState("");
 
   // ~~~ Support Handle fucntion ~~~
   // 1. Hàm đóng Popover
@@ -692,7 +695,25 @@ const InputTextCustom = (props) => {
       setSearchValue(searchInput);
     }
   }, [searchInput]);
-
+  // 5. Tự mở content nếu có giá trị search
+  useEffect(() => {
+    if (
+      type === "select" &&
+      searchField === true &&
+      valueSearch.trim() !== "" &&
+      valueSearch !== undefined
+    ) {
+      setOpen(true);
+    }
+    else {
+      setOpen(false)
+    }
+  },[valueSearch])
+  useEffect(() => {
+    if (type === "select" && searchField === true && related === true) {
+      setOpen(true);
+    }
+  }, [related]);
   return (
     <div className="input-custom" ref={refContainer}>
       {/* Input Field  */}
@@ -878,13 +899,15 @@ const InputTextCustom = (props) => {
                 style={{ cursor: "pointer" }}
                 placeholder=" "
                 value={
-                  // options?.find((el) => el.code === value)?.name &&
-                  // options?.find((el) => el.code === value)?.name !== "unknow"
-                  options?.find((el) => el.code === value)?.label ||
-                  options?.find((el) => el.code === value)?.name
+                  typeof options?.find((el) => el.code === value)?.label === 'string'
+                    ? options?.find((el) => el.code === value)?.label
+                    : options?.find((el) => el.code === value)?.name
                 }
                 readOnly={searchField ? false : true}
-                onChange={onChange}
+                onChange={(e) => {
+                  onChange(e.target.value);
+                  setValueSearch(e.target.value);
+                }}
               />
               <label htmlFor=" " className="input-custom__label">
                 {placeHolder}
