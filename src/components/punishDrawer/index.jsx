@@ -280,7 +280,7 @@ const PunishDrawer = (props) => {
               placeHolder="Đối tác"
               searchField={true}
               setSearchValue={setValueCollaboratorSearch}
-              onChange={(e) => handleSearchCollaborator(e.target.value)}
+              onChange={handleSearchCollaborator}
               setValueSelectedProps={setValueCollaborator}
             />
           </div>
@@ -317,7 +317,7 @@ const PunishDrawer = (props) => {
               }
               placeHolder="Ca làm liên quan"
               searchField={true}
-              onChange={(e) => handleSearchOrder(e.target.value)}
+              onChange={ handleSearchOrder}
               setValueSelectedProps={setValueOrder}
             />
           </div>

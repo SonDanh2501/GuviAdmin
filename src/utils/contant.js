@@ -582,9 +582,15 @@ export const formatArray = (array, code, labelList, indexList) => {
         ? labelList
             .map((key, idx) => {
               if (Array.isArray(item[key])) {
+                // Trường hợp là mảng
                 return indexList[idx] !== undefined
                   ? item[key][indexList[idx]]
                   : item[key][0];
+              } else if (typeof item[key] === "object") {
+                // Trường hợp là object
+                return indexList[idx] !== undefined
+                  ? item[key][indexList[idx]]
+                  : item[key];
               }
               return item[key];
             })
@@ -594,6 +600,7 @@ export const formatArray = (array, code, labelList, indexList) => {
   });
   return updatedArray;
 };
+
 /* 6. Hàm so sánh hai mốc thời gian */
 export const compareDateIsBefore = (firstDate, secondDate) => { 
   const date1 = moment(firstDate)

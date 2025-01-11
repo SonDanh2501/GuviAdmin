@@ -17,6 +17,9 @@
         justify-content: space-between;
 
         .detail-bill-container__child--label {
+            display: flex;
+            gap: $gapXS;
+            align-items: center;
             font-size: $textFontSizeM;
             font-weight: $fontWeightXL;
             color: $colorBlack;
@@ -48,6 +51,7 @@
             }
 
             &.detail {
+                font-size: $textFontSizeXL;
                 cursor: pointer;
                 color: $colorLightGray
             }
@@ -190,7 +194,7 @@
         border-radius: $borderRadiusXL;
         padding: 16px;
         gap: $gapS;
-        max-height: 340px;
+        max-height: 307px;
         overflow-y: auto;
 
         .detail-bill-container__child {
