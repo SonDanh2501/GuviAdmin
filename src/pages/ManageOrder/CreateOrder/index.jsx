@@ -357,7 +357,6 @@ const CreateOrder = () => {
   // };
   const calculateFeeGroupOrder = async (payload) => {
     try {
-      console.log("check running");
       const res = await getCalculateFeeApi(payload);
       setListEventPromotion(res?.event_promotion);
       setResultCodePromotion(res?.code_promotion);
@@ -643,7 +642,6 @@ const CreateOrder = () => {
   };
 
   /* ~~~ Main ~~~ */
-  console.log("check infoBill >>>", infoBill);
   return (
     <div className="container-create-order">
       {/* Container bên trái */}
