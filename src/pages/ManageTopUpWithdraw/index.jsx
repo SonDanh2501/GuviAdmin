@@ -213,8 +213,11 @@ const ManageTopUpWithdraw = (props) => {
     { code: "", label: "Tất cả" },
     { code: "bank", label: "Chuyển khoản" },
     { code: "momo", label: "MoMo" },
-    { code: "vnpay", label: "VN Pay" },
     { code: "viettel_money", label: "Viettel Money" },
+    { code: "vnpay", label: "VNPAY-QR" },
+    { code: "vnbank", label: "VNPAY-ATM" },
+    { code: "intcard", label: "Thẻ quốc tế" },
+
   ];
   // 5. Danh sách các loại ví
   const walletTypeList = [
