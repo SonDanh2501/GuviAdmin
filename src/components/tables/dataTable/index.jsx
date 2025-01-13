@@ -1391,7 +1391,7 @@ const DataTable = (props) => {
               //   <span className="case__normal-text--label"> {dataView}</span>
               // </div>
             );
- 
+
             // return <p className={`${item?.fontSize}`}> {dataView}</p>;
             break;
           }
@@ -1488,14 +1488,20 @@ const DataTable = (props) => {
               punish: "Phạt",
               pay_service: "Thanh toán dịch vụ",
               withdraw_affiliate: "Affiliate",
-              order_payment: "Phiếu thu", 
+              order_payment: "Phiếu thu",
             };
             const type_transfer = typeTransferMap[data?.type_transfer] || "";
             return (
               <div className="case__transfer-type-transfer">
                 <span
                   className={`case__transfer-type-transfer--text ${
-                    data?.type_transfer === "withdraw" ? "withdraw" : data?.type_transfer === "top_up" ? "top-up" : "other"
+                    data?.type_transfer === "withdraw"
+                      ? "withdraw"
+                      : data?.type_transfer === "top_up"
+                      ? "top-up"
+                      : data?.type_transfer === "order_payment"
+                      ? "top-up"
+                      : "other"
                   }`}
                 >
                   {type_transfer}
@@ -1657,9 +1663,6 @@ const DataTable = (props) => {
               case "momo":
                 _payment_out = "Ví MoMo";
                 break;
-              case "vnpay":
-                _payment_out = "Ví VNPAY";
-                break;
               case "viettel_pay":
                 _payment_out = "Viettel Pay";
                 break;
@@ -1677,6 +1680,15 @@ const DataTable = (props) => {
                 break;
               case "bank":
                 _payment_out = "Chuyển khoản NH";
+                break;
+              case "intcard":
+                _payment_out = "Thẻ quốc tế";
+                break;
+              case "vnbank":
+                _payment_out = "VNPAY-ATM";
+                break;
+              case "vnpay":
+                _payment_out = "VNPAY-QR";
                 break;
               default:
                 break;
@@ -2193,7 +2205,11 @@ const DataTable = (props) => {
           }
           case "end_date_promotion": {
             return (
-             <div className={`case__date-create ${item.position === "center" && "center"}`}>
+              <div
+                className={`case__date-create ${
+                  item.position === "center" && "center"
+                }`}
+              >
                 {data?.is_limit_date ? (
                   <>
                     <span className="case__date-create-date">
