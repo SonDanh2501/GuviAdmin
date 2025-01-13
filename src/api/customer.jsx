@@ -23,7 +23,10 @@ export const getInviteCustomerById = (id, start, length) => {
 };
 
 export const createCustomer = (payload) => {
-  return axiosClient.post("/admin/customer_manager/create_item", payload);
+  return axiosClient.post(
+    "api/admin/customer_manager/create_new_customer",
+    payload
+  );
 };
 export const updateCustomer = (id, payload) => {
   return axiosClient.post(

@@ -12,15 +12,14 @@ import icons from "../../../utils/icons";
 const { IoAddCircleOutline, IoCalendarOutline, IoHelpCircleOutline } = icons;
 
 const RangeDatePicker = (props) => {
+  const timeTemp = new Date(2000, 0, 1);
+  const timeEndTemp = new Date();
   const { width } = useWindowDimensions();
   const lang = useSelector(getLanguageState);
   const {
-    startDateProps,
-    endDateProps,
     setStartDate,
     setEndDate,
     rangeDateDefaults,
-    rangeDatePrevious,
     disableFutureDay,
     isRight,
   } = props;
@@ -35,7 +34,7 @@ const RangeDatePicker = (props) => {
 
   const [valueTab, setValueTab] = useState("");
   const [tabTime, setTabTime] = useState("days");
-  const [title, setTitle] = useState("");
+  const [title, setTitle] = useState(""); // Giá trị label hiển thị
   const [typeView, setTypeView] = useState("month");
   const [tempTypeView, setTempTypeView] = useState("month");
   const [selectedMonths, setSelectedMonths] = useState([]);
@@ -49,23 +48,8 @@ const RangeDatePicker = (props) => {
         return (num < 10 ? "0" : "") + num;
       };
 
-    // 
+    //
     return date.toISOString();
-    // date?.getFullYear() +
-    // "-" +
-    // pad(date?.getMonth() + 1) +
-    // "-" +
-    // pad(date?.getDate()) +
-    // "T" +
-    // pad(date?.getHours()) +
-    // ":" +
-    // pad(date?.getMinutes()) +
-    // ":" +
-    // pad(date?.getSeconds())
-    //  + dif +
-    // pad(Math.floor(Math.abs(tzo) / 60)) +
-    // ":" +
-    // pad(Math.abs(tzo) % 60)
   };
 
   const toEndOfDayIsoString = (date) => {
@@ -82,27 +66,19 @@ const RangeDatePicker = (props) => {
     date?.setMilliseconds(999);
 
     return date.toISOString();
-    // date?.getFullYear() +
-    // "-" +
-    // pad(date?.getMonth() + 1) +
-    // "-" +
-    // pad(date?.getDate()) +
-    // "T" +
-    // pad(date?.getHours()) +
-    // ":" +
-    // pad(date?.getMinutes()) +
-    // ":" +
-    // pad(date?.getSeconds())
-    // + dif +
-    // pad(Math.floor(Math.abs(tzo) / 60)) +
-    // ":" +
-    // pad(Math.abs(tzo) % 60)
   };
 
   useEffect(() => {
     // var lenghtDaySelectedConvert;
     // Nếu truyền vào rangeDateDefaults (30 ngày trước)
-    if (rangeDateDefaults) {
+    if (rangeDateDefaults === "all") {
+      setStartCalendar("");
+      setEndCalendar("");
+      setStartDate(toIsoString(timeTemp));
+      setEndDate(toEndOfDayIsoString(timeEndTemp));
+      setValueTab("all");
+      setTitle(`${i18n.t("all", { lng: lang })}`);
+    } else if (rangeDateDefaults) {
       // Nếu rangeDateDefaults là mảng
       if (Array.isArray(rangeDateDefaults) === true) {
         setValueTab(DATA_TAB[DATA_TAB.length - 1].value);
@@ -128,8 +104,6 @@ const RangeDatePicker = (props) => {
           setEnd(endDate);
           setStartCalendar(startDate);
           setEndCalendar(endDate);
-          // setStartDate(startDate.toISOString());
-          // setEndDate(endDate.toISOString());
           setStartDate(toIsoString(startDate._d));
           setEndDate(toEndOfDayIsoString(endDate._d));
           setTitle(`${i18n.t(item.title, { lng: lang })}`);
@@ -141,39 +115,7 @@ const RangeDatePicker = (props) => {
           );
         }
       }
-    } 
-    // else if (startDateProps && endDateProps) {
-    //   const item = DATA_TAB[7]
-    //   setStart(moment(startDateProps));
-    //   setEnd(moment(endDateProps));
-    //   setStartCalendar(moment(startDateProps));
-    //   setEndCalendar(moment(endDateProps));
-    //   // setValueTab(item.value);
-
-    //   // 
-    //   //   "check  moment(startDateProps)._d",
-    //   //   moment(startDateProps)._d
-    //   // );
-
-    //   if (moment(startDateProps)._d.setHours(0, 0, 0, 0) == moment(endDateProps)._d.setHours(0, 0, 0, 0)) {
-    //     calculateRangeDateLastTerm(
-    //       0,
-    //       tabTime,
-    //       caculateLenghtDayUntilNow(moment(startDateProps)._d),
-    //       caculateLenghtDayUntilNow(moment(endDateProps)._d)
-    //     );
-    //   }
-    //   // Thống kê nhiều ngày
-    //   else {
-    //     calculateRangeDateLastTerm(
-    //       moment(startDateProps)._d.diff(moment(endDateProps)._d, "days"),
-    //       tabTime,
-    //       caculateLenghtDayUntilNow(moment(endDateProps)._d),
-    //       caculateLenghtDayUntilNow(moment(endDateProps)._d)
-    //     );
-    //   }
-    // } 
-    else {
+    } else {
       // Tìm giá trị trong các option có value tương ứng rangeDateDefaults
       const item = DATA_TAB[3];
       // Nếu có thì tính
@@ -213,17 +155,16 @@ const RangeDatePicker = (props) => {
     /*Hàm apply filter mới*/
   }
   const handleOk = () => {
+    if (valueTab.trim() === "all") {
+      setStartDate(toIsoString(timeTemp));
+      setEndDate(toEndOfDayIsoString(timeEndTemp));
+    } else {
+      setStartDate(start._d ? toIsoString(start._d) : toIsoString(start));
+      setEndDate(
+        end._d ? toEndOfDayIsoString(end._d) : toEndOfDayIsoString(end)
+      );
+    }
     setOpen(false);
-    if (start._d) {
-      setStartDate(toIsoString(start._d));
-    } else {
-      setStartDate(toIsoString(start));
-    }
-    if (end._d) {
-      setEndDate(toEndOfDayIsoString(end._d));
-    } else {
-      setEndDate(toEndOfDayIsoString(end));
-    }
   };
 
   {
@@ -306,7 +247,9 @@ const RangeDatePicker = (props) => {
         setTabTime("years");
       }
       setTypeView(tempTypeView);
-    } else {
+    }
+    // Trường hợp chọn Tất cả
+    else if (item.type_range !== "all") {
       const { startDate, endDate } = calculateRangeDate(
         item.range,
         item.type_range
@@ -328,6 +271,9 @@ const RangeDatePicker = (props) => {
           caculateLenghtDayUntilNow(startDate)
         );
       }
+    } else {
+      setStartCalendar("");
+      setEndCalendar("");
     }
   };
 
@@ -367,7 +313,7 @@ const RangeDatePicker = (props) => {
       } else {
         lengthDaySelectedConvert = lengthDaySelected + 1;
       }
-      // 
+      //
     } else if (item.type_range === "months" && selectedMonths?.length < 2) {
       if (lengthDaySelected < 0) {
         lengthDaySelectedConvert = (-lengthDaySelected + 1) * 2;
@@ -446,7 +392,7 @@ const RangeDatePicker = (props) => {
           ? lengthDayToCurrent + lengthDaySelectedConvert / 2
           : lengthDaySelectedConvert / 2;
         //
-        // 
+        //
         for (let i = start; i <= lengthDayFinal - 1; i++) {
           var previousDay = moment()
             .subtract(i, item.type_range)
@@ -587,7 +533,7 @@ const RangeDatePicker = (props) => {
     /*Hàm tìm ngày kết thúc và bắt đầu (dành cho các option thống kê nhanh) */
   }
   const calculateRangeDate = (rangeDate, typeRange) => {
-    // 
+    //
     const startDate = moment()
       .subtract(rangeDate[0], typeRange)
       .startOf(typeRange)
@@ -722,11 +668,6 @@ const RangeDatePicker = (props) => {
     setSelectedMonths(sortedMonths);
   };
 
-  // 
-  // 
-  // 
-  // 
-
   return (
     <div>
       <div onClick={() => setOpen(!open)} className="range-date-picker">
@@ -743,14 +684,18 @@ const RangeDatePicker = (props) => {
             {/* {title} {moment(toIsoString(startCalendar?._d)).format("DD/MM/YYYY")} -{" "}
             {moment(toIsoString(endCalendar?._d)).format("DD/MM/YYYY")} */}
             {title}
-            <Popover
-              content={`${
-                start._d
-                  ? moment(toIsoString(start?._d)).format("DD/MM/YYYY")
-                  : start
-                  ? moment(toIsoString(start)).format("DD/MM/YYYY")
-                  : ""
-              }
+            {start !== "" &&
+              start !== undefined &&
+              end !== "" &&
+              end !== undefined && (
+                <Popover
+                  content={`${
+                    start._d
+                      ? moment(toIsoString(start?._d)).format("DD/MM/YYYY")
+                      : start
+                      ? moment(toIsoString(start)).format("DD/MM/YYYY")
+                      : ""
+                  }
               ${
                 end._d
                   ? " - " + moment(toIsoString(end?._d)).format("DD/MM/YYYY")
@@ -758,15 +703,16 @@ const RangeDatePicker = (props) => {
                   ? " - " + moment(toIsoString(end)).format("DD/MM/YYYY")
                   : ""
               }`}
-              placement="top"
-              overlayInnerStyle={{
-                backgroundColor: "white",
-              }}
-            >
-              <div>
-                <IoHelpCircleOutline size={14} color={"black"} />
-              </div>
-            </Popover>
+                  placement="top"
+                  overlayInnerStyle={{
+                    backgroundColor: "white",
+                  }}
+                >
+                  <div>
+                    <IoHelpCircleOutline size={14} color={"black"} />
+                  </div>
+                </Popover>
+              )}
           </span>
         </div>
       </div>
@@ -1024,6 +970,12 @@ const DATA_TAB = [
     value: "last_month",
     type_range: "months",
     range: [1, 1],
+  },
+  {
+    title: "all",
+    value: "all",
+    type_range: "all",
+    range: [],
   },
   {
     title: "custom",
