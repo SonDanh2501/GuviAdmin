@@ -963,9 +963,9 @@ const CreateOrder = () => {
           </div>
           {/* Line */}
           <div className="container-create-order__bill--detail-line">
-            {/* <div className="container-create-order__bill--detail-line-circle left"></div> */}
+            <div className="container-create-order__bill--detail-line-circle left"></div>
             <div className="container-create-order__bill--detail-line-dashed"></div>
-            {/* <div className="container-create-order__bill--detail-line-circle right"></div> */}
+            <div className="container-create-order__bill--detail-line-circle right"></div>
           </div>
           {/* Content */}
           <div>
