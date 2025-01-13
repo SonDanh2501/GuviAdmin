@@ -18,6 +18,7 @@ const FilterData = (props) => {
     endDate,
     setStartDate,
     setEndDate,
+    rangeDateDefaults,
   } = props;
   // const [startDate, setStartDate] = useState("");
   // const [endDate, setEndDate] = useState("")
@@ -91,7 +92,6 @@ const FilterData = (props) => {
     }
   }, [startDate, endDate]);
 
-
   return (
     <div className="filter-data card-shadow">
       {/* Nội dung bên trái */}
@@ -119,8 +119,10 @@ const FilterData = (props) => {
                 setStartDate={setStartDate}
                 setEndDate={setEndDate}
                 onCancel={() => {}}
-                rangeDateDefaults={"thirty_last"}
                 isRight={true}
+                rangeDateDefaults={
+                  rangeDateDefaults ? rangeDateDefaults : "thirty_last"
+                }
               />
             </div>
           </div>

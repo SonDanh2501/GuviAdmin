@@ -159,8 +159,8 @@ export const searchOrderApi = (start, length, search) => {
   );
 };
 
-export const getTotalOrder = (query) => {
+export const getTotalOrder = (startDate, endDate) => {
   return axiosClient.get(
-    `/admin/order_manager/get_total_order?lang=vi&${query}`
+    `/admin/order_manager/get_total_order?lang=vi&start_date=${startDate}&end_date=${endDate}`
   );
 };

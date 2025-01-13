@@ -48,9 +48,7 @@ const ManageOrder = () => {
   const [total, setTotal] = useState(0);
   const [type, setType] = useState("date_create");
   const [isLoading, setIsLoading] = useState(false);
-  const [startDate, setStartDate] = useState(
-    new Date("2022-12-31").toISOString()
-  );
+  const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState(moment().endOf("date").toISOString());
   const [item, setItem] = useState({ date_work: "" });
   const [modal, setModal] = useState(false);
@@ -72,6 +70,7 @@ const ManageOrder = () => {
     { code: "done", label: "Hoàn thành", total: 0 },
     { code: "cancel", label: "Đã hủy", total: 0 },
   ]);
+  // Danh sách các phương thức thanh toán
   const paymentMethodList = [
     { code: "all", label: "Tất cả" },
     { code: "cash", label: "Tiền mặt" },
@@ -130,7 +129,6 @@ const ManageOrder = () => {
   });
   // 4. Danh sách các loại quận/huyện của thành phố/tỉnh
   const [districtList, setDistrictList] = useState([]);
-    // 4. Danh sách các loại quận/huyện của thành phố/tỉnh
   // 5. Danh sách các cột trong bảng
   const columns = [
     {
@@ -298,13 +296,15 @@ const ManageOrder = () => {
   // 3. Hàm fetch các giá trị total cho từng trạng thái của đơn hàng
   const getTotal = async () => {
     try {
-      const res = await getTotalOrder();
-      setStatusList((prevList) =>
-        prevList.map((item) => ({
-          ...item,
-          total: item?.code === "all" ? res["total"] : res[item?.code] || 0,
-        }))
-      );
+      if (startDate.trim() !== "" && startDate !== undefined) {
+        const res = await getTotalOrder(startDate, endDate);
+        setStatusList((prevList) =>
+          prevList.map((item) => ({
+            ...item,
+            total: item?.code === "all" ? res["total"] : res[item?.code] || 0,
+          }))
+        );
+      }
     } catch (err) {
       errorNotify({
         message: err?.message,
@@ -368,7 +368,16 @@ const ManageOrder = () => {
   // 2. Fetch dữ liệu tổng
   useEffect(() => {
     getTotal();
-  }, [valueSearch, selectStatus, selectService, selectCity, selectDistrict, selectPaymentMethod]);
+  }, [
+    startDate,
+    endDate,
+    valueSearch,
+    selectStatus,
+    selectService,
+    selectCity,
+    selectDistrict,
+    selectPaymentMethod,
+  ]);
   // 3. Set giá trị quận/huyện khi thành phố/tỉnh thay đổi
   useEffect(() => {
     const found = cityList?.find((el) => el.code === +selectCity);
@@ -492,6 +501,7 @@ const ManageOrder = () => {
       </div>
     );
   };
+
   /* ~~~ Main ~~~ */
   return (
     <div className="manage-order">
@@ -508,6 +518,7 @@ const ManageOrder = () => {
         setEndDate={setEndDate}
         leftContent={filterContentLeft()}
         rightContent={filterContentRight()}
+        rangeDateDefaults={"all"}
       />
       {/* Data table */}
       <DataTable

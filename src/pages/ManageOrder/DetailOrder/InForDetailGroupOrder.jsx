@@ -409,7 +409,6 @@ const InForDetailGroupOrder = (props) => {
       });
     setModalCancelCollaborator(false);
   };
-  console.log("check isPunishCollaborator", isPunishCollaborator);
   return (
     <div className="info-detail-order_container ">
       <div className="info-detail-order_header">
@@ -510,6 +509,9 @@ const InForDetailGroupOrder = (props) => {
           }
           final_fee={dataGroup?.final_fee}
           initial_fee={dataGroup?.initial_fee}
+          net_income={dataGroup?.net_income}
+          subtotal_fee={dataGroup?.subtotal_fee}
+          tax={dataGroup?.value_added_tax}
           total_date_work={dataGroup?.date_work_schedule.length}
           payment_method={paymentMethod}
         />
@@ -530,15 +532,15 @@ const InForDetailGroupOrder = (props) => {
           setOpenModalChangeStatus={setIsOpenModalChangeStatus}
         />
 
-      //   <DataTable
-      //   columns={columns}
-      //   data={data}
-      //   start={startPage}
-      //   pageSize={lengthPage}
-      //   setLengthPage={setLengthPage}
-      //   totalItem={totalData}
-      //   onCurrentPageChange={onChangePage}
-      // />
+        //   <DataTable
+        //   columns={columns}
+        //   data={data}
+        //   start={startPage}
+        //   pageSize={lengthPage}
+        //   setLengthPage={setLengthPage}
+        //   totalItem={totalData}
+        //   onCurrentPageChange={onChangePage}
+        // />
       )}
       <FloatButton.BackTop />
       <ModalCustom
