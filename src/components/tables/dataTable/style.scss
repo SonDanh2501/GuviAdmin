@@ -591,7 +591,8 @@ span {
       color: $colorRed;
     }
 
-    &.holding {
+    &.holding,
+    &.processing {
       background-color: $colorExtraLightOrange;
       color: $colorOrange;
     }
