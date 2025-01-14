@@ -50,7 +50,7 @@ import ServiceComponent from "../components/ServiceComponent";
 import "./index.scss";
 import DateWorkComponent from "../components/DateWorkComponent";
 import { useNavigate } from "react-router-dom";
-import { formatMoney } from "../../../helper/formatMoney";
+import { clearFormatNumber, formatMoney } from "../../../helper/formatMoney";
 import LoadingPagination from "../../../components/paginationLoading";
 import ItemCollaborator from "../../../components/collaborator/itemCollaborator/index.jsx";
 import {
@@ -640,7 +640,7 @@ const CreateOrder = () => {
   const handleChangeAddressDefault = (checked) => {
     setIsShowAddressDefault(checked);
   };
-
+  
   /* ~~~ Main ~~~ */
   return (
     <div className="container-create-order">
@@ -863,7 +863,7 @@ const CreateOrder = () => {
             value={tipCollaborator}
             placeHolder="Tiền tip"
             isNumber={true}
-            onChange={(e) => setTipCollaborator(e.target.value)}
+            onChange={(e) => setTipCollaborator(clearFormatNumber(e.target.value))}
           />
         </div>
         {/* Ghi chú */}
