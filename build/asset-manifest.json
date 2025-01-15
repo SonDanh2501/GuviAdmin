@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.3d9a97aa.css",
-    "main.js": "/static/js/main.9eeccff6.js",
+    "main.css": "/static/css/main.6315f41d.css",
+    "main.js": "/static/js/main.ecc88b4b.js",
     "static/media/guideStep.png": "/static/media/guideStep.bd5e1f52d13b9f78d0a4.png",
     "static/media/guideStepVertical.png": "/static/media/guideStepVertical.d8b6d21ad2261bdd6b97.png",
     "static/media/tongvesinh.png": "/static/media/tongvesinh.6fd8e2a0e47f4af27e2b.png",
@@ -24,6 +24,7 @@
     "static/media/jobLogo.svg": "/static/media/jobLogo.b366915ccb3bc38ecb0c155f49f16b08.svg",
     "static/media/shortDescription.png": "/static/media/shortDescription.b605fabff65c3ef59f02.png",
     "static/media/punish_ticket.svg": "/static/media/punish_ticket.c5d0e05086d40c447ff60ec638e4d845.svg",
+    "static/media/loginLanding.svg": "/static/media/loginLanding.62cb886b291ddfdec2fd70c13bdd98f3.svg",
     "static/media/overViewAffiliate.svg": "/static/media/overViewAffiliate.9990a4cbec6123cfab1132bdabc821d0.svg",
     "static/media/logoNoBackGround.svg": "/static/media/logoNoBackGround.085e576fed6f1f39242e8db1471d6515.svg",
     "static/media/testLogo.svg": "/static/media/testLogo.989503ac0cefe867873527c9f9002221.svg",
@@ -90,15 +91,16 @@
     "static/media/flag_vietnam.svg": "/static/media/flag_vietnam.6061817ac5695ec5df942e9621b538ca.svg",
     "static/media/flag_thailand.svg": "/static/media/flag_thailand.55a06f1c78072a13ba52f840c16371a4.svg",
     "static/media/bank_techcom.svg": "/static/media/bank_techcom.3b5ef11f01b658b70a7a4a28cf0f9037.svg",
+    "static/media/wave.svg": "/static/media/wave.0d45bbb001954cb5110e.svg",
     "static/media/flag_indonesia.svg": "/static/media/flag_indonesia.ac467f9527a4962822f93a6ed821ba66.svg",
     "static/media/offline.svg": "/static/media/offline.33acbe8c955951e587e68725985e74e7.svg",
     "static/media/online.svg": "/static/media/online.acf17c611c1affd9615cf0c62302674d.svg",
     "static/media/pending.svg": "/static/media/pending.ae3d796b3e3d6c6272a35edc144a2e90.svg",
-    "main.3d9a97aa.css.map": "/static/css/main.3d9a97aa.css.map",
-    "main.9eeccff6.js.map": "/static/js/main.9eeccff6.js.map"
+    "main.6315f41d.css.map": "/static/css/main.6315f41d.css.map",
+    "main.ecc88b4b.js.map": "/static/js/main.ecc88b4b.js.map"
   },
   "entrypoints": [
-    "static/css/main.3d9a97aa.css",
-    "static/js/main.9eeccff6.js"
+    "static/css/main.6315f41d.css",
+    "static/js/main.ecc88b4b.js"
   ]
 }
