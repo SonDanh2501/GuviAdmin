@@ -13,6 +13,8 @@ import {
 } from "../../../api/affeliate";
 import { useDispatch } from "react-redux";
 import logo from "../../../assets/images/Logo.svg";
+import logoLabelImage from "../../../assets/images/LogoS.svg";
+
 import icons from "../../../utils/icons";
 import { message, Modal } from "antd";
 import { errorNotify, successNotify } from "../../../helper/toast";
@@ -23,6 +25,7 @@ import {
   loginWithOnlyTokenAction,
 } from "../../../redux/actions/auth";
 import { useNavigate } from "react-router-dom";
+import loginLandingImage from "../../../assets/images/loginLanding.svg";
 
 const LoginAffiliate = () => {
   const { IoColorWandOutline, IoCashOutline } = icons;
@@ -221,23 +224,342 @@ const LoginAffiliate = () => {
     setValuePassword("");
   };
 
-  console.log("check running 1")
   return (
+    // <div className="login-affiliate">
+    //   <div className="login-affiliate__card card-shadow">
+    //     <div className="login-affiliate__card--information">
+    //       {/* Label đăng nhập */}
+    //       <span className="login-affiliate__card--information-label">
+    //         {isSignUp ? "Đăng ký" : "Đăng nhập"}
+    //       </span>
+    //       <div className="login-affiliate__card--information-logo">
+    //         <img
+    //           className="login-affiliate__card--information-logo-image"
+    //           src={logo}
+    //         ></img>
+    //       </div>
+    //       {!isSignUp ? (
+    //         <>
+    // <InputTextCustom
+    //   type="textValue"
+    //   valueUnit={valuePhoneArea}
+    //   onChangeValueUnit={(e) => setValuePhoneArea(e.target.value)}
+    //   value={valuePhone}
+    //   placeHolder="Số điện thoại"
+    //   onChange={(e) => setValuePhone(e.target.value)}
+    //   required={true}
+    // />
+    // <InputTextCustom
+    //   type="text"
+    //   value={valuePassword}
+    //   placeHolder="Mật khẩu"
+    //   onChange={(e) => setValuePassword(e.target.value)}
+    //   required={true}
+    //   isPassword={true}
+    // />
+    // <ButtonCustom
+    //   fullScreen={true}
+    //   label="Đăng nhập"
+    //   onClick={() => handleLoginAffiliate(valuePhone, valuePassword)}
+    // />
+    //           <div className="login-affiliate__card--information-line">
+    //             <span className="login-affiliate__card--information-line-other">
+    //               Hoặc
+    //             </span>
+    //           </div>
+    //           <ButtonCustom
+    //             fullScreen={true}
+    //             label="Đăng ký"
+    //             style="normal"
+    //             onClick={() => handleChangeToSignUp()}
+    //           />
+    //         </>
+    //       ) : (
+    //         <>
+    //           <InputTextCustom
+    //             type="text"
+    //             value={valuePhone}
+    //             placeHolder="Số điện thoại"
+    //             onChange={(e) => setValuePhone(e.target.value)}
+    //             required={true}
+    //           />
+    //           <ButtonCustom
+    //             fullScreen={true}
+    //             label="Đăng ký"
+    //             onClick={() =>
+    //               handleSendOTP({
+    //                 phone: valuePhone,
+    //                 code_phone_area: valuePhoneArea,
+    //               })
+    //             }
+    //           />
+    // <div className="login-affiliate__card--information-line">
+    //   <span className="login-affiliate__card--information-line-other">
+    //     Hoặc
+    //   </span>
+    // </div>
+    //           <ButtonCustom
+    //             fullScreen={true}
+    //             label="Đăng nhập"
+    //             style="normal"
+    //             onClick={() => handleChangeToSignIn()}
+    //           />
+    //         </>
+    //       )}
+    //       <div className="login-affiliate__card--information-forgot-password">
+    //         <span className="login-affiliate__card--information-forgot-password-label">
+    //           Bạn quên mật khẩu hiện tại?
+    //         </span>
+    //         <span
+    //           onClick={() => setShowModalForgotPassword(true)}
+    //           className="login-affiliate__card--information-forgot-password-button"
+    //         >
+    //           Quên mật khẩu
+    //         </span>
+    //       </div>
+    //       {/* Modal OTP */}
+    //       <Modal
+    //         title="Xác thực mã OTP"
+    //         onCancel={() => setShowModalSignUp(false)}
+    //         onOk={() =>
+    //           handleCheckOTP({
+    //             phone: valuePhone.length > 0 ? valuePhone : valuePhoneForgot,
+    //             code_phone_area: valuePhoneArea,
+    //             code: otp.join(""),
+    //           })
+    //         }
+    //         open={showModalSignUp}
+    //         okText={"Xác nhận"}
+    //         cancelText={"Hủy"}
+    //       >
+    //         <div className="login-affiliate__card--information-otp">
+    //           <span className="login-affiliate__card--information-otp-label">
+    //             Nhập mã gồm 6 số đã gửi tới SMS thông qua số (+84){" "}
+    //             <span className="bold">{valuePhone}</span>
+    //           </span>
+    //           <div className="login-affiliate__card--information-otp-digit">
+    //             {Array.from({ length: 6 }, (_, index) => (
+    //               <input
+    //                 key={index}
+    //                 type="text"
+    //                 maxLength={1}
+    //                 className="login-affiliate__card--information-otp-digit-number"
+    //                 ref={(el) => (inputRefs.current[index] = el)}
+    //                 onChange={(e) => handleChange(e, index)}
+    //                 onKeyDown={(e) => handleKeyDown(e, index)}
+    //               />
+    //             ))}
+    //           </div>
+    //           {secondsLeft !== 0 ? (
+    //             <span className="login-affiliate__card--information-otp-label">
+    //               Bạn chưa nhận được mã OTP. Gửi lại mã sau{" "}
+    //               <span className="login-affiliate__card--information-otp-label high-light">
+    //                 {secondsLeft}s
+    //               </span>
+    //             </span>
+    //           ) : (
+    //             <span
+    //               className="login-affiliate__card--information-otp-label high-light clickable"
+    //               onClick={() =>
+    //                 handleResendOTP({
+    //                   phone: valuePhone,
+    //                   code_phone_area: valuePhoneArea,
+    //                 })
+    //               }
+    //             >
+    //               Gửi lại mã
+    //             </span>
+    //           )}
+    //         </div>
+    //       </Modal>
+    //       {/* Modal nhập thông tin cá nhân */}
+    //       <Modal
+    //         title="Nhập thông tin cá nhân"
+    //         onCancel={() => {
+    //           setShowModalRegisterInformation(false);
+    //         }}
+    //         onOk={() =>
+    //           handleRegisterAccount({
+    //             token: saveToken,
+    //             name: "",
+    //             full_name: valueFullName,
+    //             email: valueEmail,
+    //             phone: valuePhone,
+    //             password: valuePassword,
+    //             code_phone_area: valuePhoneArea,
+    //             code: otp.join(""),
+    //             // code_inviter: valueInvitedCode,
+    //           })
+    //         }
+    //         okText={"Xác nhận"}
+    //         cancelText={"Hủy"}
+    //         open={showModalRegisterInformation}
+    //       >
+    //         <div className="login-affiliate__card--information-person">
+    //           <InputTextCustom
+    //             type="text"
+    //             value={valueEmail}
+    //             placeHolder="Email"
+    //             onChange={(e) => setValueEmail(e.target.value)}
+    //           />
+    //           {/* <InputTextCustom
+    //             type="text"
+    //             value={valueName}
+    //             placeHolder="Tên"
+    //             onChange={(e) => setValueName(e.target.value)}
+    //             required={true}
+    //           /> */}
+    //           <InputTextCustom
+    //             type="text"
+    //             value={valueFullName}
+    //             placeHolder="Họ và tên"
+    //             onChange={(e) => setValueFullName(e.target.value)}
+    //           />
+    //           <InputTextCustom
+    //             type="text"
+    //             value={valuePassword}
+    //             placeHolder="Mật khẩu"
+    //             onChange={(e) => setValuePassword(e.target.value)}
+    //             required={true}
+    //             isPassword={true}
+    //           />
+    //         </div>
+    //       </Modal>
+    //       {/* Modal quên mật khẩu */}
+    //       <Modal
+    //         title="Quên mật khẩu"
+    //         onCancel={() => {
+    //           setShowModalForgotPassword(false);
+    //         }}
+    //         onOk={() =>
+    //           handleForgotPassword({
+    //             phone: valuePhoneForgot,
+    //             code_phone_area: valuePhoneArea,
+    //           })
+    //         }
+    //         okText={"Xác nhận"}
+    //         cancelText={"Hủy"}
+    //         open={showModalForgotPassword}
+    //       >
+    //         <div className="login-affiliate__card--information-person">
+    //           <InputTextCustom
+    //             type="text"
+    //             value={valuePhoneForgot}
+    //             placeHolder="Số điện thoại hiện tại"
+    //             onChange={(e) => setValuePhoneForgot(e.target.value)}
+    //           />
+    //         </div>
+    //       </Modal>
+    //       {/* Modal nhập mật khẩu mới */}
+    //       <Modal
+    //         title="Nhập mật khẩu mới"
+    //         onCancel={() => {
+    //           setShowModalUpdatePassword(false);
+    //         }}
+    //         onOk={() =>
+    //           handleUpdatePassword({
+    //             token: saveToken,
+    //             password: valuePassword,
+    //           })
+    //         }
+    //         okText={"Xác nhận"}
+    //         cancelText={"Hủy"}
+    //         open={showModalUpdatePassword}
+    //       >
+    //         <div className="login-affiliate__card--information-person">
+    //           <InputTextCustom
+    //             type="text"
+    //             value={valuePassword}
+    //             placeHolder="Nhập mật khẩu mới"
+    //             onChange={(e) => setValuePassword(e.target.value)}
+    //           />
+    //           <InputTextCustom
+    //             type="text"
+    //             value={valuePasswordRetype}
+    //             placeHolder="Nhập lại mật khẩu"
+    //             onChange={(e) => setValuePasswordRetype(e.target.value)}
+    //           />
+    //         </div>
+    //       </Modal>
+    //     </div>
+    //   </div>
+    // </div>
     <div className="login-affiliate">
-      <div className="login-affiliate__card card-shadow">
-        <div className="login-affiliate__card--information">
-          {/* Label đăng nhập */}
-          <span className="login-affiliate__card--information-label">
-            {isSignUp ? "Đăng ký" : "Đăng nhập"}
-          </span>
-          <div className="login-affiliate__card--information-logo">
-            <img
-              className="login-affiliate__card--information-logo-image"
-              src={logo}
-            ></img>
+      {/* <div className="login-affiliate__blank"></div> */}
+      <div className="login-affiliate__wave"></div>
+      <div className="login-affiliate__form">
+        <div className="login-affiliate__form--left">
+          <div className="login-affiliate__form--left-child">
+            <img src={loginLandingImage} alt=""></img>
           </div>
-          {!isSignUp ? (
-            <>
+        </div>
+        <div className="login-affiliate__form--right">
+          <div className="login-affiliate__form--right-logo">
+            <img src={logoLabelImage} alt=""></img>
+          </div>
+          {/* Form sign up */}
+          {/* <div
+            className={`login-affiliate__form--right-sign-up ${
+              !isSignUp && "hide"
+            }`}
+          >
+            <div className="login-affiliate__form--right-sign-up-header">
+              <span>Trở thành thành viên của chúng tôi !</span>
+            </div>
+            <div className="login-affiliate__form--right-sign-up-input">
+              <InputTextCustom
+                type="text"
+                value={valuePassword}
+                placeHolder="Mật khẩu"
+                onChange={(e) => setValuePassword(e.target.value)}
+                // required={true}
+                isPassword={true}
+              />
+              <InputTextCustom
+                type="text"
+                value={valuePassword}
+                placeHolder="Mật khẩu"
+                onChange={(e) => setValuePassword(e.target.value)}
+                // required={true}
+                isPassword={true}
+              />
+              <InputTextCustom
+                type="text"
+                value={valuePassword}
+                placeHolder="Mật khẩu"
+                onChange={(e) => setValuePassword(e.target.value)}
+                // required={true}
+                isPassword={true}
+              />
+              <button
+                className="login-affiliate__button"
+                onClick={() => handleChangeToSignIn()}
+              >
+                <span>Tham gia ngay</span>
+              </button>
+            </div>
+            <div className="login-affiliate__form--right-sign-up-sign-up">
+              <span className="login-affiliate__form--right-sign-up-sign-up-label">
+                Bạn là khách hàng mới?
+              </span>
+              <span
+                onClick={() => setIsSignUp(false)}
+                className="login-affiliate__form--right-sign-up-sign-up-label high-light"
+              >
+                Đăng nhập
+              </span>
+            </div>
+          </div> */}
+          {/* Form Login */}
+          <div
+            className={`login-affiliate__form--right-login ${
+              isSignUp && "hide"
+            }`}
+          >
+            <div className="login-affiliate__form--right-login-header">
+              <span>Mừng bạn trở lại !</span>
+            </div>
+            <div className="login-affiliate__form--right-login-input">
               <InputTextCustom
                 type="textValue"
                 valueUnit={valuePhoneArea}
@@ -245,240 +567,40 @@ const LoginAffiliate = () => {
                 value={valuePhone}
                 placeHolder="Số điện thoại"
                 onChange={(e) => setValuePhone(e.target.value)}
-                required={true}
+                // required={true}
               />
               <InputTextCustom
                 type="text"
                 value={valuePassword}
                 placeHolder="Mật khẩu"
                 onChange={(e) => setValuePassword(e.target.value)}
-                required={true}
+                // required={true}
                 isPassword={true}
               />
-              <ButtonCustom
-                fullScreen={true}
-                label="Đăng nhập"
-                onClick={() => handleLoginAffiliate(valuePhone, valuePassword)}
-              />
-              <div className="login-affiliate__card--information-line">
-                <span className="login-affiliate__card--information-line-other">
-                  Hoặc
-                </span>
-              </div>
-              <ButtonCustom
-                fullScreen={true}
-                label="Đăng ký"
-                style="normal"
-                onClick={() => handleChangeToSignUp()}
-              />
-            </>
-          ) : (
-            <>
-              <InputTextCustom
-                type="text"
-                value={valuePhone}
-                placeHolder="Số điện thoại"
-                onChange={(e) => setValuePhone(e.target.value)}
-                required={true}
-              />
-              <ButtonCustom
-                fullScreen={true}
-                label="Đăng ký"
-                onClick={() =>
-                  handleSendOTP({
-                    phone: valuePhone,
-                    code_phone_area: valuePhoneArea,
-                  })
-                }
-              />
-              <div className="login-affiliate__card--information-line">
-                <span className="login-affiliate__card--information-line-other">
-                  Hoặc
-                </span>
-              </div>
-              <ButtonCustom
-                fullScreen={true}
-                label="Đăng nhập"
-                style="normal"
+              <button
+                className="login-affiliate__button"
                 onClick={() => handleChangeToSignIn()}
-              />
-            </>
-          )}
-          <div className="login-affiliate__card--information-forgot-password">
-            <span className="login-affiliate__card--information-forgot-password-label">
-              Bạn quên mật khẩu hiện tại?
-            </span>
-            <span
-              onClick={() => setShowModalForgotPassword(true)}
-              className="login-affiliate__card--information-forgot-password-button"
-            >
-              Quên mật khẩu
-            </span>
-          </div>
-          {/* Modal OTP */}
-          <Modal
-            title="Xác thực mã OTP"
-            onCancel={() => setShowModalSignUp(false)}
-            onOk={() =>
-              handleCheckOTP({
-                phone: valuePhone.length > 0 ? valuePhone : valuePhoneForgot,
-                code_phone_area: valuePhoneArea,
-                code: otp.join(""),
-              })
-            }
-            open={showModalSignUp}
-            okText={"Xác nhận"}
-            cancelText={"Hủy"}
-          >
-            <div className="login-affiliate__card--information-otp">
-              <span className="login-affiliate__card--information-otp-label">
-                Nhập mã gồm 6 số đã gửi tới SMS thông qua số (+84){" "}
-                <span className="bold">{valuePhone}</span>
+              >
+                <span>Đăng nhập</span>
+              </button>
+            </div>
+            <div className="login-affiliate__form--right-login-line">
+              <span className="login-affiliate__form--right-login-line-other">
+                Hoặc
               </span>
-              <div className="login-affiliate__card--information-otp-digit">
-                {Array.from({ length: 6 }, (_, index) => (
-                  <input
-                    key={index}
-                    type="text"
-                    maxLength={1}
-                    className="login-affiliate__card--information-otp-digit-number"
-                    ref={(el) => (inputRefs.current[index] = el)}
-                    onChange={(e) => handleChange(e, index)}
-                    onKeyDown={(e) => handleKeyDown(e, index)}
-                  />
-                ))}
-              </div>
-              {secondsLeft !== 0 ? (
-                <span className="login-affiliate__card--information-otp-label">
-                  Bạn chưa nhận được mã OTP. Gửi lại mã sau{" "}
-                  <span className="login-affiliate__card--information-otp-label high-light">
-                    {secondsLeft}s
-                  </span>
-                </span>
-              ) : (
-                <span
-                  className="login-affiliate__card--information-otp-label high-light clickable"
-                  onClick={() =>
-                    handleResendOTP({
-                      phone: valuePhone,
-                      code_phone_area: valuePhoneArea,
-                    })
-                  }
-                >
-                  Gửi lại mã
-                </span>
-              )}
             </div>
-          </Modal>
-          {/* Modal nhập thông tin cá nhân */}
-          <Modal
-            title="Nhập thông tin cá nhân"
-            onCancel={() => {
-              setShowModalRegisterInformation(false);
-            }}
-            onOk={() =>
-              handleRegisterAccount({
-                token: saveToken,
-                name: "",
-                full_name: valueFullName,
-                email: valueEmail,
-                phone: valuePhone,
-                password: valuePassword,
-                code_phone_area: valuePhoneArea,
-                code: otp.join(""),
-                // code_inviter: valueInvitedCode,
-              })
-            }
-            okText={"Xác nhận"}
-            cancelText={"Hủy"}
-            open={showModalRegisterInformation}
-          >
-            <div className="login-affiliate__card--information-person">
-              <InputTextCustom
-                type="text"
-                value={valueEmail}
-                placeHolder="Email"
-                onChange={(e) => setValueEmail(e.target.value)}
-              />
-              {/* <InputTextCustom
-                type="text"
-                value={valueName}
-                placeHolder="Tên"
-                onChange={(e) => setValueName(e.target.value)}
-                required={true}
-              /> */}
-              <InputTextCustom
-                type="text"
-                value={valueFullName}
-                placeHolder="Họ và tên"
-                onChange={(e) => setValueFullName(e.target.value)}
-              />
-              <InputTextCustom
-                type="text"
-                value={valuePassword}
-                placeHolder="Mật khẩu"
-                onChange={(e) => setValuePassword(e.target.value)}
-                required={true}
-                isPassword={true}
-              />
+            <div className="login-affiliate__form--right-login-sign-up">
+              <span className="login-affiliate__form--right-login-sign-up-label">
+                Bạn là khách hàng mới?
+              </span>
+              <span
+                onClick={() => setIsSignUp(true)}
+                className="login-affiliate__form--right-login-sign-up-label high-light"
+              >
+                Đăng ký ngay
+              </span>
             </div>
-          </Modal>
-          {/* Modal quên mật khẩu */}
-          <Modal
-            title="Quên mật khẩu"
-            onCancel={() => {
-              setShowModalForgotPassword(false);
-            }}
-            onOk={() =>
-              handleForgotPassword({
-                phone: valuePhoneForgot,
-                code_phone_area: valuePhoneArea,
-              })
-            }
-            okText={"Xác nhận"}
-            cancelText={"Hủy"}
-            open={showModalForgotPassword}
-          >
-            <div className="login-affiliate__card--information-person">
-              <InputTextCustom
-                type="text"
-                value={valuePhoneForgot}
-                placeHolder="Số điện thoại hiện tại"
-                onChange={(e) => setValuePhoneForgot(e.target.value)}
-              />
-            </div>
-          </Modal>
-          {/* Modal nhập mật khẩu mới */}
-          <Modal
-            title="Nhập mật khẩu mới"
-            onCancel={() => {
-              setShowModalUpdatePassword(false);
-            }}
-            onOk={() =>
-              handleUpdatePassword({
-                token: saveToken,
-                password: valuePassword,
-              })
-            }
-            okText={"Xác nhận"}
-            cancelText={"Hủy"}
-            open={showModalUpdatePassword}
-          >
-            <div className="login-affiliate__card--information-person">
-              <InputTextCustom
-                type="text"
-                value={valuePassword}
-                placeHolder="Nhập mật khẩu mới"
-                onChange={(e) => setValuePassword(e.target.value)}
-              />
-              <InputTextCustom
-                type="text"
-                value={valuePasswordRetype}
-                placeHolder="Nhập lại mật khẩu"
-                onChange={(e) => setValuePasswordRetype(e.target.value)}
-              />
-            </div>
-          </Modal>
+          </div>
         </div>
       </div>
     </div>
