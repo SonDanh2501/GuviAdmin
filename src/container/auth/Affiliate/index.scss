@@ -1,232 +1,541 @@
 @import "../../../@theme/style.scss";
 
+// .login-affiliate {
+//     height: 100vh;
+//     align-items: center;
+//     justify-content: center;
+//     display: flex;
+//     flex-direction: column;
+//     width: 100%;
+//     background: linear-gradient(90deg, $colorViolet 30%, $colorLightViolet 80%);
+
+//     .login-affiliate__card {
+//         width: 70%;
+//         max-width: 400px;
+//         background-color: $colorWhite;
+//         border-radius: $borderRadiusL;
+//         padding: 16px;
+
+//         .login-affiliate__card--information {
+//             display: flex;
+//             width: 100%;
+//             flex-direction: column;
+//             gap: $gapL;
+
+//             .login-affiliate__card--information-label {
+//                 font-weight: $fontWeightXL;
+//                 font-size: $textFontSize3XL;
+//                 text-align: center;
+//             }
+
+//             .login-affiliate__card--information-slogan {
+//                 display: flex;
+//                 gap: $gapL;
+//                 align-items: center;
+//                 justify-content: center;
+
+//                 .login-affiliate__card--information-slogan-icon {
+//                     display: flex;
+//                     width: 50%;
+//                     flex-direction: column;
+//                     align-items: center;
+//                     justify-content: center;
+
+//                     .login-affiliate__card--information-slogan-icon-color {
+//                         display: flex;
+//                         align-items: center;
+//                         justify-content: center;
+//                         padding: 8px;
+//                         background-color: $colorViolet;
+//                         width: fit-content;
+//                         border-radius: $borderRadiusFull;
+//                         color: $colorWhite;
+//                         margin-bottom: 2px;
+//                     }
+
+//                     .login-affiliate__card--information-slogan-icon-label {
+//                         font-size: $textFontSizeM;
+//                         font-weight: $fontWeightXL;
+//                     }
+
+//                     .login-affiliate__card--information-slogan-icon-sub-label {
+//                         font-size: $textFontSizeM;
+//                         font-weight: $fontWeightL;
+//                         color: $colorLightGray;
+//                         white-space: nowrap;
+//                     }
+//                 }
+
+//             }
+
+//             .login-affiliate__card--information-logo {
+//                 display: flex;
+//                 align-items: center;
+//                 justify-content: center;
+
+//                 .login-affiliate__card--information-logo-image {
+//                     width: 25%;
+//                     height: 25%;
+//                 }
+
+//                 // height: 30%;
+//                 // width: 30%;
+//             }
+
+// .login-affiliate__card--information-line {
+//     position: relative;
+//     width: 50%;
+//     height: 2px;
+//     background-color: $colorMoreLightGray;
+//     border-radius: $borderRadiusL;
+//     margin: 0 auto;
+
+//     .login-affiliate__card--information-line-other {
+//         position: absolute;
+//         top: 50%;
+//         left: 50%;
+//         transform: translate(-50%, -50%);
+//         color: $colorLightGray;
+//         background-color: $colorWhite; // Đặt màu nền để chữ không bị che bởi đường thẳng
+//         padding: 0 8px; // Tạo khoảng cách giữa chữ và viền nền
+//     }
+// }
+
+
+
+//             .login-affiliate__card--information-forgot-password {
+//                 display: flex;
+//                 flex-direction: column;
+//                 align-items: center;
+//                 justify-content: center;
+//                 gap: $gapXS;
+
+//                 .login-affiliate__card--information-forgot-password-label {
+//                     font-size: $textFontSizeM;
+//                     font-weight: $fontWeightL;
+//                     color: $colorBlack;
+//                 }
+//                 .login-affiliate__card--information-forgot-password-button {
+//                     cursor: pointer;
+//                     font-size: $textFontSizeM;
+//                     font-weight: $fontWeightXL;
+//                     color: $colorViolet;
+//                 }
+//             }
+
+
+//         }
+//     }
+// }
+
+// .login-affiliate__card--information-otp {
+//     display: flex;
+//     flex-direction: column;
+//     gap: $gapM;
+
+//     .login-affiliate__card--information-forgot-password {
+//         font-size: $textFontSizeM;
+//         font-weight: $fontWeightL;
+//         color: $colorBlack;
+//         text-align: center;
+
+//         &.high-light {
+//             color: $colorOrange;
+//             font-weight: $fontWeightXL;
+//         }
+
+//         &.clickable {
+//             cursor: pointer;
+//         }
+
+//     }
+
+//     .login-affiliate__card--information-otp-digit {
+//         display: flex;
+//         gap: $gapM;
+//         justify-content: center;
+//         align-items: center;
+
+//         .login-affiliate__card--information-otp-digit-number {
+//             width: 50px;
+//             height: 50px;
+//             font-size: $textFontSize3XL;
+//             text-align: center;
+//             border: 3px solid $colorMoreLightGray;
+//             border-radius: 8px;
+//             outline: none;
+//             transition: all 0.3s ease;
+
+//             &:focus {
+//                 border-color: $colorViolet;
+//             }
+//         }
+//     }
+
+//     .login-affiliate__card--information-otp-resend {}
+// }
+
+// .login-affiliate__card--information-person {
+//     display: flex;
+//     flex-direction: column;
+//     gap: $gapM;
+//     padding: 12px;
+
+// }
+
+// .login-affiliate__card--information-person-footer {
+//     padding: 0 12px;
+// }
+
+// .login-affiliate__card--information-otp {
+//     display: flex;
+
+//     .login-affiliate__card--information-otp-label {
+//         font-size: $textFontSizeM;
+//         font-weight: $fontWeightL;
+//         color: $colorBlack;
+
+//         &.high-light {
+//             color: $colorOrange;
+//             font-weight: $fontWeightXL;
+//         }
+
+//         &.clickable {
+//             cursor: pointer;
+//         }
+
+//         .bold {
+//             font-weight: $fontWeightXL;
+//         }
+//     }
+
+//     .login-affiliate__card--information-otp-digit {
+//         display: flex;
+//         gap: 10px;
+//         /* Adjust spacing between inputs */
+//         justify-content: center;
+//         align-items: center;
+
+//         .login-affiliate__card--information-otp-digit-number {
+//             width: 50px;
+//             height: 50px;
+//             font-size: 24px;
+//             text-align: center;
+//             border: 2px solid #ccc;
+//             /* Default border */
+//             border-radius: 8px;
+//             outline: none;
+//             transition: border-color 0.3s, box-shadow 0.3s;
+
+//         }
+//     }
+// }
+
 .login-affiliate {
-    height: 100vh;
-    align-items: center;
-    justify-content: center;
-    display: flex;
-    flex-direction: column;
+    position: relative;
     width: 100%;
-    background: linear-gradient(90deg, $colorViolet 30%, $colorLightViolet 80%);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #4158D0;
+    background-image: linear-gradient(43deg, #3E187A 0%, #C850C0 46%, #FFCC70 100%);
+    // box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+    // background: url('../../../assets/images/bg.png');
+    // background-size: cover;
 
-    .login-affiliate__card {
-        width: 70%;
-        max-width: 400px;
-        background-color: $colorWhite;
+    // Khoảng trắng (để làm phần gợn sóng to hơn)
+    .login-affiliate__blank {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 50px;
+        background-color: #994ECC;
+    }
+
+    .login-affiliate__wave {
+        position: absolute;
+        width: 100%;
+        height: 195px;
+        bottom: 0px;
+        left: 0;
+        background: url('../../../assets/images/wave.svg');
+        animation: wave 8s linear infinite;
+        // background-position: 200px
+    }
+
+    .login-affiliate__wave::before {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 195px;
+        bottom: 0px;
+        left: 0;
+        background: url('../../../assets/images/wave.svg');
+        opacity: .2;
+        // background-position: 300px
+        animation: wave-reverse 8s linear infinite;
+
+    }
+
+    .login-affiliate__wave::after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 195px;
+        bottom: 0px;
+        left: 0;
+        background: url('../../../assets/images/wave.svg');
+        opacity: .8;
+        animation-delay: -4s;
+        // background-position: 600px
+        animation: wave 16s linear infinite;
+    }
+
+    @keyframes wave {
+        0% {
+            background-position: 0;
+        }
+
+        100% {
+            background-position: 1280px;
+        }
+    }
+
+    @keyframes wave-reverse {
+        0% {
+            background-position: 1280px;
+        }
+
+        100% {
+            background-position: 0;
+        }
+    }
+
+    .login-affiliate__form {
+        display: flex;
+        // margin-top: 210px;
+        // padding: 16px;
+        background-color: $colorMoreLightViolet;
+        width: 600px;
+        z-index: 1;
+        height: 400px;
         border-radius: $borderRadiusL;
-        padding: 16px;
+        box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
 
-        .login-affiliate__card--information {
+        .login-affiliate__form--left {
             display: flex;
-            width: 100%;
-            flex-direction: column;
-            gap: $gapL;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            background-color: #4158D0;
+            // background-image: linear-gradient(43deg, #3E187A 0%, #C850C0 46%, #FFCC70 100%);
+            background-image: linear-gradient(43deg, #C850C0 46%, #3E187A 100%);
 
-            .login-affiliate__card--information-label {
-                font-weight: $fontWeightXL;
-                font-size: $textFontSize3XL;
-                text-align: center;
-            }
+            height: 100%;
+            width: 50%;
+            border-top-left-radius: $borderRadiusL;
+            border-bottom-left-radius: $borderRadiusL;
+            // border-right: 1px solid black;
 
-            .login-affiliate__card--information-slogan {
-                display: flex;
-                gap: $gapL;
-                align-items: center;
-                justify-content: center;
-
-                .login-affiliate__card--information-slogan-icon {
-                    display: flex;
-                    width: 50%;
-                    flex-direction: column;
-                    align-items: center;
-                    justify-content: center;
-
-                    .login-affiliate__card--information-slogan-icon-color {
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        padding: 8px;
-                        background-color: $colorViolet;
-                        width: fit-content;
-                        border-radius: $borderRadiusFull;
-                        color: $colorWhite;
-                        margin-bottom: 2px;
-                    }
-
-                    .login-affiliate__card--information-slogan-icon-label {
-                        font-size: $textFontSizeM;
-                        font-weight: $fontWeightXL;
-                    }
-
-                    .login-affiliate__card--information-slogan-icon-sub-label {
-                        font-size: $textFontSizeM;
-                        font-weight: $fontWeightL;
-                        color: $colorLightGray;
-                        white-space: nowrap;
-                    }
-                }
-
-            }
-
-            .login-affiliate__card--information-logo {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-
-                .login-affiliate__card--information-logo-image {
-                    width: 25%;
-                    height: 25%;
-                }
-
-                // height: 30%;
-                // width: 30%;
-            }
-
-            .login-affiliate__card--information-line {
-                position: relative;
-                width: 50%;
-                height: 2px;
-                background-color: $colorMoreLightGray;
+            .login-affiliate__form--left-child {
+                background-color: transparent;
                 border-radius: $borderRadiusL;
-                margin: 0 auto;
+            }
+        }
 
-                .login-affiliate__card--information-line-other {
-                    position: absolute;
-                    top: 50%;
-                    left: 50%;
-                    transform: translate(-50%, -50%);
-                    color: $colorLightGray;
-                    background-color: $colorWhite; // Đặt màu nền để chữ không bị che bởi đường thẳng
-                    padding: 0 8px; // Tạo khoảng cách giữa chữ và viền nền
-                }
+        .login-affiliate__form--right {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: $gapL;
+            background-color: $colorWhite;
+            height: 100%;
+            width: 50%;
+            border-top-right-radius: $borderRadiusL;
+            border-bottom-right-radius: $borderRadiusL;
+            padding: 12px;
+
+            .login-affiliate__form--right-logo {
+                width: 80px;
+                height: 50px;
+                border-radius: $borderRadiusFull;
             }
 
-
-
-            .login-affiliate__card--information-forgot-password {
+            .login-affiliate__form--right-login {
                 display: flex;
                 flex-direction: column;
+                width: 100%;
+                height: 100%;
                 align-items: center;
-                justify-content: center;
-                gap: $gapXS;
-
-                .login-affiliate__card--information-forgot-password-label {
-                    font-size: $textFontSizeM;
-                    font-weight: $fontWeightL;
-                    color: $colorBlack;
+                gap: $gapL;
+                opacity: 1;
+                transition: opacity 1s ease-out, height 0.3s ease-out; /* Thêm height vào transition */
+                &.hide {
+                    height: 0;
+                    opacity: 0;
                 }
-                .login-affiliate__card--information-forgot-password-button {
-                    cursor: pointer;
-                    font-size: $textFontSizeM;
-                    font-weight: $fontWeightXL;
-                    color: $colorViolet;
+
+                .login-affiliate__form--right-login-header {
+                    text-align: center;
+
+                    span {
+                        font-size: $textFontSizeXL;
+                        font-weight: $fontWeightXL;
+                        color: $colorBlack;
+                    }
+
+                }
+
+                .login-affiliate__form--right-login-input {
+                    display: flex;
+                    flex-direction: column;
+                    gap: $gapL;
+                    width: 100%;
+                    padding-top: 16px;
+
+                }
+
+                .login-affiliate__form--right-login-line {
+                    position: relative;
+                    width: 70%;
+                    height: 2px;
+                    background-color: $colorMoreLightGray;
+                    border-radius: $borderRadiusL;
+                    margin: 0 auto;
+
+                    .login-affiliate__form--right-login-line-other {
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        color: $colorLightGray;
+                        background-color: $colorWhite; // Đặt màu nền để chữ không bị che bởi đường thẳng
+                        padding: 0 8px; // Tạo khoảng cách giữa chữ và viền nền
+                    }
+                }
+
+                .login-affiliate__form--right-login-sign-up {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: $gapXS;
+
+                    .login-affiliate__form--right-login-sign-up-label {
+                        font-size: $textFontSizeM;
+                        font-weight: $fontWeightL;
+                        color: $colorBlack;
+
+                        &.high-light {
+                            font-weight: $fontWeightXL;
+                            color: $colorDarkViolet;
+                        }
+                    }
                 }
             }
-        
 
-        }
-    }
-}
+            .login-affiliate__form--right-sign-up {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                height: 100%;
+                align-items: center;
+                gap: $gapL;
+                opacity: 1;
+                transition:  0.3s ease-out;
 
-.login-affiliate__card--information-otp {
-    display: flex;
-    flex-direction: column;
-    gap: $gapM;
+                &.hide {
+                    height: 0;
+                    opacity: 0;
+                }
 
-    .login-affiliate__card--information-forgot-password {
-        font-size: $textFontSizeM;
-        font-weight: $fontWeightL;
-        color: $colorBlack;
-        text-align: center;
+                .login-affiliate__form--right-sign-up-header {
+                    text-align: center;
 
-        &.high-light {
-            color: $colorOrange;
-            font-weight: $fontWeightXL;
-        }
+                    span {
+                        font-size: $textFontSizeXL;
+                        font-weight: $fontWeightXL;
+                        color: $colorBlack;
+                    }
 
-        &.clickable {
-            cursor: pointer;
-        }
+                }
 
-    }
+                .login-affiliate__form--right-sign-up-input {
+                    display: flex;
+                    flex-direction: column;
+                    gap: $gapL;
+                    width: 100%;
+                    padding-top: 16px;
 
-    .login-affiliate__card--information-otp-digit {
-        display: flex;
-        gap: $gapM;
-        justify-content: center;
-        align-items: center;
+                }
 
-        .login-affiliate__card--information-otp-digit-number {
-            width: 50px;
-            height: 50px;
-            font-size: $textFontSize3XL;
-            text-align: center;
-            border: 3px solid $colorMoreLightGray;
-            border-radius: 8px;
-            outline: none;
-            transition: all 0.3s ease;
+                .login-affiliate__form--right-sign-up-line {
+                    position: relative;
+                    width: 70%;
+                    height: 2px;
+                    background-color: $colorMoreLightGray;
+                    border-radius: $borderRadiusL;
+                    margin: 0 auto;
 
-            &:focus {
-                border-color: $colorViolet;
+                    .login-affiliate__form--right-sign-up-line-other {
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        color: $colorLightGray;
+                        background-color: $colorWhite; // Đặt màu nền để chữ không bị che bởi đường thẳng
+                        padding: 0 8px; // Tạo khoảng cách giữa chữ và viền nền
+                    }
+                }
+
+                .login-affiliate__form--right-sign-up-sign-up {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: $gapXS;
+
+                    .login-affiliate__form--right-sign-up-sign-up-label {
+                        font-size: $textFontSizeM;
+                        font-weight: $fontWeightL;
+                        color: $colorBlack;
+
+                        &.high-light {
+                            font-weight: $fontWeightXL;
+                            color: $colorDarkViolet;
+                        }
+                    }
+                }
             }
         }
+
     }
-
-    .login-affiliate__card--information-otp-resend {}
 }
 
-.login-affiliate__card--information-person {
+.login-affiliate__button {
     display: flex;
-    flex-direction: column;
-    gap: $gapM;
-    padding: 12px;
-    
-}
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    height: fit-content;
+    width: 100%;
+    background-color: $colorWhite;
+    border: 1px solid $colorDarkViolet;
+    border-radius: $borderRadiusFull;
+    text-align: center;
+    transition: all 0.3s ease-out;
 
-.login-affiliate__card--information-person-footer {
-    padding: 0 12px;
-}
-
-.login-affiliate__card--information-otp {
-    display: flex;
-
-    .login-affiliate__card--information-otp-label {
+    span {
         font-size: $textFontSizeM;
-        font-weight: $fontWeightL;
-        color: $colorBlack;
-
-        &.high-light {
-            color: $colorOrange;
-            font-weight: $fontWeightXL;
-        }
-
-        &.clickable {
-            cursor: pointer;
-        }
-
-        .bold {
-            font-weight: $fontWeightXL;
-        }
+        font-weight: $fontWeightXL;
+        color: $colorDarkViolet;
     }
 
-    .login-affiliate__card--information-otp-digit {
-        display: flex;
-        gap: 10px;
-        /* Adjust spacing between inputs */
-        justify-content: center;
-        align-items: center;
+    &:hover {
+        background-color: $colorDarkViolet;
 
-        .login-affiliate__card--information-otp-digit-number {
-            width: 50px;
-            height: 50px;
-            font-size: 24px;
-            text-align: center;
-            border: 2px solid #ccc;
-            /* Default border */
-            border-radius: 8px;
-            outline: none;
-            transition: border-color 0.3s, box-shadow 0.3s;
-
+        span {
+            color: $colorWhite;
         }
     }
 }

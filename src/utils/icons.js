@@ -85,6 +85,8 @@ import {
   IoLocation,
   IoShareOutline,
   IoRestaurant,
+  IoEye,
+  IoEyeOff,
 } from "react-icons/io5";
 import { FaRegFrown, FaRegMeh, FaRegSmile, FaDog } from "react-icons/fa";
 import { MdDoubleArrow, MdChair } from "react-icons/md";
@@ -180,6 +182,8 @@ const icons = {
   IoShareOutline,
   IoHeart,
   IoRestaurant,
+  IoEye,
+  IoEyeOff,
   // Font Awesome 5
   FaRegFrown,
   FaRegMeh,

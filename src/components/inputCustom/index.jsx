@@ -32,6 +32,8 @@ const {
   IoCloudUploadOutline,
   IoWarning,
   IoAlertCircleOutline,
+  IoEye,
+  IoEyeOff,
 } = icons;
 
 const InputTextCustom = (props) => {
@@ -85,7 +87,7 @@ const InputTextCustom = (props) => {
   const [hideImage, setHideImage] = useState(false);
   const [selectArea, setSelectArea] = useState("");
   const [valueSearch, setValueSearch] = useState("");
-
+const [isShowPassword, setIsShowPassword] = useState(isPassword ? true : false );
   // ~~~ Support Handle fucntion ~~~
   // 1. Hàm đóng Popover
   const handleClose = () => {
@@ -720,7 +722,7 @@ const InputTextCustom = (props) => {
       {type === "text" && (
         <>
           <input
-            type={isPassword ? "password" : "text"}
+            type={isShowPassword ? "password" : "text"}
             disabled={disable}
             name={name ? name : ""}
             className="input-custom__input"
@@ -737,6 +739,26 @@ const InputTextCustom = (props) => {
               <span className="input-custom__label--required">*</span>
             )}
           </label>
+
+          {isPassword ? (
+            isShowPassword ? (
+              <IoEyeOff
+                className="input-custom__icon"
+                size="14px"
+                color="#999"
+                onClick={() => setIsShowPassword(false)}
+              />
+            ) : (
+              <IoEye
+                className="input-custom__icon"
+                size="14px"
+                color="#999"
+                onClick={() => setIsShowPassword(true)}
+              />
+            )
+          ) : (
+            ""
+          )}
           <span className="input-custom__describe">{describe}</span>
         </>
       )}
@@ -899,7 +921,8 @@ const InputTextCustom = (props) => {
                 style={{ cursor: "pointer" }}
                 placeholder=" "
                 value={
-                  typeof options?.find((el) => el.code === value)?.label === 'string'
+                  typeof options?.find((el) => el.code === value)?.label ===
+                  "string"
                     ? options?.find((el) => el.code === value)?.label
                     : options?.find((el) => el.code === value)?.name
                 }
