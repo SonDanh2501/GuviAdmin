@@ -32,8 +32,14 @@ import { getLanguageState } from "../../../../../redux/selectors/auth";
 import "./index.scss";
 import { update } from "lodash";
 import ButtonCustom from "../../../../../components/button";
+import {
+  getListReferralPersonAdminApi,
+  getListReferralPersonApi,
+} from "../../../../../api/affeliate";
+import icons from "../../../../../utils/icons";
 // core components
 
+const { IoCall, IoCreate } = icons;
 const DetailsProfile = ({ id }) => {
   const lang = useSelector(getLanguageState);
   const dispatch = useDispatch();
@@ -47,13 +53,15 @@ const DetailsProfile = ({ id }) => {
   const [data, setData] = useState([]);
   const [rankPoint, setRankPoint] = useState();
   const [isLoading, setIsLoading] = useState(false);
-  const [dataInvite, setDataInvite] = useState([]);
-  const [totalInvite, setTotalInvite] = useState([]);
+  const [dataInvite, setDataInvite] = useState([]); // Giá trị danh sách những người giới thiệu của khách hàng (cũ)
+  const [totalInvite, setTotalInvite] = useState([]); // Giá trị tổng những người giới thiệu của khách hàng (cũ)
   const [currentPage, setCurrentPage] = useState(1);
   const [isStaff, setIsStaff] = useState(false);
   const [bankName, setBankName] = useState(""); // Giá trị tên ngân hàng
   const [bankNumber, setBankNumber] = useState(""); // Giá trị số tài khoản ngân hàng
   const [bankHolderName, setBankHolderName] = useState(""); // Giá trị tên của chủ thẻ
+  const [valueListInviter, setValueListInviter] = useState(""); // Giá trị danh sách những người giới thiệu của khách hàng
+
   /* ~~~ Handle function ~~~ */
   // 1. Hàm fetch thông tin của khách hàng
   const fetchCustomerInfo = async (id) => {
@@ -78,7 +86,7 @@ const DetailsProfile = ({ id }) => {
       });
     }
   };
-  // 2. Hàm fetch danh sách những người giới thiệu của khách hàng
+  // 2. Hàm fetch danh sách những người giới thiệu của khách hàng (hàm cũ)
   const fetchInvitedListOfCustomer = async () => {
     try {
       dispatch(loadingAction.loadingRequest(true));
@@ -89,6 +97,17 @@ const DetailsProfile = ({ id }) => {
     } catch (err) {
       errorNotify({
         message: err?.message,
+      });
+    }
+  };
+  // Hàm fetch danh sách những người giới thiệu của khách hàng (hàm mới)
+  const fetchListInviterOfCustomer = async (id) => {
+    try {
+      const res = await getListReferralPersonAdminApi(id);
+      setValueListInviter(res);
+    } catch (err) {
+      errorNotify({
+        message: err?.message || err,
       });
     }
   };
@@ -158,6 +177,7 @@ const DetailsProfile = ({ id }) => {
   useEffect(() => {
     fetchCustomerInfo(id);
     fetchInvitedListOfCustomer();
+    fetchListInviterOfCustomer(id);
   }, [id, dispatch]);
   // 2. Kiểm tra mức rank hiện tại của khách hàng
   useEffect(() => {
@@ -343,7 +363,6 @@ const DetailsProfile = ({ id }) => {
           ></ButtonCustom>
         </div>
       </div>
-
       <div className="div-container-invite-code">
         <p className="title-invite">{`${i18n.t("recent_referrals", {
           lng: lang,

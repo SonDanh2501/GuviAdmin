@@ -198,6 +198,8 @@ const CustomerInfo = ({
           </div>
           {isAddress && isEditTime && (
             <EditTimeOrder
+              idCustomer={id}
+              address ={address}
               idOrder={dataGroupOrder?.id_order[0]}
               dateWork={date_work}
               estimate={dataGroupOrder?.total_estimate}

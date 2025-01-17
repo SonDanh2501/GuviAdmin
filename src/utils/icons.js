@@ -87,10 +87,12 @@ import {
   IoRestaurant,
   IoEye,
   IoEyeOff,
+  IoCreate,
+  IoCall,
 } from "react-icons/io5";
 import { FaRegFrown, FaRegMeh, FaRegSmile, FaDog } from "react-icons/fa";
 import { MdDoubleArrow, MdChair } from "react-icons/md";
-import { TbAirConditioning,TbIroningFilled  } from "react-icons/tb";
+import { TbAirConditioning, TbIroningFilled } from "react-icons/tb";
 import { PiCookingPotFill } from "react-icons/pi";
 import { FaToolbox } from "react-icons/fa6";
 import { GiVacuumCleaner } from "react-icons/gi";
@@ -184,6 +186,8 @@ const icons = {
   IoRestaurant,
   IoEye,
   IoEyeOff,
+  IoCreate,
+  IoCall,
   // Font Awesome 5
   FaRegFrown,
   FaRegMeh,

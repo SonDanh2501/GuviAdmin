@@ -48,6 +48,7 @@ export const sendOtpAffiliateApi = (payload) => {
 export const updatePasswordAffiliateApi = (payload) => {
   return axiosClient.post("api/customer_web/auth/update_new_password", payload);
 };
+
 /* ~~~ Affiliate ~~~ */
 // API tạo mã giới thiệu random
 export const getRandomReferralCodeApi = () => {
@@ -88,4 +89,12 @@ export const createBankAccountApi = (payload) => {
 // API check tài khoản khách hàng đã có tài khoản ngân hàng hay chưa
 export const checkBankAccountExistApi = () => {
   return axiosClient.get("api/customer_web/affiliate/check_bank_account_exist");
+}
+
+/* ~~~ Admin ~~~ */
+// API lấy danh sách những người giới thiệu của khách hàng 
+export const getListReferralPersonAdminApi = (id) => {
+  return axiosClient.get(
+    `api/admin/affiliate_manager/get_list_referral_person/${id}`
+  );
 }

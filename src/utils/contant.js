@@ -113,8 +113,6 @@ export const INIT_STATE = {
   },
 };
 
-
-
 /* ~~~ List ~~~ */
 /* 1. Danh sách ngân hàng */
 export const bankList = [
@@ -542,11 +540,13 @@ export const renderStarFromNumber = (number, color, size) => {
   }
   return stars;
 };
+
 /* 2. Hàm tính phần trăm của giá trị con (child) trên tổng (total) */
 export const calculateNumberPercent = (total, child) => {
   let percent = (child / total) * 100;
   return percent ? Math.round((percent + Number.EPSILON) * 100) / 100 : 0;
 };
+
 /* 3. Hàm dời phần từ trong mảng (array) từ vị trí hiện tại thành vị trí truyền vào (position) 
 conditionFind là điều kiện để tìm ra phần tử cần đổi vị trí trong mảng array */
 export const moveElement = (array, position, conditionFind) => {
@@ -558,23 +558,13 @@ export const moveElement = (array, position, conditionFind) => {
     return newArray;
   }
 };
+
 /* 4. Hàm sắp xếp theo bảng chữ cái */
-export const sortList = (list,valueSort) => {
+export const sortList = (list, valueSort) => {
   return list.sort((a, b) => a[valueSort].localeCompare(b[valueSort]));
-}
+};
+
 /* 5. Hàm thiết lập mảng giá trị thành mảng phù hợp cho InputTextCustom */
-// export const formatArray = (array, code, label, subLabel, child) => {
-//   const updatedArray = array.map((item) => {
-//     return {
-//       ...item,
-//       code: item[code],
-//       label: subLabel
-//         ? item[label] + " - " + (child ? item[subLabel][child] : item[subLabel])
-//         : item[label],
-//     };
-//   });
-//   return updatedArray; 
-// };
 export const formatArray = (array, code, labelList, indexList) => {
   const updatedArray = array?.map((item) => {
     const label =
@@ -602,31 +592,64 @@ export const formatArray = (array, code, labelList, indexList) => {
 };
 
 /* 6. Hàm so sánh hai mốc thời gian */
-export const compareDateIsBefore = (firstDate, secondDate) => { 
-  const date1 = moment(firstDate)
-  const date2 = moment(secondDate)
+export const compareDateIsBefore = (firstDate, secondDate) => {
+  const date1 = moment(firstDate);
+  const date2 = moment(secondDate);
   if (date1.isBefore(date2)) {
     return true;
   } else {
     return false;
   }
-}
+};
+
 /* 7. Hàm che số điện thoại */
 export const convertPhoneNumber = (phoneNumber, length) => {
   if (!phoneNumber || length >= phoneNumber.length) {
     return phoneNumber;
   }
-  
-  const mask = '*'.repeat(length); 
-  const visiblePart = phoneNumber.slice(phoneNumber.length - length); 
+
+  const mask = "*".repeat(length);
+  const visiblePart = phoneNumber.slice(phoneNumber.length - length);
   return mask + visiblePart;
-}
+};
 
 /* 8. Hàm lấy chữ cái đầu của hai từ cuối và cuối  */
-
 export const getInitials = (name) => {
   const nameParts = name.split(" ");
   const firstInitial = nameParts[0][0];
   const lastInitial = nameParts[nameParts.length - 1][0];
   return `${firstInitial}${lastInitial}`;
+};
+
+/* 9. Hàm kiểm tra độ bảo mật của mật khẩu (Ít nhất 8 ký tự, ít nhất 1 chữ cái, ít nhất 1 chữ số) Nếu đủ 3 yêu cầu trên thì mới vừa lên mức good
+Sẽ chia làm 4 mức: yếu, trung bình, tốt, mạnh, với mỗi điều kiện trên thì sẽ lên được 1 bậc, và để lên được mức good thì phải ít nhất 12 ký tự*/
+export const checkPasswordRequired = (valuePassword) => {
+  const condition = {
+    isPassLength: false,
+    isHaveLetter: false,
+    isHaveNumber: false,
+    isStrong: false,
+    level: 0,
+  };
+  // Ít nhất 8 ký tự
+  if (valuePassword.toString().trim().length >= 8) {
+    condition.isPassLength = true;
+    condition.level = condition.level + 1;
+  }
+  // Ít nhất 1 chữ cái
+  if (/[a-zA-Z]/.test(valuePassword.toString().trim())) {
+    condition.isHaveLetter = true;
+    condition.level = condition.level + 1;
+  }
+  // Ít nhất 1 chữ số
+  if (/\d/.test(valuePassword.toString().trim())) {
+    condition.isHaveNumber = true;
+    condition.level = condition.level + 1;
+  }
+  // Có hơn 12 ký tự
+  if (valuePassword.toString().trim().length >= 12) {
+    condition.isStrong = true;
+    condition.level = condition.level + 1;
+  }
+  return condition;
 };

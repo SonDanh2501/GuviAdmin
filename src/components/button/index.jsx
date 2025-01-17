@@ -18,6 +18,7 @@ const ButtonCustom = (props) => {
     setValueSelectedProps,
     total,
     fullScreen,
+    borderRadiusFull,
   } = props;
   const [open, setOpen] = useState(false);
   const content = (
@@ -124,7 +125,9 @@ const ButtonCustom = (props) => {
           disabled={disable}
           className={`button-custom ${disable && "disable"} ${
             style === "normal" && "normal"
-          } ${fullScreen && "full-screen"}`}
+          } ${fullScreen && "full-screen"} ${
+            borderRadiusFull && "border-full"
+          }`}
         >
           {label}
         </button>

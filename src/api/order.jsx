@@ -164,3 +164,10 @@ export const getTotalOrder = (startDate, endDate) => {
     `/admin/order_manager/get_total_order?lang=vi&start_date=${startDate}&end_date=${endDate}`
   );
 };
+
+export const updateAddressOrderApi = (idOrder, payload) => {
+  return axiosClient.post(
+    `api/admin/order_manager/update_address_for_order/${idOrder}`,
+    payload
+  );
+};

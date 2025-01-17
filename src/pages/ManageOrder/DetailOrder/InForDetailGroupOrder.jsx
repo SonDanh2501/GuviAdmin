@@ -369,7 +369,6 @@ const InForDetailGroupOrder = (props) => {
     setIsOpenModalCancel(false);
   };
 
-  // console.log("check data >>> ", collaborator);
   const onChangeStatus = (_id, data) => {
     dispatch(loadingAction.loadingRequest(true));
     changeStatusOrderApi(_id, data)
@@ -409,6 +408,7 @@ const InForDetailGroupOrder = (props) => {
       });
     setModalCancelCollaborator(false);
   };
+
   return (
     <div className="info-detail-order_container ">
       <div className="info-detail-order_header">
@@ -482,6 +482,7 @@ const InForDetailGroupOrder = (props) => {
           address={dataGroup?.address}
           dataGroupOrder={dataGroup}
           isAddress
+          id={customer?._id}
           date_work={dataList.length > 0 && dataList[0]?.date_work}
           end_date_work={dataList.length > 0 && dataList[0]?.end_date_work}
           setReCallData={setReCallData}

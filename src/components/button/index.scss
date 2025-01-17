@@ -38,6 +38,10 @@
     &.full-screen {
         width: 100%;
     }
+
+    &.border-full {
+        border-radius: $borderRadiusFull;
+    }
 }
 
 .button-custom-checked {
