@@ -107,7 +107,7 @@ const DetailsProfile = ({ id }) => {
       setValueListInviter(res);
     } catch (err) {
       errorNotify({
-        message: err?.message || err,
+        message: message?.err || err,
       });
     }
   };
@@ -200,6 +200,7 @@ const DetailsProfile = ({ id }) => {
   /* ~~~ Other ~~~ */
   const age = moment().diff(data?.birthday, "years");
 
+  console.log("check valueListInviter", valueListInviter);
   /* ~~~ Main ~~~ */
   return (
     <>
@@ -362,6 +363,97 @@ const DetailsProfile = ({ id }) => {
             onClick={() => handleUpdateUser()}
           ></ButtonCustom>
         </div>
+      </div>
+      <span>Danh sách người giới thiệu</span>
+      {/* Danh sách người giới thiệu */}
+      <div className="detail-profile__list-inviter">
+        {valueListInviter?.data?.map((person, index) => (
+          <div key={index} className="detail-profile__list-inviter--child">
+            <div
+              className={`detail-profile__list-inviter--child-avatar ${
+                person?.rank === "silver"
+                  ? "rank-silver"
+                  : person?.rank === "gold"
+                  ? "rank-gold"
+                  : person?.rank === "platinum"
+                  ? "rank-platinum"
+                  : "rank-member"
+              }`}
+            >
+              {person?.avatar ? (
+                <img
+                  className="detail-profile__list-inviter--child-avatar-image"
+                  src={person?.avatar}
+                  alt=""
+                ></img>
+              ) : (
+                <img
+                  className="detail-profile__list-inviter--child-avatar-image"
+                  src={user}
+                  alt=""
+                ></img>
+              )}
+              <div
+                className={`detail-profile__list-inviter--child-avatar-rank ${
+                  person?.rank === "silver"
+                    ? "rank-silver"
+                    : person?.rank === "gold"
+                    ? "rank-gold"
+                    : person?.rank === "platinum"
+                    ? "rank-platinum"
+                    : "rank-member"
+                }`}
+              >
+                <span>
+                  {person?.rank === "silver"
+                    ? "Bạc"
+                    : person?.rank === "gold"
+                    ? "Vàng"
+                    : person?.rank === "platinum"
+                    ? "Bạch kim"
+                    : "Thành viên"}
+                </span>
+              </div>
+            </div>
+            <div className="detail-profile__list-inviter--child-name">
+              <span>{person?.full_name}</span>
+            </div>
+            <div className="detail-profile__list-inviter--child-email">
+              <span>
+                @
+                {person?.email.split("@")[0].trim() !== ""
+                  ? person?.email.split("@")[0]
+                  : "chuadangky"}
+              </span>
+            </div>
+            <div className="detail-profile__list-inviter--child-statistic">
+              <div className="detail-profile__list-inviter--child-statistic-value">
+                <span>Tổng đơn:</span>
+                <span>{person?.total_done_order}</span>
+              </div>
+              <div className="detail-profile__list-inviter--child-statistic-line"></div>
+              <div className="detail-profile__list-inviter--child-statistic-value">
+                <span>Tổng tiền:</span>
+                <span>{formatMoney(person?.total_money || 0)}</span>
+              </div>
+            </div>
+            <div className="detail-profile__list-inviter--child-extra">
+              <div className="detail-profile__list-inviter--child-extra-element">
+                <span>
+                  <IoCall />
+                </span>
+                <span>{person?.phone}</span>
+              </div>
+              <div className="detail-profile__list-inviter--child-extra-element">
+                <span>
+                  <IoCreate />
+                </span>
+                {/* moment(new Date(activity[dateIndex])).format("DD MMM, YYYY") */}
+                <span>{moment(person?.date_create).format("DD MMM YYYY")}</span>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
       <div className="div-container-invite-code">
         <p className="title-invite">{`${i18n.t("recent_referrals", {

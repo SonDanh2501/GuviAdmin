@@ -67,7 +67,12 @@ export const getListReferralPersonApi = (start, length) => {
   );
 };
 // API lấy danh sách lệnh nạp rút affiliate
-export const getListTransactionAffiliateApi = (start, length, query, search) => {
+export const getListTransactionAffiliateApi = (
+  start,
+  length,
+  query,
+  search
+) => {
   return axiosClient.get(
     `api/customer_web/affiliate/get_list_transaction?start=${start}&length=${length}&search=${search}${query}`
   );
@@ -89,12 +94,39 @@ export const createBankAccountApi = (payload) => {
 // API check tài khoản khách hàng đã có tài khoản ngân hàng hay chưa
 export const checkBankAccountExistApi = () => {
   return axiosClient.get("api/customer_web/affiliate/check_bank_account_exist");
-}
+};
 
 /* ~~~ Admin ~~~ */
-// API lấy danh sách những người giới thiệu của khách hàng 
+
+// API lấy danh sách những người giới thiệu của khách hàng
 export const getListReferralPersonAdminApi = (id) => {
   return axiosClient.get(
     `api/admin/affiliate_manager/get_list_referral_person/${id}`
   );
-}
+};
+
+// API lấy danh sách nhận chiết khấu
+export const getListHistoryDiscountApi = (
+  idCustomer,
+  start,
+  length,
+  query,
+  search
+) => {
+  return axiosClient.get(
+    `api/admin/affiliate_manager/get_list_activity/${idCustomer}?start=${start}&length=${length}&search=${search}${query}`
+  );
+};
+
+// API lấy danh sách yêu cầu rút
+export const getListHisorityWithdrawApi = (
+  idCustomer,
+  start,
+  length,
+  query,
+  search
+) => {
+  return axiosClient.get(
+    `api/admin/affiliate_manager/get_list_transaction/${idCustomer}?start=${start}&length=${length}&search=${search}${query}`
+  );
+};

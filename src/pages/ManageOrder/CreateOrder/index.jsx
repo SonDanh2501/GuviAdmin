@@ -318,6 +318,7 @@ const CreateOrder = () => {
       errorNotify({
         message: err?.message || err,
       });
+      dispatch(loadingAction.loadingRequest(false));
     }
   };
   // Hàm tính toán tiền của đơn hàng

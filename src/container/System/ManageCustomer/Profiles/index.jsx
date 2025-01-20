@@ -7,17 +7,19 @@ import { useCookies } from "../../../../helper/useCookies";
 import i18n from "../../../../i18n";
 import user from "../../../../assets/images/user.png";
 import { getLanguageState } from "../../../../redux/selectors/auth";
+import { errorNotify } from "../../../../helper/toast";
+import { fetchCustomerById } from "../../../../api/customer";
+import { loadingAction } from "../../../../redux/actions/loading";
+import "./index.scss";
+import useWindowDimensions from "../../../../helper/useWindowDimensions";
 import FavouriteBlock from "./CollaboratorFavoriteBlock";
 import DetailsProfile from "./DetailsProfile";
 import HistoryTransition from "./History";
 import OrderCustomer from "./OrderCustomer";
 import CustomerReview from "./Review";
 import UsedPromotion from "./UsedPromotion";
-import { errorNotify } from "../../../../helper/toast";
-import { fetchCustomerById } from "../../../../api/customer";
-import { loadingAction } from "../../../../redux/actions/loading";
-import "./index.scss";
-import useWindowDimensions from "../../../../helper/useWindowDimensions";
+import HistoryAffiliate from "./HistoryAffiliate";
+import HistoryWithdraw from "./HistoryWithdraw";
 
 const Profiles = () => {
   const { width } = useWindowDimensions();
@@ -107,6 +109,12 @@ const Profiles = () => {
           <Tabs.TabPane tab="Đánh giá" key="6">
             <CustomerReview id={id} />
           </Tabs.TabPane>
+          <Tabs.TabPane tab="Lịch sử nhận chiết khấu" key="7">
+            <HistoryAffiliate id={id} />
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="Lịch sử yêu cầu rút" key="8">
+            <HistoryWithdraw id={id} />
+          </Tabs.TabPane>
         </Tabs>
       </div>
       {/*Card Profile*/}
@@ -139,7 +147,7 @@ const Profiles = () => {
                 ? `${data?.phone}`
                 : `${hidePhoneNumber(data?.phone)}`}
               <i
-                style={{ cursor: "pointer", color: "darkgray"}}
+                style={{ cursor: "pointer", color: "darkgray" }}
                 onClick={() => setIsShowPhone(!isShowPhone)}
                 className={`${isShowPhone ? "uil-eye-slash" : "uil-eye"}`}
               ></i>
