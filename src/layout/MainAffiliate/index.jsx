@@ -85,7 +85,7 @@ const MainAffiliate = () => {
             height: "100vh",
           }}
         >
-          <Header
+          {/* <Header
             style={{
               height: `${width < 640 ? "40px" : "55px"}`,
               padding: "0px",
@@ -94,7 +94,7 @@ const MainAffiliate = () => {
             }}
           >
             <HeaderBar onClick={() => handleClickSideBar()} hide={collapsed} />
-          </Header>
+          </Header> */}
           <Content
             style={{
               overflow: "auto",

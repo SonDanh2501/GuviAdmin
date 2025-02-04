@@ -22,7 +22,7 @@ import {
   IoThumbsDownOutline,
   IoTimeOutline,
   IoWalletOutline,
-  IoCheckmarkCircleSharp,
+  IoCheckmarkCircle,
   IoChevronDownOutline,
   IoEyeOutline,
   IoClose,
@@ -89,6 +89,9 @@ import {
   IoEyeOff,
   IoCreate,
   IoCall,
+  IoCheckboxOutline,
+  IoArrowDownCircle,
+  IoGlobeOutline,
 } from "react-icons/io5";
 import { FaRegFrown, FaRegMeh, FaRegSmile, FaDog } from "react-icons/fa";
 import { MdDoubleArrow, MdChair } from "react-icons/md";
@@ -121,7 +124,7 @@ const icons = {
   IoThumbsDownOutline,
   IoTimeOutline,
   IoWalletOutline,
-  IoCheckmarkCircleSharp,
+  IoCheckmarkCircle,
   IoChevronDownOutline,
   IoEyeOutline,
   IoClose,
@@ -188,6 +191,9 @@ const icons = {
   IoEyeOff,
   IoCreate,
   IoCall,
+  IoCheckboxOutline,
+  IoArrowDownCircle,
+  IoGlobeOutline,
   // Font Awesome 5
   FaRegFrown,
   FaRegMeh,

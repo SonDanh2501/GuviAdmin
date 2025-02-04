@@ -22,7 +22,7 @@ import notFoundImage from "../../assets/images/not_found_image.svg";
 import { formatMoney, formatNumber } from "../../helper/formatMoney";
 
 const {
-  IoCheckmarkCircleSharp,
+  IoCheckmarkCircle,
   IoChevronDownOutline,
   IoSearchCircle,
   IoChevronDown,
@@ -256,7 +256,7 @@ const [isShowPassword, setIsShowPassword] = useState(isPassword ? true : false )
                 {itemFound.label ? itemFound.label : itemFound.name}
               </span>
               {itemFound?.code === value && (
-                <IoCheckmarkCircleSharp size={"18px"} />
+                <IoCheckmarkCircle size={"18px"} />
               )}
             </div>
           ))
@@ -271,7 +271,7 @@ const [isShowPassword, setIsShowPassword] = useState(isPassword ? true : false )
             } `}
           >
             <span key={index}>{item.label ? item.label : item.name}</span>
-            {item?.code === value && <IoCheckmarkCircleSharp size={"18px"} />}
+            {item?.code === value && <IoCheckmarkCircle size={"18px"} />}
           </div>
         ))
       ) : (
@@ -350,7 +350,7 @@ const [isShowPassword, setIsShowPassword] = useState(isPassword ? true : false )
                 <span key={index}>{province?.name}</span>
                 {(province?.code === value?.code ||
                   province?.code === value) && (
-                  <IoCheckmarkCircleSharp size={"18px"} />
+                  <IoCheckmarkCircle size={"18px"} />
                 )}
               </div>
             ))
@@ -375,7 +375,7 @@ const [isShowPassword, setIsShowPassword] = useState(isPassword ? true : false )
                 <span key={index}>{province?.name}</span>
                 {(province?.code === value?.code ||
                   province?.code === value) && (
-                  <IoCheckmarkCircleSharp size={"18px"} />
+                  <IoCheckmarkCircle size={"18px"} />
                 )}
               </div>
             )
@@ -431,7 +431,7 @@ const [isShowPassword, setIsShowPassword] = useState(isPassword ? true : false )
               >
                 <span key={index}>{item?.name}</span>
                 {item?.code === value?.code && (
-                  <IoCheckmarkCircleSharp size={"18px"} />
+                  <IoCheckmarkCircle size={"18px"} />
                 )}
               </div>
             ))
@@ -450,7 +450,7 @@ const [isShowPassword, setIsShowPassword] = useState(isPassword ? true : false )
             >
               <span key={index}>{item?.name}</span>
               {item?.code === value?.code && (
-                <IoCheckmarkCircleSharp size={"18px"} />
+                <IoCheckmarkCircle size={"18px"} />
               )}
             </div>
           ))}
@@ -473,7 +473,7 @@ const [isShowPassword, setIsShowPassword] = useState(isPassword ? true : false )
           // })}`}
         >
           <span key={index}>{item?.title?.vi}</span>
-          {item?.is_select === true && <IoCheckmarkCircleSharp size={"18px"} />}
+          {item?.is_select === true && <IoCheckmarkCircle size={"18px"} />}
         </div>
       ))}
     </div>
@@ -530,7 +530,7 @@ const [isShowPassword, setIsShowPassword] = useState(isPassword ? true : false )
               >
                 <span key={index}>{item?.name}</span>
                 {item?.is_select === true && (
-                  <IoCheckmarkCircleSharp size={"18px"} />
+                  <IoCheckmarkCircle size={"18px"} />
                 )}
               </div>
             ))
@@ -554,7 +554,7 @@ const [isShowPassword, setIsShowPassword] = useState(isPassword ? true : false )
             >
               <span key={index}>{item?.name}</span>
               {item?.is_select === true && (
-                <IoCheckmarkCircleSharp size={"18px"} />
+                <IoCheckmarkCircle size={"18px"} />
               )}
             </div>
           ))}
@@ -613,7 +613,7 @@ const [isShowPassword, setIsShowPassword] = useState(isPassword ? true : false )
           // })}`}
         >
           <span key={index}>{item?.label}</span>
-          {item?.is_select === true && <IoCheckmarkCircleSharp size={"18px"} />}
+          {item?.is_select === true && <IoCheckmarkCircle size={"18px"} />}
         </div>
       ))}
     </div>

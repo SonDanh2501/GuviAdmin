@@ -3,7 +3,7 @@ import "./index.scss";
 import { ConfigProvider, Popover } from "antd";
 import icons from "../../utils/icons";
 
-const { IoCheckmarkCircleSharp, IoAddCircleOutline } = icons;
+const { IoCheckmarkCircle, IoAddCircleOutline } = icons;
 
 const ButtonCustom = (props) => {
   const {
@@ -46,7 +46,7 @@ const ButtonCustom = (props) => {
               {item?.total}
             </span>
           </span>
-          {item?.code === value && <IoCheckmarkCircleSharp size={"18px"} />}
+          {item?.code === value && <IoCheckmarkCircle size={"18px"} />}
         </div>
       ))}
     </div>
@@ -77,7 +77,7 @@ const ButtonCustom = (props) => {
               ) : null}
             </span>
             {value.length > 0 && value.includes(item.code) && (
-              <IoCheckmarkCircleSharp size="18px" />
+              <IoCheckmarkCircle size="18px" />
             )}
           </div>
         ))}

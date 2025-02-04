@@ -1746,10 +1746,6 @@ export default function Home() {
       </text>
     );
   };
-//   console.log("START >>> ", startDate)
-//   console.log("END >>> ", endDate);
-// console.log("START 2 >>> ",moment(startDate).format("DD/MM/YYYY"))
-// console.log("END 2 >>> ", moment(endDate).format("DD/MM/YYYY"));
   return (
     <div className="container-dash">
       {checkElement?.includes("get_general_total_report_dashboard") && (
@@ -1965,7 +1961,7 @@ export default function Home() {
                           to={`/details-collaborator/${topCollaborator[0]?._id?.id_collaborator}`}
                         >
                           <p className="text-level">
-                            {topCollaborator[0]?._id?.full_name}
+                            {topCollaborator[0]?._id?.full_name || topCollaborator[0]?.full_name} 
                           </p>
                           <p className="text-level-number">
                             {formatMoney(topCollaborator[0]?.sumIncome)}
@@ -1977,7 +1973,7 @@ export default function Home() {
                             to={`/details-collaborator/${topCollaborator[1]?._id?.id_collaborator}`}
                           >
                             <p className="text-level">
-                              {topCollaborator[1]?._id?.name}
+                              {topCollaborator[1]?._id?.name || topCollaborator[1]?.full_name}
                             </p>
                             <p className="text-level-number">
                               {formatMoney(topCollaborator[1]?.sumIncome)}
@@ -1990,7 +1986,7 @@ export default function Home() {
                             to={`/details-collaborator/${topCollaborator[2]?._id?.id_collaborator}`}
                           >
                             <p className="text-level">
-                              {topCollaborator[2]?._id?.name}
+                              {topCollaborator[2]?._id?.name || topCollaborator[2]?.full_name}
                             </p>
                             <p className="text-level-number">
                               {formatMoney(topCollaborator[2]?.sumIncome)}
@@ -2003,7 +1999,7 @@ export default function Home() {
                             to={`/details-collaborator/${topCollaborator[3]?._id?.id_collaborator}`}
                           >
                             <p className="text-level">
-                              {topCollaborator[3]?._id?.name}
+                              {topCollaborator[3]?._id?.name || topCollaborator[3]?.full_name}
                             </p>
                             <p className="text-level-number">
                               {formatMoney(topCollaborator[3]?.sumIncome)}
@@ -2016,7 +2012,7 @@ export default function Home() {
                             to={`/details-collaborator/${topCollaborator[4]?._id?.id_collaborator}`}
                           >
                             <p className="text-level">
-                              {topCollaborator[4]?._id?.name}
+                              {topCollaborator[4]?._id?.name || topCollaborator[4]?.full_name}
                             </p>
                             <p className="text-level-number">
                               {formatMoney(topCollaborator[4]?.sumIncome)}
