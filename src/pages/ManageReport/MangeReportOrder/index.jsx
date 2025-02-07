@@ -95,7 +95,7 @@ const ManageReportOrder = () => {
     // },
     {
       title: "Báo cáo doanh thu",
-      detail: "Báo cáo bao gồm những đơn đã hoàn thành",
+      detail: "Báo cáo doanh thu của những đơn đã hoàn thành",
       linkNavigate: "/report/manage-report/report-revenue",
       checkPermition: "order_report",
     },

@@ -267,12 +267,12 @@ const ReportOrderDone = () => {
       customTitle: (
         <CustomHeaderDatatable
           title="% Lợi nhuận"
-          subValue={totalValue?.percent_income}
+          subValue={totalValue?.percent_income_envenue}
           typeSubValue="percent"
-          textToolTip="% Lợi nhuận = Tổng lợi nhuận (/) Doanh thu"
+          textToolTip="% Lợi nhuận = Lời nhuận trước thuế (/) Tổng lời nhuận"
         />
       ),
-      dataIndex: "percent_income",
+      dataIndex: "percent_income_envenue",
       key: "percent",
       width: 120,
       position: "center",
