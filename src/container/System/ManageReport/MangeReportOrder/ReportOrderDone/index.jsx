@@ -1,0 +1,359 @@
+import { Pagination, Popover, Table, Select, message } from "antd";
+// import moment from "moment";
+import React, { useCallback, useEffect, useState } from "react";
+// import { useSelector } from "react-redux";
+// import { Link, useLocation } from "react-router-dom";
+// import { getReportOrder } from "../../../../api/report";
+// import CustomDatePicker from "../../../../components/customDatePicker";
+// import LoadingPagination from "../../../../components/paginationLoading";
+// import { formatMoney } from "../../../../helper/formatMoney";
+// import useWindowDimensions from "../../../../helper/useWindowDimensions";
+// import i18n from "../../../../i18n";
+// import { getLanguageState } from "../../../../redux/selectors/auth";
+// import RangeDatePicker from "../../../../components/datePicker/RangeDatePicker";
+// import DataTable from "../../../../components/tables/dataTable";
+// import CardMultiInfo from "../../../../components/card/cardMultiInfo";
+import "./index.scss";
+import { formatMoney } from "../../../../../helper/formatMoney";
+import DataTable from "../../../../../components/tables/dataTable";
+import CustomHeaderDatatable from "../../../../../components/tables/tableHeader";
+import { getReportOrder } from "../../../../../api/report";
+import RangeDatePicker from "../../../../../components/datePicker/RangeDatePicker";
+import moment from "moment";
+import i18n from "../../../../../i18n";
+import { getLanguageState } from "../../../../../redux/selectors/auth";
+import { useSelector } from "react-redux";
+import { errorNotify } from "../../../../../helper/toast";
+import FilterData from "../../../../../components/filterData";
+
+const HeaderInfo = ({ title, subValue, typeSubValue, textToolTip }) => {
+  const content = <p>{textToolTip ? textToolTip : ""}</p>;
+  if (subValue)
+    subValue =
+      typeSubValue === "money"
+        ? formatMoney(subValue)
+        : typeSubValue === "percent"
+        ? subValue + " %"
+        : subValue;
+  if (title == "Giá vốn") subValue = "0 đ";
+  return (
+    <React.Fragment>
+      <div className="header-table-custom">
+        <div className="title-report">
+          <p style={{ color: title === "Doanh thu" ? "#2463eb" : "none" }}>
+            {title}
+          </p>
+          {textToolTip ? (
+            <Popover
+              content={content}
+              placement="bottom"
+              overlayInnerStyle={{
+                backgroundColor: "white",
+              }}
+            >
+              <div>
+                <i
+                  style={{
+                    color: title === "Doanh thu" ? "#2463eb" : "none",
+                  }}
+                  class="uil uil-question-circle icon-question"
+                ></i>
+              </div>
+            </Popover>
+          ) : (
+            <></>
+          )}
+        </div>
+        <div className="sub-value">
+          {subValue ? (
+            <p style={{ color: title === "Doanh thu" ? "#2463eb" : "none" }}>
+              {subValue}
+            </p>
+          ) : (
+            <div style={{ marginTop: "35px" }}></div>
+          )}
+        </div>
+      </div>
+    </React.Fragment>
+  );
+};
+
+const ReportOrderDone = () => {
+  const lang = useSelector(getLanguageState);
+  /* ~~~ Value ~~~ */
+  const [lengthPage, setLengthPage] = useState(
+    JSON.parse(localStorage.getItem("linePerPage"))
+      ? JSON.parse(localStorage.getItem("linePerPage")).value
+      : 20
+  );
+  const [isLoading, setIsLoading] = useState(false);
+  const [total, setTotal] = useState([]);
+  const [totalValue, setTotalValue] = useState([]);
+  const [start, setStart] = useState(0);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  /* ~~~ List ~~~ */
+  const [listData, setListData] = useState([]);
+  const columns = [
+    {
+      customTitle: <CustomHeaderDatatable title="STT" />,
+      dataIndex: "",
+      key: "ordinal",
+      width: 50,
+    },
+    {
+      customTitle: <CustomHeaderDatatable title="Ngày làm" />,
+      dataIndex: "date_work",
+      key: "date_hour",
+      width: 100,
+      position: "center",
+    },
+    {
+      customTitle: <CustomHeaderDatatable title="Mã đơn" />,
+      dataIndex: "id_view",
+      key: "text_link",
+      width: 130,
+    },
+    {
+      customTitle: <CustomHeaderDatatable title="Trạng thái" />,
+      dataIndex: "status",
+      key: "status",
+      width: 120,
+    },
+    {
+      customTitle: (
+        <CustomHeaderDatatable
+          title="Tổng giá trị giao dịch"
+          subValue={totalValue?.total_gross_income}
+          typeSubValue="money"
+          textToolTip="GMV - Gross Merchandise Volume"
+        />
+      ),
+      dataIndex: "total_gross_income",
+      key: "money",
+      width: 170,
+    },
+    {
+      customTitle: (
+        <CustomHeaderDatatable
+          title="Thu hộ dịch vụ"
+          subValue={totalValue?.total_collabotator_fee}
+          typeSubValue="money"
+          textToolTip="Bao gồm phí dịch vụ trả đối tác: tiền tip từ khách,..."
+        />
+      ),
+      dataIndex: "total_collabotator_fee",
+      key: "money",
+      width: 150,
+    },
+    {
+      customTitle: (
+        <CustomHeaderDatatable
+          title="Doanh thu"
+          subValue={totalValue?.total_income}
+          typeSubValue="money"
+          textToolTip=""
+        />
+      ),
+      dataIndex: "total_income",
+      key: "money",
+      width: 120,
+    },
+    {
+      customTitle: (
+        <CustomHeaderDatatable
+          title="Giảm giá"
+          subValue={totalValue?.total_discount}
+          typeSubValue="money"
+          textToolTip="Tổng số tiền giảm giá từ: giảm giá dịch vụ, giảm giá đơn hàng, đồng giá, ctkm,…"
+        />
+      ),
+      dataIndex: "total_discount",
+      key: "money",
+      width: 100,
+    },
+    {
+      customTitle: (
+        <CustomHeaderDatatable
+          title="Doanh thu thuần"
+          subValue={totalValue?.total_net_income}
+          typeSubValue="money"
+          textToolTip="Số tiền thu được sau khi trừ toàn bộ các giảm giá. Doanh thu thuần = Doanh thu (-) Giảm giá."
+        />
+      ),
+      dataIndex: "total_net_income",
+      key: "money",
+      width: 150,
+    },
+    {
+      customTitle: (
+        <CustomHeaderDatatable
+          title="Tổng hóa đơn"
+          subValue={totalValue?.total_order_fee}
+          typeSubValue="money"
+          textToolTip="Tổng số tiền ghi nhận trên hoá đơn dịch vụ. Tổng hoá đơn = Tổng tiền - giảm giá."
+        />
+      ),
+      dataIndex: "total_order_fee",
+      key: "money",
+      width: 150,
+    },
+    {
+      customTitle: (
+        <CustomHeaderDatatable
+          title="Giá vốn"
+          subValue={totalValue?.punishss}
+          typeSubValue="money"
+        />
+      ),
+      dataIndex: "punishss",
+      key: "money",
+      width: 100,
+    },
+    {
+      customTitle: (
+        <CustomHeaderDatatable
+          title="Phí áp dụng"
+          subValue={totalValue?.total_service_fee}
+          typeSubValue="money"
+        />
+      ),
+      dataIndex: "total_service_fee",
+      key: "money",
+      width: 100,
+    },
+    {
+      customTitle: (
+        <CustomHeaderDatatable
+          title="Thuế"
+          subValue={totalValue?.total_tax}
+          typeSubValue="money"
+        />
+      ),
+      dataIndex: "total_tax",
+      key: "money",
+      width: 100,
+    },
+    {
+      customTitle: (
+        <CustomHeaderDatatable
+          title="Tổng lợi nhuận"
+          subValue={totalValue?.total_net_income_business}
+          typeSubValue="money"
+          textToolTip="Tổng lợi nhuận = Doanh thu thuần + thu nhập khác"
+        />
+      ),
+      dataIndex: "total_net_income_business",
+      key: "money",
+      width: 150,
+    },
+
+    {
+      customTitle: (
+        <CustomHeaderDatatable
+          title="Lợi nhuận trước thuế"
+          subValue={
+            totalValue?.total_tax + totalValue?.total_net_income_business
+          }
+          typeSubValue="money"
+          textToolTip="Lợi nhuận trước thuế = Tổng lợi nhuận (-) Thuế"
+        />
+      ),
+      dataIndex: "total_net_income_before_tax",
+      key: "money",
+      width: 170,
+    },
+    {
+      customTitle: (
+        <CustomHeaderDatatable
+          title="% Lợi nhuận"
+          subValue={totalValue?.percent_income}
+          typeSubValue="percent"
+          textToolTip="% Lợi nhuận = Tổng lợi nhuận (/) Doanh thu"
+        />
+      ),
+      dataIndex: "percent_income",
+      key: "percent",
+      width: 120,
+      position: "center",
+    },
+  ];
+  /* ~~~ Handle function ~~~ */
+  const fetchDataReportOrder = async () => {
+    try {
+      setIsLoading(true);
+      const res = await getReportOrder(
+        start,
+        lengthPage,
+        startDate,
+        endDate,
+        "date_work",
+        ["done"]
+      );
+      setListData(res?.data);
+      setTotal(res?.totalItem);
+      setTotalValue(res?.total[0]);
+      setIsLoading(false);
+    } catch (err) {
+      errorNotify({
+        message: err?.message || err,
+      });
+      setIsLoading(false);
+    }
+    
+  };
+  /* ~~~ Use effect ~~~ */
+  useEffect(() => {
+    if (startDate !== "" && endDate !== "") {
+      fetchDataReportOrder();
+    }
+  }, [startDate, endDate, start, lengthPage]);
+  /* ~~~ Other ~~~ */
+  /* ~~~ Main ~~~ */
+  return (
+    <div className="report-order-revenue">
+      <div className="report-order-revenue__header">
+        <span className="report-order-revenue__header--title">
+          Báo cáo doanh thu
+        </span>
+        <div>
+        <FilterData
+        isTimeFilter={true}
+        setStartDate={setStartDate}
+        setEndDate={setEndDate}
+        // rangeDateDefaults={"all"}
+      />
+        </div>
+        {/* <div className="div-range-date">
+          <RangeDatePicker
+            setStartDate={setStartDate}
+            setEndDate={setEndDate}
+            onCancel={() => {}}
+            // defaults={defaultRangeTime}
+          />
+          <p className="date">
+            {moment(startDate).format("DD/MM/YYYY")} -{" "}
+            {moment(endDate).format("DD/MM/YYYY")}
+          </p>
+        </div> */}
+      </div>
+      <div>
+        <DataTable
+          columns={columns}
+          data={listData}
+          // actionColumn={addActionColumn}
+          start={start}
+          pageSize={lengthPage}
+          setLengthPage={setLengthPage}
+          totalItem={total}
+          // detectLoading={detectLoading}
+          // getItemRow={setItem}
+          onCurrentPageChange={setStart}
+          loading={isLoading}
+        />
+      </div>
+    </div>
+  );
+};
+
+export default ReportOrderDone;

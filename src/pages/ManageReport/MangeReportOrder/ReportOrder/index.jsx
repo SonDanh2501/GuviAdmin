@@ -25,7 +25,6 @@ const ReportOrder = () => {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState([]);
   const [dataTotal, setDataTotal] = useState({});
-
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [start, setStart] = useState(0);

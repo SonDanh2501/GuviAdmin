@@ -44,6 +44,7 @@ import settingAffiliateImage from "../../../../assets/images/settingAffiliate.sv
 import chartAffiliateImage from "../../../../assets/images/chartAffiliate.svg";
 import assistantAffiliateImage from "../../../../assets/images/assistantAffiliate.svg";
 import stepAffiliateImage from "../../../../assets/images/stepAffiliate.svg";
+import affiliateLandingImage from "../../../../assets/images/affiliate_landing.png";
 
 import { useSelector } from "react-redux";
 import { getUser } from "../../../../redux/selectors/auth";
@@ -85,6 +86,8 @@ const OverView = () => {
   const [isShowFooter, setIsShowFooter] = useState(false);
   const [isSelectAffiliate, setIsSelectAffiliate] = useState(true);
   const [isSelectManageRefferend, setIsSelectManageRefferend] = useState(false);
+  const [isRotatePhone, setIsRotatePhone] = useState(false); // Giá trị xác định có đưa chuột vào nút để rotate điện thoại
+  const [isScaleCircle, setIsScaleCircle] = useState(false); // Giá trị xác định có đưa chuột vào nút để phóng to những hình tròn
 
   /* ~~~ List ~~~ */
   const listBenefit = [
@@ -210,7 +213,11 @@ const OverView = () => {
         <div className="affiliate-overview__introduction--star">
           <img src={starManyImage} alt=""></img>
         </div>
-        <div className="affiliate-overview__introduction--phone">
+        <div
+          className={`affiliate-overview__introduction--phone ${
+            isRotatePhone && "rotate"
+          }`}
+        >
           <img src={phoneAffiliateImage} alt=""></img>
         </div>
         <div className="affiliate-overview__introduction--wave"></div>
@@ -227,6 +234,8 @@ const OverView = () => {
                     setIsShowIntroductionPage(false);
                     setIsShowCodeRefference(true);
                   }}
+                  onMouseEnter={() => setIsRotatePhone(true)}
+                  onMouseLeave={() => setIsRotatePhone(false)}
                   className="affiliate-overview__introduction--blank-button"
                 >
                   <span>THỂ LỆ CHƯƠNG TRÌNH</span>
@@ -236,10 +245,10 @@ const OverView = () => {
               <>
                 <div className="affiliate-overview__introduction--blank-header">
                   <span className="affiliate-overview__introduction--blank-header-text-border">
-                    Cách giới thiệu
+                    Chọn phương thức
                   </span>
                   <span className="affiliate-overview__introduction--blank-header-text-neon">
-                    Đơn giản
+                    Giới thiệu
                   </span>
                 </div>
                 <div className="affiliate-overview__introduction--blank-child">
@@ -380,6 +389,14 @@ const OverView = () => {
                               </span>
                               <span className="affiliate-overview__introduction--blank-guide-container-child-right-container-promotion-benefit-label">
                                 Cho bạn bè giới thiệu
+                              </span>
+                            </div>
+                            <div className="affiliate-overview__introduction--blank-guide-container-child-right-container-promotion-benefit">
+                              <span className="affiliate-overview__introduction--blank-guide-container-child-right-container-promotion-benefit-icon">
+                                <IoCheckmarkCircle />
+                              </span>
+                              <span className="affiliate-overview__introduction--blank-guide-container-child-right-container-promotion-benefit-label">
+                                Nhận chiết khấu từ đơn thứ hai
                               </span>
                             </div>
                             <div className="affiliate-overview__introduction--blank-guide-container-child-right-container-promotion-share">
@@ -532,7 +549,11 @@ const OverView = () => {
                     ))}
                   </div>
                   <div className="affiliate-overview__introduction--benefit-header-list-content-icon">
-                    <img src={item.image} alt=""></img>
+                    <img
+                      className="affiliate-overview__introduction--benefit-header-list-content-icon-image-container"
+                      src={item.image}
+                      alt=""
+                    ></img>
                   </div>
                 </div>
               ))}
@@ -635,6 +656,261 @@ const OverView = () => {
             </div>
           </div>
         )}
+      </div>
+      <div className="affiliate-overview__landing-page">
+        {/* Mục giới thiệu đầu */}
+        <div className="affiliate-overview__landing-page--container">
+          <div className="affiliate-overview__landing-page--container-child left">
+            <img className="" src={affiliateLandingImage} alt=""></img>
+          </div>
+          <div className="affiliate-overview__landing-page--container-child right">
+            <span className="affiliate-overview__landing-page--container-child-title">
+              AFFILIATE
+            </span>
+            <span className="affiliate-overview__landing-page--container-child-title orange">
+              <span className="orange">GU</span>
+              <span className="violet">VI</span>
+            </span>
+            <span className="affiliate-overview__landing-page--container-child-caption">
+              "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+              enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+              reprehenderit in voluptate velit esse cillum dolore eu fugiat
+              nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+              sunt in culpa qui officia deserunt mollit anim id est laborum."
+            </span>
+            <span className="affiliate-overview__landing-page--container-child-caption">
+              "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            </span>
+            <div
+              onMouseEnter={() => setIsScaleCircle(true)}
+              onMouseLeave={() => setIsScaleCircle(false)}
+              className="affiliate-overview__landing-page--container-child-button"
+            >
+              <span>Thể lệ chương trình</span>
+            </div>
+          </div>
+        </div>
+
+        <div
+          style={{
+            top: `${isScaleCircle ? "100px" : "-50px"} `,
+            left: "-300px",
+          }}
+          className={`affiliate-overview__landing-page--circle medium color-right-to-left ${
+            isScaleCircle && "scale-up"
+          }`}
+        ></div>
+        <div
+          style={{
+            top: "-300px",
+            left: `${isScaleCircle ? "50px" : "-150px"}`,
+          }}
+          className={`affiliate-overview__landing-page--circle medium color-white ${
+            isScaleCircle && "scale-up"
+          }`}
+        ></div>
+        <div
+          style={{ top: "-200px", left: "-100px" }}
+          className={`affiliate-overview__landing-page--circle medium color-blur ${
+            isScaleCircle && "scale-up"
+          }`}
+        ></div>
+        <div
+          style={{ top: "50px", right: "-120px" }}
+          className={`affiliate-overview__landing-page--circle small color-top-to-bottom ${
+            isScaleCircle && "scale-up"
+          }`}
+        ></div>
+        <div
+          style={{ top: "-300px", right: "50px" }}
+          className={`affiliate-overview__landing-page--circle medium color-right-to-left ${
+            isScaleCircle && "scale-up"
+          }`}
+        ></div>
+        <div
+          style={{ bottom: "-200px", right: "-100px" }}
+          className={`affiliate-overview__landing-page--circle medium color-right-to-left ${
+            isScaleCircle && "scale-up"
+          }`}
+        ></div>
+        <div
+          style={{ bottom: "-670px", right: "-200px" }}
+          className={`affiliate-overview__landing-page--circle extra-large color-blur ${
+            isScaleCircle && "scale-up"
+          }`}
+        ></div>
+        <div
+          style={{ bottom: "-730px", right: "-250px" }}
+          className={`affiliate-overview__landing-page--circle extra-large color-white ${
+            isScaleCircle && "scale-up"
+          }`}
+        ></div>
+        <div
+          style={{ bottom: "100px", right: "-150px" }}
+          className={`affiliate-overview__landing-page--circle small color-white ${
+            isScaleCircle && "scale-up"
+          }`}
+        ></div>
+
+        <div
+          style={{ bottom: "100px", right: "50px" }}
+          className={`affiliate-overview__landing-page--circle extra-small color-white ${
+            isScaleCircle && "scale-up"
+          }`}
+        ></div>
+      </div>
+      <div className="affiliate-overview__guide">
+        <div className="affiliate-overview__guide--code">
+          <span className="affiliate-overview__guide--code-title">
+            Phương thức giới thiệu
+          </span>
+          <div className="affiliate-overview__guide--code-voucher">
+            {/* Nhận chiết khấu */}
+            <div className="affiliate-overview__guide--code-voucher-container">
+              <div className="affiliate-overview__guide--code-voucher-container-child">
+                <div className="affiliate-overview__guide--code-voucher-container-child-tag-name">
+                  <span>NHẬN HOA HỒNG</span>
+                </div>
+                <div className="affiliate-overview__guide--code-voucher-container-child-tag">
+                  <img src={labelTagImage} alt=""></img>
+                </div>
+                <img
+                  className="affiliate-overview__guide--code-voucher-container-child-image"
+                  src={fivePercentageImage}
+                  alt=""
+                ></img>
+                <div className="affiliate-overview__guide--code-voucher-container-child-benefit">
+                  <span className="affiliate-overview__guide--code-voucher-container-child-benefit-icon">
+                    <IoCheckmarkCircle />
+                  </span>
+                  <span className="affiliate-overview__guide--code-voucher-container-child-benefit-label">
+                    Ngay từ đơn đầu tiên
+                  </span>
+                </div>
+                <div className="affiliate-overview__guide--code-voucher-container-child-benefit">
+                  <span className="affiliate-overview__guide--code-voucher-container-child-benefit-icon">
+                    <IoCheckmarkCircle />
+                  </span>
+                  <span className="affiliate-overview__guide--code-voucher-container-child-benefit-label">
+                    Nhận tiền thưởng cho đơn hoàn thành đầu tiên
+                  </span>
+                </div>
+                <div className="affiliate-overview__guide--code-voucher-container-child-share">
+                  <img src={copyButtonImage} alt=""></img>
+                  <span>CHIA SẺ</span>
+                </div>
+              </div>
+            </div>
+            {/* Gửi tặng voucher */}
+            <div className="affiliate-overview__guide--code-voucher-container">
+              <div className="affiliate-overview__guide--code-voucher-container-child">
+                <div className="affiliate-overview__guide--code-voucher-container-child-tag-name">
+                  <span>TẶNG VOUCHER</span>
+                </div>
+                <div className="affiliate-overview__guide--code-voucher-container-child-tag">
+                  <img src={labelTagImage} alt=""></img>
+                </div>
+                <img
+                  className="affiliate-overview__guide--code-voucher-container-child-image"
+                  src={tenPercentageImage}
+                  alt=""
+                ></img>
+                <div className="affiliate-overview__guide--code-voucher-container-child-benefit">
+                  <span className="affiliate-overview__guide--code-voucher-container-child-benefit-icon">
+                    <IoCheckmarkCircle />
+                  </span>
+                  <span className="affiliate-overview__guide--code-voucher-container-child-benefit-label">
+                    Ngay từ đơn đầu tiên
+                  </span>
+                </div>
+                <div className="affiliate-overview__guide--code-voucher-container-child-benefit">
+                  <span className="affiliate-overview__guide--code-voucher-container-child-benefit-icon">
+                    <IoCheckmarkCircle />
+                  </span>
+                  <span className="affiliate-overview__guide--code-voucher-container-child-benefit-label">
+                    Nhận tiền thưởng cho đơn hoàn thành đầu tiên
+                  </span>
+                </div>
+                <div className="affiliate-overview__guide--code-voucher-container-child-share">
+                  <img src={copyButtonImage} alt=""></img>
+                  <span>CHIA SẺ</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="affiliate-overview__guide--benefit">
+          <div className="affiliate-overview__guide--benefit-step">
+            <div className="affiliate-overview__guide--benefit-step-image"></div>
+            <div className="affiliate-overview__guide--benefit-step-title">
+              <div className="affiliate-overview__guide--benefit-step-title-container">
+                <div className="affiliate-overview__guide--benefit-step-title-container-bullet-points">
+                  <img src={blinkStickerImage} alt=""></img>
+                </div>
+                <span>
+                  Chọn một trong hai chương trình giới thiệu và bấm nút chia sẻ
+                </span>
+              </div>
+              <div className="affiliate-overview__guide--benefit-step-title-container">
+                <div className="affiliate-overview__guide--benefit-step-title-container-bullet-points">
+                  <img src={blinkStickerImage} alt=""></img>
+                </div>
+                <span>
+                  Gửi link cho người bạn muốn giới thiệu bằng cách dán link vào
+                  khung tin nhắn và gửi
+                </span>
+              </div>
+            </div>
+          </div>
+          <div className="affiliate-overview__guide--benefit-step right-to-left">
+            <div className="affiliate-overview__guide--benefit-step-image"></div>
+            <div className="affiliate-overview__guide--benefit-step-title">
+              <div className="affiliate-overview__guide--benefit-step-title-container">
+                <div className="affiliate-overview__guide--benefit-step-title-container-bullet-points">
+                  <img src={blinkStickerImage} alt=""></img>
+                </div>
+                <span>
+                  Người được giới thiệu bấm vào link mà bạn vừa gửi để tải app
+                  GUVI và đăng ký tài khoản
+                </span>
+              </div>
+              <div className="affiliate-overview__guide--benefit-step-title-container">
+                <div className="affiliate-overview__guide--benefit-step-title-container-bullet-points">
+                  <img src={blinkStickerImage} alt=""></img>
+                </div>
+                <span>
+                  Người được giới thiệu lựa chọn và trải nghiệm thành cộng một
+                  trong các dịch vụ của GUVI
+                </span>
+              </div>
+            </div>
+          </div>
+          <div className="affiliate-overview__guide--benefit-step">
+            <div className="affiliate-overview__guide--benefit-step-image"></div>
+            <div className="affiliate-overview__guide--benefit-step-title">
+              <div className="affiliate-overview__guide--benefit-step-title-container">
+                <div className="affiliate-overview__guide--benefit-step-title-container-bullet-points">
+                  <img src={blinkStickerImage} alt=""></img>
+                </div>
+                <span>
+                  Chọn một trong hai chương trình giới thiệu và bấm nút chia sẻ
+                </span>
+              </div>
+              <div className="affiliate-overview__guide--benefit-step-title-container">
+                <div className="affiliate-overview__guide--benefit-step-title-container-bullet-points">
+                  <img src={blinkStickerImage} alt=""></img>
+                </div>
+                <span>
+                  Gửi link cho người bạn muốn giới thiệu bằng cách dán link vào
+                  khung tin nhắn và gửi
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
