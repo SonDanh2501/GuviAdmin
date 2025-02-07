@@ -247,7 +247,7 @@ const ManageTopUpWithdraw = (props) => {
       dataIndex: "date_create",
       key: "date_create",
       width: 30,
-      position: "center",
+      position: "right",
     },
     {
       customTitle: (
