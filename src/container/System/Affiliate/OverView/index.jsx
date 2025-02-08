@@ -230,6 +230,7 @@ const OverView = () => {
                   <span>Tham gia ngay !</span>
                 </div>
                 <div
+                  href="#sectionGuide"
                   onClick={() => {
                     setIsShowIntroductionPage(false);
                     setIsShowCodeRefference(true);
@@ -238,7 +239,7 @@ const OverView = () => {
                   onMouseLeave={() => setIsRotatePhone(false)}
                   className="affiliate-overview__introduction--blank-button"
                 >
-                  <span>THỂ LỆ CHƯƠNG TRÌNH</span>
+                  <a href="#sectionGuide">THỂ LỆ CHƯƠNG TRÌNH</a>
                 </div>
               </>
             ) : (
@@ -657,7 +658,7 @@ const OverView = () => {
           </div>
         )}
       </div>
-      <div className="affiliate-overview__landing-page">
+      <div className="affiliate-overview__landing-page" id="sectionLandingPage">
         {/* Mục giới thiệu đầu */}
         <div className="affiliate-overview__landing-page--container">
           <div className="affiliate-overview__landing-page--container-child left">
@@ -693,7 +694,6 @@ const OverView = () => {
             </div>
           </div>
         </div>
-
         <div
           style={{
             top: `${isScaleCircle ? "100px" : "-50px"} `,
@@ -762,7 +762,7 @@ const OverView = () => {
           }`}
         ></div>
       </div>
-      <div className="affiliate-overview__guide">
+      <div className="affiliate-overview__guide" id="sectionGuide">
         <div className="affiliate-overview__guide--code">
           <span className="affiliate-overview__guide--code-title">
             Phương thức giới thiệu
@@ -844,7 +844,9 @@ const OverView = () => {
         </div>
         <div className="affiliate-overview__guide--benefit">
           <div className="affiliate-overview__guide--benefit-step">
-            <div className="affiliate-overview__guide--benefit-step-image"></div>
+            <div className="affiliate-overview__guide--benefit-step-image">
+              <img src={downloadAppImage}></img>
+            </div>
             <div className="affiliate-overview__guide--benefit-step-title">
               <div className="affiliate-overview__guide--benefit-step-title-container">
                 <div className="affiliate-overview__guide--benefit-step-title-container-bullet-points">
@@ -866,7 +868,9 @@ const OverView = () => {
             </div>
           </div>
           <div className="affiliate-overview__guide--benefit-step right-to-left">
-            <div className="affiliate-overview__guide--benefit-step-image"></div>
+            <div className="affiliate-overview__guide--benefit-step-image">
+              <img src={downloadAppImage} alt=""></img>
+            </div>
             <div className="affiliate-overview__guide--benefit-step-title">
               <div className="affiliate-overview__guide--benefit-step-title-container">
                 <div className="affiliate-overview__guide--benefit-step-title-container-bullet-points">
@@ -889,23 +893,18 @@ const OverView = () => {
             </div>
           </div>
           <div className="affiliate-overview__guide--benefit-step">
-            <div className="affiliate-overview__guide--benefit-step-image"></div>
+            <div className="affiliate-overview__guide--benefit-step-image">
+              <img src={notificationMoneyImage} alt=""></img>
+            </div>
             <div className="affiliate-overview__guide--benefit-step-title">
               <div className="affiliate-overview__guide--benefit-step-title-container">
                 <div className="affiliate-overview__guide--benefit-step-title-container-bullet-points">
                   <img src={blinkStickerImage} alt=""></img>
                 </div>
                 <span>
-                  Chọn một trong hai chương trình giới thiệu và bấm nút chia sẻ
-                </span>
-              </div>
-              <div className="affiliate-overview__guide--benefit-step-title-container">
-                <div className="affiliate-overview__guide--benefit-step-title-container-bullet-points">
-                  <img src={blinkStickerImage} alt=""></img>
-                </div>
-                <span>
-                  Gửi link cho người bạn muốn giới thiệu bằng cách dán link vào
-                  khung tin nhắn và gửi
+                  Người giới thiệu nhận ngay 50.000đ vào ví G-pay cho đơn đầu
+                  tiên và 5% chiết khấu từ đơn hàng tùy thuộc vào mã đã gửi.
+                  Thông báo sẽ được gửi qua ứng dụng GUVI
                 </span>
               </div>
             </div>

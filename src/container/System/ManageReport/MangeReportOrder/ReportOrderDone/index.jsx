@@ -124,12 +124,12 @@ const ReportOrderDone = () => {
       customTitle: (
         <CustomHeaderDatatable
           title="Tổng giá trị giao dịch"
-          subValue={totalValue?.total_gross_income}
+          subValue={totalValue?.total_fee}
           typeSubValue="money"
-          textToolTip="GMV - Gross Merchandise Volume"
+          textToolTip="GMV - Gross Merchandise Volume (total_fee)"
         />
       ),
-      dataIndex: "total_gross_income",
+      dataIndex: "total_fee",
       key: "money",
       width: 170,
     },
@@ -137,12 +137,12 @@ const ReportOrderDone = () => {
       customTitle: (
         <CustomHeaderDatatable
           title="Thu hộ dịch vụ"
-          subValue={totalValue?.total_collabotator_fee}
+          subValue={totalValue?.total_net_income_new}
           typeSubValue="money"
-          textToolTip="Bao gồm phí dịch vụ trả đối tác: tiền tip từ khách,..."
+          textToolTip="Bao gồm phí dịch vụ trả đối tác: tiền tip từ khách,... (net_income)"
         />
       ),
-      dataIndex: "total_collabotator_fee",
+      dataIndex: "total_net_income_new",
       key: "money",
       width: 150,
     },
@@ -150,12 +150,12 @@ const ReportOrderDone = () => {
       customTitle: (
         <CustomHeaderDatatable
           title="Doanh thu"
-          subValue={totalValue?.total_income}
+          subValue={totalValue?.total_fee - totalValue?.total_net_income_new}
           typeSubValue="money"
-          textToolTip=""
+          textToolTip="Doanh thu = Tổng giá trị giao dịch (-) Thu hộ dịch vụ"
         />
       ),
-      dataIndex: "total_income",
+      dataIndex: "revenue",
       key: "money",
       width: 120,
     },
@@ -163,12 +163,12 @@ const ReportOrderDone = () => {
       customTitle: (
         <CustomHeaderDatatable
           title="Giảm giá"
-          subValue={totalValue?.total_discount}
+          subValue={totalValue?.total_discount_new}
           typeSubValue="money"
           textToolTip="Tổng số tiền giảm giá từ: giảm giá dịch vụ, giảm giá đơn hàng, đồng giá, ctkm,…"
         />
       ),
-      dataIndex: "total_discount",
+      dataIndex: "total_discount_new",
       key: "money",
       width: 100,
     },
@@ -176,12 +176,16 @@ const ReportOrderDone = () => {
       customTitle: (
         <CustomHeaderDatatable
           title="Doanh thu thuần"
-          subValue={totalValue?.total_net_income}
+          subValue={
+            totalValue?.total_fee -
+            totalValue?.total_net_income_new -
+            totalValue?.total_discount_new
+          }
           typeSubValue="money"
           textToolTip="Số tiền thu được sau khi trừ toàn bộ các giảm giá. Doanh thu thuần = Doanh thu (-) Giảm giá."
         />
       ),
-      dataIndex: "total_net_income",
+      dataIndex: "net_revenue",
       key: "money",
       width: 150,
     },
@@ -189,12 +193,12 @@ const ReportOrderDone = () => {
       customTitle: (
         <CustomHeaderDatatable
           title="Tổng hóa đơn"
-          subValue={totalValue?.total_order_fee}
+          subValue={totalValue?.total_fee - totalValue?.total_discount_new}
           typeSubValue="money"
           textToolTip="Tổng số tiền ghi nhận trên hoá đơn dịch vụ. Tổng hoá đơn = Tổng tiền - giảm giá."
         />
       ),
-      dataIndex: "total_order_fee",
+      dataIndex: "invoice",
       key: "money",
       width: 150,
     },
@@ -238,12 +242,16 @@ const ReportOrderDone = () => {
       customTitle: (
         <CustomHeaderDatatable
           title="Tổng lợi nhuận"
-          subValue={totalValue?.total_net_income_business}
+          subValue={
+            totalValue?.total_fee -
+            totalValue?.total_net_income_new -
+            totalValue?.total_discount_new
+          }
           typeSubValue="money"
           textToolTip="Tổng lợi nhuận = Doanh thu thuần + thu nhập khác"
         />
       ),
-      dataIndex: "total_net_income_business",
+      dataIndex: "net_revenue",
       key: "money",
       width: 150,
     },
@@ -253,13 +261,16 @@ const ReportOrderDone = () => {
         <CustomHeaderDatatable
           title="Lợi nhuận trước thuế"
           subValue={
-            totalValue?.total_tax + totalValue?.total_net_income_business
+            totalValue?.total_fee -
+            totalValue?.total_net_income_new -
+            totalValue?.total_discount_new -
+            totalValue?.total_tax
           }
           typeSubValue="money"
           textToolTip="Lợi nhuận trước thuế = Tổng lợi nhuận (-) Thuế"
         />
       ),
-      dataIndex: "total_net_income_before_tax",
+      dataIndex: "profit_before_tax",
       key: "money",
       width: 170,
     },
@@ -267,7 +278,6 @@ const ReportOrderDone = () => {
       customTitle: (
         <CustomHeaderDatatable
           title="% Lợi nhuận"
-          subValue={totalValue?.percent_income_envenue}
           typeSubValue="percent"
           textToolTip="% Lợi nhuận = Lời nhuận trước thuế (/) Tổng lời nhuận"
         />
@@ -300,7 +310,6 @@ const ReportOrderDone = () => {
       });
       setIsLoading(false);
     }
-    
   };
   /* ~~~ Use effect ~~~ */
   useEffect(() => {
@@ -309,6 +318,7 @@ const ReportOrderDone = () => {
     }
   }, [startDate, endDate, start, lengthPage]);
   /* ~~~ Other ~~~ */
+  console.log("check listData >>>", listData);
   /* ~~~ Main ~~~ */
   return (
     <div className="report-order-revenue">
@@ -317,12 +327,12 @@ const ReportOrderDone = () => {
           Báo cáo doanh thu
         </span>
         <div>
-        <FilterData
-        isTimeFilter={true}
-        setStartDate={setStartDate}
-        setEndDate={setEndDate}
-        // rangeDateDefaults={"all"}
-      />
+          <FilterData
+            isTimeFilter={true}
+            setStartDate={setStartDate}
+            setEndDate={setEndDate}
+            // rangeDateDefaults={"all"}
+          />
         </div>
         {/* <div className="div-range-date">
           <RangeDatePicker
