@@ -72,6 +72,7 @@ const {
   IoRemove,
   IoShareOutline,
   IoLink,
+  IoExit,
 } = icons;
 
 const RefferendList = () => {
@@ -1202,6 +1203,17 @@ const RefferendList = () => {
                 </div>
               </div>
             </div>
+          </div>
+          <div
+            onClick={() => navigate("/")}
+            className="refferend-list-affiliate__content--right-exit card-shadow"
+          >
+            <span className="refferend-list-affiliate__content--right-exit-title">
+              Quay về trang giới thiệu
+            </span>
+            <span className="refferend-list-affiliate__content--right-exit-icon">
+              <IoExit />
+            </span>
           </div>
         </div>
       </div>

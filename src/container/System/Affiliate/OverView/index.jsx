@@ -45,6 +45,7 @@ import chartAffiliateImage from "../../../../assets/images/chartAffiliate.svg";
 import assistantAffiliateImage from "../../../../assets/images/assistantAffiliate.svg";
 import stepAffiliateImage from "../../../../assets/images/stepAffiliate.svg";
 import affiliateLandingImage from "../../../../assets/images/affiliate_landing.png";
+import affiliateShareImage from "../../../../assets/images/affiliate_share.png";
 
 import { useSelector } from "react-redux";
 import { getUser } from "../../../../redux/selectors/auth";
@@ -135,14 +136,14 @@ const OverView = () => {
       ],
       image: assistantAffiliateImage,
     },
-    {
-      title: "Thao tác đơn giản",
-      content: [
-        "Quy trình đăng ký nhanh chóng, dễ dàng.",
-        "Giao diện thân thiện, dễ sử dụng.",
-      ],
-      image: stepAffiliateImage,
-    },
+    // {
+    //   title: "Thao tác đơn giản",
+    //   content: [
+    //     "Quy trình đăng ký nhanh chóng, dễ dàng.",
+    //     "Giao diện thân thiện, dễ sử dụng.",
+    //   ],
+    //   image: stepAffiliateImage,
+    // },
   ];
   /* ~~~ Other ~~~ */
   const copyToClipBoard = (text) => {
@@ -152,6 +153,12 @@ const OverView = () => {
         message: `Sao chép thành công`,
       });
     }
+  };
+  const scrollDown = () => {
+    window.scrollTo({
+      top: window.innerHeight,
+      behavior: "smooth", // Hiệu ứng cuộn mượt
+    });
   };
 
   return (
@@ -183,6 +190,7 @@ const OverView = () => {
               onClick={() => {
                 setIsSelectAffiliate(false);
                 setIsSelectManageRefferend(true);
+                navigate("/referend-list");
               }}
               className={`affiliate-overview__introduction--header-navigation-button right-side ${
                 isSelectManageRefferend ? "activated" : "disable"
@@ -230,7 +238,6 @@ const OverView = () => {
                   <span>Tham gia ngay !</span>
                 </div>
                 <div
-                  href="#sectionGuide"
                   onClick={() => {
                     setIsShowIntroductionPage(false);
                     setIsShowCodeRefference(true);
@@ -239,7 +246,7 @@ const OverView = () => {
                   onMouseLeave={() => setIsRotatePhone(false)}
                   className="affiliate-overview__introduction--blank-button"
                 >
-                  <a href="#sectionGuide">THỂ LỆ CHƯƠNG TRÌNH</a>
+                  <span>THỂ LỆ CHƯƠNG TRÌNH</span>
                 </div>
               </>
             ) : (
@@ -658,6 +665,38 @@ const OverView = () => {
           </div>
         )}
       </div>
+      <div className="affiliate-overview__navigate">
+        <div className="affiliate-overview__navigate--child">
+          <div
+            onClick={() => {
+              setIsSelectAffiliate(true);
+              setIsSelectManageRefferend(false);
+              setIsShowIntroductionPage(true);
+              setIsShowCodeRefference(false);
+              setIsShowServiceOfGuvi(false);
+              setIsShowBenefit(false);
+              setIsShowFooter(false);
+            }}
+            className={`affiliate-overview__navigate--child-button left-side ${
+              isSelectAffiliate ? "activated" : "disable"
+            }`}
+          >
+            <span>Affiliate</span>
+          </div>
+          <div
+            onClick={() => {
+              setIsSelectAffiliate(false);
+              setIsSelectManageRefferend(true);
+              navigate("/referend-list");
+            }}
+            className={`affiliate-overview__navigate--child-button right-side ${
+              isSelectManageRefferend ? "activated" : "disable"
+            }`}
+          >
+            <span>Quản lý</span>
+          </div>
+        </div>
+      </div>
       <div className="affiliate-overview__landing-page" id="sectionLandingPage">
         {/* Mục giới thiệu đầu */}
         <div className="affiliate-overview__landing-page--container">
@@ -673,24 +712,22 @@ const OverView = () => {
               <span className="violet">VI</span>
             </span>
             <span className="affiliate-overview__landing-page--container-child-caption">
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-              reprehenderit in voluptate velit esse cillum dolore eu fugiat
-              nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-              sunt in culpa qui officia deserunt mollit anim id est laborum."
+              Chương trình Affiliate của GUVI là cơ hội tuyệt vời để bạn kiếm
+              thêm thu nhập bằng cách giới thiệu sản phẩm/dịch vụ của chúng tôi
+              đến bạn bè, người thân hoặc cộng đồng của mình. Với mỗi đơn hàng
+              thành công thông qua liên kết giới thiệu, bạn sẽ nhận được hoa
+              hồng hấp dẫn.
             </span>
             <span className="affiliate-overview__landing-page--container-child-caption">
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              Tham gia ngay để nhận được những ưu đãi hấp dẫn
             </span>
             <div
+              onClick={() => scrollDown()}
               onMouseEnter={() => setIsScaleCircle(true)}
               onMouseLeave={() => setIsScaleCircle(false)}
               className="affiliate-overview__landing-page--container-child-button"
             >
-              <span>Thể lệ chương trình</span>
+              <a href="#sectionGuide">Thể lệ chương trình</a>
             </div>
           </div>
         </div>
@@ -845,7 +882,7 @@ const OverView = () => {
         <div className="affiliate-overview__guide--benefit">
           <div className="affiliate-overview__guide--benefit-step">
             <div className="affiliate-overview__guide--benefit-step-image">
-              <img src={downloadAppImage}></img>
+              <img src={affiliateShareImage}></img>
             </div>
             <div className="affiliate-overview__guide--benefit-step-title">
               <div className="affiliate-overview__guide--benefit-step-title-container">
@@ -908,6 +945,117 @@ const OverView = () => {
                 </span>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+      <div className="affiliate-overview__benefit" id="sectionBenefit">
+        <div className="affiliate-overview__benefit--service-available">
+          <img src={aboutGuviAffiliateImage} alt=""></img>
+          <div className="affiliate-overview__benefit--service-available-list">
+            <div className="affiliate-overview__benefit--service-available-list-child">
+              <img src={giupViecTheoGioImage} alt=""></img>
+            </div>
+            <div className="affiliate-overview__benefit--service-available-list-child">
+              <img src={donDepCoDinhImage} alt=""></img>
+            </div>
+            <div className="affiliate-overview__benefit--service-available-list-child">
+              <img src={tongVeSinhImage} alt=""></img>
+            </div>
+            <div className="affiliate-overview__benefit--service-available-list-child">
+              <img src={veSinhRemThamImage} alt=""></img>
+            </div>
+            <div className="affiliate-overview__benefit--service-available-list-child">
+              <img src={veSinhMayLanhImage} alt=""></img>
+            </div>
+          </div>
+        </div>
+        <div className="affiliate-overview__benefit--list">
+          <span className="affiliate-overview__benefit--list-title">
+            Lợi ích khi tham gia
+          </span>
+          <span className="affiliate-overview__benefit--list-title">
+            chương trình
+          </span>
+          <span className="affiliate-overview__benefit--list-sub-title">
+            Tham gia chương trình Affiliate không chỉ giúp bạn tạo thêm nguồn
+            thu nhập thụ động mà còn mang đến nhiều lợi ích hấp dẫn cùng với đó
+            là sự quản lý chặt chẽ của GUVI giúp việc tham gia chương trình
+            không gặp bất kì vấn đề nào
+          </span>
+          <div className="affiliate-overview__benefit--list-child">
+            {listBenefit.map((item, index) => (
+              <div className="affiliate-overview__benefit--list-child-information">
+                <div className="affiliate-overview__benefit--list-child-information-icon">
+                  <img src={item.image} alt=""></img>
+                </div>
+                <span className="affiliate-overview__benefit--list-child-information-title">
+                  {item.title}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      <div className="affiliate-overview__footer">
+        <div className="affiliate-overview__footer--information">
+          <div className="affiliate-overview__footer--information-item">
+            <img src={logoGuvi} alt=""></img>
+          </div>
+          <div className="affiliate-overview__footer--information-item">
+            <span>
+              Mã số: <span className="high-light">0317084672</span>
+            </span>
+          </div>
+          <div className="affiliate-overview__footer--information-item">
+            <span>
+              Hotline: <span className="high-light">1900.0027</span>
+            </span>
+          </div>
+          <div className="affiliate-overview__footer--information-item">
+            <span>
+              Email:
+              <span className="high-light">
+                cskh@guvico.com – marketing@guvico.com
+              </span>
+            </span>
+          </div>
+        </div>
+        <div className="affiliate-overview__footer--copy-right">
+          <div className="affiliate-overview__footer--copy-right-item">
+            <span>
+              @ 2024 Công ty TNHH Giải pháp Công nghệ Guvi​ sở hữu bản quyền.
+            </span>
+          </div>
+          <div
+            onClick={() =>
+              window.open(
+                "https://apps.apple.com/us/app/guvi-gi%C3%BAp-vi%E1%BB%87c-theo-gi%E1%BB%9D/id6443966297",
+                "_blank"
+              )
+            }
+            className="affiliate-overview__footer--copy-right-item"
+          >
+            <img src={appleStoreImage} alt=""></img>
+          </div>
+          {/* <Link
+                        style={{ paddingBottom: "3px" }}
+                        to={`/details-order/${item?.id_order?.id_group_order}`}
+                        target="_blank"
+                      >
+                        <span className="history-activity__item--right-bottom-item-link">
+                          {item?.id_order?.id_view}
+                        </span>
+                      </Link> */}
+          <div
+            onClick={() =>
+              window.open(
+                "https://play.google.com/store/apps/details?id=com.guvico_customer",
+                "_blank"
+              )
+            }
+            className="affiliate-overview__footer--copy-right-item"
+          >
+            <img src={chStoreImage} alt=""></img>
           </div>
         </div>
       </div>

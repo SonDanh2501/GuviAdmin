@@ -92,6 +92,7 @@ import {
   IoCheckboxOutline,
   IoArrowDownCircle,
   IoGlobeOutline,
+  IoExit 
 } from "react-icons/io5";
 import { FaRegFrown, FaRegMeh, FaRegSmile, FaDog } from "react-icons/fa";
 import { MdDoubleArrow, MdChair } from "react-icons/md";
@@ -194,6 +195,7 @@ const icons = {
   IoCheckboxOutline,
   IoArrowDownCircle,
   IoGlobeOutline,
+  IoExit ,
   // Font Awesome 5
   FaRegFrown,
   FaRegMeh,
