@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import icons from "../../../../utils/icons";
 import "./index.scss";
 import ButtonCustom from "../../../../components/button";
@@ -72,6 +72,7 @@ const {
   IoCheckboxOutline,
   IoArrowDownCircle,
   IoGlobeOutline,
+  MdKeyboardDoubleArrowDown,
 } = icons;
 
 const OverView = () => {
@@ -160,7 +161,7 @@ const OverView = () => {
       behavior: "smooth", // Hiệu ứng cuộn mượt
     });
   };
-
+  
   return (
     <div className="affiliate-overview">
       <div
@@ -705,11 +706,15 @@ const OverView = () => {
           </div>
           <div className="affiliate-overview__landing-page--container-child right">
             <span className="affiliate-overview__landing-page--container-child-title">
-              AFFILIATE
+              THU NHẬP THU ĐỘNG
             </span>
-            <span className="affiliate-overview__landing-page--container-child-title orange">
-              <span className="orange">GU</span>
-              <span className="violet">VI</span>
+            <span className="affiliate-overview__landing-page--container-child-title">
+              <div className="vertical">
+                <span>LÊN</span>
+                <span>ĐẾN</span>
+              </div>
+              <span className="orange">5&nbsp;</span>
+              <span className="orange">TRIỆU</span>
             </span>
             <span className="affiliate-overview__landing-page--container-child-caption">
               Chương trình Affiliate của GUVI là cơ hội tuyệt vời để bạn kiếm
@@ -791,13 +796,17 @@ const OverView = () => {
             isScaleCircle && "scale-up"
           }`}
         ></div>
-
         <div
           style={{ bottom: "100px", right: "50px" }}
           className={`affiliate-overview__landing-page--circle extra-small color-white ${
             isScaleCircle && "scale-up"
           }`}
         ></div>
+        <div className="affiliate-overview__landing-page--arrow-down">
+          <span>
+            <MdKeyboardDoubleArrowDown />
+          </span>
+        </div>
       </div>
       <div className="affiliate-overview__guide" id="sectionGuide">
         <div className="affiliate-overview__guide--code">

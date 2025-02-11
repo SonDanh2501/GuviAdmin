@@ -218,7 +218,9 @@ const EditTimeOrder = (props) => {
     }
   };
   useEffect(() => {
-    fetchAddressDefault();
+    if (idCustomer) {
+      fetchAddressDefault();
+    }
   }, [idCustomer]);
 
   useEffect(() => {
