@@ -12,19 +12,16 @@ import appleStoreImage from "../../../../assets/images/apple_store.svg";
 import chStoreImage from "../../../../assets/images/google_play.svg";
 import copyRightImage from "../../../../assets/images/copy_right.png";
 import logoGuvi from "../../../../assets/images/LogoS.svg";
-import guideStepImage from "../../../../assets/images/guideStep.png";
+// import guideStepImage from "../../../../assets/images/guideStep.png";
 import aboutGuviAffiliateImage from "../../../../assets/images/aboutGuvi.png";
-import logoGuviImage from "../../../../assets/images/LogoS.svg";
-import giupViecTheoGioImage from "../../../../assets/images/giupviectheogio.png";
-import donDepCoDinhImage from "../../../../assets/images/dondepcodinh.png";
-import tongVeSinhImage from "../../../../assets/images/tongvesinh.png";
-import veSinhRemThamImage from "../../../../assets/images/vesinhrt.png";
-import veSinhMayLanhImage from "../../../../assets/images/vesinhmaylanh.png";
-import guideStepVerticalImage from "../../../../assets/images/guideStepVertical.png";
-import headerAffiliateImage from "../../../../assets/images/headerAffiliate.png";
-// import fivePercentageImage from "../../../../assets/images/fivePercentage.png";
+//
+import giupViecTheoGioImage from "../../../../assets/images/giupviectheogio.svg";
+import donDepCoDinhImage from "../../../../assets/images/dondepcodinh.svg";
+import tongVeSinhImage from "../../../../assets/images/tongvesinh.svg";
+import veSinhRemThamImage from "../../../../assets/images/vesinhremtham.svg";
+import veSinhMayLanhImage from "../../../../assets/images/vesinhmaylanh.svg";
+//
 import fivePercentageImage from "../../../../assets/images/fivePercentage.svg";
-// import tenPercentageImage from "../../../../assets/images/tenPercentage.png";
 import tenPercentageImage from "../../../../assets/images/tenPercentage.svg";
 import copyButtonImage from "../../../../assets/images/copy_button.svg";
 
@@ -32,7 +29,6 @@ import phoneAffiliateImage from "../../../../assets/images/phone_affiliate.svg";
 import starManyImage from "../../../../assets/images/star_many.svg";
 import wireDecorationImage from "../../../../assets/images/wire_decoration.svg";
 import labelTagImage from "../../../../assets/images/labelTag.svg";
-import peopleManageImage from "../../../../assets/images/people_manage.svg";
 import blinkStickerImage from "../../../../assets/images/blink_sticker.svg";
 import downloadAppImage from "../../../../assets/images/download_app.svg";
 import notificationMoneyImage from "../../../../assets/images/notification_money.svg";
@@ -44,7 +40,7 @@ import settingAffiliateImage from "../../../../assets/images/settingAffiliate.sv
 import chartAffiliateImage from "../../../../assets/images/chartAffiliate.svg";
 import assistantAffiliateImage from "../../../../assets/images/assistantAffiliate.svg";
 import stepAffiliateImage from "../../../../assets/images/stepAffiliate.svg";
-import affiliateLandingImage from "../../../../assets/images/affiliate_landing.png";
+import affiliateLandingImage from "../../../../assets/images/affiliateLanding.svg";
 import affiliateShareImage from "../../../../assets/images/affiliate_share.png";
 
 import { useSelector } from "react-redux";
