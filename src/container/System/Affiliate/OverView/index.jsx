@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import icons from "../../../../utils/icons";
 import "./index.scss";
 import ButtonCustom from "../../../../components/button";
@@ -12,19 +12,16 @@ import appleStoreImage from "../../../../assets/images/apple_store.svg";
 import chStoreImage from "../../../../assets/images/google_play.svg";
 import copyRightImage from "../../../../assets/images/copy_right.png";
 import logoGuvi from "../../../../assets/images/LogoS.svg";
-import guideStepImage from "../../../../assets/images/guideStep.png";
+// import guideStepImage from "../../../../assets/images/guideStep.png";
 import aboutGuviAffiliateImage from "../../../../assets/images/aboutGuvi.png";
-import logoGuviImage from "../../../../assets/images/LogoS.svg";
-import giupViecTheoGioImage from "../../../../assets/images/giupviectheogio.png";
-import donDepCoDinhImage from "../../../../assets/images/dondepcodinh.png";
-import tongVeSinhImage from "../../../../assets/images/tongvesinh.png";
-import veSinhRemThamImage from "../../../../assets/images/vesinhrt.png";
-import veSinhMayLanhImage from "../../../../assets/images/vesinhmaylanh.png";
-import guideStepVerticalImage from "../../../../assets/images/guideStepVertical.png";
-import headerAffiliateImage from "../../../../assets/images/headerAffiliate.png";
-// import fivePercentageImage from "../../../../assets/images/fivePercentage.png";
+//
+import giupViecTheoGioImage from "../../../../assets/images/giupviectheogio.svg";
+import donDepCoDinhImage from "../../../../assets/images/dondepcodinh.svg";
+import tongVeSinhImage from "../../../../assets/images/tongvesinh.svg";
+import veSinhRemThamImage from "../../../../assets/images/vesinhremtham.svg";
+import veSinhMayLanhImage from "../../../../assets/images/vesinhmaylanh.svg";
+//
 import fivePercentageImage from "../../../../assets/images/fivePercentage.svg";
-// import tenPercentageImage from "../../../../assets/images/tenPercentage.png";
 import tenPercentageImage from "../../../../assets/images/tenPercentage.svg";
 import copyButtonImage from "../../../../assets/images/copy_button.svg";
 
@@ -32,7 +29,6 @@ import phoneAffiliateImage from "../../../../assets/images/phone_affiliate.svg";
 import starManyImage from "../../../../assets/images/star_many.svg";
 import wireDecorationImage from "../../../../assets/images/wire_decoration.svg";
 import labelTagImage from "../../../../assets/images/labelTag.svg";
-import peopleManageImage from "../../../../assets/images/people_manage.svg";
 import blinkStickerImage from "../../../../assets/images/blink_sticker.svg";
 import downloadAppImage from "../../../../assets/images/download_app.svg";
 import notificationMoneyImage from "../../../../assets/images/notification_money.svg";
@@ -44,7 +40,7 @@ import settingAffiliateImage from "../../../../assets/images/settingAffiliate.sv
 import chartAffiliateImage from "../../../../assets/images/chartAffiliate.svg";
 import assistantAffiliateImage from "../../../../assets/images/assistantAffiliate.svg";
 import stepAffiliateImage from "../../../../assets/images/stepAffiliate.svg";
-import affiliateLandingImage from "../../../../assets/images/affiliate_landing.png";
+import affiliateLandingImage from "../../../../assets/images/affiliateLanding.svg";
 import affiliateShareImage from "../../../../assets/images/affiliate_share.png";
 
 import { useSelector } from "react-redux";
@@ -72,6 +68,7 @@ const {
   IoCheckboxOutline,
   IoArrowDownCircle,
   IoGlobeOutline,
+  MdKeyboardDoubleArrowDown,
 } = icons;
 
 const OverView = () => {
@@ -100,7 +97,7 @@ const OverView = () => {
       image: handUpImage,
     },
     {
-      title: "Phần thưởng hời dành cho đối tác",
+      title: "Đăng ký miễn phí",
       content: [
         "Nhận ngay 50.000 VNĐ vào ví G-Pay khi mỗi đơn hàng đầu tiên được hoàn thành",
       ],
@@ -115,7 +112,7 @@ const OverView = () => {
       image: settingAffiliateImage,
     },
     {
-      title: "Tăng chất lượng sống cho cộng đồng",
+      title: "Thao tác dễ dàng",
       content: [
         "Giúp cộng đồng tiếp cận các dịch vụ tiện ích, cải thiện chất lượng cuộc sống.",
       ],
@@ -130,7 +127,7 @@ const OverView = () => {
       image: checkListAffiliateImage,
     },
     {
-      title: "Hỗ trợ tận tình",
+      title: "Hỗ trợ 24/7",
       content: [
         "Đội ngũ Guvi luôn đồng hành, cung cấp hướng dẫn và giải đáp thắc mắc kịp thời.",
       ],
@@ -705,11 +702,15 @@ const OverView = () => {
           </div>
           <div className="affiliate-overview__landing-page--container-child right">
             <span className="affiliate-overview__landing-page--container-child-title">
-              AFFILIATE
+              THU NHẬP THU ĐỘNG
             </span>
-            <span className="affiliate-overview__landing-page--container-child-title orange">
-              <span className="orange">GU</span>
-              <span className="violet">VI</span>
+            <span className="affiliate-overview__landing-page--container-child-title">
+              <div className="vertical">
+                <span>LÊN</span>
+                <span>ĐẾN</span>
+              </div>
+              <span className="orange">5&nbsp;</span>
+              <span className="orange">TRIỆU</span>
             </span>
             <span className="affiliate-overview__landing-page--container-child-caption">
               Chương trình Affiliate của GUVI là cơ hội tuyệt vời để bạn kiếm
@@ -791,15 +792,135 @@ const OverView = () => {
             isScaleCircle && "scale-up"
           }`}
         ></div>
-
         <div
           style={{ bottom: "100px", right: "50px" }}
           className={`affiliate-overview__landing-page--circle extra-small color-white ${
             isScaleCircle && "scale-up"
           }`}
         ></div>
+        <div className="affiliate-overview__landing-page--arrow-down">
+          <span>
+            <MdKeyboardDoubleArrowDown />
+          </span>
+        </div>
+      </div>
+      <div className="affiliate-overview__benefit" id="sectionBenefit">
+        <div className="affiliate-overview__benefit--list">
+          <span className="affiliate-overview__benefit--list-title">
+            Ưu đãi của
+          </span>
+          <span className="affiliate-overview__benefit--list-title">
+            chương trình
+          </span>
+          <span className="affiliate-overview__benefit--list-sub-title">
+            Tham gia chương trình Affiliate không chỉ giúp bạn tạo thêm nguồn
+            thu nhập thụ động mà còn mang đến nhiều lợi ích hấp dẫn cùng với đó
+            là sự quản lý chặt chẽ của GUVI giúp việc tham gia chương trình
+            không gặp bất kì vấn đề nào
+          </span>
+          <div className="affiliate-overview__benefit--list-child">
+            {listBenefit.map((item, index) => (
+              <div className="affiliate-overview__benefit--list-child-information">
+                <div className="affiliate-overview__benefit--list-child-information-icon">
+                  <img src={item.image} alt=""></img>
+                </div>
+                <span className="affiliate-overview__benefit--list-child-information-title">
+                  {item.title}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="affiliate-overview__benefit--service-available">
+          <img src={aboutGuviAffiliateImage} alt=""></img>
+          <div className="affiliate-overview__benefit--service-available-list">
+            <div className="affiliate-overview__benefit--service-available-list-child">
+              <img src={giupViecTheoGioImage} alt=""></img>
+            </div>
+            <div className="affiliate-overview__benefit--service-available-list-child">
+              <img src={donDepCoDinhImage} alt=""></img>
+            </div>
+            <div className="affiliate-overview__benefit--service-available-list-child">
+              <img src={tongVeSinhImage} alt=""></img>
+            </div>
+            <div className="affiliate-overview__benefit--service-available-list-child">
+              <img src={veSinhRemThamImage} alt=""></img>
+            </div>
+            <div className="affiliate-overview__benefit--service-available-list-child">
+              <img src={veSinhMayLanhImage} alt=""></img>
+            </div>
+          </div>
+        </div>
       </div>
       <div className="affiliate-overview__guide" id="sectionGuide">
+        <div className="affiliate-overview__guide--benefit">
+          <div className="affiliate-overview__guide--benefit-step">
+            <div className="affiliate-overview__guide--benefit-step-image">
+              <img src={affiliateShareImage}></img>
+            </div>
+            <div className="affiliate-overview__guide--benefit-step-title">
+              <div className="affiliate-overview__guide--benefit-step-title-container">
+                <div className="affiliate-overview__guide--benefit-step-title-container-bullet-points">
+                  <img src={blinkStickerImage} alt=""></img>
+                </div>
+                <span>
+                  Chọn một trong hai chương trình giới thiệu và bấm nút chia sẻ
+                </span>
+              </div>
+              <div className="affiliate-overview__guide--benefit-step-title-container">
+                <div className="affiliate-overview__guide--benefit-step-title-container-bullet-points">
+                  <img src={blinkStickerImage} alt=""></img>
+                </div>
+                <span>
+                  Gửi link cho người bạn muốn giới thiệu bằng cách dán link vào
+                  khung tin nhắn và gửi
+                </span>
+              </div>
+            </div>
+          </div>
+          <div className="affiliate-overview__guide--benefit-step right-to-left">
+            <div className="affiliate-overview__guide--benefit-step-image">
+              <img src={downloadAppImage} alt=""></img>
+            </div>
+            <div className="affiliate-overview__guide--benefit-step-title">
+              <div className="affiliate-overview__guide--benefit-step-title-container">
+                <div className="affiliate-overview__guide--benefit-step-title-container-bullet-points">
+                  <img src={blinkStickerImage} alt=""></img>
+                </div>
+                <span>
+                  Người được giới thiệu bấm vào link mà bạn vừa gửi để tải app
+                  GUVI và đăng ký tài khoản
+                </span>
+              </div>
+              <div className="affiliate-overview__guide--benefit-step-title-container">
+                <div className="affiliate-overview__guide--benefit-step-title-container-bullet-points">
+                  <img src={blinkStickerImage} alt=""></img>
+                </div>
+                <span>
+                  Người được giới thiệu lựa chọn và trải nghiệm thành cộng một
+                  trong các dịch vụ của GUVI
+                </span>
+              </div>
+            </div>
+          </div>
+          <div className="affiliate-overview__guide--benefit-step">
+            <div className="affiliate-overview__guide--benefit-step-image">
+              <img src={notificationMoneyImage} alt=""></img>
+            </div>
+            <div className="affiliate-overview__guide--benefit-step-title">
+              <div className="affiliate-overview__guide--benefit-step-title-container">
+                <div className="affiliate-overview__guide--benefit-step-title-container-bullet-points">
+                  <img src={blinkStickerImage} alt=""></img>
+                </div>
+                <span>
+                  Người giới thiệu nhận ngay 50.000đ vào ví G-pay cho đơn đầu
+                  tiên và 5% chiết khấu từ đơn hàng tùy thuộc vào mã đã gửi.
+                  Thông báo sẽ được gửi qua ứng dụng GUVI
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
         <div className="affiliate-overview__guide--code">
           <span className="affiliate-overview__guide--code-title">
             Phương thức giới thiệu
@@ -877,122 +998,6 @@ const OverView = () => {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-        <div className="affiliate-overview__guide--benefit">
-          <div className="affiliate-overview__guide--benefit-step">
-            <div className="affiliate-overview__guide--benefit-step-image">
-              <img src={affiliateShareImage}></img>
-            </div>
-            <div className="affiliate-overview__guide--benefit-step-title">
-              <div className="affiliate-overview__guide--benefit-step-title-container">
-                <div className="affiliate-overview__guide--benefit-step-title-container-bullet-points">
-                  <img src={blinkStickerImage} alt=""></img>
-                </div>
-                <span>
-                  Chọn một trong hai chương trình giới thiệu và bấm nút chia sẻ
-                </span>
-              </div>
-              <div className="affiliate-overview__guide--benefit-step-title-container">
-                <div className="affiliate-overview__guide--benefit-step-title-container-bullet-points">
-                  <img src={blinkStickerImage} alt=""></img>
-                </div>
-                <span>
-                  Gửi link cho người bạn muốn giới thiệu bằng cách dán link vào
-                  khung tin nhắn và gửi
-                </span>
-              </div>
-            </div>
-          </div>
-          <div className="affiliate-overview__guide--benefit-step right-to-left">
-            <div className="affiliate-overview__guide--benefit-step-image">
-              <img src={downloadAppImage} alt=""></img>
-            </div>
-            <div className="affiliate-overview__guide--benefit-step-title">
-              <div className="affiliate-overview__guide--benefit-step-title-container">
-                <div className="affiliate-overview__guide--benefit-step-title-container-bullet-points">
-                  <img src={blinkStickerImage} alt=""></img>
-                </div>
-                <span>
-                  Người được giới thiệu bấm vào link mà bạn vừa gửi để tải app
-                  GUVI và đăng ký tài khoản
-                </span>
-              </div>
-              <div className="affiliate-overview__guide--benefit-step-title-container">
-                <div className="affiliate-overview__guide--benefit-step-title-container-bullet-points">
-                  <img src={blinkStickerImage} alt=""></img>
-                </div>
-                <span>
-                  Người được giới thiệu lựa chọn và trải nghiệm thành cộng một
-                  trong các dịch vụ của GUVI
-                </span>
-              </div>
-            </div>
-          </div>
-          <div className="affiliate-overview__guide--benefit-step">
-            <div className="affiliate-overview__guide--benefit-step-image">
-              <img src={notificationMoneyImage} alt=""></img>
-            </div>
-            <div className="affiliate-overview__guide--benefit-step-title">
-              <div className="affiliate-overview__guide--benefit-step-title-container">
-                <div className="affiliate-overview__guide--benefit-step-title-container-bullet-points">
-                  <img src={blinkStickerImage} alt=""></img>
-                </div>
-                <span>
-                  Người giới thiệu nhận ngay 50.000đ vào ví G-pay cho đơn đầu
-                  tiên và 5% chiết khấu từ đơn hàng tùy thuộc vào mã đã gửi.
-                  Thông báo sẽ được gửi qua ứng dụng GUVI
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="affiliate-overview__benefit" id="sectionBenefit">
-        <div className="affiliate-overview__benefit--service-available">
-          <img src={aboutGuviAffiliateImage} alt=""></img>
-          <div className="affiliate-overview__benefit--service-available-list">
-            <div className="affiliate-overview__benefit--service-available-list-child">
-              <img src={giupViecTheoGioImage} alt=""></img>
-            </div>
-            <div className="affiliate-overview__benefit--service-available-list-child">
-              <img src={donDepCoDinhImage} alt=""></img>
-            </div>
-            <div className="affiliate-overview__benefit--service-available-list-child">
-              <img src={tongVeSinhImage} alt=""></img>
-            </div>
-            <div className="affiliate-overview__benefit--service-available-list-child">
-              <img src={veSinhRemThamImage} alt=""></img>
-            </div>
-            <div className="affiliate-overview__benefit--service-available-list-child">
-              <img src={veSinhMayLanhImage} alt=""></img>
-            </div>
-          </div>
-        </div>
-        <div className="affiliate-overview__benefit--list">
-          <span className="affiliate-overview__benefit--list-title">
-            Lợi ích khi tham gia
-          </span>
-          <span className="affiliate-overview__benefit--list-title">
-            chương trình
-          </span>
-          <span className="affiliate-overview__benefit--list-sub-title">
-            Tham gia chương trình Affiliate không chỉ giúp bạn tạo thêm nguồn
-            thu nhập thụ động mà còn mang đến nhiều lợi ích hấp dẫn cùng với đó
-            là sự quản lý chặt chẽ của GUVI giúp việc tham gia chương trình
-            không gặp bất kì vấn đề nào
-          </span>
-          <div className="affiliate-overview__benefit--list-child">
-            {listBenefit.map((item, index) => (
-              <div className="affiliate-overview__benefit--list-child-information">
-                <div className="affiliate-overview__benefit--list-child-information-icon">
-                  <img src={item.image} alt=""></img>
-                </div>
-                <span className="affiliate-overview__benefit--list-child-information-title">
-                  {item.title}
-                </span>
-              </div>
-            ))}
           </div>
         </div>
       </div>

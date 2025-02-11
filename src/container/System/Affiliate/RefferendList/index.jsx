@@ -94,15 +94,6 @@ const RefferendList = () => {
   // Hàm kiểm tra khi nào cuộn tới cuối
   const checkIfEnd = () => {
     if (sliderRef.current) {
-      console.log(
-        "check running scrollLeft >>> ",
-        sliderRef.current.scrollLeft
-      );
-      console.log(
-        "check running sliderRef.current.scrollWidth - sliderRef.current.clientWidth - 5 >>> ",
-        sliderRef.current.scrollWidth - sliderRef.current.clientWidth
-      );
-
       const atEnd =
         sliderRef.current.scrollLeft >=
           sliderRef.current.scrollWidth - sliderRef.current.clientWidth &&

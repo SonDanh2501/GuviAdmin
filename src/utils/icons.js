@@ -95,7 +95,11 @@ import {
   IoExit 
 } from "react-icons/io5";
 import { FaRegFrown, FaRegMeh, FaRegSmile, FaDog } from "react-icons/fa";
-import { MdDoubleArrow, MdChair } from "react-icons/md";
+import {
+  MdDoubleArrow,
+  MdChair,
+  MdKeyboardDoubleArrowDown,
+} from "react-icons/md";
 import { TbAirConditioning, TbIroningFilled } from "react-icons/tb";
 import { PiCookingPotFill } from "react-icons/pi";
 import { FaToolbox } from "react-icons/fa6";
@@ -195,7 +199,7 @@ const icons = {
   IoCheckboxOutline,
   IoArrowDownCircle,
   IoGlobeOutline,
-  IoExit ,
+  IoExit,
   // Font Awesome 5
   FaRegFrown,
   FaRegMeh,
@@ -204,6 +208,7 @@ const icons = {
   // Material Design icons
   MdDoubleArrow,
   MdChair,
+  MdKeyboardDoubleArrowDown,
   // Tabler Icons
   TbAirConditioning,
   TbIroningFilled,

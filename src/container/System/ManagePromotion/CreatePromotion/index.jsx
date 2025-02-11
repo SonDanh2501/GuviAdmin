@@ -32,7 +32,7 @@ import {
   createPromotion,
   getGroupCustomerApi,
 } from "../../../../api/promotion";
-import backgroundImage from "../../../../assets/images/backgroundContent.png";
+// import backgroundImage from "../../../../assets/images/backgroundContent.png";
 import descriptionImage from "../../../../assets/images/description.png";
 import shortDescriptionImage from "../../../../assets/images/shortDescription.png";
 import thumnailImage from "../../../../assets/images/thumnailContent.png";
@@ -288,7 +288,7 @@ const CreatePromotion = () => {
       <p className="m-0">Chi tiết mã khuyến mãi</p>
       <Image
         preview={false}
-        src={backgroundImage}
+        src={descriptionImage}
         className="img-description"
       />
     </div>
