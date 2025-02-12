@@ -1,9 +1,9 @@
 version: '3.3'
 services:
   # webadmin
-  guvico-admin-dev: 
+  guvico-admin-test: 
     build: .
-    container_name: guvico-admin-dev
+    container_name: guvico-admin-test
     volumes:
       - .:/app
       - /app/node_modules
@@ -11,6 +11,6 @@ services:
       - ${REACT_APP_PORT_AFFILIATE}:${REACT_APP_PORT_AFFILIATE}
       - ${REACT_APP_PORT_MAIN}:${REACT_APP_PORT_MAIN}
     restart: always
-    command: sh -c "serve -s build -l 3005 & serve -s build -l 3006"
+    command: sh -c "serve -s build -l ${REACT_APP_PORT_MAIN} & serve -s build -l ${REACT_APP_PORT_AFFILIATE}"
     env_file:
       - .env
