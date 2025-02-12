@@ -150,6 +150,7 @@ const CreateOrder = () => {
   const [isShowTipCollaborator, setIsShowTipCollaborator] = useState(false); // Hiển thị tiền tip cho đối tác
   const [isShowAddressSearch, setIsShowAddressSearch] = useState(true); // Hiển thị danh sách những địa chỉ đã tìm kiếm
   const [isDetailBill, setIsDetailBill] = useState(false); // Hiển thị chi tiết hóa đơn
+  const [isAllowClickTip, setIsAllowClickTip] = useState(true) // Cờ cho phép nhấn tiền tip
   /* ~~~ Handle function ~~~ */
   // const getDataListCustomer = async (search) => {
   //   const res = await searchCustomersApi(search);
@@ -348,9 +349,9 @@ const CreateOrder = () => {
   // })
   //     .catch((err) => {
   //       console.log("err ", err);
-        // if (err?.field === "code_promotion") {
-        //   setSelectCodePromotion(null);
-        // }
+  // if (err?.field === "code_promotion") {
+  //   setSelectCodePromotion(null);
+  // }
   //       errorNotify({
   //         message: err?.message,
   //       });
@@ -436,6 +437,7 @@ const CreateOrder = () => {
       selectCustomerValue !== null &&
       paymentMethod !== null
     ) {
+      console.log("chạy 1");
       let tempPayload = {};
       tempPayload["type"] = serviceData.type;
       tempPayload["is_auto_order"] = serviceData.is_auto_order;
@@ -471,6 +473,7 @@ const CreateOrder = () => {
       dateWorkSchedule.length > 0 &&
       valueAddrressEncode !== null
     ) {
+      console.log("chạy 2");
       calculateFeeGroupOrder(payloadOrder);
       getDataCodePromotionAvaiable();
       // getCheckEventPromotion();
@@ -624,11 +627,19 @@ const CreateOrder = () => {
     tempValueCollaborator !== "" && setTempValueCollaborator("");
   };
   const onBonusTipCollaborator = (_amount) => {
-    if (_amount === tipCollaborator) {
-      setTipCollaborator(0);
-    } else {
-      setTipCollaborator(_amount);
+    if (isAllowClickTip) {
+      if (_amount === tipCollaborator) {
+        setTipCollaborator(0);
+      } else {
+        setTipCollaborator(_amount);
+        setIsAllowClickTip(false);
+        setTimeout(() => setIsAllowClickTip(true), 3000); // Bật lại sau 5 giây
+      }
     }
+    else {
+      return; 
+    }
+
   };
   // Hàm chọn/hủy chọn mã khuyến mãi
   const handleChoosePromotion = (_code_promotion) => {
@@ -641,7 +652,8 @@ const CreateOrder = () => {
   const handleChangeAddressDefault = (checked) => {
     setIsShowAddressDefault(checked);
   };
-  
+
+  console.log("check isAllowClickTip", isAllowClickTip);
   /* ~~~ Main ~~~ */
   return (
     <div className="container-create-order">
@@ -852,7 +864,7 @@ const CreateOrder = () => {
                   key={index}
                   className={`container-create-order__info--tip-header-suggest-child ${
                     tipCollaborator === item.amount && "selected"
-                  }`}
+                  } ${!isAllowClickTip && tipCollaborator !== item.amount && "disable"}`}
                 >
                   <span>{formatMoney(item?.amount) || 0}</span>
                 </div>
@@ -864,7 +876,9 @@ const CreateOrder = () => {
             value={tipCollaborator}
             placeHolder="Tiền tip"
             isNumber={true}
-            onChange={(e) => setTipCollaborator(clearFormatNumber(e.target.value))}
+            onChange={(e) =>
+              setTipCollaborator(clearFormatNumber(e.target.value))
+            }
           />
         </div>
         {/* Ghi chú */}

@@ -17,6 +17,8 @@ const RangeDatePicker = (props) => {
   const { width } = useWindowDimensions();
   const lang = useSelector(getLanguageState);
   const {
+    startDateInitial,
+    endDateInitial,
     setStartDate,
     setEndDate,
     rangeDateDefaults,
@@ -668,6 +670,25 @@ const RangeDatePicker = (props) => {
     setSelectedMonths(sortedMonths);
   };
 
+  useEffect(() => {
+    if (
+      startDateInitial !== "" &&
+      startDateInitial !== null &&
+      startDateInitial !== undefined
+    ) {
+      setStartCalendar(moment(startDateInitial));
+      setStart(moment(startDateInitial));
+      setTitle("Tùy chỉnh");
+    }
+    if (
+      endDateInitial !== "" &&
+      endDateInitial !== null &&
+      endDateInitial !== undefined
+    ) {
+      setEndCalendar(moment(endDateInitial));
+      setEnd(moment(endDateInitial));
+    }
+  }, [startDateInitial, endDateInitial]);
   return (
     <div>
       <div onClick={() => setOpen(!open)} className="range-date-picker">

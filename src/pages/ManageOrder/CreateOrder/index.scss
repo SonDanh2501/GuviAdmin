@@ -355,6 +355,27 @@
               }
             }
 
+            &.disable {
+              border-color: $colorBlack;
+              background-color: $colorMoreLightGray;
+              cursor: not-allowed;
+              // box-shadow: rgba(139, 92, 246, 0.5) 0px 0px 10px 0px, rgba(139, 92, 246, 0.7) 0px 0px 3px 0px;
+
+              span {
+                color: $colorBlack;
+                font-weight: $fontWeightXL;
+              }
+
+              &:hover {
+                border-color: $colorBlack;
+                background-color: $colorMoreLightGray;
+  
+                span {
+                  color: $colorBlack;
+                }
+              }
+            }
+
             span {
               font-size: $textFontSizeM;
               font-weight: $fontWeightL;
