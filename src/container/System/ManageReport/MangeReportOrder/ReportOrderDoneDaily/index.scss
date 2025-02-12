@@ -1,0 +1,21 @@
+@import "../../../../../@theme/style.scss";
+
+
+.report-order-daily-revenue {
+    display: flex;
+    flex-direction: column;
+    gap: $gapL;
+    padding-bottom: 12px;
+
+    .report-order-daily-revenue__header {
+        display: flex;
+        flex-direction: column;
+        gap: $gapL;
+
+        .report-order-daily-revenue__header--title {
+            font-size: $textFontSize3XL;
+            font-weight: $fontWeightXL;
+            color: $colorBlack;
+        }
+    }
+}

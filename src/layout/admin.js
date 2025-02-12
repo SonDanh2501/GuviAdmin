@@ -112,6 +112,7 @@ import PunishDetail from "../pages/ManagePunish/PunishDetail";
 import TransferDetail from "../pages/ManageTopUpWithdraw/TransferDetail";
 import ReportFirstOrderByCustomer from "../pages/ManageReport/MangeReportOrder/ReportFirstOrderByCustomer";
 import ReportOrderDone from "../container/System/ManageReport/MangeReportOrder/ReportOrderDone";
+import ReportOrderDoneDaily from "../container/System/ManageReport/MangeReportOrder/ReportOrderDoneDaily";
 // import ManageFinance from "../pages/ManageFinance";
 
 const Admin = () => {
@@ -406,8 +407,12 @@ const Admin = () => {
         element={<ReportInviteDetails />}
       />
       <Route
-        path="/report/manage-report/report-revenue"
+        path="/report/manage-report/report-detail-revenue"
         element={<ReportOrderDone />}
+      />
+      <Route
+        path="/report/manage-report/report-daily-revenue"
+        element={<ReportOrderDoneDaily />}
       />
       <Route
         path="/notification/manage-push-notification"

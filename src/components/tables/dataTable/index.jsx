@@ -1156,6 +1156,7 @@ const DataTable = (props) => {
             const dataView = data[item.dataIndex] || "";
             return (
               <p
+              style={{cursor: "pointer"}}
                 className={`${item?.fontSize}`}
                 onClick={() =>
                   navigate(item.navigate, {
@@ -1163,7 +1164,6 @@ const DataTable = (props) => {
                   })
                 }
               >
-                {" "}
                 {dataView}
               </p>
             );

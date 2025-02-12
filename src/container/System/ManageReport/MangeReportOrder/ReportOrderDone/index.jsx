@@ -25,6 +25,7 @@ import { getLanguageState } from "../../../../../redux/selectors/auth";
 import { useSelector } from "react-redux";
 import { errorNotify } from "../../../../../helper/toast";
 import FilterData from "../../../../../components/filterData";
+import { useLocation } from "react-router-dom";
 
 const HeaderInfo = ({ title, subValue, typeSubValue, textToolTip }) => {
   const content = <p>{textToolTip ? textToolTip : ""}</p>;
@@ -80,6 +81,8 @@ const HeaderInfo = ({ title, subValue, typeSubValue, textToolTip }) => {
 
 const ReportOrderDone = () => {
   const lang = useSelector(getLanguageState);
+  const { state } = useLocation();
+  const date = state?.date;
   /* ~~~ Value ~~~ */
   const [lengthPage, setLengthPage] = useState(
     JSON.parse(localStorage.getItem("linePerPage"))
@@ -92,6 +95,7 @@ const ReportOrderDone = () => {
   const [start, setStart] = useState(0);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+
   /* ~~~ List ~~~ */
   const [listData, setListData] = useState([]);
   const columns = [
@@ -102,8 +106,8 @@ const ReportOrderDone = () => {
       width: 50,
     },
     {
-      customTitle: <CustomHeaderDatatable title="Ngày làm" />,
-      dataIndex: "date_work",
+      customTitle: <CustomHeaderDatatable title="Ngày tạo" />,
+      dataIndex: "date_create",
       key: "date_hour",
       width: 100,
       position: "center",
@@ -150,7 +154,9 @@ const ReportOrderDone = () => {
       customTitle: (
         <CustomHeaderDatatable
           title="Doanh thu"
-          subValue={totalValue?.total_fee - totalValue?.total_net_income_new}
+          subValue={
+            totalValue?.total_fee - totalValue?.total_net_income_new || null
+          }
           typeSubValue="money"
           textToolTip="Doanh thu = Tổng giá trị giao dịch (-) Thu hộ dịch vụ"
         />
@@ -163,7 +169,7 @@ const ReportOrderDone = () => {
       customTitle: (
         <CustomHeaderDatatable
           title="Giảm giá"
-          subValue={totalValue?.total_discount_new}
+          subValue={totalValue?.total_discount_new || null}
           typeSubValue="money"
           textToolTip="Tổng số tiền giảm giá từ: giảm giá dịch vụ, giảm giá đơn hàng, đồng giá, ctkm,…"
         />
@@ -178,8 +184,8 @@ const ReportOrderDone = () => {
           title="Doanh thu thuần"
           subValue={
             totalValue?.total_fee -
-            totalValue?.total_net_income_new -
-            totalValue?.total_discount_new
+              totalValue?.total_net_income_new -
+              totalValue?.total_discount_new || null
           }
           typeSubValue="money"
           textToolTip="Số tiền thu được sau khi trừ toàn bộ các giảm giá. Doanh thu thuần = Doanh thu (-) Giảm giá."
@@ -193,7 +199,9 @@ const ReportOrderDone = () => {
       customTitle: (
         <CustomHeaderDatatable
           title="Tổng hóa đơn"
-          subValue={totalValue?.total_fee - totalValue?.total_discount_new}
+          subValue={
+            totalValue?.total_fee - totalValue?.total_discount_new || null
+          }
           typeSubValue="money"
           textToolTip="Tổng số tiền ghi nhận trên hoá đơn dịch vụ. Tổng hoá đơn = Tổng tiền - giảm giá."
         />
@@ -244,8 +252,8 @@ const ReportOrderDone = () => {
           title="Tổng lợi nhuận"
           subValue={
             totalValue?.total_fee -
-            totalValue?.total_net_income_new -
-            totalValue?.total_discount_new
+              totalValue?.total_net_income_new -
+              totalValue?.total_discount_new || null
           }
           typeSubValue="money"
           textToolTip="Tổng lợi nhuận = Doanh thu thuần + thu nhập khác"
@@ -259,18 +267,18 @@ const ReportOrderDone = () => {
     {
       customTitle: (
         <CustomHeaderDatatable
-          title="Lợi nhuận trước thuế"
+          title="Lợi nhuận sau thuế"
           subValue={
             totalValue?.total_fee -
-            totalValue?.total_net_income_new -
-            totalValue?.total_discount_new -
-            totalValue?.total_tax
+              totalValue?.total_net_income_new -
+              totalValue?.total_discount_new -
+              totalValue?.total_tax || null
           }
           typeSubValue="money"
-          textToolTip="Lợi nhuận trước thuế = Tổng lợi nhuận (-) Thuế"
+          textToolTip="Lợi nhuận sau thuế = Tổng lợi nhuận (-) Thuế"
         />
       ),
-      dataIndex: "profit_before_tax",
+      dataIndex: "profit_after_tax",
       key: "money",
       width: 170,
     },
@@ -279,7 +287,7 @@ const ReportOrderDone = () => {
         <CustomHeaderDatatable
           title="% Lợi nhuận"
           typeSubValue="percent"
-          textToolTip="% Lợi nhuận = Lời nhuận trước thuế (/) Tổng lời nhuận"
+          textToolTip="% Lợi nhuận = Lời nhuận sau thuế (/) Tổng lời nhuận"
         />
       ),
       dataIndex: "percent_income_envenue",
@@ -297,7 +305,7 @@ const ReportOrderDone = () => {
         lengthPage,
         startDate,
         endDate,
-        "date_work",
+        "date_create",
         ["done"]
       );
       setListData(res?.data);
@@ -313,21 +321,28 @@ const ReportOrderDone = () => {
   };
   /* ~~~ Use effect ~~~ */
   useEffect(() => {
+    if (date) {
+      setStartDate(moment(date, "DD-MM-YYYY").startOf("date").toISOString());
+      setEndDate(moment(date, "DD-MM-YYYY").endOf("date").toISOString());
+    }
+  }, []);
+  useEffect(() => {
     if (startDate !== "" && endDate !== "") {
       fetchDataReportOrder();
     }
   }, [startDate, endDate, start, lengthPage]);
   /* ~~~ Other ~~~ */
-  console.log("check listData >>>", listData);
   /* ~~~ Main ~~~ */
   return (
     <div className="report-order-revenue">
       <div className="report-order-revenue__header">
         <span className="report-order-revenue__header--title">
-          Báo cáo doanh thu
+          Báo cáo doanh thu chi tiết từng đơn
         </span>
         <div>
           <FilterData
+            startDate={startDate}
+            endDate={endDate}
             isTimeFilter={true}
             setStartDate={setStartDate}
             setEndDate={setEndDate}

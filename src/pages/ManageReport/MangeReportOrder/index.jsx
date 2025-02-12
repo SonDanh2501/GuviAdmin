@@ -94,9 +94,15 @@ const ManageReportOrder = () => {
     //   checkPermition: "order_report"
     // },
     {
+      title: "Báo cáo doanh thu chi tiết",
+      detail: "Báo cáo doanh thu của TỪNG ĐƠN HÀNG (chỉ gồm những đơn đã hoàn thành)",
+      linkNavigate: "/report/manage-report/report-detail-revenue",
+      checkPermition: "order_report",
+    },
+    {
       title: "Báo cáo doanh thu",
-      detail: "Báo cáo doanh thu của những đơn đã hoàn thành",
-      linkNavigate: "/report/manage-report/report-revenue",
+      detail: "Báo cáo doanh thu của TỪNG NGÀY (chỉ bao gồm những đơn đã hoàn thành)",
+      linkNavigate: "/report/manage-report/report-daily-revenue",
       checkPermition: "order_report",
     },
   ];
