@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.347dac4f.css",
-    "main.js": "/static/js/main.a9dd2540.js",
+    "main.js": "/static/js/main.7063281c.js",
     "static/media/description.png": "/static/media/description.5da8e5eb29ad845b842c.png",
     "static/media/thumnailContent.png": "/static/media/thumnailContent.5f47e4a8f0e0c87659a9.png",
     "static/media/tenPercentage.svg": "/static/media/tenPercentage.23f9c75e2b14f3d13db89327697314e4.svg",
@@ -111,10 +111,10 @@
     "static/media/online.svg": "/static/media/online.acf17c611c1affd9615cf0c62302674d.svg",
     "static/media/pending.svg": "/static/media/pending.ae3d796b3e3d6c6272a35edc144a2e90.svg",
     "main.347dac4f.css.map": "/static/css/main.347dac4f.css.map",
-    "main.a9dd2540.js.map": "/static/js/main.a9dd2540.js.map"
+    "main.7063281c.js.map": "/static/js/main.7063281c.js.map"
   },
   "entrypoints": [
     "static/css/main.347dac4f.css",
-    "static/js/main.a9dd2540.js"
+    "static/js/main.7063281c.js"
   ]
 }
