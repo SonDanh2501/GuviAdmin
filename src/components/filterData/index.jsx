@@ -23,6 +23,8 @@ const FilterData = (props) => {
   // const [startDate, setStartDate] = useState("");
   // const [endDate, setEndDate] = useState("")
 
+  console.log("check startDate", startDate);
+  console.log("check endDate", endDate);
   const toIsoString = (date) => {
     var tzo = -date?.getTimezoneOffset(),
       dif = tzo >= 0 ? "+" : "-",
@@ -93,21 +95,13 @@ const FilterData = (props) => {
   }, [startDate, endDate]);
 
   return (
-    <div className="filter-data card-shadow">
+    <div
+      className={`filter-data card-shadow ${
+        !leftContent && "only-time-filter"
+      }`}
+    >
       {/* Nội dung bên trái */}
       <div className="filter-data__left">
-        {/* {isTimeFilter && (
-          <div className="filter-data__left--date-time-picker">
-            <div className="filter-data__left--date-time-picker-label">
-              <RangeDatePicker
-                setStartDate={setStartDate}
-                setEndDate={setEndDate}
-                onCancel={() => {}}
-                rangeDateDefaults={"thirty_last"}
-              />
-            </div>
-          </div>
-        )} */}
         {leftContent && <div>{leftContent}</div>}
       </div>
       {/* Nội dung bên phải */}
@@ -116,6 +110,8 @@ const FilterData = (props) => {
           <div className="filter-data__right--date-time-picker">
             <div className="filter-data__right--date-time-picker-label">
               <RangeDatePicker
+                startDateInitial={startDate}
+                endDateInitial={endDate}
                 setStartDate={setStartDate}
                 setEndDate={setEndDate}
                 onCancel={() => {}}
