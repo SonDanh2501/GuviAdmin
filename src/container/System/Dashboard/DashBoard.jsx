@@ -1322,6 +1322,7 @@ export default function Home() {
   const lastestService = useSelector(getLastestServices);
   const connectionService = useSelector(getServiceConnects);
   const topCollaborator = useSelector(getTopCollaborators);
+  console.log("check topCollaborator", topCollaborator);
   const dispatch = useDispatch();
   const yearFormat = "YYYY";
   const dataChartUser = [];
@@ -1958,7 +1959,7 @@ export default function Home() {
                       <div className="level">
                         <Link
                           className="level-ctv1"
-                          to={`/details-collaborator/${topCollaborator[0]?._id?.id_collaborator}`}
+                          to={`/details-collaborator/${topCollaborator[0]?._id?.id_collaborator || topCollaborator[0]._id}`}
                         >
                           <p className="text-level">
                             {topCollaborator[0]?._id?.full_name || topCollaborator[0]?.full_name} 
@@ -1970,7 +1971,7 @@ export default function Home() {
                         {topCollaborator.length > 1 && (
                           <Link
                             className="level-ctv2"
-                            to={`/details-collaborator/${topCollaborator[1]?._id?.id_collaborator}`}
+                            to={`/details-collaborator/${topCollaborator[1]?._id?.id_collaborator || topCollaborator[1]._id}`}
                           >
                             <p className="text-level">
                               {topCollaborator[1]?._id?.name || topCollaborator[1]?.full_name}
@@ -1983,7 +1984,7 @@ export default function Home() {
                         {topCollaborator.length > 2 && (
                           <Link
                             className="level-ctv3"
-                            to={`/details-collaborator/${topCollaborator[2]?._id?.id_collaborator}`}
+                            to={`/details-collaborator/${topCollaborator[2]?._id?.id_collaborator || topCollaborator[2]._id}`}
                           >
                             <p className="text-level">
                               {topCollaborator[2]?._id?.name || topCollaborator[2]?.full_name}
@@ -1996,7 +1997,7 @@ export default function Home() {
                         {topCollaborator.length > 3 && (
                           <Link
                             className="level-ctv4"
-                            to={`/details-collaborator/${topCollaborator[3]?._id?.id_collaborator}`}
+                            to={`/details-collaborator/${topCollaborator[3]?._id?.id_collaborator || topCollaborator[3]._id}`}
                           >
                             <p className="text-level">
                               {topCollaborator[3]?._id?.name || topCollaborator[3]?.full_name}
@@ -2009,7 +2010,7 @@ export default function Home() {
                         {topCollaborator.length > 4 && (
                           <Link
                             className="level-ctv5"
-                            to={`/details-collaborator/${topCollaborator[4]?._id?.id_collaborator}`}
+                            to={`/details-collaborator/${topCollaborator[4]?._id?.id_collaborator || topCollaborator[4]._id}`}
                           >
                             <p className="text-level">
                               {topCollaborator[4]?._id?.name || topCollaborator[4]?.full_name}
