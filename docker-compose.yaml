@@ -1,9 +1,9 @@
 version: '3.3'
 services:
   # webadmin
-  guvico-admin-test: 
+  guvico-admin: 
     build: .
-    container_name: guvico-admin-test
+    container_name: guvico-admin
     volumes:
       - .:/app
       - /app/node_modules
