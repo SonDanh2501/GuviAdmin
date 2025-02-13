@@ -242,7 +242,7 @@ const ReportOrderDoneDaily = () => {
         "done"
       );
       setListData(res?.data);
-      setTotal(res?.totalItem);
+      setTotal(res?.data?.length);
       setListTotalStatistic(res?.total[0]);
       setIsLoading(false);
     } catch (err) {
