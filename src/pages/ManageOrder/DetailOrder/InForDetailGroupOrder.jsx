@@ -195,8 +195,17 @@ const InForDetailGroupOrder = (props) => {
       if (dataGroup?.payment_method === "point") {
         setPaymentMethod("Ví G-pay");
       }
-      if (dataGroup?.payment_method === "momo") {
+      else if (dataGroup?.payment_method === "momo") {
         setPaymentMethod("Momo");
+      }
+      else if (dataGroup?.payment_method === "intcard") {
+        setPaymentMethod("Thẻ quốc tế");
+      }
+      else if (dataGroup?.payment_method === "vnbank") {
+        setPaymentMethod("VNPAY-ATM");
+      }
+      else {
+        return
       }
     }
   }, [dataGroup]);

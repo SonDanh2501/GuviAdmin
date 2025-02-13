@@ -17,5 +17,153 @@
             font-weight: $fontWeightXL;
             color: $colorBlack;
         }
+
+        .report-order-daily-revenue__header--total-statistic {
+            display: flex;
+            gap: $gapL;
+            // flex-wrap: wrap;
+            align-items: center;
+            // background-color: red;
+
+            .report-order-daily-revenue__header--total-statistic-child {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                width: 25%;
+                background-color: white;
+                padding: 16px;
+                border-radius: $borderRadiusL;
+                position: relative;
+                // border-bottom: 4px solid black;
+
+                .line {
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 6px;
+                    background-color: $colorBlack;
+                    opacity: .8;
+                    border-bottom-left-radius: $borderRadiusFull;
+                    border-bottom-right-radius: $borderRadiusFull;
+                }
+
+                &.red {
+
+                    .line {
+                        background-color: $colorRed;
+                    }
+
+                    .report-order-daily-revenue__header--total-statistic-child-icon {
+                        background-color: $colorExtraLightRed;
+
+                        span {
+                            color: $colorRed;
+                        }
+                    }
+
+                    .report-order-daily-revenue__header--total-statistic-child-value {
+
+                        .report-order-daily-revenue__header--total-statistic-child-value-numer {
+                            color: $colorRed;
+                        }
+                    }
+                }
+
+                &.blue {
+                    .line {
+                        background-color: $colorBlue;
+                    }
+
+                    .report-order-daily-revenue__header--total-statistic-child-icon {
+                        background-color: $colorExtraLightBlue;
+
+                        span {
+                            color: $colorBlue;
+                        }
+                    }
+
+                    .report-order-daily-revenue__header--total-statistic-child-value {
+
+                        .report-order-daily-revenue__header--total-statistic-child-value-numer {
+                            color: $colorBlue;
+                        }
+                    }
+                }
+
+                &.green {
+                    .line {
+                        background-color: $colorGreen;
+                    }
+
+                    .report-order-daily-revenue__header--total-statistic-child-icon {
+                        background-color: $colorExtraLightGreen;
+
+                        span {
+                            color: $colorGreen;
+                        }
+                    }
+
+                    .report-order-daily-revenue__header--total-statistic-child-value {
+
+                        .report-order-daily-revenue__header--total-statistic-child-value-numer {
+                            color: $colorGreen;
+                        }
+                    }
+                }
+
+                &.yellow {
+                    .line {
+                        background-color: $colorYellow;
+                    }
+
+                    .report-order-daily-revenue__header--total-statistic-child-icon {
+                        background-color: $colorExtraLightYellow;
+
+                        span {
+                            color: $colorYellow;
+                        }
+                    }
+
+                    .report-order-daily-revenue__header--total-statistic-child-value {
+
+                        .report-order-daily-revenue__header--total-statistic-child-value-numer {
+                            color: $colorYellow;
+                        }
+                    }
+                }
+
+                .report-order-daily-revenue__header--total-statistic-child-icon {
+                    border-radius: $borderRadiusFull;
+                    padding: 12px;
+
+                    span {
+                        font-size: 1.5em;
+                        font-weight: $fontWeightXL;
+                        color: $colorBlack;
+                    }
+                }
+
+                .report-order-daily-revenue__header--total-statistic-child-value {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    gap: $gapS;
+
+                    .report-order-daily-revenue__header--total-statistic-child-value-title {
+                        font-size: 1em;
+                        font-weight: $fontWeightXL;
+                        color: $colorBlack;
+                    }
+
+                    .report-order-daily-revenue__header--total-statistic-child-value-numer {
+                        font-size: 1em;
+                        font-weight: $fontWeightL;
+                        color: $colorBlack;
+                    }
+                }
+            }
+
+        }
     }
 }
