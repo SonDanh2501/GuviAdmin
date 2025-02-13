@@ -23,8 +23,6 @@ const FilterData = (props) => {
   // const [startDate, setStartDate] = useState("");
   // const [endDate, setEndDate] = useState("")
 
-  console.log("check startDate", startDate);
-  console.log("check endDate", endDate);
   const toIsoString = (date) => {
     var tzo = -date?.getTimezoneOffset(),
       dif = tzo >= 0 ? "+" : "-",
