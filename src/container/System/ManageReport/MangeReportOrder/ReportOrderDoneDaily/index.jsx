@@ -5,6 +5,10 @@ import DataTable from "../../../../../components/tables/dataTable";
 import FilterData from "../../../../../components/filterData";
 import { errorNotify } from "../../../../../helper/toast";
 import { getReportOrderDaily } from "../../../../../api/report";
+import { formatMoney } from "../../../../../helper/formatMoney";
+import icons from "../../../../../utils/icons";
+
+const { IoReceipt, IoCash, IoTrendingUp, IoHappy } = icons;
 
 const ReportOrderDoneDaily = () => {
   /* ~~~ Value ~~~ */
@@ -20,6 +24,7 @@ const ReportOrderDoneDaily = () => {
   const [endDate, setEndDate] = useState("");
   /* ~~~ List ~~~ */
   const [listData, setListData] = useState([]);
+  const [listTotalStatistic, setListTotalStatistic] = useState([]);
   const columns = [
     {
       customTitle: <CustomHeaderDatatable title="STT" />,
@@ -36,25 +41,25 @@ const ReportOrderDoneDaily = () => {
       navigate: "/report/manage-report/report-detail-revenue",
     },
     {
-      customTitle: <CustomHeaderDatatable title="Số đơn hàng" />,
+      customTitle: (
+        <CustomHeaderDatatable
+          title="Số đơn hàng"
+          subValue={listTotalStatistic?.total_item}
+          typeSubValue="number"
+        />
+      ),
       dataIndex: "total_item",
       key: "number",
       width: 130,
       position: "center",
     },
-    // {
-    //   customTitle: <CustomHeaderDatatable title="Trạng thái" />,
-    //   dataIndex: "status",
-    //   key: "status",
-    //   width: 120,
-    // },
     {
       customTitle: (
         <CustomHeaderDatatable
           title="Tổng giá trị giao dịch"
-          //   subValue={totalValue?.total_fee}
           typeSubValue="money"
           textToolTip="GMV - Gross Merchandise Volume (total_fee)"
+          subValue={listTotalStatistic?.total_fee}
         />
       ),
       dataIndex: "total_fee",
@@ -65,7 +70,7 @@ const ReportOrderDoneDaily = () => {
       customTitle: (
         <CustomHeaderDatatable
           title="Thu hộ dịch vụ"
-          //   subValue={totalValue?.total_net_income_new}
+          subValue={listTotalStatistic?.total_net_income_new}
           typeSubValue="money"
           textToolTip="Bao gồm phí dịch vụ trả đối tác: tiền tip từ khách,... (net_income)"
         />
@@ -78,9 +83,10 @@ const ReportOrderDoneDaily = () => {
       customTitle: (
         <CustomHeaderDatatable
           title="Doanh thu"
-          //   subValue={
-          //     // totalValue?.total_fee - totalValue?.total_net_income_new || null
-          //   }
+          subValue={
+            listTotalStatistic?.total_fee -
+              listTotalStatistic?.total_net_income_new || null
+          }
           typeSubValue="money"
           textToolTip="Doanh thu = Tổng giá trị giao dịch (-) Thu hộ dịch vụ"
         />
@@ -93,7 +99,7 @@ const ReportOrderDoneDaily = () => {
       customTitle: (
         <CustomHeaderDatatable
           title="Giảm giá"
-          //   subValue={totalValue?.total_discount_new || null}
+          subValue={listTotalStatistic?.total_discount_new || null}
           typeSubValue="money"
           textToolTip="Tổng số tiền giảm giá từ: giảm giá dịch vụ, giảm giá đơn hàng, đồng giá, ctkm,…"
         />
@@ -106,11 +112,11 @@ const ReportOrderDoneDaily = () => {
       customTitle: (
         <CustomHeaderDatatable
           title="Doanh thu thuần"
-          //   subValue={
-          //     totalValue?.total_fee -
-          //     totalValue?.total_net_income_new -
-          //     totalValue?.total_discount_new || null
-          //   }
+          subValue={
+            listTotalStatistic?.total_fee -
+              listTotalStatistic?.total_net_income_new -
+              listTotalStatistic?.total_discount_new || null
+          }
           typeSubValue="money"
           textToolTip="Số tiền thu được sau khi trừ toàn bộ các giảm giá. Doanh thu thuần = Doanh thu (-) Giảm giá."
         />
@@ -123,7 +129,10 @@ const ReportOrderDoneDaily = () => {
       customTitle: (
         <CustomHeaderDatatable
           title="Tổng hóa đơn"
-          //   subValue={totalValue?.total_fee - totalValue?.total_discount_new || null}
+          subValue={
+            listTotalStatistic?.total_fee -
+              listTotalStatistic?.total_discount_new || null
+          }
           typeSubValue="money"
           textToolTip="Tổng số tiền ghi nhận trên hoá đơn dịch vụ. Tổng hoá đơn = Tổng tiền - giảm giá."
         />
@@ -136,8 +145,8 @@ const ReportOrderDoneDaily = () => {
       customTitle: (
         <CustomHeaderDatatable
           title="Giá vốn"
-          //   subValue={totalValue?.punishss }
-          typeSubValue="money"
+          subValue={0}
+          typeSubValue="number"
         />
       ),
       dataIndex: "punishss",
@@ -148,7 +157,7 @@ const ReportOrderDoneDaily = () => {
       customTitle: (
         <CustomHeaderDatatable
           title="Phí áp dụng"
-          //   subValue={totalValue?.total_service_fee}
+          subValue={listTotalStatistic?.total_service_fee}
           typeSubValue="money"
         />
       ),
@@ -160,7 +169,7 @@ const ReportOrderDoneDaily = () => {
       customTitle: (
         <CustomHeaderDatatable
           title="Thuế"
-          //   subValue={totalValue?.total_tax}
+          subValue={listTotalStatistic?.total_tax}
           typeSubValue="money"
         />
       ),
@@ -172,11 +181,11 @@ const ReportOrderDoneDaily = () => {
       customTitle: (
         <CustomHeaderDatatable
           title="Tổng lợi nhuận"
-          //   subValue={
-          //     totalValue?.total_fee -
-          //     totalValue?.total_net_income_new -
-          //     totalValue?.total_discount_new || null
-          //   }
+          subValue={
+            listTotalStatistic?.total_fee -
+              listTotalStatistic?.total_net_income_new -
+              listTotalStatistic?.total_discount_new || null
+          }
           typeSubValue="money"
           textToolTip="Tổng lợi nhuận = Doanh thu thuần + thu nhập khác"
         />
@@ -190,12 +199,12 @@ const ReportOrderDoneDaily = () => {
       customTitle: (
         <CustomHeaderDatatable
           title="Lợi nhuận sau thuế"
-          //   subValue={
-          //     totalValue?.total_fee -
-          //     totalValue?.total_net_income_new -
-          //     totalValue?.total_discount_new -
-          //     totalValue?.total_tax || null
-          //   }
+          subValue={
+            listTotalStatistic?.total_fee -
+              listTotalStatistic?.total_net_income_new -
+              listTotalStatistic?.total_discount_new -
+              listTotalStatistic?.total_tax || null
+          }
           typeSubValue="money"
           textToolTip="Lợi nhuận sau thuế = Tổng lợi nhuận (-) Thuế"
         />
@@ -234,6 +243,7 @@ const ReportOrderDoneDaily = () => {
       );
       setListData(res?.data);
       setTotal(res?.totalItem);
+      setListTotalStatistic(res?.total[0]);
       setIsLoading(false);
     } catch (err) {
       errorNotify({
@@ -245,8 +255,7 @@ const ReportOrderDoneDaily = () => {
   /* ~~~ Use effect ~~~ */
   useEffect(() => {
     fetchReportOrderDaily();
-  }, []);
-  /* ~~~ Other ~~~ */
+  }, [startDate, endDate, start, lengthPage]);
   /* ~~~ Main ~~~ */
   return (
     <div className="report-order-daily-revenue">
@@ -254,6 +263,80 @@ const ReportOrderDoneDaily = () => {
         <span className="report-order-daily-revenue__header--title">
           Báo cáo doanh thu từng ngày
         </span>
+        <div className="report-order-daily-revenue__header--total-statistic">
+          <div className="report-order-daily-revenue__header--total-statistic-child card-shadow blue">
+            <div className="line"></div>
+            <div className="report-order-daily-revenue__header--total-statistic-child-icon">
+              <span>
+                <IoReceipt />
+              </span>
+            </div>
+            <div className="report-order-daily-revenue__header--total-statistic-child-value">
+              <span className="report-order-daily-revenue__header--total-statistic-child-value-title">
+                Tổng đơn hàng
+              </span>
+              <span className="report-order-daily-revenue__header--total-statistic-child-value-numer">
+                {listTotalStatistic?.total_item}&nbsp;đơn
+              </span>
+            </div>
+          </div>
+          <div className="report-order-daily-revenue__header--total-statistic-child card-shadow green">
+            <div className="line"></div>
+            <div className="report-order-daily-revenue__header--total-statistic-child-icon">
+              <span>
+                <IoTrendingUp />
+              </span>
+            </div>
+            <div className="report-order-daily-revenue__header--total-statistic-child-value">
+              <span className="report-order-daily-revenue__header--total-statistic-child-value-title">
+                Tổng giá trị giao dịch
+              </span>
+              <span className="report-order-daily-revenue__header--total-statistic-child-value-numer">
+                {formatMoney(listTotalStatistic?.total_fee)}
+              </span>
+            </div>
+          </div>
+          <div className="report-order-daily-revenue__header--total-statistic-child card-shadow yellow">
+            <div className="line"></div>
+            <div className="report-order-daily-revenue__header--total-statistic-child-icon">
+              <span>
+                <IoCash />
+              </span>
+            </div>
+            <div className="report-order-daily-revenue__header--total-statistic-child-value">
+              <span className="report-order-daily-revenue__header--total-statistic-child-value-title">
+                Tổng doanh thu
+              </span>
+              <span className="report-order-daily-revenue__header--total-statistic-child-value-numer">
+                {formatMoney(
+                  listTotalStatistic?.total_fee -
+                    listTotalStatistic?.total_net_income_new || null
+                )}
+              </span>
+            </div>
+          </div>
+          <div className="report-order-daily-revenue__header--total-statistic-child card-shadow red">
+            <div className="line"></div>
+            <div className="report-order-daily-revenue__header--total-statistic-child-icon">
+              <span>
+                <IoHappy />
+              </span>
+            </div>
+            <div className="report-order-daily-revenue__header--total-statistic-child-value">
+              <span className="report-order-daily-revenue__header--total-statistic-child-value-title">
+                Tổng lợi nhuận
+              </span>
+              <span className="report-order-daily-revenue__header--total-statistic-child-value-numer">
+                {formatMoney(
+                  listTotalStatistic?.total_fee -
+                    listTotalStatistic?.total_net_income_new -
+                    listTotalStatistic?.total_discount_new || null
+                )}
+              </span>
+            </div>
+          </div>
+        </div>
+
         <div>
           <FilterData
             isTimeFilter={true}

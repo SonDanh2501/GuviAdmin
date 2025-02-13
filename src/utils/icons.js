@@ -92,7 +92,9 @@ import {
   IoCheckboxOutline,
   IoArrowDownCircle,
   IoGlobeOutline,
-  IoExit 
+  IoExit,
+  IoReceipt,
+  IoHappy,
 } from "react-icons/io5";
 import { FaRegFrown, FaRegMeh, FaRegSmile, FaDog } from "react-icons/fa";
 import {
@@ -200,6 +202,8 @@ const icons = {
   IoArrowDownCircle,
   IoGlobeOutline,
   IoExit,
+  IoReceipt,
+  IoHappy,
   // Font Awesome 5
   FaRegFrown,
   FaRegMeh,
