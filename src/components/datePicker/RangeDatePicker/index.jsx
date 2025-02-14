@@ -698,10 +698,7 @@ const RangeDatePicker = (props) => {
         </span>
         <div className="range-date-picker__line"></div>
         <div className="range-date-picker__option">
-          <span
-            style={{ fontWeight: 400 }}
-            className="range-date-picker__option--title"
-          >
+          <span className="range-date-picker__option--title">
             {/* {title} {moment(toIsoString(startCalendar?._d)).format("DD/MM/YYYY")} -{" "}
             {moment(toIsoString(endCalendar?._d)).format("DD/MM/YYYY")} */}
             {title}
