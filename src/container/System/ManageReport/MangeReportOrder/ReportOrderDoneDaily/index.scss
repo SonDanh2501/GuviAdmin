@@ -166,4 +166,93 @@
 
         }
     }
+
+    .report-order-daily-revenue__chart {
+        display: flex;
+        flex-direction: column;
+        gap: $gapL;
+        background-color: white;
+        border-radius: $borderRadiusL;
+        padding: 16px;
+
+        .report-order-daily-revenue__chart--header {
+            display: flex;
+            justify-content: space-between;
+
+            span {
+                font-size: $textFontSizeM;
+                font-weight: $fontWeightXL;
+                color: $colorBlack;
+            }
+
+            .report-order-daily-revenue__chart--header-total {
+                display: flex;
+                align-items: center;
+                gap: $gapXS;
+                padding: 4px;
+                border: 1px solid $colorLightGray;
+                border-radius: $borderRadiusL;
+
+                .report-order-daily-revenue__chart--header-total-compare {
+                    // display: flex;
+                    // align-items: center;
+                    // gap: $gapXS;
+
+                    &.up {
+                        span {
+                            font-size: $textFontSizeM;
+                            font-weight: $fontWeightL;
+                            color: $colorGreen;
+                        }
+                    }
+
+                    &.down {
+                        span {
+                            font-size: $textFontSizeM;
+                            font-weight: $fontWeightL;
+                            color: $colorRed;
+                        }
+                    }
+                }
+
+            }
+        }
+    }
+
+    .report-order-daily-revenue__previous-period {
+        display: flex;
+        align-items: center;
+        gap: $gapM;
+
+        .report-order-daily-revenue__previous-period-child {
+            display: flex;
+            align-items: center;
+            gap: $gapXS;
+            padding: 6px;
+            border-radius: $borderRadiusL;
+            background-color: transparent;
+            border: 1px solid $colorLightGray;
+
+            span {
+                font-size: $textFontSizeM;
+                font-weight: $fontWeightL;
+            }
+
+            .line {
+                width: 1px;
+                height: 20px;
+                border-radius: $borderRadiusL;
+                background-color: $colorMoreLightGray;
+            }
+
+            .report-order-daily-revenue__previous-period-child-value {
+                padding: 6px;
+                background-color: $colorMoreLightGray;
+                border-radius: $borderRadiusL;
+                font-weight: $fontWeightXL;
+            }
+
+        }
+    }
+
 }

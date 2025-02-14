@@ -265,9 +265,9 @@ export const getReportPercentOrderDaily = (start_date, end_date) => {
   );
 };
 
-export const getTotalReportOrderDaily = (start_date, end_date, typeDate) => {
+export const getTotalReportOrderDaily = (start_date, end_date, typeDate, status) => {
   return axiosClient.get(
-    `/admin/report_mananger/total_order_daily?start_date=${start_date}&end_date=${end_date}&type_date=${typeDate}`
+    `/admin/report_mananger/total_order_daily?start_date=${start_date}&end_date=${end_date}&type_date=${typeDate}&status=${status}`
   );
 };
 

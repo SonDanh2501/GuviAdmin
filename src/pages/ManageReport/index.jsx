@@ -24,32 +24,37 @@ const ManageReport = () => {
   const itemTab = [
     {
       label: "Tổng quan",
-      content: <ReportOverview/>,
+      content: <ReportOverview />,
       key: 0,
     },
     {
       label: "Báo cáo đơn hàng",
-      content: <ManageReportOrder/>,
+      content: <ManageReportOrder />,
       key: 1,
     },
     {
       label: "Báo cáo CTV",
-      content: <MamageReportCollaborator/>,
+      content: <MamageReportCollaborator />,
       key: 2,
     },
     {
       label: "Báo cáo khách hàng",
-      content: <ManageReportCustomer/>,
+      content: <ManageReportCustomer />,
       key: 3,
     },
     {
       label: "Báo cáo đơn huỷ",
-      content: <ReportCancelOrder/>,
+      content: <ReportCancelOrder />,
       key: 4,
     },
     {
       label: "Báo cáo dịch vụ",
-      content: <ReportService/>,
+      content: <ReportService />,
+      key: 5,
+    },
+    {
+      label: "Báo cáo sổ quỹ",
+      content: <ReportService />,
       key: 5,
     },
   ];

@@ -1480,7 +1480,7 @@ body {
 
                         .affiliate-overview__guide--code-voucher-container-child-image {
                             width: 130px;
-                            height: fit-content;
+                            height: 130px;
                         }
 
                         .affiliate-overview__guide--code-voucher-container-child-benefit {
@@ -1631,6 +1631,32 @@ body {
         width: 100vw;
         height: 100vh;
         padding: 16px;
+        position: relative;
+
+        .affiliate-overview__benefit--tag {
+            position: absolute;
+            top: 0;
+            left: 32px;
+            opacity: 1;
+
+            img {
+                height: 130px;
+                width: 130px;
+            }
+        }
+
+        .affiliate-overview__benefit--wire {
+            position: absolute;
+            background-color: transparent;
+            z-index: 1;
+            opacity: 0.8;
+            transform: rotate(10deg);
+
+            img {
+                height: 100vh;
+                width: 100vw;
+            }
+        }
 
         .affiliate-overview__benefit--service-available {
             display: flex;
@@ -1655,7 +1681,6 @@ body {
                 }
             }
         }
-
 
         .affiliate-overview__benefit--list {
             display: flex;
