@@ -42,6 +42,10 @@ import assistantAffiliateImage from "../../../../assets/images/assistantAffiliat
 import stepAffiliateImage from "../../../../assets/images/stepAffiliate.svg";
 import affiliateLandingImage from "../../../../assets/images/affiliateLanding.svg";
 import affiliateShareImage from "../../../../assets/images/affiliate_share.png";
+import quoteBigImage from "../../../../assets/images/quote_big.svg";
+import waveImage from "../../../../assets/images/wave_affiliate.svg";
+import wavePngImage from "../../../../assets/images/wave_affiliate.png";
+
 
 import { useSelector } from "react-redux";
 import { getUser } from "../../../../redux/selectors/auth";
@@ -200,7 +204,7 @@ const OverView = () => {
             <div className="affiliate-overview__introduction--header-information">
               <div className="affiliate-overview__introduction--header-information-personal">
                 <span className="affiliate-overview__introduction--header-information-personal-label">
-                  Xin chào, Trường Sơn !
+                  Xin chào&nbsp;{user?.full_name}&nbsp;!
                 </span>
                 <span className="affiliate-overview__introduction--header-information-personal-sub-label">
                   Hãy cừng chia sẻ và nhận thêm thu nhập không giới hạn!
@@ -287,7 +291,12 @@ const OverView = () => {
                           Nhận tiền thưởng cho đơn hoàn thành đầu tiên
                         </span>
                       </div>
-                      <div className="affiliate-overview__introduction--blank-child-promotion-share">
+                      <div
+                        onClick={() =>
+                          copyToClipBoard(user?.promotional_referral_code)
+                        }
+                        className="affiliate-overview__introduction--blank-child-promotion-share"
+                      >
                         <img src={copyButtonImage} alt=""></img>
                         <span>CHIA SẺ</span>
                       </div>
@@ -323,7 +332,10 @@ const OverView = () => {
                           Nhận chiết khấu từ đơn thứ hai
                         </span>
                       </div>
-                      <div className="affiliate-overview__introduction--blank-child-promotion-share">
+                      <div
+                        onClick={() => copyToClipBoard(user?.referral_code)}
+                        className="affiliate-overview__introduction--blank-child-promotion-share"
+                      >
                         <img src={copyButtonImage} alt=""></img>
                         <span>CHIA SẺ</span>
                       </div>
@@ -728,7 +740,7 @@ const OverView = () => {
               onMouseLeave={() => setIsScaleCircle(false)}
               className="affiliate-overview__landing-page--container-child-button"
             >
-              <a href="#sectionGuide">Thể lệ chương trình</a>
+              <a href="#sectionBenefit">Ưu đãi chương trình</a>
             </div>
           </div>
         </div>
@@ -805,12 +817,16 @@ const OverView = () => {
         </div>
       </div>
       <div className="affiliate-overview__benefit" id="sectionBenefit">
+        <div className="affiliate-overview__benefit--tag">
+          <img src={quoteBigImage} alt=""></img>
+        </div>
+
         <div className="affiliate-overview__benefit--list">
           <span className="affiliate-overview__benefit--list-title">
-            Ưu đãi của
+            Ưu đãi
           </span>
           <span className="affiliate-overview__benefit--list-title">
-            chương trình
+            không giới hạn
           </span>
           <span className="affiliate-overview__benefit--list-sub-title">
             Tham gia chương trình Affiliate không chỉ giúp bạn tạo thêm nguồn
@@ -851,6 +867,13 @@ const OverView = () => {
             </div>
           </div>
         </div>
+        <div className="affiliate-overview__benefit--wire">
+          <img src={wireDecorationImage} alt=""></img>
+        </div>
+
+        {/* <div className="affiliate-overview__benefit--wave">
+          <img src={wavePngImage} alt=""></img>
+        </div> */}
       </div>
       <div className="affiliate-overview__guide" id="sectionGuide">
         <div className="affiliate-overview__guide--benefit">

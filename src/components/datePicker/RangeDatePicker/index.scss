@@ -6,7 +6,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 6px 4px;
+  padding: 6px;
   border: 1px solid $colorViolet;
   border-radius: $borderRadiusL;
   cursor: pointer;
@@ -33,7 +33,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 4px 6px;
+    padding: 6px;
     background-color: $colorMoreLightGray;
     border-radius: $borderRadiusL;
 
@@ -86,7 +86,7 @@
   background-color: white;
   padding: 0px;
   box-shadow: 2px 3px 2px rgb(216, 216, 216);
-  
+
   &.right {
     right: 225px;
   }
