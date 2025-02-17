@@ -60,6 +60,11 @@
                         span {
                             color: $colorRed;
                         }
+
+                        .report-order-daily-revenue__header--total-statistic-child-icon-empty {
+                            background-color: $colorRed;
+
+                        }
                     }
 
                     .report-order-daily-revenue__header--total-statistic-child-value {
@@ -80,6 +85,11 @@
 
                         span {
                             color: $colorBlue;
+                        }
+
+                        .report-order-daily-revenue__header--total-statistic-child-icon-empty {
+                            background-color: $colorBlue;
+
                         }
                     }
 
@@ -102,6 +112,12 @@
                         span {
                             color: $colorGreen;
                         }
+
+
+                        .report-order-daily-revenue__header--total-statistic-child-icon-empty {
+                            background-color: $colorGreen;
+
+                        }
                     }
 
                     .report-order-daily-revenue__header--total-statistic-child-value {
@@ -123,6 +139,11 @@
                         span {
                             color: $colorYellow;
                         }
+
+                        .report-order-daily-revenue__header--total-statistic-child-icon-empty {
+                            background-color: $colorYellow;
+
+                        }
                     }
 
                     .report-order-daily-revenue__header--total-statistic-child-value {
@@ -141,6 +162,13 @@
                         font-size: 1.5em;
                         font-weight: $fontWeightXL;
                         color: $colorBlack;
+                    }
+
+                    .report-order-daily-revenue__header--total-statistic-child-icon-empty {
+                        width: 20px;
+                        height: 20px;
+                        border-radius: $borderRadiusFull;
+                        background-color: black;
                     }
                 }
 

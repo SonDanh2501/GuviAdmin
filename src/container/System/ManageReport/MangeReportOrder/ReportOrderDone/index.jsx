@@ -106,8 +106,8 @@ const ReportOrderDone = () => {
       width: 50,
     },
     {
-      customTitle: <CustomHeaderDatatable title="Ngày tạo" />,
-      dataIndex: "date_create",
+      customTitle: <CustomHeaderDatatable title="Ngày làm" />,
+      dataIndex: "date_work",
       key: "date_hour",
       width: 100,
       position: "center",
@@ -305,7 +305,7 @@ const ReportOrderDone = () => {
         lengthPage,
         startDate,
         endDate,
-        "date_create",
+        "date_work",
         ["done"]
       );
       setListData(res?.data);
