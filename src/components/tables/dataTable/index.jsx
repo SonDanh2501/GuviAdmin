@@ -54,6 +54,9 @@ const DataTable = (props) => {
     headerRightContent,
     onCurrentPageChange,
     loading,
+    childArray,
+    childArrayIndex,
+    param,
   } = props;
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
@@ -243,17 +246,24 @@ const DataTable = (props) => {
             break;
           // Ngày tạo của sổ quỹ
           case "date_create":
+            const url = `${window.location.origin}/${item?.navigate}`;
             return (
               <div
-                className={`case__date-create ${
+                onClick={() =>
+                  window.open(
+                    `${url}?start_date=${data["time_start_report"]}&end_date=${data["time_end_report"]}`,
+                    "_blank"
+                  )
+                }
+                className={`case__date-create ${item?.fontSize} ${
                   item?.position === "center" && "center"
                 }`}
               >
                 <span className="case__date-create-date">
-                  {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}
+                  {moment(new Date(data[item.dataIndex])).format("DD/MM/YYYY")}
                 </span>
                 <span className="case__date-create-time">
-                  {moment(new Date(data?.date_create)).format("HH:mm:ss")}
+                  {moment(new Date(data[item.dataIndex])).format("HH:mm:ss")}
                 </span>
               </div>
             );
@@ -1098,10 +1108,13 @@ const DataTable = (props) => {
             );
             break;
           case "money": {
+            const dataShow = Array.isArray(data[item.dataIndex])
+              ? data[item.dataIndex][childArray]?.childArrayIndex
+              : data[item.dataIndex];
             return (
               <div className="case__money">
                 <span className="case__money--number">
-                  {formatMoney(data[item.dataIndex] || 0)}
+                  {formatMoney(dataShow) || 0}
                 </span>
               </div>
             );
@@ -1156,7 +1169,7 @@ const DataTable = (props) => {
             const dataView = data[item.dataIndex] || "";
             return (
               <p
-              style={{cursor: "pointer"}}
+                style={{ cursor: "pointer" }}
                 className={`${item?.fontSize}`}
                 onClick={() =>
                   navigate(item.navigate, {
