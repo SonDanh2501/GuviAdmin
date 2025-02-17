@@ -18,6 +18,8 @@ import ReportService from "../../container/System/ManageReport/ReportService"
 
 import TabPanelContent from "../../components/tabs/TabPanel"
 import "./index.scss";
+import ManageReportCashBook from "../../container/System/ManageReport/ManageReportCashBook";
+import ManageReportActivity from "../../container/System/ManageReport/ManageReportActivity";
 
 const ManageReport = () => {
 
@@ -54,8 +56,13 @@ const ManageReport = () => {
     },
     {
       label: "Báo cáo sổ quỹ",
-      content: <ReportService />,
-      key: 5,
+      content: <ManageReportCashBook />,
+      key: 6,
+    },
+    {
+      label: "Báo cáo hoạt động",
+      content: <ManageReportActivity />,
+      key: 7,
     },
   ];
   const checkElement = useSelector(getElementState);

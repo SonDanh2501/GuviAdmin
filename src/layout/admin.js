@@ -113,6 +113,10 @@ import TransferDetail from "../pages/ManageTopUpWithdraw/TransferDetail";
 import ReportFirstOrderByCustomer from "../pages/ManageReport/MangeReportOrder/ReportFirstOrderByCustomer";
 import ReportOrderDone from "../container/System/ManageReport/MangeReportOrder/ReportOrderDone";
 import ReportOrderDoneDaily from "../container/System/ManageReport/MangeReportOrder/ReportOrderDoneDaily";
+import ReportCashBook from "../container/System/ManageReport/ManageReportCashBook/ReportCashBook";
+import ReportCashBookCollaborator from "../container/System/ManageReport/ManageReportCashBook/ReportCashBookCollaborator";
+import ReportCashBookCustomer from "../container/System/ManageReport/ManageReportCashBook/ReportCashBookCustomer";
+import ReportOrderActivity from "../container/System/ManageReport/ManageReportActivity/ReportOrderActivity";
 // import ManageFinance from "../pages/ManageFinance";
 
 const Admin = () => {
@@ -337,6 +341,23 @@ const Admin = () => {
       <Route
         path="/report/manage-report/report-order-daily-date-work"
         element={<ReportOrderDaily />}
+      />
+
+      <Route
+        path="/report/manage-report/report-cash-book"
+        element={<ReportCashBook />}
+      />
+      <Route
+        path="/report/manage-report/report-cash-book-collaborator"
+        element={<ReportCashBookCollaborator />}
+      />
+      <Route
+        path="/report/manage-report/report-cash-book-customer"
+        element={<ReportCashBookCustomer />}
+      />
+      <Route
+        path="/report/manage-report/report-order-activity"
+        element={<ReportOrderActivity />}
       />
       <Route
         path="/report/manage-report/report-order-daily-date-create"

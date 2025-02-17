@@ -84,7 +84,7 @@ const HeaderInfoCharts = ({ total, arrow, percentSame }) => {
   );
 };
 
-const ReportOrderDoneDaily = () => {
+const ReportOrderActivity = () => {
   const headerDefault = {
     total: 0,
     arrow: "up",
@@ -130,7 +130,7 @@ const ReportOrderDoneDaily = () => {
       width: 50,
     },
     {
-      customTitle: <CustomHeaderDatatable title="Ngày làm" />,
+      customTitle: <CustomHeaderDatatable title="Ngày tạo" />,
       dataIndex: "_id",
       key: "id_date_work",
       width: 100,
@@ -333,9 +333,9 @@ const ReportOrderDoneDaily = () => {
         lengthPage,
         startDate,
         endDate,
-        "date_work",
+        "date_create",
         -1,
-        "date_work",
+        "date_create",
         "done"
       );
       setListData(res?.data);
@@ -377,11 +377,11 @@ const ReportOrderDoneDaily = () => {
 
   const getTotalReportDaily = async () => {
     const arrGetResult = await Promise.all([
-      getTotalReportOrderDaily(startDate, endDate, "date_work", "done"),
+      getTotalReportOrderDaily(startDate, endDate, "date_create", "done"),
       getTotalReportOrderDaily(
         previousStartDate,
         previousEndDate,
-        "date_work",
+        "date_create",
         "done"
       ),
     ]);
@@ -441,7 +441,7 @@ const ReportOrderDoneDaily = () => {
     <div className="report-order-daily-revenue">
       <div className="report-order-daily-revenue__header">
         <span className="report-order-daily-revenue__header--title">
-          Báo cáo doanh thu từng ngày
+          Báo cáo hoạt động đơn hàng
         </span>
         <div className="report-order-daily-revenue__header--total-statistic">
           <div className="report-order-daily-revenue__header--total-statistic-child card-shadow blue">
@@ -597,4 +597,4 @@ const ReportOrderDoneDaily = () => {
   );
 };
 
-export default ReportOrderDoneDaily;
+export default ReportOrderActivity;
