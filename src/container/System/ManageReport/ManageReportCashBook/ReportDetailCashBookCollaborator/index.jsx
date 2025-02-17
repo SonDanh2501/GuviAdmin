@@ -6,11 +6,14 @@ import moment from "moment";
 import icons from "../../../../../utils/icons";
 import { formatMoney } from "../../../../../helper/formatMoney";
 import { errorNotify } from "../../../../../helper/toast";
-import { getDetailReportCashBookApi } from "../../../../../api/report";
+import {
+  getDetailReportCashBookApi,
+  getReportCashBookCollaboratorApi,
+} from "../../../../../api/report";
 
 const { IoReceipt, IoCash, IoTrendingUp, IoHappy } = icons;
 
-const ReportCashBook = () => {
+const ReportDetailCashBookCollaborator = () => {
   /* ~~~ Value ~~~ */
   const [lengthPage, setLengthPage] = useState(
     JSON.parse(localStorage.getItem("linePerPage"))
@@ -40,6 +43,8 @@ const ReportCashBook = () => {
       key: "date_create",
       width: 100,
       position: "center",
+      fontSize: "cursor-pointer",
+      navigate: "transaction/manage-transaction/collaborator",
     },
     {
       customTitle: <CustomHeaderDatatable title="Ngày kết thúc" />,
@@ -47,63 +52,106 @@ const ReportCashBook = () => {
       key: "date_create",
       width: 100,
       position: "center",
+      fontSize: "cursor-pointer",
     },
     {
       customTitle: (
         <CustomHeaderDatatable
           title="Tổng thu"
-          subValue={listTotalStatistic?.total_income}
+          subValue={listTotalStatistic?.total_income_from_collaborators}
           typeSubValue="money"
         />
       ),
-      dataIndex: "total_income",
+      dataIndex: "total_income_from_collaborators",
       key: "money",
       width: 130,
     },
     {
       customTitle: (
         <CustomHeaderDatatable
-          title="Tổng chi"
-          subValue={listTotalStatistic?.total_expenses}
+          title="Tổng thu vào từ ngân hàng"
+          subValue={listTotalStatistic?.total_income_from_collaborators_bank}
           typeSubValue="money"
         />
       ),
-      dataIndex: "total_expenses",
+      dataIndex: "detailed_total_income_from_collaborators",
+      key: "money",
+      width: 170,
+      childArray: 0,
+      childArrayIndex: "money",
+    },
+    {
+      customTitle: (
+        <CustomHeaderDatatable
+          title="Tổng thu vào từ momo"
+          subValue={listTotalStatistic?.total_income_from_collaborators_momo}
+          typeSubValue="money"
+        />
+      ),
+      dataIndex: "detailed_total_income_from_collaborators",
+      key: "money",
+      width: 170,
+      childArray: 1,
+      childArrayIndex: "money",
+    },
+    {
+      customTitle: (
+        <CustomHeaderDatatable
+          title="Tổng chi"
+          subValue={listTotalStatistic?.total_expenses_for_collaborators}
+          typeSubValue="money"
+        />
+      ),
+      dataIndex: "total_expenses_for_collaborators",
       key: "money",
       width: 170,
     },
     {
       customTitle: (
         <CustomHeaderDatatable
-          title="Tổng số giao dịch thu"
-          subValue={listTotalStatistic?.total_income_transactions}
-          typeSubValue="number"
+          title="Tổng chi ra bằng ngân hàng"
+          subValue={listTotalStatistic?.total_expenses_for_collaborators_bank}
+          typeSubValue="money"
         />
       ),
-      dataIndex: "total_income_transactions",
-      key: "number",
-      width: 120,
-      position: "center",
+      dataIndex: "detailed_total_expenses_for_collaborators",
+      key: "money",
+      width: 170,
+      childArray: 0,
+      childArrayIndex: "money",
     },
-    {
-      customTitle: (
-        <CustomHeaderDatatable
-          title="Tổng số giao dịch chi"
-          subValue={listTotalStatistic?.total_expenses_transactions}
-          typeSubValue="number"
-        />
-      ),
-      dataIndex: "total_expenses_transactions",
-      key: "number",
-      width: 150,
-      position: "center",
-    },
+    // {
+    //   customTitle: (
+    //     <CustomHeaderDatatable
+    //       title="Tổng số giao dịch thu"
+    //       subValue={listTotalStatistic?.total_income_transactions}
+    //       typeSubValue="number"
+    //     />
+    //   ),
+    //   dataIndex: "total_income_transactions",
+    //   key: "number",
+    //   width: 120,
+    //   position: "center",
+    // },
+    // {
+    //   customTitle: (
+    //     <CustomHeaderDatatable
+    //       title="Tổng số giao dịch chi"
+    //       subValue={listTotalStatistic?.total_expenses_transactions}
+    //       typeSubValue="number"
+    //     />
+    //   ),
+    //   dataIndex: "total_expenses_transactions",
+    //   key: "number",
+    //   width: 150,
+    //   position: "center",
+    // },
   ];
   /* ~~~ Handle function ~~~ */
   const fetchDataReportCashBook = async (payload) => {
     try {
       setIsLoading(true);
-      const res = await getDetailReportCashBookApi(
+      const res = await getReportCashBookCollaboratorApi(
         payload.start,
         payload.lengthPage,
         payload.startDate,
@@ -119,6 +167,7 @@ const ReportCashBook = () => {
       });
     }
   };
+  const handleGetDetailTransactions = () => {};
   /* ~~~ Use effect ~~~ */
   useEffect(() => {
     fetchDataReportCashBook({ start, lengthPage, startDate, endDate });
@@ -166,9 +215,9 @@ const ReportCashBook = () => {
     <div className="report-order-daily-revenue">
       <div className="report-order-daily-revenue__header">
         <span className="report-order-daily-revenue__header--title">
-          Báo cáo tổng quan thu chi
+          Báo cáo tổng thu chi đối tác
         </span>
-        {/* <div className="report-order-daily-revenue__header--total-statistic">
+        <div className="report-order-daily-revenue__header--total-statistic">
           <div className="report-order-daily-revenue__header--total-statistic-child card-shadow blue">
             <div className="line"></div>
             <div className="report-order-daily-revenue__header--total-statistic-child-icon">
@@ -181,23 +230,9 @@ const ReportCashBook = () => {
                 Tổng thu
               </span>
               <span className="report-order-daily-revenue__header--total-statistic-child-value-numer">
-                {formatMoney(listTotalStatistic?.total_income)}
-              </span>
-            </div>
-          </div>
-          <div className="report-order-daily-revenue__header--total-statistic-child card-shadow green">
-            <div className="line"></div>
-            <div className="report-order-daily-revenue__header--total-statistic-child-icon">
-              <span>
-                <IoTrendingUp />
-              </span>
-            </div>
-            <div className="report-order-daily-revenue__header--total-statistic-child-value">
-              <span className="report-order-daily-revenue__header--total-statistic-child-value-title">
-                Tổng chi
-              </span>
-              <span className="report-order-daily-revenue__header--total-statistic-child-value-numer">
-                {formatMoney(listTotalStatistic?.total_expenses)}
+                {formatMoney(
+                  listTotalStatistic?.total_income_from_collaborators
+                )}
               </span>
             </div>
           </div>
@@ -210,30 +245,17 @@ const ReportCashBook = () => {
             </div>
             <div className="report-order-daily-revenue__header--total-statistic-child-value">
               <span className="report-order-daily-revenue__header--total-statistic-child-value-title">
-                Tổng số giao dịch thu
+                Tổng chi
               </span>
               <span className="report-order-daily-revenue__header--total-statistic-child-value-numer">
-                {listTotalStatistic?.total_income_transactions}&nbsp;giao dịch
+                {formatMoney(
+                  listTotalStatistic?.total_expenses_for_collaborators
+                )}
               </span>
             </div>
           </div>
-          <div className="report-order-daily-revenue__header--total-statistic-child card-shadow red">
-            <div className="line"></div>
-            <div className="report-order-daily-revenue__header--total-statistic-child-icon">
-              <span>
-                <IoHappy />
-              </span>
-            </div>
-            <div className="report-order-daily-revenue__header--total-statistic-child-value">
-              <span className="report-order-daily-revenue__header--total-statistic-child-value-title">
-                Tổng số giao dịch chi
-              </span>
-              <span className="report-order-daily-revenue__header--total-statistic-child-value-numer">
-                {listTotalStatistic?.total_expenses_transactions}&nbsp;giao dịch
-              </span>
-            </div>
-          </div>
-        </div> */}
+        </div>
+
         <div>
           <FilterData
             isTimeFilter={true}
@@ -264,4 +286,4 @@ const ReportCashBook = () => {
   );
 };
 
-export default ReportCashBook;
+export default ReportDetailCashBookCollaborator;
