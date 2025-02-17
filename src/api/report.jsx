@@ -388,7 +388,7 @@ export const getReportDetailOrderByCollaborator = (
   );
 };
 
-export const getReportCashBookApi = (
+export const getDetailReportCashBookApi = (
   start,
   length,
   start_date,
@@ -396,7 +396,7 @@ export const getReportCashBookApi = (
   status
 ) => {
   return axiosClient.get(
-    `api/admin/report_mananger/report_cash_book?start=${start}&length=${length}&start_date=${start_date}&end_date=${end_date}&status=${status}`
+    `api/admin/report_mananger/detail_report_cash_book?start=${start}&length=${length}&start_date=${start_date}&end_date=${end_date}&status=${status}`
   );
 };
 
@@ -408,7 +408,7 @@ export const getReportCashBookCollaboratorApi = (
   status
 ) => {
   return axiosClient.get(
-    `api/admin/report_mananger/report_cash_book_collaborator?start=${start}&length=${length}&start_date=${start_date}&end_date=${end_date}&status=${status}`
+    `api/admin/report_mananger/detail_report_cash_book_collaborator?start=${start}&length=${length}&start_date=${start_date}&end_date=${end_date}&status=${status}`
   );
 };
 
@@ -420,6 +420,6 @@ export const getReportCashBookCustomerApi = (
   status
 ) => {
   return axiosClient.get(
-    `api/admin/report_mananger/report_cash_book_customer?start=${start}&length=${length}&start_date=${start_date}&end_date=${end_date}&status=${status}`
+    `api/admin/report_mananger/detail_report_cash_book_customer?start=${start}&length=${length}&start_date=${start_date}&end_date=${end_date}&status=${status}`
   );
 };

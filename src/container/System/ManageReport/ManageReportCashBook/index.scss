@@ -69,6 +69,26 @@
             }
         }
 
+        .manage-report-cash-book__child--numbered {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: 0;
+            right: 0;
+            height: 30px;
+            width: 30px;
+            border-radius: $borderRadiusFull;
+            background-color: $colorMoreLightGray;
+            margin: 8px;
+
+            span {
+                font-size: $textFontSizeM;
+                font-weight: $fontWeightXL;
+                color: $colorLightGray;
+            }
+        }
+
         &:hover {
 
             .manage-report-cash-book__child--circle {

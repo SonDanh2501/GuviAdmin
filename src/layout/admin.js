@@ -117,6 +117,9 @@ import ReportCashBook from "../container/System/ManageReport/ManageReportCashBoo
 import ReportCashBookCollaborator from "../container/System/ManageReport/ManageReportCashBook/ReportCashBookCollaborator";
 import ReportCashBookCustomer from "../container/System/ManageReport/ManageReportCashBook/ReportCashBookCustomer";
 import ReportOrderActivity from "../container/System/ManageReport/ManageReportActivity/ReportOrderActivity";
+import ReportDetailCashBook from "../container/System/ManageReport/ManageReportCashBook/ReportDetailCashBook";
+import ReportDetailCashBookCollaborator from "../container/System/ManageReport/ManageReportCashBook/ReportDetailCashBookCollaborator";
+import ReportDetailCashBookCustomer from "../container/System/ManageReport/ManageReportCashBook/ReportDetailCashBookCustomer";
 // import ManageFinance from "../pages/ManageFinance";
 
 const Admin = () => {
@@ -342,18 +345,33 @@ const Admin = () => {
         path="/report/manage-report/report-order-daily-date-work"
         element={<ReportOrderDaily />}
       />
-
       <Route
         path="/report/manage-report/report-cash-book"
         element={<ReportCashBook />}
+      />
+      <Route
+        path="/report/manage-report/report-detail-cash-book"
+        element={<ReportDetailCashBook />}
       />
       <Route
         path="/report/manage-report/report-cash-book-collaborator"
         element={<ReportCashBookCollaborator />}
       />
       <Route
+        path="/report/manage-report/report-detail-cash-book-collaborator"
+        element={<ReportDetailCashBookCollaborator />}
+      />
+      <Route
         path="/report/manage-report/report-cash-book-customer"
         element={<ReportCashBookCustomer />}
+      />
+      <Route
+        path="/report/manage-report/report-detail-cash-book-customer"
+        element={<ReportDetailCashBookCustomer />}
+      />
+      <Route
+        path="/report/manage-report/report-cash-book"
+        element={<ReportCashBook />}
       />
       <Route
         path="/report/manage-report/report-order-activity"

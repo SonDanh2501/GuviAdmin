@@ -14,15 +14,33 @@ const ManageReportCashBook = () => {
       checkPermition: "order_report",
     },
     {
+      title: "Báo cáo chi tiết thu chi",
+      detail: "Báo cáo chi tiết thu chi tổng",
+      linkNavigate: "report/manage-report/report-detail-cash-book",
+      checkPermition: "order_report",
+    },
+    {
       title: "Báo cáo thu chi đối tác",
-      detail: "Báo cáo thu chi đối tác",
+      detail: "Báo cáo chi tiết thu chi đối tác",
       linkNavigate: "report/manage-report/report-cash-book-collaborator",
       checkPermition: "order_report",
     },
     {
+      title: "Báo cáo chi tiết thu chi đối tác",
+      detail: "Báo cáo chi tiết thu chi đối tác",
+      linkNavigate: "report/manage-report/report-detail-cash-book-collaborator",
+      checkPermition: "order_report",
+    },
+    {
       title: "Báo cáo thu chi khách hàng",
-      detail: "Báo cáo thu chi khách hàng",
+      detail: "Báo cáo chi tiết thu chi khách hàng",
       linkNavigate: "report/manage-report/report-cash-book-customer",
+      checkPermition: "order_report",
+    },
+    {
+      title: "Báo cáo chi tiết thu chi khách hàng",
+      detail: "Báo cáo chi tiết thu chi khách hàng",
+      linkNavigate: "report/manage-report/report-detail-cash-book-customer",
       checkPermition: "order_report",
     },
   ];
@@ -44,6 +62,9 @@ const ManageReportCashBook = () => {
             className="manage-report-cash-book__child--detail"
           >
             <span>Xem báo cáo</span>
+          </div>
+          <div className="manage-report-cash-book__child--numbered">
+            <span>{index + 1}</span>
           </div>
           <div className="manage-report-cash-book__child--title">
             <span className="manage-report-cash-book__child--title-header">
