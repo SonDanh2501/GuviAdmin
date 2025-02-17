@@ -217,7 +217,6 @@ const ManageTopUpWithdraw = (props) => {
     { code: "vnpay", label: "VNPAY-QR" },
     { code: "vnbank", label: "VNPAY-ATM" },
     { code: "intcard", label: "Thẻ quốc tế" },
-
   ];
   // 5. Danh sách các loại ví
   const walletTypeList = [
@@ -566,6 +565,21 @@ const ManageTopUpWithdraw = (props) => {
     selectTransferType,
     selectWalletType,
   ]);
+
+  // 4.
+  useEffect(() => {
+    // Lấy query string từ URL hiện tại
+    const queryString = window.location.search;
+
+    // Chuyển thành đối tượng URLSearchParams
+    const params = new URLSearchParams(queryString);
+    if (params.get("start_date")) {
+      setStartDate(params.get("start_date"));
+    }
+    if (params.get("end_date")) {
+      setEndDate(params.get("end_date"));
+    }
+  }, []);
   /* ~~~ Other ~~~ */
   const filterByType = () => {
     return (

@@ -265,7 +265,12 @@ export const getReportPercentOrderDaily = (start_date, end_date) => {
   );
 };
 
-export const getTotalReportOrderDaily = (start_date, end_date, typeDate, status) => {
+export const getTotalReportOrderDaily = (
+  start_date,
+  end_date,
+  typeDate,
+  status
+) => {
   return axiosClient.get(
     `/admin/report_mananger/total_order_daily?start_date=${start_date}&end_date=${end_date}&type_date=${typeDate}&status=${status}`
   );
@@ -380,5 +385,41 @@ export const getReportDetailOrderByCollaborator = (
 ) => {
   return axiosClient.get(
     `/admin/report_mananger/report_order_by_collaborator/get_detail/${idCollaborator}?start_date=${start_date}&end_date=${end_date}&type_date=date_work&start=${start}&length=${length}&status=${status}`
+  );
+};
+
+export const getReportCashBookApi = (
+  start,
+  length,
+  start_date,
+  end_date,
+  status
+) => {
+  return axiosClient.get(
+    `api/admin/report_mananger/report_cash_book?start=${start}&length=${length}&start_date=${start_date}&end_date=${end_date}&status=${status}`
+  );
+};
+
+export const getReportCashBookCollaboratorApi = (
+  start,
+  length,
+  start_date,
+  end_date,
+  status
+) => {
+  return axiosClient.get(
+    `api/admin/report_mananger/report_cash_book_collaborator?start=${start}&length=${length}&start_date=${start_date}&end_date=${end_date}&status=${status}`
+  );
+};
+
+export const getReportCashBookCustomerApi = (
+  start,
+  length,
+  start_date,
+  end_date,
+  status
+) => {
+  return axiosClient.get(
+    `api/admin/report_mananger/report_cash_book_customer?start=${start}&length=${length}&start_date=${start_date}&end_date=${end_date}&status=${status}`
   );
 };
