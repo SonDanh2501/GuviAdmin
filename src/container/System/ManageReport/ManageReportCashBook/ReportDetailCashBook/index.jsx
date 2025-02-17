@@ -10,7 +10,7 @@ import { getDetailReportCashBookApi } from "../../../../../api/report";
 
 const { IoReceipt, IoCash, IoTrendingUp, IoHappy } = icons;
 
-const ReportCashBook = () => {
+const ReportDetailCashBook = () => {
   /* ~~~ Value ~~~ */
   const [lengthPage, setLengthPage] = useState(
     JSON.parse(localStorage.getItem("linePerPage"))
@@ -166,9 +166,9 @@ const ReportCashBook = () => {
     <div className="report-order-daily-revenue">
       <div className="report-order-daily-revenue__header">
         <span className="report-order-daily-revenue__header--title">
-          Báo cáo tổng quan thu chi
+          Báo cáo chi tiết tổng thu chi
         </span>
-        {/* <div className="report-order-daily-revenue__header--total-statistic">
+        <div className="report-order-daily-revenue__header--total-statistic">
           <div className="report-order-daily-revenue__header--total-statistic-child card-shadow blue">
             <div className="line"></div>
             <div className="report-order-daily-revenue__header--total-statistic-child-icon">
@@ -233,7 +233,7 @@ const ReportCashBook = () => {
               </span>
             </div>
           </div>
-        </div> */}
+        </div>
         <div>
           <FilterData
             isTimeFilter={true}
@@ -264,4 +264,4 @@ const ReportCashBook = () => {
   );
 };
 
-export default ReportCashBook;
+export default ReportDetailCashBook;
