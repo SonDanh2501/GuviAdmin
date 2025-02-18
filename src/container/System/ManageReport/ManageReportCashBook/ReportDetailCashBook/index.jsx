@@ -7,10 +7,13 @@ import icons from "../../../../../utils/icons";
 import { formatMoney } from "../../../../../helper/formatMoney";
 import { errorNotify } from "../../../../../helper/toast";
 import { getDetailReportCashBookApi } from "../../../../../api/report";
+import { useLocation } from "react-router-dom";
 
 const { IoReceipt, IoCash, IoTrendingUp, IoHappy } = icons;
 
 const ReportDetailCashBook = () => {
+  const { state } = useLocation();
+  const date = state?.date;
   /* ~~~ Value ~~~ */
   const [lengthPage, setLengthPage] = useState(
     JSON.parse(localStorage.getItem("linePerPage"))
@@ -120,10 +123,11 @@ const ReportDetailCashBook = () => {
     }
   };
   /* ~~~ Use effect ~~~ */
+  // 1. Fetch giá trị bảng
   useEffect(() => {
     fetchDataReportCashBook({ start, lengthPage, startDate, endDate });
   }, [start, lengthPage, start, endDate]);
-  // 3. Tính toán thời gian của kỳ trước dựa trên kỳ hiện tại
+  // 2. Tính toán thời gian của kỳ trước dựa trên kỳ hiện tại
   useEffect(() => {
     if (startDate !== "") {
       const timeStartDate = new Date(startDate).getTime();
@@ -135,6 +139,16 @@ const ReportDetailCashBook = () => {
       setPreviousEndDate(new Date(tempSameEndDate).toISOString());
     }
   }, [startDate, endDate]);
+  // 3. Gán giá trị date cho startDate và endDate
+  useEffect(() => {
+    if (date) {
+      const timer = setTimeout(() => {
+        setStartDate(moment(date, "DD-MM-YYYY").startOf("date").toISOString());
+        setEndDate(moment(date, "DD-MM-YYYY").endOf("date").toISOString());
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, []);
   /* ~~~ Other ~~~ */
   const rightContent = (
     startDate,
@@ -237,6 +251,8 @@ const ReportDetailCashBook = () => {
         <div>
           <FilterData
             isTimeFilter={true}
+            startDate={startDate}
+            endDate={endDate}
             setStartDate={setStartDate}
             setEndDate={setEndDate}
             rightContent={rightContent(

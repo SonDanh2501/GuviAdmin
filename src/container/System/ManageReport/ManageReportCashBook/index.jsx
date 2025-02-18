@@ -8,41 +8,41 @@ const ManageReportCashBook = () => {
   /* ~~~ List ~~~ */
   const reportCashBookListItem = [
     {
-      title: "Báo cáo thu chi",
+      title: "Báo cáo TỔNG QUAN thu chi",
       detail: "Báo cáo thu chi tổng",
       linkNavigate: "report/manage-report/report-cash-book",
       checkPermition: "order_report",
     },
+    // {
+    //   title: "Báo cáo CHI TIẾT thu chi",
+    //   detail: "Báo cáo chi tiết thu chi tổng",
+    //   linkNavigate: "report/manage-report/report-detail-cash-book",
+    //   checkPermition: "order_report",
+    // },
     {
-      title: "Báo cáo chi tiết thu chi",
-      detail: "Báo cáo chi tiết thu chi tổng",
-      linkNavigate: "report/manage-report/report-detail-cash-book",
-      checkPermition: "order_report",
-    },
-    {
-      title: "Báo cáo thu chi đối tác",
-      detail: "Báo cáo chi tiết thu chi đối tác",
+      title: "Báo cáo TỔNG QUAN thu chi đối tác",
+      detail: "Báo cáo tổng quan thu chi đối tác",
       linkNavigate: "report/manage-report/report-cash-book-collaborator",
       checkPermition: "order_report",
     },
+    // {
+    //   title: "Báo cáo CHI TIẾT thu chi đối tác",
+    //   detail: "Báo cáo chi tiết thu chi đối tác",
+    //   linkNavigate: "report/manage-report/report-detail-cash-book-collaborator",
+    //   checkPermition: "order_report",
+    // },
     {
-      title: "Báo cáo chi tiết thu chi đối tác",
-      detail: "Báo cáo chi tiết thu chi đối tác",
-      linkNavigate: "report/manage-report/report-detail-cash-book-collaborator",
-      checkPermition: "order_report",
-    },
-    {
-      title: "Báo cáo thu chi khách hàng",
-      detail: "Báo cáo chi tiết thu chi khách hàng",
+      title: "Báo cáo TỔNG QUAN thu chi khách hàng",
+      detail: "Báo cáo tổng quát thu chi khách hàng",
       linkNavigate: "report/manage-report/report-cash-book-customer",
       checkPermition: "order_report",
     },
-    {
-      title: "Báo cáo chi tiết thu chi khách hàng",
-      detail: "Báo cáo chi tiết thu chi khách hàng",
-      linkNavigate: "report/manage-report/report-detail-cash-book-customer",
-      checkPermition: "order_report",
-    },
+    // {
+    //   title: "Báo cáo CHI TIẾT thu chi khách hàng",
+    //   detail: "Báo cáo chi tiết thu chi khách hàng",
+    //   linkNavigate: "report/manage-report/report-detail-cash-book-customer",
+    //   checkPermition: "order_report",
+    // },
   ];
   /* ~~~ Handle function ~~~ */
   /* ~~~ Use effect ~~~ */

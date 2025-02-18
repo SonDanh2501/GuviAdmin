@@ -54,9 +54,6 @@ const DataTable = (props) => {
     headerRightContent,
     onCurrentPageChange,
     loading,
-    childArray,
-    childArrayIndex,
-    param,
   } = props;
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
@@ -1109,7 +1106,7 @@ const DataTable = (props) => {
             break;
           case "money": {
             const dataShow = Array.isArray(data[item.dataIndex])
-              ? data[item.dataIndex][childArray]?.childArrayIndex
+              ? data[item.dataIndex][item?.childArray][item?.childArrayIndex]
               : data[item.dataIndex];
             return (
               <div className="case__money">
