@@ -6,7 +6,7 @@ import moment from "moment";
 import icons from "../../../../../utils/icons";
 import { formatMoney } from "../../../../../helper/formatMoney";
 import { errorNotify } from "../../../../../helper/toast";
-import { getDetailReportCashBookApi } from "../../../../../api/report";
+import { getDetailReportCashBookApi, getReportCashBookApi } from "../../../../../api/report";
 
 const { IoReceipt, IoCash, IoTrendingUp, IoHappy } = icons;
 
@@ -35,18 +35,12 @@ const ReportCashBook = () => {
       width: 50,
     },
     {
-      customTitle: <CustomHeaderDatatable title="Ngày bắt đầu" />,
-      dataIndex: "time_start_report",
-      key: "date_create",
+      customTitle: <CustomHeaderDatatable title="Ngày báo cáo" />,
+      dataIndex: "_id",
+      key: "id_date_work",
       width: 100,
       position: "center",
-    },
-    {
-      customTitle: <CustomHeaderDatatable title="Ngày kết thúc" />,
-      dataIndex: "time_end_report",
-      key: "date_create",
-      width: 100,
-      position: "center",
+      navigate: "/report/manage-report/report-detail-cash-book",
     },
     {
       customTitle: (
@@ -103,7 +97,7 @@ const ReportCashBook = () => {
   const fetchDataReportCashBook = async (payload) => {
     try {
       setIsLoading(true);
-      const res = await getDetailReportCashBookApi(
+      const res = await getReportCashBookApi(
         payload.start,
         payload.lengthPage,
         payload.startDate,
@@ -168,7 +162,7 @@ const ReportCashBook = () => {
         <span className="report-order-daily-revenue__header--title">
           Báo cáo tổng quan thu chi
         </span>
-        {/* <div className="report-order-daily-revenue__header--total-statistic">
+        <div className="report-order-daily-revenue__header--total-statistic">
           <div className="report-order-daily-revenue__header--total-statistic-child card-shadow blue">
             <div className="line"></div>
             <div className="report-order-daily-revenue__header--total-statistic-child-icon">
@@ -233,7 +227,7 @@ const ReportCashBook = () => {
               </span>
             </div>
           </div>
-        </div> */}
+        </div>
         <div>
           <FilterData
             isTimeFilter={true}
