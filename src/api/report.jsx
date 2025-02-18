@@ -388,6 +388,18 @@ export const getReportDetailOrderByCollaborator = (
   );
 };
 
+export const getReportCashBookApi = (
+  start,
+  length,
+  start_date,
+  end_date,
+  status
+) => {
+  return axiosClient.get(
+    `api/admin/report_mananger/report_cash_book?start=${start}&length=${length}&start_date=${start_date}&end_date=${end_date}&status=${status}`
+  );
+};
+
 export const getDetailReportCashBookApi = (
   start,
   length,
@@ -408,11 +420,35 @@ export const getReportCashBookCollaboratorApi = (
   status
 ) => {
   return axiosClient.get(
+    `api/admin/report_mananger/report_cash_book_collaborator?start=${start}&length=${length}&start_date=${start_date}&end_date=${end_date}&status=${status}`
+  );
+};
+
+export const getDetailReportCashBookCollaboratorApi = (
+  start,
+  length,
+  start_date,
+  end_date,
+  status
+) => {
+  return axiosClient.get(
     `api/admin/report_mananger/detail_report_cash_book_collaborator?start=${start}&length=${length}&start_date=${start_date}&end_date=${end_date}&status=${status}`
   );
 };
 
 export const getReportCashBookCustomerApi = (
+  start,
+  length,
+  start_date,
+  end_date,
+  status
+) => {
+  return axiosClient.get(
+    `api/admin/report_mananger/report_cash_book_customer?start=${start}&length=${length}&start_date=${start_date}&end_date=${end_date}&status=${status}`
+  );
+};
+
+export const getDetailReportCashBookCustomerApi = (
   start,
   length,
   start_date,
