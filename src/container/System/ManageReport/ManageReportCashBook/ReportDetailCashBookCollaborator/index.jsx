@@ -273,6 +273,8 @@ const ReportDetailCashBookCollaborator = () => {
         <div>
           <FilterData
             isTimeFilter={true}
+            startDate={startDate}
+            endDate={endDate}
             setStartDate={setStartDate}
             setEndDate={setEndDate}
             rightContent={rightContent(

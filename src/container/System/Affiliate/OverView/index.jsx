@@ -46,7 +46,6 @@ import quoteBigImage from "../../../../assets/images/quote_big.svg";
 import waveImage from "../../../../assets/images/wave_affiliate.svg";
 import wavePngImage from "../../../../assets/images/wave_affiliate.png";
 
-
 import { useSelector } from "react-redux";
 import { getUser } from "../../../../redux/selectors/auth";
 import { Modal } from "antd";
@@ -817,9 +816,33 @@ const OverView = () => {
         </div>
       </div>
       <div className="affiliate-overview__benefit" id="sectionBenefit">
-        <div className="affiliate-overview__benefit--tag">
+        {/* <div className="affiliate-overview__benefit--tag">
           <img src={quoteBigImage} alt=""></img>
-        </div>
+        </div> */}
+        <div
+          style={{ top: "0px", right: "0px" }}
+          className="affiliate-overview__benefit--rectangle medium right-to-left"
+        ></div>
+        <div
+          style={{ top: "40vh", right: "-10vw" }}
+          className="affiliate-overview__benefit--rectangle large right-to-left"
+        ></div>
+        <div
+          style={{ top: "75vh", right: "-10vw" }}
+          className="affiliate-overview__benefit--rectangle medium right-to-left"
+        ></div>
+        <div
+          style={{ top: "0vh", left: "-10vw" }}
+          className="affiliate-overview__benefit--rectangle medium left-to-right"
+        ></div>
+        <div
+          style={{ top: "40vh", left: "-10vw" }}
+          className="affiliate-overview__benefit--rectangle medium left-to-right"
+        ></div>
+        <div
+          style={{ top: "85vh", left: "-10vw" }}
+          className="affiliate-overview__benefit--rectangle medium left-to-right"
+        ></div>
 
         <div className="affiliate-overview__benefit--list">
           <span className="affiliate-overview__benefit--list-title">
@@ -867,9 +890,9 @@ const OverView = () => {
             </div>
           </div>
         </div>
-        <div className="affiliate-overview__benefit--wire">
+        {/* <div className="affiliate-overview__benefit--wire">
           <img src={wireDecorationImage} alt=""></img>
-        </div>
+        </div> */}
 
         {/* <div className="affiliate-overview__benefit--wave">
           <img src={wavePngImage} alt=""></img>
@@ -1025,31 +1048,32 @@ const OverView = () => {
         </div>
       </div>
       <div className="affiliate-overview__footer">
-        <div className="affiliate-overview__footer--information">
-          <div className="affiliate-overview__footer--information-item">
+        <div className="affiliate-overview__footer--container">
+        <div className="affiliate-overview__footer--container-information">
+          <div className="affiliate-overview__footer--container-information-item">
             <img src={logoGuvi} alt=""></img>
           </div>
-          <div className="affiliate-overview__footer--information-item">
+          <div className="affiliate-overview__footer--container-information-item">
             <span>
-              Mã số: <span className="high-light">0317084672</span>
+              Mã số:&nbsp;<span className="high-light">0317084672</span>
             </span>
           </div>
-          <div className="affiliate-overview__footer--information-item">
+          <div className="affiliate-overview__footer--container-information-item">
             <span>
-              Hotline: <span className="high-light">1900.0027</span>
+              Hotline:&nbsp;<span className="high-light">1900.0027</span>
             </span>
           </div>
-          <div className="affiliate-overview__footer--information-item">
+          <div className="affiliate-overview__footer--container-information-item">
             <span>
-              Email:
+              Email:&nbsp;
               <span className="high-light">
                 cskh@guvico.com – marketing@guvico.com
               </span>
             </span>
           </div>
         </div>
-        <div className="affiliate-overview__footer--copy-right">
-          <div className="affiliate-overview__footer--copy-right-item">
+        <div className="affiliate-overview__footer--container-copy-right">
+          <div className="affiliate-overview__footer--container-copy-right-item">
             <span>
               @ 2024 Công ty TNHH Giải pháp Công nghệ Guvi​ sở hữu bản quyền.
             </span>
@@ -1061,7 +1085,7 @@ const OverView = () => {
                 "_blank"
               )
             }
-            className="affiliate-overview__footer--copy-right-item"
+            className="affiliate-overview__footer--container-copy-right-item"
           >
             <img src={appleStoreImage} alt=""></img>
           </div>
@@ -1081,11 +1105,13 @@ const OverView = () => {
                 "_blank"
               )
             }
-            className="affiliate-overview__footer--copy-right-item"
+            className="affiliate-overview__footer--container-copy-right-item"
           >
             <img src={chStoreImage} alt=""></img>
           </div>
         </div>
+        </div>
+
       </div>
     </div>
   );
