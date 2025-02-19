@@ -8,12 +8,15 @@ import { formatMoney } from "../../../../../helper/formatMoney";
 import { errorNotify } from "../../../../../helper/toast";
 import {
   getDetailReportCashBookApi,
-  getReportCashBookCollaboratorApi,
+  getDetailReportCashBookCollaboratorApi,
 } from "../../../../../api/report";
+import { useLocation } from "react-router-dom";
 
 const { IoReceipt, IoCash, IoTrendingUp, IoHappy } = icons;
 
 const ReportDetailCashBookCollaborator = () => {
+  const { state } = useLocation();
+  const date = state?.date;
   /* ~~~ Value ~~~ */
   const [lengthPage, setLengthPage] = useState(
     JSON.parse(localStorage.getItem("linePerPage"))
@@ -151,7 +154,7 @@ const ReportDetailCashBookCollaborator = () => {
   const fetchDataReportCashBook = async (payload) => {
     try {
       setIsLoading(true);
-      const res = await getReportCashBookCollaboratorApi(
+      const res = await getDetailReportCashBookCollaboratorApi(
         payload.start,
         payload.lengthPage,
         payload.startDate,
@@ -169,10 +172,11 @@ const ReportDetailCashBookCollaborator = () => {
   };
   const handleGetDetailTransactions = () => {};
   /* ~~~ Use effect ~~~ */
+  // 1. Fetch dữ liệu bảng
   useEffect(() => {
     fetchDataReportCashBook({ start, lengthPage, startDate, endDate });
   }, [start, lengthPage, start, endDate]);
-  // 3. Tính toán thời gian của kỳ trước dựa trên kỳ hiện tại
+  // 2. Tính toán thời gian của kỳ trước dựa trên kỳ hiện tại
   useEffect(() => {
     if (startDate !== "") {
       const timeStartDate = new Date(startDate).getTime();
@@ -184,6 +188,16 @@ const ReportDetailCashBookCollaborator = () => {
       setPreviousEndDate(new Date(tempSameEndDate).toISOString());
     }
   }, [startDate, endDate]);
+  // 3. Gán giá trị date cho startDate và endDate
+  useEffect(() => {
+    if (date) {
+      const timer = setTimeout(() => {
+        setStartDate(moment(date, "DD-MM-YYYY").startOf("date").toISOString());
+        setEndDate(moment(date, "DD-MM-YYYY").endOf("date").toISOString());
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, []);
   /* ~~~ Other ~~~ */
   const rightContent = (
     startDate,
@@ -215,7 +229,7 @@ const ReportDetailCashBookCollaborator = () => {
     <div className="report-order-daily-revenue">
       <div className="report-order-daily-revenue__header">
         <span className="report-order-daily-revenue__header--title">
-          Báo cáo tổng thu chi đối tác
+          Báo cáo chi tiết thu chi của đối tác
         </span>
         <div className="report-order-daily-revenue__header--total-statistic">
           <div className="report-order-daily-revenue__header--total-statistic-child card-shadow blue">
@@ -259,6 +273,8 @@ const ReportDetailCashBookCollaborator = () => {
         <div>
           <FilterData
             isTimeFilter={true}
+            startDate={startDate}
+            endDate={endDate}
             setStartDate={setStartDate}
             setEndDate={setEndDate}
             rightContent={rightContent(

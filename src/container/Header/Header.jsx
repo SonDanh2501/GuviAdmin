@@ -165,7 +165,7 @@ const Header = ({ onClick, hide }) => {
               <IoMenu size={"18px"} />
             </div>
             <span className="header-navigation__left--version">
-              Version 1.0.2
+              Version 1.0.2v1
             </span>
           </div>
           <div className="header-navigation__right">

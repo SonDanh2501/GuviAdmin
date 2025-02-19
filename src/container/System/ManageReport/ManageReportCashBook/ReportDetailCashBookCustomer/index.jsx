@@ -8,13 +8,16 @@ import { formatMoney } from "../../../../../helper/formatMoney";
 import { errorNotify } from "../../../../../helper/toast";
 import {
   getDetailReportCashBookApi,
-  getReportCashBookCollaboratorApi,
-  getReportCashBookCustomerApi,
+  getDetailReportCashBookCollaboratorApi,
+  getDetailReportCashBookCustomerApi,
 } from "../../../../../api/report";
+import { useLocation } from "react-router-dom";
 
 const { IoReceipt, IoCash, IoTrendingUp, IoHappy } = icons;
 
 const ReportDetailCashBookCustomer = () => {
+  const { state } = useLocation();
+  const date = state?.date;
   /* ~~~ Value ~~~ */
   const [lengthPage, setLengthPage] = useState(
     JSON.parse(localStorage.getItem("linePerPage"))
@@ -45,7 +48,7 @@ const ReportDetailCashBookCustomer = () => {
       width: 100,
       position: "center",
       fontSize: "cursor-pointer",
-      navigate: "transaction/manage-transaction/customer",
+      navigate: "transaction/manage-transaction/collaborator",
     },
     {
       customTitle: <CustomHeaderDatatable title="Ngày kết thúc" />,
@@ -53,6 +56,7 @@ const ReportDetailCashBookCustomer = () => {
       key: "date_create",
       width: 100,
       position: "center",
+      fontSize: "cursor-pointer",
     },
     {
       customTitle: (
@@ -76,7 +80,7 @@ const ReportDetailCashBookCustomer = () => {
       ),
       dataIndex: "detailed_total_income_from_customers",
       key: "money",
-      width: 170,
+      width: 190,
       childArray: 0,
       childArrayIndex: "money",
     },
@@ -90,7 +94,7 @@ const ReportDetailCashBookCustomer = () => {
       ),
       dataIndex: "detailed_total_income_from_customers",
       key: "money",
-      width: 170,
+      width: 190,
       childArray: 1,
       childArrayIndex: "money",
     },
@@ -111,7 +115,7 @@ const ReportDetailCashBookCustomer = () => {
     {
       customTitle: (
         <CustomHeaderDatatable
-          title="Tổng thu từ momo"
+          title="Tổng thu vào từ momo"
           subValue={listTotalStatistic?.total_income_from_customers_momo}
           typeSubValue="money"
         />
@@ -144,7 +148,7 @@ const ReportDetailCashBookCustomer = () => {
       ),
       dataIndex: "detailed_total_expenses_for_customers",
       key: "money",
-      width: 170,
+      width: 190,
       childArray: 0,
       childArrayIndex: "money",
     },
@@ -153,7 +157,7 @@ const ReportDetailCashBookCustomer = () => {
   const fetchDataReportCashBook = async (payload) => {
     try {
       setIsLoading(true);
-      const res = await getReportCashBookCustomerApi(
+      const res = await getDetailReportCashBookCustomerApi(
         payload.start,
         payload.lengthPage,
         payload.startDate,
@@ -169,11 +173,13 @@ const ReportDetailCashBookCustomer = () => {
       });
     }
   };
+  const handleGetDetailTransactions = () => {};
   /* ~~~ Use effect ~~~ */
+  // 1. Fetch dữ liệu bảng
   useEffect(() => {
     fetchDataReportCashBook({ start, lengthPage, startDate, endDate });
   }, [start, lengthPage, start, endDate]);
-  // 3. Tính toán thời gian của kỳ trước dựa trên kỳ hiện tại
+  // 2. Tính toán thời gian của kỳ trước dựa trên kỳ hiện tại
   useEffect(() => {
     if (startDate !== "") {
       const timeStartDate = new Date(startDate).getTime();
@@ -185,6 +191,16 @@ const ReportDetailCashBookCustomer = () => {
       setPreviousEndDate(new Date(tempSameEndDate).toISOString());
     }
   }, [startDate, endDate]);
+  // 3. Gán giá trị date cho startDate và endDate
+  useEffect(() => {
+    if (date) {
+      const timer = setTimeout(() => {
+        setStartDate(moment(date, "DD-MM-YYYY").startOf("date").toISOString());
+        setEndDate(moment(date, "DD-MM-YYYY").endOf("date").toISOString());
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, []);
   /* ~~~ Other ~~~ */
   const rightContent = (
     startDate,
@@ -216,7 +232,7 @@ const ReportDetailCashBookCustomer = () => {
     <div className="report-order-daily-revenue">
       <div className="report-order-daily-revenue__header">
         <span className="report-order-daily-revenue__header--title">
-          Báo cáo tổng thu chi khách hàng
+          Báo cáo chi tiết thu chi của khách hàng
         </span>
         <div className="report-order-daily-revenue__header--total-statistic">
           <div className="report-order-daily-revenue__header--total-statistic-child card-shadow blue">
@@ -231,7 +247,9 @@ const ReportDetailCashBookCustomer = () => {
                 Tổng thu
               </span>
               <span className="report-order-daily-revenue__header--total-statistic-child-value-numer">
-                {formatMoney(listTotalStatistic?.total_income_from_customers)}
+                {formatMoney(
+                  listTotalStatistic?.total_income_from_customers
+                )}
               </span>
             </div>
           </div>
@@ -247,7 +265,9 @@ const ReportDetailCashBookCustomer = () => {
                 Tổng chi
               </span>
               <span className="report-order-daily-revenue__header--total-statistic-child-value-numer">
-                {formatMoney(listTotalStatistic?.total_expenses_for_customers)}
+                {formatMoney(
+                  listTotalStatistic?.total_expenses_for_customers
+                )}
               </span>
             </div>
           </div>
@@ -256,6 +276,8 @@ const ReportDetailCashBookCustomer = () => {
         <div>
           <FilterData
             isTimeFilter={true}
+            startDate={startDate}
+            endDate={endDate}
             setStartDate={setStartDate}
             setEndDate={setEndDate}
             rightContent={rightContent(

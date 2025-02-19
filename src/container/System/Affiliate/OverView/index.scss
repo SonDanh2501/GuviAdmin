@@ -1355,10 +1355,12 @@ body {
             bottom: 0;
             // box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
             transition: all 1.5s ease;
+
             span {
                 font-size: 3rem;
                 color: $colorWhite;
             }
+
             animation: scroll-down 5s infinite;
         }
 
@@ -1632,6 +1634,41 @@ body {
         height: 100vh;
         padding: 16px;
         position: relative;
+        z-index: 1;
+        overflow: hidden;
+
+        .affiliate-overview__benefit--rectangle {
+            transform: rotate(-15deg);
+            border-radius: $borderRadiusFull;
+            background-color: black;
+            position: absolute;
+
+            &.medium {
+                width: 1000px;
+                height: 100px;
+            }
+
+            ;
+
+            &.large {
+                width: 1500px;
+                height: 150px;
+            }
+
+            ;
+
+            &.left-to-right {
+                mask-image: linear-gradient(to left, rgba(251, 239, 239, 0.1), rgba(255, 255, 255, 0));
+                -webkit-mask-image: linear-gradient(to right, rgba(251, 239, 239, 0.1), rgba(255, 255, 255, 0));
+            }
+
+            &.right-to-left {
+                mask-image: linear-gradient(to right, rgba(251, 239, 239, 0.15), rgba(255, 255, 255, 0));
+                -webkit-mask-image: linear-gradient(to left, rgba(251, 239, 239, 0.15), rgba(255, 255, 255, 0));
+            }
+        }
+
+
 
         .affiliate-overview__benefit--tag {
             position: absolute;
@@ -1650,7 +1687,7 @@ body {
             background-color: transparent;
             z-index: 1;
             opacity: 0.8;
-            transform: rotate(10deg);
+            transform: rotate(0deg);
 
             img {
                 height: 100vh;
@@ -1755,67 +1792,79 @@ body {
     .affiliate-overview__footer {
         display: flex;
         flex-direction: column;
-        background-color: black;
+        align-items: center;
+        // background-color: black;
+        background-image: url('../../../../assets/images/footer_wave.png');
         width: 100%;
-        height: fit-content;
+        height: 40vh;
 
-        .affiliate-overview__footer--information {
+        .affiliate-overview__footer--container {
             display: flex;
-            align-items: center;
-            padding: 0px;
+            flex-direction: column;
+            // align-items: center;
+            justify-content: center;
+            width: 80%;
+            height: 100%;
 
-            .affiliate-overview__footer--information-item {
-                width: 25%;
-                height: fit-content;
-
-                img {
-                    width: 100px;
-                    height: fit-content;
-                }
-
-                span {
-                    font-size: $textFontSize2XL;
-                    font-weight: $fontWeightXL;
-                    color: $colorWhite;
-
-                    .high-light {
-                        color: $colorViolet
-                    }
-                }
-            }
-        }
-
-        .affiliate-overview__footer--copy-right {
-            display: flex;
-            align-items: center;
-            padding: 16px;
-            gap: $gapL;
-            border-top: 1px solid $colorWhite;
-
-            .affiliate-overview__footer--copy-right-item {
+            .affiliate-overview__footer--container-information {
                 display: flex;
                 align-items: center;
-                justify-content: center;
-                width: 30%;
-                height: fit-content;
+                padding: 0px;
 
-                img {
-                    width: 150px;
+                .affiliate-overview__footer--container-information-item {
+                    width: 25%;
                     height: fit-content;
-                    cursor: pointer;
+
+                    img {
+                        width: 100px;
+                        height: fit-content;
+                    }
+
+                    span {
+                        font-size: $textFontSize2XL;
+                        font-weight: $fontWeightXL;
+                        color: $colorBlack;
+
+                        .high-light {
+                            color: $colorViolet
+                        }
+                    }
                 }
+            }
 
-                span {
-                    font-size: $textFontSize2XL;
-                    font-weight: $fontWeightXL;
-                    color: $colorWhite;
+            .affiliate-overview__footer--container-copy-right {
+                display: flex;
+                align-items: center;
+                padding: 16px;
+                gap: $gapL;
+                border-top: 1px solid $colorBlack;
 
-                    .high-light {
-                        color: $colorViolet
+                .affiliate-overview__footer--container-copy-right-item {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 30%;
+                    height: fit-content;
+
+                    img {
+                        width: 150px;
+                        height: fit-content;
+                        cursor: pointer;
+                    }
+
+                    span {
+                        font-size: $textFontSize2XL;
+                        font-weight: $fontWeightXL;
+                        color: $colorBlack;
+
+                        .high-light {
+                            color: $colorViolet
+                        }
                     }
                 }
             }
         }
+
     }
 }
 
