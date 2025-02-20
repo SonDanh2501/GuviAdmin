@@ -153,7 +153,7 @@ const ReportOrderActivity = () => {
     {
       customTitle: (
         <CustomHeaderDatatable
-          title="Tổng giá trị giao dịch"
+          title="Tổng giá trị giao dịch dự kiến"
           typeSubValue="money"
           textToolTip="GMV - Gross Merchandise Volume (total_fee)"
           subValue={listTotalStatistic?.total_fee}
@@ -166,7 +166,7 @@ const ReportOrderActivity = () => {
     {
       customTitle: (
         <CustomHeaderDatatable
-          title="Thu hộ dịch vụ"
+          title="Thu hộ dịch vụ dự kiến"
           subValue={listTotalStatistic?.total_net_income_new}
           typeSubValue="money"
           textToolTip="Bao gồm phí dịch vụ trả đối tác: tiền tip từ khách,... (net_income)"
@@ -179,7 +179,7 @@ const ReportOrderActivity = () => {
     {
       customTitle: (
         <CustomHeaderDatatable
-          title="Doanh thu"
+          title="Doanh thu dự kiến"
           subValue={
             listTotalStatistic?.total_fee -
               listTotalStatistic?.total_net_income_new || null
@@ -208,7 +208,7 @@ const ReportOrderActivity = () => {
     {
       customTitle: (
         <CustomHeaderDatatable
-          title="Doanh thu thuần"
+          title="Doanh thu thuần dự kiến"
           subValue={
             listTotalStatistic?.total_fee -
               listTotalStatistic?.total_net_income_new -
@@ -225,7 +225,7 @@ const ReportOrderActivity = () => {
     {
       customTitle: (
         <CustomHeaderDatatable
-          title="Tổng hóa đơn"
+          title="Tổng hóa đơn dự kiến"
           subValue={
             listTotalStatistic?.total_fee -
               listTotalStatistic?.total_discount_new || null
@@ -253,7 +253,7 @@ const ReportOrderActivity = () => {
     {
       customTitle: (
         <CustomHeaderDatatable
-          title="Phí áp dụng"
+          title="Phí áp dụng "
           subValue={listTotalStatistic?.total_service_fee}
           typeSubValue="money"
         />
