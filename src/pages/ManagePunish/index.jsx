@@ -2,7 +2,15 @@ import { useCallback, useEffect, useState } from "react";
 import { LENGTH_ITEM } from "../../constants";
 import DataTable from "../../components/tables/dataTable";
 import { UilEllipsisV } from "@iconscout/react-unicons";
-import { Button, Dropdown, Input, Pagination, Popover, Space } from "antd";
+import {
+  Button,
+  Dropdown,
+  Input,
+  message,
+  Pagination,
+  Popover,
+  Space,
+} from "antd";
 import {
   cancelPunishTicketApi,
   createPunishTicketApi,
@@ -18,41 +26,78 @@ import PunishDrawer from "../../components/punishDrawer";
 import dayjs from "dayjs";
 import { errorNotify, successNotify } from "../../helper/toast";
 import ActivityHistory from "../../components/activityHistory";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import CommonFilter from "../../components/commonFilter";
 import Tabs from "../../components/tabs/tabs1";
 import ModalCustom from "../../components/modalCustom";
 import useWindowDimensions from "../../helper/useWindowDimensions";
-import { getLanguageState } from "../../redux/selectors/auth";
+import {
+  getElementState,
+  getLanguageState,
+  getUser,
+} from "../../redux/selectors/auth";
 import i18n from "../../i18n";
 import { useSelector } from "react-redux";
+import "./index.scss";
+import FilterData from "../../components/filterData";
+import ButtonCustom from "../../components/button";
+import { getProvince, getService } from "../../redux/selectors/service";
+import InputTextCustom from "../../components/inputCustom";
+
 const ManagePunish = () => {
   let { width } = useWindowDimensions();
+  const navigate = useNavigate();
+  const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
+  const service = useSelector(getService);
+  const province = useSelector(getProvince);
+  const user = useSelector(getUser);
   const [startPage, setStartPage] = useState(0);
-  const [total, setTotal] = useState(0);
+  const [lengthPage, setLengthPage] = useState(
+    JSON.parse(localStorage.getItem("linePerPage"))
+      ? JSON.parse(localStorage.getItem("linePerPage")).value
+      : 20
+  );
+  /* ~~~ Value ~~~ */
+  const [startDate, setStartDate] = useState("");
+  const [valueSearch, setValueSearch] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [selectStatus, setSelectStatus] = useState(""); // Giá trị lựa chọn trạng thái
+  const [selectValueUserApply, setSelectValueUserApply] = useState(""); // Giá trị của đối tượng phạt lựa chọn
+  const [selectValueCreatedBy, setSelectValueCreatedBy] = useState(""); // Giá trị của đối tượng tạo lệnh phạt
+  const [selectValueOfStatusPunishTicket, setSelectValueOfStatusPunishTicket] =
+    useState(""); // Giá trị của trạng thái vé phạt
   const [item, setItem] = useState();
+  const [total, setTotal] = useState(0);
+  /* ~~~ Flag ~~~ */
+  const [isLoading, setIsLoading] = useState(false);
   const [openModalChangeStatus, setOpenModalChangeStatus] = useState(false);
   const [openModalCancel, setOpenModalCancel] = useState(false);
-  const [data, setData] = useState([]);
-  const [valueSearch, setValueSearch] = useState("");
-  const [returnFilter, setReturnFilter] = useState([]);
-  const [totalPunishTicket, setTotalPunishTicket] = useState([]);
-  const [selectedDate, setSelectedDate] = useState({
-    start_date: "2024-02-09T17:00:00.000Z",
-    end_date: "2024-04-08T16:59:59.999Z",
-  });
-  const [currentTab, setCurrentTab] = useState(itemTabStatus[0]);
   const [openModalRevoke, setOpenModalRevoke] = useState(false);
-  // ------------------------------ xử lý data ---------------------------------- /
-  let queryDate = "&";
-  for (const key of Object.keys(selectedDate)) {
-    queryDate += `${key}=${selectedDate[key]}&`;
-  }
-  const query =
-    returnFilter.map((item) => `&${item.key}=${item.value}`).join("") +
-    queryDate +
-    `&search=${valueSearch}`;
+  /* ~~~ List ~~~ */
+  const [listData, setListData] = useState([]);
+  const [statusList, setStatusList] = useState([
+    { code: "", label: "Tất cả", total: 0 },
+    { code: "processing", label: "Chờ duyệt", total: 0 },
+    { code: "pending", label: "Đang xử lý", total: 0 },
+    { code: "confirm", label: "Đang xét duyệt", total: 0 },
+    { code: "doing", label: "Đang thực thi", total: 0 },
+    { code: "done", label: "Hoàn thành", total: 0 },
+    { code: "cancel", label: "Đã hủy", total: 0 },
+    { code: "revoke", label: "Đã thu hồi", total: 0 },
+  ]);
+  // Danh sách các đối tượng phạt
+  const objectPunishList = [
+    { code: "", label: "Tất cả" },
+    { code: "collaborator", label: "Đối tác" },
+    { code: "customer", label: "Khách hàng" },
+  ];
+  // Danh sách các đối tượng tạo lệnh phạt
+  const objectCreatePunishList = [
+    { code: "", label: "Tất cả" },
+    { code: "system", label: "Hệ thống" },
+    { code: "admin_action", label: "Quản trị viên" },
+  ];
 
   let items = [
     {
@@ -184,171 +229,326 @@ const ManagePunish = () => {
       );
     },
   };
-  // ----------------------------- xử lý  action ----------------------------------- //
-  const onChangePage = (value) => {
-    setStartPage(value);
-  };
+  /* ~~~ Handle function ~~~ */
   const handleSearch = useCallback(
     _debounce((value) => {
       setValueSearch(value);
-    }, 1000),
+    }, 500),
     []
   );
-  const getList = () => {
-    getListPunishTicketApi(startPage, LENGTH_ITEM, currentTab.value, query)
-      .then((res) => {
-        setData(res?.data);
-        setTotal(res?.totalItem);
-      })
-      .catch((err) => {
-        console.log("err ", err);
-      });
-  };
-  const getTotal = () => {
-    getTotalPunishTicketApi(query)
-      .then((res) => {
-        const temp_arr = [];
-        for (let i of Object.values(res)) {
-          temp_arr.push({ value: i });
-        }
-        setTotalPunishTicket(temp_arr);
-      })
-      .catch((err) => {
-        console.log("err ", err);
-      });
-  };
-  const createPunishTicket = (value) => {
-    let id_order;
-    if (value?.id_order && id_order !== "") {
-      id_order = value.id_order;
+  // Hàm fetch dữ liệu danh sách các lệnh phạt
+  const handleFetchPunishData = async (payload) => {
+    try {
+      setIsLoading(true);
+      const res = await getListPunishTicketApi(
+        payload.startPage,
+        payload.lengthPage,
+        payload.startDate,
+        payload.endDate,
+        payload.selectStatus,
+        payload.selectValueUserApply,
+        payload.selectValueCreatedBy,
+        payload.valueSearch
+      );
+      setListData(res?.data);
+      setTotal(res?.totalItem);
+      setIsLoading(false);
+    } catch (err) {
+      errorNotify({ message: err?.message || err });
+      setIsLoading(false);
     }
-    const payload = {
-      id_collaborator: value?.id_collaborator,
-      id_punish_policy: value?.id_punish_policy,
-      date_start_lock_time: value?.start_date,
-      user_apply: "collaborator",
-      note_admin: value?.note,
-      id_order: id_order,
-    };
-    createPunishTicketApi(payload)
-      .then((res) => {
-        getList();
-        successNotify({
-          message: "Tạo lệnh phạt thành công",
-        });
-      })
-      .catch((err) => {
-        errorNotify({
-          message: err?.message,
-        });
-      });
   };
+  // Hàm fetch dữ liệu tổng của các trạng thái của lệnh phạt
+  const handleFetchTotalPunish = async (payload) => {
+    try {
+      setIsLoading(true);
+      const res = await getTotalPunishTicketApi(
+        payload.startDate,
+        payload.endDate
+      );
+      setStatusList((prevList) =>
+        prevList.map((item) => ({
+          ...item,
+          total: item?.code === "" ? res["total"] : res[item?.code] || 0,
+        }))
+      );
+      setIsLoading(false);
+    } catch (err) {
+      errorNotify({ message: err?.message || err });
+      setIsLoading(false);
+    }
+  };
+  // Hàm tạo lệnh phạt mới
+  const handleCreatePunishTicket = async (value) => {
+    try {
+      setIsLoading(true);
+      let id_order;
+      if (value?.id_order && id_order !== "") {
+        id_order = value.id_order;
+      }
+      const payload = {
+        id_collaborator: value?.id_collaborator,
+        id_punish_policy: value?.id_punish_policy,
+        date_start_lock_time: value?.start_date,
+        user_apply: "collaborator",
+        note_admin: value?.note,
+        id_order: id_order,
+      };
+      const res = await createPunishTicketApi(payload);
+      successNotify({
+        message: "Tạo lệnh phạt thành công",
+      });
+      handleFetchPunishData({
+        startPage,
+        lengthPage,
+        startDate,
+        endDate,
+        selectStatus,
+        selectValueUserApply,
+        selectValueCreatedBy,
+        valueSearch,
+      });
+      handleFetchTotalPunish({ startDate, endDate });
+      setIsLoading(false);
+    } catch (err) {
+      errorNotify({
+        message: err?.message || err,
+      });
+      setIsLoading(false);
+    }
+  };
+  // Hàm hủy lệnh phạt
+  const handleCancelPunishTicket = async () => {
+    try {
+      setIsLoading(true);
+      const res = await cancelPunishTicketApi(item?._id);
+      successNotify({
+        message: "Hủy lệnh phạt thành công",
+      });
+      handleFetchPunishData({
+        startPage,
+        lengthPage,
+        startDate,
+        endDate,
+        selectStatus,
+        selectValueUserApply,
+        selectValueCreatedBy,
+        valueSearch,
+      });
+      handleFetchTotalPunish({ startDate, endDate });
+      setOpenModalCancel(false);
+      setIsLoading(false);
+    } catch (err) {
+      errorNotify({
+        message: err?.message || err,
+      });
+      setOpenModalCancel(false);
+      setIsLoading(false);
+    }
+  };
+
+  // Hàm thu hồi lệnh phạt
+  const handleRevokePunishTicket = async () => {
+    try {
+      setIsLoading(true);
+      const res = await revokePunishTicketApi(item?._id);
+      successNotify({
+        message: "Thu hồi lệnh phạt thành công",
+      });
+      handleFetchPunishData({
+        startPage,
+        lengthPage,
+        startDate,
+        endDate,
+        selectStatus,
+        selectValueUserApply,
+        selectValueCreatedBy,
+        valueSearch,
+      });
+      handleFetchTotalPunish({ startDate, endDate });
+      setOpenModalRevoke(false);
+      setIsLoading(false);
+    } catch (err) {
+      errorNotify({
+        message: err?.message || err,
+      });
+      setOpenModalRevoke(false);
+      setIsLoading(false);
+    }
+  };
+
+  // Hàm xác thực lệnh phạt
+  const handleVerifyPunishTicket = async () => {
+    try {
+      setIsLoading(true);
+      const res = await verifyPunishTicketApi(item?._id);
+      successNotify({
+        message: "Duyệt lệnh phạt thành công",
+      });
+      handleFetchPunishData({
+        startPage,
+        lengthPage,
+        startDate,
+        endDate,
+        selectStatus,
+        selectValueUserApply,
+        selectValueCreatedBy,
+        valueSearch,
+      });
+      handleFetchTotalPunish({ startDate, endDate });
+      setOpenModalChangeStatus(false);
+      setIsLoading(false);
+    } catch (err) {
+      errorNotify({
+        message: err?.message || err,
+      });
+      setOpenModalChangeStatus(false);
+      setIsLoading(false);
+    }
+  };
+
+  const onChangePage = (value) => {
+    setStartPage(value);
+  };
+
   const onChangeTab = (item) => {
-    setCurrentTab(item);
+    setSelectValueOfStatusPunishTicket(item);
   };
-  const handleCancelPunishTicket = () => {
-    console.log("vé này sẽ bị huỷ ", item);
-    cancelPunishTicketApi(item?._id)
-      .then(() => {
-        getList();
-        getTotal();
-        successNotify({
-          message: "Huỷ vé phạt thành công",
-        });
-      })
-      .catch((err) => {
-        errorNotify({
-          message: err?.message,
-        });
-      });
-    setOpenModalCancel(false);
-  };
-  const handleRevoke = () => {
-    console.log("thu hooif");
-    revokePunishTicketApi(item?._id)
-      .then((res) => {
-        console.log("ré ", res);
-        successNotify({
-          message: "Thu hồi lệnh phạt thành công",
-        });
-        setOpenModalRevoke(false);
-      })
-      .catch((err) => {
-        errorNotify({
-          message: err?.message,
-        });
-      });
-  };
-  const handleVerify = () => {
-    console.log("vé này sẽ được duyệt ", item);
-    verifyPunishTicketApi(item?._id)
-      .then(() => {
-        getList();
-        getTotal();
-        successNotify({
-          message: "Duyệt vé phạt thành công",
-        });
-      })
-      .catch((err) => {
-        errorNotify({
-          message: err?.message,
-        });
-      });
-    setOpenModalChangeStatus(false);
-  };
-  // --------------------------- xử lý useEffect ------------------------------------- //
+
+  /* ~~~ Use effect ~~~ */
   useEffect(() => {
-    getList();
-    getTotal();
-  }, [startPage, returnFilter, selectedDate, currentTab, valueSearch]);
-  return (
-    <div className="manage-punish_container">
-      <h5>Quản lý lệnh phạt</h5>
-      <CommonFilter
-        setDate={setSelectedDate}
-        data={dataFilter}
-        setReturnFilter={setReturnFilter}
-      />
-      <Tabs
-        itemTab={itemTabStatus}
-        onValueChangeTab={onChangeTab}
-        dataTotal={totalPunishTicket}
-      />
-      <div className="transfer-collaborator_search">
-        <div className="transfer-collaborator_transaction">
-          <PunishDrawer
-            titleButton="Tạo lệnh phạt"
-            subject="collaborator"
-            titleHeader="Tạo lệnh phạt cho cộng tác viên"
-            onClick={createPunishTicket}
+    if (startDate !== "" && endDate !== "") {
+      handleFetchPunishData({
+        startPage,
+        lengthPage,
+        startDate,
+        endDate,
+        selectStatus,
+        selectValueUserApply,
+        selectValueCreatedBy,
+        valueSearch,
+      });
+      handleFetchTotalPunish({ startDate, endDate });
+    }
+  }, [
+    startPage,
+    lengthPage,
+    startDate,
+    endDate,
+    selectStatus,
+    selectValueUserApply,
+    selectValueCreatedBy,
+    valueSearch,
+  ]);
+
+  /* ~~~ Other ~~~ */
+  const filterByStatus = () => {
+    return (
+      <div className="manage-punish__filter-content">
+        {statusList?.map((el) => (
+          <div
+            onClick={() => setSelectStatus(el.code)}
+            className={`manage-punish__filter-content--tab ${
+              selectStatus === el.code && "selected"
+            }`}
+          >
+            <span className="manage-punish__filter-content--tab-label">
+              {el?.label}
+            </span>
+            <span className="manage-punish__filter-content--tab-number">
+              {el?.total}
+            </span>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
+  const filterContentLeft = () => {
+    return (
+      <div className="manage-order__filter-content">
+        <div className="manage-order__search">
+          <div>
+            <PunishDrawer
+              titleButton="Tạo lệnh phạt"
+              subject="collaborator"
+              titleHeader="Tạo lệnh phạt cho cộng tác viên"
+              onClick={handleCreatePunishTicket}
+            />
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const filterContentRight = () => {
+    return (
+      <div className="manage-punish__filter-content">
+        <div>
+          <ButtonCustom
+            label="Đối tượng phạt"
+            options={objectPunishList}
+            value={selectValueUserApply}
+            setValueSelectedProps={setSelectValueUserApply}
           />
         </div>
-        <Input
-          placeholder={`${i18n.t("search-punish", { lng: lang })}`}
-          prefix={<SearchOutlined />}
-          className="input-search"
-          onChange={(e) => {
-            handleSearch(e.target.value);
-          }}
-        />
-        <Button type="primary">Tìm kiếm</Button>
+        <div>
+          <ButtonCustom
+            label="Đối tượng tạo lệnh"
+            options={objectCreatePunishList}
+            value={selectValueCreatedBy}
+            setValueSelectedProps={setSelectValueCreatedBy}
+          />
+        </div>
       </div>
-      <div>
-        <DataTable
-          columns={columns}
-          data={data}
-          actionColumn={addActionColumn}
-          start={startPage}
-          pageSize={LENGTH_ITEM}
-          totalItem={total}
-          getItemRow={setItem}
-          onCurrentPageChange={onChangePage}
-          setOpenModalChangeStatus={setOpenModalChangeStatus}
-          setOpenModalCancel={setOpenModalCancel}
-          // detectLoading={detectLoading}
-          scrollX={1600}
-        />
+    );
+  };
+
+  return (
+    <div className="manage-punish">
+      {/* Header */}
+      <div className="manage-punish__header">
+        <span>Quản lý lệnh phạt</span>
       </div>
+      {/* Filter */}
+      <FilterData leftContent={filterByStatus()} />
+      {/* Filter */}
+      <FilterData
+        isTimeFilter={true}
+        setStartDate={setStartDate}
+        setEndDate={setEndDate}
+        leftContent={filterContentLeft()}
+        rightContent={filterContentRight()}
+        rangeDateDefaults={"thirty_last"}
+      />
+      {/* Data table */}
+      <DataTable
+        columns={columns}
+        data={listData}
+        actionColumn={addActionColumn}
+        start={startPage}
+        pageSize={lengthPage}
+        setLengthPage={setLengthPage}
+        totalItem={total}
+        getItemRow={setItem}
+        onCurrentPageChange={onChangePage}
+        loading={isLoading}
+        headerRightContent={
+          <div className="manage-punish__search">
+            <div className="manage-punish__search-field">
+              <InputTextCustom
+                type="text"
+                placeHolderNormal={`${i18n.t("search_transaction", {
+                  lng: lang,
+                })}`}
+                onChange={(e) => {
+                  handleSearch(e.target.value);
+                }}
+              />
+            </div>
+          </div>
+        }
+      />
       <div>
         <ModalCustom
           isOpen={openModalCancel}
@@ -372,7 +572,7 @@ const ManagePunish = () => {
         <ModalCustom
           isOpen={openModalChangeStatus}
           title={`Duyệt vé phạt`}
-          handleOk={handleVerify}
+          handleOk={handleVerifyPunishTicket}
           handleCancel={() => setOpenModalChangeStatus(false)}
           textOk={`Xác nhận`}
           body={
@@ -392,7 +592,7 @@ const ManagePunish = () => {
         <ModalCustom
           isOpen={openModalRevoke}
           title={`Thu hồi vé phạt`}
-          handleOk={handleRevoke}
+          handleOk={handleRevokePunishTicket}
           handleCancel={() => setOpenModalRevoke(false)}
           textOk={`Xác nhận`}
           body={
@@ -407,9 +607,25 @@ const ManagePunish = () => {
           }
         />
       </div>
+      {/* <div>
+        <ModalCustom
+          isOpen={modal}
+          title={`${i18n.t("delete_order", { lng: lang })}`}
+          handleOk={() => deleteOrder(item?._id)}
+          handleCancel={toggle}
+          textOk={`${i18n.t("delete", { lng: lang })}`}
+          body={
+            <>
+              <p>{`${i18n.t("confirm_delete", { lng: lang })}`}</p>
+              <p className="text-name-modal">{item?.id_view}</p>
+            </>
+          }
+        />
+      </div> */}
     </div>
   );
 };
+
 export default ManagePunish;
 
 const columns = [
@@ -496,67 +712,4 @@ const columns = [
   //   width: 50,
   //   fontSize: "text-size-M",
   // },
-];
-
-const dataFilter = [
-  {
-    key: "user_apply",
-    label: "Đối tượng phạt",
-    data: [
-      { key: "0", value: "", label: "Tất cả" },
-      { key: "1", value: "collaborator", label: "Cộng tác viên" },
-      { key: "2", value: "customer", label: "Khách hàng" },
-    ],
-  },
-  {
-    key: "created_by",
-    label: "Đối tượng tạo",
-    data: [
-      { key: "0", value: "", label: "Tất cả" },
-      { key: "1", value: "system", label: "Hệ thống" },
-      { key: "2", value: "admin_action", label: "Quản trị viên" },
-    ],
-  },
-];
-const itemTabStatus = [
-  {
-    label: "Tất cả",
-    key: "0",
-    value: "",
-  },
-  {
-    label: "Chờ duyệt",
-    key: "1",
-    value: "standby",
-  },
-  {
-    label: "Đang xử lý",
-    key: "2",
-    value: "waiting",
-  },
-  {
-    label: "Đang xét duyệt",
-    key: "3",
-    value: "processing",
-  },
-  {
-    label: "Đang thực thi",
-    key: "4",
-    value: "doing",
-  },
-  {
-    label: "Hoàn thành",
-    key: "6",
-    value: "done",
-  },
-  {
-    label: "Đã huỷ",
-    key: "7",
-    value: "cancel",
-  },
-  {
-    label: "Đã thu hồi",
-    key: "5",
-    value: "revoke",
-  },
 ];

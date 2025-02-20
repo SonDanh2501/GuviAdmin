@@ -2467,14 +2467,14 @@ const DataTable = (props) => {
               rowHoverBg: "#f0f0f0",
               borderColor: "#e7ecf3",
               lineWidth: 1,
-              headerBorderRadius: 6,
+              headerBorderRadius: 0,
               footerBg: "#ffffff",
             },
           },
         }}
       >
         <Table
-          style={{ borderRadius: "6px", overflow: "hidden" }}
+          style={{ borderRadius: "8px", overflow: "hidden" }}
           locale={locale}
           columns={headerTable}
           title={() => tableHeader()}
