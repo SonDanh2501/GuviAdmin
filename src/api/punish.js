@@ -1,13 +1,23 @@
 import axiosClient from "../axios";
 
 export const getListPunishTicketApi = (
-  start = 0,
-  length = 20,
-  status = "",
-  query
+  start,
+  length,
+  start_date,
+  end_date,
+  status,
+  user_apply,
+  created_by,
+  search
 ) => {
   return axiosClient.get(
-    `/admin/punish_ticket_manage/get_list?lang=vi&start=${start}&length=${length}&status=${status}&${query}`
+    `api/admin/punish_ticket_manager/get_list?lang=vi&start=${start}&length=${length}&start_date=${start_date}&end_date=${end_date}&status=${status}&user_apply=${user_apply}&created_by=${created_by}&search=${search}`
+  );
+};
+
+export const getTotalPunishTicketApi = (start_date,end_date) => {
+  return axiosClient.get(
+    `api/admin/punish_ticket_manager/get_total_punish_ticket?lang=vi&start_date=${start_date}&end_date=${end_date}`
   );
 };
 
@@ -30,11 +40,8 @@ export const getActivityHistoryPunishTicketApi = (idPunishTicket) => {
   );
 };
 
-export const getTotalPunishTicketApi = (query) => {
-  return axiosClient.get(
-    `/admin/punish_ticket_manage/get_total_punish_ticket?lang=vi${query}`
-  );
-};
+
+
 export const verifyPunishTicketApi = (idPunishTicket) => {
   return axiosClient.post(
     `/admin/punish_ticket_manage/verify_item/${idPunishTicket}?lang=vi`
@@ -51,6 +58,5 @@ export const revokePunishTicketApi = (idPunishTicket) => {
   return axiosClient.post(
     // `/admin/punish_ticket_manage/revoke_item/${idPunishTicket}?lang=vi`
     `/api/admin/punish_ticket_manager/revoke_item/${idPunishTicket}?lang=vi`
-
   );
 };
