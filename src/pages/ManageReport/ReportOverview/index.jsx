@@ -12,7 +12,7 @@ import {
 } from "recharts";
 import {
   getReportOrderByCity,
-  getReportOrderDaily,
+  getReportOrderDailyApi,
   getReportServiceByArea,
 } from "../../../api/report";
 import CustomDatePicker from "../../../components/customDatePicker";
@@ -152,8 +152,8 @@ const ReportOverview = () => {
 
   const getDataReportDaily = async (diffDays) => {
     const arrGetResult = await Promise.all([
-      getReportOrderDaily(0, diffDays, startDate, endDate, "date_work", 1),
-      getReportOrderDaily(
+      getReportOrderDailyApi(0, diffDays, startDate, endDate, "date_work", 1),
+      getReportOrderDailyApi(
         0,
         diffDays,
         sameStartDate,

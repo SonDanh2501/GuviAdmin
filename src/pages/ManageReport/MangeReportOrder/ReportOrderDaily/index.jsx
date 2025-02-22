@@ -16,7 +16,7 @@ import {
   LineChart,
 } from "recharts";
 import {
-  getReportOrderDaily,
+  getReportOrderDailyApi,
   getTotalReportOrderDaily,
 } from "../../../../api/report";
 import CustomDatePicker from "../../../../components/customDatePicker";
@@ -132,7 +132,7 @@ const ReportOrderDaily = () => {
   };
 
   const getDataReportDaily = async () => {
-    const res = await getReportOrderDaily(
+    const res = await getReportOrderDailyApi(
       start,
       lengthPage,
       startDate,
@@ -153,7 +153,7 @@ const ReportOrderDaily = () => {
       .startOf("days")
       .toISOString();
     const endToday = moment().subtract(0, "days").endOf("days").toISOString();
-    const res = await getReportOrderDaily(
+    const res = await getReportOrderDailyApi(
       start,
       lengthPage,
       startToday,

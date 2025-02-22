@@ -1,0 +1,115 @@
+@import "../../../../@theme/style.scss";
+
+
+.manage-report-order-activity {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $gapL;
+    margin: 16px 0px;
+
+    .manage-report-order-activity__child {
+        position: relative;
+        padding: 12px;
+        width: 30%;
+        height: 100%;
+        min-height: 100px;
+        background-color: $colorWhite;
+        border-radius: $borderRadiusL;
+        transition: all 1.5s ease;
+        overflow: hidden;
+
+        .manage-report-order-activity__child--circle {
+            position: absolute;
+            bottom: -50px;
+            left: -50px;
+            width: 100px;
+            height: 100px;
+            border-radius: $borderRadiusFull;
+            background: linear-gradient(120deg, $colorViolet 30%, $colorOrange 100%);
+            transition: all 1.5s ease;
+            z-index: 1;
+        }
+
+        .manage-report-order-activity__child--detail {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            cursor: pointer;
+            padding: 4px 8px;
+            margin: 12px;
+            background-color: $colorViolet;
+            border-radius: $borderRadiusL;
+            z-index: 2;
+
+            span {
+                font-size: $textFontSizeM;
+                font-weight: $fontWeightXL;
+                color: $colorWhite;
+            }
+        }
+
+        .manage-report-order-activity__child--title {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: $gapXS;
+            z-index: 2;
+            transition: all 1.5s ease;
+
+            .manage-report-order-activity__child--title-header {
+                font-size: 1em;
+                font-weight: $fontWeightXL;
+                color: $colorBlack;
+            }
+
+            .manage-report-order-activity__child--title-sub-header {
+                font-size: 1em;
+                font-weight: $fontWeightL;
+                color: $colorLightGray;
+            }
+        }
+
+        .manage-report-order-activity__child--numbered {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: 0;
+            right: 0;
+            height: 30px;
+            width: 30px;
+            border-radius: $borderRadiusFull;
+            background-color: $colorMoreLightGray;
+            margin: 8px;
+
+            span {
+                font-size: $textFontSizeM;
+                font-weight: $fontWeightXL;
+                color: $colorLightGray;
+            }
+        }
+
+        &:hover {
+
+            .manage-report-order-activity__child--circle {
+                width: 500px;
+                height: 350px;
+                transform: translate(0, 0);
+                background: linear-gradient(120deg, $colorViolet 30%, $colorOrange 100%);
+            }
+
+            .manage-report-order-activity__child--title {
+
+                .manage-report-order-activity__child--title-header {
+                    color: $colorOrange;
+                    font-weight: $fontWeight2XL;
+
+                }
+
+                .manage-report-order-activity__child--title-sub-header {
+                    color: $colorWhite;
+                }
+            }
+        }
+    }
+}
