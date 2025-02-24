@@ -16,7 +16,7 @@ import {
   LineChart,
 } from "recharts";
 import {
-  getReportOrderDaily,
+  getReportOrderDailyApi,
   getTotalReportOrderDaily,
 } from "../../../../api/report";
 import CustomDatePicker from "../../../../components/customDatePicker";
@@ -132,7 +132,7 @@ const ReportOrderDaily = () => {
   };
 
   const getDataReportDaily = async () => {
-    const res = await getReportOrderDaily(
+    const res = await getReportOrderDailyApi(
       start,
       lengthPage,
       startDate,
@@ -153,7 +153,7 @@ const ReportOrderDaily = () => {
       .startOf("days")
       .toISOString();
     const endToday = moment().subtract(0, "days").endOf("days").toISOString();
-    const res = await getReportOrderDaily(
+    const res = await getReportOrderDailyApi(
       start,
       lengthPage,
       startToday,
@@ -403,7 +403,7 @@ const ReportOrderDaily = () => {
           title="Tổng hoá đơn"
           subValue={dataTotal?.total_order_fee}
           typeSubValue="money"
-          textToolTip="Tổng số tiền ghi nhận trên hoá đơn dịch vụ. Tổng hoá đơn = Tổng tiền - giảm giá."
+          textToolTip="Tổng số tiền ghi nhận trên hoá đơn dịch vụ. Tổng hoá đơn = Tổng tiền (-) giảm giá."
         />
       ),
       dataIndex: "total_order_fee",
@@ -441,7 +441,7 @@ const ReportOrderDaily = () => {
           title="Tổng lợi nhuận"
           subValue={dataTotal?.total_net_income_business}
           typeSubValue="money"
-          textToolTip="Tổng lợi nhuận = Doanh thu thuần + thu nhập khác"
+          textToolTip="Tổng lợi nhuận = Doanh thu thuần (+) thu nhập khác"
         />
       ),
       dataIndex: "total_net_income_business",

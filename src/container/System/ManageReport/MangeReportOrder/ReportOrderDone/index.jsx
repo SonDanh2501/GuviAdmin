@@ -27,58 +27,6 @@ import { errorNotify } from "../../../../../helper/toast";
 import FilterData from "../../../../../components/filterData";
 import { useLocation } from "react-router-dom";
 
-const HeaderInfo = ({ title, subValue, typeSubValue, textToolTip }) => {
-  const content = <p>{textToolTip ? textToolTip : ""}</p>;
-  if (subValue)
-    subValue =
-      typeSubValue === "money"
-        ? formatMoney(subValue)
-        : typeSubValue === "percent"
-        ? subValue + " %"
-        : subValue;
-  if (title == "Giá vốn") subValue = "0 đ";
-  return (
-    <React.Fragment>
-      <div className="header-table-custom">
-        <div className="title-report">
-          <p style={{ color: title === "Doanh thu" ? "#2463eb" : "none" }}>
-            {title}
-          </p>
-          {textToolTip ? (
-            <Popover
-              content={content}
-              placement="bottom"
-              overlayInnerStyle={{
-                backgroundColor: "white",
-              }}
-            >
-              <div>
-                <i
-                  style={{
-                    color: title === "Doanh thu" ? "#2463eb" : "none",
-                  }}
-                  class="uil uil-question-circle icon-question"
-                ></i>
-              </div>
-            </Popover>
-          ) : (
-            <></>
-          )}
-        </div>
-        <div className="sub-value">
-          {subValue ? (
-            <p style={{ color: title === "Doanh thu" ? "#2463eb" : "none" }}>
-              {subValue}
-            </p>
-          ) : (
-            <div style={{ marginTop: "35px" }}></div>
-          )}
-        </div>
-      </div>
-    </React.Fragment>
-  );
-};
-
 const ReportOrderDone = () => {
   const lang = useSelector(getLanguageState);
   const { state } = useLocation();
@@ -130,7 +78,7 @@ const ReportOrderDone = () => {
           title="Tổng giá trị giao dịch"
           subValue={totalValue?.total_fee}
           typeSubValue="money"
-          textToolTip="GMV - Gross Merchandise Volume (total_fee)"
+          textToolTip="GMV - Gross Merchandise Volume"
         />
       ),
       dataIndex: "total_fee",
@@ -143,7 +91,7 @@ const ReportOrderDone = () => {
           title="Thu hộ dịch vụ"
           subValue={totalValue?.total_net_income_new}
           typeSubValue="money"
-          textToolTip="Bao gồm phí dịch vụ trả đối tác: tiền tip từ khách,... (net_income)"
+          textToolTip="Bao gồm phí dịch vụ trả đối tác: tiền tip từ khách,..."
         />
       ),
       dataIndex: "total_net_income_new",
@@ -256,7 +204,7 @@ const ReportOrderDone = () => {
               totalValue?.total_discount_new || null
           }
           typeSubValue="money"
-          textToolTip="Tổng lợi nhuận = Doanh thu thuần + thu nhập khác"
+          textToolTip="Tổng lợi nhuận = Doanh thu thuần (+) thu nhập khác"
         />
       ),
       dataIndex: "net_revenue",

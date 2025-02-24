@@ -14,7 +14,7 @@ import {
   YAxis,
 } from "recharts";
 import {
-  getReportOrderDaily,
+  getReportOrderDailyApi,
   getReportPercentOrderDaily,
 } from "../../../../../api/report";
 import CustomDatePicker from "../../../../../components/customDatePicker";
@@ -40,7 +40,7 @@ const ReportOrderDaily = () => {
   const lang = useSelector(getLanguageState);
 
   useEffect(() => {
-    getReportOrderDaily(
+    getReportOrderDailyApi(
       0,
       40,
       moment().subtract(30, "d").startOf("date").toISOString(),
@@ -69,7 +69,7 @@ const ReportOrderDaily = () => {
     const dataLength = data.length < 20 ? 20 : data.length;
     const start = page * dataLength - dataLength;
     setStartPage(start);
-    getReportOrderDaily(start, 40, startDate, endDate, "date_work")
+    getReportOrderDailyApi(start, 40, startDate, endDate, "date_work")
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);
@@ -79,7 +79,7 @@ const ReportOrderDaily = () => {
   };
 
   const onChangeDay = () => {
-    getReportOrderDaily(startPage, 40, startDate, endDate, "date_work")
+    getReportOrderDailyApi(startPage, 40, startDate, endDate, "date_work")
       .then((res) => {
         setData(res?.data);
         setTotal(res?.totalItem);

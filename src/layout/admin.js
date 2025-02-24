@@ -120,6 +120,7 @@ import ReportOrderActivity from "../container/System/ManageReport/ManageReportAc
 import ReportDetailCashBook from "../container/System/ManageReport/ManageReportCashBook/ReportDetailCashBook";
 import ReportDetailCashBookCollaborator from "../container/System/ManageReport/ManageReportCashBook/ReportDetailCashBookCollaborator";
 import ReportDetailCashBookCustomer from "../container/System/ManageReport/ManageReportCashBook/ReportDetailCashBookCustomer";
+import ReportDetailOrderActivity from "../container/System/ManageReport/ManageReportActivity/ReportDetailOrderActivity";
 // import ManageFinance from "../pages/ManageFinance";
 
 const Admin = () => {
@@ -376,6 +377,10 @@ const Admin = () => {
       <Route
         path="/report/manage-report/report-order-activity"
         element={<ReportOrderActivity />}
+      />
+      <Route
+        path="/report/manage-report/report-detail-order-activity"
+        element={<ReportDetailOrderActivity />}
       />
       <Route
         path="/report/manage-report/report-order-daily-date-create"

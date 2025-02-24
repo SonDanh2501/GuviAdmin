@@ -244,7 +244,7 @@ export const checkReviewCollaborator = (id, data) => {
   );
 };
 
-export const getReportOrderDaily = (
+export const getReportOrderDailyApi = (
   start,
   length,
   start_date,
@@ -255,7 +255,7 @@ export const getReportOrderDaily = (
   status
 ) => {
   return axiosClient.get(
-    `/admin/report_mananger/report_order_dayly?start=${start}&length=${length}&start_date=${start_date}&end_date=${end_date}&type=${type}&valueSort=${valueSort}&typeSort=${typeSort}&status=${status}`
+    `/admin/report_mananger/report_order_daily?start=${start}&length=${length}&start_date=${start_date}&end_date=${end_date}&type=${type}&valueSort=${valueSort}&typeSort=${typeSort}&status=${status}`
   );
 };
 
@@ -457,5 +457,30 @@ export const getDetailReportCashBookCustomerApi = (
 ) => {
   return axiosClient.get(
     `api/admin/report_mananger/detail_report_cash_book_customer?start=${start}&length=${length}&start_date=${start_date}&end_date=${end_date}&status=${status}`
+  );
+};
+
+export const getReportOrderActivityApi = (
+  start,
+  length,
+  start_date,
+  end_date,
+  status
+) => {
+  return axiosClient.get(
+    `api/admin/report_mananger/report_order_activity?start=${start}&length=${length}&start_date=${start_date}&end_date=${end_date}&status=${status}`
+  );
+};
+
+
+export const getReportDetailOrderActivityApi = (
+  start,
+  length,
+  start_date,
+  end_date,
+  status
+) => {
+  return axiosClient.get(
+    `api/admin/report_mananger/report_detail_order_activity?start=${start}&length=${length}&start_date=${start_date}&end_date=${end_date}&status=${status}`
   );
 };
