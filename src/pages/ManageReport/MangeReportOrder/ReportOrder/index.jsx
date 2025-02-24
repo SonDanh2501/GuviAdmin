@@ -725,7 +725,7 @@ const ReportOrder = () => {
           title="Tổng hoá đơn"
           subValue={dataTotal?.total_order_fee}
           typeSubValue="money"
-          textToolTip="Tổng số tiền ghi nhận trên hoá đơn dịch vụ. Tổng hoá đơn = Tổng tiền - giảm giá."
+          textToolTip="Tổng số tiền ghi nhận trên hoá đơn dịch vụ. Tổng hoá đơn = Tổng tiền (-) giảm giá."
         />
       ),
       dataIndex: "total_order_fee",
@@ -766,7 +766,7 @@ const ReportOrder = () => {
           title="Tổng lợi nhuận"
           subValue={dataTotal?.total_net_income_business}
           typeSubValue="money"
-          textToolTip="Tổng lợi nhuận = Doanh thu thuần + thu nhập khác"
+          textToolTip="Tổng lợi nhuận = Doanh thu thuần (+) thu nhập khác"
         />
       ),
       dataIndex: "total_net_income_business",

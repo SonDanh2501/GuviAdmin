@@ -155,7 +155,7 @@ const ReportOrderDoneDaily = () => {
         <CustomHeaderDatatable
           title="Tổng giá trị giao dịch"
           typeSubValue="money"
-          textToolTip="GMV - Gross Merchandise Volume (total_fee)"
+          textToolTip="GMV - Gross Merchandise Volume"
           subValue={listTotalStatistic?.total_fee}
         />
       ),
@@ -169,7 +169,7 @@ const ReportOrderDoneDaily = () => {
           title="Thu hộ dịch vụ"
           subValue={listTotalStatistic?.total_net_income_new}
           typeSubValue="money"
-          textToolTip="Bao gồm phí dịch vụ trả đối tác: tiền tip từ khách,... (net_income)"
+          textToolTip="Bao gồm phí dịch vụ trả đối tác: tiền tip từ khách,..."
         />
       ),
       dataIndex: "total_net_income_new",
@@ -231,7 +231,7 @@ const ReportOrderDoneDaily = () => {
               listTotalStatistic?.total_discount_new || null
           }
           typeSubValue="money"
-          textToolTip="Tổng số tiền ghi nhận trên hoá đơn dịch vụ. Tổng hoá đơn = Tổng tiền - giảm giá."
+          textToolTip="Tổng số tiền ghi nhận trên hoá đơn dịch vụ. Tổng hoá đơn = Tổng tiền (-) giảm giá."
         />
       ),
       dataIndex: "invoice",
@@ -284,7 +284,7 @@ const ReportOrderDoneDaily = () => {
               listTotalStatistic?.total_discount_new || null
           }
           typeSubValue="money"
-          textToolTip="Tổng lợi nhuận = Doanh thu thuần + thu nhập khác"
+          textToolTip="Tổng lợi nhuận = Doanh thu thuần (+) thu nhập khác"
         />
       ),
       dataIndex: "net_revenue",
