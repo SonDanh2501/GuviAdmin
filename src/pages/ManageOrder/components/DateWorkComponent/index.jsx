@@ -23,7 +23,13 @@ import "./index.scss";
 import InputTextCustom from "../../../../components/inputCustom/index.jsx";
 
 const DateWorkComponent = (props) => {
-  const { serviceData, setPaymentMethod, setIsChoicePaymentMethod } = props;
+  const {
+    serviceData,
+    setPaymentMethod,
+    setIsChoicePaymentMethod,
+    setIsAutoOrder,
+    setListLoopDateOfWeek,
+  } = props;
   const [listTimeQuickSelect, setListTimeQuickSelect] = useState(SELECT_TIME);
   const [time, setTime] = useState(null);
   const [date, setDate] = useState(null);
@@ -81,6 +87,10 @@ const DateWorkComponent = (props) => {
       setService(serviceData);
     }
   }, [serviceData]);
+
+  useEffect(() => {
+    setListLoopDateOfWeek(dateOfWeek)
+  },[dateOfWeek])
 
   useEffect(() => {
     const tempSelect = SELECT_TIME;
@@ -182,6 +192,7 @@ const DateWorkComponent = (props) => {
   const onChangeLoopDate = (newValue) => {
     let tempService = JSON.parse(JSON.stringify(service));
     tempService.is_auto_order = newValue;
+    setIsAutoOrder(newValue) // Gán tạm nhanh giá trị
     if (timeSchedule !== null && newValue === true) {
       const getDateOfWeek = new Date(timeSchedule).getDay();
       setDateOfWeek([getDateOfWeek]);
@@ -191,6 +202,7 @@ const DateWorkComponent = (props) => {
       setDateOfWeek([]);
       setIsChoicePaymentMethod(true);
     }
+    console.log("check tempService >>> ", tempService);
     setService(tempService);
   };
 
