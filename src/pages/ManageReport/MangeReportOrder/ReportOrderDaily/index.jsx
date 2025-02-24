@@ -125,8 +125,8 @@ const ReportOrderDaily = () => {
 
   const getTotalReportDaily = async () => {
     const arrGetResult = await Promise.all([
-      getTotalReportOrderDaily(startDate, endDate, typeDate, "done"),
-      getTotalReportOrderDaily(sameStartDate, sameEndDate, typeDate, "done"),
+      getTotalReportOrderDaily(startDate, endDate, typeDate, "done,doing,confirm"),
+      getTotalReportOrderDaily(sameStartDate, sameEndDate, typeDate, "done,doing,confirm"),
     ]);
     visualizationDataOrder(arrGetResult[0], arrGetResult[1]);
   };
@@ -140,7 +140,7 @@ const ReportOrderDaily = () => {
       typeDate,
       -1,
       typeDate,
-      "done"
+      "done,doing,confirm"
     );
     setData(res.data);
     setTotal(res?.totalItem);
