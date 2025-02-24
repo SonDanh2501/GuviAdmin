@@ -130,7 +130,7 @@ const ReportOrderDone = () => {
           title="Tổng giá trị giao dịch"
           subValue={totalValue?.total_fee}
           typeSubValue="money"
-          textToolTip="GMV - Gross Merchandise Volume (total_fee)"
+          textToolTip="GMV - Gross Merchandise Volume"
         />
       ),
       dataIndex: "total_fee",
@@ -143,7 +143,7 @@ const ReportOrderDone = () => {
           title="Thu hộ dịch vụ"
           subValue={totalValue?.total_net_income_new}
           typeSubValue="money"
-          textToolTip="Bao gồm phí dịch vụ trả đối tác: tiền tip từ khách,... (net_income)"
+          textToolTip="Bao gồm phí dịch vụ trả đối tác: tiền tip từ khách,..."
         />
       ),
       dataIndex: "total_net_income_new",
@@ -203,7 +203,7 @@ const ReportOrderDone = () => {
             totalValue?.total_fee - totalValue?.total_discount_new || null
           }
           typeSubValue="money"
-          textToolTip="Tổng số tiền ghi nhận trên hoá đơn dịch vụ. Tổng hoá đơn = Tổng tiền - giảm giá."
+          textToolTip="Tổng số tiền ghi nhận trên hoá đơn dịch vụ. Tổng hoá đơn = Tổng tiền (-) giảm giá."
         />
       ),
       dataIndex: "invoice",
@@ -256,7 +256,7 @@ const ReportOrderDone = () => {
               totalValue?.total_discount_new || null
           }
           typeSubValue="money"
-          textToolTip="Tổng lợi nhuận = Doanh thu thuần + thu nhập khác"
+          textToolTip="Tổng lợi nhuận = Doanh thu thuần (+) thu nhập khác"
         />
       ),
       dataIndex: "net_revenue",
