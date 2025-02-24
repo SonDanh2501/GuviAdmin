@@ -1220,7 +1220,9 @@ const DataTable = (props) => {
               <Link
                 target="_blank"
                 to={{
-                  pathname: `/report/manage-report/report-order-by-collaborator/${data?.id_collaborator._id}`,
+                  pathname: `/report/manage-report/report-order-by-collaborator/${
+                    data?.id_collaborator._id || data?.id_collaborator[0]._id
+                  }`,
                 }}
                 state={{
                   startDate: data?.start_date,
@@ -1230,7 +1232,8 @@ const DataTable = (props) => {
               >
                 <div className="case__normal-text">
                   <span className="case__normal-text--label">
-                    {data?.id_collaborator.full_name}
+                    {data?.id_collaborator.full_name ||
+                      data?.id_collaborator[0].full_name}
                   </span>
                 </div>
               </Link>
