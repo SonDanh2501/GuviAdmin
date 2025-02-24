@@ -11,7 +11,6 @@ export const formatNumber = (number) => {
   }
   // Xóa các ký tự không phải số và loại bỏ số 0 ở đầu
   number = number?.toString()?.replace(/\D/g, "").replace(/^0+/, "");
-  console.log("check number >>>", number);
   return number.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 };
 

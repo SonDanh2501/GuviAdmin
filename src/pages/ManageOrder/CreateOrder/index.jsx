@@ -135,6 +135,7 @@ const CreateOrder = () => {
   const [listCustomer, setListCustomer] = useState([]); // Giá trị danh sách những khách hàng tìm kiếm
   const [listAddress, setListAddress] = useState([]); // Giá trị danh sách những địa chỉ đã tìm kiếm
   const [listAddressDefault, setListAddressDefault] = useState([]); // Giá trị danh sách những địa chỉ đã lưu của khách hàng
+  const [listLoopDateOfWeek, setListLoopDateOfWeek] = useState([]); // Giá trị danh sách những ngày trong tuần cần lặp lại
   const listMoneyTipForCollaborator = [
     { id: 0, amount: 2000 },
     { id: 1, amount: 5000 },
@@ -149,7 +150,8 @@ const CreateOrder = () => {
   const [isShowTipCollaborator, setIsShowTipCollaborator] = useState(false); // Hiển thị tiền tip cho đối tác
   const [isShowAddressSearch, setIsShowAddressSearch] = useState(true); // Hiển thị danh sách những địa chỉ đã tìm kiếm
   const [isDetailBill, setIsDetailBill] = useState(false); // Hiển thị chi tiết hóa đơn
-  const [isAllowClickTip, setIsAllowClickTip] = useState(true) // Cờ cho phép nhấn tiền tip
+  const [isAllowClickTip, setIsAllowClickTip] = useState(true); // Cờ cho phép nhấn tiền tip
+  const [isAutoOrder, setIsAutoOrder] = useState(false); // Cờ có lặp lại hay không
   /* ~~~ Handle function ~~~ */
   // const getDataListCustomer = async (search) => {
   //   const res = await searchCustomersApi(search);
@@ -436,10 +438,9 @@ const CreateOrder = () => {
       selectCustomerValue !== null &&
       paymentMethod !== null
     ) {
-      console.log("chạy 1");
       let tempPayload = {};
       tempPayload["type"] = serviceData.type;
-      tempPayload["is_auto_order"] = serviceData.is_auto_order;
+      tempPayload["is_auto_order"] = isAutoOrder;
       tempPayload["token"] = valueAddrressEncode.toString();
       tempPayload["extend_optional"] = listExtend;
       tempPayload["id_customer"] = selectCustomerValue;
@@ -451,6 +452,7 @@ const CreateOrder = () => {
       tempPayload["type_address_work"] = "house";
       tempPayload["note"] = valueNoteForCollaborator;
       tempPayload["tip_collaborator"] = tipCollaborator;
+      tempPayload["day_loop"] = listLoopDateOfWeek;
       setPayloadOrder(tempPayload);
     }
   }, [
@@ -464,6 +466,7 @@ const CreateOrder = () => {
     serviceData,
     valueNoteForCollaborator,
     tipCollaborator,
+    isAutoOrder,
   ]);
   useEffect(() => {
     if (
@@ -472,7 +475,6 @@ const CreateOrder = () => {
       dateWorkSchedule.length > 0 &&
       valueAddrressEncode !== null
     ) {
-      console.log("chạy 2");
       calculateFeeGroupOrder(payloadOrder);
       getDataCodePromotionAvaiable();
       // getCheckEventPromotion();
@@ -634,11 +636,9 @@ const CreateOrder = () => {
         setIsAllowClickTip(false);
         setTimeout(() => setIsAllowClickTip(true), 3000); // Bật lại sau 5 giây
       }
+    } else {
+      return;
     }
-    else {
-      return; 
-    }
-
   };
   // Hàm chọn/hủy chọn mã khuyến mãi
   const handleChoosePromotion = (_code_promotion) => {
@@ -652,6 +652,7 @@ const CreateOrder = () => {
     setIsShowAddressDefault(checked);
   };
 
+  console.log("check listLoopDateOfWeek", listLoopDateOfWeek);
   /* ~~~ Main ~~~ */
   return (
     <div className="container-create-order">
@@ -785,6 +786,8 @@ const CreateOrder = () => {
           changeTimeSchedule={setDateWorkSchedule}
           setPaymentMethod={setPaymentMethod}
           setIsChoicePaymentMethod={setIsChoicePaymentMethod}
+          setIsAutoOrder={setIsAutoOrder}
+          setListLoopDateOfWeek={setListLoopDateOfWeek}
         />
         {/* Container chọn phương thức thanh toán và cộng tấc viên */}
         <div className="container-create-order-flex">
@@ -862,7 +865,11 @@ const CreateOrder = () => {
                   key={index}
                   className={`container-create-order__info--tip-header-suggest-child ${
                     tipCollaborator === item.amount && "selected"
-                  } ${!isAllowClickTip && tipCollaborator !== item.amount && "disable"}`}
+                  } ${
+                    !isAllowClickTip &&
+                    tipCollaborator !== item.amount &&
+                    "disable"
+                  }`}
                 >
                   <span>{formatMoney(item?.amount) || 0}</span>
                 </div>
