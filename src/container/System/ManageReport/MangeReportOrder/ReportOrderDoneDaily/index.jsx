@@ -4,7 +4,7 @@ import CustomHeaderDatatable from "../../../../../components/tables/tableHeader"
 import DataTable from "../../../../../components/tables/dataTable";
 import FilterData from "../../../../../components/filterData";
 import { errorNotify } from "../../../../../helper/toast";
-import { getReportOrderDaily, getTotalReportOrderDaily } from "../../../../../api/report";
+import { getReportOrderDailyApi, getTotalReportOrderDaily } from "../../../../../api/report";
 import { formatMoney } from "../../../../../helper/formatMoney";
 import icons from "../../../../../utils/icons";
 import moment from "moment";
@@ -328,7 +328,7 @@ const ReportOrderDoneDaily = () => {
   const fetchReportOrderDaily = async () => {
     try {
       setIsLoading(true);
-      const res = await getReportOrderDaily(
+      const res = await getReportOrderDailyApi(
         start,
         lengthPage,
         startDate,

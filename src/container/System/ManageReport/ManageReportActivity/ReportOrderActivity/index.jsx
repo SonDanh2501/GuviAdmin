@@ -4,7 +4,11 @@ import CustomHeaderDatatable from "../../../../../components/tables/tableHeader"
 import DataTable from "../../../../../components/tables/dataTable";
 import FilterData from "../../../../../components/filterData";
 import { errorNotify } from "../../../../../helper/toast";
-import { getReportOrderDaily, getTotalReportOrderDaily } from "../../../../../api/report";
+import {
+  getReportOrderActivityApi,
+  getReportOrderDailyApi,
+  getTotalReportOrderDaily,
+} from "../../../../../api/report";
 import { formatMoney } from "../../../../../helper/formatMoney";
 import icons from "../../../../../utils/icons";
 import moment from "moment";
@@ -90,20 +94,20 @@ const ReportOrderActivity = () => {
     arrow: "up",
     percent: 0,
   };
-  /* ~~~ Value ~~~ */
-  const [headerChartsOrder, setHeaderChartsOrder] = useState(headerDefault);
+  const [isLoading, setIsLoading] = useState(false);
   const [lengthPage, setLengthPage] = useState(
     JSON.parse(localStorage.getItem("linePerPage"))
       ? JSON.parse(localStorage.getItem("linePerPage")).value
       : 20
   );
-  const [start, setStart] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
-  const [total, setTotal] = useState(0);
-  const [startDate, setStartDate] = useState("");
-  const [previousStartDate, setPreviousStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [previousEndDate, setPreviousEndDate] = useState("");
+  const [headerChartsOrder, setHeaderChartsOrder] = useState(headerDefault);
+  /* ~~~ Value ~~~ */
+  const [startPage, setStartPage] = useState(0); // Giá trị trang bắt đầu
+  const [totalItem, setTotalItem] = useState(0); // Giá trị tổng số lượng item
+  const [startDate, setStartDate] = useState(""); // Giá trị ngày bắt đầu
+  const [endDate, setEndDate] = useState(""); // Giá trị ngày kết thúc
+  const [previousStartDate, setPreviousStartDate] = useState(""); // Giá trị ngày bắt đầu của kì trước
+  const [previousEndDate, setPreviousEndDate] = useState(""); // Giá trị ngày kết thúc của kì trước
   /* ~~~ List ~~~ */
   const [listData, setListData] = useState([]);
   const [listTotalStatistic, setListTotalStatistic] = useState([]);
@@ -145,7 +149,7 @@ const ReportOrderActivity = () => {
           typeSubValue="number"
         />
       ),
-      dataIndex: "total_item",
+      dataIndex: "total_orders_created",
       key: "number",
       width: 130,
       position: "center",
@@ -153,45 +157,58 @@ const ReportOrderActivity = () => {
     {
       customTitle: (
         <CustomHeaderDatatable
-          title="Tổng giá trị giao dịch"
+          title="Tổng giá trị giao dịch dự kiến"
           typeSubValue="money"
           textToolTip="GMV - Gross Merchandise Volume (total_fee)"
           subValue={listTotalStatistic?.total_fee}
         />
       ),
-      dataIndex: "total_fee",
+      dataIndex: "total_gmv_done",
       key: "money",
-      width: 170,
+      width: 210,
     },
     {
       customTitle: (
         <CustomHeaderDatatable
-          title="Thu hộ dịch vụ"
+          title="Thu hộ dịch vụ dự kiến"
           subValue={listTotalStatistic?.total_net_income_new}
           typeSubValue="money"
           textToolTip="Bao gồm phí dịch vụ trả đối tác: tiền tip từ khách,... (net_income)"
+        />
+      ),
+      dataIndex: "total_service_collection_amount_done",
+      key: "money",
+      width: 200,
+    },
+    {
+      customTitle: (
+        <CustomHeaderDatatable
+          title="Tiền hoàn lại"
+          subValue={listTotalStatistic?.total_net_income_new}
+          typeSubValue="money"
+          textToolTip="Chưa có"
         />
       ),
       dataIndex: "total_net_income_new",
       key: "money",
       width: 150,
     },
-    {
-      customTitle: (
-        <CustomHeaderDatatable
-          title="Doanh thu"
-          subValue={
-            listTotalStatistic?.total_fee -
-              listTotalStatistic?.total_net_income_new || null
-          }
-          typeSubValue="money"
-          textToolTip="Doanh thu = Tổng giá trị giao dịch (-) Thu hộ dịch vụ"
-        />
-      ),
-      dataIndex: "revenue",
-      key: "money",
-      width: 120,
-    },
+    // {
+    //   customTitle: (
+    //     <CustomHeaderDatatable
+    //       title="Doanh thu dự kiến"
+    //       subValue={
+    //         listTotalStatistic?.total_fee -
+    //           listTotalStatistic?.total_net_income_new || null
+    //       }
+    //       typeSubValue="money"
+    //       textToolTip="Doanh thu = Tổng giá trị giao dịch (-) Thu hộ dịch vụ"
+    //     />
+    //   ),
+    //   dataIndex: "total_revenue_done",
+    //   key: "money",
+    //   width: 120,
+    // },
     {
       customTitle: (
         <CustomHeaderDatatable
@@ -201,14 +218,14 @@ const ReportOrderActivity = () => {
           textToolTip="Tổng số tiền giảm giá từ: giảm giá dịch vụ, giảm giá đơn hàng, đồng giá, ctkm,…"
         />
       ),
-      dataIndex: "total_discount_new",
+      dataIndex: "total_discount_done",
       key: "money",
       width: 100,
     },
     {
       customTitle: (
         <CustomHeaderDatatable
-          title="Doanh thu thuần"
+          title="Doanh thu thuần dự kiến"
           subValue={
             listTotalStatistic?.total_fee -
               listTotalStatistic?.total_net_income_new -
@@ -220,12 +237,12 @@ const ReportOrderActivity = () => {
       ),
       dataIndex: "net_revenue",
       key: "money",
-      width: 150,
+      width: 200,
     },
     {
       customTitle: (
         <CustomHeaderDatatable
-          title="Tổng hóa đơn"
+          title="Tổng hóa đơn dự kiến"
           subValue={
             listTotalStatistic?.total_fee -
               listTotalStatistic?.total_discount_new || null
@@ -236,7 +253,7 @@ const ReportOrderActivity = () => {
       ),
       dataIndex: "invoice",
       key: "money",
-      width: 150,
+      width: 170,
     },
     {
       customTitle: (
@@ -325,22 +342,17 @@ const ReportOrderActivity = () => {
     },
   ];
   /* ~~~ Handle function ~~~ */
-  const fetchReportOrderDaily = async () => {
+  // 1. Hàm fetch dữ liệu của bảng
+  const fetchReportOrderDaily = async (payload) => {
     try {
       setIsLoading(true);
-      const res = await getReportOrderDaily(
-        start,
-        lengthPage,
-        startDate,
-        endDate,
-        "date_create",
-        -1,
-        "date_create",
-        "done"
+      const res = await getReportOrderActivityApi(
+        payload.start,
+        payload.lengthPage,
+        payload.startDate,
+        payload.endDate
       );
-      setListData(res?.data);
-      setTotal(res?.data?.length);
-      setListTotalStatistic(res?.total[0]);
+      setListData(res?.data)
       setIsLoading(false);
     } catch (err) {
       errorNotify({
@@ -350,52 +362,54 @@ const ReportOrderActivity = () => {
     }
   };
 
-  const visualizationDataOrder = (data, dataInsame) => {
-    const tempOrder = [];
-    for (let i = 0; i < data.data.length; i++) {
-      const payload = {
-        total_item: data.data[i].total_item,
-        date_report: data.data[i]._id.slice(0, 5),
-        total_item_same: dataInsame.data[i]?.total_item,
-        date_report_same: dataInsame.data[i]?._id.slice(0, 5),
-      };
-      tempOrder.push(payload);
-    }
-    setDataChartsOrder(tempOrder);
-    // const percentOrder = (data.totalOrder[0]?.total_item / (data.totalOrder[0]?.total_item + dataInsame.totalOrder[0]?.total_item)) * 100;
-    // const percentSameOrder = (dataInsame.totalOrder[0]?.total_item / (data.totalOrder[0]?.total_item + dataInsame.totalOrder[0]?.total_item)) * 100
+  // const visualizationDataOrder = (data, dataInsame) => {
+  //   const tempOrder = [];
+  //   for (let i = 0; i < data.data.length; i++) {
+  //     const payload = {
+  //       total_item: data.data[i].total_item,
+  //       date_report: data.data[i]._id.slice(0, 5),
+  //       total_item_same: dataInsame.data[i]?.total_item,
+  //       date_report_same: dataInsame.data[i]?._id.slice(0, 5),
+  //     };
+  //     tempOrder.push(payload);
+  //   }
+  //   setDataChartsOrder(tempOrder);
+  //   // const percentOrder = (data.totalOrder[0]?.total_item / (data.totalOrder[0]?.total_item + dataInsame.totalOrder[0]?.total_item)) * 100;
+  //   // const percentSameOrder = (dataInsame.totalOrder[0]?.total_item / (data.totalOrder[0]?.total_item + dataInsame.totalOrder[0]?.total_item)) * 100
 
-    const percentOrder =
-      data.totalOrder[0]?.total_item / dataInsame.totalOrder[0]?.total_item - 1;
-    const headerTempOrder = {
-      total: data.totalOrder[0]?.total_item + " Đơn hàng",
-      arrow: percentOrder > 0 ? "up" : "down",
-      percent: Math.abs((percentOrder * 100).toFixed(2)),
-    };
-    setHeaderChartsOrder(headerTempOrder);
-  };
+  //   const percentOrder =
+  //     data.totalOrder[0]?.total_item / dataInsame.totalOrder[0]?.total_item - 1;
+  //   const headerTempOrder = {
+  //     total: data.totalOrder[0]?.total_item + " Đơn hàng",
+  //     arrow: percentOrder > 0 ? "up" : "down",
+  //     percent: Math.abs((percentOrder * 100).toFixed(2)),
+  //   };
+  //   setHeaderChartsOrder(headerTempOrder);
+  // };
 
-  const getTotalReportDaily = async () => {
-    const arrGetResult = await Promise.all([
-      getTotalReportOrderDaily(startDate, endDate, "date_create", "done"),
-      getTotalReportOrderDaily(
-        previousStartDate,
-        previousEndDate,
-        "date_create",
-        "done"
-      ),
-    ]);
-    visualizationDataOrder(arrGetResult[0], arrGetResult[1]);
-  };
+  // const fetchTotalReportDaily = async () => {
+  //   const arrGetResult = await Promise.all([
+  //     getTotalReportOrderDaily(startDate, endDate, "date_create", "done"),
+  //     getTotalReportOrderDaily(
+  //       previousStartDate,
+  //       previousEndDate,
+  //       "date_create",
+  //       "done"
+  //     ),
+  //   ]);
+  //   visualizationDataOrder(arrGetResult[0], arrGetResult[1]);
+  // };
   /* ~~~ Use effect ~~~ */
   // 1. Fetch dữ liệu của bảng
   useEffect(() => {
-    fetchReportOrderDaily();
-  }, [startDate, endDate, start, lengthPage]);
+    if (startDate !== "" && endDate !== "") {
+      fetchReportOrderDaily({ startPage, lengthPage, startDate, endDate });
+    }
+  }, [startDate, endDate, startPage, lengthPage]);
   // 2. Fetch dữ liệu của cột
-  useEffect(() => {
-    getTotalReportDaily();
-  }, [previousStartDate, previousEndDate]);
+  // useEffect(() => {
+  //   fetchTotalReportDaily();
+  // }, [previousStartDate, previousEndDate]);
   // 3. Tính toán thời gian của kỳ trước dựa trên kỳ hiện tại
   useEffect(() => {
     if (startDate !== "") {
@@ -408,7 +422,6 @@ const ReportOrderActivity = () => {
       setPreviousEndDate(new Date(tempSameEndDate).toISOString());
     }
   }, [startDate, endDate]);
-
   /* ~~~ Other ~~~ */
   const rightContent = (
     startDate,
@@ -435,7 +448,6 @@ const ReportOrderActivity = () => {
       </div>
     );
   };
-
   /* ~~~ Main ~~~ */
   return (
     <div className="report-order-daily-revenue">
@@ -443,7 +455,7 @@ const ReportOrderActivity = () => {
         <span className="report-order-daily-revenue__header--title">
           Báo cáo hoạt động đơn hàng
         </span>
-        <div className="report-order-daily-revenue__header--total-statistic">
+        {/* <div className="report-order-daily-revenue__header--total-statistic">
           <div className="report-order-daily-revenue__header--total-statistic-child card-shadow blue">
             <div className="line"></div>
             <div className="report-order-daily-revenue__header--total-statistic-child-icon">
@@ -515,8 +527,7 @@ const ReportOrderActivity = () => {
               </span>
             </div>
           </div>
-        </div>
-
+        </div> */}
         <div>
           <FilterData
             isTimeFilter={true}
@@ -531,65 +542,15 @@ const ReportOrderActivity = () => {
           />
         </div>
       </div>
-      <div className="report-order-daily-revenue__chart card-shadow">
-        <div className="">
-          {/* Header */}
-          <div className="report-order-daily-revenue__chart--header">
-            <div className="">
-              <span>Lượng đơn hàng</span>
-            </div>
-            <HeaderInfoCharts
-              total={headerChartsOrder.total}
-              arrow={headerChartsOrder.arrow}
-              percentSame={headerChartsOrder.percent}
-            />
-          </div>
-          {/* Chart */}
-          <div className="">
-            {dataChartsOrder?.length > 0 ? (
-              <ResponsiveContainer height={350} width="99%">
-                <LineChart
-                  data={dataChartsOrder}
-                  margin={{ left: -10, top: 10 }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis
-                    dataKey="date_report"
-                    angle={-20}
-                    textAnchor="end"
-                    tick={{ fontSize: 10 }}
-                  />
-                  <YAxis
-                    tickFormatter={(tickItem) => number_processing(tickItem)}
-                  />
-                  <Tooltip content={renderTooltipContent} />
-                  <Legend />
-                  {configLineOrder.map((item, index) => (
-                    <Line
-                      type="monotone"
-                      dataKey={item.dataKey}
-                      stroke={item.stroke}
-                      name={item.name}
-                      strokeDasharray={item.strokeDasharray}
-                    />
-                  ))}
-                </LineChart>
-              </ResponsiveContainer>
-            ) : (
-              <p>Không có dữ liệu</p>
-            )}
-          </div>
-        </div>
-      </div>
       <div>
         <DataTable
           columns={columns}
           data={listData}
-          start={start}
+          start={startPage}
           pageSize={lengthPage}
           setLengthPage={setLengthPage}
-          totalItem={total}
-          onCurrentPageChange={setStart}
+          totalItem={totalItem}
+          onCurrentPageChange={setStartPage}
           loading={isLoading}
         />
       </div>

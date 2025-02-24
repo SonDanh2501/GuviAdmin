@@ -119,7 +119,6 @@ const CreateOrder = () => {
   });
   const [isChoicePaymentMethod, setIsChoicePaymentMethod] = useState(true);
   const [modal, setModal] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
   const [infoBill, setInfoBill] = useState();
   // SON Value
   const [collaborator, setCollaborator] = useState(null); // Giá trị thông tin id của đối tác
@@ -264,7 +263,7 @@ const CreateOrder = () => {
       setCollaboratorBlock(responseBlockCollaborator?.data);
     } catch (err) {
       errorNotify({
-        message: err,
+        message: err?.message || err,
       });
     }
   };
@@ -379,7 +378,7 @@ const CreateOrder = () => {
       });
       setServiceFee(_service_fee);
     } catch (err) {
-      errorMessage({
+      errorNotify({
         message: err?.message || err,
       });
       if (err?.field === "code_promotion") {

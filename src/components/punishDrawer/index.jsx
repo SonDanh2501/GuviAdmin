@@ -223,9 +223,7 @@ const PunishDrawer = (props) => {
   /* ~~~ Main ~~~ */
   return (
     <div>
-      <Button onClick={showDrawer} type="primary">
-        {titleButton}
-      </Button>
+      <ButtonCustom onClick={showDrawer} label={titleButton} />
       <Drawer
         title={titleHeader}
         placement="right"
@@ -317,7 +315,7 @@ const PunishDrawer = (props) => {
               }
               placeHolder="Ca làm liên quan"
               searchField={true}
-              onChange={ handleSearchOrder}
+              onChange={handleSearchOrder}
               setValueSelectedProps={setValueOrder}
             />
           </div>
