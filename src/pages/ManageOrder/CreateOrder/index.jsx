@@ -652,7 +652,6 @@ const CreateOrder = () => {
     setIsShowAddressDefault(checked);
   };
 
-  console.log("check isAllowClickTip", isAllowClickTip);
   /* ~~~ Main ~~~ */
   return (
     <div className="container-create-order">
