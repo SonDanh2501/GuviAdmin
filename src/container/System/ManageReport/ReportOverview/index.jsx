@@ -12,7 +12,7 @@
 // } from "recharts";
 // import {
 //   getReportOrderByCity,
-//   getReportOrderDaily,
+//   getReportOrderDailyApi,
 //   getReportServiceByArea,
 // } from "../../../../api/report";
 // import CustomDatePicker from "../../../../components/customDatePicker";
@@ -82,7 +82,7 @@
 //   const navigate = useNavigate();
 
 //   useEffect(() => {
-//     getReportOrderDaily(0, 90, startDate, endDate, "date_work")
+//     getReportOrderDailyApi(0, 90, startDate, endDate, "date_work")
 //       .then((res) => {
 //         setData(res?.data);
 //         setTotalNetIncome(res?.total[0]?.total_net_income);
@@ -91,7 +91,7 @@
 //       })
 //       .catch((err) => {});
 
-//     getReportOrderDaily(0, 90, sameStartDate, sameEndDate, "date_work")
+//     getReportOrderDailyApi(0, 90, sameStartDate, sameEndDate, "date_work")
 //       .then((res) => {
 //         setDataSame(res?.data);
 //         setTotalNetIncomeSame(res?.total[0]?.total_net_income);
@@ -126,7 +126,7 @@
 
 //   const onChangeDay = () => {
 //     setIsLoading(true);
-//     getReportOrderDaily(0, 90, startDate, endDate, "date_work")
+//     getReportOrderDailyApi(0, 90, startDate, endDate, "date_work")
 //       .then((res) => {
 //         setData(res?.data);
 //         setIsLoading(false);
@@ -138,7 +138,7 @@
 //         setIsLoading(false);
 //       });
 
-//     getReportOrderDaily(0, 90, sameStartDate, sameEndDate, "date_work")
+//     getReportOrderDailyApi(0, 90, sameStartDate, sameEndDate, "date_work")
 //       .then((res) => {
 //         setDataSame(res?.data);
 //         setIsLoading(false);
@@ -807,7 +807,7 @@ import {
 } from "recharts";
 import {
   getReportOrderByCity,
-  getReportOrderDaily,
+  getReportOrderDailyApi,
   getReportServiceByArea,
 } from "../../../../api/report";
 import CustomDatePicker from "../../../../components/customDatePicker";
@@ -948,8 +948,8 @@ const ReportOverview = () => {
 
   const getDataReportDaily = async (diffDays) => {
     const arrGetResult = await Promise.all([
-      getReportOrderDaily(0, diffDays, startDate, endDate, "date_work"),
-      getReportOrderDaily(0, diffDays, sameStartDate, sameEndDate, "date_work"),
+      getReportOrderDailyApi(0, diffDays, startDate, endDate, "date_work"),
+      getReportOrderDailyApi(0, diffDays, sameStartDate, sameEndDate, "date_work"),
     ]);
     visualizationDataIncome(arrGetResult[0], arrGetResult[1]);
     visualizationDataOrder(arrGetResult[0], arrGetResult[1]);
