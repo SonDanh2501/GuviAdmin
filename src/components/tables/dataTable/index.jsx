@@ -405,7 +405,7 @@ const DataTable = (props) => {
               <div>
                 <p className={`${item?.fontSize}`}>
                   {data?.type === "loop" && data?.is_auto_order
-                    ? `${i18n.t("repeat", { lng: lang })}`
+                    ? `${i18n.t("cleaning", { lng: lang })} (lặp lại)`
                     : data?.service?._id?.kind === "giup_viec_theo_gio"
                     ? `${i18n.t("cleaning", { lng: lang })}`
                     : data?.service?._id?.kind === "giup_viec_co_dinh"
