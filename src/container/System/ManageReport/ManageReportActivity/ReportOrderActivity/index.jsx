@@ -165,7 +165,7 @@ const ReportOrderActivity = () => {
       ),
       dataIndex: "total_gmv_done",
       key: "money",
-      width: 170,
+      width: 210,
     },
     {
       customTitle: (
@@ -178,7 +178,7 @@ const ReportOrderActivity = () => {
       ),
       dataIndex: "total_service_collection_amount_done",
       key: "money",
-      width: 150,
+      width: 200,
     },
     {
       customTitle: (
@@ -237,7 +237,7 @@ const ReportOrderActivity = () => {
       ),
       dataIndex: "net_revenue",
       key: "money",
-      width: 150,
+      width: 200,
     },
     {
       customTitle: (
@@ -253,7 +253,7 @@ const ReportOrderActivity = () => {
       ),
       dataIndex: "invoice",
       key: "money",
-      width: 150,
+      width: 170,
     },
     {
       customTitle: (
@@ -270,7 +270,7 @@ const ReportOrderActivity = () => {
     {
       customTitle: (
         <CustomHeaderDatatable
-          title="Phí áp dụng "
+          title="Phí áp dụng"
           subValue={listTotalStatistic?.total_service_fee}
           typeSubValue="money"
         />
@@ -352,7 +352,6 @@ const ReportOrderActivity = () => {
         payload.startDate,
         payload.endDate
       );
-      console.log("check res", res);
       setListData(res?.data)
       setIsLoading(false);
     } catch (err) {
@@ -456,7 +455,7 @@ const ReportOrderActivity = () => {
         <span className="report-order-daily-revenue__header--title">
           Báo cáo hoạt động đơn hàng
         </span>
-        <div className="report-order-daily-revenue__header--total-statistic">
+        {/* <div className="report-order-daily-revenue__header--total-statistic">
           <div className="report-order-daily-revenue__header--total-statistic-child card-shadow blue">
             <div className="line"></div>
             <div className="report-order-daily-revenue__header--total-statistic-child-icon">
@@ -528,8 +527,7 @@ const ReportOrderActivity = () => {
               </span>
             </div>
           </div>
-        </div>
-
+        </div> */}
         <div>
           <FilterData
             isTimeFilter={true}
@@ -544,7 +542,6 @@ const ReportOrderActivity = () => {
           />
         </div>
       </div>
-
       <div>
         <DataTable
           columns={columns}
