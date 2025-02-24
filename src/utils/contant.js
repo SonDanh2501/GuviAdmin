@@ -18,6 +18,7 @@ import HD_BANK from "../assets/images/bank_hd.svg";
 import PVC_BANK from "../assets/images/bank_pvc.svg";
 import MSB_BANK from "../assets/images/bank_msb.svg";
 import LP_BANK from "../assets/images/bank_lp.svg";
+import OCB_BANK from "../assets/images/bank_ocb.svg";
 
 // Flag list
 import CHINA_FLAG from "../assets/images/flag_china.svg";
@@ -313,6 +314,17 @@ export const bankList = [
     ),
     image: LP_BANK,
     name: "Ngân hàng Thương mại cổ phần Lộc Phát Việt Nam (LPBANK)",
+  },
+  {
+    code: "ocb_bank",
+    label: (
+      <div style={{ gap: "12px" }} className="flex items-center">
+        <img className="w-6 h-6" src={OCB_BANK}></img>
+        <span className="text-xs font-normal">OCBBANK</span>
+      </div>
+    ),
+    image: OCB_BANK,
+    name: "Ngân hàng thương mại cổ phần Phương Đông (OCB)",
   },
 ];
 /* 2. Danh sách các nước */
