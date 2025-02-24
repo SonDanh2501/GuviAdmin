@@ -27,58 +27,6 @@ import { errorNotify } from "../../../../../helper/toast";
 import FilterData from "../../../../../components/filterData";
 import { useLocation } from "react-router-dom";
 
-const HeaderInfo = ({ title, subValue, typeSubValue, textToolTip }) => {
-  const content = <p>{textToolTip ? textToolTip : ""}</p>;
-  if (subValue)
-    subValue =
-      typeSubValue === "money"
-        ? formatMoney(subValue)
-        : typeSubValue === "percent"
-        ? subValue + " %"
-        : subValue;
-  if (title == "Giá vốn") subValue = "0 đ";
-  return (
-    <React.Fragment>
-      <div className="header-table-custom">
-        <div className="title-report">
-          <p style={{ color: title === "Doanh thu" ? "#2463eb" : "none" }}>
-            {title}
-          </p>
-          {textToolTip ? (
-            <Popover
-              content={content}
-              placement="bottom"
-              overlayInnerStyle={{
-                backgroundColor: "white",
-              }}
-            >
-              <div>
-                <i
-                  style={{
-                    color: title === "Doanh thu" ? "#2463eb" : "none",
-                  }}
-                  class="uil uil-question-circle icon-question"
-                ></i>
-              </div>
-            </Popover>
-          ) : (
-            <></>
-          )}
-        </div>
-        <div className="sub-value">
-          {subValue ? (
-            <p style={{ color: title === "Doanh thu" ? "#2463eb" : "none" }}>
-              {subValue}
-            </p>
-          ) : (
-            <div style={{ marginTop: "35px" }}></div>
-          )}
-        </div>
-      </div>
-    </React.Fragment>
-  );
-};
-
 const ReportOrderDone = () => {
   const lang = useSelector(getLanguageState);
   const { state } = useLocation();
@@ -203,7 +151,7 @@ const ReportOrderDone = () => {
             totalValue?.total_fee - totalValue?.total_discount_new || null
           }
           typeSubValue="money"
-          textToolTip="Tổng số tiền ghi nhận trên hoá đơn dịch vụ. Tổng hoá đơn = Tổng tiền (-) giảm giá."
+          textToolTip="Tổng số tiền ghi nhận trên hoá đơn dịch vụ. Tổng hoá đơn = Tổng tiền - giảm giá."
         />
       ),
       dataIndex: "invoice",

@@ -248,7 +248,7 @@ const ReportOrderActivity = () => {
               listTotalStatistic?.total_discount_new || null
           }
           typeSubValue="money"
-          textToolTip="Tổng số tiền ghi nhận trên hoá đơn dịch vụ. Tổng hoá đơn = Tổng tiền (-) giảm giá."
+          textToolTip="Tổng số tiền ghi nhận trên hoá đơn dịch vụ. Tổng hoá đơn = Tổng tiền - giảm giá."
         />
       ),
       dataIndex: "invoice",

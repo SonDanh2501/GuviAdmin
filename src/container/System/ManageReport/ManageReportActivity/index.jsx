@@ -11,6 +11,12 @@ const ManageReportActivity = () => {
       linkNavigate: "report/manage-report/report-order-activity",
       checkPermition: "order_report",
     },
+    {
+      title: "Báo cáo chi tiết hoạt động đơn hàng",
+      detail: "Báo cáo chi tiết hoạt động của đơn hàng",
+      linkNavigate: "report/manage-report/report-detail-order-activity",
+      checkPermition: "order_report",
+    },
   ];
   /* ~~~ Handle function ~~~ */
   const handleOpenNewTab = (link) => {
