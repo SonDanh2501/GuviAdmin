@@ -34,6 +34,10 @@ import THAILAND_FLAG from "../assets/images/flag_thailand.svg";
 import TIMOR_FLAG from "../assets/images/flag_timor.svg";
 import moment from "moment";
 
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
+import { errorNotify } from "../helper/toast";
+
 const { IoStar, IoStarHalf, IoStarOutline } = icons;
 
 export const INIT_STATE = {
@@ -664,4 +668,24 @@ export const checkPasswordRequired = (valuePassword) => {
     condition.level = condition.level + 1;
   }
   return condition;
+};
+
+/* 10. Hàm xuất file excel */
+export const exportToExcel = (listData, fileName) => {
+  if (listData.length > 0) {
+    // Chuyển đổi dữ liệu thành định dạng mà thư viện xlsx có thể hiểu
+    const ws = XLSX.utils.json_to_sheet(listData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+
+    // Tạo file Excel và tải xuống
+    const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+    const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
+    saveAs(blob, `${fileName}.xlsx`);
+  }
+  else {
+    errorNotify({
+      message: "Không có dữ liệu để xuất file",
+    })
+  }
 };

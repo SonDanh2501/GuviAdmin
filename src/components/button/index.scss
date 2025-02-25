@@ -42,6 +42,11 @@
     &.border-full {
         border-radius: $borderRadiusFull;
     }
+
+    &.green {
+        background-color: $colorGreen;
+        border-color: $colorGreen;
+    }
 }
 
 .button-custom-checked {
@@ -103,6 +108,7 @@
                 display: flex;
                 gap: $gapL;
                 background-color: $colorMoreLightGray;
+
                 .button-custom-select__option--label {
                     padding: 0 4px 0 4px;
                 }
