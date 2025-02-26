@@ -252,7 +252,7 @@ export const getReportOrderDailyApi = (
   type,
   valueSort,
   typeSort = "date_work",
-  status,
+  status
 ) => {
   return axiosClient.get(
     `/admin/report_mananger/report_order_daily?start=${start}&length=${length}&start_date=${start_date}&end_date=${end_date}&type=${type}&valueSort=${valueSort}&typeSort=${typeSort}&status=${status}`
@@ -464,23 +464,20 @@ export const getReportOrderActivityApi = (
   start,
   length,
   start_date,
-  end_date,
-  status
+  end_date
 ) => {
   return axiosClient.get(
-    `api/admin/report_mananger/report_order_activity?start=${start}&length=${length}&start_date=${start_date}&end_date=${end_date}&status=${status}`
+    `api/admin/report_mananger/report_order_activity?start=${start}&length=${length}&start_date=${start_date}&end_date=${end_date}`
   );
 };
-
 
 export const getReportDetailOrderActivityApi = (
   start,
   length,
   start_date,
-  end_date,
-  status
+  end_date
 ) => {
   return axiosClient.get(
-    `api/admin/report_mananger/report_detail_order_activity?start=${start}&length=${length}&start_date=${start_date}&end_date=${end_date}&status=${status}`
+    `api/admin/report_mananger/report_detail_order_activity?start=${start}&length=${length}&start_date=${start_date}&end_date=${end_date}`
   );
 };

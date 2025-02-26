@@ -24,26 +24,7 @@ const Review = ({ id, totalReview }) => {
       : 20
   );
   const [startPage, setStartPage] = useState(0);
-  useEffect(() => {
-    getReviewCollaborator(id, startPage, lengthPage)
-      .then((res) => {
-        setData(res?.data);
-        setTotal(res?.totalItem);
-      })
-      .catch((err) => {});
-  }, [id, startPage, lengthPage]);
 
-  const onChange = (page) => {
-    setCurrentPage(page);
-    const lengthData = data?.length < 20 ? 20 : data.length;
-    const start = page * lengthData - lengthData;
-    getReviewCollaborator(id, start, 20)
-      .then((res) => {
-        setData(res?.data);
-        setTotal(res?.totalItem);
-      })
-      .catch((err) => {});
-  };
   const onChangePage = (value) => {
     setStartPage(value);
   };
@@ -86,6 +67,15 @@ const Review = ({ id, totalReview }) => {
     },
   ];
 
+  useEffect(() => {
+    getReviewCollaborator(id, startPage, lengthPage)
+      .then((res) => {
+        setData(res?.data);
+        setTotal(res?.totalItem);
+      })
+      .catch((err) => {});
+  }, [id, startPage, lengthPage]);
+
   return (
     <div className="collaborator-rating">
       <div className="collaborator-rating__overview">
@@ -107,6 +97,17 @@ const Review = ({ id, totalReview }) => {
             cardHeader="Số lượt đánh giá"
             collaboratorStar={totalReview}
           />
+        </div>
+      </div>
+      {/* Acvitiy Log */}
+      <div className="collaborator-rating__activity-bar shadow">
+        <div className="collaborator-rating__activity-bar--header">
+          <span>
+            Thống kê
+          </span>
+          <span>
+            
+          </span>
         </div>
       </div>
       <DataTable

@@ -83,7 +83,7 @@ const ManagePushNotification = () => {
           textToolTip="Ngày tạo của thông báo"
         />
       ),
-      dataIndex: "",
+      dataIndex: "date_create",
       key: "date_create",
       width: 20,
     },
@@ -222,6 +222,7 @@ const ManagePushNotification = () => {
   const onActive = (id, active) => {};
   const onDelete = (id) => {};
 
+  console.log("check dataNotifications", dataNotifications);
   /* ~~~ Main ~~~ */
   return (
     <div className="manage-push-notification">
