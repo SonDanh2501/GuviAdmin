@@ -22,6 +22,8 @@ import {
 } from "recharts";
 import { number_processing } from "../../../../../helper/numberProcessing";
 import { CaretDownOutlined, CaretUpOutlined } from "@ant-design/icons";
+import ButtonCustom from "../../../../../components/button";
+import { exportToExcel } from "../../../../../utils/contant";
 
 const { IoReceipt, IoCash, IoTrendingUp, IoHappy } = icons;
 
@@ -436,6 +438,18 @@ const ReportOrderDoneDaily = () => {
     );
   };
 
+  const leftContent = () => {
+    return (
+      <div>
+        <ButtonCustom
+          label="Xuất Excel"
+          customColor="green"
+          onClick={() => exportToExcel(listData, "Bao_cao_doanh_thu")}
+        />
+      </div>
+    );
+  }
+
   /* ~~~ Main ~~~ */
   return (
     <div className="report-order-daily-revenue">
@@ -528,6 +542,7 @@ const ReportOrderDoneDaily = () => {
               moment(previousStartDate).format("DD/MM/YYYY"),
               moment(previousEndDate).format("DD/MM/YYYY")
             )}
+            leftContent={leftContent()}
           />
         </div>
       </div>

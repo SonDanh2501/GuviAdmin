@@ -48,7 +48,14 @@ const CustomHeaderDatatable = ({
                 ? "right"
                 : "center"
             }`}
-            style={{ color: title === "Doanh thu" ? "#eab308" : "white" }}
+            style={{
+              color:
+                title === "Doanh thu"
+                  ? "#FFE100"
+                  : title === "Doanh thu dự kiến"
+                  ? "#FFE100"
+                  : "white",
+            }}
           >
             {typeSubValue === "money"
               ? formatMoney(subValue)

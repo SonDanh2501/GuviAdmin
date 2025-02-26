@@ -243,15 +243,8 @@ const DataTable = (props) => {
             break;
           // Ngày tạo của sổ quỹ
           case "date_create":
-            const url = `${window.location.origin}/${item?.navigate}`;
             return (
               <div
-                onClick={() =>
-                  window.open(
-                    `${url}?start_date=${data["time_start_report"]}&end_date=${data["time_end_report"]}`,
-                    "_blank"
-                  )
-                }
                 className={`case__date-create ${item?.fontSize} ${
                   item?.position === "center" && "center"
                 }`}
@@ -2259,6 +2252,30 @@ const DataTable = (props) => {
             );
             break;
           }
+          case "date_navigate": {
+            const url = `${window.location.origin}/${item?.navigate}`;
+            return (
+              <div
+                onClick={() =>
+                  window.open(
+                    `${url}?start_date=${data["time_start_report"]}&end_date=${data["time_end_report"]}`,
+                    "_blank"
+                  )
+                }
+                className={`case__date-create ${item?.fontSize} ${
+                  item?.position === "center" && "center"
+                }`}
+              >
+                <span className="case__date-create-date">
+                  {moment(new Date(data[item.dataIndex])).format("DD/MM/YYYY")}
+                </span>
+                <span className="case__date-create-time">
+                  {moment(new Date(data[item.dataIndex])).format("HH:mm:ss")}
+                </span>
+              </div>
+            );
+            break;
+          }
           default: {
             return (
               <Tooltip placement="top" title={data[item.dataIndex]}>
@@ -2272,15 +2289,6 @@ const DataTable = (props) => {
                   </span>
                 </div>
               </Tooltip>
-              // <div
-              //   className={`case__normal-text ${
-              //     item.position === "center" && "center"
-              //   }`}
-              // >
-              //   <span className="case__normal-text--label">
-              //     {data[item.dataIndex] || ""}
-              //   </span>
-              // </div>
             );
           }
         }

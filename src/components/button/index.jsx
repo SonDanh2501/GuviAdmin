@@ -12,13 +12,12 @@ const ButtonCustom = (props) => {
     onClick,
     disable,
     style,
-    isCheckButton,
     options,
     value,
     setValueSelectedProps,
-    total,
     fullScreen,
     borderRadiusFull,
+    customColor,
   } = props;
   const [open, setOpen] = useState(false);
   const content = (
@@ -26,7 +25,7 @@ const ButtonCustom = (props) => {
       {options?.map((item, index) => (
         <div
           onClick={() => {
-            handldeSelected(item.code);
+            handleSelected(item.code);
           }}
           // style={{ borderRadius: "6px" }}
           // className={`${
@@ -84,7 +83,7 @@ const ButtonCustom = (props) => {
       </div>
     ) : null;
 
-  /* ~~~ Support fucntion ~~~ */
+  /* ~~~ Support function ~~~ */
   const handleOpen = (newOpen) => {
     setOpen(newOpen);
   };
@@ -92,9 +91,9 @@ const ButtonCustom = (props) => {
     // setSearchInput("");
     setOpen(false);
   };
-  /* ~~~ Handle fucntion ~~~ */
+  /* ~~~ Handle function ~~~ */
   // 1. Hàm xử lí khi type === "select"
-  const handldeSelected = (valueSelect) => {
+  const handleSelected = (valueSelect) => {
     // options.map((el) => {
     //   if (el.value === valueSelect) setSelectValue(el.label);
     // });
@@ -116,7 +115,7 @@ const ButtonCustom = (props) => {
         setValueSelectedProps([...value, valueSelect]);
       }
     }
-  }
+  };
   return (
     <div>
       {!options ? (
@@ -127,7 +126,7 @@ const ButtonCustom = (props) => {
             style === "normal" && "normal"
           } ${fullScreen && "full-screen"} ${
             borderRadiusFull && "border-full"
-          }`}
+          } ${customColor && customColor}`}
         >
           {label}
         </button>

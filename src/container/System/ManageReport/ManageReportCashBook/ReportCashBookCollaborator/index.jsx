@@ -11,6 +11,8 @@ import {
   getDetailReportCashBookCollaboratorApi,
   getReportCashBookCollaboratorApi,
 } from "../../../../../api/report";
+import { exportToExcel } from "../../../../../utils/contant";
+import ButtonCustom from "../../../../../components/button";
 
 const { IoReceipt, IoCash, IoTrendingUp, IoHappy } = icons;
 
@@ -136,7 +138,12 @@ const ReportCashBookCollaborator = () => {
   };
   /* ~~~ Use effect ~~~ */
   useEffect(() => {
-    fetchDataReportCashBookCollaborator({ start, lengthPage, startDate, endDate });
+    fetchDataReportCashBookCollaborator({
+      start,
+      lengthPage,
+      startDate,
+      endDate,
+    });
   }, [start, lengthPage, start, endDate]);
   // 3. Tính toán thời gian của kỳ trước dựa trên kỳ hiện tại
   useEffect(() => {
@@ -177,6 +184,18 @@ const ReportCashBookCollaborator = () => {
     );
   };
 
+  const leftContent = () => {
+    return (
+      <div>
+        <ButtonCustom
+          label="Xuất Excel"
+          customColor="green"
+          onClick={() => exportToExcel(listData, "Bao_cao_thu_chi_doi_tac")}
+        />
+      </div>
+    );
+  };
+
   console.log("check listTotalStatistic", listTotalStatistic);
   return (
     <div className="report-order-daily-revenue">
@@ -197,7 +216,9 @@ const ReportCashBookCollaborator = () => {
                 Tổng thu
               </span>
               <span className="report-order-daily-revenue__header--total-statistic-child-value-numer">
-                {formatMoney(listTotalStatistic?.total_income_from_collaborators)}
+                {formatMoney(
+                  listTotalStatistic?.total_income_from_collaborators
+                )}
               </span>
             </div>
           </div>
@@ -213,7 +234,9 @@ const ReportCashBookCollaborator = () => {
                 Tổng chi
               </span>
               <span className="report-order-daily-revenue__header--total-statistic-child-value-numer">
-                {formatMoney(listTotalStatistic?.total_expenses_for_collaborators)}
+                {formatMoney(
+                  listTotalStatistic?.total_expenses_for_collaborators
+                )}
               </span>
             </div>
           </div>
@@ -229,6 +252,7 @@ const ReportCashBookCollaborator = () => {
               moment(previousStartDate).format("DD/MM/YYYY"),
               moment(previousEndDate).format("DD/MM/YYYY")
             )}
+            leftContent={leftContent()}
           />
         </div>
       </div>
