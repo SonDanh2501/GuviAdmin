@@ -90,6 +90,7 @@ const CreateOrder = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const service = useSelector(getService);
+
   /* ~~~ Value ~~~ */
   const [selectService, setSelectService] = useState(null);
   const [serviceData, setServiceData] = useState(null);
@@ -106,7 +107,6 @@ const CreateOrder = () => {
   const [serviceFee, setServiceFee] = useState(0);
   const [totalFee, setTotalFee] = useState(0);
   const [finalFee, setFinalFee] = useState(0);
-  const [tipCollaborator, setTipCollaborator] = useState(0);
   const [netIncomeCollaborator, setNetIncomeCollaborator] = useState(0);
   const [platformFee, setPlatformFee] = useState(0);
   const [totalDiscount, setTotalDiscount] = useState(0);
@@ -120,17 +120,28 @@ const CreateOrder = () => {
   const [isChoicePaymentMethod, setIsChoicePaymentMethod] = useState(true);
   const [modal, setModal] = useState(false);
   const [infoBill, setInfoBill] = useState();
-  // SON Value
   const [collaborator, setCollaborator] = useState(null); // Giá trị thông tin id của đối tác
   const [tempValueCollaborator, setTempValueCollaborator] = useState(""); // Giá trị để hiển thị họ tên - mã đối tác - số điện thoại của đối tác (cần có cái này vì giá trị truyền lên api chỉ là id của đối tác)
   const [selectCustomerValue, setSelectCustomerValue] = useState(""); // Giá trị thông tin khách hàng lựa chọn
   const [selectAddressValueTemp, setSelectAddressValueTemp] = useState(""); // Giá trị thông tin địa chỉ của khách hàng để hiển thị
   const [newAddressValue, setNewAddressValue] = useState(null); // Giá trị thông tin địa chỉ của khách hàng để tạo địa chỉ mặc định
-  const [valueAddrressEncode, setValueAddressEncode] = useState(null); // Giá trị thông tin địa chỉ của khách hàng nhưng sau khi encode
+  const [valueAddressEncode, setValueAddressEncode] = useState(null); // Giá trị thông tin địa chỉ của khách hàng nhưng sau khi encode
   const [valueNoteForCollaborator, setValueNoteForCollaborator] = useState(""); // Giá trị thông tin ghi chú cho đối tác (nếu có)
   const [valueSubtotalFee, setValueSubTotalFee] = useState(""); // Giá trị đơn hàng
   const [valueTax, setValueTax] = useState(""); // Giá trị thuế
   const [valueNetIncome, setValueNetIncome] = useState(""); // Giá trị thu nhập ròng
+  const [tipCollaborator, setTipCollaborator] = useState(0); // Giá trị tiền típ của khách hàng
+  const [valueTipCollaboratorTemp, setValueTipCollaboratorTemp] = useState(0); // Giá trị tiền tip của khách hàng (giá trị tạm)
+
+  /* ~~~ Flag ~~~ */
+  const [isShowCollaborator, setIsShowCollaborator] = useState(false); // Hiển thị danh sách những đối tác yêu thích
+  const [isShowAddressDefault, setIsShowAddressDefault] = useState(true); // Hiển thị danh sách những địa chỉ mặc định của khách hàng
+  const [isShowTipCollaborator, setIsShowTipCollaborator] = useState(false); // Hiển thị tiền tip cho đối tác
+  const [isShowAddressSearch, setIsShowAddressSearch] = useState(true); // Hiển thị danh sách những địa chỉ đã tìm kiếm
+  const [isDetailBill, setIsDetailBill] = useState(false); // Hiển thị chi tiết hóa đơn
+  const [isAllowClickTip, setIsAllowClickTip] = useState(true); // Cờ cho phép nhấn tiền tip
+  const [isAutoOrder, setIsAutoOrder] = useState(false); // Cờ có lặp lại hay không
+
   /* ~~~ List ~~~ */
   const [listCustomer, setListCustomer] = useState([]); // Giá trị danh sách những khách hàng tìm kiếm
   const [listAddress, setListAddress] = useState([]); // Giá trị danh sách những địa chỉ đã tìm kiếm
@@ -142,27 +153,9 @@ const CreateOrder = () => {
     { id: 2, amount: 10000 },
     { id: 3, amount: 20000 },
     { id: 4, amount: 50000 },
-  ]; // Một vài giá trị tiền típ nhanh
+  ];
 
-  /* ~~~ Flag ~~~ */
-  const [isShowCollaborator, setIsShowCollaborator] = useState(false); // Hiển thị danh sách những đối tác yêu thích
-  const [isShowAddressDefault, setIsShowAddressDefault] = useState(true); // Hiển thị danh sách những địa chỉ mặc định của khách hàng
-  const [isShowTipCollaborator, setIsShowTipCollaborator] = useState(false); // Hiển thị tiền tip cho đối tác
-  const [isShowAddressSearch, setIsShowAddressSearch] = useState(true); // Hiển thị danh sách những địa chỉ đã tìm kiếm
-  const [isDetailBill, setIsDetailBill] = useState(false); // Hiển thị chi tiết hóa đơn
-  const [isAllowClickTip, setIsAllowClickTip] = useState(true); // Cờ cho phép nhấn tiền tip
-  const [isAutoOrder, setIsAutoOrder] = useState(false); // Cờ có lặp lại hay không
   /* ~~~ Handle function ~~~ */
-  // const getDataListCustomer = async (search) => {
-  //   const res = await searchCustomersApi(search);
-  //   setListCustomer(res.data);
-  // };
-  // const handleSearchCustomer = useCallback(
-  //   _debounce((newValue) => {
-  //     getDataListCustomer(newValue);
-  //   }, 500),
-  //   []
-  // );
   // 1. Hàm tìm kiếm khách hàng
   const handleSearchCustomer = useCallback(
     _.debounce(async (value) => {
@@ -273,7 +266,7 @@ const CreateOrder = () => {
   const handleAddNewAddressCustomer = async () => {
     try {
       const data = {
-        token: valueAddrressEncode.toString(),
+        token: valueAddressEncode.toString(),
         type_address_work: "house",
         note_address: "",
         address: "",
@@ -323,41 +316,7 @@ const CreateOrder = () => {
       dispatch(loadingAction.loadingRequest(false));
     }
   };
-  // Hàm tính toán tiền của đơn hàng
-  // const calculateFeeGroupOrder = async (payload) => {
-  //   getCalculateFeeApi(payload)
-  //     .then((res) => {
-  //       // console.log("ress caculate ", res);
-  // setListEventPromotion(res?.event_promotion);
-  // setResultCodePromotion(res?.code_promotion);
-  // setTotalFee(res?.total_fee);
-  // setInitialFee(res?.initial_fee);
-  // setFinalFee(res?.final_fee);
-  // setTipCollaborator(res?.tip_collaborator);
-  // setInfoBill({
-  //   info: res,
-  //   date_work_schedule: res?.date_work_schedule,
-  // });
-  // setValueSubTotalFee(res?.subtotal_fee);
-  // setValueNetIncome(res?.net_income);
-  // setValueTax(res?.value_added_tax);
-  // // ------------------------- tính giá trị service fee--------------------------------------- //
-  // let _service_fee = 0;
-  // res?.service_fee?.map((item) => {
-  //   _service_fee += item?.fee;
-  // });
-  // setServiceFee(_service_fee);
-  // })
-  //     .catch((err) => {
-  //       console.log("err ", err);
-  // if (err?.field === "code_promotion") {
-  //   setSelectCodePromotion(null);
-  // }
-  //       errorNotify({
-  //         message: err?.message,
-  //       });
-  //     });
-  // };
+
   const calculateFeeGroupOrder = async (payload) => {
     try {
       const res = await getCalculateFeeApi(payload);
@@ -390,6 +349,7 @@ const CreateOrder = () => {
   };
 
   /* ~~~ Use effect ~~~ */
+
   useEffect(() => {
     if (selectService !== null) {
       getDataOptionalService();
@@ -410,6 +370,7 @@ const CreateOrder = () => {
     OnResetFees();
     OnResetPromotion();
   }, [selectService]);
+
   // Fetch những giá trị của khách hàng: địa chỉ đã lưu, đối tác ưu thích
   useEffect(() => {
     if (
@@ -423,17 +384,11 @@ const CreateOrder = () => {
       setIsShowCollaborator(true);
     }
   }, [selectCustomerValue]);
-  // useEffect(() => {
-  //   listAddressDefault.map((item) => {
-  //     if (item.is_default_address) {
-  //       handleChangeAddress(item._id);
-  //     }
-  //   });
-  // }, [listAddressDefault]);
+
   useEffect(() => {
     if (
       serviceData !== null &&
-      valueAddrressEncode !== null &&
+      valueAddressEncode !== null &&
       listExtend.length > 0 &&
       selectCustomerValue !== null &&
       paymentMethod !== null
@@ -441,7 +396,7 @@ const CreateOrder = () => {
       let tempPayload = {};
       tempPayload["type"] = serviceData.type;
       tempPayload["is_auto_order"] = isAutoOrder;
-      tempPayload["token"] = valueAddrressEncode.toString();
+      tempPayload["token"] = valueAddressEncode.toString();
       tempPayload["extend_optional"] = listExtend;
       tempPayload["id_customer"] = selectCustomerValue;
       tempPayload["date_work_schedule"] = dateWorkSchedule;
@@ -456,7 +411,7 @@ const CreateOrder = () => {
       setPayloadOrder(tempPayload);
     }
   }, [
-    valueAddrressEncode,
+    valueAddressEncode,
     listExtend,
     selectCustomerValue,
     dateWorkSchedule,
@@ -468,12 +423,13 @@ const CreateOrder = () => {
     tipCollaborator,
     isAutoOrder,
   ]);
+
   useEffect(() => {
     if (
       serviceData !== null &&
       selectCustomerValue !== null &&
       dateWorkSchedule.length > 0 &&
-      valueAddrressEncode !== null
+      valueAddressEncode !== null
     ) {
       calculateFeeGroupOrder(payloadOrder);
       getDataCodePromotionAvaiable();
@@ -485,6 +441,7 @@ const CreateOrder = () => {
       // }
     }
   }, [payloadOrder]);
+
   useEffect(() => {
     let _total_discount = 0;
     listEventPromotion?.map((item) => {
@@ -493,6 +450,7 @@ const CreateOrder = () => {
     _total_discount += resultCodePromotion?.discount | 0;
     setTotalDiscount(_total_discount);
   }, [listEventPromotion, resultCodePromotion, infoBill]);
+
   useEffect(() => {
     if (selectAddressValueTemp.trim() !== "") {
       if (isShowAddressDefault) {
@@ -508,6 +466,7 @@ const CreateOrder = () => {
       }
     }
   }, [selectAddressValueTemp]);
+
   useEffect(() => {
     if (service.length > 0) {
       setSelectService(service[1]._id);
@@ -515,6 +474,12 @@ const CreateOrder = () => {
     OnResetFees();
     OnResetPromotion();
   }, [service]);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setTipCollaborator(valueTipCollaboratorTemp);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [valueTipCollaboratorTemp]);
   /* ~~~ Other ~~~ */
   const OnResetFees = () => {
     setInitialFee(0);
@@ -631,10 +596,12 @@ const CreateOrder = () => {
     if (isAllowClickTip) {
       if (_amount === tipCollaborator) {
         setTipCollaborator(0);
+        setValueTipCollaboratorTemp(0);
       } else {
         setTipCollaborator(_amount);
+        setValueTipCollaboratorTemp(_amount);
         setIsAllowClickTip(false);
-        setTimeout(() => setIsAllowClickTip(true), 3000); // Bật lại sau 5 giây
+        setTimeout(() => setIsAllowClickTip(true), 3000);
       }
     } else {
       return;
@@ -652,7 +619,6 @@ const CreateOrder = () => {
     setIsShowAddressDefault(checked);
   };
 
-  console.log("check listLoopDateOfWeek", listLoopDateOfWeek);
   /* ~~~ Main ~~~ */
   return (
     <div className="container-create-order">
@@ -878,11 +844,11 @@ const CreateOrder = () => {
           </div>
           <InputTextCustom
             type="text"
-            value={tipCollaborator}
-            placeHolder="Tiền tip"
+            value={valueTipCollaboratorTemp}
+            placeHolderNormal="Tiền tip"
             isNumber={true}
             onChange={(e) =>
-              setTipCollaborator(clearFormatNumber(e.target.value))
+              setValueTipCollaboratorTemp(clearFormatNumber(e.target.value))
             }
           />
         </div>
@@ -942,7 +908,7 @@ const CreateOrder = () => {
             serviceData !== null &&
             selectCustomerValue !== null &&
             dateWorkSchedule.length > 0 &&
-            valueAddrressEncode !== null
+            valueAddressEncode !== null
               ? false
               : true
           }

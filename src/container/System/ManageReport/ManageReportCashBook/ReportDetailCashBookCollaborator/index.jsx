@@ -43,7 +43,7 @@ const ReportDetailCashBookCollaborator = () => {
     {
       customTitle: <CustomHeaderDatatable title="Ngày bắt đầu" />,
       dataIndex: "time_start_report",
-      key: "date_create",
+      key: "date_navigate",
       width: 100,
       position: "center",
       fontSize: "cursor-pointer",
