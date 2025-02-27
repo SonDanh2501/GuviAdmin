@@ -26,6 +26,8 @@ import {
 } from "recharts";
 import { number_processing } from "../../../../../helper/numberProcessing";
 import { CaretDownOutlined, CaretUpOutlined } from "@ant-design/icons";
+import ButtonCustom from "../../../../../components/button";
+import { exportToExcel } from "../../../../../utils/contant";
 
 const { IoReceipt, IoCash, IoTrendingUp, IoHappy } = icons;
 
@@ -101,6 +103,7 @@ const ReportOrderActivity = () => {
       : 20
   );
   const [headerChartsOrder, setHeaderChartsOrder] = useState(headerDefault);
+
   /* ~~~ Value ~~~ */
   const [startPage, setStartPage] = useState(0); // Giá trị trang bắt đầu
   const [totalItem, setTotalItem] = useState(0); // Giá trị tổng số lượng item
@@ -108,6 +111,7 @@ const ReportOrderActivity = () => {
   const [endDate, setEndDate] = useState(""); // Giá trị ngày kết thúc
   const [previousStartDate, setPreviousStartDate] = useState(""); // Giá trị ngày bắt đầu của kì trước
   const [previousEndDate, setPreviousEndDate] = useState(""); // Giá trị ngày kết thúc của kì trước
+
   /* ~~~ List ~~~ */
   const [listData, setListData] = useState([]);
   const [listTotalStatistic, setListTotalStatistic] = useState([]);
@@ -139,14 +143,14 @@ const ReportOrderActivity = () => {
       key: "id_date_work",
       width: 100,
       position: "center",
-      navigate: "/report/manage-report/report-detail-revenue",
+      navigate: "/report/manage-report/report-detail-order-activity",
     },
     {
       customTitle: (
         <CustomHeaderDatatable
           title="Số đơn hàng"
-          subValue={listTotalStatistic?.total_item}
           typeSubValue="number"
+          subValue={listTotalStatistic?.total_orders_created}
         />
       ),
       dataIndex: "total_orders_created",
@@ -160,10 +164,10 @@ const ReportOrderActivity = () => {
           title="Tổng giá trị giao dịch dự kiến"
           typeSubValue="money"
           textToolTip="GMV - Gross Merchandise Volume"
-          subValue={listTotalStatistic?.total_fee}
+          subValue={listTotalStatistic?.total_gmv}
         />
       ),
-      dataIndex: "total_gmv_done",
+      dataIndex: "total_gmv",
       key: "money",
       width: 210,
     },
@@ -171,71 +175,132 @@ const ReportOrderActivity = () => {
       customTitle: (
         <CustomHeaderDatatable
           title="Thu hộ dịch vụ dự kiến"
-          subValue={listTotalStatistic?.total_net_income_new}
           typeSubValue="money"
           textToolTip="Bao gồm phí dịch vụ trả đối tác: tiền tip từ khách,..."
+          subValue={
+            listTotalStatistic?.total_projected_service_collection_amount
+          }
         />
       ),
-      dataIndex: "total_service_collection_amount_done",
+      dataIndex: "total_projected_service_collection_amount",
       key: "money",
       width: 200,
     },
     {
       customTitle: (
         <CustomHeaderDatatable
-          title="Tiền hoàn lại"
-          subValue={listTotalStatistic?.total_net_income_new}
+          title="Doanh thu dự kiến"
           typeSubValue="money"
-          textToolTip="Chưa có"
+          textToolTip="Doanh thu = Tổng giá trị giao dịch (-) Thu hộ dịch vụ"
+          subValue={listTotalStatistic?.total_projected_revenue}
         />
       ),
-      dataIndex: "total_net_income_new",
+      dataIndex: "total_projected_revenue",
       key: "money",
       width: 150,
     },
-    // {
-    //   customTitle: (
-    //     <CustomHeaderDatatable
-    //       title="Doanh thu dự kiến"
-    //       subValue={
-    //         listTotalStatistic?.total_fee -
-    //           listTotalStatistic?.total_net_income_new || null
-    //       }
-    //       typeSubValue="money"
-    //       textToolTip="Doanh thu = Tổng giá trị giao dịch (-) Thu hộ dịch vụ"
-    //     />
-    //   ),
-    //   dataIndex: "total_revenue_done",
-    //   key: "money",
-    //   width: 120,
-    // },
+
     {
       customTitle: (
         <CustomHeaderDatatable
-          title="Giảm giá"
-          subValue={listTotalStatistic?.total_discount_new || null}
+          title="Giảm giá dự kiến"
           typeSubValue="money"
           textToolTip="Tổng số tiền giảm giá từ: giảm giá dịch vụ, giảm giá đơn hàng, đồng giá, ctkm,…"
+          subValue={listTotalStatistic?.total_projected_discount || null}
         />
       ),
-      dataIndex: "total_discount_done",
+      dataIndex: "total_projected_discount",
       key: "money",
-      width: 100,
+      width: 150,
+    },
+    {
+      customTitle: (
+        <CustomHeaderDatatable
+          title="Thanh toán bằng ngân hàng"
+          typeSubValue="money"
+          textToolTip="Doanh thu = Tổng giá trị giao dịch (-) Thu hộ dịch vụ"
+          subValue={listTotalStatistic?.total_money_payment_method_from_bank}
+        />
+      ),
+      dataIndex: "total_money_payment_method_from_bank",
+      key: "money",
+      width: 200,
+    },
+    {
+      customTitle: (
+        <CustomHeaderDatatable
+          title="Thanh toán bằng VNPAY-QR"
+          typeSubValue="money"
+          textToolTip="Doanh thu = Tổng giá trị giao dịch (-) Thu hộ dịch vụ"
+          subValue={listTotalStatistic?.total_money_payment_method_from_vnpay}
+        />
+      ),
+      dataIndex: "total_money_payment_method_from_vnpay",
+      key: "money",
+      width: 200,
+    },
+    {
+      customTitle: (
+        <CustomHeaderDatatable
+          title="Thanh toán bằng VNPAY-ATM"
+          typeSubValue="money"
+          textToolTip="Doanh thu = Tổng giá trị giao dịch (-) Thu hộ dịch vụ"
+          subValue={listTotalStatistic?.total_money_payment_method_from_vnbank}
+        />
+      ),
+      dataIndex: "total_money_payment_method_from_vnbank",
+      key: "money",
+      width: 210,
+    },
+    {
+      customTitle: (
+        <CustomHeaderDatatable
+          title="Thanh toán bằng thẻ quốc tế"
+          typeSubValue="money"
+          textToolTip="Doanh thu = Tổng giá trị giao dịch (-) Thu hộ dịch vụ"
+          subValue={listTotalStatistic?.total_money_payment_method_from_intcard}
+        />
+      ),
+      dataIndex: "total_money_payment_method_from_intcard",
+      key: "money",
+      width: 210,
+    },
+    {
+      customTitle: (
+        <CustomHeaderDatatable
+          title="Thanh toán bằng momo"
+          typeSubValue="money"
+          textToolTip="Doanh thu = Tổng giá trị giao dịch (-) Thu hộ dịch vụ"
+          subValue={listTotalStatistic?.total_money_payment_method_from_momo}
+        />
+      ),
+      dataIndex: "total_money_payment_method_from_momo",
+      key: "money",
+      width: 200,
+    },
+    {
+      customTitle: (
+        <CustomHeaderDatatable
+          title="Thanh toán bằng tiền mặt"
+          typeSubValue="money"
+          textToolTip="Doanh thu = Tổng giá trị giao dịch (-) Thu hộ dịch vụ"
+          subValue={listTotalStatistic?.total_money_payment_method_from_cash}
+        />
+      ),
+      dataIndex: "total_money_payment_method_from_cash",
+      key: "money",
+      width: 200,
     },
     {
       customTitle: (
         <CustomHeaderDatatable
           title="Doanh thu thuần dự kiến"
-          subValue={
-            listTotalStatistic?.total_fee -
-              listTotalStatistic?.total_net_income_new -
-              listTotalStatistic?.total_discount_new || null
-          }
           typeSubValue="money"
           textToolTip="Số tiền thu được sau khi trừ toàn bộ các giảm giá. Doanh thu thuần = Doanh thu (-) Giảm giá."
+          subValue={listTotalStatistic?.total_projected_net_revenue}
         />
       ),
-      dataIndex: "net_revenue",
+      dataIndex: "total_projected_net_revenue",
       key: "money",
       width: 200,
     },
@@ -243,15 +308,12 @@ const ReportOrderActivity = () => {
       customTitle: (
         <CustomHeaderDatatable
           title="Tổng hóa đơn dự kiến"
-          subValue={
-            listTotalStatistic?.total_fee -
-              listTotalStatistic?.total_discount_new || null
-          }
           typeSubValue="money"
           textToolTip="Tổng số tiền ghi nhận trên hoá đơn dịch vụ. Tổng hoá đơn = Tổng tiền - giảm giá."
+          subValue={listTotalStatistic?.total_projected_invoice}
         />
       ),
-      dataIndex: "invoice",
+      dataIndex: "total_projected_invoice",
       key: "money",
       width: 170,
     },
@@ -270,62 +332,53 @@ const ReportOrderActivity = () => {
     {
       customTitle: (
         <CustomHeaderDatatable
-          title="Phí áp dụng"
-          subValue={listTotalStatistic?.total_service_fee}
+          title="Phí áp dụng dự kiến"
           typeSubValue="money"
+          subValue={listTotalStatistic?.total_projected_applied_fees}
         />
       ),
-      dataIndex: "total_service_fee",
-      key: "money",
-      width: 100,
-    },
-    {
-      customTitle: (
-        <CustomHeaderDatatable
-          title="Thuế"
-          subValue={listTotalStatistic?.total_tax}
-          typeSubValue="money"
-        />
-      ),
-      dataIndex: "total_tax",
-      key: "money",
-      width: 100,
-    },
-    {
-      customTitle: (
-        <CustomHeaderDatatable
-          title="Tổng lợi nhuận"
-          subValue={
-            listTotalStatistic?.total_fee -
-              listTotalStatistic?.total_net_income_new -
-              listTotalStatistic?.total_discount_new || null
-          }
-          typeSubValue="money"
-          textToolTip="Tổng lợi nhuận = Doanh thu thuần (+) thu nhập khác"
-        />
-      ),
-      dataIndex: "net_revenue",
+      dataIndex: "total_projected_applied_fees",
       key: "money",
       width: 150,
+    },
+    {
+      customTitle: (
+        <CustomHeaderDatatable
+          title="Thuế dự kiến"
+          typeSubValue="money"
+          subValue={listTotalStatistic?.total_projected_value_added_tax}
+        />
+      ),
+      dataIndex: "total_projected_value_added_tax",
+      key: "money",
+      width: 100,
+    },
+    {
+      customTitle: (
+        <CustomHeaderDatatable
+          title="Tổng lợi nhuận dự kiến"
+          typeSubValue="money"
+          textToolTip="Tổng lợi nhuận = Doanh thu thuần (+) thu nhập khác"
+          subValue={listTotalStatistic?.total_projected_profit}
+        />
+      ),
+      dataIndex: "total_projected_profit",
+      key: "money",
+      width: 200,
     },
 
     {
       customTitle: (
         <CustomHeaderDatatable
-          title="Lợi nhuận sau thuế"
-          subValue={
-            listTotalStatistic?.total_fee -
-              listTotalStatistic?.total_net_income_new -
-              listTotalStatistic?.total_discount_new -
-              listTotalStatistic?.total_tax || null
-          }
+          title="Lợi nhuận sau thuế dự kiến"
           typeSubValue="money"
           textToolTip="Lợi nhuận sau thuế = Tổng lợi nhuận (-) Thuế"
+          subValue={listTotalStatistic?.total_projected_profit_after_tax}
         />
       ),
-      dataIndex: "profit_after_tax",
+      dataIndex: "total_projected_profit_after_tax",
       key: "money",
-      width: 170,
+      width: 200,
     },
     {
       customTitle: (
@@ -335,24 +388,41 @@ const ReportOrderActivity = () => {
           textToolTip="% Lợi nhuận = Lời nhuận sau thuế (/) Tổng lời nhuận"
         />
       ),
-      dataIndex: "percent_income_envenue",
+      dataIndex: "profit_percentage_done",
       key: "percent",
       width: 120,
       position: "center",
     },
+    {
+      customTitle: (
+        <CustomHeaderDatatable
+          title="Tiền hoàn lại"
+          typeSubValue="money"
+          textToolTip="Chưa có"
+          subValue={listTotalStatistic?.total_money_canceled}
+        />
+      ),
+      dataIndex: "total_money_canceled",
+      key: "money",
+      width: 150,
+    },
   ];
+
   /* ~~~ Handle function ~~~ */
   // 1. Hàm fetch dữ liệu của bảng
   const fetchReportOrderDaily = async (payload) => {
     try {
       setIsLoading(true);
       const res = await getReportOrderActivityApi(
-        payload.start,
+        payload.startPage,
         payload.lengthPage,
         payload.startDate,
         payload.endDate
       );
-      setListData(res?.data)
+      console.log("chheck res", res);
+      setListData(res?.data);
+      setListTotalStatistic(res.totalItem[0]);
+      setTotalItem(res?.total);
       setIsLoading(false);
     } catch (err) {
       errorNotify({
@@ -399,6 +469,7 @@ const ReportOrderActivity = () => {
   //   ]);
   //   visualizationDataOrder(arrGetResult[0], arrGetResult[1]);
   // };
+
   /* ~~~ Use effect ~~~ */
   // 1. Fetch dữ liệu của bảng
   useEffect(() => {
@@ -422,6 +493,7 @@ const ReportOrderActivity = () => {
       setPreviousEndDate(new Date(tempSameEndDate).toISOString());
     }
   }, [startDate, endDate]);
+
   /* ~~~ Other ~~~ */
   const rightContent = (
     startDate,
@@ -448,6 +520,19 @@ const ReportOrderActivity = () => {
       </div>
     );
   };
+
+  const leftContent = () => {
+    return (
+      <div>
+        <ButtonCustom
+          label="Xuất Excel"
+          customColor="green"
+          onClick={() => exportToExcel(listData, "Bao_cao_hoat_dong_don_hang")}
+        />
+      </div>
+    );
+  };
+
   /* ~~~ Main ~~~ */
   return (
     <div className="report-order-daily-revenue">
@@ -539,6 +624,7 @@ const ReportOrderActivity = () => {
               moment(previousStartDate).format("DD/MM/YYYY"),
               moment(previousEndDate).format("DD/MM/YYYY")
             )}
+            leftContent={leftContent()}
           />
         </div>
       </div>

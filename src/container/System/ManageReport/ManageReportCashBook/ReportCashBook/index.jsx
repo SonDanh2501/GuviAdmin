@@ -6,7 +6,12 @@ import moment from "moment";
 import icons from "../../../../../utils/icons";
 import { formatMoney } from "../../../../../helper/formatMoney";
 import { errorNotify } from "../../../../../helper/toast";
-import { getDetailReportCashBookApi, getReportCashBookApi } from "../../../../../api/report";
+import {
+  getDetailReportCashBookApi,
+  getReportCashBookApi,
+} from "../../../../../api/report";
+import ButtonCustom from "../../../../../components/button";
+import { exportToExcel } from "../../../../../utils/contant";
 
 const { IoReceipt, IoCash, IoTrendingUp, IoHappy } = icons;
 
@@ -156,6 +161,18 @@ const ReportCashBook = () => {
     );
   };
 
+  const leftContent = () => {
+    return (
+      <div>
+        <ButtonCustom
+          label="Xuất Excel"
+          customColor="green"
+          onClick={() => exportToExcel(listData, "Bao_cao_thu_chi")}
+        />
+      </div>
+    );
+  };
+
   return (
     <div className="report-order-daily-revenue">
       <div className="report-order-daily-revenue__header">
@@ -239,6 +256,7 @@ const ReportCashBook = () => {
               moment(previousStartDate).format("DD/MM/YYYY"),
               moment(previousEndDate).format("DD/MM/YYYY")
             )}
+            leftContent={leftContent()}
           />
         </div>
       </div>

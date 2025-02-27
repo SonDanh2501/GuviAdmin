@@ -42,8 +42,8 @@
       align-items: center;
       justify-content: center;
       gap: $gapXS;
-      font-size: $textFontSizeM;
-      font-weight: $fontWeightL;
+      font-size: $textFontSizeL;
+      font-weight: $fontWeightL !important;
     }
   }
 

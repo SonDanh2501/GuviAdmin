@@ -12,6 +12,8 @@ import {
   getDetailReportCashBookCustomerApi,
   getReportCashBookCustomerApi,
 } from "../../../../../api/report";
+import ButtonCustom from "../../../../../components/button";
+import { exportToExcel } from "../../../../../utils/contant";
 
 const { IoReceipt, IoCash, IoTrendingUp, IoHappy } = icons;
 
@@ -212,6 +214,18 @@ const ReportCashBookCustomer = () => {
     );
   };
 
+  const leftContent = () => {
+    return (
+      <div>
+        <ButtonCustom
+          label="Xuất Excel"
+          customColor="green"
+          onClick={() => exportToExcel(listData, "Bao_cao_thu_chi_khach_hang")}
+        />
+      </div>
+    );
+  };
+
   return (
     <div className="report-order-daily-revenue">
       <div className="report-order-daily-revenue__header">
@@ -231,9 +245,7 @@ const ReportCashBookCustomer = () => {
                 Tổng thu
               </span>
               <span className="report-order-daily-revenue__header--total-statistic-child-value-numer">
-                {formatMoney(
-                  listTotalStatistic?.total_income_from_customers
-                )}
+                {formatMoney(listTotalStatistic?.total_income_from_customers)}
               </span>
             </div>
           </div>
@@ -249,9 +261,7 @@ const ReportCashBookCustomer = () => {
                 Tổng chi
               </span>
               <span className="report-order-daily-revenue__header--total-statistic-child-value-numer">
-                {formatMoney(
-                  listTotalStatistic?.total_expenses_for_customers
-                )}
+                {formatMoney(listTotalStatistic?.total_expenses_for_customers)}
               </span>
             </div>
           </div>
@@ -267,6 +277,7 @@ const ReportCashBookCustomer = () => {
               moment(previousStartDate).format("DD/MM/YYYY"),
               moment(previousEndDate).format("DD/MM/YYYY")
             )}
+            leftContent={leftContent()}
           />
         </div>
       </div>
