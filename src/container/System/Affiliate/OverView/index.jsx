@@ -45,6 +45,7 @@ import affiliateShareImage from "../../../../assets/images/affiliate_share.png";
 import quoteBigImage from "../../../../assets/images/quote_big.svg";
 import waveImage from "../../../../assets/images/wave_affiliate.svg";
 import wavePngImage from "../../../../assets/images/wave_affiliate.png";
+import affiliateWelcomePopupImage from "../../../../assets/images/affiliate_welcome_popup.png";
 
 import { useSelector } from "react-redux";
 import { getUser } from "../../../../redux/selectors/auth";
@@ -673,6 +674,12 @@ const OverView = () => {
           </div>
         )}
       </div>
+      {/* <div className="affiliate-overview__popup">
+        <div className="affiliate-overview__popup--image">
+          <img src={affiliateWelcomePopupImage} alt=""></img>
+          <span>XEM NGAY</span>
+        </div>
+      </div> */}
       <div className="affiliate-overview__navigate">
         <div className="affiliate-overview__navigate--child">
           <div
@@ -1049,47 +1056,47 @@ const OverView = () => {
       </div>
       <div className="affiliate-overview__footer">
         <div className="affiliate-overview__footer--container">
-        <div className="affiliate-overview__footer--container-information">
-          <div className="affiliate-overview__footer--container-information-item">
-            <img src={logoGuvi} alt=""></img>
-          </div>
-          <div className="affiliate-overview__footer--container-information-item">
-            <span>
-              Mã số:&nbsp;<span className="high-light">0317084672</span>
-            </span>
-          </div>
-          <div className="affiliate-overview__footer--container-information-item">
-            <span>
-              Hotline:&nbsp;<span className="high-light">1900.0027</span>
-            </span>
-          </div>
-          <div className="affiliate-overview__footer--container-information-item">
-            <span>
-              Email:&nbsp;
-              <span className="high-light">
-                cskh@guvico.com – marketing@guvico.com
+          <div className="affiliate-overview__footer--container-information">
+            <div className="affiliate-overview__footer--container-information-item">
+              <img src={logoGuvi} alt=""></img>
+            </div>
+            <div className="affiliate-overview__footer--container-information-item">
+              <span>
+                Mã số:&nbsp;<span className="high-light">0317084672</span>
               </span>
-            </span>
+            </div>
+            <div className="affiliate-overview__footer--container-information-item">
+              <span>
+                Hotline:&nbsp;<span className="high-light">1900.0027</span>
+              </span>
+            </div>
+            <div className="affiliate-overview__footer--container-information-item">
+              <span>
+                Email:&nbsp;
+                <span className="high-light">
+                  cskh@guvico.com – marketing@guvico.com
+                </span>
+              </span>
+            </div>
           </div>
-        </div>
-        <div className="affiliate-overview__footer--container-copy-right">
-          <div className="affiliate-overview__footer--container-copy-right-item">
-            <span>
-              @ 2024 Công ty TNHH Giải pháp Công nghệ Guvi​ sở hữu bản quyền.
-            </span>
-          </div>
-          <div
-            onClick={() =>
-              window.open(
-                "https://apps.apple.com/us/app/guvi-gi%C3%BAp-vi%E1%BB%87c-theo-gi%E1%BB%9D/id6443966297",
-                "_blank"
-              )
-            }
-            className="affiliate-overview__footer--container-copy-right-item"
-          >
-            <img src={appleStoreImage} alt=""></img>
-          </div>
-          {/* <Link
+          <div className="affiliate-overview__footer--container-copy-right">
+            <div className="affiliate-overview__footer--container-copy-right-item">
+              <span>
+                @ 2024 Công ty TNHH Giải pháp Công nghệ Guvi​ sở hữu bản quyền.
+              </span>
+            </div>
+            <div
+              onClick={() =>
+                window.open(
+                  "https://apps.apple.com/us/app/guvi-gi%C3%BAp-vi%E1%BB%87c-theo-gi%E1%BB%9D/id6443966297",
+                  "_blank"
+                )
+              }
+              className="affiliate-overview__footer--container-copy-right-item"
+            >
+              <img src={appleStoreImage} alt=""></img>
+            </div>
+            {/* <Link
                         style={{ paddingBottom: "3px" }}
                         to={`/details-order/${item?.id_order?.id_group_order}`}
                         target="_blank"
@@ -1098,20 +1105,19 @@ const OverView = () => {
                           {item?.id_order?.id_view}
                         </span>
                       </Link> */}
-          <div
-            onClick={() =>
-              window.open(
-                "https://play.google.com/store/apps/details?id=com.guvico_customer",
-                "_blank"
-              )
-            }
-            className="affiliate-overview__footer--container-copy-right-item"
-          >
-            <img src={chStoreImage} alt=""></img>
+            <div
+              onClick={() =>
+                window.open(
+                  "https://play.google.com/store/apps/details?id=com.guvico_customer",
+                  "_blank"
+                )
+              }
+              className="affiliate-overview__footer--container-copy-right-item"
+            >
+              <img src={chStoreImage} alt=""></img>
+            </div>
           </div>
         </div>
-        </div>
-
       </div>
     </div>
   );
