@@ -1949,9 +1949,10 @@ const DataTable = (props) => {
               <div
                 className="case__promotion-code"
                 onClick={() =>
-                  navigate("/promotion/manage-setting/edit-promotion", {
-                    state: { id: data?._id },
-                  })
+                  window.open(
+                    `/promotion/manage-setting/edit-promotion/${data?._id}`,
+                    "_blank"
+                  )
                 }
               >
                 {data?.type_promotion === "code" &&

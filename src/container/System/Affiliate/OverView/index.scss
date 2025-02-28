@@ -1090,6 +1090,32 @@ body {
         }
     }
 
+    .affiliate-overview__popup {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 3;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .affiliate-overview__popup--image {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: $borderRadiusXL;
+
+            img {
+                border-radius: $borderRadiusXL
+            }
+
+            // .affiliate-overview__popup--
+        }
+    }
+
     .affiliate-overview__navigate {
         display: flex;
         flex-direction: column;

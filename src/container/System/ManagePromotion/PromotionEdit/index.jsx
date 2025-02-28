@@ -25,7 +25,7 @@ import moment from "moment";
 import "moment/locale/vi";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { getGroupPromotion } from "../../../../api/configuration";
 import { searchCustomersApi } from "../../../../api/customer";
 import { DATA_PAYMENT, DATA_TIME_APPLY } from "../../../../api/fakeData";
@@ -58,8 +58,7 @@ import "./styles.scss";
 const { Option } = Select;
 
 const EditPromotion = () => {
-  const { state } = useLocation();
-  const { id } = state;
+  const { id } = useParams();
   const [statePromo, setStatePromo] = useState({
     promoCode: "",
     isParrentPromotion: false,

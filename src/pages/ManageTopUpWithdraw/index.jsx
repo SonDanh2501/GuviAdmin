@@ -30,6 +30,7 @@ import ButtonCustom from "../../components/button";
 import CustomHeaderDatatable from "../../components/tables/tableHeader";
 import { loadingAction } from "../../redux/actions/loading";
 import InputTextCustom from "../../components/inputCustom";
+import { exportToExcel } from "../../utils/contant";
 
 const ManageTopUpWithdraw = (props) => {
   const [openModalCancel, setOpenModalCancel] = useState(false);
@@ -581,7 +582,7 @@ const ManageTopUpWithdraw = (props) => {
     }
   }, []);
   /* ~~~ Other ~~~ */
-  const filterByType = () => {
+  const leftContent = () => {
     return (
       <div className="manage-top-up-with-draw__table--right-header">
         <TransactionDrawer2
@@ -594,60 +595,10 @@ const ManageTopUpWithdraw = (props) => {
           titleHeader="Phiếu chi"
           onClick={handleWithdraw}
         />
-        {/* <div className="manage-top-up-with-draw__table--right-header--search-field">
-          <InputTextCustom
-            type="text"
-            placeHolderNormal={`${i18n.t("search_transaction", {
-              lng: lang,
-            })}`}
-            onChange={(e) => {
-              handleSearch(e.target.value);
-            }}
-          />
-        </div> */}
       </div>
-      // <div className="manage-top-up-with-draw__filter-content">
-      //   {/* Lọc theo loại đối tượng */}
-      //   <div>
-      //     <ButtonCustom
-      //       label="Đối tượng"
-      //       options={objectList}
-      //       value={object}
-      //       setValueSelectedProps={setSelectObject}
-      //       disable={true}
-      //     />
-      //   </div>
-      //   {/* Lọc theo loại giao dịch */}
-      //   <div>
-      //     <ButtonCustom
-      //       label="Loại giao dịch"
-      //       options={transferTypeList}
-      //       value={selectTransferType}
-      //       setValueSelectedProps={setSelectTransferType}
-      //     />
-      //   </div>
-      //   {/* Lọc theo loại phương thức thanh toán */}
-      //   <div>
-      //     <ButtonCustom
-      //       label="Phương thức thanh toán"
-      //       options={paymentMethodList}
-      //       value={selectPaymentMetod}
-      //       setValueSelectedProps={setSelectPaymentMetod}
-      //     />
-      //   </div>
-      //   {/* Lọc theo loại ví vào */}
-      //   <div>
-      //     <ButtonCustom
-      //       label="Vào ví"
-      //       options={walletTypeList}
-      //       value={selectWalletType}
-      //       setValueSelectedProps={setSelectWalletMetod}
-      //     />
-      //   </div>
-      // </div>
     );
   };
-  const filterByTypeRight = () => {
+  const rightContent = () => {
     return (
       <div className="manage-top-up-with-draw__filter-content">
         {/* Lọc theo loại đối tượng */}
@@ -690,7 +641,7 @@ const ManageTopUpWithdraw = (props) => {
       </div>
     );
   };
-  const filterDateAndSearchRight = () => {
+  const totalByStatusFilter = () => {
     return (
       <div className="manage-top-up-with-draw__filter-content">
         {object !== "affiliate" &&
@@ -818,7 +769,7 @@ const ManageTopUpWithdraw = (props) => {
         <span>Sổ quỹ</span>
       </div>
       {/* Filter */}
-      <FilterData leftContent={filterDateAndSearchRight()} />
+      <FilterData leftContent={totalByStatusFilter()} />
       {/* Filter */}
       <FilterData
         isTimeFilter
@@ -826,8 +777,8 @@ const ManageTopUpWithdraw = (props) => {
         endDate={endDate}
         setStartDate={setStartDate}
         setEndDate={setEndDate}
-        leftContent={object !== "affiliate" ? filterByType() : ""}
-        rightContent={object !== "affiliate" ? filterByTypeRight() : ""}
+        leftContent={object !== "affiliate" ? leftContent() : ""}
+        rightContent={object !== "affiliate" ? rightContent() : ""}
       />
       {/* Table */}
       <div>
