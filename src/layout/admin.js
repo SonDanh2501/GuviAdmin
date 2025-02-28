@@ -193,7 +193,7 @@ const Admin = () => {
       />
 
       <Route
-        path="/promotion/manage-setting/edit-promotion"
+        path="/promotion/manage-setting/edit-promotion/:id"
         element={<EditPromotion />}
       />
 
