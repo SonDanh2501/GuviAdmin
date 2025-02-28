@@ -1,10 +1,9 @@
 {
   "files": {
-    "main.css": "/static/css/main.b4e3dea7.css",
-    "main.js": "/static/js/main.c55824fc.js",
+    "main.css": "/static/css/main.dc25484b.css",
+    "main.js": "/static/js/main.883e66ca.js",
     "static/media/description.png": "/static/media/description.5da8e5eb29ad845b842c.png",
     "static/media/thumnailContent.png": "/static/media/thumnailContent.5f47e4a8f0e0c87659a9.png",
-    "static/media/tenPercentage.svg": "/static/media/tenPercentage.23f9c75e2b14f3d13db89327697314e4.svg",
     "static/media/title.png": "/static/media/title.71a2ab4847b010aa171e.png",
     "static/media/assistant.svg": "/static/media/assistant.874a18a165975da4be4f0f1ebdd70ead.svg",
     "static/media/copy_button.svg": "/static/media/copy_button.bc07f136f2ed0bffcbe76e2850714581.svg",
@@ -13,8 +12,8 @@
     "static/media/unqualifed.png": "/static/media/unqualifed.f47fd0d921eab6dbfa8d.png",
     "static/media/qualified.png": "/static/media/qualified.bce6c8ccfcfbd3a45512.png",
     "static/media/affiliate_share.png": "/static/media/affiliate_share.754b0d7705f0b0f42a5c.png",
+    "static/media/phone_affiliate.svg": "/static/media/phone_affiliate.5a03fb05689726ee8163729b484b3e22.svg",
     "static/media/notification_money.svg": "/static/media/notification_money.ab0370685cfa35f985b2c69688d85974.svg",
-    "static/media/phone_affiliate.svg": "/static/media/phone_affiliate.856e75daa689e4a1d1d844568a79415d.svg",
     "static/media/login.png": "/static/media/login.5c4aa4f38f2dc9e54095.png",
     "static/media/affiliateLanding.svg": "/static/media/affiliateLanding.1deece497c7c0fd2176ed619849d8bcc.svg",
     "static/media/fivePercentage.svg": "/static/media/fivePercentage.18a9345ff3b95c438259f67cffba0b3b.svg",
@@ -29,6 +28,7 @@
     "static/media/punish_ticket.svg": "/static/media/punish_ticket.c5d0e05086d40c447ff60ec638e4d845.svg",
     "static/media/loginLanding.svg": "/static/media/loginLanding.62cb886b291ddfdec2fd70c13bdd98f3.svg",
     "static/media/overViewAffiliate.svg": "/static/media/overViewAffiliate.9990a4cbec6123cfab1132bdabc821d0.svg",
+    "static/media/tenPercentage.svg": "/static/media/tenPercentage.cbb648d7d23ecd6752f4afc0eedbeb69.svg",
     "static/media/logoNoBackGround.svg": "/static/media/logoNoBackGround.085e576fed6f1f39242e8db1471d6515.svg",
     "static/media/testLogo.svg": "/static/media/testLogo.989503ac0cefe867873527c9f9002221.svg",
     "static/media/gift.svg": "/static/media/gift.9cb706b8b2ce58ef9bba5d44452002a2.svg",
@@ -46,6 +46,7 @@
     "static/media/bank_msb.svg": "/static/media/bank_msb.fb53ebfb48a9130540fe4e11583f5b0b.svg",
     "static/media/blink_sticker.svg": "/static/media/blink_sticker.0081b9353f385005bb808bc5812176f3.svg",
     "static/media/off-button.png": "/static/media/off-button.9bf895f0705e192e4789.png",
+    "static/media/wave_affiliate.png": "/static/media/wave_affiliate.86149b10486660218a3f.png",
     "static/media/apple_store.svg": "/static/media/apple_store.15f01eefb2013206cc7e26d98fbe95fb.svg",
     "static/media/dondepcodinh.svg": "/static/media/dondepcodinh.8592f3ab8dfa165f6fab772da57ae88f.svg",
     "static/media/tongvesinh.svg": "/static/media/tongvesinh.c03fba22126e61635d690e4526ec3491.svg",
@@ -96,6 +97,7 @@
     "static/media/service.svg": "/static/media/service.102a66c97d67431f624a89f3ee1dd642.svg",
     "static/media/bank_tp.svg": "/static/media/bank_tp.4b06f29e4177d8a85d17f064212ec43f.svg",
     "static/media/flag_china.svg": "/static/media/flag_china.d0b80d8040201b2df715930343bfbbaa.svg",
+    "static/media/quote_big.svg": "/static/media/quote_big.28efec586a7435056ff326ae94fad452.svg",
     "static/media/flag_laos.svg": "/static/media/flag_laos.7e56efb3ae7c8d822a5f1d610e1fed27.svg",
     "static/media/bank_hd.svg": "/static/media/bank_hd.8264188ae2f0e79844c6c274cc16bf2d.svg",
     "static/media/bank_vietin.svg": "/static/media/bank_vietin.eafc3bcd5fc4640878304b3842c20383.svg",
@@ -106,15 +108,16 @@
     "static/media/flag_thailand.svg": "/static/media/flag_thailand.55a06f1c78072a13ba52f840c16371a4.svg",
     "static/media/bank_techcom.svg": "/static/media/bank_techcom.3b5ef11f01b658b70a7a4a28cf0f9037.svg",
     "static/media/wave.svg": "/static/media/wave.0d45bbb001954cb5110e.svg",
+    "static/media/wave_affiliate.svg": "/static/media/wave_affiliate.35ff5773a381bae555c4a4d8176fbf17.svg",
     "static/media/flag_indonesia.svg": "/static/media/flag_indonesia.ac467f9527a4962822f93a6ed821ba66.svg",
     "static/media/offline.svg": "/static/media/offline.33acbe8c955951e587e68725985e74e7.svg",
     "static/media/online.svg": "/static/media/online.acf17c611c1affd9615cf0c62302674d.svg",
     "static/media/pending.svg": "/static/media/pending.ae3d796b3e3d6c6272a35edc144a2e90.svg",
-    "main.b4e3dea7.css.map": "/static/css/main.b4e3dea7.css.map",
-    "main.c55824fc.js.map": "/static/js/main.c55824fc.js.map"
+    "main.dc25484b.css.map": "/static/css/main.dc25484b.css.map",
+    "main.883e66ca.js.map": "/static/js/main.883e66ca.js.map"
   },
   "entrypoints": [
-    "static/css/main.b4e3dea7.css",
-    "static/js/main.c55824fc.js"
+    "static/css/main.dc25484b.css",
+    "static/js/main.883e66ca.js"
   ]
 }
