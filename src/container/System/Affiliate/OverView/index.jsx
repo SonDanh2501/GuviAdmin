@@ -53,26 +53,14 @@ import { Modal } from "antd";
 import useWindowDimensions from "../../../../helper/useWindowDimensions";
 import { useNavigate } from "react-router-dom";
 const {
-  IoLink,
-  IoPersonAdd,
-  IoPeople,
-  IoBagAdd,
-  IoChevronForward,
   MdDoubleArrow,
-  IoCopyOutline,
-  IoSwapHorizontal,
-  IoColorWandOutline,
-  IoPeopleOutline,
-  IoBagOutline,
   IoLogoFacebook,
   IoLogoYoutube,
-  IoLogoTiktok,
-  IoCopy,
   IoCheckmarkCircle,
   IoCheckboxOutline,
-  IoArrowDownCircle,
   IoGlobeOutline,
   MdKeyboardDoubleArrowDown,
+  IoPlay,
 } = icons;
 
 const OverView = () => {
@@ -90,6 +78,7 @@ const OverView = () => {
   const [isSelectManageRefferend, setIsSelectManageRefferend] = useState(false);
   const [isRotatePhone, setIsRotatePhone] = useState(false); // Giá trị xác định có đưa chuột vào nút để rotate điện thoại
   const [isScaleCircle, setIsScaleCircle] = useState(false); // Giá trị xác định có đưa chuột vào nút để phóng to những hình tròn
+  const [isShowPopup, setIsShowPopup] = useState(true);
 
   /* ~~~ List ~~~ */
   const listBenefit = [
@@ -674,12 +663,22 @@ const OverView = () => {
           </div>
         )}
       </div>
-      {/* <div className="affiliate-overview__popup">
-        <div className="affiliate-overview__popup--image">
-          <img src={affiliateWelcomePopupImage} alt=""></img>
-          <span>XEM NGAY</span>
+      {isShowPopup && (
+        <div className="affiliate-overview__popup">
+          <div className="affiliate-overview__popup--image">
+            <img src={affiliateWelcomePopupImage} alt=""></img>
+            <div
+              onClick={() => setIsShowPopup(false)}
+              className="affiliate-overview__popup--close"
+            >
+              <span>Xem ngay</span>
+              <span className="affiliate-overview__popup--close-icon">
+                <IoPlay />
+              </span>
+            </div>
+          </div>
         </div>
-      </div> */}
+      )}
       <div className="affiliate-overview__navigate">
         <div className="affiliate-overview__navigate--child">
           <div

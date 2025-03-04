@@ -1103,6 +1103,7 @@ body {
         justify-content: center;
 
         .affiliate-overview__popup--image {
+            position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1112,8 +1113,39 @@ body {
                 border-radius: $borderRadiusXL
             }
 
-            // .affiliate-overview__popup--
+            .affiliate-overview__popup--close {
+                position: absolute;
+                bottom: -18px;
+                padding: 4px;
+                border-radius: $borderRadiusL;
+                background-color: $colorWhite;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border: 3px solid $colorViolet;
+                gap: $gapS;
+                cursor: pointer;
+
+                span {
+                    font-family: "Work Sans", serif;
+                    font-size: 1rem;
+                    font-weight: $fontWeight2XL;
+                    color: $colorViolet;
+                    text-transform: uppercase;
+                }
+
+                .affiliate-overview__popup--close-icon {
+                    padding: 4px;
+                    border-radius: $borderRadiusFull;
+                    background-color: $colorViolet;
+                    color: $colorWhite;
+                }
+            }
         }
+        
+
+
+
     }
 
     .affiliate-overview__navigate {
@@ -1450,8 +1482,10 @@ body {
                 // background-color: $colorExtraLightGray;
                 opacity: 1;
                 transition: all 1.5s ease;
+                height: 100%;
 
                 &.hide {
+                    z-index: -1;
                     display: none;
                     width: 0px;
                     height: 0px;
@@ -2431,66 +2465,79 @@ body {
         .affiliate-overview__footer {
             display: flex;
             flex-direction: column;
-            background-color: black;
+            align-items: center;
+            // background-color: black;
+            background-image: url('../../../../assets/images/footer_wave.png');
             width: 100%;
-            height: fit-content;
-
-            .affiliate-overview__footer--information {
+            height: 35vh;
+    
+            .affiliate-overview__footer--container {
                 display: flex;
-                align-items: center;
-                padding: 0px;
-
-                .affiliate-overview__footer--information-item {
-                    width: 25%;
-                    height: fit-content;
-
-                    img {
-                        width: 100px;
-                        height: fit-content;
-                    }
-
-                    span {
-                        font-size: $textFontSize2XL;
-                        font-weight: $fontWeightXL;
-                        color: $colorWhite;
-
-                        .high-light {
-                            color: $colorViolet
-                        }
-                    }
-                }
-            }
-
-            .affiliate-overview__footer--copy-right {
-                display: flex;
-                align-items: center;
-                padding: 16px;
-                gap: $gapL;
-                border-top: 1px solid $colorWhite;
-
-                .affiliate-overview__footer--copy-right-item {
+                flex-direction: column;
+                // align-items: center;
+                justify-content: center;
+                width: 70%;
+                height: 100%;
+    
+                .affiliate-overview__footer--container-information {
                     display: flex;
                     align-items: center;
-                    justify-content: center;
-                    width: 30%;
-                    height: fit-content;
-
-                    img {
-                        width: 150px;
+                    padding: 0px;
+    
+                    .affiliate-overview__footer--container-information-item {
+                        width: 25%;
                         height: fit-content;
+    
+                        img {
+                            width: 100px;
+                            height: fit-content;
+                        }
+    
+                        span {
+                            font-size: $textFontSize2XL;
+                            font-weight: $fontWeightXL;
+                            color: $colorBlack;
+    
+                            .high-light {
+                                color: $colorViolet
+                            }
+                        }
                     }
-
-                    span {
-                        font-size: $textFontSize2XL;
-                        font-weight: $fontWeightXL;
-                        color: $colorWhite;
-
-                        .high-light {
-                            color: $colorViolet
+                }
+    
+                .affiliate-overview__footer--container-copy-right {
+                    display: flex;
+                    align-items: center;
+                    padding: 16px;
+                    gap: $gapL;
+                    border-top: 1px solid $colorBlack;
+    
+                    .affiliate-overview__footer--container-copy-right-item {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: 30%;
+                        height: fit-content;
+    
+                        img {
+                            width: 150px;
+                            height: fit-content;
+                            cursor: pointer;
+                        }
+    
+                        span {
+                            font-size: $textFontSize2XL;
+                            font-weight: $fontWeightXL;
+                            color: $colorBlack;
+    
+                            .high-light {
+                                color: $colorViolet
+                            }
                         }
                     }
                 }
             }
+    
         }
     }
 }
@@ -3030,66 +3077,79 @@ body {
         .affiliate-overview__footer {
             display: flex;
             flex-direction: column;
-            background-color: black;
+            align-items: center;
+            // background-color: black;
+            background-image: url('../../../../assets/images/footer_wave.png');
             width: 100%;
-            height: fit-content;
-
-            .affiliate-overview__footer--information {
+            height: 35vh;
+    
+            .affiliate-overview__footer--container {
                 display: flex;
-                align-items: center;
-                padding: 0px;
-
-                .affiliate-overview__footer--information-item {
-                    width: 25%;
-                    height: fit-content;
-
-                    img {
-                        width: 100px;
-                        height: fit-content;
-                    }
-
-                    span {
-                        font-size: $textFontSize2XL;
-                        font-weight: $fontWeightXL;
-                        color: $colorWhite;
-
-                        .high-light {
-                            color: $colorViolet
-                        }
-                    }
-                }
-            }
-
-            .affiliate-overview__footer--copy-right {
-                display: flex;
-                align-items: center;
-                padding: 16px;
-                gap: $gapL;
-                border-top: 1px solid $colorWhite;
-
-                .affiliate-overview__footer--copy-right-item {
+                flex-direction: column;
+                // align-items: center;
+                justify-content: center;
+                width: 70%;
+                height: 100%;
+    
+                .affiliate-overview__footer--container-information {
                     display: flex;
                     align-items: center;
-                    justify-content: center;
-                    width: 30%;
-                    height: fit-content;
-
-                    img {
-                        width: 150px;
+                    padding: 0px;
+    
+                    .affiliate-overview__footer--container-information-item {
+                        width: 25%;
                         height: fit-content;
+    
+                        img {
+                            width: 100px;
+                            height: fit-content;
+                        }
+    
+                        span {
+                            font-size: $textFontSize2XL;
+                            font-weight: $fontWeightXL;
+                            color: $colorBlack;
+    
+                            .high-light {
+                                color: $colorViolet
+                            }
+                        }
                     }
-
-                    span {
-                        font-size: $textFontSize2XL;
-                        font-weight: $fontWeightXL;
-                        color: $colorWhite;
-
-                        .high-light {
-                            color: $colorViolet
+                }
+    
+                .affiliate-overview__footer--container-copy-right {
+                    display: flex;
+                    align-items: center;
+                    padding: 16px;
+                    gap: $gapL;
+                    border-top: 1px solid $colorBlack;
+    
+                    .affiliate-overview__footer--container-copy-right-item {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: 30%;
+                        height: fit-content;
+    
+                        img {
+                            width: 150px;
+                            height: fit-content;
+                            cursor: pointer;
+                        }
+    
+                        span {
+                            font-size: $textFontSize2XL;
+                            font-weight: $fontWeightXL;
+                            color: $colorBlack;
+    
+                            .high-light {
+                                color: $colorViolet
+                            }
                         }
                     }
                 }
             }
+    
         }
     }
 }
