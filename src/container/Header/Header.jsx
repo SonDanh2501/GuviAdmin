@@ -49,7 +49,7 @@ import logoUS from "../../assets/images/flag_american.svg";
 import logoGuvi from "../../assets/images/LogoS.svg";
 import Sidebar from "../../layout/Slidebar";
 import icons from "../../utils/icons";
-import { getCustomerInfoAffiliateApi } from "../../api/affeliate";
+import { getCustomerInfoAffiliateApi } from "../../api/affiliate";
 import { errorNotify } from "../../helper/toast";
 
 const { IoPeopleOutline, IoHomeOutline, IoHome, IoPeople } = icons;

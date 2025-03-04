@@ -10,7 +10,7 @@ import {
   forgotPasswordAffiliateApi,
   sendOtpAffiliateApi,
   updatePasswordAffiliateApi,
-} from "../../../api/affeliate";
+} from "../../../api/affiliate";
 import { useDispatch } from "react-redux";
 import logo from "../../../assets/images/Logo.svg";
 import logoLabelImage from "../../../assets/images/LogoS.svg";

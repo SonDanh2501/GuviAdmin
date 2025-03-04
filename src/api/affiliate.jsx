@@ -44,9 +44,19 @@ export const sendOtpAffiliateApi = (payload) => {
   return axiosClient.post("api/customer_web/auth/send_otp", payload);
 };
 
-// API cập nhật mật khẩu
+// API cập nhật mật khẩu (sử dụng OTP)
 export const updatePasswordAffiliateApi = (payload) => {
   return axiosClient.post("api/customer_web/auth/update_new_password", payload);
+};
+
+// API xác thực mật khẩu cũ
+export const checkOldPasswordApi = (payload) => {
+  return axiosClient.post("api/customer_web/auth/check_old_password", payload);
+};
+
+// API cập nhật mật khẩu mới
+export const updatePasswordApi = (payload) => {
+  return axiosClient.post("api/customer_web/auth/change_password", payload);
 };
 
 /* ~~~ Affiliate ~~~ */
