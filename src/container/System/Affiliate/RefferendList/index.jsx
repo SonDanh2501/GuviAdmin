@@ -1708,6 +1708,7 @@ const RefferendList = () => {
                     color="#3b82f6"
                     bgColor="#ffffff"
                     size={170}
+                    bordered = {false}
                   />
                 </div>
               </div>
@@ -1736,6 +1737,7 @@ const RefferendList = () => {
                     color="#eab308"
                     bgColor="#ffffff"
                     size={170}
+                    bordered = {false}
                   />
                 </div>
               </div>
