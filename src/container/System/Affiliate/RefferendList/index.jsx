@@ -64,7 +64,7 @@ import notFoundImage from "../../../../assets/images/empty_data.svg";
 import moment from "moment";
 import { removeToken } from "../../../../helper/tokenHelper";
 import { logoutAffiliateAction } from "../../../../redux/actions/auth";
-import QRCode from "react-qr-code";
+// import QRCode from "react-qr-code";
 
 const {
   IoSettings,
@@ -1709,11 +1709,11 @@ const RefferendList = () => {
                 <div className="refferend-list-affiliate__share-link--qr-code-child-container-rouded-border-vertical"></div>
                 <div className="refferend-list-affiliate__share-link--qr-code-child-container-rouded-border-horizontal"></div>
                 <div className="refferend-list-affiliate__share-link--qr-code-child-container-rouded-border-qr-code">
-                  <QRCode
+                  {/* <QRCode
                     id="qrcode_referral_link"
                     value={valueUserInfo?.referral_link}
                     size={170}
-                  />
+                  /> */}
                 </div>
               </div>
             </div>
@@ -1731,11 +1731,11 @@ const RefferendList = () => {
                 <div className="refferend-list-affiliate__share-link--qr-code-child-container-rouded-border-vertical"></div>
                 <div className="refferend-list-affiliate__share-link--qr-code-child-container-rouded-border-horizontal"></div>
                 <div className="refferend-list-affiliate__share-link--qr-code-child-container-rouded-border-qr-code">
-                  <QRCode
+                  {/* <QRCode
                     id="qrcode_promotional_referral_link"
                     value={valueUserInfo?.promotional_referral_link}
                     size={170}
-                  />
+                  /> */}
                 </div>
               </div>
             </div>
