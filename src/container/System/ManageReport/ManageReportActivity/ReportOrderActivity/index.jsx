@@ -140,10 +140,10 @@ const ReportOrderActivity = () => {
     {
       customTitle: <CustomHeaderDatatable title="Ngày tạo" />,
       dataIndex: "_id",
-      key: "id_date_work",
+      key: "date_navigate",
       width: 100,
       position: "center",
-      navigate: "/report/manage-report/report-detail-order-activity",
+      navigate: "group-order/manage-order",
     },
     {
       customTitle: (

@@ -36,6 +36,7 @@ const ManageTopUpWithdraw = (props) => {
   const [openModalCancel, setOpenModalCancel] = useState(false);
   const [openModalChangeStatus, setOpenModalChangeStatus] = useState(false);
   const [valueSearch, setValueSearch] = useState("");
+
   const handleTopUp = (value) => {
     createTransaction({
       transfer_note: value?.note,
@@ -69,6 +70,7 @@ const ManageTopUpWithdraw = (props) => {
     createTransactionApi(data)
       .then((res) => {
         fetchData();
+        fetchTotalData();
         successNotify({
           message: "Tạo lệnh giao dịch thành công",
         });
@@ -88,7 +90,8 @@ const ManageTopUpWithdraw = (props) => {
         message: "Huỷ lệnh giao dịch thành công",
       });
       setOpenModalCancel(false);
-      fetchData();
+      await fetchData();
+      await fetchTotalData();
     } catch (err) {
       errorNotify({
         message: "Hủy lệnh giao dịch thất bại \n" + err?.message,
@@ -131,6 +134,7 @@ const ManageTopUpWithdraw = (props) => {
         message: "Duyệt lệnh thành công",
       });
       await fetchData();
+      await fetchTotalData();
       setOpenModalChangeStatus(false);
     } catch (err) {
       errorNotify({
@@ -567,7 +571,7 @@ const ManageTopUpWithdraw = (props) => {
     selectWalletType,
   ]);
 
-  // 4.
+  // 4. Hàm tự động lấy giá trị ngày bắt đầu và ngày kết thúc từ param
   useEffect(() => {
     // Lấy query string từ URL hiện tại
     const queryString = window.location.search;
