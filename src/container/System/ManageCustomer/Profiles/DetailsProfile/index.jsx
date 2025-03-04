@@ -35,7 +35,7 @@ import ButtonCustom from "../../../../../components/button";
 import {
   getListReferralPersonAdminApi,
   getListReferralPersonApi,
-} from "../../../../../api/affeliate";
+} from "../../../../../api/affiliate";
 import icons from "../../../../../utils/icons";
 // core components
 
@@ -200,10 +200,9 @@ const DetailsProfile = ({ id }) => {
   /* ~~~ Other ~~~ */
   const age = moment().diff(data?.birthday, "years");
 
-  console.log("check valueListInviter", valueListInviter);
   /* ~~~ Main ~~~ */
   return (
-    <>
+    <div style={{display: "flex", gap: "16px", flexDirection: "column"}}>
       <div className="div-profile-customer">
         <div className="div-infomation-name">
           <div className="div-image-customer">
@@ -364,7 +363,7 @@ const DetailsProfile = ({ id }) => {
           ></ButtonCustom>
         </div>
       </div>
-      <span>Danh sách người giới thiệu</span>
+      <span style={{fontSize: "12px", fontWeight: "500"}}>Danh sách người giới thiệu</span>
       {/* Danh sách người giới thiệu */}
       <div className="detail-profile__list-inviter">
         {valueListInviter?.data?.map((person, index) => (
@@ -455,7 +454,7 @@ const DetailsProfile = ({ id }) => {
           </div>
         ))}
       </div>
-      <div className="div-container-invite-code">
+      {/* <div className="div-container-invite-code">
         <p className="title-invite">{`${i18n.t("recent_referrals", {
           lng: lang,
         })}`}</p>
@@ -563,11 +562,11 @@ const DetailsProfile = ({ id }) => {
         ) : (
           <p className="text-no-invite">Chưa có người giới thiệu</p>
         )}
-      </div>
+      </div> */}
 
       <FloatButton.BackTop />
       {isLoading && <LoadingPagination />}
-    </>
+    </div>
   );
 };
 

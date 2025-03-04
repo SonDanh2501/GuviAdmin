@@ -42,10 +42,11 @@ const ReportCashBook = () => {
     {
       customTitle: <CustomHeaderDatatable title="Ngày báo cáo" />,
       dataIndex: "_id",
-      key: "id_date_work",
+      key: "date_navigate",
       width: 100,
       position: "center",
-      navigate: "/report/manage-report/report-detail-cash-book",
+      // navigate: "/report/manage-report/report-detail-cash-book",
+      navigate: "transaction/manage-transaction",
     },
     {
       customTitle: (

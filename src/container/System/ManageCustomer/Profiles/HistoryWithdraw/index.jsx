@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./index.scss";
-import { getListHisorityWithdrawApi } from "../../../../../api/affeliate";
+import { getListHisorityWithdrawApi } from "../../../../../api/affiliate";
 import { errorNotify } from "../../../../../helper/toast";
 import DataTable from "../../../../../components/tables/dataTable";
 import CustomHeaderDatatable from "../../../../../components/tables/tableHeader";

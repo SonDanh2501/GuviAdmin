@@ -6,7 +6,7 @@ import {
   checkOTPAffiliateApi,
   registerAffiliateApi,
   getCustomerInfoAffiliateApi,
-} from "../../api/affeliate";
+} from "../../api/affiliate";
 import { errorNotify, successNotify } from "../../helper/toast";
 import { setToken } from "../../helper/tokenHelper";
 import {

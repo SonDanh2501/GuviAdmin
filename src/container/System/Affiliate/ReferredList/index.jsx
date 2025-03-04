@@ -17,7 +17,9 @@ import {
   checkOTPAffiliateApi,
   forgotPasswordAffiliateApi,
   updatePasswordAffiliateApi,
-} from "../../../../api/affeliate";
+  checkOldPasswordApi,
+  updatePasswordApi,
+} from "../../../../api/affiliate";
 
 import icons from "../../../../utils/icons";
 import {
@@ -74,6 +76,7 @@ import notFoundImage from "../../../../assets/images/empty_data.svg";
 import moment from "moment";
 import { removeToken } from "../../../../helper/tokenHelper";
 import { logoutAffiliateAction } from "../../../../redux/actions/auth";
+import useWindowDimensions from "../../../../helper/useWindowDimensions";
 
 const {
   IoSettings,
@@ -106,7 +109,8 @@ const {
   IoDownloadOutline,
 } = icons;
 
-const RefferendList = () => {
+const ReferredList = () => {
+  const { width } = useWindowDimensions();
   const sliderRef = useRef(null);
   const navigate = useNavigate();
   const [isDragging, setIsDragging] = useState(false);
@@ -240,7 +244,9 @@ const RefferendList = () => {
   const [valuePerviousDiscount, setValuePerviousDiscount] = useState(0);
   const [saveToken, setSaveToken] = useState(""); // Giá trị Token lưu lại thông tin số điện thoại, mã vùng số điện thoại và ngày tạo (không phải token đăng nhập)
   const [otp, setOtp] = useState(Array(6).fill("")); // Trạng thái lưu giá trị từng ô
-  const [valuePassword, setValuePassword] = useState("");
+  const [valueCurrentPassword, setValueCurrentPassword] = useState(""); // Giá trị mật khẩu hiện tại
+  const [valueNewPassword, setValueNewPassword] = useState(""); // Giá trị mật khẩu mới
+  const [valueConfirmPassword, setValueConfirmPassword] = useState(""); // Giá trị xác nhận mật khẩu mới
 
   /* ~~~ List ~~~ */
   // 1. Danh sách các cột của bảng
@@ -462,41 +468,25 @@ const RefferendList = () => {
     dispatch(loadingAction.loadingRequest(true));
     dispatch(logoutAffiliateAction.logoutAffiliateRequest(navigate));
   };
-  // 12. Hàm kiểm tra mã OTP
-  const handleCheckOTP = async (payload) => {
+  // 11. Hàm kiểm tra mật khẩu hiện tại
+  const handleCheckAndUpdatePassword = async (payload) => {
     try {
-      dispatch(loadingAction.loadingRequest(true));
-      const res = await checkOTPAffiliateApi(payload);
-      setSaveToken(res.token);
-      setShowChangePasswordInput(true);
-      dispatch(loadingAction.loadingRequest(false));
+      const res = await checkOldPasswordApi(payload);
+      if (res) {
+        try {
+          const updatePassword = await updatePasswordApi(payload);
+          setShowModalInformation(false);
+          setIsShowChangePassword(false);
+          setValueCurrentPassword("");
+          setValueNewPassword("");
+          setValueConfirmPassword(""); 
+          successNotify({ message: "Cập nhật mật khẩu thành công" });
+        } catch (err) {
+          errorNotify({ message: err?.message || err });
+        }
+      }
     } catch (err) {
-      errorNotify({
-        message: err.message,
-      });
-      dispatch(loadingAction.loadingRequest(false));
-    }
-  };
-  // 12. Hàm quên mật khẩu
-  const handleForgotPassword = async (payload) => {
-    try {
-      const res = await forgotPasswordAffiliateApi(payload);
-      setIsShowChangePassword(true);
-    } catch (err) {
-      errorNotify({
-        message: err.message,
-      });
-    }
-  };
-  // 13. Hàm cập nhật mật khẩu
-  const handleUpdatePassword = async (payload) => {
-    try {
-      const res = await updatePasswordAffiliateApi(payload);
-      setIsShowChangePassword(false);
-    } catch (err) {
-      errorNotify({
-        message: err.message,
-      });
+      errorNotify({ message: err?.message || err });
     }
   };
 
@@ -534,17 +524,7 @@ const RefferendList = () => {
   useEffect(() => {
     checkIfEnd();
   }, [scrollLeft]);
-  // 6. Tự động xác thực mã code khi OTP đủ 6 ký tự
-  useEffect(() => {
-    if (otp.join("").length === 6) {
-      handleCheckOTP({
-        phone: valueUserInfo?.phone,
-        code_phone_area: "+84",
-        code: otp.join(""),
-      });
-    }
-  }, [otp]);
-
+  // 6. Hàm tự động kiểm tra mật khẩu hiện tại là đúng hay sai
   /* ~~~ Other  ~~~ */
   const copyToClipBoard = (text) => {
     if (text && text.length > 0) {
@@ -625,13 +605,13 @@ const RefferendList = () => {
   }
 
   const downloadCanvasQRCode = (elementId) => {
-    const canvas = document.getElementById(elementId)?.querySelector('canvas');
+    const canvas = document.getElementById(elementId)?.querySelector("canvas");
     if (canvas) {
       const url = canvas.toDataURL();
-      doDownload(url, 'QRCode.png');
+      doDownload(url, "QRCode.png");
     }
   };
-  
+
   /* ~~~ Main  ~~~ */
   return (
     <div className="refferend-list-affiliate">
@@ -830,6 +810,54 @@ const RefferendList = () => {
                 >
                   <span className="refferend-list-affiliate__content--left-card-body-code-random-label">
                     Chia sẻ ngay
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* Sharing link */}
+          <div className="refferend-list-affiliate__content--left-card-share-link card-shadow">
+            {/* Header */}
+            <div className="refferend-list-affiliate__content--left-card-share-link-header">
+              <span className="">Đường dẫn chia sẻ của chương trình</span>
+            </div>
+            {/* Content */}
+            <div className="refferend-list-affiliate__content--left-card-share-link-content">
+              {/* Nhận ngay chiết khấu */}
+              <div className="refferend-list-affiliate__content--left-card-share-link-content-share">
+                <div className="refferend-list-affiliate__content--left-card-share-link-content-share-header">
+                  <span>Nhận chiết khấu ngay:</span>
+                </div>
+                <div className="refferend-list-affiliate__content--left-card-share-link-content-share-link">
+                  <span className="refferend-list-affiliate__content--left-card-share-link-content-share-link-url">
+                    {valueUserInfo?.referral_link || ""}
+                  </span>
+                  <span
+                    onClick={() => {
+                      copyToClipBoard(valueUserInfo?.referral_link);
+                    }}
+                    className="refferend-list-affiliate__content--left-card-share-link-content-share-link-url-copy"
+                  >
+                    Sao chép
+                  </span>
+                </div>
+              </div>
+              {/* Gửi voucher giảm giá ngay */}
+              <div className="refferend-list-affiliate__content--left-card-share-link-content-share">
+                <div className="refferend-list-affiliate__content--left-card-share-link-content-share-header">
+                  <span>Gửi voucher giảm giá ngay:</span>
+                </div>
+                <div className="refferend-list-affiliate__content--left-card-share-link-content-share-link">
+                  <span className="refferend-list-affiliate__content--left-card-share-link-content-share-link-url">
+                    {valueUserInfo?.promotional_referral_link || ""}
+                  </span>
+                  <span
+                    onClick={() => {
+                      copyToClipBoard(valueUserInfo?.promotional_referral_link);
+                    }}
+                    className="refferend-list-affiliate__content--left-card-share-link-content-share-link-url-copy"
+                  >
+                    Sao chép
                   </span>
                 </div>
               </div>
@@ -1707,15 +1735,17 @@ const RefferendList = () => {
                     icon={logoGuviCircle}
                     color="#3b82f6"
                     bgColor="#ffffff"
-                    size={170}
-                    bordered = {false}
+                    size={width < 768 ? 350 : 170}
+                    bordered={false}
                   />
                 </div>
               </div>
             </div>
             <div className="refferend-list-affiliate__share-link--qr-code-child">
               <div
-                onClick={() => downloadCanvasQRCode("promotional_referral_link")}
+                onClick={() =>
+                  downloadCanvasQRCode("promotional_referral_link")
+                }
                 className="refferend-list-affiliate__share-link--qr-code-child-download"
               >
                 <IoDownloadOutline size={24} color="black" />
@@ -1736,14 +1766,13 @@ const RefferendList = () => {
                     icon={logoGuviCircle}
                     color="#eab308"
                     bgColor="#ffffff"
-                    size={170}
-                    bordered = {false}
+                    size={width < 768 ? 350 : 170}
+                    bordered={false}
                   />
                 </div>
               </div>
             </div>
           </div>
-
           <div className="refferend-list-affiliate__share-link--social">
             <div className="refferend-list-affiliate__share-link--social-child">
               <FacebookShareButton
@@ -1752,7 +1781,9 @@ const RefferendList = () => {
               >
                 <FacebookIcon size={48} round={true}></FacebookIcon>
               </FacebookShareButton>
-              <span>Facebook</span>
+              <span className="refferend-list-affiliate__share-link--social-child-label">
+                Facebook
+              </span>
             </div>
             <div className="refferend-list-affiliate__share-link--social-child">
               <EmailShareButton
@@ -1761,7 +1792,9 @@ const RefferendList = () => {
               >
                 <EmailIcon size={48} round={true}></EmailIcon>
               </EmailShareButton>
-              <span>Email</span>
+              <span className="refferend-list-affiliate__share-link--social-child-label">
+                Email
+              </span>
             </div>
           </div>
         </div>
@@ -1769,7 +1802,10 @@ const RefferendList = () => {
       <Modal
         title="Thông tin tài khoản"
         open={showModalInformation}
-        onCancel={() => setShowModalInformation(false)}
+        onCancel={() => {
+          setShowModalInformation(false);
+          setIsShowChangePassword(false);
+        }}
         footer={[]}
       >
         <div className="refferend-list-affiliate__information">
@@ -1780,7 +1816,6 @@ const RefferendList = () => {
                 disable={true}
                 value={valueUserInfo?.full_name}
                 placeHolder="Họ và tên"
-                // onChange={(e) => setValueCardHolder(e.target.value)}
               />
             </div>
             <div className="refferend-list-affiliate__information--child-item">
@@ -1826,75 +1861,47 @@ const RefferendList = () => {
             }
             placeHolder="Tên ngân hàng"
           />
-          <div className="refferend-list-affiliate__information--forgot-password">
-            <div></div>
+          {!isShowChangePassword && (
             <div
-              onClick={() =>
-                handleForgotPassword({
-                  phone: valueUserInfo?.phone,
-                  code_phone_area: "+84",
-                })
-              }
+              onClick={() => setIsShowChangePassword(true)}
+              className="refferend-list-affiliate__information--forgot-password"
             >
-              <span>Đổi mật khẩu</span>
+              <div></div>
+              <div>
+                <span>Đổi mật khẩu</span>
+              </div>
             </div>
-          </div>
-        </div>
-      </Modal>
-      <Modal
-        title="Thay đổi mật khẩu"
-        open={isShowChangePassword}
-        onCancel={() => setIsShowChangePassword(false)}
-        footer={[]}
-        width="370px"
-      >
-        <div className="refferend-list-affiliate__change-password">
-          <span className="refferend-list-affiliate__change-password--title">
-            Nhập mã gồm 6 số đã gửi tới SMS thông qua số (+84)
-          </span>
-          <div className="refferend-list-affiliate__change-password-otp-digit">
-            {[...Array(6)].map((_, index) => (
-              <React.Fragment key={index}>
-                <input
-                  type="text"
-                  maxLength={1}
-                  className="refferend-list-affiliate__change-password-otp-digit-number"
-                  ref={(el) => (inputRefs.current[index] = el)}
-                  onChange={(e) => handleChange(e, index)}
-                  onKeyDown={(e) => handleKeyDown(e, index)}
-                />
-                {index === 2 && <span className="otp-separator">&bull;</span>}
-              </React.Fragment>
-            ))}
-          </div>
-          <div className="refferend-list-affiliate__change-password--otp-verify">
-            {showChangePasswordInput ? (
-              <>
-                <span>
-                  <IoCheckmark size={12} color="green" />
-                </span>
-                <span className="refferend-list-affiliate__change-password--otp-verify-label verify">
-                  Xác thức
-                </span>
-              </>
-            ) : (
-              <>
-                <span>
-                  <IoCheckmark size={12} />
-                </span>
-                <span className="refferend-list-affiliate__change-password--otp-verify-label">
-                  Chưa xác thực
-                </span>
-              </>
-            )}
-          </div>
-          {showChangePasswordInput && (
+          )}
+          {/* Hiển thi khung đổi mật khẩu */}
+          <div
+            className={`refferend-list-affiliate__information--update-password ${
+              !isShowChangePassword && "hide"
+            }`}
+          >
+            {/* Mật khẩu hiện tại */}
+            <div>
+              <InputTextCustom
+                type="text"
+                value={valueCurrentPassword}
+                placeHolder="Mật khẩu hiện tại"
+                onChange={(e) => setValueCurrentPassword(e.target.value)}
+                isPassword={true}
+              />
+            </div>
+            {/* Mật khẩu cần đổi */}
             <div className="refferend-list-affiliate__change-password--new-password">
               <InputTextCustom
                 type="text"
-                value={valuePassword}
-                placeHolderNormal="Mật khẩu"
-                onChange={(e) => setValuePassword(e.target.value)}
+                value={valueNewPassword}
+                placeHolder="Mật khẩu mới"
+                onChange={(e) => setValueNewPassword(e.target.value)}
+                isPassword={true}
+              />
+              <InputTextCustom
+                type="text"
+                value={valueConfirmPassword}
+                placeHolder="Xác nhận mật khẩu mới"
+                onChange={(e) => setValueConfirmPassword(e.target.value)}
                 isPassword={true}
               />
               {/* Thanh kiểm tra dựa trên mật khẩu điền vào */}
@@ -1903,15 +1910,15 @@ const RefferendList = () => {
               >
                 <div
                   className={`login-affiliate__card--information-password-process-bar-child ${
-                    checkPasswordRequired(valuePassword).level === 0
+                    checkPasswordRequired(valueNewPassword).level === 0
                       ? "empty"
-                      : checkPasswordRequired(valuePassword).level === 1
+                      : checkPasswordRequired(valueNewPassword).level === 1
                       ? "week"
-                      : checkPasswordRequired(valuePassword).level === 2
+                      : checkPasswordRequired(valueNewPassword).level === 2
                       ? "fear"
-                      : checkPasswordRequired(valuePassword).level === 3
+                      : checkPasswordRequired(valueNewPassword).level === 3
                       ? "good"
-                      : checkPasswordRequired(valuePassword).level === 4
+                      : checkPasswordRequired(valueNewPassword).level === 4
                       ? "strong"
                       : ""
                   }`}
@@ -1922,7 +1929,7 @@ const RefferendList = () => {
                 {/* Ít nhất 8 ký tự */}
                 <div
                   className={`login-affiliate__card--information-password-condition-required-child ${
-                    checkPasswordRequired(valuePassword).isPassLength &&
+                    checkPasswordRequired(valueNewPassword).isPassLength &&
                     "checked"
                   }`}
                 >
@@ -1933,7 +1940,7 @@ const RefferendList = () => {
                 </div>
                 <div
                   className={`login-affiliate__card--information-password-condition-required-child ${
-                    checkPasswordRequired(valuePassword).isHaveLetter &&
+                    checkPasswordRequired(valueNewPassword).isHaveLetter &&
                     "checked"
                   }`}
                 >
@@ -1944,7 +1951,7 @@ const RefferendList = () => {
                 </div>
                 <div
                   className={`login-affiliate__card--information-password-condition-required-child ${
-                    checkPasswordRequired(valuePassword).isHaveNumber &&
+                    checkPasswordRequired(valueNewPassword).isHaveNumber &&
                     "checked"
                   }`}
                 >
@@ -1959,18 +1966,19 @@ const RefferendList = () => {
                 fullScreen={true}
                 borderRadiusFull={true}
                 onClick={() =>
-                  handleUpdatePassword({
-                    token: saveToken,
-                    password: valuePassword,
+                  handleCheckAndUpdatePassword({
+                    password: valueCurrentPassword,
+                    new_password: valueNewPassword,
+                    confirm_password: valueConfirmPassword,
                   })
                 }
               ></ButtonCustom>
             </div>
-          )}
+          </div>
         </div>
       </Modal>
     </div>
   );
 };
 
-export default RefferendList;
+export default ReferredList;

@@ -180,7 +180,7 @@ const OverView = () => {
               onClick={() => {
                 setIsSelectAffiliate(false);
                 setIsSelectManageRefferend(true);
-                navigate("/referend-list");
+                navigate("/referred-list");
               }}
               className={`affiliate-overview__introduction--header-navigation-button right-side ${
                 isSelectManageRefferend ? "activated" : "disable"
@@ -701,7 +701,7 @@ const OverView = () => {
             onClick={() => {
               setIsSelectAffiliate(false);
               setIsSelectManageRefferend(true);
-              navigate("/referend-list");
+              navigate("/referred-list");
             }}
             className={`affiliate-overview__navigate--child-button right-side ${
               isSelectManageRefferend ? "activated" : "disable"

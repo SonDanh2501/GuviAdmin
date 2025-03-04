@@ -43,11 +43,12 @@ const ReportCashBookCollaborator = () => {
     {
       customTitle: <CustomHeaderDatatable title="Ngày báo cáo" />,
       dataIndex: "_id",
-      key: "id_date_work",
+      key: "date_navigate",
       width: 100,
       position: "center",
       fontSize: "cursor-pointer",
-      navigate: "/report/manage-report/report-detail-cash-book-collaborator",
+      // navigate: "/report/manage-report/report-detail-cash-book-collaborator",
+      navigate: "transaction/manage-transaction/collaborator",
     },
     {
       customTitle: (
