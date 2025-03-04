@@ -4410,9 +4410,10 @@
     .refferend-list-affiliate__share-link--qr-code {
         display: flex;
         align-items: center;
+        justify-content: center;
         gap: $gapL;
-        padding: 20px;
-        border: 1px solid $colorLightGray;
+        padding: 20px 8px;
+        border: 2px solid $colorMoreLightGray;
         border-radius: $borderRadiusL;
 
         .refferend-list-affiliate__share-link--qr-code-child {
@@ -4431,7 +4432,7 @@
                 left: 50%;
                 transform: translate(-50%, -50%);
                 padding: 4px;
-                background-color: $colorOrange;
+                background-color: $colorMoreLightGray;
                 border-radius: $borderRadiusFull;
                 cursor: pointer;
             }
