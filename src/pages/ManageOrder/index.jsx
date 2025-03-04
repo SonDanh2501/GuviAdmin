@@ -1,7 +1,4 @@
-import {
-  Dropdown,
-  Space,
-} from "antd";
+import { Dropdown, Space } from "antd";
 import _debounce from "lodash/debounce";
 import moment from "moment";
 import { useCallback, useEffect, useState } from "react";
@@ -350,7 +347,9 @@ const ManageOrder = () => {
   /* ~~~ Use effect ~~~ */
   // 1. Fetch dữ liệu bảng
   useEffect(() => {
-    getJobList();
+    if (startDate !== "" && endDate !== "") {
+      getJobList();
+    }
   }, [
     valueSearch,
     startPage,
@@ -398,6 +397,20 @@ const ManageOrder = () => {
     }
     setSelectDistrict([]);
   }, [selectCity]);
+  // 4. Hàm tự động lấy giá trị ngày bắt đầu và ngày kết thúc từ param
+  useEffect(() => {
+    // Lấy query string từ URL hiện tại
+    const queryString = window.location.search;
+
+    // Chuyển thành đối tượng URLSearchParams
+    const params = new URLSearchParams(queryString);
+    if (params.get("start_date")) {
+      setStartDate(params.get("start_date"));
+    }
+    if (params.get("end_date")) {
+      setEndDate(params.get("end_date"));
+    }
+  }, []);
   /* ~~~ Other ~~~ */
   const addActionColumn = {
     i18n_title: "",
@@ -514,6 +527,8 @@ const ManageOrder = () => {
       {/* Filter */}
       <FilterData
         isTimeFilter={true}
+        startDate={startDate}
+        endDate={endDate}
         setStartDate={setStartDate}
         setEndDate={setEndDate}
         leftContent={filterContentLeft()}

@@ -2255,11 +2255,19 @@ const DataTable = (props) => {
           }
           case "date_navigate": {
             const url = `${window.location.origin}/${item?.navigate}`;
+            const start_date = data['time_start_report']
+            const end_date = data['time_end_report']
+
+            const date = moment(data[item.dataIndex], "DD-MM-YYYY").format("DD/MM/YYYY");
+            const formatDate = moment(date, "DD/MM/YYYY");
+            const startOfDay = formatDate?.startOf("day").toISOString();
+            const endOfDay = formatDate?.endOf("day").toISOString();
+
             return (
               <div
                 onClick={() =>
                   window.open(
-                    `${url}?start_date=${data["time_start_report"]}&end_date=${data["time_end_report"]}`,
+                    `${url}?start_date=${startOfDay}&end_date=${endOfDay}`,
                     "_blank"
                   )
                 }
@@ -2268,10 +2276,15 @@ const DataTable = (props) => {
                 }`}
               >
                 <span className="case__date-create-date">
-                  {moment(new Date(data[item.dataIndex])).format("DD/MM/YYYY")}
+                  {moment(data[item.dataIndex], "DD-MM-YYYY").format(
+                    "DD/MM/YYYY"
+                  )}
                 </span>
                 <span className="case__date-create-time">
-                  {moment(new Date(data[item.dataIndex])).format("HH:mm:ss")}
+                  {/* moment(data[item.dataIndex], "DD-MM-YYYY").format("DD/MM/YYYY") */}
+                  {moment(data[item.dataIndex], "DD-MM-YYYY").format(
+                    "HH:mm:ss"
+                  )}
                 </span>
               </div>
             );

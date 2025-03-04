@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { errorNotify } from "../../../../../helper/toast";
-import { getListHistoryDiscountApi } from "../../../../../api/affeliate";
+import { getListHistoryDiscountApi } from "../../../../../api/affiliate";
 import moment from "moment";
 import icons from "../../../../../utils/icons";
 import { formatMoney } from "../../../../../helper/formatMoney";

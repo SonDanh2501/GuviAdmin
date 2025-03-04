@@ -265,6 +265,10 @@ const Admin = () => {
       {/* 
       <Route path="/topup/manage-cashbook" element={< ManageCashBook />} /> */}
       <Route
+        path="/transaction/manage-transaction"
+        element={<ManageTopUpWithdraw object="" />}
+      />
+      <Route
         path="/transaction/manage-transaction/collaborator"
         element={<ManageTopUpWithdraw object="collaborator" />}
       />
