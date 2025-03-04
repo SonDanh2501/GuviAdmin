@@ -20,7 +20,16 @@ import {
 } from "../../../../api/affeliate";
 
 import icons from "../../../../utils/icons";
-import { Button, message, Modal, Pagination, Popover, Tooltip } from "antd";
+import {
+  Button,
+  message,
+  Modal,
+  Pagination,
+  Popover,
+  QRCode,
+  Space,
+  Tooltip,
+} from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import {
   FacebookIcon,
@@ -60,12 +69,11 @@ import {
 import referralPolicy from "../../../../assets/images/referral-policy.svg";
 import overViewAffilaite from "../../../../assets/images/overViewAffiliate.svg";
 import logoGuvi from "../../../../assets/images/LogoS.svg";
+import logoGuviCircle from "../../../../assets/images/Logo.svg";
 import notFoundImage from "../../../../assets/images/empty_data.svg";
 import moment from "moment";
 import { removeToken } from "../../../../helper/tokenHelper";
 import { logoutAffiliateAction } from "../../../../redux/actions/auth";
-// import QRCode from "react-qr-code";
-import {QRCodeSVG} from "qrcode.react";
 
 const {
   IoSettings,
@@ -607,43 +615,23 @@ const RefferendList = () => {
     []
   );
 
-  const downloadQR = (elementId) => {
-    const svg = document.getElementById(elementId); // Lấy phần tử SVG
-    if (!svg) {
-      console.error("Không tìm thấy phần tử SVG");
-      return;
+  function doDownload(url, fileName) {
+    const a = document.createElement("a");
+    a.download = fileName;
+    a.href = url;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
+
+  const downloadCanvasQRCode = (elementId) => {
+    const canvas = document.getElementById(elementId)?.querySelector('canvas');
+    if (canvas) {
+      const url = canvas.toDataURL();
+      doDownload(url, 'QRCode.png');
     }
-
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
-    const svgData = new XMLSerializer().serializeToString(svg);
-
-    const img = new Image();
-    const svgBlob = new Blob([svgData], {
-      type: "image/svg+xml;charset=utf-8",
-    });
-    const url = URL.createObjectURL(svgBlob);
-
-    img.onload = () => {
-      canvas.width = svg.clientWidth;
-      canvas.height = svg.clientHeight;
-      ctx.drawImage(img, 0, 0);
-
-      const pngUrl = canvas.toDataURL("image/png");
-
-      let downloadLink = document.createElement("a");
-      downloadLink.href = pngUrl;
-      downloadLink.download = "qrcode.png";
-      document.body.appendChild(downloadLink);
-      downloadLink.click();
-      document.body.removeChild(downloadLink);
-
-      URL.revokeObjectURL(url);
-    };
-
-    img.src = url;
   };
-
+  
   /* ~~~ Main  ~~~ */
   return (
     <div className="refferend-list-affiliate">
@@ -1698,10 +1686,10 @@ const RefferendList = () => {
           <div className="refferend-list-affiliate__share-link--qr-code">
             <div className="refferend-list-affiliate__share-link--qr-code-child">
               <div
-                onClick={() => downloadQR("qrcode_referral_link")}
+                onClick={() => downloadCanvasQRCode("referral_link")}
                 className="refferend-list-affiliate__share-link--qr-code-child-download"
               >
-                <IoDownloadOutline size={24} color="white" />
+                <IoDownloadOutline size={24} color="black" />
               </div>
               <span className="refferend-list-affiliate__share-link--qr-code-child-title">
                 Nhận chiết khấu
@@ -1709,10 +1697,16 @@ const RefferendList = () => {
               <div className="refferend-list-affiliate__share-link--qr-code-child-container">
                 <div className="refferend-list-affiliate__share-link--qr-code-child-container-rouded-border-vertical"></div>
                 <div className="refferend-list-affiliate__share-link--qr-code-child-container-rouded-border-horizontal"></div>
-                <div className="refferend-list-affiliate__share-link--qr-code-child-container-rouded-border-qr-code">
-                  <QRCodeSVG
-                    id="qrcode_referral_link"
+                <div
+                  id="referral_link"
+                  className="refferend-list-affiliate__share-link--qr-code-child-container-rouded-border-qr-code"
+                >
+                  <QRCode
+                    errorLevel="Q"
                     value={valueUserInfo?.referral_link}
+                    icon={logoGuviCircle}
+                    color="#3b82f6"
+                    bgColor="#ffffff"
                     size={170}
                   />
                 </div>
@@ -1720,10 +1714,10 @@ const RefferendList = () => {
             </div>
             <div className="refferend-list-affiliate__share-link--qr-code-child">
               <div
-                onClick={() => downloadQR("qrcode_promotional_referral_link")}
+                onClick={() => downloadCanvasQRCode("promotional_referral_link")}
                 className="refferend-list-affiliate__share-link--qr-code-child-download"
               >
-                <IoDownloadOutline size={24} color="white" />
+                <IoDownloadOutline size={24} color="black" />
               </div>
               <span className="refferend-list-affiliate__share-link--qr-code-child-title">
                 Gửi voucher
@@ -1731,10 +1725,16 @@ const RefferendList = () => {
               <div className="refferend-list-affiliate__share-link--qr-code-child-container">
                 <div className="refferend-list-affiliate__share-link--qr-code-child-container-rouded-border-vertical"></div>
                 <div className="refferend-list-affiliate__share-link--qr-code-child-container-rouded-border-horizontal"></div>
-                <div className="refferend-list-affiliate__share-link--qr-code-child-container-rouded-border-qr-code">
-                  <QRCodeSVG
-                    id="qrcode_promotional_referral_link"
+                <div
+                  id="promotional_referral_link"
+                  className="refferend-list-affiliate__share-link--qr-code-child-container-rouded-border-qr-code"
+                >
+                  <QRCode
+                    errorLevel="Q"
                     value={valueUserInfo?.promotional_referral_link}
+                    icon={logoGuviCircle}
+                    color="#eab308"
+                    bgColor="#ffffff"
                     size={170}
                   />
                 </div>
