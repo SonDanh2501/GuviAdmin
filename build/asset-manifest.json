@@ -1,11 +1,11 @@
 {
   "files": {
-    "main.css": "/static/css/main.9caf962b.css",
-    "main.js": "/static/js/main.9c5df9ca.js",
-    "static/media/affiliate_welcome_popup.png": "/static/media/affiliate_welcome_popup.0e5721e252bc363dcfc1.png",
+    "main.css": "/static/css/main.295d05d7.css",
+    "main.js": "/static/js/main.9b54f56e.js",
     "static/media/description.png": "/static/media/description.5da8e5eb29ad845b842c.png",
     "static/media/thumnailContent.png": "/static/media/thumnailContent.5f47e4a8f0e0c87659a9.png",
     "static/media/title.png": "/static/media/title.71a2ab4847b010aa171e.png",
+    "static/media/affiliate_welcome_popup.png": "/static/media/affiliate_welcome_popup.ffd961be701cdbd42db8.png",
     "static/media/assistant.svg": "/static/media/assistant.874a18a165975da4be4f0f1ebdd70ead.svg",
     "static/media/copy_button.svg": "/static/media/copy_button.bc07f136f2ed0bffcbe76e2850714581.svg",
     "static/media/aboutGuvi.png": "/static/media/aboutGuvi.0b1bee3dd291fa2a95b5.png",
@@ -115,11 +115,11 @@
     "static/media/offline.svg": "/static/media/offline.33acbe8c955951e587e68725985e74e7.svg",
     "static/media/online.svg": "/static/media/online.acf17c611c1affd9615cf0c62302674d.svg",
     "static/media/pending.svg": "/static/media/pending.ae3d796b3e3d6c6272a35edc144a2e90.svg",
-    "main.9caf962b.css.map": "/static/css/main.9caf962b.css.map",
-    "main.9c5df9ca.js.map": "/static/js/main.9c5df9ca.js.map"
+    "main.295d05d7.css.map": "/static/css/main.295d05d7.css.map",
+    "main.9b54f56e.js.map": "/static/js/main.9b54f56e.js.map"
   },
   "entrypoints": [
-    "static/css/main.9caf962b.css",
-    "static/js/main.9c5df9ca.js"
+    "static/css/main.295d05d7.css",
+    "static/js/main.9b54f56e.js"
   ]
 }
