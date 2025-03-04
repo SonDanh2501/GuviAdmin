@@ -95,6 +95,9 @@ import {
   IoExit,
   IoReceipt,
   IoHappy,
+  IoPlay,
+  IoCreateOutline,
+  IoDownloadOutline,
 } from "react-icons/io5";
 import { FaRegFrown, FaRegMeh, FaRegSmile, FaDog } from "react-icons/fa";
 import {
@@ -204,6 +207,9 @@ const icons = {
   IoExit,
   IoReceipt,
   IoHappy,
+  IoPlay,
+  IoCreateOutline,
+  IoDownloadOutline,
   // Font Awesome 5
   FaRegFrown,
   FaRegMeh,

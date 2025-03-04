@@ -41,6 +41,7 @@
     "react-icons": "~5.2.1",
     "react-image-file-resizer": "~0.4.8",
     "react-intl-currency-input": "0.2.6",
+    "react-qr-code": "~2.0.15",
     "react-qrcode-logo": "~2.8.0",
     "react-redux": "~7.2.3",
     "react-router-dom": "6.4.3",

@@ -2,6 +2,23 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import "./index.scss";
 import _ from "lodash";
 
+import {
+  getCustomerInfoAffiliateApi,
+  getRandomReferralCodeApi,
+  updateReferralCodeApi,
+  getListReferralPersonApi,
+  getListActivityAffiliateApi,
+  createWithdrawalRequestApi,
+  getListTransactionAffiliateApi,
+  createBankAccountApi,
+  checkBankAccountExistApi,
+  getTotalDiscountApi,
+  getTotalReferralPersonApi,
+  checkOTPAffiliateApi,
+  forgotPasswordAffiliateApi,
+  updatePasswordAffiliateApi,
+} from "../../../../api/affeliate";
+
 import icons from "../../../../utils/icons";
 import { Button, message, Modal, Pagination, Popover, Tooltip } from "antd";
 import { Link, useNavigate } from "react-router-dom";
@@ -17,19 +34,8 @@ import appleStoreImage from "../../../../assets/images/apple_store.svg";
 import chStoreImage from "../../../../assets/images/google_play.svg";
 import copyRightImage from "../../../../assets/images/copy_right.png";
 import affiliateLogo from "../../../../assets/images/affiliate_guide.svg";
-import {
-  getCustomerInfoAffiliateApi,
-  getRandomReferralCodeApi,
-  updateReferralCodeApi,
-  getListReferralPersonApi,
-  getListActivityAffiliateApi,
-  createWithdrawalRequestApi,
-  getListTransactionAffiliateApi,
-  createBankAccountApi,
-  checkBankAccountExistApi,
-  getTotalDiscountApi,
-  getTotalReferralPersonApi,
-} from "../../../../api/affeliate";
+import userDefault from "../../../../assets/images/user.png";
+
 import { errorNotify, successNotify } from "../../../../helper/toast";
 import { useDispatch, useSelector } from "react-redux";
 import { loadingAction } from "../../../../redux/actions/loading";
@@ -40,14 +46,27 @@ import InputTextCustom from "../../../../components/inputCustom";
 import i18n from "../../../../i18n";
 import { getLanguageState, getUser } from "../../../../redux/selectors/auth";
 import ButtonCustom from "../../../../components/button";
-import { formatMoney, formatNumber } from "../../../../helper/formatMoney";
-import { bankList, getInitials, sortList } from "../../../../utils/contant";
+import {
+  formatCardNumber,
+  formatMoney,
+  formatNumber,
+} from "../../../../helper/formatMoney";
+import {
+  bankList,
+  checkPasswordRequired,
+  getInitials,
+  sortList,
+} from "../../../../utils/contant";
 import referralPolicy from "../../../../assets/images/referral-policy.svg";
 import overViewAffilaite from "../../../../assets/images/overViewAffiliate.svg";
+import logoGuvi from "../../../../assets/images/LogoS.svg";
 import notFoundImage from "../../../../assets/images/empty_data.svg";
 import moment from "moment";
+import { removeToken } from "../../../../helper/tokenHelper";
+import { logoutAffiliateAction } from "../../../../redux/actions/auth";
+import QRCode from "react-qr-code";
+
 const {
-  IoChevronDown,
   IoSettings,
   IoTrendingDown,
   IoTrendingUp,
@@ -58,21 +77,24 @@ const {
   IoCash,
   IoReader,
   IoCopy,
-  IoRefresh,
   IoTime,
   IoCalendar,
   IoChatboxEllipses,
   IoArrowForward,
   IoLocation,
-  IoArrowUpCircleOutline,
   IoArrowUp,
   MdDoubleArrow,
   IoAdd,
   IoArrowDown,
   IoRemove,
-  IoShareOutline,
-  IoLink,
   IoExit,
+  IoCreateOutline,
+  IoEye,
+  IoEyeOff,
+  IoCheckmark,
+  IoClose,
+  IoCheckmarkCircleOutline,
+  IoDownloadOutline,
 } = icons;
 
 const RefferendList = () => {
@@ -160,6 +182,7 @@ const RefferendList = () => {
   const [item, setItem] = useState();
   const lang = useSelector(getLanguageState);
   const [valueSearch, setValueSearch] = useState("");
+
   /* ~~~ Value ~~~ */
   const [selectStatus, setSelectStatus] = useState(""); // Giá trị lựa chọn trạng thái
   const [selectObject, setSelectObject] = useState(""); // Giá trị lựa chọn đối tượng (mặc định là đối tác)
@@ -168,7 +191,6 @@ const RefferendList = () => {
   const [selectWalletType, setSelectWalletMetod] = useState(""); // Giá trị lựa chọn phương thức thanh toán
   const [selectTab, setSelectTab] = useState(0);
   const [valueUserInfo, setValueUserInfo] = useState([]);
-  const [isChangeReferralCode, setIsChangeReferralCode] = useState(false);
   const [valueReferralCode, setValueReferralCode] = useState("");
   const [dataListReferralPerson, setDataListReferralPerson] = useState([]);
   const [dataHistoryDiscount, setDataHistoryDiscount] = useState([]);
@@ -191,14 +213,25 @@ const RefferendList = () => {
   const [valueCardHolder, setValueCardHolder] = useState(""); // Giá trị tên của chủ thẻ tài khoản ngân hàng
   const [valueCardNumber, setValueCardNumber] = useState(""); // Giá trị số tài khoản của thẻ tài khoản ngân hàng
   const [valueSelectBank, setValueSelectBank] = useState(""); // Giá trị lựa chọn ngân hàng
-  const [isCheckBankExist, setIsCheckBankExist] = useState(false); // Giá trị kiểm tra tài khoản đã có tài khoản ngân hàng hay chưa
+
+  /* ~~~ Flag ~~~ */
   const [showModalWithdrawal, setShowModalWithdrawal] = useState(false);
   const [showModalBankInfo, setShowModalBankInfo] = useState(false);
   const [showModalPolicy, setShowModalPolicy] = useState(false);
   const [showModalShareLink, setShowModalShareLink] = useState(false);
+  const [showModalInformation, setShowModalInformation] = useState(false);
+  const [isCheckBankExist, setIsCheckBankExist] = useState(false); // Giá trị kiểm tra tài khoản đã có tài khoản ngân hàng hay chưa
+  const [isChangeReferralCode, setIsChangeReferralCode] = useState(false);
+  const [isShowCardNumber, setIsShowCardNumber] = useState(false);
+  const [isShowChangePassword, setIsShowChangePassword] = useState(false);
+  const [showChangePasswordInput, setShowChangePasswordInput] = useState(false);
+
   const [valuePerviousReferralPerson, setValuePerviousReferralPerson] =
     useState(0);
   const [valuePerviousDiscount, setValuePerviousDiscount] = useState(0);
+  const [saveToken, setSaveToken] = useState(""); // Giá trị Token lưu lại thông tin số điện thoại, mã vùng số điện thoại và ngày tạo (không phải token đăng nhập)
+  const [otp, setOtp] = useState(Array(6).fill("")); // Trạng thái lưu giá trị từng ô
+  const [valuePassword, setValuePassword] = useState("");
 
   /* ~~~ List ~~~ */
   // 1. Danh sách các cột của bảng
@@ -262,6 +295,7 @@ const RefferendList = () => {
       step: "Nhận chiết khấu 5% từ những đơn hàng hoàn thành",
     },
   ];
+
   /* ~~~ Handle function ~~~ */
   // 1. Hàm fetch thông tin của khách hàng hiện tại
   const fetchCustomerInfo = async () => {
@@ -413,18 +447,51 @@ const RefferendList = () => {
       });
     }
   };
-  const onChangePage = (value) => {
-    setStartPageWithdrawal(value);
+  // 10. Hàm đăng xuất
+  const handleLogout = () => {
+    removeToken();
+    dispatch(loadingAction.loadingRequest(true));
+    dispatch(logoutAffiliateAction.logoutAffiliateRequest(navigate));
   };
-  const handleSearch = useCallback(
-    _.debounce((value) => {
-      setValueSearch(value);
-      setStartPage(0);
-    }, 500),
-    []
-  );
-  /* ~~~ Use effect ~~~ */
+  // 12. Hàm kiểm tra mã OTP
+  const handleCheckOTP = async (payload) => {
+    try {
+      dispatch(loadingAction.loadingRequest(true));
+      const res = await checkOTPAffiliateApi(payload);
+      setSaveToken(res.token);
+      setShowChangePasswordInput(true);
+      dispatch(loadingAction.loadingRequest(false));
+    } catch (err) {
+      errorNotify({
+        message: err.message,
+      });
+      dispatch(loadingAction.loadingRequest(false));
+    }
+  };
+  // 12. Hàm quên mật khẩu
+  const handleForgotPassword = async (payload) => {
+    try {
+      const res = await forgotPasswordAffiliateApi(payload);
+      setIsShowChangePassword(true);
+    } catch (err) {
+      errorNotify({
+        message: err.message,
+      });
+    }
+  };
+  // 13. Hàm cập nhật mật khẩu
+  const handleUpdatePassword = async (payload) => {
+    try {
+      const res = await updatePasswordAffiliateApi(payload);
+      setIsShowChangePassword(false);
+    } catch (err) {
+      errorNotify({
+        message: err.message,
+      });
+    }
+  };
 
+  /* ~~~ Use effect ~~~ */
   // 1. Fetch các dữ liệu ban đầu (thông tin khách hàng, giới thiệu chung, kiểm tra tòi khoản ngân hàng)
   useEffect(() => {
     fetchCustomerInfo();
@@ -458,6 +525,17 @@ const RefferendList = () => {
   useEffect(() => {
     checkIfEnd();
   }, [scrollLeft]);
+  // 6. Tự động xác thực mã code khi OTP đủ 6 ký tự
+  useEffect(() => {
+    if (otp.join("").length === 6) {
+      handleCheckOTP({
+        phone: valueUserInfo?.phone,
+        code_phone_area: "+84",
+        code: otp.join(""),
+      });
+    }
+  }, [otp]);
+
   /* ~~~ Other  ~~~ */
   const copyToClipBoard = (text) => {
     if (text && text.length > 0) {
@@ -487,6 +565,82 @@ const RefferendList = () => {
   const convertToMoney = (value) => {
     const tempMoney = value.replace(/\./g, "");
     return Number(tempMoney);
+  };
+
+  const inputRefs = useRef([]);
+
+  const handleChange = (e, index) => {
+    const value = e.target.value;
+
+    // Chỉ cho phép nhập số
+    if (!/^\d*$/.test(value)) {
+      return;
+    }
+    // Cập nhật giá trị vào state
+    const newOtp = [...otp];
+    newOtp[index] = value;
+    setOtp(newOtp);
+
+    // Chuyển focus sang ô tiếp theo
+    if (value && index < inputRefs.current.length - 1) {
+      inputRefs.current[index + 1].focus();
+    }
+  };
+
+  const handleKeyDown = (e, index) => {
+    if (e.key === "Backspace" && index > 0 && !e.target.value) {
+      // Quay lại ô trước nếu nhấn Backspace khi ô hiện tại đang trống
+      inputRefs.current[index - 1].focus();
+    }
+  };
+
+  const onChangePage = (value) => {
+    setStartPageWithdrawal(value);
+  };
+
+  const handleSearch = useCallback(
+    _.debounce((value) => {
+      setValueSearch(value);
+      setStartPage(0);
+    }, 500),
+    []
+  );
+
+  const downloadQR = (elementId) => {
+    const svg = document.getElementById(elementId); // Lấy phần tử SVG
+    if (!svg) {
+      console.error("Không tìm thấy phần tử SVG");
+      return;
+    }
+
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    const svgData = new XMLSerializer().serializeToString(svg);
+
+    const img = new Image();
+    const svgBlob = new Blob([svgData], {
+      type: "image/svg+xml;charset=utf-8",
+    });
+    const url = URL.createObjectURL(svgBlob);
+
+    img.onload = () => {
+      canvas.width = svg.clientWidth;
+      canvas.height = svg.clientHeight;
+      ctx.drawImage(img, 0, 0);
+
+      const pngUrl = canvas.toDataURL("image/png");
+
+      let downloadLink = document.createElement("a");
+      downloadLink.href = pngUrl;
+      downloadLink.download = "qrcode.png";
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+
+      URL.revokeObjectURL(url);
+    };
+
+    img.src = url;
   };
 
   /* ~~~ Main  ~~~ */
@@ -1018,6 +1172,44 @@ const RefferendList = () => {
           </div>
         </div>
         <div className="refferend-list-affiliate__content--right">
+          {/* Information card */}
+          <div className="refferend-list-affiliate__content--right-info card-shadow">
+            <div className="refferend-list-affiliate__content--right-info-content">
+              <div className="refferend-list-affiliate__content--right-info-content-avatar">
+                <img src={userDefault} alt=""></img>
+              </div>
+              <div className="refferend-list-affiliate__content--right-info-content-name">
+                <span className="refferend-list-affiliate__content--right-info-content-name-title">
+                  {valueUserInfo?.full_name || ""}{" "}
+                </span>
+                <span className="refferend-list-affiliate__content--right-info-content-name-sub">
+                  {valueUserInfo?.phone || ""}{" "}
+                </span>
+              </div>
+            </div>
+            <div className="refferend-list-affiliate__content--right-info-action">
+              <Tooltip placement="bottom" title="Chỉnh sửa thông tin">
+                <div
+                  onClick={() => setShowModalInformation(true)}
+                  className="refferend-list-affiliate__content--right-info-action-child card-shadow"
+                >
+                  <span>
+                    <IoCreateOutline size="16px" />
+                  </span>
+                </div>
+              </Tooltip>
+              <Tooltip placement="bottom" title="Đăng xuất">
+                <div
+                  onClick={() => handleLogout()}
+                  className="refferend-list-affiliate__content--right-info-action-child card-shadow"
+                >
+                  <span>
+                    <IoExit size="16px" />
+                  </span>
+                </div>
+              </Tooltip>
+            </div>
+          </div>
           {/* Bank card */}
           <div className="refferend-list-affiliate__content--right-bank card-shadow">
             {isCheckBankExist ? (
@@ -1032,7 +1224,7 @@ const RefferendList = () => {
                     <div className="refferend-list-affiliate__content--right-bank-content-top-location">
                       <IoLocation className="refferend-list-affiliate__content--right-bank-content-top-location-icon" />
                       <span className="refferend-list-affiliate__content--right-bank-content-top-location-label">
-                        Viet Nam
+                        {valueUserInfo?.bank_account?.bank_name}
                       </span>
                     </div>
                   </div>
@@ -1044,7 +1236,11 @@ const RefferendList = () => {
                         Số thẻ
                       </span>
                       <span className="refferend-list-affiliate__content--right-bank-content-middle-info-value">
-                        *** *** {valueUserInfo?.account_number?.slice(-4) || ""}
+                        {formatCardNumber(
+                          isShowCardNumber
+                            ? valueUserInfo?.bank_account?.account_number
+                            : valueUserInfo?.account_number
+                        )}
                       </span>
                     </div>
                     {/* Thông tin số 2 */}
@@ -1062,15 +1258,31 @@ const RefferendList = () => {
                   <span className="refferend-list-affiliate__content--right-bank-bottom-name">
                     {valueUserInfo?.account_holder || ""}
                   </span>
-                  <div
-                    onClick={() => setShowModalWithdrawal(true)}
-                    className="refferend-list-affiliate__content--right-bank-bottom-icon"
-                  >
-                    <Tooltip placement="top" title="Rút tiền">
-                      <div className="refferend-list-affiliate__content--right-bank-bottom-icon-icon">
-                        <IoArrowUp color="black" />
-                      </div>
-                    </Tooltip>
+                  <div className="refferend-list-affiliate__content--right-bank-bottom-icon">
+                    <div
+                      onClick={() => setIsShowCardNumber(!isShowCardNumber)}
+                      className="refferend-list-affiliate__content--right-bank-bottom-icon-child"
+                    >
+                      <Tooltip placement="top" title="Xem số tài khoản">
+                        <div className="refferend-list-affiliate__content--right-bank-bottom-icon-child-icon">
+                          {isShowCardNumber ? (
+                            <IoEyeOff color="black" />
+                          ) : (
+                            <IoEye color="black" />
+                          )}
+                        </div>
+                      </Tooltip>
+                    </div>
+                    <div
+                      onClick={() => setShowModalWithdrawal(true)}
+                      className="refferend-list-affiliate__content--right-bank-bottom-icon-child"
+                    >
+                      <Tooltip placement="top" title="Rút tiền">
+                        <div className="refferend-list-affiliate__content--right-bank-bottom-icon-child-icon">
+                          <IoArrowUp color="black" />
+                        </div>
+                      </Tooltip>
+                    </div>
                   </div>
                 </div>
               </>
@@ -1209,72 +1421,68 @@ const RefferendList = () => {
         </div>
       </div>
       <div className="refferend-list-affiliate__footer">
-        <div className="refferend-list-affiliate__footer--content">
-          {/* Address */}
-          <div className="refferend-list-affiliate__footer--content-information">
-            <span className="refferend-list-affiliate__footer--content-information-header">
-              CÔNG TY TNHH GIẢI PHÁP CÔNG NGHỆ GUVI
-            </span>
-            <span className="refferend-list-affiliate__footer--content-information-description">
-              Văn phòng: 137D đường số 11, Phường Trường Thọ, TP. Thủ Đức, TP.
-              Hồ Chí Minh{" "}
-            </span>
-            <span className="refferend-list-affiliate__footer--content-information-description">
-              Hotline: 1900 0027
-            </span>
-            <span className="refferend-list-affiliate__footer--content-information-description">
-              Email: cskh@guvico.com - marketing@guvico.com
-            </span>
-          </div>
-          {/* Download app */}
-          <div className="refferend-list-affiliate__footer--content-information">
-            <span className="refferend-list-affiliate__footer--content-information-header">
-              Tải ứng dụng
-            </span>
-            <div className="refferend-list-affiliate__footer--content-information-image-container">
-              <img
-                onClick={() =>
-                  window.open(
-                    "https://play.google.com/store/apps/details?id=com.guvico_customer",
-                    "_blank"
-                  )
-                }
-                className="refferend-list-affiliate__footer--content-information-image"
-                src={chStoreImage}
-              ></img>
-              <img
-                onClick={() =>
-                  window.open(
-                    "https://apps.apple.com/us/app/guvi-gi%C3%BAp-vi%E1%BB%87c-theo-gi%E1%BB%9D/id6443966297",
-                    "_blank"
-                  )
-                }
-                className="refferend-list-affiliate__footer--content-information-image"
-                src={appleStoreImage}
-              ></img>
+        <div className="refferend-list-affiliate__footer--container">
+          <div className="refferend-list-affiliate__footer--container-information">
+            <div className="refferend-list-affiliate__footer--container-information-item">
+              <img src={logoGuvi} alt=""></img>
             </div>
-            <img
-              className="refferend-list-affiliate__footer--content-information-image"
-              src={copyRightImage}
-            ></img>
-          </div>
-          {/* Contact */}
-          <div className="refferend-list-affiliate__footer--content-information">
-            <span className="refferend-list-affiliate__footer--content-information-header">
-              Liên hệ với GUVI
-            </span>
-            <div className="refferend-list-affiliate__footer--content-information-image-container">
-              <IoLogoFacebook size="40px" color="white" />
-              <IoLogoTiktok size="40px" color="white" />
-              <IoLogoYoutube size="40px" color="white" />
+            <div className="refferend-list-affiliate__footer--container-information-item">
+              <span>
+                Mã số:&nbsp;<span className="high-light">0317084672</span>
+              </span>
+            </div>
+            <div className="refferend-list-affiliate__footer--container-information-item">
+              <span>
+                Hotline:&nbsp;<span className="high-light">1900.0027</span>
+              </span>
+            </div>
+            <div className="refferend-list-affiliate__footer--container-information-item">
+              <span>
+                Email:&nbsp;
+                <span className="high-light">
+                  cskh@guvico.com – marketing@guvico.com
+                </span>
+              </span>
             </div>
           </div>
-        </div>
-        {/* Copy right */}
-        <div className="refferend-list-affiliate__footer--content-copy-right">
-          <span className="refferend-list-affiliate__footer--content-copy-right-label">
-            @ 2024 Công ty TNHH Giải pháp Công nghệ Guvi sở hữu bản quyền.
-          </span>
+          <div className="refferend-list-affiliate__footer--container-copy-right">
+            <div className="refferend-list-affiliate__footer--container-copy-right-item">
+              <span>
+                @ 2024 Công ty TNHH Giải pháp Công nghệ Guvi​ sở hữu bản quyền.
+              </span>
+            </div>
+            <div
+              onClick={() =>
+                window.open(
+                  "https://apps.apple.com/us/app/guvi-gi%C3%BAp-vi%E1%BB%87c-theo-gi%E1%BB%9D/id6443966297",
+                  "_blank"
+                )
+              }
+              className="refferend-list-affiliate__footer--container-copy-right-item"
+            >
+              <img src={appleStoreImage} alt=""></img>
+            </div>
+            {/* <Link
+                        style={{ paddingBottom: "3px" }}
+                        to={`/details-order/${item?.id_order?.id_group_order}`}
+                        target="_blank"
+                      >
+                        <span className="history-activity__item--right-bottom-item-link">
+                          {item?.id_order?.id_view}
+                        </span>
+                      </Link> */}
+            <div
+              onClick={() =>
+                window.open(
+                  "https://play.google.com/store/apps/details?id=com.guvico_customer",
+                  "_blank"
+                )
+              }
+              className="refferend-list-affiliate__footer--container-copy-right-item"
+            >
+              <img src={chStoreImage} alt=""></img>
+            </div>
+          </div>
         </div>
       </div>
       <Modal
@@ -1486,36 +1694,53 @@ const RefferendList = () => {
         footer={[]}
       >
         <div className="refferend-list-affiliate__share-link">
-          {/* Example sharing text */}
-          <div className="refferend-list-affiliate__share-link--example">
-            {/* Header */}
-            <div className="refferend-list-affiliate__share-link--example-header">
-              <span className="refferend-list-affiliate__share-link--example-header-left">
-                Sao chép nhanh đoạn văn mẫu sau
+          <div className="refferend-list-affiliate__share-link--qr-code">
+            <div className="refferend-list-affiliate__share-link--qr-code-child">
+              <div
+                onClick={() => downloadQR("qrcode_referral_link")}
+                className="refferend-list-affiliate__share-link--qr-code-child-download"
+              >
+                <IoDownloadOutline size={24} color="white" />
+              </div>
+              <span className="refferend-list-affiliate__share-link--qr-code-child-title">
+                Nhận chiết khấu
               </span>
-              <span className="refferend-list-affiliate__share-link--example-header-right">
-                <IoCopy /> Sao chép
-              </span>
+              <div className="refferend-list-affiliate__share-link--qr-code-child-container">
+                <div className="refferend-list-affiliate__share-link--qr-code-child-container-rouded-border-vertical"></div>
+                <div className="refferend-list-affiliate__share-link--qr-code-child-container-rouded-border-horizontal"></div>
+                <div className="refferend-list-affiliate__share-link--qr-code-child-container-rouded-border-qr-code">
+                  <QRCode
+                    id="qrcode_referral_link"
+                    value={valueUserInfo?.referral_link}
+                    size={170}
+                  />
+                </div>
+              </div>
             </div>
-            {/* Body */}
-            <div className="refferend-list-affiliate__share-link--example-body">
-              <span>️️🎉 Tải ứng dụng GUVI để nhận ngay chiết khấu ️🎉</span>
-              <span>
-                - Nhấn{" "}
-                <span className="high-light">
-                  {valueUserInfo?.referral_link}
-                </span>{" "}
-                để cùng tôi kiếm thêm thu nhập một cách dễ dàng 🤝!
+            <div className="refferend-list-affiliate__share-link--qr-code-child">
+              <div
+                onClick={() => downloadQR("qrcode_promotional_referral_link")}
+                className="refferend-list-affiliate__share-link--qr-code-child-download"
+              >
+                <IoDownloadOutline size={24} color="white" />
+              </div>
+              <span className="refferend-list-affiliate__share-link--qr-code-child-title">
+                Gửi voucher
               </span>
-              <span>
-                - Nhấn{" "}
-                <span className="high-light">
-                  {valueUserInfo?.promotional_referral_link}
-                </span>{" "}
-                để nhận ngay voucher giảm giá đơn đầu tiên ❤️!
-              </span>
+              <div className="refferend-list-affiliate__share-link--qr-code-child-container">
+                <div className="refferend-list-affiliate__share-link--qr-code-child-container-rouded-border-vertical"></div>
+                <div className="refferend-list-affiliate__share-link--qr-code-child-container-rouded-border-horizontal"></div>
+                <div className="refferend-list-affiliate__share-link--qr-code-child-container-rouded-border-qr-code">
+                  <QRCode
+                    id="qrcode_promotional_referral_link"
+                    value={valueUserInfo?.promotional_referral_link}
+                    size={170}
+                  />
+                </div>
+              </div>
             </div>
           </div>
+
           <div className="refferend-list-affiliate__share-link--social">
             <div className="refferend-list-affiliate__share-link--social-child">
               <FacebookShareButton
@@ -1536,24 +1761,209 @@ const RefferendList = () => {
               <span>Email</span>
             </div>
           </div>
-          {/* <div className="refferend-list-affiliate__share-link--social">
-            <div className="refferend-list-affiliate__share-link--social-child">
-              <div className="refferend-list-affiliate__share-link--social-child-circle">
-                <IoLink size={32} />
-              </div>
-              <span className="refferend-list-affiliate__share-link--social-child-label">
-                Facebook
-              </span>
+        </div>
+      </Modal>
+      <Modal
+        title="Thông tin tài khoản"
+        open={showModalInformation}
+        onCancel={() => setShowModalInformation(false)}
+        footer={[]}
+      >
+        <div className="refferend-list-affiliate__information">
+          <div className="refferend-list-affiliate__information--child">
+            <div className="refferend-list-affiliate__information--child-item">
+              <InputTextCustom
+                type="text"
+                disable={true}
+                value={valueUserInfo?.full_name}
+                placeHolder="Họ và tên"
+                // onChange={(e) => setValueCardHolder(e.target.value)}
+              />
             </div>
-            <div className="refferend-list-affiliate__share-link--social-child">
-              <div className="refferend-list-affiliate__share-link--social-child-circle">
-                <IoLink size={32} />
-              </div>
-              <span className="refferend-list-affiliate__share-link--social-child-label">
-                Email
-              </span>
+            <div className="refferend-list-affiliate__information--child-item">
+              <InputTextCustom
+                type="text"
+                disable={true}
+                value={valueUserInfo?.phone}
+                placeHolder="Số điện thoại"
+              />
             </div>
-          </div> */}
+          </div>
+          <InputTextCustom
+            type="text"
+            disable={true}
+            value={valueUserInfo?.email}
+            placeHolder="Email"
+          />
+          <div className="refferend-list-affiliate__information--child">
+            <div className="refferend-list-affiliate__information--child-item">
+              <InputTextCustom
+                type="text"
+                disable={true}
+                value={valueUserInfo?.account_holder}
+                placeHolder="Chủ thẻ"
+              />
+            </div>
+            <div className="refferend-list-affiliate__information--child-item">
+              <InputTextCustom
+                type="text"
+                disable={true}
+                value={valueUserInfo?.bank_account?.account_number}
+                placeHolder="Số thẻ"
+              />
+            </div>
+          </div>
+          <InputTextCustom
+            type="text"
+            disable={true}
+            value={
+              bankList.find(
+                (el) => el.code === valueUserInfo?.bank_account?.bank_name
+              )?.name
+            }
+            placeHolder="Tên ngân hàng"
+          />
+          <div className="refferend-list-affiliate__information--forgot-password">
+            <div></div>
+            <div
+              onClick={() =>
+                handleForgotPassword({
+                  phone: valueUserInfo?.phone,
+                  code_phone_area: "+84",
+                })
+              }
+            >
+              <span>Đổi mật khẩu</span>
+            </div>
+          </div>
+        </div>
+      </Modal>
+      <Modal
+        title="Thay đổi mật khẩu"
+        open={isShowChangePassword}
+        onCancel={() => setIsShowChangePassword(false)}
+        footer={[]}
+        width="370px"
+      >
+        <div className="refferend-list-affiliate__change-password">
+          <span className="refferend-list-affiliate__change-password--title">
+            Nhập mã gồm 6 số đã gửi tới SMS thông qua số (+84)
+          </span>
+          <div className="refferend-list-affiliate__change-password-otp-digit">
+            {[...Array(6)].map((_, index) => (
+              <React.Fragment key={index}>
+                <input
+                  type="text"
+                  maxLength={1}
+                  className="refferend-list-affiliate__change-password-otp-digit-number"
+                  ref={(el) => (inputRefs.current[index] = el)}
+                  onChange={(e) => handleChange(e, index)}
+                  onKeyDown={(e) => handleKeyDown(e, index)}
+                />
+                {index === 2 && <span className="otp-separator">&bull;</span>}
+              </React.Fragment>
+            ))}
+          </div>
+          <div className="refferend-list-affiliate__change-password--otp-verify">
+            {showChangePasswordInput ? (
+              <>
+                <span>
+                  <IoCheckmark size={12} color="green" />
+                </span>
+                <span className="refferend-list-affiliate__change-password--otp-verify-label verify">
+                  Xác thức
+                </span>
+              </>
+            ) : (
+              <>
+                <span>
+                  <IoCheckmark size={12} />
+                </span>
+                <span className="refferend-list-affiliate__change-password--otp-verify-label">
+                  Chưa xác thực
+                </span>
+              </>
+            )}
+          </div>
+          {showChangePasswordInput && (
+            <div className="refferend-list-affiliate__change-password--new-password">
+              <InputTextCustom
+                type="text"
+                value={valuePassword}
+                placeHolderNormal="Mật khẩu"
+                onChange={(e) => setValuePassword(e.target.value)}
+                isPassword={true}
+              />
+              {/* Thanh kiểm tra dựa trên mật khẩu điền vào */}
+              <div
+                className={`login-affiliate__card--information-password-process-bar`}
+              >
+                <div
+                  className={`login-affiliate__card--information-password-process-bar-child ${
+                    checkPasswordRequired(valuePassword).level === 0
+                      ? "empty"
+                      : checkPasswordRequired(valuePassword).level === 1
+                      ? "week"
+                      : checkPasswordRequired(valuePassword).level === 2
+                      ? "fear"
+                      : checkPasswordRequired(valuePassword).level === 3
+                      ? "good"
+                      : checkPasswordRequired(valuePassword).level === 4
+                      ? "strong"
+                      : ""
+                  }`}
+                ></div>
+              </div>
+              {/* Các yêu cầu khi tạo mật khẩu */}
+              <div className="login-affiliate__card--information-password-condition-required">
+                {/* Ít nhất 8 ký tự */}
+                <div
+                  className={`login-affiliate__card--information-password-condition-required-child ${
+                    checkPasswordRequired(valuePassword).isPassLength &&
+                    "checked"
+                  }`}
+                >
+                  <span>
+                    <IoCheckmarkCircleOutline />
+                  </span>
+                  <span>Ít nhất 8 ký tự</span>
+                </div>
+                <div
+                  className={`login-affiliate__card--information-password-condition-required-child ${
+                    checkPasswordRequired(valuePassword).isHaveLetter &&
+                    "checked"
+                  }`}
+                >
+                  <span>
+                    <IoCheckmarkCircleOutline />
+                  </span>
+                  <span>Ít nhất 1 chữ cái</span>
+                </div>
+                <div
+                  className={`login-affiliate__card--information-password-condition-required-child ${
+                    checkPasswordRequired(valuePassword).isHaveNumber &&
+                    "checked"
+                  }`}
+                >
+                  <span>
+                    <IoCheckmarkCircleOutline />
+                  </span>
+                  <span>Ít nhất 1 chữ số</span>
+                </div>
+              </div>
+              <ButtonCustom
+                label="Xác nhận"
+                fullScreen={true}
+                borderRadiusFull={true}
+                onClick={() =>
+                  handleUpdatePassword({
+                    token: saveToken,
+                    password: valuePassword,
+                  })
+                }
+              ></ButtonCustom>
+            </div>
+          )}
         </div>
       </Modal>
     </div>
