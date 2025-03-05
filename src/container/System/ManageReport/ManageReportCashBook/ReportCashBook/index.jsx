@@ -47,6 +47,10 @@ const ReportCashBook = () => {
       position: "center",
       // navigate: "/report/manage-report/report-detail-cash-book",
       navigate: "transaction/manage-transaction",
+      fontSize: "cursor-pointer",
+      param: [
+        { key: "type_date", code: "date_verify" },
+      ],
     },
     {
       customTitle: (

@@ -355,7 +355,7 @@ const LoginAffiliate = () => {
             </div>
             <div className="login-affiliate__form--right-sign-up-sign-up">
               <span className="login-affiliate__form--right-sign-up-sign-up-label">
-                Não cá vàng chăng?
+                Bạn quên mật khẩu?
               </span>
               <span
                 onClick={() => {
@@ -364,7 +364,7 @@ const LoginAffiliate = () => {
                 }}
                 className="login-affiliate__form--right-sign-up-sign-up-label high-light"
               >
-                Quên mật khẩu ngay
+                Bấm vào đây
               </span>
             </div>
           </div>
