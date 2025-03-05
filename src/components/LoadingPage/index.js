@@ -4,10 +4,11 @@ import "./style.scss";
 const Loading = ({ loading }) => {
   return (
     <div className={`app-loading ${loading ? "show" : "hide"}`}>
-      <div className="loading">
+      {/* <div className="loading">
         <p>loading</p>
         <span />
-      </div>
+      </div> */}
+      <div class="loader"></div>
     </div>
   );
 };

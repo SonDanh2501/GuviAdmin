@@ -689,3 +689,10 @@ export const exportToExcel = (listData, fileName) => {
     })
   }
 };
+
+
+/* 11. Hàm kiểm tra định dạng email */
+export const checkIsEmailFormat = (email) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
