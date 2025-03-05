@@ -46,6 +46,8 @@ import {
   formatArray,
 } from "../../../../../../../utils/contant";
 import user from "../../../../../../../assets/images/user.png";
+import _, { filter } from "lodash";
+
 const {
   IoClose,
   IoEyeOutline,
@@ -283,39 +285,36 @@ const Information = ({ data, idCTV, setData, id }) => {
     imgProfile,
   ]);
   // 5. Fetch giá trị đối tác khi search
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (nameCollaborator.length > 0) {
-          const dataCollaboratorFetch = await fetchCollaborators(
-            lang,
-            0,
-            100,
-            "",
-            nameCollaborator,
-            ""
-          );
-          setDataCollaborator(dataCollaboratorFetch?.data);
-        } else {
-          const dataCollaboratorFetch = await fetchCollaborators(
-            lang,
-            0,
-            100,
-            "",
-            "",
-            ""
-          );
-          setDataCollaborator(dataCollaboratorFetch?.data);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    // setTimeout(() => {
-    //   fetchData();
-    // }, 1000);
-    fetchData();
-  }, [nameCollaborator]);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       if (nameCollaborator.length > 0) {
+  //         const dataCollaboratorFetch = await fetchCollaborators(
+  //           lang,
+  //           0,
+  //           100,
+  //           "",
+  //           nameCollaborator,
+  //           ""
+  //         );
+  //         setDataCollaborator(dataCollaboratorFetch?.data);
+  //       } else {
+  //         const dataCollaboratorFetch = await fetchCollaborators(
+  //           lang,
+  //           0,
+  //           100,
+  //           "",
+  //           "",
+  //           ""
+  //         );
+  //         setDataCollaborator(dataCollaboratorFetch?.data);
+  //       }
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+  //   fetchData();
+  // }, [nameCollaborator]);
   // ~~~ Handle fucntion ~~~
   // 1. Handle thay đổi thông tin người liên hệ
   const handleChangeContact = (e, index) => {
@@ -570,6 +569,18 @@ const Information = ({ data, idCTV, setData, id }) => {
         dispatch(loadingAction.loadingRequest(false));
       });
   };
+  // 11. Hàm tìm kiếm tên đối tác
+  const handleSearchCollaborator = useCallback(
+    _.debounce(async (value) => {
+      if (value.trim() !== "") {
+        const res = await fetchCollaborators(lang, 0, 20, "", value, "");
+        setDataCollaborator(res?.data);
+      } else {
+        setDataCollaborator([]);
+      }
+    }, 500),
+    []
+  )
   // ~~~ Update information fucntion ~~~
   // 1. Cập nhật thông tin cộng tác viên
   const handleUpdateCollaboratorInfo = useCallback(() => {
@@ -607,7 +618,7 @@ const Information = ({ data, idCTV, setData, id }) => {
       avatar: img, // Ảnh đại diện của CTV [✓]
       type: type, // Kiểu đối tượng hiện đang chỉnh sửa [✓] (Để nguyên không cần chỉnh sửa)
       id_inviter: idCollaborator, // [✓] Mã giới thiệu của CTV khác (Không rõ => để nguyên)
-
+      id_collaborator_inviter: idCollaborator,
       //   // permanent_address: resident, // Địa chỉ thường trú của CTV (dữ liệu cũ)
       //   // temporary_address: staying, //  Địa chỉ tạm trú của CTV (dữ liệu cũ)
       district: codeDistrict, // Quận/Huyện làm việc của CTV
@@ -1221,20 +1232,18 @@ const Information = ({ data, idCTV, setData, id }) => {
                   <InputTextCustom
                     type="select"
                     value={idCollaborator}
-                    placeHolder="Nhập mã giới thiệu"
                     options={
                       dataCollaborator
-                        ? formatArray(
-                            dataCollaborator,
-                            "_id",
-                            ["full_name",
-                            "phone"]
-                          )
+                        ? formatArray(dataCollaborator, "_id", [
+                            "full_name",
+                            "phone",
+                          ])
                         : []
                     }
-                    setValueSelectedProps={setIdCollaborator}
-                    setSearchValue={setNameCollaborator}
+                    placeHolder="Nhập mã giới thiệu"
                     searchField={true}
+                    onChange={handleSearchCollaborator}
+                    setValueSelectedProps={setIdCollaborator}
                   />
                 </div>
               </div>

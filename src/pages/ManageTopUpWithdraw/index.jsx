@@ -115,19 +115,6 @@ const ManageTopUpWithdraw = (props) => {
   };
   // Action đồng ý lệnh giao dịch
   const handleVerifyTransfer = async () => {
-    // verifyTransactionApi(item?._id)
-    //   .then((res) => {
-    //     successNotify({
-    //       message: "Duyệt lệnh thành công",
-    //     });
-    //     fetchData();
-    //   })
-    //   .catch((err) => {
-    //     errorNotify({
-    //       message: "Duyệt lệnh giao dịch thất bại \n" + err?.message,
-    //     });
-    //   });
-    // setOpenModalChangeStatus(false);
     try {
       const res = await verifyTransactionApi(item?._id);
       successNotify({
@@ -145,7 +132,6 @@ const ManageTopUpWithdraw = (props) => {
   // Action đồng ý lệnh giao dịch affiliate
   const handleVerifyAffiliateTransfer = async () => {
     try {
-      console.log("check item?._id", item?._id);
       const res = await verifyTransactionAffiliateAdminApi(item?._id);
       successNotify({
         message: "Duyệt lệnh thành công",
@@ -158,6 +144,7 @@ const ManageTopUpWithdraw = (props) => {
       });
     }
   };
+
   /* ~~~~~~~~~~~~~~~~~~~~~~~~ SON ~~~~~~~~~~~~~~~~~~~~~~~~ */
   const { object } = props;
   let { width } = useWindowDimensions();
@@ -168,6 +155,7 @@ const ManageTopUpWithdraw = (props) => {
   /* ~~~ Value ~~~ */
   const [selectStatus, setSelectStatus] = useState(""); // Giá trị lựa chọn trạng thái
   const [selectObject, setSelectObject] = useState(""); // Giá trị lựa chọn đối tượng (mặc định là đối tác)
+  const [selectDateType, setSelectDateType] = useState("date_create"); // Giá trị lựa chọn loại ngày
   const [selectTransferType, setSelectTransferType] = useState(""); // Giá trị lựa chọn loại giao dịch
   const [selectPaymentMetod, setSelectPaymentMetod] = useState(""); // Giá trị lựa chọn phương thức thanh toán
   const [selectWalletType, setSelectWalletMetod] = useState(""); // Giá trị lựa chọn phương thức thanh toán
@@ -181,6 +169,7 @@ const ManageTopUpWithdraw = (props) => {
     { key: "type_transfer", code: "" },
     { key: "payment_out", code: "" },
     { key: "payment_in", code: "" },
+    { key: "type_date", code: "" },
   ]);
   const [startPage, setStartPage] = useState(0);
   const [lengthPage, setLengthPage] = useState(
@@ -231,7 +220,12 @@ const ManageTopUpWithdraw = (props) => {
     { code: "pay_point", label: "Ví Pay Point" },
     { code: "other", label: "Ví Khác" },
   ];
-  // 6. Danh sách các cột của bảng
+  // 6. Danh sách các loại ngày
+  const dateTypeList = [
+    { code: "date_create", label: "Ngày tạo" },
+    { code: "date_verify", label: "Ngày duyệt" },
+  ];
+  // 7. Danh sách các cột của bảng
   const columns = [
     {
       customTitle: (
@@ -251,7 +245,19 @@ const ManageTopUpWithdraw = (props) => {
       dataIndex: "date_create",
       key: "date_create",
       width: 30,
-      position: "right",
+      position: "center",
+    },
+    {
+      customTitle: (
+        <CustomHeaderDatatable
+          title="Ngày duyệt"
+          textToolTip="Ngày xét duyệt của lệnh giao dịch"
+        />
+      ),
+      dataIndex: "date_verify",
+      key: "date_create",
+      width: 30,
+      position: "center",
     },
     {
       customTitle: (
@@ -409,7 +415,7 @@ const ManageTopUpWithdraw = (props) => {
       position: "center",
     },
   ];
-  // 7. Danh sách các hành động
+  // 8. Danh sách các hành động
   let items = [
     {
       key: "1",
@@ -463,11 +469,13 @@ const ManageTopUpWithdraw = (props) => {
       let query =
         selectFilter.map((item) => `&${item.key}=${item.code}`).join("") +
         `&start_date=${startDate}&end_date=${endDate}`;
+
       const res = await getListTransactionApi(
         startPage,
         lengthPage,
         query,
-        valueSearch
+        valueSearch,
+
       );
       setData(res?.data);
       setTotal(res?.totalItem);
@@ -536,7 +544,7 @@ const ManageTopUpWithdraw = (props) => {
         fetchDataAffiliate();
       }
     }
-  }, [startPage, valueSearch, lengthPage, selectFilter, startDate, endDate]);
+  }, [startPage, valueSearch, lengthPage, selectFilter, startDate, endDate, selectDateType]);
   // 2. Fetch dữ liệu total
   useEffect(() => {
     if (startDate !== "" && endDate !== "") {
@@ -558,6 +566,8 @@ const ManageTopUpWithdraw = (props) => {
           return { ...item, code: selectPaymentMetod };
         } else if (item.key === "payment_in") {
           return { ...item, code: selectWalletType };
+        } else if (item.key === "type_date") {
+          return { ...item, code: selectDateType };
         }
         return item; // Giữ nguyên các phần tử khác
       })
@@ -569,9 +579,10 @@ const ManageTopUpWithdraw = (props) => {
     selectPaymentMetod,
     selectTransferType,
     selectWalletType,
+    selectDateType
   ]);
 
-  // 4. Hàm tự động lấy giá trị ngày bắt đầu và ngày kết thúc từ param
+  // 4. Hàm tự động lấy giá trị từ param
   useEffect(() => {
     // Lấy query string từ URL hiện tại
     const queryString = window.location.search;
@@ -583,6 +594,9 @@ const ManageTopUpWithdraw = (props) => {
     }
     if (params.get("end_date")) {
       setEndDate(params.get("end_date"));
+    }
+    if (params.get("type_date")) {
+      setSelectDateType(params.get("type_date"));
     }
   }, []);
   /* ~~~ Other ~~~ */
@@ -605,7 +619,14 @@ const ManageTopUpWithdraw = (props) => {
   const rightContent = () => {
     return (
       <div className="manage-top-up-with-draw__filter-content">
-        {/* Lọc theo loại đối tượng */}
+        <div>
+          <ButtonCustom
+            label="Loại ngày"
+            options={dateTypeList}
+            value={selectDateType}
+            setValueSelectedProps={setSelectDateType}
+          />
+        </div>
         <div>
           <ButtonCustom
             label="Đối tượng"
@@ -615,7 +636,6 @@ const ManageTopUpWithdraw = (props) => {
             disable={true}
           />
         </div>
-        {/* Lọc theo loại giao dịch */}
         <div>
           <ButtonCustom
             label="Loại giao dịch"
@@ -624,7 +644,6 @@ const ManageTopUpWithdraw = (props) => {
             setValueSelectedProps={setSelectTransferType}
           />
         </div>
-        {/* Lọc theo loại phương thức thanh toán */}
         <div>
           <ButtonCustom
             label="Phương thức thanh toán"
@@ -633,7 +652,6 @@ const ManageTopUpWithdraw = (props) => {
             setValueSelectedProps={setSelectPaymentMetod}
           />
         </div>
-        {/* Lọc theo loại ví vào */}
         <div>
           <ButtonCustom
             label="Vào ví"
