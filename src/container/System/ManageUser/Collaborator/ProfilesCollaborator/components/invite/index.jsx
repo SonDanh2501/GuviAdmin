@@ -10,6 +10,7 @@ import FilterData from "../../../../../../../components/filterData";
 import { CaretDownOutlined } from "@ant-design/icons";
 import icons from "../../../../../../../utils/icons";
 import DataTable from "../../../../../../../components/tables/dataTable";
+import CustomHeaderDatatable from "../../../../../../../components/tables/tableHeader";
 
 const { IoCaretDown } = icons;
 
@@ -32,6 +33,7 @@ const InviteCollaborator = ({ id }) => {
   useEffect(() => {
     getInviteCollaborator(id, 0, 20)
       .then((res) => {
+        console.log("check res >>>", res);
         setCustomer(res?.customer);
         setCollaborator(res?.collaborator);
         setTotalCustomer(res?.total_customer);
@@ -44,50 +46,60 @@ const InviteCollaborator = ({ id }) => {
     statusFilter === "collaborator"
       ? [
           {
-            title: "Ngày tạo",
+            customTitle: <CustomHeaderDatatable title="STT" />,
+            dataIndex: "",
+            key: "ordinal",
+            width: 50,
+          },
+          {
+            customTitle: <CustomHeaderDatatable title="Ngày tạo" />,
+            dataIndex: "date_create",
             key: "date_create",
-            width: 60,
-            FontSize: "text-size-M",
+            width: 100,
+            position: "center",
           },
-
           {
-            title: "Mã giới thiệu",
+            customTitle: <CustomHeaderDatatable title="Mã giới thiệu" />,
+            dataIndex: "code_order",
             key: "code_order",
-            width: 60,
-            FontSize: "text-size-M",
+            width: 100,
+            position: "center",
           },
           {
-            title: "Tên đối tác",
+            customTitle: <CustomHeaderDatatable title="Tên đối tác" />,
+            dataIndex: "customer_name_phone",
             key: "customer_name_phone",
-            width: 60,
-            FontSize: "text-size-M",
+            width: 100,
+            position: "center",
           },
         ]
       : [
           {
-            title: "Ngày tạo",
+            customTitle: <CustomHeaderDatatable title="STT" />,
+            dataIndex: "",
+            key: "ordinal",
+            width: 50,
+          },
+          {
+            customTitle: <CustomHeaderDatatable title="Ngày tạo" />,
+            dataIndex: "date_create",
             key: "date_create",
-            width: 60,
-            FontSize: "text-size-M",
+            width: 100,
+            position: "center",
           },
-
           {
-            title: "Mã giới thiệu",
+            customTitle: <CustomHeaderDatatable title="Mã giới thiệu" />,
+            dataIndex: "code_order",
             key: "code_order",
-            width: 60,
-            FontSize: "text-size-M",
+            width: 100,
+            position: "center",
           },
           {
-            title: "Tên đối tác",
+            customTitle: <CustomHeaderDatatable title="Tên khách hàng" />,
+            dataIndex: "customer_name_phone",
             key: "customer_name_phone",
-            width: 60,
-            FontSize: "text-size-M",
-          },
-          {
-            title: "Giai đoạn",
-            key: "customer_name_phone",
-            width: 60,
-            FontSize: "text-size-M",
+            width: 100,
+            position: "center",
           },
         ];
   // const columns1 =

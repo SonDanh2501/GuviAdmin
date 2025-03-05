@@ -26,7 +26,8 @@ import {
 } from "../../../redux/actions/auth";
 import { useNavigate } from "react-router-dom";
 import loginLandingImage from "../../../assets/images/loginLanding.svg";
-import { checkPasswordRequired } from "../../../utils/contant";
+import { checkIsEmailFormat, checkPasswordRequired } from "../../../utils/contant";
+
 const LoginAffiliate = () => {
   const { IoColorWandOutline, IoCashOutline, IoCheckmarkCircleOutline } = icons;
   const dispatch = useDispatch();
@@ -67,13 +68,19 @@ const LoginAffiliate = () => {
   // 2. Hàm gửi mã OTP
   const handleSendOTP = async (payload) => {
     try {
-      const res = await registerPhoneAffiliateApi(payload);
+      if (!valuePhone.trim() || !valueFullName.trim() || !valueEmail.trim())
+        return errorNotify({ message: "Vui lòng điền đầy đủ thông tin" });
+  
+      if (!checkIsEmailFormat(valueEmail))
+        return errorNotify({ message: "Vui lòng nhập đúng định dạng email" });
+  
+      dispatch(loadingAction.loadingRequest(true));
+      await registerPhoneAffiliateApi(payload);
       setIsRunning(true);
       setShowModalSignUp(true);
+      dispatch(loadingAction.loadingRequest(false));
     } catch (err) {
-      errorNotify({
-        message: err.message,
-      });
+      errorNotify({ message: err.message });
     }
   };
   // 3. Hàm check mã OTP, nếu pass thì lưu lại token vào cookie
@@ -154,8 +161,8 @@ const LoginAffiliate = () => {
   // 7. Hàm quên mật khẩu
   const handleForgotPassword = async (payload) => {
     try {
-      console.log("check payload", payload);
       const res = await forgotPasswordAffiliateApi(payload);
+      setIsRunning(true);
       setShowModalSignUp(true);
       setIsForgotPassword(true);
     } catch (err) {
@@ -320,6 +327,7 @@ const LoginAffiliate = () => {
                 value={valueFullName}
                 placeHolder="Họ và tên"
                 onChange={(e) => setValueFullName(e.target.value)}
+                required={true}
               />
               <InputTextCustom
                 type="textValue"
@@ -328,13 +336,14 @@ const LoginAffiliate = () => {
                 value={valuePhone}
                 placeHolder="Số điện thoại"
                 onChange={(e) => setValuePhone(e.target.value)}
-                // required={true}
+                required={true}
               />
               <InputTextCustom
                 type="text"
                 value={valueEmail}
                 placeHolder="Email"
                 onChange={(e) => setValueEmail(e.target.value)}
+                required={true}
               />
               <button
                 className="login-affiliate__button"
@@ -355,7 +364,7 @@ const LoginAffiliate = () => {
             </div>
             <div className="login-affiliate__form--right-sign-up-sign-up">
               <span className="login-affiliate__form--right-sign-up-sign-up-label">
-                Não cá vàng chăng?
+                Bạn quên mật khẩu?
               </span>
               <span
                 onClick={() => {
@@ -364,7 +373,7 @@ const LoginAffiliate = () => {
                 }}
                 className="login-affiliate__form--right-sign-up-sign-up-label high-light"
               >
-                Quên mật khẩu ngay
+                Bấm vào đây
               </span>
             </div>
           </div>
@@ -476,14 +485,42 @@ const LoginAffiliate = () => {
             ) : (
               <>
                 <span className="login-affiliate__card--information-otp-label">
-                  Lưu ý số lần gửi mã có giới hạn
+                  Lưu ý số lần gửi mã có giới hạn.&nbsp;
+                  <span
+                    className="high-light click-able"
+                    onClick={() =>
+                      handleResendOTP({
+                        phone:
+                          valuePhone.trim() !== ""
+                            ? valuePhone
+                            : valuePhoneForgot,
+                        code_phone_area: valuePhoneArea,
+                      })
+                    }
+                  >
+                    Gửi lại mã
+                  </span>
                 </span>
-                <ButtonCustom
+
+                {/* <ButtonCustom
                   label="Gửi lại mã"
                   onClick={() =>
                     handleResendOTP({
-                      phone: valuePhone,
+                      phone: valuePhone.trim() !== "" ?valuePhone : valuePhoneForgot,
                       code_phone_area: valuePhoneArea,
+                    })
+                  }
+                  fullScreen={true}
+                  borderRadiusFull={true}
+                ></ButtonCustom> */}
+                <ButtonCustom
+                  label="Xác nhận mã"
+                  onClick={() =>
+                    handleCheckOTP({
+                      phone:
+                        valuePhone.length > 0 ? valuePhone : valuePhoneForgot,
+                      code_phone_area: valuePhoneArea,
+                      code: otp.join(""),
                     })
                   }
                   fullScreen={true}

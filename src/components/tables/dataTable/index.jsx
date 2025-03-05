@@ -243,6 +243,8 @@ const DataTable = (props) => {
             break;
           // Ngày tạo của sổ quỹ
           case "date_create":
+            const dateValue = new Date(data[item.dataIndex]);
+
             return (
               <div
                 className={`case__date-create ${item?.fontSize} ${
@@ -250,10 +252,18 @@ const DataTable = (props) => {
                 }`}
               >
                 <span className="case__date-create-date">
-                  {moment(new Date(data[item.dataIndex])).format("DD/MM/YYYY")}
+                  {/* {moment(new Date(data[item.dataIndex])).format("DD/MM/YYYY")} */}
+                  {isNaN(dateValue.getTime())
+                    ? ""
+                    : moment(new Date(data[item.dataIndex])).format(
+                        "DD/MM/YYYY"
+                      )}
                 </span>
                 <span className="case__date-create-time">
-                  {moment(new Date(data[item.dataIndex])).format("HH:mm:ss")}
+                  {/* {moment(new Date(data[item.dataIndex])).format("HH:mm:ss")} */}
+                  {isNaN(dateValue.getTime())
+                    ? "Chưa có"
+                    : moment(new Date(data[item.dataIndex])).format("HH:mm:ss")}
                 </span>
               </div>
             );
@@ -2255,22 +2265,26 @@ const DataTable = (props) => {
           }
           case "date_navigate": {
             const url = `${window.location.origin}/${item?.navigate}`;
-            const start_date = data['time_start_report']
-            const end_date = data['time_end_report']
+            // const start_date = data['time_start_report']
+            // const end_date = data['time_end_report']
 
-            const date = moment(data[item.dataIndex], "DD-MM-YYYY").format("DD/MM/YYYY");
+            const date = moment(data[item.dataIndex], "DD-MM-YYYY").format(
+              "DD/MM/YYYY"
+            );
             const formatDate = moment(date, "DD/MM/YYYY");
             const startOfDay = formatDate?.startOf("day").toISOString();
             const endOfDay = formatDate?.endOf("day").toISOString();
 
+            let query = item?.param
+              ? item?.param
+                  .map((item) => `&${item.key}=${item.code}`)
+                  .join("") + `&start_date=${startOfDay}&end_date=${endOfDay}`
+              : `&start_date=${startOfDay}&end_date=${endOfDay}`;
+
+            console.log("check query >>>", query);
             return (
               <div
-                onClick={() =>
-                  window.open(
-                    `${url}?start_date=${startOfDay}&end_date=${endOfDay}`,
-                    "_blank"
-                  )
-                }
+                onClick={() => window.open(`${url}?${query}`, "_blank")}
                 className={`case__date-create ${item?.fontSize} ${
                   item?.position === "center" && "center"
                 }`}
