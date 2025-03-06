@@ -57,7 +57,7 @@ export const deleteCollaborator = (id) => {
 };
 
 export const verifyCollaborator = (id) => {
-  return axiosClient.post(`/admin/collaborator_manager/verify_item/${id}`);
+  return axiosClient.post(`api/admin/collaborator_manager/verify_item/${id}`);
 };
 
 export const lockTimeCollaborator = (id, data) => {
@@ -192,9 +192,16 @@ export const passInfoTestApi = (data) => {
   );
 };
 
+// export const updateStatusCollaborator = (idCollaborator, payload) => {
+//   return axiosClient.post(
+//     `/admin/collaborator_manager/update_status_collaborator/${idCollaborator}`,
+//     payload
+//   )
+// }
+
 export const updateStatusCollaborator = (idCollaborator, payload) => {
   return axiosClient.post(
-    `/admin/collaborator_manager/update_status_collaborator/${idCollaborator}`,
+    `api/admin/collaborator_manager/update_status_collaborator_profile/${idCollaborator}`,
     payload
   )
 }

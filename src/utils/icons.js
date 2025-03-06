@@ -99,7 +99,13 @@ import {
   IoCreateOutline,
   IoDownloadOutline,
 } from "react-icons/io5";
-import { FaRegFrown, FaRegMeh, FaRegSmile, FaDog } from "react-icons/fa";
+import {
+  FaRegFrown,
+  FaRegMeh,
+  FaRegSmile,
+  FaDog,
+  FaCrown,
+} from "react-icons/fa";
 import {
   MdDoubleArrow,
   MdChair,
@@ -215,6 +221,8 @@ const icons = {
   FaRegMeh,
   FaRegSmile,
   FaDog,
+  FaToolbox,
+  FaCrown,
   // Material Design icons
   MdDoubleArrow,
   MdChair,
@@ -224,8 +232,6 @@ const icons = {
   TbIroningFilled,
   // Phosphor Icons
   PiCookingPotFill,
-  // Fa Icons
-  FaToolbox,
   // Gi Icons
   GiVacuumCleaner,
 };
