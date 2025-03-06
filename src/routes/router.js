@@ -650,13 +650,22 @@ const router = [
       ),
       "collaborator",
       getItem(
-        <Link style={{ textDecoration: "none" }} to="/punish/manage-punish">
+        <Link style={{ textDecoration: "none" }} to="/system/manage-punish">
           Phạt
         </Link>,
-        "/punish/manage-punish",
+        "/system/manage-punish",
         null,
         null
       ),
+      "collaborator",
+      // getItem(
+      //   <Link style={{ textDecoration: "none" }} to="/system/manage-new-punish">
+      //     Lý do phạt
+      //   </Link>,
+      //   "/system/manage-new-punish",
+      //   null,
+      //   null
+      // ),
     ],
     "collaborator"
   ),

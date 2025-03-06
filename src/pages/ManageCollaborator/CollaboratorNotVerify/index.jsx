@@ -8,6 +8,7 @@ import {
   Select,
   Space,
   Pagination,
+  message,
 } from "antd";
 import { useSelector } from "react-redux";
 import i18n from "../../../i18n";
@@ -39,7 +40,7 @@ import _debounce from "lodash/debounce";
 import Tabs from "../../../components/tabs/tabs1";
 
 import ModalCustom from "../../../components/modalCustom";
-import { errorNotify } from "../../../helper/toast";
+import { errorNotify, successNotify } from "../../../helper/toast";
 import { OPTIONS_SELECT_STATUS_COLLABORATOR_NOT_VERIFY } from "../../../@core/constant/constant.js";
 import ModalStatusNoteAdmin from "./components/NoteAdminModal";
 
@@ -512,9 +513,9 @@ const CollaboratorNotVerify = () => {
 
       // neu la actived thi kich hoat tai khoan theo logic cu
       if (dataChange.status === "actived") {
-        verifyCollaborator(dataChange._id);
+        handleVerifyCollaborator(dataChange._id);
       }
-      await updateStatusCollaborator(item._id, payload);
+      handleUpdateCollaboratorStatus(item._id, payload);
     }
     getListCollaborator();
     setModal("");
@@ -524,6 +525,31 @@ const CollaboratorNotVerify = () => {
     setSelectStatus(value);
   };
 
+  const handleVerifyCollaborator = async (idCollaborator) => {
+    try {
+      const res = await verifyCollaborator(idCollaborator)
+      successNotify({
+        message: "Xác nhận kích hoạt thành công",
+      });
+    } catch (err) {
+      errorNotify({
+        message: err?.message || err,
+      });
+    }
+  }
+
+  const handleUpdateCollaboratorStatus = async (idCollaborator, payload) => {
+    try {
+      const res = await updateStatusCollaborator(idCollaborator,payload)
+      successNotify({
+        message: "Thay đổi trạng thái đối tác thành công",
+      });
+    } catch (err) {
+      errorNotify({
+        message: err?.message || err,
+      });
+    }
+  }
   //   const processHandleReview = async (dataChange) => {
   //     const payload = {
   //       id_order: item._id,
