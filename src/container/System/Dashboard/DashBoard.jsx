@@ -1,1227 +1,3 @@
-// import {
-//   Col,
-//   DatePicker,
-//   FloatButton,
-//   List,
-//   Progress,
-//   Row,
-//   Select,
-//   Table,
-// } from "antd";
-// import dayjs from "dayjs";
-// import customParseFormat from "dayjs/plugin/customParseFormat";
-// import moment from "moment";
-// import "moment/locale/vi";
-// import React, { useCallback, useEffect, useState } from "react";
-// import { useDispatch, useSelector } from "react-redux";
-// import { Link, useNavigate } from "react-router-dom";
-// import {
-//   Area,
-//   AreaChart,
-//   Bar,
-//   BarChart,
-//   CartesianGrid,
-//   Cell,
-//   ComposedChart,
-//   Legend,
-//   Line,
-//   Pie,
-//   PieChart,
-//   ResponsiveContainer,
-//   Tooltip,
-//   XAxis,
-//   YAxis,
-// } from "recharts";
-// import {
-//   getReportCancelReport,
-//   getReportServiceDetails,
-//   getTotalCustomerYear,
-// } from "../../../api/report";
-// import { getDayReportApi } from "../../../api/statistic";
-// import CustomDatePicker from "../../../components/customDatePicker";
-// import MoreTopCollaborator from "../../../components/moreTopCollaborator";
-// import { formatMoney } from "../../../helper/formatMoney";
-// import { number_processing } from "../../../helper/numberProcessing";
-// import {
-//   getActiveUser,
-//   getHistoryActivity,
-//   getLastestService,
-//   getServiceConnect,
-//   getTopCollaborator,
-// } from "../../../redux/actions/statistic";
-// import {
-//   getElementState,
-//   getLanguageState,
-// } from "../../../redux/selectors/auth";
-// import {
-//   getActiveUsers,
-//   getHistoryActivitys,
-//   getLastestServices,
-//   getServiceConnects,
-//   getTopCollaborators,
-// } from "../../../redux/selectors/statistic";
-// import "./DashBoard.scss";
-// import Header from "./HeaderBoard/Header";
-// import MoreActivity from "./MoreActivity";
-// import i18n from "../../../i18n";
-// import { getProvince } from "../../../redux/selectors/service";
-// import useWindowDimensions from "../../../helper/useWindowDimensions";
-// moment.locale("vi");
-// dayjs.extend(customParseFormat);
-
-// export default function Home() {
-//   const { height, width } = useWindowDimensions();
-//   const [arrResult, setArrResult] = useState([]);
-//   const [totalMoneyChart, setTotalMoneyChart] = useState(0);
-//   const [day, setDay] = useState([]);
-//   const [dataUser, setDataUser] = useState([]);
-//   const [totalYearUser, setTotalYearUser] = useState(0);
-//   const [dataChartCancel, setDataChartCancel] = useState([]);
-//   const [dataTotalChartCancel, setDataTotalChartCancel] = useState([]);
-//   const [codeCity, setCodeCity] = useState();
-//   const [nameCity, setNameCity] = useState("");
-
-//   const [startDate, setStartDate] = useState(
-//     moment().subtract(30, "days").startOf("days").add(7, "hours").toISOString()
-//   );
-//   const [endDate, setEndDate] = useState(
-//     moment().endOf("days").add(7, "hours").toISOString()
-//   );
-//   const [dataChartServiceDetails, setDataChartServiceDetails] = useState([]);
-//   const historyActivity = useSelector(getHistoryActivitys);
-//   const activeUser = useSelector(getActiveUsers);
-//   const lastestService = useSelector(getLastestServices);
-//   const connectionService = useSelector(getServiceConnects);
-//   const topCollaborator = useSelector(getTopCollaborators);
-//   const dispatch = useDispatch();
-//   const yearFormat = "YYYY";
-//   const dataChartUser = [];
-//   const cityData = [];
-//   const dataChartDetail = [];
-//   const checkElement = useSelector(getElementState);
-//   const lang = useSelector(getLanguageState);
-//   const province = useSelector(getProvince);
-
-//   useEffect(() => {
-//     if (checkElement?.includes("total_finance_job_dashboard")) {
-//       getDayReportApi(startDate, endDate)
-//         .then((res) => {
-//           setArrResult(res.arrResult);
-//           setTotalMoneyChart(res?.total_money);
-//           getDates(res?.arrResult[0]?.date_start, res?.arrResult?.date_end);
-//         })
-//         .catch((err) => {});
-//     }
-//     if (checkElement?.includes("connection_service_dashboard")) {
-//       dispatch(getServiceConnect.getServiceConnectRequest());
-//     }
-//     if (checkElement?.includes("history_activity_dashboard")) {
-//       dispatch(
-//         getHistoryActivity.getHistoryActivityRequest({
-//           lang: lang,
-//           start: 0,
-//           length: 20,
-//         })
-//       );
-//     }
-//     if (checkElement?.includes("lastest_services_dashboard")) {
-//       dispatch(
-//         getLastestService.getLastestServiceRequest({ start: 0, length: 5 })
-//       );
-//     }
-//     if (checkElement?.includes("top_collaborator_dashboard")) {
-//       dispatch(
-//         getTopCollaborator.getTopCollaboratorRequest({
-//           startDate: startDate,
-//           endDate: endDate,
-//           start: 0,
-//           length: 10,
-//         })
-//       );
-//     }
-//     if (checkElement?.includes("total_customer_monthly_dashboard")) {
-//       getTotalCustomerYear(moment().year())
-//         .then((res) => {
-//           setDataUser(res);
-//         })
-//         .catch((err) => {});
-//     }
-
-//     dispatch(getActiveUser.getActiveUserRequest());
-//     setCodeCity(province[1]?.code);
-//     setNameCity(province[1]?.name);
-
-//     if (checkElement?.includes("report_detail_service_dashboard")) {
-//       getReportServiceDetails(startDate, endDate, "")
-//         .then((res) => {
-//           setDataChartServiceDetails(res?.detailData);
-//         })
-//         .catch((err) => {});
-//     }
-
-//     if (checkElement?.includes("report_cancel_order_dashboard")) {
-//       getReportCancelReport(startDate, endDate, "", "")
-//         .then((res) => {
-//           setDataChartCancel(res?.percent);
-//           setDataTotalChartCancel(res);
-//         })
-//         .catch((err) => {});
-//     }
-//   }, []);
-
-//   useEffect(() => {
-//     let sum = 0;
-//     for (let i = 0; i < dataUser.length; i++) {
-//       setTotalYearUser((sum += dataUser[i].totalNew));
-//     }
-//   }, [dataUser]);
-
-//   dataUser.map((item, index) => {
-//     return dataChartUser.push({
-//       totalNew: item?.totalNew,
-//       totalOld: item?.totalOld,
-//       total: item?.totalAll,
-//       month: index + 1,
-//     });
-//   });
-
-//   province?.map((item) => {
-//     return cityData?.push({
-//       value: item?.code,
-//       label: item?.name,
-//       districts: item?.districts,
-//     });
-//   });
-
-//   dataChartServiceDetails?.map((item) => {
-//     return dataChartDetail?.push({
-//       title: item?.title[0]?.[lang],
-//       percent_2_hour: item?.total_2_hour,
-//       percent_3_hour: item?.total_3_hour,
-//       percent_4_hour: item?.total_4_hour,
-//     });
-//   });
-
-//   const onChangeCity = useCallback(
-//     (value, label) => {
-//       setNameCity(label?.label);
-//       setCodeCity(value);
-//       getReportServiceDetails(startDate, endDate, value)
-//         .then((res) => {
-//           setDataChartServiceDetails(res?.detailData);
-//         })
-//         .catch((err) => {});
-
-//       getReportCancelReport(startDate, endDate, value, -1)
-//         .then((res) => {
-//           setDataChartCancel(res?.percent);
-//           setDataTotalChartCancel(res);
-//         })
-//         .catch((err) => {});
-//     },
-//     [startDate, endDate]
-//   );
-
-//   function getDates(startDate, stopDate) {
-//     var dateArray = [];
-//     var currentDate = moment(startDate);
-//     var stopDate = moment(stopDate);
-//     while (currentDate <= stopDate) {
-//       dateArray.push(moment(currentDate).format("YYYY-MM-DD"));
-//       currentDate = moment(currentDate).add(1, "days");
-//     }
-//     return setDay(dateArray);
-//   }
-
-//   const onChange = useCallback(() => {
-//     getDayReportApi(startDate, endDate)
-//       .then((res) => {
-//         setArrResult(res.arrResult);
-//         setTotalMoneyChart(res?.total_money);
-//       })
-//       .catch((err) => console.log(err));
-
-//     getReportServiceDetails(startDate, endDate, codeCity)
-//       .then((res) => {
-//         setDataChartServiceDetails(res?.detailData);
-//       })
-//       .catch((err) => {});
-//     // getDates(startDate, endDate);
-//   }, [startDate, endDate, codeCity]);
-
-//   const timeWork = (data) => {
-//     const start = moment(new Date(data.date_work_schedule[0].date)).format(
-//       "HH:mm"
-//     );
-
-//     const timeEnd = moment(new Date(data?.date_work_schedule[0]?.date))
-//       .add(data?.total_estimate, "hours")
-//       .format("HH:mm");
-
-//     return start + " - " + timeEnd;
-//   };
-
-//   const onChangeNumberData = useCallback((number) => {
-//     dispatch(
-//       getLastestService.getLastestServiceRequest({ start: 0, length: number })
-//     );
-//   }, []);
-
-//   const columns = [
-//     {
-//       title: () => {
-//         return (
-//           <a className="title-head-column">{`${i18n.t("customer", {
-//             lng: lang,
-//           })}`}</a>
-//         );
-//       },
-//       render: (data) => {
-//         return (
-//           <Link to={`/profile-customer/${data?.id_customer?._id}`}>
-//             <a className="text-collaborator">{data?.id_customer?.full_name}</a>
-//           </Link>
-//         );
-//       },
-//     },
-//     {
-//       title: () => {
-//         return (
-//           <a className="title-head-column">{`${i18n.t("service", {
-//             lng: lang,
-//           })}`}</a>
-//         );
-//       },
-//       render: (data) => {
-//         return (
-//           <div className="div-column-service">
-//             <a className="text-service">
-//               {data?.type === "loop" && data?.is_auto_order
-//                 ? `${i18n.t("repeat", { lng: lang })}`
-//                 : data?.service?._id?.kind === "giup_viec_theo_gio"
-//                 ? `${i18n.t("cleaning", { lng: lang })}`
-//                 : data?.service?._id?.kind === "giup_viec_co_dinh"
-//                 ? `${i18n.t("cleaning_subscription", { lng: lang })}`
-//                 : data?.service?._id?.kind === "phuc_vu_nha_hang"
-//                 ? `${i18n.t("serve", { lng: lang })}`
-//                 : data?.service?._id?.kind === "ve_sinh_may_lanh"
-//                 ? `${i18n.t("Máy lạnh", { lng: lang })}`
-//                 : ""}
-//             </a>
-//             <a className="text-service">{timeWork(data)}</a>
-//           </div>
-//         );
-//       },
-//     },
-//     {
-//       title: () => {
-//         return (
-//           <a className="title-head-column">{`${i18n.t("time", {
-//             lng: lang,
-//           })}`}</a>
-//         );
-//       },
-//       render: (data) => {
-//         return (
-//           <div className="div-column-date">
-//             <a className="text-date">
-//               {moment(new Date(data.date_work_schedule[0].date)).format(
-//                 "DD/MM/YYYY"
-//               )}
-//             </a>
-//             <a className="text-time">
-//               {moment(new Date(data.date_work_schedule[0].date))
-//                 .locale(lang)
-//                 .format("dddd")}
-//             </a>
-//           </div>
-//         );
-//       },
-//       align: "center",
-//     },
-//     {
-//       title: () => {
-//         return (
-//           <a className="title-head-column">{`${i18n.t("address", {
-//             lng: lang,
-//           })}`}</a>
-//         );
-//       },
-//       render: (data) => {
-//         return <a className="text-address-dashboard">{data?.address}</a>;
-//       },
-//     },
-//     {
-//       title: () => {
-//         return (
-//           <a className="title-head-column">{`${i18n.t("collaborator", {
-//             lng: lang,
-//           })}`}</a>
-//         );
-//       },
-//       render: (data) => {
-//         return (
-//           <div>
-//             {!data?.id_collaborator ? (
-//               <a className="text-find-collaborator">{`${i18n.t("searching", {
-//                 lng: lang,
-//               })}`}</a>
-//             ) : (
-//               <Link to={`/details-collaborator/${data?.id_collaborator?._id}`}>
-//                 <a className="text-collaborator">
-//                   {data?.id_collaborator.full_name}
-//                 </a>
-//               </Link>
-//             )}
-//           </div>
-//         );
-//       },
-//     },
-//     {
-//       title: () => {
-//         return (
-//           <a className="title-head-column">{`${i18n.t("progress", {
-//             lng: lang,
-//           })}`}</a>
-//         );
-//       },
-//       render: (data) => (
-//         <a
-//           className={
-//             data?.status === "pending"
-//               ? "text-pending"
-//               : data?.status === "confirm"
-//               ? "text-confirm"
-//               : data?.status === "doing"
-//               ? "text-doing"
-//               : data?.status === "done"
-//               ? "text-done"
-//               : "text-cancel"
-//           }
-//         >
-//           {data?.status === "pending"
-//             ? `${i18n.t("pending", { lng: lang })}`
-//             : data?.status === "confirm"
-//             ? `${i18n.t("confirm", { lng: lang })}`
-//             : data?.status === "doing"
-//             ? `${i18n.t("doing", { lng: lang })}`
-//             : data?.status === "done"
-//             ? `${i18n.t("complete", { lng: lang })}`
-//             : `${i18n.t("cancel", { lng: lang })}`}
-//         </a>
-//       ),
-//     },
-//     {
-//       key: "action",
-//       render: (data) => {
-//         return (
-//           <div className="div-action">
-//             <Link to={`/details-order/${data?._id}`} className="btn-details">
-//               <a>{`${i18n.t("detail", { lng: lang })}`}</a>
-//             </Link>
-//           </div>
-//         );
-//       },
-//     },
-//   ];
-
-//   const renderTooltipContent = (o) => {
-//     const { payload, label } = o;
-
-//     return (
-//       <div className="div-content-tool-chart">
-//         <a className="date-text">
-//           Ngày: {moment(new Date(label)).format("DD/MM/YYYY")}
-//         </a>
-
-//         <a className="money-text-dashboard">
-//           Tổng tiền:{" "}
-//           {payload?.length > 0
-//             ? formatMoney(payload[0]?.payload?.total_income)
-//             : 0}
-//         </a>
-
-//         <a className="date-text">
-//           Tổng đơn: {payload?.length > 0 ? payload[0]?.payload?.total_job : 0}
-//         </a>
-//       </div>
-//     );
-//   };
-
-//   const renderTooltipContentUser = (o) => {
-//     const { payload, label } = o;
-
-//     return (
-//       <div className="div-content-tool-chart-user">
-//         <a className="date-text">Tháng {label}</a>
-//         <a className="money-text">
-//           Số tổng:{" "}
-//           {payload?.length > 0
-//             ? payload[0]?.payload?.totalNew + payload[0]?.payload?.totalOld
-//             : 0}
-//         </a>
-//         <a className="money-text-new">
-//           Số người đăng kí mới:{" "}
-//           {payload?.length > 0 ? payload[0]?.payload?.totalNew : 0}
-//         </a>
-//         <a className="money-text-old">
-//           Số người đăng kí cũ:{" "}
-//           {payload?.length > 0 ? payload[0]?.payload?.totalOld : 0}
-//         </a>
-//       </div>
-//     );
-//   };
-
-//   const renderLabelCancel = ({
-//     cx,
-//     cy,
-//     midAngle,
-//     innerRadius,
-//     outerRadius,
-//     value,
-//     name,
-//   }) => {
-//     const RADIAN = Math.PI / 180;
-//     // eslint-disable-next-line
-//     const radius = 25 + innerRadius + (outerRadius - innerRadius);
-//     // eslint-disable-next-line
-//     const x = cx + radius * Math.cos(-midAngle * RADIAN);
-//     // eslint-disable-next-line
-//     const y = cy + radius * Math.sin(-midAngle * RADIAN);
-
-//     return (
-//       <text
-//         x={x}
-//         y={y}
-//         fill="#000000"
-//         textAnchor={x > cx ? "start" : "end"}
-//         dominantBaseline="central"
-//         fontSize={10}
-//       >
-//         {name === "system_cancel"
-//           ? `${i18n.t("system", { lng: lang })}`
-//           : name === "customer_cancel"
-//           ? `${i18n.t("customer", { lng: lang })}`
-//           : `${i18n.t("admin", { lng: lang })}`}{" "}
-//         ({value} {"%"})
-//       </text>
-//     );
-//   };
-
-//   return (
-//     <div className="container-dash">
-//       {checkElement?.includes("get_general_total_report_dashboard") && (
-//         <Header />
-//       )}
-
-//       <div>
-//         <div className="div-chart_total_service_collaborator">
-//           <div className="chart">
-//             <div className="div-head-chart">
-//               <div className="div-date">
-//                 <CustomDatePicker
-//                   setStartDate={setStartDate}
-//                   setEndDate={setEndDate}
-//                   onClick={onChange}
-//                   onCancel={() => {}}
-//                   setSameStart={() => {}}
-//                   setSameEnd={() => {}}
-//                 />
-//                 {startDate && (
-//                   <a className="text-date">
-//                     {moment(new Date(startDate)).format("DD/MM/YYYY")} -{" "}
-//                     {moment(endDate).utc().format("DD/MM/YYYY")}
-//                   </a>
-//                 )}
-//               </div>
-//               {checkElement?.includes("total_finance_job_dashboard") && (
-//                 <a className="text-total-money">
-//                   {`${i18n.t("total_money", { lng: lang })}`}:{" "}
-//                   {formatMoney(totalMoneyChart)}
-//                 </a>
-//               )}
-//             </div>
-//             {/* <div className="div-select-city mb-3">
-//               <Select
-//                 style={{ width: 200 }}
-//                 value={nameCity}
-//                 onChange={onChangeCity}
-//                 options={cityData}
-//                 showSearch
-//                 filterOption={(input, option) =>
-//                   (option?.label ?? "")
-//                     .toLowerCase()
-//                     .includes(input.toLowerCase())
-//                 }
-//               />
-//             </div> */}
-//             {checkElement?.includes("total_finance_job_dashboard") && (
-//               <div>
-//                 <ResponsiveContainer
-//                   width={"100%"}
-//                   height={200}
-//                   min-width={300}
-//                 >
-//                   <AreaChart
-//                     width={window.screen.height / 1.2}
-//                     height={400}
-//                     data={arrResult}
-//                     margin={{
-//                       top: 10,
-//                       right: 30,
-//                       left: 0,
-//                       bottom: 0,
-//                     }}
-//                   >
-//                     <CartesianGrid strokeDasharray="3 3" />
-//                     <XAxis
-//                       dataKey="date_start"
-//                       tickFormatter={(tickItem) =>
-//                         moment(tickItem).format("DD/MM")
-//                       }
-//                     />
-//                     <YAxis
-//                       dataKey="total_income"
-//                       fontSize={12}
-//                       tickFormatter={(tickItem) => number_processing(tickItem)}
-//                     />
-//                     <Tooltip content={renderTooltipContent} />
-//                     <Area
-//                       type="monotone"
-//                       dataKey="total_income"
-//                       stroke="#00CF3A"
-//                       fill="#00CF3A"
-//                       name="Tổng tiền"
-//                     />
-//                   </AreaChart>
-//                 </ResponsiveContainer>
-//               </div>
-//             )}
-//             <div>
-//               <p className="label-persen-active">{`${i18n.t(
-//                 "percentage_of_activity",
-//                 { lng: lang }
-//               )}`}</p>
-//               <div className="div-persen">
-//                 <p className="label-persen">{activeUser?.donePercent}%</p>
-//                 <p className="label-total">{`${i18n.t("total", {
-//                   lng: lang,
-//                 })}`}</p>
-//               </div>
-//               <Progress
-//                 percent={activeUser?.donePercent}
-//                 showInfo={false}
-//                 strokeColor={"#48CAE4"}
-//                 className="progress-persent"
-//                 strokeWidth={15}
-//               />
-//               <div className="div-container-on">
-//                 <div className="div-on">
-//                   <div className="line-on" />
-//                   <div className="total-div-on">
-//                     <a className="text-on">Online</a>
-//                     <a className="text-total-on">{activeUser?.ActiveUsers}</a>
-//                   </div>
-//                 </div>
-
-//                 <div className="div-on">
-//                   <div className="line-off" />
-//                   <div className="total-div-on">
-//                     <a className="text-on">Offline</a>
-//                     <a className="text-total-on">{activeUser?.OfflineUsers}</a>
-//                   </div>
-//                 </div>
-//               </div>
-//             </div>
-//           </div>
-//           <div className="div-right-conection-dashboard">
-//             <div className="div-right">
-//               {checkElement?.includes("connection_service_dashboard") && (
-//                 <div className="div-connect-service">
-//                   <div className="div-progress">
-//                     <Progress
-//                       type="dashboard"
-//                       percent={
-//                         !connectionService?.donePercent
-//                           ? 0
-//                           : connectionService?.donePercent
-//                       }
-//                       gapDegree={5}
-//                       strokeColor={"#48CAE4"}
-//                       strokeWidth={10}
-//                       width={100}
-//                       size="small"
-//                     />
-//                   </div>
-//                   <div className="div-progress-text">
-//                     <p className="title-progress">{`${i18n.t(
-//                       "connection_service_rate",
-//                       {
-//                         lng: lang,
-//                       }
-//                     )}`}</p>
-//                   </div>
-//                   <div className="div-success">
-//                     <a className="square" />
-//                     <p className="text-success-square">{`${i18n.t("complete", {
-//                       lng: lang,
-//                     })}`}</p>
-//                   </div>
-//                   <div className="div-success">
-//                     <a className="unsquare" />
-//                     <p className="text-success-square">{`${i18n.t(
-//                       "uncomplete",
-//                       {
-//                         lng: lang,
-//                       }
-//                     )}`}</p>
-//                   </div>
-//                 </div>
-//               )}
-//               {checkElement?.includes("top_collaborator_dashboard") && (
-//                 <>
-//                   {topCollaborator.length > 0 && (
-//                     <div className="div-top-collaborator">
-//                       <p className="text-top">{`${i18n.t("top_collaborator", {
-//                         lng: lang,
-//                       })}`}</p>
-//                       <div className="level">
-//                         <Link
-//                           className="level-ctv1"
-//                           to={`/details-collaborator/${topCollaborator[0]?._id?.id_collaborator}`}
-//                         >
-//                           <p className="text-level">
-//                             {topCollaborator[0]?._id?.full_name}
-//                           </p>
-//                           <p className="text-level-number">
-//                             {formatMoney(topCollaborator[0]?.sumIncome)}
-//                           </p>
-//                         </Link>
-//                         {topCollaborator.length > 1 && (
-//                           <Link
-//                             className="level-ctv2"
-//                             to={`/details-collaborator/${topCollaborator[1]?._id?.id_collaborator}`}
-//                           >
-//                             <p className="text-level">
-//                               {topCollaborator[1]?._id?.name}
-//                             </p>
-//                             <p className="text-level-number">
-//                               {formatMoney(topCollaborator[1]?.sumIncome)}
-//                             </p>
-//                           </Link>
-//                         )}
-//                         {topCollaborator.length > 2 && (
-//                           <Link
-//                             className="level-ctv3"
-//                             to={`/details-collaborator/${topCollaborator[2]?._id?.id_collaborator}`}
-//                           >
-//                             <p className="text-level">
-//                               {topCollaborator[2]?._id?.name}
-//                             </p>
-//                             <p className="text-level-number">
-//                               {formatMoney(topCollaborator[2]?.sumIncome)}
-//                             </p>
-//                           </Link>
-//                         )}
-//                         {topCollaborator.length > 3 && (
-//                           <Link
-//                             className="level-ctv4"
-//                             to={`/details-collaborator/${topCollaborator[3]?._id?.id_collaborator}`}
-//                           >
-//                             <p className="text-level">
-//                               {topCollaborator[3]?._id?.name}
-//                             </p>
-//                             <p className="text-level-number">
-//                               {formatMoney(topCollaborator[3]?.sumIncome)}
-//                             </p>
-//                           </Link>
-//                         )}
-//                         {topCollaborator.length > 4 && (
-//                           <Link
-//                             className="level-ctv5"
-//                             to={`/details-collaborator/${topCollaborator[4]?._id?.id_collaborator}`}
-//                           >
-//                             <p className="text-level">
-//                               {topCollaborator[4]?._id?.name}
-//                             </p>
-//                             <p className="text-level-number">
-//                               {formatMoney(topCollaborator[4]?.sumIncome)}
-//                             </p>
-//                           </Link>
-//                         )}
-//                       </div>
-//                       <div className="div-seemore">
-//                         <MoreTopCollaborator />
-//                       </div>
-//                     </div>
-//                   )}
-//                 </>
-//               )}
-//             </div>
-//             {checkElement?.includes("history_activity_dashboard") && (
-//               <div className="col-activity-dashboard">
-//                 <p className="label-activity">{`${i18n.t("history_acivity", {
-//                   lng: lang,
-//                 })}`}</p>
-//                 <List
-//                   itemLayout="horizontal"
-//                   dataSource={historyActivity.slice(0, 6)}
-//                   renderItem={(item, index) => {
-//                     const subject = item?.id_user_system
-//                       ? item?.title_admin.replace(
-//                           item?.id_user_system?._id,
-//                           item?.id_user_system?.full_name
-//                         )
-//                       : item?.id_admin_action
-//                       ? item?.title_admin.replace(
-//                           item?.id_admin_action?._id,
-//                           item?.id_admin_action?.full_name
-//                         )
-//                       : item?.id_customer
-//                       ? item?.title_admin.replace(
-//                           item?.id_customer?._id,
-//                           item?.id_customer?.full_name
-//                         )
-//                       : item?.id_collaborator
-//                       ? item?.title_admin.replace(
-//                           item?.id_collaborator?._id,
-//                           item?.id_collaborator?.full_name
-//                         )
-//                       : item?.title_admin.replace(
-//                           item?.id_promotion?._id,
-//                           item?.id_promotion?.code
-//                         );
-
-//                     const predicate = item?.id_punish
-//                       ? subject.replace(
-//                           item?.id_punish?._id,
-//                           item?.id_punish?.note_admin
-//                         )
-//                       : item?.id_reason_punish
-//                       ? subject.replace(
-//                           item?.id_reason_punish?._id,
-//                           item?.id_reason_punish?.title?.vi
-//                         )
-//                       : item?.id_order
-//                       ? subject.replace(
-//                           item?.id_order?._id,
-//                           item?.id_order?.id_view
-//                         )
-//                       : item?.id_collaborator
-//                       ? subject.replace(
-//                           item?.id_collaborator?._id,
-//                           item?.id_collaborator?.full_name
-//                         )
-//                       : item?.id_promotion
-//                       ? subject.replace(
-//                           item?.id_promotion?._id,
-//                           item?.id_promotion?.title?.vi
-//                         )
-//                       : item?.id_transistion_collaborator
-//                       ? subject.replace(
-//                           item?.id_transistion_collaborator?._id,
-//                           item?.id_transistion_collaborator?.transfer_note
-//                         )
-//                       : item?.id_reward
-//                       ? subject.replace(
-//                           item?.id_reward?._id,
-//                           item?.id_reward?.title?.vi
-//                         )
-//                       : item?.id_info_reward_collaborator
-//                       ? subject.replace(
-//                           item?.id_info_reward_collaborator?._id,
-//                           item?.id_info_reward_collaborator
-//                             ?.id_reward_collaborator?.title?.vi
-//                         )
-//                       : item?.id_customer
-//                       ? subject.replace(
-//                           item?.id_customer?._id,
-//                           item?.id_customer?.full_name
-//                         )
-//                       : item?.id_admin_action
-//                       ? subject.replace(
-//                           item?.id_admin_action?._id,
-//                           item?.id_admin_action?.full_name
-//                         )
-//                       : item?.id_address
-//                       ? subject.replace(item?.id_address, item?.value_string)
-//                       : subject.replace(
-//                           item?.id_transistion_customer?._id,
-//                           item?.id_transistion_customer?.transfer_note
-//                         );
-
-//                     const object = item?.id_reason_cancel
-//                       ? predicate.replace(
-//                           item?.id_reason_cancel?._id,
-//                           item?.id_reason_cancel?.title?.vi
-//                         )
-//                       : item?.id_customer
-//                       ? predicate.replace(
-//                           item?.id_customer?._id,
-//                           item?.id_customer?.full_name
-//                         )
-//                       : item?.id_collaborator
-//                       ? predicate.replace(
-//                           item?.id_collaborator?._id,
-//                           item?.id_collaborator?.full_name
-//                         )
-//                       : item?.id_address
-//                       ? predicate.replace(item?.id_address, item?.value_string)
-//                       : item?.id_order
-//                       ? predicate.replace(
-//                           item?.id_order?._id,
-//                           item?.id_order?.id_view
-//                         )
-//                       : item?.id_transistion_collaborator
-//                       ? predicate.replace(
-//                           item?.id_transistion_collaborator?._id,
-//                           item?.id_transistion_collaborator?.transfer_note
-//                         )
-//                       : predicate.replace(
-//                           item?.id_transistion_customer?._id,
-//                           item?.id_transistion_customer?.transfer_note
-//                         );
-
-//                     return (
-//                       <div className="div-list" key={index}>
-//                         <div className="div-line">
-//                           <div className="circle" />
-//                           <div className="line-vertical" />
-//                         </div>
-//                         <div className="div-details-activity">
-//                           <a className="text-date-activity">
-//                             {moment(new Date(item?.date_create)).format(
-//                               "DD/MM/YYYY HH:mm"
-//                             )}
-//                           </a>
-//                           <a className="text-content-activity">{object}</a>
-//                         </div>
-//                       </div>
-//                     );
-//                   }}
-//                 />
-//                 <div className="div-seemore">
-//                   <MoreActivity />
-//                 </div>
-//               </div>
-//             )}
-//           </div>
-//         </div>
-
-//         {checkElement?.includes("total_finance_job_dashboard") && (
-//           <div>
-//             <p className="label-service">{`${i18n.t("nearest_service", {
-//               lng: lang,
-//             })}`}</p>
-//             <div className="div-card-service">
-//               <Table
-//                 columns={columns}
-//                 dataSource={lastestService}
-//                 pagination={false}
-//                 scroll={{
-//                   x: width <= 900 ? 900 : 0,
-//                 }}
-//               />
-//               <div className="div-entries">
-//                 <Select
-//                   style={{ width: 60 }}
-//                   defaultValue={"5"}
-//                   onChange={onChangeNumberData}
-//                   options={[
-//                     { value: 5, label: "5" },
-//                     { value: 10, label: "10" },
-//                     { value: 20, label: "20" },
-//                   ]}
-//                 />
-//               </div>
-//             </div>
-//           </div>
-//         )}
-//         <div className="div-total-report-dashboard">
-//           {checkElement?.includes("report_detail_service_dashboard") && (
-//             <div className="div-chart-pie-total-dash">
-//               <a className="title-chart-area">{`${i18n.t("order_statistic", {
-//                 lng: lang,
-//               })}`}</a>
-//               <div className="div-pie-chart">
-//                 <div className="div-pie">
-//                   <ResponsiveContainer
-//                     width={"100%"}
-//                     height={200}
-//                     min-width={350}
-//                   >
-//                     <BarChart
-//                       width={500}
-//                       height={300}
-//                       data={dataChartDetail}
-//                       margin={{
-//                         top: 30,
-//                         right: 30,
-//                         left: 20,
-//                         bottom: 5,
-//                       }}
-//                     >
-//                       <CartesianGrid strokeDasharray="3 3" />
-//                       <XAxis dataKey="title" />
-//                       <YAxis />
-//                       <Tooltip />
-//                       <Legend />
-//                       <Bar
-//                         dataKey="percent_2_hour"
-//                         fill="#8884d8"
-//                         barSize={40}
-//                         minPointSize={10}
-//                         name={`2 ${i18n.t("hour", {
-//                           lng: lang,
-//                         })}`}
-//                         label={{
-//                           position: "top",
-//                           fill: "black",
-//                           fontSize: 14,
-//                         }}
-//                       />
-//                       <Bar
-//                         dataKey="percent_3_hour"
-//                         fill="#82ca9d"
-//                         barSize={40}
-//                         minPointSize={10}
-//                         name={`3 ${i18n.t("hour", {
-//                           lng: lang,
-//                         })}`}
-//                         label={{
-//                           position: "top",
-//                           fill: "black",
-//                           fontSize: 14,
-//                         }}
-//                       />
-//                       <Bar
-//                         dataKey="percent_4_hour"
-//                         fill="#0088FE"
-//                         barSize={40}
-//                         minPointSize={10}
-//                         name={`4 ${i18n.t("hour", {
-//                           lng: lang,
-//                         })}`}
-//                         label={{
-//                           position: "top",
-//                           fill: "black",
-//                           fontSize: 14,
-//                         }}
-//                       />
-//                     </BarChart>
-//                   </ResponsiveContainer>
-//                 </div>
-//               </div>
-//             </div>
-//           )}
-//           {checkElement?.includes("total_customer_monthly_dashboard") && (
-//             <div className="div-chart-user">
-//               <h4>{`${i18n.t("total_register", {
-//                 lng: lang,
-//               })}`}</h4>
-//               <div className="div-total-time-area">
-//                 <div className="div-time-area">
-//                   <div>
-//                     <a className="text-time">{`${i18n.t("time", {
-//                       lng: lang,
-//                     })}`}</a>
-//                     <DatePicker
-//                       picker="year"
-//                       onChange={(date, dateString) => {
-//                         getTotalCustomerYear(dateString)
-//                           .then((res) => {
-//                             setDataUser(res);
-//                           })
-//                           .catch((err) => {});
-//                       }}
-//                       defaultValue={dayjs("2023", yearFormat)}
-//                       format={yearFormat}
-//                     />
-//                   </div>
-//                 </div>
-//                 <div className="div-total">
-//                   <a className="text-total-user">{`${i18n.t("total_user", {
-//                     lng: lang,
-//                   })}`}</a>
-//                   <div className="div-total">
-//                     <a className="text-number-total">{totalYearUser}</a>
-//                   </div>
-//                 </div>
-//               </div>
-//               <div className="mt-4">
-//                 <ResponsiveContainer
-//                   width={"100%"}
-//                   height={225}
-//                   min-width={350}
-//                 >
-//                   <ComposedChart
-//                     width={500}
-//                     height={300}
-//                     data={dataChartUser.slice(0, moment().utc().month() + 1)}
-//                     margin={{
-//                       top: 10,
-//                       right: 30,
-//                       left: 20,
-//                       bottom: 5,
-//                     }}
-//                     barSize={50}
-//                   >
-//                     <CartesianGrid strokeDasharray="3 3" />
-//                     <XAxis
-//                       dataKey="month"
-//                       tickFormatter={(tickItem) =>
-//                         `${i18n.t("month", {
-//                           lng: lang,
-//                         })}` +
-//                         " " +
-//                         tickItem
-//                       }
-//                     />
-//                     <YAxis />
-//                     <Tooltip content={renderTooltipContentUser} />
-//                     <Legend />
-
-//                     <Bar
-//                       dataKey="totalOld"
-//                       fill="#82ca9d"
-//                       minPointSize={10}
-//                       barSize={20}
-//                       name={`${i18n.t("customer_old", {
-//                         lng: lang,
-//                       })}`}
-//                       stackId="a"
-//                     />
-
-//                     <Bar
-//                       dataKey="totalNew"
-//                       fill="#4376CC"
-//                       minPointSize={10}
-//                       barSize={20}
-//                       name={`${i18n.t("customer_new", {
-//                         lng: lang,
-//                       })}`}
-//                       stackId="a"
-//                       label={{
-//                         position: "top",
-//                         fill: "black",
-//                         fontSize: 12,
-//                         fontFamily: "Roboto",
-//                       }}
-//                     />
-//                     <Line
-//                       type="monotone"
-//                       dataKey="totalNew"
-//                       stroke="#ff7300"
-//                       name={`${i18n.t("customer_new", {
-//                         lng: lang,
-//                       })}`}
-//                     />
-//                   </ComposedChart>
-//                 </ResponsiveContainer>
-//               </div>
-//             </div>
-//           )}
-//         </div>
-//         <div>
-//           {checkElement?.includes("report_cancel_order_dashboard") && (
-//             <div className="div-chart-pie-total-cancel-dash">
-//               <a className="title-chart">
-//                 {`${i18n.t("order_statistic_cancel", {
-//                   lng: lang,
-//                 })}`}
-//               </a>
-//               <div className="div-pie-chart-cancel">
-//                 <div className="div-total-piechart">
-//                   <div className="item-total">
-//                     <a className="title-total">
-//                       {`${i18n.t("total_order_cancel", {
-//                         lng: lang,
-//                       })}`}
-//                     </a>
-//                     <a className="text-colon">:</a>
-//                     <a className="number-total">
-//                       {dataTotalChartCancel?.total_cancel_order}
-//                     </a>
-//                   </div>
-//                   <div className="item-total">
-//                     <a className="title-total">{`${i18n.t(
-//                       "order_cancel_customer",
-//                       {
-//                         lng: lang,
-//                       }
-//                     )}`}</a>
-//                     <a className="text-colon">:</a>
-//                     <a className="number-total">
-//                       {dataTotalChartCancel?.total_cancel_order_by_customer}
-//                     </a>
-//                   </div>
-//                   <div className="item-total">
-//                     <a className="title-total">{`${i18n.t(
-//                       "order_cancel_system",
-//                       {
-//                         lng: lang,
-//                       }
-//                     )}`}</a>
-//                     <a className="text-colon">:</a>
-//                     <a className="number-total">
-//                       {dataTotalChartCancel?.total_cancel_order_by_system}
-//                     </a>
-//                   </div>
-//                   <div className="item-total">
-//                     <a className="title-total">{`${i18n.t(
-//                       "order_cancel_admin",
-//                       {
-//                         lng: lang,
-//                       }
-//                     )}`}</a>
-//                     <a className="text-colon">:</a>
-//                     <a className="number-total">
-//                       {dataTotalChartCancel?.total_cancel_order_by_user_system}
-//                     </a>
-//                   </div>
-//                 </div>
-//                 <div className="div-pie-cancel">
-//                   <ResponsiveContainer height={300} min-width={500}>
-//                     <PieChart>
-//                       <Pie
-//                         data={dataChartCancel}
-//                         cx="50%"
-//                         cy="50%"
-//                         outerRadius={80}
-//                         fill="#8884d8"
-//                         dataKey="value"
-//                         label={renderLabelCancel}
-//                         margin={{
-//                           top: 20,
-//                           right: 50,
-//                           left: 50,
-//                           bottom: 5,
-//                         }}
-//                       >
-//                         {dataChartCancel.map((entry, index) => (
-//                           <Cell
-//                             key={`cell-${index}`}
-//                             fill={COLORS_CANCEL[index % COLORS_CANCEL.length]}
-//                           />
-//                         ))}
-//                       </Pie>
-//                     </PieChart>
-//                   </ResponsiveContainer>
-//                 </div>
-//               </div>
-//             </div>
-//           )}
-//         </div>
-//       </div>
-//       <FloatButton.BackTop />
-//     </div>
-//   );
-// }
-
-// const COLORS_CANCEL = ["#FCD34D", "#FBBF24", "#F59E0B", "#ff8000", "#ff1919"];
-
-// //Today 31/08/2023 Le Minh Dang!!!!!!
-
 import {
   Col,
   DatePicker,
@@ -1291,9 +67,13 @@ import i18n from "../../../i18n";
 import { getProvince } from "../../../redux/selectors/service";
 import useWindowDimensions from "../../../helper/useWindowDimensions";
 import RangeDatePicker from "../../../components/datePicker/RangeDatePicker";
+import avatarDefaultImage from "../../../assets/images/user.png";
+import icons from "../../../utils/icons";
 
 moment.locale("vi");
 dayjs.extend(customParseFormat);
+
+const { FaCrown } = icons;
 
 export default function Home() {
   const { height, width } = useWindowDimensions();
@@ -1322,7 +102,6 @@ export default function Home() {
   const lastestService = useSelector(getLastestServices);
   const connectionService = useSelector(getServiceConnects);
   const topCollaborator = useSelector(getTopCollaborators);
-  console.log("check topCollaborator", topCollaborator);
   const dispatch = useDispatch();
   const yearFormat = "YYYY";
   const dataChartUser = [];
@@ -1331,6 +110,10 @@ export default function Home() {
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
   const province = useSelector(getProvince);
+
+
+
+  const [isExpandListRanking, setIsExpandListRanking] = useState(false);
 
   // useEffect(() => {
   //   if (startDate !== "") {
@@ -1764,7 +547,7 @@ export default function Home() {
                     setEndDate={setEndDate}
                     rangeDateDefaults={"thirty_last"}
                     rangeDatePrevious
-                    
+
                     // disableFutureDay
                   />
                 </div>
@@ -1959,10 +742,14 @@ export default function Home() {
                       <div className="level">
                         <Link
                           className="level-ctv1"
-                          to={`/details-collaborator/${topCollaborator[0]?._id?.id_collaborator || topCollaborator[0]._id}`}
+                          to={`/details-collaborator/${
+                            topCollaborator[0]?._id?.id_collaborator ||
+                            topCollaborator[0]._id
+                          }`}
                         >
                           <p className="text-level">
-                            {topCollaborator[0]?._id?.full_name || topCollaborator[0]?.full_name} 
+                            {topCollaborator[0]?._id?.full_name ||
+                              topCollaborator[0]?.full_name}
                           </p>
                           <p className="text-level-number">
                             {formatMoney(topCollaborator[0]?.sumIncome)}
@@ -1971,10 +758,14 @@ export default function Home() {
                         {topCollaborator.length > 1 && (
                           <Link
                             className="level-ctv2"
-                            to={`/details-collaborator/${topCollaborator[1]?._id?.id_collaborator || topCollaborator[1]._id}`}
+                            to={`/details-collaborator/${
+                              topCollaborator[1]?._id?.id_collaborator ||
+                              topCollaborator[1]._id
+                            }`}
                           >
                             <p className="text-level">
-                              {topCollaborator[1]?._id?.name || topCollaborator[1]?.full_name}
+                              {topCollaborator[1]?._id?.name ||
+                                topCollaborator[1]?.full_name}
                             </p>
                             <p className="text-level-number">
                               {formatMoney(topCollaborator[1]?.sumIncome)}
@@ -1984,10 +775,14 @@ export default function Home() {
                         {topCollaborator.length > 2 && (
                           <Link
                             className="level-ctv3"
-                            to={`/details-collaborator/${topCollaborator[2]?._id?.id_collaborator || topCollaborator[2]._id}`}
+                            to={`/details-collaborator/${
+                              topCollaborator[2]?._id?.id_collaborator ||
+                              topCollaborator[2]._id
+                            }`}
                           >
                             <p className="text-level">
-                              {topCollaborator[2]?._id?.name || topCollaborator[2]?.full_name}
+                              {topCollaborator[2]?._id?.name ||
+                                topCollaborator[2]?.full_name}
                             </p>
                             <p className="text-level-number">
                               {formatMoney(topCollaborator[2]?.sumIncome)}
@@ -1997,10 +792,14 @@ export default function Home() {
                         {topCollaborator.length > 3 && (
                           <Link
                             className="level-ctv4"
-                            to={`/details-collaborator/${topCollaborator[3]?._id?.id_collaborator || topCollaborator[3]._id}`}
+                            to={`/details-collaborator/${
+                              topCollaborator[3]?._id?.id_collaborator ||
+                              topCollaborator[3]._id
+                            }`}
                           >
                             <p className="text-level">
-                              {topCollaborator[3]?._id?.name || topCollaborator[3]?.full_name}
+                              {topCollaborator[3]?._id?.name ||
+                                topCollaborator[3]?.full_name}
                             </p>
                             <p className="text-level-number">
                               {formatMoney(topCollaborator[3]?.sumIncome)}
@@ -2010,10 +809,14 @@ export default function Home() {
                         {topCollaborator.length > 4 && (
                           <Link
                             className="level-ctv5"
-                            to={`/details-collaborator/${topCollaborator[4]?._id?.id_collaborator || topCollaborator[4]._id}`}
+                            to={`/details-collaborator/${
+                              topCollaborator[4]?._id?.id_collaborator ||
+                              topCollaborator[4]._id
+                            }`}
                           >
                             <p className="text-level">
-                              {topCollaborator[4]?._id?.name || topCollaborator[4]?.full_name}
+                              {topCollaborator[4]?._id?.name ||
+                                topCollaborator[4]?.full_name}
                             </p>
                             <p className="text-level-number">
                               {formatMoney(topCollaborator[4]?.sumIncome)}
@@ -2488,6 +1291,93 @@ export default function Home() {
           )}
         </div>
       </div>
+      {/* <div className="ranking-board">
+        <div className="ranking-board__background-circle"></div>
+        <div
+          className={`ranking-board__list ${isExpandListRanking && "expanded"}`}
+        >
+          <div
+            onClick={() => setIsExpandListRanking(!isExpandListRanking)}
+            className="ranking-board__list--expand"
+          >
+            <div className="ranking-board__list--expand-dot"></div>
+          </div>
+          <div className="ranking-board__list--container">
+            {Array.from({ length: 7 }, (_, index) => (
+              <div className="ranking-board__list--container-child">
+                <div className="ranking-board__list--container-child-number">
+                  <span>{index + 4}</span>
+                </div>
+                <div className="ranking-board__list--container-child-avatar">
+                  <img src={avatarDefaultImage} alt=""></img>
+                </div>
+                <div className="ranking-board__list--container-child-info">
+                  <span className="ranking-board__list--container-child-info-name">
+                    Danh Trường Sơn
+                  </span>
+                  <span className="ranking-board__list--container-child-info-point">
+                    700
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="ranking-board__columns">
+          <div className="ranking-board__columns--child medium">
+            <div className="ranking-board__columns--child-avatar">
+              <img src={avatarDefaultImage} alt=""></img>
+            </div>
+            <span className="ranking-board__columns--child-info">
+              Nguyễn Tú
+            </span>
+            <div className="ranking-board__columns--child-point">
+              <span>1.469</span>
+            </div>
+            <div className="ranking-board__columns--child-trapezoid"></div>
+            <div className="ranking-board__columns--child-vertical">
+              <span className="ranking-board__columns--child-vertical-number">
+                2
+              </span>
+            </div>
+          </div>
+          <div className="ranking-board__columns--child large">
+            <div className="ranking-board__columns--child-avatar">
+              <img src={avatarDefaultImage} alt=""></img>
+              <div className="ranking-board__columns--child-avatar-medal">
+                <FaCrown color="white" size="10px" />
+              </div>
+            </div>
+            <span className="ranking-board__columns--child-info">Sơn Danh</span>
+            <div className="ranking-board__columns--child-point">
+              <span>2.569</span>
+            </div>
+            <div className="ranking-board__columns--child-trapezoid"></div>
+            <div className="ranking-board__columns--child-vertical">
+              <span className="ranking-board__columns--child-vertical-number">
+                1
+              </span>
+            </div>
+          </div>
+          <div className="ranking-board__columns--child small">
+            <div className="ranking-board__columns--child-avatar">
+              <img src={avatarDefaultImage} alt=""></img>
+            </div>
+            <span className="ranking-board__columns--child-info">
+              Nguyễn Kim
+            </span>
+            <div className="ranking-board__columns--child-point">
+              <span>1,045</span>
+            </div>
+            <div className="ranking-board__columns--child-trapezoid"></div>
+            <div className="ranking-board__columns--child-vertical">
+              <span className="ranking-board__columns--child-vertical-number">
+                3
+              </span>
+            </div>
+          </div>
+        </div>
+      </div> */}
       <FloatButton.BackTop />
     </div>
   );
@@ -2495,4 +1385,3 @@ export default function Home() {
 
 const COLORS_CANCEL = ["#FCD34D", "#FBBF24", "#F59E0B", "#ff8000", "#ff1919"];
 
-//Today 31/08/2023 Le Minh Dang!!!!!!
