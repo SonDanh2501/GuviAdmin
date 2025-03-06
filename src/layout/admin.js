@@ -121,6 +121,7 @@ import ReportDetailCashBook from "../container/System/ManageReport/ManageReportC
 import ReportDetailCashBookCollaborator from "../container/System/ManageReport/ManageReportCashBook/ReportDetailCashBookCollaborator";
 import ReportDetailCashBookCustomer from "../container/System/ManageReport/ManageReportCashBook/ReportDetailCashBookCustomer";
 import ReportDetailOrderActivity from "../container/System/ManageReport/ManageReportActivity/ReportDetailOrderActivity";
+import ManagePunishNew from "../pages/ManagePunish/ManagePunishNew";
 // import ManageFinance from "../pages/ManageFinance";
 
 const Admin = () => {
@@ -162,6 +163,10 @@ const Admin = () => {
         path="/system/collaborator-not-verify-manage"
         element={<CollaboratorNotVerify />}
       />
+
+      <Route path="/system/manage-punish" element={<ManagePunish />} />
+
+      <Route path="/system/manage-new-punish" element={<ManagePunishNew />} />
 
       <Route
         path="/system/collaborator-manage/details-collaborator/details-activity"
@@ -297,7 +302,7 @@ const Admin = () => {
         element={<TransferStaff />}
       />
 
-      <Route path="/punish/manage-punish" element={<ManagePunish />} />
+      <Route path="/reward/manage-reward" element={<ManageReward />} />
       <Route path="/reward/manage-reward" element={<ManageReward />} />
       <Route
         path="/topup/manage-topup/details-reward-collaborator/:id"
