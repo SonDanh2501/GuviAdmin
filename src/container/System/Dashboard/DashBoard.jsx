@@ -1291,7 +1291,7 @@ export default function Home() {
           )}
         </div>
       </div>
-      {/* <div className="ranking-board">
+      <div className="ranking-board">
         <div className="ranking-board__background-circle"></div>
         <div
           className={`ranking-board__list ${isExpandListRanking && "expanded"}`}
@@ -1377,7 +1377,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </div> */}
+      </div>
       <FloatButton.BackTop />
     </div>
   );

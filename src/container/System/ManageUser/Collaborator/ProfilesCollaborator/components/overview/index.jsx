@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { loadingAction } from "../../../../../../../redux/actions/loading";
 import { useDispatch } from "react-redux";
 import {
+  getAllHistoryOrderCollaborator,
   getCollaboratorsById,
   getHistoryOrderCollaborator,
   getListTrainingLessonByCollaboratorApi,
@@ -57,7 +58,19 @@ const Overview = ({ id, star }) => {
       fullMark: 5,
     },
   ]; // Giá trị tạm thời để hiển thị của tiêu chí đánh giá
-  const [dataOrder, setDataOrder] = useState([]); // Giá trị đơn hàng
+
+  /* ~~~ Value ~~~ */
+  const [dataRatingTotalItem, setDataRatingTotalItem] = useState(0); // Giá trị tổng số lượt đánh giá
+  const [dataJobsTotalItem, setDataJobsTotalItem] = useState(0); // Giá trị tổng công việc
+  const [dataJobsTotalSuccess, setDataJobsTotalSuccess] = useState(0); // Tổng số công việc hoàn thành
+  const [dataJobsTotalCancel, setDataJobsTotalCancel] = useState(0); // Tổng số công việc đã hủy
+  const [dataJobsTotalOther, setDataJobsTotalOther] = useState(0); // Tổng các công việc khác (đã nhận, đang làm)
+
+  /* ~~~ List ~~~ */
+  const [dataInformationCollaborator, setDataInformationCollaborator] =
+    useState([]);
+  const [dataExamination, setDataExamination] = useState([]); // Giá trị các bài kiểm tra
+  const [listRecentOrderActivity, setListRecentOrderActivity] = useState([]); // Danh sách những hoạt động đơn hàng mới nhất
   const [dataRating, setDataRating] = useState([
     {
       name: "5 sao",
@@ -80,14 +93,6 @@ const Overview = ({ id, star }) => {
       value: 1,
     },
   ]); // Giá trị tổng giá trị từng loại sao
-  const [dataRatingTotalItem, setDataRatingTotalItem] = useState(0); // Giá trị tổng số lượt đánh giá
-  const [dataExamination, setDataExamination] = useState([]); // Giá trị các bài kiểm tra
-  const [dataJobsTotalItem, setDataJobsTotalItem] = useState(0); // Giá trị tổng công việc
-  const [dataJobsTotalSuccess, setDataJobsTotalSuccess] = useState(0); // Tổng số công việc hoàn thành
-  const [dataJobsTotalCancel, setDataJobsTotalCancel] = useState(0); // Tổng số công việc đã hủy
-  const [dataJobsTotalOther, setDataJobsTotalOther] = useState(0); // Tổng các công việc khác (đã nhận, đang làm)
-  const [dataInformationCollaborator, setDataInformationCollaborator] =
-    useState([]);
   const [total, setTotal] = useState({
     total_favourite: 0,
     total_order: 0,
@@ -95,6 +100,7 @@ const Overview = ({ id, star }) => {
     remainder: 0,
     gift_remainder: 0,
   }); // Tổng các giá trị: số lượt yêu thích, số đơn hoàn thành, số giờ làm...
+
   /* ~~~ Handle Function ~~~ */
   // 1. Hàm tính tổng từng loại sao
   const handleCalculateStarEachKind = (
@@ -152,27 +158,63 @@ const Overview = ({ id, star }) => {
       );
     }
   };
+
+  // Hàm fetch giá trị lịch sử 5 đơn hàng gần nhất
+  const fetchRecentHistoryOrder = async (idCollaborator, start, length) => {
+    try {
+      dispatch(loadingAction.loadingRequest(true))
+      const res = await getHistoryOrderCollaborator(
+        idCollaborator,
+        start,
+        length
+      );
+      setListRecentOrderActivity(res);
+      dispatch(loadingAction.loadingRequest(false))
+    } catch (err) {
+      errorNotify({
+        message: err?.message || err,
+      });
+      dispatch(loadingAction.loadingRequest(false))
+    }
+  };
+
+  const fetchHistoryOrder = async (idCollaborator) => {
+    try {
+      const res = await getAllHistoryOrderCollaborator(idCollaborator);
+      res.map((el, index) => {
+        if (el._id === "done") {
+          setDataJobsTotalSuccess(el.total_order)
+        }
+        if (el._id === "confirm") {
+          setDataJobsTotalOther(el.total_order)
+        }
+        if (el._id === "cancel") {
+          setDataJobsTotalCancel(el.total_order)
+        }
+      });
+      const totalItem = res.reduce((sum, el) => sum + el.total_order, 0);
+      setDataJobsTotalItem(totalItem);
+
+    } catch (err ) {
+      errorNotify({ message: err?.message || err });
+    }
+  }
   /* ~~~ Use effect ~~~ */
   useEffect(() => {
     const fetchData = async () => {
       try {
         dispatch(loadingAction.loadingRequest(true));
-        // Chạy API
         let tempTotalDoneActivity = 0,
           tempTotalCancelActivity = 0,
           tempTotalOtherActivity = 0;
         const [
-          dataOrderFetch,
           dataStarFetch,
           dataExaminationFetch,
-          dataRecentActivitiesFetch,
           dataInformationCollaboratorFetch,
           dataOverviewCollaboratorFetch,
         ] = await Promise.all([
-          getHistoryOrderCollaborator(id, 0, 5), // Fetch dữ liệu lịch sử đơn hàng của đối tác (5 đơn gần nhất)
           getReviewCollaborator(id, 0, 1), // Fetch dữ liệu lấy đánh giá gần nhất của đối tác (dùng trick để lấy tổng đánh giá)
           getListTrainingLessonByCollaboratorApi(id, 0, 20, "all"), // Fetch dữ liệu các bài kiểm tra của đối tác
-          getHistoryOrderCollaborator(id, 0, 5), // Fetch dữ liệu 5 hoạt động gần nhất
           getCollaboratorsById(id), // Fetch dữ liệu thông tin cộng tác viên
           getOverviewCollaborator(id), // Fetch dữ liệu tổng quan của đối tác
         ]);
@@ -182,24 +224,9 @@ const Overview = ({ id, star }) => {
           0,
           dataStarFetch.totalItem
         );
-        const fullRecentActivity = await getHistoryOrderCollaborator(
-          id,
-          0,
-          dataRecentActivitiesFetch?.totalItem
-        );
         /* Gán giá trị */
-        setDataOrder(dataOrderFetch);
         handleCalculateStarEachKind(dataRating, setDataRating, fullReviewData);
         setDataExamination(dataExaminationFetch?.data);
-        setDataJobsTotalItem(dataRecentActivitiesFetch?.totalItem);
-        fullRecentActivity?.data?.forEach((el) => {
-          if (el.status === "done") tempTotalDoneActivity += 1;
-          else if (el.status === "cancel") tempTotalCancelActivity += 1;
-          else tempTotalOtherActivity += 1;
-        });
-        setDataJobsTotalSuccess(tempTotalDoneActivity);
-        setDataJobsTotalCancel(tempTotalCancelActivity);
-        setDataJobsTotalOther(tempTotalOtherActivity);
         setDataInformationCollaborator(dataInformationCollaboratorFetch);
         setTotal({
           ...total,
@@ -213,17 +240,21 @@ const Overview = ({ id, star }) => {
           collaborator_wallet:
             dataOverviewCollaboratorFetch?.collaborator_wallet,
         });
+        dispatch(loadingAction.loadingRequest(false));
       } catch (err) {
         errorNotify({
           message: err?.message,
         });
-      } finally {
         dispatch(loadingAction.loadingRequest(false));
       }
     };
     fetchData();
   }, [id, dispatch]);
 
+  useEffect(() => {
+    fetchRecentHistoryOrder(id, 0, 5); // Lấy 5 hoạt động đơn hàng mới nhất
+    fetchHistoryOrder(id);
+  }, [id]);
   return (
     <div class="collaborator-overview">
       {/* Left container */}
@@ -283,8 +314,8 @@ const Overview = ({ id, star }) => {
           cardHeader="Hoạt động gần đây"
           cardContent={
             <CardActivityLog
-              data={dataOrder?.data}
-              totalItem={dataOrder?.data?.length}
+              data={listRecentOrderActivity?.data}
+              totalItem={listRecentOrderActivity?.data?.length}
               dateIndex="date_work"
               statusIndex="status"
             />

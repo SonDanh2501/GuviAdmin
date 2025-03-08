@@ -50,7 +50,7 @@ const CardActivityLog = (props) => {
     onCurrentPageChange,
     dateIndex,
     statusIndex,
-    pagination
+    pagination,
   } = props;
   const lang = useSelector(getLanguageState);
   const [currentPage, setCurrentPage] = useState(1);
@@ -272,47 +272,42 @@ const CardActivityLog = (props) => {
     );
   };
 
+  const groupedData = data?.reduce((acc, item) => {
+    const date = item.date_create.split("T")[0]; // Lấy phần ngày từ ISO string
+    if (!acc[date]) {
+      acc[date] = [];
+    }
+    acc[date].push(item);
+    return acc;
+  }, {});
+
+  const sortedGroupedData = Object.fromEntries(
+    Object.entries(groupedData).sort(
+      ([dateA], [dateB]) => new Date(dateB) - new Date(dateA)
+    )
+  );
+
+  console.log(sortedGroupedData);
+
+  // groupedArray?.map((el, index) => console.log("check >>>"));
   return (
-    <div>
-      {totalItem > 0 ? (
-        <div className="card-activities">
-          {data?.map((activity, index) => (
-            <div className="card-activities--activity">
-              {/* Nội dung bên trái */}
-              {leftContent(
-                moment(new Date(activity[dateIndex])).format("DD MMM, YYYY"),
-                "",
-                moment(new Date(activity[dateIndex]))
-                  .locale(lang)
-                  .format("dddd - HH:mm")
-              )}
-              {/* Icon và line ở giữa */}
-              {index === data?.length - 1
-                ? middleContent(activity[statusIndex], true)
-                : middleContent(activity[statusIndex], false)}
-              {/* Nội dung bên phải */}
-              {rightConent(activity)}
+    <div className="card-activities">
+      {/* {groupedArray?.map((dateGroup, index) => (
+        <div key={index} className="card-activities__child">
+          <div className="card-activities__child--header">
+            <span>20 Thg 02</span>
+          </div>
+          <div className="card-activities__child--list">
+            <div className="card-activities__child--list-left">
+              <div className="card-activities__child--list-left-dot"></div>
             </div>
-          ))}
-          <div
-            className={`card-activities--pagination ${!pagination && "hidden"}`}
-          >
-            <Pagination
-              current={currentPage}
-              onChange={calculateCurrentPage}
-              total={totalItem}
-              showSizeChanger={false}
-              pageSize={pageSize}
-            />
+            <div className="card-activities__child--list-middle">
+              <span>thứ bảy - 08:00</span>
+            </div>
+            <div className="card-activities__child--list-right">Right</div>
           </div>
         </div>
-      ) : (
-        <div className="flex justify-center items-center p-4">
-          <span className="text-xs text-gray-500/60 italic">
-            Cộng tác viên chưa có hoạt động nào
-          </span>
-        </div>
-      )}
+      ))} */}
     </div>
   );
 };
