@@ -81,9 +81,21 @@ export const updateDocumentCollaboratorApi = (id, data) => {
   );
 };
 
+// export const getHistoryOrderCollaborator = (id, start, length) => {
+//   return axiosClient.get(
+//     `/admin/collaborator_manager/get_history_activity_v2/${id}?start=${start}&length=${length}`
+//   );
+// };
+
 export const getHistoryOrderCollaborator = (id, start, length) => {
   return axiosClient.get(
-    `/admin/collaborator_manager/get_history_activity_v2/${id}?start=${start}&length=${length}`
+    `api/admin/collaborator_manager/get_order/${id}?start=${start}&length=${length}`
+  );
+};
+
+export const getAllHistoryOrderCollaborator = (id) => {
+  return axiosClient.get(
+    `api/admin/collaborator_manager/get_total_order/${id}`
   );
 };
 
