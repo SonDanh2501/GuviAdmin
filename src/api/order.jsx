@@ -11,10 +11,11 @@ export const getOrderApi = (
   endDate,
   city,
   district,
-  payment_method
+  payment_method,
+  is_duplicate
 ) => {
   return axiosClient.get(
-    `/admin/statistic/job_lists?search=${search}&start=${start}&length=${length}&status=${status}&id_service=${service}&type_sort=${type}&start_date=${startDate}&end_date=${endDate}&city=${city}&district=${district}&payment_method=${payment_method}`
+    `/admin/statistic/job_lists?search=${search}&start=${start}&length=${length}&status=${status}&id_service=${service}&type_sort=${type}&start_date=${startDate}&end_date=${endDate}&city=${city}&district=${district}&payment_method=${payment_method}&is_duplicate=${is_duplicate}`
   );
 };
 
@@ -71,7 +72,6 @@ export const changeCollaboratorToOrderApi = (id, data) => {
 export const createOrderApi = (data) => {
   // return axiosClient.post(`/admin/group-order-manager/create`, data);
   return axiosClient.post(`/api/admin/group_order_manager/create`, data);
-
 };
 
 export const getAddressCustomerApi = (id, start = 0, length = 10) => {

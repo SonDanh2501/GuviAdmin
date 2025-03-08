@@ -144,6 +144,7 @@ const ReportOrderActivity = () => {
       width: 100,
       position: "center",
       navigate: "group-order/manage-order",
+      param: [{ key: "is_duplicate", code: "true" }],
     },
     {
       customTitle: (
