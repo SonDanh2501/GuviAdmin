@@ -80,7 +80,7 @@ const Review = ({ id, totalReview }) => {
     <div className="collaborator-rating">
       <div className="collaborator-rating__overview">
         {/* Thẻ thống kê lượt đánh giá theo năm */}
-        <div className="collaborator-rating__overview--statistic">
+        {/* <div className="collaborator-rating__overview--statistic">
           <CardInfo
             collaboratorRatingStatistic={true}
             collaboratorId={id}
@@ -88,7 +88,7 @@ const Review = ({ id, totalReview }) => {
             timePeriod={timePeriod}
             supportIcon={true}
           />
-        </div>
+        </div> */}
         {/* Thẻ tổng lượt đánh giá */}
         <div className="collaborator-rating__overview--total">
           <CardInfo
@@ -100,7 +100,7 @@ const Review = ({ id, totalReview }) => {
         </div>
       </div>
       {/* Acvitiy Log */}
-      <div className="collaborator-rating__activity-bar shadow">
+      {/* <div className="collaborator-rating__activity-bar shadow">
         <div className="collaborator-rating__activity-bar--header">
           <span>
             Thống kê
@@ -109,7 +109,7 @@ const Review = ({ id, totalReview }) => {
             
           </span>
         </div>
-      </div>
+      </div> */}
       <DataTable
         columns={columns}
         data={data}

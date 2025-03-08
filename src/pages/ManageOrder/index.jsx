@@ -39,6 +39,7 @@ const ManageOrder = () => {
       : 20
   );
   const toggle = () => setModal(!modal);
+
   /* ~~~ Value ~~~ */
   const [valueSearch, setValueSearch] = useState("");
   const [data, setData] = useState([]);
@@ -46,7 +47,8 @@ const ManageOrder = () => {
   const [type, setType] = useState("date_create");
   const [isLoading, setIsLoading] = useState(false);
   const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState(moment().endOf("date").toISOString());
+  const [endDate, setEndDate] = useState("");
+  const [isDuplicate, setIsDuplicate] = useState("");
   const [item, setItem] = useState({ date_work: "" });
   const [modal, setModal] = useState(false);
   const [reCallData, setReCallData] = useState(false);
@@ -256,6 +258,7 @@ const ManageOrder = () => {
   ];
   // Lọc những items list các option có thể chọn
   items = items.filter((x) => x.label !== false);
+
   /* ~~~ Handle function ~~~ */
   // 1. Hàm tìm kiếm theo giá trị search
   const handleSearch = useCallback(
@@ -279,7 +282,8 @@ const ManageOrder = () => {
         endDate,
         selectCity,
         selectDistrict,
-        selectPaymentMethod
+        selectPaymentMethod,
+        isDuplicate
       );
       setData(res?.data);
       setTotal(res?.totalItem);
@@ -344,6 +348,7 @@ const ManageOrder = () => {
   const onChangePage = (value) => {
     setStartPage(value);
   };
+
   /* ~~~ Use effect ~~~ */
   // 1. Fetch dữ liệu bảng
   useEffect(() => {
@@ -363,6 +368,7 @@ const ManageOrder = () => {
     selectCity,
     selectDistrict,
     selectPaymentMethod,
+    isDuplicate,
   ]);
   // 2. Fetch dữ liệu tổng
   useEffect(() => {
@@ -410,7 +416,11 @@ const ManageOrder = () => {
     if (params.get("end_date")) {
       setEndDate(params.get("end_date"));
     }
+    if (params.get("is_duplicate")) {
+    setIsDuplicate(params.get("is_duplicate"));
+    }
   }, []);
+
   /* ~~~ Other ~~~ */
   const addActionColumn = {
     i18n_title: "",
