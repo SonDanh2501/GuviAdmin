@@ -26,7 +26,10 @@ import {
 } from "../../../redux/actions/auth";
 import { useNavigate } from "react-router-dom";
 import loginLandingImage from "../../../assets/images/loginLanding.svg";
-import { checkIsEmailFormat, checkPasswordRequired } from "../../../utils/contant";
+import {
+  checkIsEmailFormat,
+  checkPasswordRequired,
+} from "../../../utils/contant";
 
 const LoginAffiliate = () => {
   const { IoColorWandOutline, IoCashOutline, IoCheckmarkCircleOutline } = icons;
@@ -46,6 +49,8 @@ const LoginAffiliate = () => {
   const [showModalForgotPassword, setShowModalForgotPassword] = useState(false); // Giá trị hiển thị modal quên mật khẩu
   const [showModalUpdatePassword, setShowModalUpdatePassword] = useState(false); // Giá trị hiển thị modal nhập mật khẩu mới
   const [valuePhoneArea, setValuePhoneArea] = useState("+84"); // Giá trị phân vùng
+  const [valueStepSignUp, setValueStepSignUp] = useState(1); // Giá trị xác định bước tạo tài khoản hiện tại
+
   /* ~~~ Flag ~~~ */
   const [isSignUp, setIsSignUp] = useState(false); // Giá trị cờ form đăng ký
   const [isForgotPassword, setIsForgotPassword] = useState(false); // Giá trị cờ form quên mật khẩu
@@ -54,26 +59,40 @@ const LoginAffiliate = () => {
   /* ~~~ Handle function ~~~ */
   // 1. Hàm đăng nhập
   const handleLoginAffiliate = (phone, password) => {
-    dispatch(
-      loginAffiliateAction.loginAffiliateRequest({
-        data: {
-          phone: phone,
-          password: password,
-          code_phone_area: valuePhoneArea,
-        },
-        naviga: navigate,
-      })
-    );
+    if (phone.trim() === "" || phone === undefined || phone === null) {
+      errorNotify({
+        message: "Vui lòng nhập số điện thoại",
+      });
+    } else if (
+      password.trim() === "" ||
+      password === undefined ||
+      password === null
+    ) {
+      errorNotify({
+        message: "Vui lòng nhập mật khẩu",
+      });
+    } else {
+      dispatch(
+        loginAffiliateAction.loginAffiliateRequest({
+          data: {
+            phone: phone,
+            password: password,
+            code_phone_area: valuePhoneArea,
+          },
+          naviga: navigate,
+        })
+      );
+    }
   };
   // 2. Hàm gửi mã OTP
   const handleSendOTP = async (payload) => {
     try {
-      if (!valuePhone.trim() || !valueFullName.trim() || !valueEmail.trim())
-        return errorNotify({ message: "Vui lòng điền đầy đủ thông tin" });
-  
-      if (!checkIsEmailFormat(valueEmail))
-        return errorNotify({ message: "Vui lòng nhập đúng định dạng email" });
-  
+      // if (!valuePhone.trim() || !valueFullName.trim() || !valueEmail.trim())
+      //   return errorNotify({ message: "Vui lòng điền đầy đủ thông tin" });
+
+      // if (!checkIsEmailFormat(valueEmail))
+      //   return errorNotify({ message: "Vui lòng nhập đúng định dạng email" });
+
       dispatch(loadingAction.loadingRequest(true));
       await registerPhoneAffiliateApi(payload);
       setIsRunning(true);
@@ -81,6 +100,7 @@ const LoginAffiliate = () => {
       dispatch(loadingAction.loadingRequest(false));
     } catch (err) {
       errorNotify({ message: err.message });
+      dispatch(loadingAction.loadingRequest(false));
     }
   };
   // 3. Hàm check mã OTP, nếu pass thì lưu lại token vào cookie
@@ -129,6 +149,7 @@ const LoginAffiliate = () => {
       errorNotify({
         message: err.message,
       });
+      dispatch(loadingAction.loadingRequest(false));
     }
   };
   // 5. Hàm gửi lại mã OTP
@@ -161,10 +182,16 @@ const LoginAffiliate = () => {
   // 7. Hàm quên mật khẩu
   const handleForgotPassword = async (payload) => {
     try {
-      const res = await forgotPasswordAffiliateApi(payload);
-      setIsRunning(true);
-      setShowModalSignUp(true);
-      setIsForgotPassword(true);
+      if (payload?.phone.trim() === "") {
+        errorNotify({
+          message: "Chưa điền số điện thoại",
+        });
+      } else {
+        const res = await forgotPasswordAffiliateApi(payload);
+        setIsRunning(true);
+        setShowModalSignUp(true);
+        setIsForgotPassword(true);
+      }
     } catch (err) {
       errorNotify({
         message: err.message,
@@ -301,15 +328,28 @@ const LoginAffiliate = () => {
               </span>
             </div>
             <div className="login-affiliate__form--right-login-sign-up">
-              <span className="login-affiliate__form--right-login-sign-up-label">
-                Bạn là khách hàng mới?
-              </span>
-              <span
-                onClick={() => setIsSignUp(true)}
-                className="login-affiliate__form--right-login-sign-up-label high-light"
-              >
-                Đăng ký ngay
-              </span>
+              <div className="login-affiliate__form--right-login-sign-up-container">
+                <span className="login-affiliate__form--right-login-sign-up-container-label">
+                  Bạn là khách hàng mới?
+                </span>
+                <span
+                  onClick={() => setIsSignUp(true)}
+                  className="login-affiliate__form--right-login-sign-up-container-label high-light"
+                >
+                  Đăng ký ngay
+                </span>
+              </div>
+              <div className="login-affiliate__form--right-login-forgot-password-container">
+                <span
+                  onClick={() => {
+                    setIsSignUp(false);
+                    setIsForgotPassword(true);
+                  }}
+                  className="login-affiliate__form--right-login-sign-up-label high-light"
+                >
+                  Quên mật khẩu
+                </span>
+              </div>
             </div>
           </div>
           {/* Form sign up */}
@@ -322,13 +362,13 @@ const LoginAffiliate = () => {
               <span>Trở thành thành viên của chúng tôi !</span>
             </div>
             <div className="login-affiliate__form--right-sign-up-input">
-              <InputTextCustom
+              {/* <InputTextCustom
                 type="text"
                 value={valueFullName}
                 placeHolder="Họ và tên"
                 onChange={(e) => setValueFullName(e.target.value)}
                 required={true}
-              />
+              /> */}
               <InputTextCustom
                 type="textValue"
                 valueUnit={valuePhoneArea}
@@ -338,13 +378,13 @@ const LoginAffiliate = () => {
                 onChange={(e) => setValuePhone(e.target.value)}
                 required={true}
               />
-              <InputTextCustom
+              {/* <InputTextCustom
                 type="text"
                 value={valueEmail}
                 placeHolder="Email"
                 onChange={(e) => setValueEmail(e.target.value)}
                 required={true}
-              />
+              /> */}
               <button
                 className="login-affiliate__button"
                 onClick={() =>
@@ -535,14 +575,99 @@ const LoginAffiliate = () => {
           onCancel={() => {
             setIsModalPasswordType(false);
           }}
-          open={isModalPasswordType}
+          // open={isModalPasswordType}
+          open={true}
           footer={[]}
+          width={750}
         >
-          <div className="login-affiliate__card--information-password">
-            <div className="login-affiliate__card--information-password-header">
-              <span>Tạo một mật khẩu của riêng bạn</span>
+          <div className="login-affiliate__card--information">
+            <div className="login-affiliate__card--information-header">
+              <div
+                className={`login-affiliate__card--information-header-child ${
+                  valueStepSignUp === 1 && "activated"
+                }`}
+              >
+                <div
+                  onClick={() => setValueStepSignUp(1)}
+                  className="login-affiliate__card--information-header-child-step-number"
+                >
+                  <span>1</span>
+                </div>
+                <div className="login-affiliate__card--information-header-child-step-title">
+                  <span className="login-affiliate__card--information-header-child-step-title-vietnam">
+                    Thông tin tài khoản
+                  </span>
+                  <span className="login-affiliate__card--information-header-child-step-title-english">
+                    Account information
+                  </span>
+                </div>
+                <div className="login-affiliate__card--information-header-child-step-line"></div>
+              </div>
+              <div
+                className={`login-affiliate__card--information-header-child ${
+                  valueStepSignUp === 2 && "activated"
+                }`}
+              >
+                <div
+                  onClick={() => setValueStepSignUp(2)}
+                  className="login-affiliate__card--information-header-child-step-number"
+                >
+                  <span>2</span>
+                </div>
+                <div className="login-affiliate__card--information-header-child-step-title">
+                  <span className="login-affiliate__card--information-header-child-step-title-vietnam">
+                    Địa chỉ liên hệ
+                  </span>
+                  <span className="login-affiliate__card--information-header-child-step-title-english">
+                    Address
+                  </span>
+                </div>
+                <div className="login-affiliate__card--information-header-child-step-line"></div>
+              </div>
+              <div
+                className={`login-affiliate__card--information-header-child ${
+                  valueStepSignUp === 3 && "activated"
+                }`}
+              >
+                <div
+                  onClick={() => setValueStepSignUp(3)}
+                  className="login-affiliate__card--information-header-child-step-number"
+                >
+                  <span>3</span>
+                </div>
+                <div className="login-affiliate__card--information-header-child-step-title">
+                  <span className="login-affiliate__card--information-header-child-step-title-vietnam">
+                    Xác nhận mật khẩu
+                  </span>
+                  <span className="login-affiliate__card--information-header-child-step-title-english">
+                    Verify password
+                  </span>
+                </div>
+              </div>
             </div>
-            <InputTextCustom
+            <div className="login-affiliate__card--information-body">
+              <div className="login-affiliate__card--information-body-child">
+                <div className="login-affiliate__card--information-body-child-input">
+                  <InputTextCustom
+                    type="text"
+                    value={valuePassword}
+                    placeHolder=""
+                    onChange={(e) => setValuePassword(e.target.value)}
+                    isPassword={true}
+                  />
+                </div>
+                <div className="login-affiliate__card--information-body-child-input">
+                  <InputTextCustom
+                    type="text"
+                    value={valuePassword}
+                    placeHolder=""
+                    onChange={(e) => setValuePassword(e.target.value)}
+                    isPassword={true}
+                  />
+                </div>
+              </div>
+            </div>
+            {/* <InputTextCustom
               type="text"
               value={valuePassword}
               placeHolder="Mật khẩu"
@@ -555,13 +680,11 @@ const LoginAffiliate = () => {
               placeHolder="Xác nhận lại mật khẩu"
               onChange={(e) => setValueConfirmPassword(e.target.value)}
               isPassword={true}
-            />
+            /> */}
             {/* Thanh kiểm tra dựa trên mật khẩu điền vào */}
-            <div
-              className={`login-affiliate__card--information-password-process-bar`}
-            >
+            <div className={`login-affiliate__card--information-process-bar`}>
               <div
-                className={`login-affiliate__card--information-password-process-bar-child ${
+                className={`login-affiliate__card--information-process-bar-child ${
                   checkPasswordRequired(valuePassword).level === 0
                     ? "empty"
                     : checkPasswordRequired(valuePassword).level === 1
@@ -577,10 +700,10 @@ const LoginAffiliate = () => {
               ></div>
             </div>
             {/* Các yêu cầu khi tạo mật khẩu */}
-            <div className="login-affiliate__card--information-password-condition-required">
+            <div className="login-affiliate__card--information-condition-required">
               {/* Ít nhất 8 ký tự */}
               <div
-                className={`login-affiliate__card--information-password-condition-required-child ${
+                className={`login-affiliate__card--information-condition-required-child ${
                   checkPasswordRequired(valuePassword).isPassLength && "checked"
                 }`}
               >
@@ -590,7 +713,7 @@ const LoginAffiliate = () => {
                 <span>Ít nhất 8 ký tự</span>
               </div>
               <div
-                className={`login-affiliate__card--information-password-condition-required-child ${
+                className={`login-affiliate__card--information-condition-required-child ${
                   checkPasswordRequired(valuePassword).isHaveLetter && "checked"
                 }`}
               >
@@ -600,7 +723,7 @@ const LoginAffiliate = () => {
                 <span>Ít nhất 1 chữ cái</span>
               </div>
               <div
-                className={`login-affiliate__card--information-password-condition-required-child ${
+                className={`login-affiliate__card--information-condition-required-child ${
                   checkPasswordRequired(valuePassword).isHaveNumber && "checked"
                 }`}
               >
@@ -620,6 +743,7 @@ const LoginAffiliate = () => {
                   name: "",
                   full_name: valueFullName,
                   email: valueEmail,
+                  // Thiếu ngày sinh, giới tính, mã số thuế, địa chỉ ở hiện tại
                   phone: valuePhone,
                   password: valuePassword,
                   code_phone_area: valuePhoneArea,
@@ -663,8 +787,8 @@ const LoginAffiliate = () => {
           footer={[]}
           open={showModalUpdatePassword}
         >
-          <div className="login-affiliate__card--information-password">
-            <div className="login-affiliate__card--information-password-header">
+          <div className="login-affiliate__card--information">
+            <div className="login-affiliate__card--information-header">
               <span>Hãy ghi nhớ mật khẩu của mình nhé</span>
             </div>
             <InputTextCustom
@@ -702,10 +826,10 @@ const LoginAffiliate = () => {
               ></div>
             </div>
             {/* Các yêu cầu khi tạo mật khẩu */}
-            <div className="login-affiliate__card--information-password-condition-required">
+            <div className="login-affiliate__card--information-condition-required">
               {/* Ít nhất 8 ký tự */}
               <div
-                className={`login-affiliate__card--information-password-condition-required-child ${
+                className={`login-affiliate__card--information-condition-required-child ${
                   checkPasswordRequired(valuePassword).isPassLength && "checked"
                 }`}
               >
@@ -715,7 +839,7 @@ const LoginAffiliate = () => {
                 <span>Ít nhất 8 ký tự</span>
               </div>
               <div
-                className={`login-affiliate__card--information-password-condition-required-child ${
+                className={`login-affiliate__card--information-condition-required-child ${
                   checkPasswordRequired(valuePassword).isHaveLetter && "checked"
                 }`}
               >
@@ -725,7 +849,7 @@ const LoginAffiliate = () => {
                 <span>Ít nhất 1 chữ cái</span>
               </div>
               <div
-                className={`login-affiliate__card--information-password-condition-required-child ${
+                className={`login-affiliate__card--information-condition-required-child ${
                   checkPasswordRequired(valuePassword).isHaveNumber && "checked"
                 }`}
               >
@@ -736,7 +860,7 @@ const LoginAffiliate = () => {
               </div>
             </div>
             <ButtonCustom
-              label="Hoàn tất tạo tài khoản"
+              label="Cập nhật mật khẩu"
               fullScreen={true}
               borderRadiusFull={true}
               onClick={() =>
