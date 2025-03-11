@@ -17,6 +17,10 @@
         font-size: $textFontSizeM;
         font-family: $fontFamily;
         color: $colorBlack;
+
+        &.with-preview-image {
+            padding: 8px 20px 8px 60px;
+        }
     }
 
     .input-custom__label {
@@ -32,6 +36,9 @@
         font-size: $textFontSizeM;
         font-family: $fontFamily;
 
+        &.with-preview-image {
+            left: 65px;
+        }
 
         &.have-describe {
             top: 34%;
@@ -67,15 +74,15 @@
         padding: 0px 12px;
         position: absolute;
         // padding-left: 8px;
-        top: 5.5px;
-        right: 1.5px;
-        border-top-right-radius: 2.5px;
-        border-bottom-right-radius: 2.5px;
-        border-left: 2px solid #eee;
+        top: 8px;
+        left: 0px;
+        // border-top-right-radius: 2.5px;
+        // border-bottom-right-radius: 2.5px;
+        border-right: 2px solid #eee;
 
         .input-custom__image--number {
             width: 28px;
-            height: 28px;
+            height: 24px;
             color: #999;
             outline: none;
             font-weight: $fontWeightL;
@@ -83,8 +90,8 @@
         }
 
         .input-custom__image--img {
-            width: 28px;
-            height: 28px;
+            width: 24px;
+            height: 24px;
         }
 
         .input-custom__image--plus {
