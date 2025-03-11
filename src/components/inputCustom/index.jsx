@@ -716,6 +716,7 @@ const [isShowPassword, setIsShowPassword] = useState(isPassword ? true : false )
       setOpen(true);
     }
   }, [related]);
+
   return (
     <div className="input-custom" ref={refContainer}>
       {/* Input Field  */}
@@ -917,7 +918,7 @@ const [isShowPassword, setIsShowPassword] = useState(isPassword ? true : false )
               <input
                 disabled={disable}
                 type="text"
-                className="input-custom__input"
+                className={`input-custom__input ${previewImage && "with-preview-image"}`}
                 style={{ cursor: "pointer" }}
                 placeholder=" "
                 value={
@@ -1218,12 +1219,12 @@ const [isShowPassword, setIsShowPassword] = useState(isPassword ? true : false )
         <>
           <input
             disabled={disable}
-            className="input-custom__input"
+            className="input-custom__input with-preview-image"
             placeholder=" "
             value={value}
             onChange={onChange}
           />
-          <label htmlFor=" " className="input-custom__label">
+          <label htmlFor=" " className="input-custom__label with-preview-image">
             {placeHolder}{" "}
             {required && (
               <span className="input-custom__label--required">*</span>
