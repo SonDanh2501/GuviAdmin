@@ -513,9 +513,9 @@ const CollaboratorNotVerify = () => {
 
       // neu la actived thi kich hoat tai khoan theo logic cu
       if (dataChange.status === "actived") {
-        handleVerifyCollaborator(dataChange._id);
+        await handleVerifyCollaborator(dataChange._id);
       }
-      handleUpdateCollaboratorStatus(item._id, payload);
+      await handleUpdateCollaboratorStatus(item._id, payload);
     }
     getListCollaborator();
     setModal("");
@@ -550,6 +550,8 @@ const CollaboratorNotVerify = () => {
       });
     }
   }
+
+ 
   //   const processHandleReview = async (dataChange) => {
   //     const payload = {
   //       id_order: item._id,

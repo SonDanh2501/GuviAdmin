@@ -1,250 +1,250 @@
 @import "../../../@theme//style.scss";
 
-// .card-activities {
-
-//     display: flex;
-//     flex-direction: column;
-//     gap: $gapM;
-//     .card-activities--activity {
-//         display: flex;
-//         padding-bottom: 12px;
-
-//         .card-activities--activity-left {
-//             width: 25%;
-//             display: flex;
-//             flex-direction: column;
-//             align-items: center;
-
-//             .card-activities--activity-left-date {
-//                 font-size: $textFontSizeM;
-//                 font-weight: $fontWeightXL;
-//                 color: $colorBlack;
-//             }
-
-//             .card-activities--activity-left-day-in-week {
-//                 font-size: $textFontSizeM;
-//                 font-weight: $fontWeightL;
-//                 color: $colorGray;
-//                 opacity: $opacityS;
-//             }
-
-//             .card-activities--activity-left-time {
-//                 font-size: $textFontSizeM;
-//                 font-weight: $fontWeightL;
-//                 color: $colorGray;
-//                 opacity: $opacityS;
-//                 text-transform: capitalize;
-//             }
-//         }
-
-//         .card-activities--activity-line {
-//             width: 16.67%;
-//             align-items: center;
-//             display: flex;
-//             flex-direction: column;
-//             margin-bottom: -40px;
-
-//             .card-activities--activity-line-icon {
-//                 padding: 8px 8px;
-//                 width: fit-content;
-//                 height: fit-content;
-//                 border-radius: $borderRadiusFull;
-
-//                 &.pending {
-//                     background-color: $colorExtraLightYellow;
-//                 }
-
-//                 &.confirm {
-//                     background-color: $colorExtraLightBlue;
-//                 }
-
-//                 &.doing {
-//                     background-color: $colorExtraLightBlue;
-//                 }
-
-//                 &.done {
-//                     background-color: $colorExtraLightGreen;
-//                 }
-
-//                 &.cancel {
-//                     background-color: $colorExtraLightRed;
-//                 }
-
-//                 &.blue {
-//                     background-color: $colorExtraLightBlue;
-//                 }
-
-//                 &.green {
-//                     background-color: $colorExtraLightGreen;
-//                 }
-
-//                 &.red {
-//                     background-color: $colorExtraLightRed;
-//                 }
-
-//                 &.yellow {
-//                     background-color: $colorExtraLightYellow;
-//                 }
-
-//                 &.violet {
-//                     background-color: $colorExtraLightViolet;
-//                 }
-//             }
-
-//             .card-activities--activity-line-icon-line {
-//                 width: 2px;
-//                 height: 100%;
-//                 background-color: $colorMoreLightGray;
-//             }
-//         }
-
-//         .card-activities--activity-right {
-//             width: 58.33%;
-
-//             .card-activities--activity-right-time {
-//                 font-size: $textFontSizeM;
-//                 font-weight: $fontWeightXL;
-//                 color: $colorBlack;
-//             }
-
-//             .card-activities--activity-right-address {
-//                 font-size: $textFontSizeM;
-//                 font-weight: $fontWeightL;
-//                 color: $colorGray;
-//                 opacity: $opacityS;
-//                 overflow: hidden;
-//                 display: -webkit-box;
-//                 -webkit-box-orient: vertical;
-//                 -webkit-line-clamp: 3;
-//             }
-
-//             .card-activities--activity-right-status {
-//                 width: fit-content;
-//                 padding: 3px 8px;
-//                 border-radius: $borderRadiusL;
-//                 // border: 1px solid;
-//                 margin-top: 4px;
-
-//                 &.pending {
-//                     background-color: $colorExtraLightYellow;
-//                     border: 1px solid $colorYellow;
-//                     color: $colorYellow;
-//                 }
-
-//                 &.confirm {
-//                     background-color: $colorExtraLightBlue;
-//                     border: 1px solid $colorBlue;
-//                     color: $colorBlue;
-//                 }
-
-//                 &.doing {
-//                     background-color: $colorExtraLightBlue;
-//                     border: 1px solid $colorBlue;
-//                     color: $colorBlue;
-//                 }
-
-//                 &.done {
-//                     background-color: $colorExtraLightGreen;
-//                     border: 1px solid $colorGreen;
-//                     color: $colorGreen;
-//                 }
-
-//                 &.cancel {
-//                     background-color: $colorExtraLightRed;
-//                     border: 1px solid $colorRed;
-//                     color: $colorRed;
-//                 }
-
-//                 span {
-//                     font-size: $textFontSizeM;
-//                     font-weight: $fontWeightL;
-//                 }
-//             }
-//         }
-
-       
-
-//     }
-
-//     .card-activities--pagination {
-//         display: flex;
-//         justify-content: flex-end;
-//         width: 100%;
-//         &.hidden {
-//             display: none;
-//         }
-//     }
-// }
-
-
 .card-activities {
+
     display: flex;
     flex-direction: column;
-    padding: 12px;
-    
-
-    .card-activities__child {
+    gap: $gapM;
+    .card-activities--activity {
         display: flex;
-        flex-direction: column;
-        gap: $gapL;
+        padding-bottom: 12px;
 
-        .card-activities__child--header {
-            padding: 4px 8px;
-            border-radius: $borderRadiusL;
-            background-color: $colorMoreLightGray;
-            width: fit-content;
+        .card-activities--activity-left {
+            width: 25%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
 
-            span {
+            .card-activities--activity-left-date {
                 font-size: $textFontSizeM;
                 font-weight: $fontWeightXL;
                 color: $colorBlack;
             }
+
+            .card-activities--activity-left-day-in-week {
+                font-size: $textFontSizeM;
+                font-weight: $fontWeightL;
+                color: $colorGray;
+                opacity: $opacityS;
+            }
+
+            .card-activities--activity-left-time {
+                font-size: $textFontSizeM;
+                font-weight: $fontWeightL;
+                color: $colorGray;
+                opacity: $opacityS;
+                text-transform: capitalize;
+            }
         }
-        .card-activities__child--list {
+
+        .card-activities--activity-line {
+            width: 16.67%;
+            align-items: center;
             display: flex;
-            gap: $gapL;
+            flex-direction: column;
+            margin-bottom: -40px;
 
-            .card-activities__child--list-left {
-                display: flex;
-                align-items: center;
-                justify-content: center;
+            .card-activities--activity-line-icon {
+                padding: 8px 8px;
                 width: fit-content;
+                height: fit-content;
+                border-radius: $borderRadiusFull;
 
-                .card-activities__child--list-left-dot {
-                    width: 20px;
-                    height: 20px;
-                    background-color: $colorViolet;
-                    border: 6px solid $colorExtraLightViolet;
-                    border-radius: $borderRadiusFull;
+                &.pending {
+                    background-color: $colorExtraLightYellow;
+                }
+
+                &.confirm {
+                    background-color: $colorExtraLightBlue;
+                }
+
+                &.doing {
+                    background-color: $colorExtraLightBlue;
+                }
+
+                &.done {
+                    background-color: $colorExtraLightGreen;
+                }
+
+                &.cancel {
+                    background-color: $colorExtraLightRed;
+                }
+
+                &.blue {
+                    background-color: $colorExtraLightBlue;
+                }
+
+                &.green {
+                    background-color: $colorExtraLightGreen;
+                }
+
+                &.red {
+                    background-color: $colorExtraLightRed;
+                }
+
+                &.yellow {
+                    background-color: $colorExtraLightYellow;
+                }
+
+                &.violet {
+                    background-color: $colorExtraLightViolet;
                 }
             }
 
-            .card-activities__child--list-middle {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                width: 20%;
+            .card-activities--activity-line-icon-line {
+                width: 2px;
+                height: 100%;
+                background-color: $colorMoreLightGray;
+            }
+        }
+
+        .card-activities--activity-right {
+            width: 58.33%;
+
+            .card-activities--activity-right-time {
+                font-size: $textFontSizeM;
+                font-weight: $fontWeightXL;
+                color: $colorBlack;
+            }
+
+            .card-activities--activity-right-address {
+                font-size: $textFontSizeM;
+                font-weight: $fontWeightL;
+                color: $colorGray;
+                opacity: $opacityS;
+                overflow: hidden;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 3;
+            }
+
+            .card-activities--activity-right-status {
+                width: fit-content;
+                padding: 3px 8px;
+                border-radius: $borderRadiusL;
+                // border: 1px solid;
+                margin-top: 4px;
+
+                &.pending {
+                    background-color: $colorExtraLightYellow;
+                    border: 1px solid $colorYellow;
+                    color: $colorYellow;
+                }
+
+                &.confirm {
+                    background-color: $colorExtraLightBlue;
+                    border: 1px solid $colorBlue;
+                    color: $colorBlue;
+                }
+
+                &.doing {
+                    background-color: $colorExtraLightBlue;
+                    border: 1px solid $colorBlue;
+                    color: $colorBlue;
+                }
+
+                &.done {
+                    background-color: $colorExtraLightGreen;
+                    border: 1px solid $colorGreen;
+                    color: $colorGreen;
+                }
+
+                &.cancel {
+                    background-color: $colorExtraLightRed;
+                    border: 1px solid $colorRed;
+                    color: $colorRed;
+                }
 
                 span {
                     font-size: $textFontSizeM;
                     font-weight: $fontWeightL;
-                    color: $colorLightGray;
-                }
-            }
-
-            .card-activities__child--list-right {
-                width: 100%;
-                background-color: $colorExtraLightGray;
-                border-radius: $borderRadiusL;
-                border: 1px solid $colorMoreLightGray;
-                padding: 12px;
-
-                span {
-                    font-size: $textFontSizeM;
-                    font-weight: $fontWeightXL;
-                    color: $colorBlack;
                 }
             }
         }
+
+       
+
+    }
+
+    .card-activities--pagination {
+        display: flex;
+        justify-content: flex-end;
+        width: 100%;
+        &.hidden {
+            display: none;
+        }
     }
 }
+
+
+// .card-activities {
+//     display: flex;
+//     flex-direction: column;
+//     padding: 12px;
+    
+
+//     .card-activities__child {
+//         display: flex;
+//         flex-direction: column;
+//         gap: $gapL;
+
+//         .card-activities__child--header {
+//             padding: 4px 8px;
+//             border-radius: $borderRadiusL;
+//             background-color: $colorMoreLightGray;
+//             width: fit-content;
+
+//             span {
+//                 font-size: $textFontSizeM;
+//                 font-weight: $fontWeightXL;
+//                 color: $colorBlack;
+//             }
+//         }
+//         .card-activities__child--list {
+//             display: flex;
+//             gap: $gapL;
+
+//             .card-activities__child--list-left {
+//                 display: flex;
+//                 align-items: center;
+//                 justify-content: center;
+//                 width: fit-content;
+
+//                 .card-activities__child--list-left-dot {
+//                     width: 20px;
+//                     height: 20px;
+//                     background-color: $colorViolet;
+//                     border: 6px solid $colorExtraLightViolet;
+//                     border-radius: $borderRadiusFull;
+//                 }
+//             }
+
+//             .card-activities__child--list-middle {
+//                 display: flex;
+//                 align-items: center;
+//                 justify-content: center;
+//                 width: 20%;
+
+//                 span {
+//                     font-size: $textFontSizeM;
+//                     font-weight: $fontWeightL;
+//                     color: $colorLightGray;
+//                 }
+//             }
+
+//             .card-activities__child--list-right {
+//                 width: 100%;
+//                 background-color: $colorExtraLightGray;
+//                 border-radius: $borderRadiusL;
+//                 border: 1px solid $colorMoreLightGray;
+//                 padding: 12px;
+
+//                 span {
+//                     font-size: $textFontSizeM;
+//                     font-weight: $fontWeightXL;
+//                     color: $colorBlack;
+//                 }
+//             }
+//         }
+//     }
+// }

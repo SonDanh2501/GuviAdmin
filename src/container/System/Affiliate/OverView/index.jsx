@@ -1008,7 +1008,10 @@ const OverView = () => {
                     Nhận tiền thưởng cho đơn hoàn thành đầu tiên
                   </span>
                 </div>
-                <div className="affiliate-overview__guide--code-voucher-container-child-share">
+                <div
+                  onClick={() => copyToClipBoard(user.referral_code)}
+                  className="affiliate-overview__guide--code-voucher-container-child-share"
+                >
                   <img src={copyButtonImage} alt=""></img>
                   <span>CHIA SẺ</span>
                 </div>
@@ -1044,7 +1047,12 @@ const OverView = () => {
                     Nhận tiền thưởng cho đơn hoàn thành đầu tiên
                   </span>
                 </div>
-                <div className="affiliate-overview__guide--code-voucher-container-child-share">
+                <div
+                  onClick={() =>
+                    copyToClipBoard(user.promotional_referral_code)
+                  }
+                  className="affiliate-overview__guide--code-voucher-container-child-share"
+                >
                   <img src={copyButtonImage} alt=""></img>
                   <span>CHIA SẺ</span>
                 </div>

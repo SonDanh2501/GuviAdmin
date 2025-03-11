@@ -495,7 +495,6 @@ const ManageTopUpWithdraw = (props) => {
           .map((item) => `&${item?.key}=${item?.code}`)
           .join("") + `&start_date=${startDate}&end_date=${endDate}`;
       const res = await getTotalTransactionApi(query, valueSearch);
-      console.log("check res", res);
       setStatusList((prevList) =>
         prevList.map((item) => ({
           ...item,
