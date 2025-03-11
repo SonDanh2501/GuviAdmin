@@ -66,6 +66,7 @@ import {
   bankList,
   checkPasswordRequired,
   getInitials,
+  province,
   sortList,
 } from "../../../../utils/contant";
 import referralPolicy from "../../../../assets/images/referral-policy.svg";
@@ -119,6 +120,10 @@ const ReferredList = () => {
   const [isEnd, setIsEnd] = useState(false);
   const [startPageHistoryReceive, setStartPageHistoryReceive] = useState(0); // Giá trị bắt đầu trang của lịch sử nhận chiết khấu
   const [currentPageHistoryReceive, setCurrentPageHistoryReceive] = useState(1);
+
+      const [valueSelectProvince, setValueSelectProvince] = useState(""); // Giá trị lựa chọn tỉnh/thành phố
+      const [valueSelectDistrict, setValueSelectDistrict] = useState(""); // Giấ trị lựa chọn quận/huyện
+
   const onChangePageHistoryReceive = (value) => {
     setStartPageHistoryReceive(value);
   };
@@ -247,6 +252,7 @@ const ReferredList = () => {
   const [valueCurrentPassword, setValueCurrentPassword] = useState(""); // Giá trị mật khẩu hiện tại
   const [valueNewPassword, setValueNewPassword] = useState(""); // Giá trị mật khẩu mới
   const [valueConfirmPassword, setValueConfirmPassword] = useState(""); // Giá trị xác nhận mật khẩu mới
+    const [listDistrict, setListDistrict] = useState([]); // Giá trị danh sách quận/huyện sau khi chọn tỉnh/thành phố
 
   /* ~~~ List ~~~ */
   // 1. Danh sách các cột của bảng
@@ -1782,12 +1788,95 @@ const ReferredList = () => {
               />
             </div>
           </div>
-          <InputTextCustom
-            type="text"
-            disable={true}
-            value={valueUserInfo?.email}
-            placeHolder="Email"
-          />
+          <div className="refferend-list-affiliate__information--child">
+            <div className="refferend-list-affiliate__information--child-item">
+              <InputTextCustom
+                type="text"
+                disable={true}
+                value={valueUserInfo?.email}
+                placeHolder="Email"
+              />
+            </div>
+            <div className="refferend-list-affiliate__information--child-item">
+              <InputTextCustom
+                type="select"
+                value={valueUserInfo?.gender}
+                placeHolder="Giới tính"
+                disable={true}
+                options={[
+                  {
+                    code: "other",
+                    label: `${i18n.t("other", { lng: lang })}`,
+                  },
+                  {
+                    code: "male",
+                    label: `${i18n.t("male", { lng: lang })}`,
+                  },
+                  {
+                    code: "female",
+                    label: `${i18n.t("female", { lng: lang })}`,
+                  },
+                ]}
+              />
+            </div>
+          </div>
+          <div className="refferend-list-affiliate__information--child">
+            <div className="refferend-list-affiliate__information--child-item">
+              <InputTextCustom
+                type="text"
+                disable={true}
+                value={valueUserInfo?.identity_number}
+                placeHolder="CCCD/CMND"
+              />
+            </div>
+            <div className="refferend-list-affiliate__information--child-item">
+              <InputTextCustom
+                type="text"
+                disable={true}
+                value={valueUserInfo?.tax_code}
+                placeHolder="Mã số thuế"
+              />
+            </div>
+          </div>
+          <div className="refferend-list-affiliate__information--child">
+            <div className="refferend-list-affiliate__information--child-item">
+              {/* <InputTextCustom
+                type="select"
+                options={province}
+                disable={true}
+                value={valueUserInfo?.city}
+                placeHolder="Tỉnh/Thành phố"
+              /> */}
+              <InputTextCustom
+                type="province"
+                searchField={true}
+                disable={true}
+                value={valueUserInfo?.city}
+                placeHolder="Tỉnh/Thành phố (thường trú)"
+                province={province}
+                setValueSelectedProps={setValueSelectProvince}
+                setValueSelectedPropsSupport={setValueSelectDistrict}
+                setValueArrayProps={setListDistrict}
+              />
+            </div>
+            <div className="refferend-list-affiliate__information--child-item">
+              {/* <InputTextCustom
+                  type="text"
+                  disable={true}
+                  value={valueUserInfo?.district}
+                  placeHolder="Quận/Huyện"
+                /> */}
+              <InputTextCustom
+                type="district"
+                searchField={true}
+                disable={true}
+                value={valueUserInfo?.district}
+                placeHolder="Quận/Huyện (thường trú)"
+                district={listDistrict}
+                setValueSelectedProps={setValueSelectDistrict}
+              />
+            </div>
+          </div>
           <div className="refferend-list-affiliate__information--child">
             <div className="refferend-list-affiliate__information--child-item">
               <InputTextCustom

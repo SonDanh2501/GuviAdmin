@@ -190,14 +190,12 @@ function* loginAffiliateWithOTPSaga(action) {
         token: response?.token,
       })
     );
-    yield put(loginAffiliateWithOTPAction.loginAffiliateWithOTPRequest(false));
   } catch (err) {
     yield put(loginAffiliateWithOTPAction.loginAffiliateWithOTPFailure(err));
     yield put(loginAffiliateWithOTPAction.loginAffiliateWithOTPRequest(false));
-    errorNotify({ message: err.message || "Tạo tài khoản không thành công" });
-  } finally {
     yield put(loadingAction.loadingRequest(false));
-  }
+    errorNotify({ message: err.message || "Tạo tài khoản không thành công" });
+  } 
 }
 
 function* logoutAffiliateSaga(action) {

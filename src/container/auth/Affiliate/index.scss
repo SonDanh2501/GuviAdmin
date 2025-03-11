@@ -707,6 +707,7 @@
         gap: $gapL;
         align-items: center;
         justify-content: center;
+        padding-bottom: 4px;
 
         .login-affiliate__card--information-header-child {
             display: flex;
@@ -762,8 +763,8 @@
 
             &.activated {
                 .login-affiliate__card--information-header-child-step-number {
-                    background-color: $colorViolet;
-                    border: 2px solid $colorViolet;
+                    background-color: $colorOrange;
+                    border: 2px solid $colorOrange;
 
                     span {
                         color: $colorWhite;
@@ -771,6 +772,7 @@
                 }
 
                 .login-affiliate__card--information-header-child-step-title {
+                    display: flex;
 
                     .login-affiliate__card--information-header-child-step-title-vietnam {
                         color: $colorBlack;
@@ -798,10 +800,56 @@
             display: flex;
             width: 100%;
             gap: $gapL;
-            background-color: red;
 
             .login-affiliate__card--information-body-child-input {
-                width: 50%;
+                width: 100%;
+            }
+        }
+
+        
+        .login-affiliate__card--information-process-bar {
+            display: flex;
+            position: relative;
+            width: 100%;
+            height: 8px;
+            border-radius: $borderRadiusFull;
+            background-color: $colorExtraLightGray;
+
+            .login-affiliate__card--information-password-process-bar-child {
+                position: absolute;
+                top: 0;
+                left: 0;
+                background-color: $colorBlack;
+                width: 0%;
+                height: 100%;
+                transition: all 0.5s ease-out;
+                border-radius: $borderRadiusFull;
+
+                &.empty {
+                    background-color: $colorMoreLightGray;
+                    width: 0%;
+                }
+
+                &.week {
+                    background-color: $colorRed;
+                    width: 25%;
+
+                }
+
+                &.fear {
+                    background-color: $colorOrange;
+                    width: 50%;
+                }
+
+                &.good {
+                    background-color: $colorLime;
+                    width: 75%;
+                }
+
+                &.strong {
+                    background-color: $colorGreen;
+                    width: 100%;
+                }
             }
         }
     }
@@ -814,7 +862,7 @@
         border-radius: $borderRadiusFull;
         background-color: $colorExtraLightGray;
 
-        .login-affiliate__card--information-password-process-bar-child {
+        .login-affiliate__card--information-process-bar-child {
             position: absolute;
             top: 0;
             left: 0;
