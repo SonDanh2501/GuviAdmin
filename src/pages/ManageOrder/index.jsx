@@ -298,7 +298,14 @@ const ManageOrder = () => {
   const getTotal = async () => {
     try {
       if (startDate.trim() !== "" && startDate !== undefined) {
-        const res = await getTotalOrder(startDate, endDate);
+        const res = await getTotalOrder(
+          startDate,
+          endDate,
+          selectService,
+          selectPaymentMethod,
+          selectCity,
+          selectDistrict
+        );
         setStatusList((prevList) =>
           prevList.map((item) => ({
             ...item,

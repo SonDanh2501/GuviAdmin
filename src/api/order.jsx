@@ -159,9 +159,16 @@ export const searchOrderApi = (start, length, search) => {
   );
 };
 
-export const getTotalOrder = (startDate, endDate) => {
+export const getTotalOrder = (
+  startDate,
+  endDate,
+  service,
+  payment_method,
+  city,
+  district
+) => {
   return axiosClient.get(
-    `/admin/order_manager/get_total_order?lang=vi&start_date=${startDate}&end_date=${endDate}`
+    `/admin/order_manager/get_total_order?lang=vi&start_date=${startDate}&end_date=${endDate}&id_service=${service}&payment_method=${payment_method}&city=${city}&district=${district}`
   );
 };
 
