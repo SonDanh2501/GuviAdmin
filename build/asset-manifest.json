@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.ef6479d9.css",
-    "main.js": "/static/js/main.94b5639f.js",
+    "main.css": "/static/css/main.f1ac24c3.css",
+    "main.js": "/static/js/main.2ab8dbf1.js",
     "static/media/description.png": "/static/media/description.5da8e5eb29ad845b842c.png",
     "static/media/thumnailContent.png": "/static/media/thumnailContent.5f47e4a8f0e0c87659a9.png",
     "static/media/title.png": "/static/media/title.71a2ab4847b010aa171e.png",
@@ -86,6 +86,7 @@
     "static/media/request.svg": "/static/media/request.514c603c328bae8b4fee4c15497a3c26.svg",
     "static/media/finance.svg": "/static/media/finance.af5dc374e285e257a46b467398a1308b.svg",
     "static/media/bank_cb.svg": "/static/media/bank_cb.6125efe6dd59387e3093bbb3f850ce7f.svg",
+    "static/media/bank_nama.svg": "/static/media/bank_nama.be65383cce9ecf3edcff4f8c0a539105.svg",
     "static/media/ticket.svg": "/static/media/ticket.83fd91bef42368a00c70c02a5667c12a.svg",
     "static/media/bank_ocb.svg": "/static/media/bank_ocb.2416ffaf357f348759bb0e00c4077639.svg",
     "static/media/cards.svg": "/static/media/cards.c625593864df3003d0f3db42c6b049ab.svg",
@@ -115,11 +116,11 @@
     "static/media/offline.svg": "/static/media/offline.33acbe8c955951e587e68725985e74e7.svg",
     "static/media/online.svg": "/static/media/online.acf17c611c1affd9615cf0c62302674d.svg",
     "static/media/pending.svg": "/static/media/pending.ae3d796b3e3d6c6272a35edc144a2e90.svg",
-    "main.ef6479d9.css.map": "/static/css/main.ef6479d9.css.map",
-    "main.94b5639f.js.map": "/static/js/main.94b5639f.js.map"
+    "main.f1ac24c3.css.map": "/static/css/main.f1ac24c3.css.map",
+    "main.2ab8dbf1.js.map": "/static/js/main.2ab8dbf1.js.map"
   },
   "entrypoints": [
-    "static/css/main.ef6479d9.css",
-    "static/js/main.94b5639f.js"
+    "static/css/main.f1ac24c3.css",
+    "static/js/main.2ab8dbf1.js"
   ]
 }
