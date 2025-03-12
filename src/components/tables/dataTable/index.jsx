@@ -444,8 +444,8 @@ const DataTable = (props) => {
                 <span className="case__date-create-date">
                   {moment(
                     new Date(
-                      data?.date_work
-                        ? data?.date_work
+                      data[item.dataIndex]
+                        ? data[item.dataIndex]
                         : data?.date_work_schedule[0].date
                     )
                   ).format("DD/MM/YYYY")}
@@ -453,8 +453,8 @@ const DataTable = (props) => {
                 <span className="case__date-create-time">
                   {moment(
                     new Date(
-                      data?.date_work
-                        ? data?.date_work
+                      data[item.dataIndex]
+                        ? data[item.dataIndex]
                         : data?.date_work_schedule[0].date
                     )
                   )
@@ -2343,11 +2343,11 @@ const DataTable = (props) => {
       myObj_serialized = JSON.stringify({ y: "" });
       setScrollYValue(0);
     } else if (e === 1) {
-      myObj_serialized = JSON.stringify({ y: 700 });
+      myObj_serialized = JSON.stringify({ y: 800 });
     } else if (e === 2) {
-      myObj_serialized = JSON.stringify({ y: 500 });
+      myObj_serialized = JSON.stringify({ y: 550 });
     } else if (e === 3) {
-      myObj_serialized = JSON.stringify({ y: 300 });
+      myObj_serialized = JSON.stringify({ y: 250 });
     }
     localStorage.setItem("tableHeight", myObj_serialized);
     setScrollYValue(e);

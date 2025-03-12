@@ -18,7 +18,6 @@
 
     .custom-table-header__label {
         display: flex;
-        flex-direction: column;
         gap: $gapXS;
         align-items: center;
 
@@ -49,6 +48,15 @@
         
             &.right {
                 justify-content: end;
+            }
+        }
+
+        .custom-table-header__label--sort {
+            display: flex;
+            flex-direction: column;
+            span {
+                cursor: pointer;
+                line-height: 1;
             }
         }
     }

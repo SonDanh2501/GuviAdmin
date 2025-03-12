@@ -628,11 +628,11 @@ const router = [
       getItem(
         <Link
           style={{ textDecoration: "none" }}
-          to="/system/collaborator-verify-manage"
+          to="/collaborator/manage"
         >
           Đang hoạt động
         </Link>,
-        "/system/collaborator-verify-manage",
+        "/collaborator/manage",
         null,
         null
       ),
