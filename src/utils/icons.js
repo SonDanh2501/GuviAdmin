@@ -98,6 +98,7 @@ import {
   IoPlay,
   IoCreateOutline,
   IoDownloadOutline,
+  IoCaretUp
 } from "react-icons/io5";
 import {
   FaRegFrown,
@@ -216,6 +217,7 @@ const icons = {
   IoPlay,
   IoCreateOutline,
   IoDownloadOutline,
+  IoCaretUp,
   // Font Awesome 5
   FaRegFrown,
   FaRegMeh,

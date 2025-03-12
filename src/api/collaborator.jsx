@@ -2,14 +2,7 @@ import axiosClient from "../axios";
 export const createCollaborator = (payload) => {
   return axiosClient.post("/admin/collaborator_manager/create_item", payload);
 };
-export const fetchCollaborators = (
-  lang,
-  start,
-  length,
-  type,
-  search,
-  city
-) => {
+export const fetchCollaborators = (lang, start, length, type, search, city) => {
   return axiosClient.get(
     `/admin/collaborator_manager/get_collaborator_by_type?lang=${lang}&start=${start}&length=${length}&collaborator_type=${type}&search=${search}&city=${city}`
   );
@@ -51,9 +44,7 @@ export const activeCollaborator = (id, payload) => {
   );
 };
 export const deleteCollaborator = (id) => {
-  return axiosClient.post(
-    `/admin/collaborator_manager/delete_item/${id}`
-  );
+  return axiosClient.post(`/admin/collaborator_manager/delete_item/${id}`);
 };
 
 export const verifyCollaborator = (id) => {
@@ -87,9 +78,17 @@ export const updateDocumentCollaboratorApi = (id, data) => {
 //   );
 // };
 
-export const getHistoryOrderCollaborator = (id, start, length) => {
+export const getHistoryOrderCollaborator = (
+  id,
+  start,
+  length,
+  service,
+  payment_method,
+  status,
+  type_date,
+) => {
   return axiosClient.get(
-    `api/admin/collaborator_manager/get_order/${id}?start=${start}&length=${length}`
+    `api/admin/collaborator_manager/get_order/${id}?start=${start}&length=${length}&id_service=${service}&payment_method=${payment_method}&status=${status}&type_date=${type_date}`
   );
 };
 
@@ -215,19 +214,17 @@ export const updateStatusCollaborator = (idCollaborator, payload) => {
   return axiosClient.post(
     `api/admin/collaborator_manager/update_status_collaborator_profile/${idCollaborator}`,
     payload
-  )
-}
-
+  );
+};
 
 export const getTotalCollaboratorByStatus = (arrStatus, search, city) => {
   return axiosClient.get(
     `/admin/collaborator_manager/get_total_collaborator_by_status?arr_status=${arrStatus}&search=${search}&city=${city}`
-  )
-}
+  );
+};
 
 export const getTotalCollaboratorByArea = (arrStatus, search) => {
   return axiosClient.get(
     `/admin/collaborator_manager/get_total_collaborator_by_area?arr_status=${arrStatus}&search=${search}&city=`
-  )
-}
-
+  );
+};
