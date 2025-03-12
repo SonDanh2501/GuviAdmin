@@ -156,7 +156,7 @@ const Admin = () => {
       />
 
       <Route
-        path="/system/collaborator-verify-manage"
+        path="/collaborator/manage"
         element={<CollaboratorVerify />}
       />
       <Route

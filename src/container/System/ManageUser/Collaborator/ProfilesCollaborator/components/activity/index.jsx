@@ -11,7 +11,10 @@ import { errorNotify } from "../../../../../../../helper/toast";
 import useWindowDimensions from "../../../../../../../helper/useWindowDimensions";
 import i18n from "../../../../../../../i18n";
 import { loadingAction } from "../../../../../../../redux/actions/loading";
-import { getLanguageState } from "../../../../../../../redux/selectors/auth";
+import {
+  getLanguageState,
+  getUser,
+} from "../../../../../../../redux/selectors/auth";
 import "./index.scss";
 import FilterData from "../../../../../../../components/filterData";
 import DataTable from "../../../../../../../components/tables/dataTable";
@@ -22,22 +25,20 @@ import CardBarChart from "../../../../../../../components/card/cardBarChart";
 
 import icons from "../../../../../../../utils/icons";
 import CardActivityLog from "../../../../../../../components/card/cardActivityLog";
+import CustomHeaderDatatable from "../../../../../../../components/tables/tableHeader";
+import ButtonCustom from "../../../../../../../components/button";
+import { getService } from "../../../../../../../redux/selectors/service";
 
 const {
-  IoLogoUsd,
-  IoTrendingUp,
-  IoTime,
-  IoStatsChart,
-  IoCalendarNumber,
-  IoTrendingDown,
   IoStatsChartOutline,
-  IoTimeOutline,
   IoCalendarNumberOutline,
   IoCubeOutline,
   IoPieChartOutline,
 } = icons;
 
 const Activity = ({ id }) => {
+  const service = useSelector(getService);
+  const user = useSelector(getUser);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const lang = useSelector(getLanguageState);
@@ -52,13 +53,20 @@ const Activity = ({ id }) => {
   );
   /* ~~~ Value ~~~ */
   const [dataHistoryOrderCollaborator, setDataHistoryOrderCollaborator] =
-    useState([]);
+    useState([]); // Dữ liệu của bảng hoạt động đơn hàng
   const [
     dataHistoryActivitiesCollaborator,
     setDataHistoryActivitiesCollaborator,
-  ] = useState([]);
+  ] = useState([]); // Dữ liệu của lịch sử hoạt động
   const [timePeriod, setTimePeriod] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [valueSelectStatus, setValueSelectStatus] = useState("all");
+  const [valueSelectService, setValueSelectService] = useState("");
+  const [valueSelectPaymentMethod, setValueSelectPaymentMethod] = useState("all");
+  const [valueSelectTypeDate, setValueSelectTypeDate] = useState("date_work");
+
+  /* ~~~ List ~~~ */
+
   const [valueActivityStatistics, setValueActivityStatistics] = useState([
     {
       label: "Tổng đơn đến nay",
@@ -86,9 +94,68 @@ const Activity = ({ id }) => {
     },
   ]);
 
-  /* ~~~ List ~~~ */
+  const [listStatus, setListStatus] = useState([
+    { code: "all", label: "Tất cả" },
+    { code: "processing", label: "Chờ thanh toán" },
+    { code: "pending", label: "Đang Chờ làm" },
+    { code: "confirm", label: "Đã nhận" },
+    { code: "doing", label: "Đang làm" },
+    { code: "done", label: "Hoàn thành" },
+    { code: "cancel", label: "Đã hủy" },
+  ]);
+
+  // 2. Danh sách các loại dịch vụ
+  const listService = [{ code: "", label: "Tất cả" }];
+  service.forEach((item) => {
+    if (user?.id_service_manager?.length === 0) {
+      listService.push({
+        code: item?._id,
+        label: item?.title?.[lang],
+      });
+      return;
+    } else {
+      user?.id_service_manager?.forEach((i) => {
+        if (item?._id === i?._id) {
+          listService.push({
+            code: item?._id,
+            label: item?.title?.[lang],
+          });
+          return;
+        }
+      });
+    }
+  });
+
+  // Danh sách các phương thức thanh toán
+  const listPaymentMethod = [
+    { code: "all", label: "Tất cả" },
+    { code: "cash", label: "Tiền mặt" },
+    { code: "point", label: "Ví G-pay" },
+    { code: "momo", label: "Momo" },
+    { code: "vnpay", label: "VNPAY-QR" },
+    { code: "vnbank", label: "VNPAY-ATM" },
+    { code: "intcard", label: "Thẻ quốc tế" },
+  ];
+
+  // Danh sách các loại ngày sắp xếp
+  const listTypeDate = [
+    { code: "date_work", label: "Ngày làm" },
+    { code: "date_create", label: "Ngày tạo" },
+  ];
+
   // 1. Danh sách các cột trong bảng
   const columns = [
+    {
+      customTitle: (
+        <CustomHeaderDatatable
+          title="STT"
+
+        />
+      ),
+      dataIndex: "",
+      key: "ordinal",
+      width: 50,
+    },
     {
       title: "Mã đơn",
       // dataIndex: "",
@@ -96,6 +163,7 @@ const Activity = ({ id }) => {
       width: 60,
       FontSize: "text-size-M",
     },
+
     {
       title: "Khách hàng",
       // dataIndex: "",
@@ -111,8 +179,25 @@ const Activity = ({ id }) => {
       FontSize: "text-size-M",
     },
     {
-      title: "Ngày làm",
-      // dataIndex: "short_review",
+      customTitle: (
+        <CustomHeaderDatatable
+          title="Ngày tạo"
+
+        />
+      ),
+      dataIndex: "date_create",
+      key: "date_work",
+      width: 50,
+      FontSize: "text-size-M",
+    },
+    {
+      customTitle: (
+        <CustomHeaderDatatable
+          title="Ngày làm"
+
+        />
+      ),
+      dataIndex: "date_work",
       key: "date_work",
       width: 50,
       FontSize: "text-size-M",
@@ -200,14 +285,32 @@ const Activity = ({ id }) => {
     setStartPageHistoryActivities(value);
   };
   // 3. Hàm fetch dữ liệu đơn hàng của đối tác
-  const fetchHistoryOrderCollaborator = async (id, start, length) => {
+  const fetchHistoryOrderCollaborator = async (
+    id,
+    start,
+    length,
+    service,
+    payment_method,
+    status,
+    type_date
+  ) => {
     try {
       dispatch(loadingAction.loadingRequest(true));
-      const res = await getHistoryOrderCollaborator(id, start, length);
+      const res = await getHistoryOrderCollaborator(
+        id,
+        start,
+        length,
+        service,
+        payment_method,
+        status,
+        type_date
+      );
       setDataHistoryOrderCollaborator(res);
       dispatch(loadingAction.loadingRequest(false));
     } catch (err) {
-      console.log("Lỗi lấy dữ liệu đơn hàng: ", err);
+      errorNotify({
+        message: err?.message || err,
+      });
     }
   };
   // 4. Hàm fetch dữ liệu lịch sử hoạt động (lịch sử hoạt động là phần tử cha của lịch sử trạng thái)
@@ -218,14 +321,32 @@ const Activity = ({ id }) => {
       setDataHistoryActivitiesCollaborator(res);
       dispatch(loadingAction.loadingRequest(false));
     } catch (err) {
-      console.log("Lỗi lấy dữ liệu lịch sử hoạt động: ", err);
+      errorNotify({
+        message: err?.message || err,
+      });
     }
   };
   /* ~~~ Use effect ~~~ */
   // 1. Fetch giá trị lịch sử đơn hàng của đối tác
   useEffect(() => {
-    fetchHistoryOrderCollaborator(id, startPageOrder, lengthPage);
-  }, [id, dispatch, startPageOrder, lengthPage]);
+    fetchHistoryOrderCollaborator(
+      id,
+      startPageOrder,
+      lengthPage,
+      valueSelectService,
+      valueSelectPaymentMethod,
+      valueSelectStatus,
+      valueSelectTypeDate
+    );
+  }, [
+    id,
+    startPageOrder,
+    lengthPage,
+    valueSelectService,
+    valueSelectPaymentMethod,
+    valueSelectStatus,
+    valueSelectTypeDate,
+  ]);
   // 2. Fetch giá trị lịch sử hoạt động của đối tác
   useEffect(() => {
     fetchHistoryActivitiesCollaborator(
@@ -234,11 +355,73 @@ const Activity = ({ id }) => {
       lengthPage
     );
   }, [id, dispatch, startPageHistoryActivities, lengthPage]);
+
+  const filterByStatus = () => {
+    return (
+      <div className="manage-order__filter-content">
+        {listStatus?.map((el) => (
+          <div
+            onClick={() => setListStatus(el.code)}
+            className={`manage-order__filter-content--tab ${
+              valueSelectStatus === el.code && "selected"
+            }`}
+          >
+            <span className="manage-order__filter-content--tab-label">
+              {el?.label}
+            </span>
+            <span className="manage-order__filter-content--tab-number">
+              {el?.total}
+            </span>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
+  const filterContentRight = () => {
+    return (
+      <div className="manage-order__filter-content">
+        <div>
+          <ButtonCustom
+            label="Trạng thái"
+            options={listStatus}
+            value={valueSelectStatus}
+            setValueSelectedProps={setValueSelectStatus}
+          />
+        </div>
+        <div>
+          <ButtonCustom
+            label="Loại ngày"
+            options={listTypeDate}
+            value={valueSelectTypeDate}
+            setValueSelectedProps={setValueSelectTypeDate}
+          />
+        </div>
+        <div>
+          <ButtonCustom
+            label="Dịch vụ"
+            options={listService}
+            value={valueSelectService}
+            setValueSelectedProps={setValueSelectService}
+          />
+        </div>
+        <div>
+          <ButtonCustom
+            label="Phương thức thanh toán"
+            options={listPaymentMethod}
+            value={valueSelectPaymentMethod}
+            setValueSelectedProps={setValueSelectPaymentMethod}
+          />
+        </div>
+      </div>
+    );
+  };
+
   /* ~~~ Main ~~~ */
   return (
     <div className="collaborator-activity">
       {/* Các thẻ thống kê (hiện tại đang ẩn đi chừng nào viết xong api thì mở ra và truyền dữ liệu vào) */}
-      <div className="collaborator-activity__statistics">
+      {/* <div className="collaborator-activity__statistics">
         <div className="collaborator-activity__statistics--overview grid-column-2">
           {valueActivityStatistics.map((item, index) => {
             return (
@@ -276,9 +459,10 @@ const Activity = ({ id }) => {
             supportIcon={true}
           />
         </div>
-      </div>
+      </div> */}
       {/* Lịch sử đơn hàng và Lịch sử hoạt động */}
       <div className="collaborator-activity__history">
+        <FilterData rightContent={filterContentRight()} />
         <div className="collaborator-activity__history--order">
           <DataTable
             columns={columns}
@@ -288,6 +472,19 @@ const Activity = ({ id }) => {
             setLengthPage={setLengthPage}
             totalItem={dataHistoryOrderCollaborator?.totalItem || 0}
             onCurrentPageChange={onChangePageOrder}
+            // headerRightContent={
+            //   <div className="manage-order__search">
+            //     <div className="manage-order__search-field">
+            //       <InputTextCustom
+            //         type="text"
+            //         placeHolderNormal="Tìm kiếm"
+            //         onChange={(e) => {
+            //           handleSearch(e.target.value);
+            //         }}
+            //       />
+            //     </div>
+            //   </div>
+            // }
           />
         </div>
         {/* Lịch sử đơn hàng */}
@@ -333,168 +530,3 @@ const Activity = ({ id }) => {
 };
 
 export default memo(Activity);
-
-// const columns = [
-//   {
-//     title: () => {
-//       return (
-//         <p className="title-column">{`${i18n.t("code_order", {
-//           lng: lang,
-//         })}`}</p>
-//       );
-//     },
-//     render: (data) => {
-//       return (
-//         <p
-//           className="text-id-activity"
-//           onClick={() =>
-//             navigate(
-//               "/system/collaborator-manage/details-collaborator/details-activity",
-//               {
-//                 state: { idOrder: data?._id, idCollaborator: id },
-//               }
-//             )
-//           }
-//         >
-//           {data?.id_view}
-//         </p>
-//       );
-//     },
-//   },
-//   {
-//     title: () => {
-//       return (
-//         <p className="title-column">{`${i18n.t("date_create", {
-//           lng: lang,
-//         })}`}</p>
-//       );
-//     },
-//     render: (data) => {
-//       return (
-//         <div className="div-create-activity">
-//           <p className="text-create">
-//             {moment(new Date(data?.date_create)).format("DD/MM/YYYY")}
-//           </p>
-//           <p className="text-create">
-//             {moment(new Date(data?.date_create)).format("HH:mm")}
-//           </p>
-//         </div>
-//       );
-//     },
-//     responsive: ["xl"],
-//   },
-//   {
-//     title: () => {
-//       return (
-//         <p className="title-column">{`${i18n.t("customer", {
-//           lng: lang,
-//         })}`}</p>
-//       );
-//     },
-//     render: (data) => {
-//       return (
-//         <Link
-//           to={`/profile-customer/${data?.id_customer?._id}`}
-//           className="div-name-activity"
-//         >
-//           <p className="text-name-customer">{data?.id_customer?.full_name}</p>
-//           <p className="text-phone-customer">{data?.id_customer?.phone}</p>
-//         </Link>
-//       );
-//     },
-//   },
-//   {
-//     title: () => {
-//       return (
-//         <p className="title-column">{`${i18n.t("service", {
-//           lng: lang,
-//         })}`}</p>
-//       );
-//     },
-//     render: (data) => {
-//       return (
-//         <div className="div-service-activity">
-//           <p className="text-service">
-//             {data?.type === "loop" && data?.is_auto_order
-//               ? `${i18n.t("repeat", { lng: lang })}`
-//               : data?.service?._id?.kind === "giup_viec_theo_gio"
-//               ? `${i18n.t("cleaning", { lng: lang })}`
-//               : data?.service?._id?.kind === "giup_viec_co_dinh"
-//               ? `${i18n.t("cleaning_subscription", { lng: lang })}`
-//               : data?.service?._id?.kind === "phuc_vu_nha_hang"
-//               ? `${i18n.t("serve", { lng: lang })}`
-//               : ""}
-//           </p>
-//           <p className="text-service">{timeWork(data)}</p>
-//         </div>
-//       );
-//     },
-//   },
-//   {
-//     title: () => {
-//       return (
-//         <p className="title-column">{`${i18n.t("date_work", {
-//           lng: lang,
-//         })}`}</p>
-//       );
-//     },
-//     render: (data) => {
-//       return (
-//         <div className="div-worktime-activity">
-//           <p className="text-worktime">
-//             {" "}
-//             {moment(new Date(data?.date_work)).format("DD/MM/YYYY")}
-//           </p>
-//           <p className="text-worktime">
-//             {moment(new Date(data?.date_work)).locale(lang).format("dddd")}
-//           </p>
-//         </div>
-//       );
-//     },
-//   },
-//   {
-//     title: () => {
-//       return (
-//         <p className="title-column">{`${i18n.t("address", {
-//           lng: lang,
-//         })}`}</p>
-//       );
-//     },
-//     render: (data) => (
-//       <p className="text-address-activity">{data?.address}</p>
-//     ),
-//     responsive: ["xl"],
-//   },
-//   {
-//     title: () => {
-//       return (
-//         <p className="title-column">{`${i18n.t("status", { lng: lang })}`}</p>
-//       );
-//     },
-//     render: (data) => (
-//       <p
-//         className={
-//           data?.status === "pending"
-//             ? "text-pending-activity"
-//             : data?.status === "confirm"
-//             ? "text-confirm-activity"
-//             : data?.status === "doing"
-//             ? "text-doing-activity"
-//             : data?.status === "done"
-//             ? "text-done-activity"
-//             : "text-cancel-activity"
-//         }
-//       >
-//         {data?.status === "pending"
-//           ? `${i18n.t("pending", { lng: lang })}`
-//           : data?.status === "confirm"
-//           ? `${i18n.t("confirm", { lng: lang })}`
-//           : data?.status === "doing"
-//           ? `${i18n.t("doing", { lng: lang })}`
-//           : data?.status === "done"
-//           ? `${i18n.t("complete", { lng: lang })}`
-//           : `${i18n.t("cancel", { lng: lang })}`}
-//       </p>
-//     ),
-//   },
-// ];
