@@ -2704,13 +2704,13 @@ const DataTable = (props) => {
                     : data?.status === "waiting"
                     ? "Đang xử lý"
                     : data?.status === "doing"
-                    ? "Đang thực thi"
+                    ? "Thực thi"
                     : data?.status === "cancel"
                     ? "Đã hủy"
                     : data?.status === "revoke"
-                    ? "Đã thu hồi"
+                    ? "Thu hồi"
                     : data?.status === "done"
-                    ? "Đã hoàn thành"
+                    ? "Hoàn thành"
                     : ""}
                 </span>
               </div>

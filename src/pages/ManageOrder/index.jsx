@@ -169,7 +169,7 @@ const ManageOrder = () => {
       customTitle: <CustomHeaderDatatable title="Địa chỉ" />,
       dataIndex: "address",
       key: "case_text",
-      width: 200,
+      width: 220,
     },
     {
       customTitle: <CustomHeaderDatatable title="Đối tác" />,
@@ -180,10 +180,10 @@ const ManageOrder = () => {
       customTitle: <CustomHeaderDatatable title="Trạng thái" />,
       dataIndex: "status",
       key: "case_status",
-      width: 130,
+      width:  120,
     },
     {
-      customTitle: <CustomHeaderDatatable title="Thanh toán thức" />,
+      customTitle: <CustomHeaderDatatable title="Thanh toán" />,
       key: "case_payment-method",
       width: 90,
     },
