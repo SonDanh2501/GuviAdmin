@@ -431,11 +431,11 @@ html,body {
   font-weight: $fontWeightXL;
 }
 .ant-table-cell {
-  padding: 12px !important;
+  padding: 16px 12px !important;
 }
 
 .ant-table tbody tr:nth-child(odd) td {
-  // background-color: #f9f9f9;
+  background-color: #f5f7fd;
   // border: 1px solid #CCC;
   // padding: 10px;
 }

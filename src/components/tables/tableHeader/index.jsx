@@ -20,7 +20,7 @@ const CustomHeaderDatatable = ({
   return (
     <div
       className={`custom-table-header ${
-        position === "left" ? "left" : position === "right" ? "right" : "center"
+        position === "center" ? "center" : position === "right" ? "right" : "left"
       }`}
     >
       <div className="custom-table-header__label">

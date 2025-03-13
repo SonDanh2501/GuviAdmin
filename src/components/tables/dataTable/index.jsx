@@ -37,6 +37,9 @@ import { IoAlertCircleOutline, IoHelpCircleOutline } from "react-icons/io5";
 import ButtonCustom from "../../button";
 import { convertPhoneNumber } from "../../../utils/contant";
 import { getProvince, getService } from "../../../redux/selectors/service";
+import icons from "../../../utils/icons";
+
+const { IoStar } = icons;
 
 const DataTable = (props) => {
   const {
@@ -83,11 +86,11 @@ const DataTable = (props) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [ordinalNumber, setOrdinalNumber] = useState(1);
   const [scrollYValue, setScrollYValue] = useState(
-    JSON.parse(localStorage.getItem("tableHeight"))?.y === 700
+    JSON.parse(localStorage.getItem("tableHeight"))?.y === 800
       ? 1
-      : JSON.parse(localStorage.getItem("tableHeight"))?.y === 500
+      : JSON.parse(localStorage.getItem("tableHeight"))?.y === 550
       ? 2
-      : JSON.parse(localStorage.getItem("tableHeight"))?.y === 300
+      : JSON.parse(localStorage.getItem("tableHeight"))?.y === 250
       ? 3
       : JSON.parse(localStorage.getItem("tableHeight"))?.y
       ? JSON.parse(localStorage.getItem("tableHeight"))?.y
@@ -270,62 +273,23 @@ const DataTable = (props) => {
             break;
           case "customer_name_phone":
             return (
-              <div className="div-customer-name-phone">
+              <div className="case__customer-name-phone">
                 <Link
                   to={`/profile-customer/${
                     data?.id_customer?._id ? data?.id_customer?._id : data?._id
                   }`}
                 >
-                  <div className="flex items-center gap-2">
-                    <p className={`text-name-customer ${item?.fontSize}`}>
-                      {data?.id_customer?.full_name || data?.full_name}
-                    </p>
-                    {/* <Image
-                      preview={false}
-                      src={
-                        data?.rank_point < 100
-                          ? member
-                          : data?.rank_point >= 100 && data?.rank_point < 300
-                          ? silver
-                          : data?.rank_point >= 300 && data?.rank_point < 1500
-                          ? gold
-                          : platinum
-                      }
-                      style={{ width: 20, height: 20 }}
-                    /> */}
-                  </div>
-                </Link>
-                <p className={`text-phone-customer ${item?.fontSize}`}>
-                  {data?.id_customer?.phone || data?.phone}
-                </p>
-                {/* <div className="flex items-center gap-1">
-                  <span className="font-normal">Hạng:</span>
-                  <span
-                    className={`${
-                      data?.rank_point < 100
-                        ? "bg-orange-100 text-orange-500 border-orange-500" // Copper
-                        : data?.rank_point >= 100 && data?.rank_point < 300
-                        ? "bg-stone-100 text-stone-500 border-stone-500" // Silver
-                        : data?.rank_point >= 300 && data?.rank_point < 1500
-                        ? "bg-yellow-100 text-amber-500 border-yellow-500" // Gold
-                        : "bg-cyan-100 text-sky-500 border-cyan-500" // Platium
-                    } px-1 py-[1px] border-[1px] rounded-lg`}
-                  >
-                    {
-                      data?.rank_point < 100
-                        ? "Đồng" // Copper
-                        : data?.rank_point >= 100 && data?.rank_point < 300
-                        ? "Bạc" // Silver
-                        : data?.rank_point >= 300 && data?.rank_point < 1500
-                        ? "Vàng" // Gold
-                        : "Bạch kim" // Platium
-                    }
+                  <span className="case__customer-name-phone--name">
+                    {data?.id_customer?.full_name || data?.full_name}
                   </span>
-                </div> */}
+                </Link>
+                <span className="case__customer-name-phone--phone">
+                  {data?.id_customer?.phone || data?.phone}
+                </span>
               </div>
             );
             break;
-          case "customer_name_phone_rank":
+          case "customer_name_phone_rank": {
             return (
               <div className="div-customer-name-phone">
                 <Link
@@ -388,6 +352,8 @@ const DataTable = (props) => {
               </div>
             );
             break;
+          }
+
           case "customer_full_name":
             return (
               <div className="div-customer-name-phone">
@@ -2301,6 +2267,404 @@ const DataTable = (props) => {
                   )}
                 </span>
               </div>
+            );
+            break;
+          }
+          case "case_service": {
+            return (
+              <div className="case__service">
+                <span className="case__service--name">
+                  {data?.type === "loop" && data?.is_auto_order
+                    ? `${i18n.t("cleaning", { lng: lang })} (lặp lại)`
+                    : data?.service?._id?.kind === "giup_viec_theo_gio"
+                    ? `${i18n.t("cleaning", { lng: lang })}`
+                    : data?.service?._id?.kind === "giup_viec_co_dinh"
+                    ? `${i18n.t("cleaning_subscription", { lng: lang })}`
+                    : data?.service?._id?.kind === "phuc_vu_nha_hang"
+                    ? `${i18n.t("serve", { lng: lang })}`
+                    : data?.service?._id?.kind === "ve_sinh_may_lanh"
+                    ? `${i18n.t("Máy lạnh", { lng: lang })}`
+                    : data?.service?._id?.kind === "rem_tham_sofa"
+                    ? `${i18n.t("Rèm - Thảm - Sofa", { lng: lang })}`
+                    : ""}
+                </span>
+                <span className="case__service-time-work">
+                  {timeWork(data)}
+                </span>
+              </div>
+            );
+            break;
+          }
+          case "case_customer_name_phone": {
+            return (
+              <div className="case__customer-name-phone">
+                <span
+                  onClick={() =>
+                    window.open(
+                      `/profile-customer/${
+                        data?.id_customer?._id
+                          ? data?.id_customer?._id
+                          : data?._id
+                      }`,
+                      "_blank"
+                    )
+                  }
+                  className="case__customer-name-phone--name"
+                >
+                  {data?.id_customer?.full_name || data?.full_name}
+                </span>
+                <span className="case__customer-name-phone--phone">
+                  {data?.id_customer?.phone || data?.phone}
+                </span>
+              </div>
+            );
+            break;
+          }
+          case "case_date-work-day": {
+            return (
+              <div
+                className={`case__date-with-day ${
+                  item?.position === "center" && "center"
+                }`}
+              >
+                <span
+                  className={`case__date-with-day--header ${
+                    item.high_light && "high-light"
+                  }`}
+                >
+                  {moment(
+                    new Date(
+                      data[item.dataIndex]
+                        ? data[item.dataIndex]
+                        : data?.date_work_schedule[0].date
+                    )
+                  ).format("DD/MM/YYYY")}
+                </span>
+                <span className="case__date-with-day--sub">
+                  {moment(
+                    new Date(
+                      data[item.dataIndex]
+                        ? data[item.dataIndex]
+                        : data?.date_work_schedule[0].date
+                    )
+                  )
+                    .locale(lang)
+                    .format("dddd")}
+                </span>
+              </div>
+            );
+            break;
+          }
+          case "case_date-create-day": {
+            return (
+              <div
+                className={`case__date-with-day ${
+                  item?.position === "center" && "center"
+                }`}
+              >
+                <span
+                  className={`case__date-with-day--header ${
+                    item.high_light && "high-light"
+                  }`}
+                >
+                  {moment(new Date(data[item.dataIndex])).format("DD/MM/YYYY")}
+                </span>
+                <span className="case__date-with-day--sub">
+                  {moment(new Date(data[item.dataIndex]))
+                    .locale(lang)
+                    .format("dddd")}
+                </span>
+              </div>
+            );
+            break;
+          }
+          case "case_date-create-time": {
+            return (
+              <div
+                className={`case__date-with-day ${
+                  item?.position === "center" && "center"
+                }`}
+              >
+                <span
+                  className={`case__date-with-day--header ${
+                    item.high_light && "high-light"
+                  }`}
+                >
+                  {moment(new Date(data[item.dataIndex])).format("DD/MM/YYYY")}
+                </span>
+                <span className="case__date-with-day--sub">
+                  {moment(new Date(data[item.dataIndex]))
+                    .locale(lang)
+                    .format("HH:mm:ss")}
+                </span>
+              </div>
+            );
+            break;
+          }
+          case "case_text": {
+            return (
+              <Tooltip placement="top" title={data[item.dataIndex]}>
+                <div
+                  className={`case__normal-text ${
+                    item.position === "center" && "center"
+                  }`}
+                >
+                  <span className="case__normal-text--label">
+                    {data[item.dataIndex] || ""}
+                  </span>
+                </div>
+              </Tooltip>
+            );
+            break;
+          }
+          case "case_status": {
+            return (
+              <div className="case__status">
+                <span
+                  className={`case_status--text ${
+                    data?.status === "pending"
+                      ? "pending"
+                      : data?.status === "done"
+                      ? "done"
+                      : data?.status === "confirm"
+                      ? "confirm"
+                      : data?.status === "doing"
+                      ? "doing"
+                      : data?.status === "processing"
+                      ? "processing"
+                      : "cancel"
+                  }`}
+                >
+                  {data?.status === "pending"
+                    ? `${i18n.t("pending", { lng: lang })}`
+                    : data?.status === "confirm"
+                    ? `${i18n.t("confirm", { lng: lang })}`
+                    : data?.status === "doing"
+                    ? `${i18n.t("doing", { lng: lang })}`
+                    : data?.status === "done"
+                    ? `${i18n.t("complete", { lng: lang })}`
+                    : data?.status === "processing"
+                    ? "Chờ thanh toán"
+                    : `${i18n.t("cancel", { lng: lang })}`}
+                </span>
+              </div>
+            );
+            break;
+          }
+          case "case_payment-method": {
+            return (
+              <div
+                className={`case__payment-method ${
+                  item.position === "center" && "center"
+                }`}
+              >
+                <span
+                  className={`case__payment-method--title ${
+                    item.high_light && "high-light"
+                  }`}
+                >
+                  {data?.payment_method === "cash"
+                    ? `${i18n.t("cash", { lng: lang })}`
+                    : data?.payment_method === "point"
+                    ? `${i18n.t("wallet_gpay", { lng: lang })}`
+                    : data?.payment_method === "momo"
+                    ? "Momo"
+                    : data?.payment_method === "vnpay"
+                    ? "VNPAY-QR"
+                    : data?.payment_method === "vnbank"
+                    ? "VNPAY-ATM"
+                    : data?.payment_method === "intcard"
+                    ? "Thẻ quốc tế"
+                    : ""}
+                </span>
+                <span className="case__payment-method--money">
+                  {formatMoney(data?.final_fee)}
+                </span>
+              </div>
+            );
+            break;
+          }
+          case "case_numbering": {
+            return (
+              <div className="case__numbering">
+                <span className="case__numbering--number">
+                  {index + ordinalNumber + 1}
+                </span>
+              </div>
+            );
+            break;
+          }
+          case "case_code_order": {
+            linkRedirect = `/details-order/${
+              data?.id_group_order ? data?.id_group_order : data?._id
+            }`;
+            return (
+              <div className="case__code_order ">
+                <Link
+                  target="_blank"
+                  onClick={() => saveToCookie("order_scrolly", scrollY)}
+                  to={linkRedirect}
+                  style={{ textDecoration: "none" }}
+                >
+                  <span className="case__code_order--code">
+                    {data?.id_view}
+                  </span>
+                </Link>
+              </div>
+            );
+            break;
+          }
+          case "case_customer_name_phone_rank": {
+            return (
+              <div className="case__customer-name-phone-rank">
+                <span
+                  onClick={() =>
+                    window.open(
+                      `/profile-customer/${
+                        data?.id_customer?._id
+                          ? data?.id_customer?._id
+                          : data?._id
+                      }`,
+                      "_blank"
+                    )
+                  }
+                  className="case__customer-name-phone-rank--name"
+                >
+                  {data?.id_customer?.full_name || data?.full_name}
+                </span>
+                <span className="case__customer-name-phone-rank--phone">
+                  {data?.id_customer?.phone || data?.phone}
+                </span>
+                <div className="case__customer-name-phone-rank--rank">
+                  <span className="case__customer-name-phone-rank--rank-sub">
+                    Hạng:
+                  </span>
+                  {data?.id_customer?.rank === "member" &&
+                  data?.id_customer?.rank_point > 0 ? (
+                    <span className="case__customer-name-phone-rank--rank-level member">
+                      Thành viên
+                    </span>
+                  ) : data?.id_customer?.rank === "silver" ? (
+                    <span className="case__customer-name-phone-rank--rank-level silver">
+                      Bạc
+                    </span>
+                  ) : data?.id_customer?.rank === "gold" ? (
+                    <span className="case__customer-name-phone-rank--rank-level gold">
+                      Vàng
+                    </span>
+                  ) : data?.id_customer?.rank === "platinum" ? (
+                    <span className="case__customer-name-phone-rank--rank-level platinum">
+                      Bạch kim
+                    </span>
+                  ) : data?.rank === "member" &&
+                    data?.id_group_customer[0] ===
+                      "63a8730e6a5e979e0d637c6d" ? (
+                    <span className="case__customer-name-phone-rank--rank-level member">
+                      Thành viên
+                    </span>
+                  ) : data?.rank === "silver" ? (
+                    <span className="case__customer-name-phone-rank--rank-level silver">
+                      Bạc
+                    </span>
+                  ) : data?.rank === "gold" ? (
+                    <span className="case__customer-name-phone-rank--rank-level gold">
+                      Vàng
+                    </span>
+                  ) : data?.rank === "platinum" ? (
+                    <span className="case__customer-name-phone-rank--rank-level platinum">
+                      Bạch kim
+                    </span>
+                  ) : (
+                    <span className="case__customer-name-phone-rank--rank-level new">
+                      Mới
+                    </span>
+                  )}
+                </div>
+              </div>
+            );
+            break;
+          }
+          case "case_collaborator-name-phone-star": {
+            return (
+              <>
+                {!data?.id_collaborator ? (
+                  <div className="case__collaborator-name-phone-star">
+                    <span className="case__collaborator-name-phone-star--finding">
+                      {`${i18n.t("searching", {
+                        lng: lang,
+                      })}`}
+                    </span>
+                  </div>
+                ) : (
+                  <div className="case__collaborator-name-phone-star">
+                    <span
+                      onClick={() =>
+                        window.open(
+                          `/details-collaborator/${
+                            data?.id_collaborator?._id
+                              ? data?.id_collaborator?._id
+                              : data?.id_collaborator
+                          }`,
+                          "_blank"
+                        )
+                      }
+                      className="case__collaborator-name-phone-star--name"
+                    >
+                      {data?.id_collaborator?.full_name
+                        ? data?.id_collaborator?.full_name
+                        : data?.name_collaborator}
+                    </span>
+
+                    <span className="case__collaborator-name-phone-star--phone">
+                      {data?.id_collaborator?.phone
+                        ? data?.id_collaborator?.phone
+                        : data?.phone_collaborator}
+                    </span>
+                    <div className="case__collaborator-name-phone-star--star">
+                      <span className="case__collaborator-name-phone-star--star-number">
+                        5
+                      </span>
+                      <span>
+                        <IoStar color="yellow" />
+                      </span>
+                    </div>
+                  </div>
+                )}
+              </>
+              // <div className="case__collaborator-name-phone-star">
+              //   {!data?.id_collaborator ? (
+              // <p>{`${i18n.t("searching", {
+              //   lng: lang,
+              // })}`}</p>
+              //   ) : (
+              //     <div>
+              //       <Link
+              //         to={`/details-collaborator/${
+              //           data?.id_collaborator?._id
+              //             ? data?.id_collaborator?._id
+              //             : data?.id_collaborator
+              //         }`}
+              //       >
+              // <span className="case__collaborator-name-phone-star--name">
+              //   {data?.id_collaborator?.full_name
+              //     ? data?.id_collaborator?.full_name
+              //     : data?.name_collaborator}
+              // </span>
+              //       </Link>
+              // <span className="case__collaborator-name-phone-star--phone">
+              //   {data?.id_collaborator?.phone
+              //     ? data?.id_collaborator?.phone
+              //     : data?.phone_collaborator}
+              // </span>
+              //       <div>
+              //         <span>5</span>
+              //         <span>
+              //           <IoStar color="yellow" />
+              //         </span>
+              //       </div>
+              //     </div>
+              //   )}
+              // </div>
             );
             break;
           }

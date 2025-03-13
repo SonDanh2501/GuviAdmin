@@ -69,7 +69,7 @@ const ReportOrderDone = () => {
     {
       customTitle: <CustomHeaderDatatable title="Trạng thái" />,
       dataIndex: "status",
-      key: "status",
+      key: "case_status",
       width: 120,
     },
     {
