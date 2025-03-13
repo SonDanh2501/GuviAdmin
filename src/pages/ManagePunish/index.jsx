@@ -43,6 +43,7 @@ import FilterData from "../../components/filterData";
 import ButtonCustom from "../../components/button";
 import { getProvince, getService } from "../../redux/selectors/service";
 import InputTextCustom from "../../components/inputCustom";
+import CustomHeaderDatatable from "../../components/tables/tableHeader";
 
 const ManagePunish = () => {
   let { width } = useWindowDimensions();
@@ -58,6 +59,7 @@ const ManagePunish = () => {
       ? JSON.parse(localStorage.getItem("linePerPage")).value
       : 20
   );
+
   /* ~~~ Value ~~~ */
   const [startDate, setStartDate] = useState("");
   const [valueSearch, setValueSearch] = useState("");
@@ -69,12 +71,72 @@ const ManagePunish = () => {
     useState(""); // Giá trị của trạng thái vé phạt
   const [item, setItem] = useState();
   const [total, setTotal] = useState(0);
+
   /* ~~~ Flag ~~~ */
   const [isLoading, setIsLoading] = useState(false);
   const [openModalChangeStatus, setOpenModalChangeStatus] = useState(false);
   const [openModalCancel, setOpenModalCancel] = useState(false);
   const [openModalRevoke, setOpenModalRevoke] = useState(false);
+
   /* ~~~ List ~~~ */
+  const columns = [
+    {
+      customTitle: <CustomHeaderDatatable title="STT" />,
+      key: "case_numbering",
+      width: 30,
+    },
+    {
+      customTitle: <CustomHeaderDatatable title="Mã lệnh phạt" />,
+      dataIndex: "id_view",
+      key: "case_code_punish_ticket",
+      width: 70,
+    },
+    {
+      customTitle: <CustomHeaderDatatable title="Ngày tạo" />,
+      dataIndex: "date_create",
+      key: "case_date-create-time",
+      width: 50,
+    },
+
+    {
+      customTitle: <CustomHeaderDatatable title="Đối tác" />,
+      dataIndex: "collaborator",
+      key: "case_collaborator-name-phone",
+      width: 70,
+    },
+    {
+      customTitle: <CustomHeaderDatatable title="Tạo bởi" />,
+      dataIndex: "id_admin_action",
+      key: "case_id_admin_action",
+      width: 50,
+    },
+    {
+      customTitle: <CustomHeaderDatatable title="Số tiền"  position="right"/>,
+      dataIndex: "punish_money",
+      key: "case_money",
+      width: 70,
+    },
+    {
+      customTitle: <CustomHeaderDatatable title="Mã đơn hàng"  />,
+      dataIndex: "id_order",
+      key: "case_code_order",
+      width: 70,
+    },
+    {
+      customTitle: <CustomHeaderDatatable title="Ngày xác nhận"  />,
+      dataIndex: "time_end",
+      key: "case_date-create-time",
+      width: 70,
+    },
+    {
+      customTitle: <CustomHeaderDatatable title="Trạng thái" />,
+      dataIndex: "status",
+      key: "case_status_ticket",
+      width: 70,
+    },
+
+  ];
+
   const [listData, setListData] = useState([]);
   const [statusList, setStatusList] = useState([
     { code: "", label: "Tất cả", total: 0 },
@@ -346,7 +408,6 @@ const ManagePunish = () => {
       setIsLoading(false);
     }
   };
-
   // Hàm thu hồi lệnh phạt
   const handleRevokePunishTicket = async () => {
     try {
@@ -376,7 +437,6 @@ const ManagePunish = () => {
       setIsLoading(false);
     }
   };
-
   // Hàm xác thực lệnh phạt
   const handleVerifyPunishTicket = async () => {
     try {
@@ -405,14 +465,6 @@ const ManagePunish = () => {
       setOpenModalChangeStatus(false);
       setIsLoading(false);
     }
-  };
-
-  const onChangePage = (value) => {
-    setStartPage(value);
-  };
-
-  const onChangeTab = (item) => {
-    setSelectValueOfStatusPunishTicket(item);
   };
 
   /* ~~~ Use effect ~~~ */
@@ -502,6 +554,14 @@ const ManagePunish = () => {
         </div>
       </div>
     );
+  };
+
+  const onChangePage = (value) => {
+    setStartPage(value);
+  };
+
+  const onChangeTab = (item) => {
+    setSelectValueOfStatusPunishTicket(item);
   };
 
   return (
@@ -627,89 +687,3 @@ const ManagePunish = () => {
 };
 
 export default ManagePunish;
-
-const columns = [
-  {
-    title: "STT",
-    dataIndex: "",
-    key: "ordinal",
-    width: 25,
-    fontSize: "text-size-M",
-  },
-  {
-    title: "Mã lệnh phạt",
-    dataIndex: "id_view",
-    key: "code_punish_ticket",
-    width: 53,
-    fontSize: "text-size-M",
-  },
-  {
-    title: "Ngày tạo",
-    dataIndex: "date_create",
-    key: "date_create",
-    width: 50,
-    fontSize: "text-size-M",
-  },
-  {
-    title: "Trạng thái",
-    dataIndex: "status",
-    key: "status_ticket",
-    width: 50,
-    fontSize: "text-size-M",
-  },
-  {
-    i18n_title: "collaborator",
-    dataIndex: "collaborator",
-    key: "collaborator_no_star",
-    width: 100,
-    fontSize: "text-size-M",
-  },
-  {
-    title: "Tạo bởi",
-    dataIndex: "id_admin_action",
-    key: "id_admin_action",
-    width: 40,
-    fontSize: "text-size-M",
-  },
-  // {
-  //   title: "Mã lệnh giao dịch",
-  //   dataIndex: "id_transaction",
-  //   key: "id_transaction",
-  //   width: 70,
-  //   fontSize: "text-size-M",
-  // },
-  {
-    title: "Số tiền",
-    dataIndex: "punish_money",
-    key: "money",
-    width: 70,
-    fontSize: "text-size-M",
-  },
-  {
-    title: "Mã đơn hàng",
-    dataIndex: "id_order",
-    key: "id_view_order",
-    width: 70,
-    fontSize: "text-size-M",
-  },
-  {
-    title: "Ngày hoàn thành",
-    dataIndex: "time_end",
-    key: "time_end",
-    width: 50,
-    fontSize: "text-size-M",
-  },
-  {
-    title: "Nội dung",
-    dataIndex: "note_admin",
-    key: "text",
-    width: 80,
-    fontSize: "text-size-M",
-  },
-  // {
-  //   dataIndex: "verify",
-  //   key: "verify",
-  //   width: 50,
-  //   fontSize: "text-size-M",
-  // },
-];

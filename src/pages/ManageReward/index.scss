@@ -1,0 +1,68 @@
+@import "../../@theme/style.scss";
+
+.manage-punish {
+    display: flex;
+    flex-direction: column;
+    gap: $gapL;
+    padding-bottom: 16px;
+  
+    .manage-punish__header {
+      span {
+        font-weight: $fontWeightXL;
+        font-size: $textFontSize3XL;
+        color: $colorBlack;
+      }
+    }
+  
+    .manage-punish__search {
+      display: flex;
+      gap: $gapM;
+      .manage-punish__search-field { 
+        width: 450px;
+      }
+    }
+  
+  
+    .manage-punish__filter-content {
+      display: flex;
+      gap: $gapM;
+  
+      .manage-punish__filter-content--search-field {
+        width: 400px;
+        overflow: hidden;
+      }
+  
+      .manage-punish__filter-content--tab {
+        background-color: $colorMoreLightGray;
+        display: flex;
+        gap: $gapS;
+        align-items: center;
+        justify-content: center;
+        padding: 9px 10px;
+        border-radius: $borderRadiusL;
+        cursor: pointer;
+        color: $colorBlack;
+        transition: 0.5s all ease-out;
+  
+  
+        .manage-punish__filter-content--tab-label {
+          font-weight: $fontWeightL;
+          font-size: $textFontSizeM;
+        }
+  
+        .manage-punish__filter-content--tab-number {
+          background-color: $colorWhite;
+          padding: 2px 4px;
+          min-width: 20px;
+          border-radius: $borderRadiusFull;
+          color: $colorBlack;
+          text-align: center;
+        }
+  
+        &.selected {
+          background-color: $colorViolet;
+          color: $colorWhite;
+        }
+      }
+    }
+  }
