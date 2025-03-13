@@ -173,7 +173,7 @@ const ManageOrder = () => {
     },
     {
       customTitle: <CustomHeaderDatatable title="Đối tác" />,
-      key: "case_collaborator-name-phone",
+      key: "case_collaborator-name-phone-star",
       width: 150,
     },
     {
