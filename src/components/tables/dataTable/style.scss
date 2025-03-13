@@ -1094,6 +1094,7 @@ span {
       font-size: $textFontSizeM;
       font-weight: $fontWeightL;
     }
+
     .case__customer-name-phone-rank--rank-level {
       padding: 4px;
       border-radius: $borderRadiusL;
@@ -1146,10 +1147,17 @@ span {
     font-size: $textFontSizeM;
     font-weight: $fontWeightL;
   }
+
   .case__collaborator-name-phone-star--name {
     font-size: $textFontSizeM;
     font-weight: $fontWeightXL;
     color: $colorBlue;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    
+    &:hover {
+      color: $colorOrange
+    }
   }
 
   .case__collaborator-name-phone-star--phone {
@@ -1166,6 +1174,49 @@ span {
       font-size: $textFontSizeM;
       font-weight: $fontWeightXL;
       color: $colorOrange;
+    }
+  }
+
+}
+
+// Trường hợp các trạng thái của phiếu phạt
+.case__status-ticket {
+  display: flex;
+  align-items: center;
+  width: 100%;
+
+  .case_status-ticket--text {
+    width: 100%;
+    padding: 8px;
+    border-radius: $borderRadiusL;
+    font-weight: $fontWeightXL;
+    font-size: $textFontSizeM;
+    text-align: center;
+
+    &.standby {
+      color: $colorYellow;
+      background-color: $colorExtraLightYellow;
+    }
+
+    &.done {
+      color: $colorGreen;
+      background-color: $colorExtraLightGreen;
+    }
+
+    &.doing {
+      color: $colorBlue;
+      background-color: $colorExtraLightBlue;
+    }
+
+    &.revoke,
+    &.cancel {
+      color: $colorRed;
+      background-color: $colorExtraLightRed;
+    }
+
+    &.waiting &.processing {
+      color: $colorOrange;
+      background-color: $colorExtraLightOrange;
     }
   }
 

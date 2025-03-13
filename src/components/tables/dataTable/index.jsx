@@ -2504,12 +2504,22 @@ const DataTable = (props) => {
                   target="_blank"
                   onClick={() => saveToCookie("order_scrolly", scrollY)}
                   to={linkRedirect}
-                  style={{ textDecoration: "none" }}
+                  style={{ textDecoration: "none" , lineHeight: 1}}
                 >
                   <span className="case__code_order--code">
                     {data?.id_view}
                   </span>
                 </Link>
+              </div>
+            );
+            break;
+          }
+          case "case_code_punish_ticket": {
+            return (
+              <div className="case__code_order">
+                  <span className="case__code_order--code">
+                    {data?.id_view}
+                  </span>
               </div>
             );
             break;
@@ -2622,7 +2632,7 @@ const DataTable = (props) => {
                     </span>
                     <div className="case__collaborator-name-phone-star--star">
                       <span className="case__collaborator-name-phone-star--star-number">
-                        5
+                        {data?.id_collaborator?.star}
                       </span>
                       <span>
                         <IoStar color="yellow" />
@@ -2631,40 +2641,102 @@ const DataTable = (props) => {
                   </div>
                 )}
               </>
-              // <div className="case__collaborator-name-phone-star">
-              //   {!data?.id_collaborator ? (
-              // <p>{`${i18n.t("searching", {
-              //   lng: lang,
-              // })}`}</p>
-              //   ) : (
-              //     <div>
-              //       <Link
-              //         to={`/details-collaborator/${
-              //           data?.id_collaborator?._id
-              //             ? data?.id_collaborator?._id
-              //             : data?.id_collaborator
-              //         }`}
-              //       >
-              // <span className="case__collaborator-name-phone-star--name">
-              //   {data?.id_collaborator?.full_name
-              //     ? data?.id_collaborator?.full_name
-              //     : data?.name_collaborator}
-              // </span>
-              //       </Link>
-              // <span className="case__collaborator-name-phone-star--phone">
-              //   {data?.id_collaborator?.phone
-              //     ? data?.id_collaborator?.phone
-              //     : data?.phone_collaborator}
-              // </span>
-              //       <div>
-              //         <span>5</span>
-              //         <span>
-              //           <IoStar color="yellow" />
-              //         </span>
-              //       </div>
-              //     </div>
-              //   )}
-              // </div>
+            );
+            break;
+          }
+          case "case_collaborator-name-phone": {
+            return (
+
+                  <div className="case__collaborator-name-phone-star">
+                    <span
+                      onClick={() =>
+                        window.open(
+                          `/details-collaborator/${
+                            data?.id_collaborator?._id
+                              ? data?.id_collaborator?._id
+                              : data?.id_collaborator
+                          }`,
+                          "_blank"
+                        )
+                      }
+                      className="case__collaborator-name-phone-star--name"
+                    >
+                      {data?.id_collaborator?.full_name
+                        ? data?.id_collaborator?.full_name
+                        : data?.name_collaborator}
+                    </span>
+
+                    <span className="case__collaborator-name-phone-star--phone">
+                      {data?.id_collaborator?.phone
+                        ? data?.id_collaborator?.phone
+                        : data?.phone_collaborator}
+                    </span>
+                  </div>
+            );
+            break;
+          }
+          case "case_status_ticket": {
+            return (
+              <div className="case__status-ticket">
+                <span
+                  className={`case_status-ticket--text ${
+                    data?.status === "standby"
+                      ? "standby"
+                      : data?.status === "processing"
+                      ? "processing"
+                      : data?.status === "waiting"
+                      ? "waiting"
+                      : data?.status === "doing"
+                      ? "doing"
+                      : data?.status === "cancel"
+                      ? "cancel"
+                      : data?.status === "revoke"
+                      ? "revoke"
+                      : data?.status === "done"
+                      ? "done"
+                      : ""
+                  }`}
+                >
+                  {data?.status === "standby"
+                    ? "Chờ duyệt"
+                    : data?.status === "processing"
+                    ? "Đang xử lý"
+                    : data?.status === "waiting"
+                    ? "Đang xử lý"
+                    : data?.status === "doing"
+                    ? "Đang thực thi"
+                    : data?.status === "cancel"
+                    ? "Đã hủy"
+                    : data?.status === "revoke"
+                    ? "Đã thu hồi"
+                    : data?.status === "done"
+                    ? "Đã hoàn thành"
+                    : ""}
+                </span>
+              </div>
+            );
+            break;
+          }
+          case "case_id_admin_action": {
+            return (
+              <div className="case__normal-text">
+                <span className="case__normal-text--label">
+                  {data?.id_admin_action?.full_name || "Hệ thống"}
+                </span>
+              </div>
+            );
+            break;
+          }
+          case "case_money": {
+            const dataShow = Array.isArray(data[item.dataIndex])
+              ? data[item.dataIndex][item?.childArray][item?.childArrayIndex]
+              : data[item.dataIndex];
+            return (
+              <div className="case__money">
+                <span className="case__money--number">
+                  {formatMoney(dataShow) || 0}
+                </span>
+              </div>
             );
             break;
           }

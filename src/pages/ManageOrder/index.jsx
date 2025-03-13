@@ -133,7 +133,6 @@ const ManageOrder = () => {
   const columns = [
     {
       customTitle: <CustomHeaderDatatable title="STT" />,
-      title: "STT",
       key: "case_numbering",
       width: 50,
     },
@@ -174,7 +173,7 @@ const ManageOrder = () => {
     },
     {
       customTitle: <CustomHeaderDatatable title="Đối tác" />,
-      key: "case_collaborator-name-phone-star",
+      key: "case_collaborator-name-phone",
       width: 150,
     },
     {
