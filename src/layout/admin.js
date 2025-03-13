@@ -160,11 +160,12 @@ const Admin = () => {
         element={<CollaboratorVerify />}
       />
       <Route
-        path="/system/collaborator-not-verify-manage"
+        path="/collaborator/apply-manage"
         element={<CollaboratorNotVerify />}
       />
 
-      <Route path="/system/manage-punish" element={<ManagePunish />} />
+      <Route path="/collaborator/manage-punish" element={<ManagePunish />} />
+      <Route path="/collaborator/manage-reward" element={<ManageReward />} />
 
       <Route path="/system/manage-new-punish" element={<ManagePunishNew />} />
 
@@ -302,8 +303,6 @@ const Admin = () => {
         element={<TransferStaff />}
       />
 
-      <Route path="/reward/manage-reward" element={<ManageReward />} />
-      <Route path="/reward/manage-reward" element={<ManageReward />} />
       <Route
         path="/topup/manage-topup/details-reward-collaborator/:id"
         element={<DetailReward />}
