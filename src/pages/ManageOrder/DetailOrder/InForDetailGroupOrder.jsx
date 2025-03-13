@@ -722,7 +722,7 @@ const base_columns = [
   {
     i18n_title: "status",
     dataIndex: "status",
-    key: "status",
+    key: "case_status",
     width: 120,
     fontSize: "text-size-M",
   },

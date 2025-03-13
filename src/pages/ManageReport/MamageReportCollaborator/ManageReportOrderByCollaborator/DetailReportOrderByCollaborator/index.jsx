@@ -487,7 +487,7 @@ const DetailReportOrderByCollaborator = () => {
     {
       customTitle: <HeaderInfo title="Trạng thái" />,
       dataIndex: "status",
-      key: "status",
+      key: "case_status",
       width: 120,
       fontSize: "text-size-M text-weight-500",
     },

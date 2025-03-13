@@ -238,7 +238,7 @@ export default PunishDetail;
 
 const dataFilter = [
   {
-    key: "status",
+    key: "case_status",
     label: "Trạng thái",
     data: [
       { key: "0", value: "", label: "Tất cả" },

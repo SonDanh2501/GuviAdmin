@@ -24,6 +24,7 @@ import ButtonCustom from "../../components/button";
 import FilterData from "../../components/filterData";
 import "./index.scss";
 import { select } from "redux-saga/effects";
+import CustomHeaderDatatable from "../../components/tables/tableHeader";
 
 const ManageOrder = () => {
   const navigate = useNavigate();
@@ -131,76 +132,61 @@ const ManageOrder = () => {
   // 5. Danh sách các cột trong bảng
   const columns = [
     {
+      customTitle: <CustomHeaderDatatable title="STT" />,
       title: "STT",
-      dataIndex: "",
-      key: "ordinal",
-      width: 60,
-      fontSize: "text-size-M",
+      key: "case_numbering",
+      width: 50,
     },
     {
-      i18n_title: "code_order",
+      customTitle: <CustomHeaderDatatable title="Mã đơn" />,
       dataIndex: "id_view",
-      key: "code_order",
+      key: "case_code_order",
       width: 140,
-      fontSize: "text-size-M",
     },
     {
-      i18n_title: "date_create",
+      customTitle: <CustomHeaderDatatable title="Ngày Tạo" />,
       dataIndex: "date_create",
-      key: "date_create",
+      key: "case_date-create-time",
       width: 100,
-      fontSize: "text-size-M",
     },
     {
-      i18n_title: "customer",
+      customTitle: <CustomHeaderDatatable title="Khách hàng" />,
       dataIndex: "customer",
-      key: "customer_name_phone_rank",
+      key: "case_customer_name_phone_rank",
       width: 140,
-      fontSize: "text-size-M",
     },
     {
-      i18n_title: "service",
-      dataIndex: "service._id.title.vi",
-      key: "service",
+      customTitle: <CustomHeaderDatatable title="Dịch vụ" />,
+      key: "case_service",
       width: 110,
-      fontSize: "text-size-M",
     },
     {
-      i18n_title: "date_work",
+      customTitle: <CustomHeaderDatatable title="Ngày làm" />,
       dataIndex: "date_work",
-      key: "date_work",
+      key: "case_date-work-day",
       width: 100,
-      fontSize: "text-size-M",
-      position: "center",
     },
     {
-      i18n_title: "address",
+      customTitle: <CustomHeaderDatatable title="Địa chỉ" />,
       dataIndex: "address",
-      key: "text",
-      maxLength: 75,
+      key: "case_text",
       width: 200,
-      fontSize: "text-size-M",
     },
     {
-      i18n_title: "collaborator",
-      dataIndex: "collaborator",
-      key: "collaborator",
+      customTitle: <CustomHeaderDatatable title="Đối tác" />,
+      key: "case_collaborator-name-phone-star",
       width: 150,
-      fontSize: "text-size-M",
     },
     {
-      i18n_title: "status",
+      customTitle: <CustomHeaderDatatable title="Trạng thái" />,
       dataIndex: "status",
-      key: "status",
+      key: "case_status",
       width: 130,
-      fontSize: "text-size-M",
     },
     {
-      i18n_title: "pay",
-      dataIndex: "pay",
-      key: "pay",
+      customTitle: <CustomHeaderDatatable title="Thanh toán thức" />,
+      key: "case_payment-method",
       width: 90,
-      fontSize: "text-size-M",
     },
   ];
   // 6. Danh sách các lựa chọn của action Column
@@ -424,7 +410,7 @@ const ManageOrder = () => {
       setEndDate(params.get("end_date"));
     }
     if (params.get("is_duplicate")) {
-    setIsDuplicate(params.get("is_duplicate"));
+      setIsDuplicate(params.get("is_duplicate"));
     }
   }, []);
 

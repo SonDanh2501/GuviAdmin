@@ -78,7 +78,7 @@ const FilterTransfer = (props) => {
         value: endDate?.toString(),
       },
       {
-        key: "status",
+        key: "case_status",
         value: "",
       },
     ];
