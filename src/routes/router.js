@@ -640,24 +640,32 @@ const router = [
       getItem(
         <Link
           style={{ textDecoration: "none" }}
-          to="/system/collaborator-not-verify-manage"
+          to="/collaborator/apply-manage"
         >
           Hồ sơ ứng tuyển
         </Link>,
-        "/system/collaborator-not-verify-manage",
+        "/collaborator/apply-manage",
         null,
         null
       ),
       "collaborator",
       getItem(
-        <Link style={{ textDecoration: "none" }} to="/system/manage-punish">
+        <Link style={{ textDecoration: "none" }} to="/collaborator/manage-punish">
           Phạt
         </Link>,
-        "/system/manage-punish",
+        "/collaborator/manage-punish",
         null,
         null
       ),
       "collaborator",
+      getItem(
+        <Link style={{ textDecoration: "none" }} to="/collaborator/manage-punish">
+          Thưởng
+        </Link>,
+        "/collaborator/manage-reward",
+        null,
+        null
+      ),
       // getItem(
       //   <Link style={{ textDecoration: "none" }} to="/system/manage-new-punish">
       //     Lý do phạt

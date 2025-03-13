@@ -65,11 +65,11 @@ const ManageReport = () => {
       content: <ManageReportActivity />,
       key: 7,
     },
-    {
-      label: "Báo cáo thưởng phạt",
-      content: <ManageReportRewardAnhPunish />,
-      key: 8,
-    },
+    // {
+    //   label: "Báo cáo thưởng phạt",
+    //   content: <ManageReportRewardAnhPunish />,
+    //   key: 8,
+    // },
   ];
   const checkElement = useSelector(getElementState);
   const lang = useSelector(getLanguageState);
