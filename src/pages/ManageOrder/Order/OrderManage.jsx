@@ -505,7 +505,7 @@
 //     {
 //       i18n_title: 'status',
 //       dataIndex: 'status',
-//       key: "status"
+//       key: "case_status"
 //     },
 //     {
 //       i18n_title: 'pay',

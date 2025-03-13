@@ -460,63 +460,50 @@ span {
 
 /* ~~~ Css dành cho các trường hợp ~~~ */
 /* 1. Trường hợp trạng thái */
-.case__status-text {
+.case__status {
   display: flex;
   align-items: center;
+  width: 100%;
 
-  .case__status-text--pending {
-    padding: 6px 8px;
-    color: $colorYellow;
-    background-color: $colorExtraLightYellow;
+  .case_status--text {
+    width: 100%;
+    padding: 8px;
     border-radius: $borderRadiusL;
     font-weight: $fontWeightXL;
     font-size: $textFontSizeM;
+    text-align: center;
+
+    &.pending {
+      color: $colorYellow;
+      background-color: $colorExtraLightYellow;
+    }
+
+    &.done {
+      color: $colorGreen;
+      background-color: $colorExtraLightGreen;
+    }
+
+    &.confirm {
+      color: $colorBlue;
+      background-color: $colorExtraLightBlue;
+    }
+
+    &.doing {
+      color: $colorBlue;
+      background-color: $colorExtraLightBlue;
+    }
+
+    &.cancel {
+      color: $colorRed;
+      background-color: $colorExtraLightRed;
+    }
+
+    &.processing {
+      color: $colorOrange;
+      background-color: $colorExtraLightOrange;
+    }
   }
 
-  .case__status-text--done {
-    padding: 6px 8px;
-    color: $colorGreen;
-    background-color: $colorExtraLightGreen;
-    border-radius: $borderRadiusL;
-    font-weight: $fontWeightXL;
-    font-size: $textFontSizeM;
-  }
-
-  .case__status-text--confirm {
-    padding: 6px 8px;
-    color: $colorBlue;
-    background-color: $colorExtraLightBlue;
-    border-radius: $borderRadiusL;
-    font-weight: $fontWeightXL;
-    font-size: $textFontSizeM;
-  }
-
-  .case__status-text--doing {
-    padding: 6px 8px;
-    color: $colorBlue;
-    background-color: $colorExtraLightBlue;
-    border-radius: $borderRadiusL;
-    font-weight: $fontWeightXL;
-    font-size: $textFontSizeM;
-  }
-
-  .case__status-text--cancel {
-    padding: 6px 8px;
-    color: $colorRed;
-    background-color: $colorExtraLightRed;
-    border-radius: $borderRadiusL;
-    font-weight: $fontWeightXL;
-    font-size: $textFontSizeM;
-  }
-
-  .case__status-text--processing {
-    padding: 6px 8px;
-    color: $colorOrange;
-    background-color: $colorExtraLightOrange;
-    border-radius: $borderRadiusL;
-    font-weight: $fontWeightXL;
-    font-size: $textFontSizeM;
-  }
 }
 
 /* 2. Trường hợp ngày giao dịch */
@@ -769,13 +756,18 @@ span {
   }
 }
 
-/* 11. Trường hợp số thứ tự */
-.case__serial-number {
+// Trường hợp số thứ tự 
+.case__numbering {
   display: flex;
   align-items: center;
   justify-content: center;
 
-  .case__serial-number--number {
+  // &.center {
+  //   align-items: center;
+  //   justify-content: center;
+  // }
+
+  .case__numbering--number {
     font-size: $textFontSizeM;
     font-weight: $fontWeightL;
     color: $colorBlack;
@@ -946,6 +938,239 @@ span {
   }
 }
 
+// Trường hợp hiển thị tên và số điện thoại khách hàng
+.case__customer-name-phone {
+  display: flex;
+  flex-direction: column;
+  gap: $gapXS;
+
+  .case__customer-name-phone--name {
+    font-size: $textFontSizeM;
+    font-weight: $fontWeightXL;
+    color: $colorBlue;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      color: $colorOrange;
+    }
+  }
+
+  .case__customer-name-phone--phone {
+    font-size: $textFontSizeM;
+    font-weight: $fontWeightL;
+    color: $colorLightGray;
+  }
+}
+
+// Trường hợp hiển thị tên dịch vụ và thời gian của dịch vụ
+.case__service {
+  display: flex;
+  flex-direction: column;
+  gap: $gapXS;
+
+  .case__service--name {
+    font-size: $textFontSizeM;
+    font-weight: $fontWeightL;
+    color: $colorBlack;
+
+    &.high-light {
+      font-weight: $fontWeightXL;
+    }
+  }
+
+  .case__service-time-work {
+    font-size: $textFontSizeM;
+    font-weight: $fontWeightL;
+    color: $colorLightGray;
+  }
+}
+
+// Trường hợp hợp ngày với thứ trong tuần
+.case__date-with-day {
+  display: flex;
+  flex-direction: column;
+  gap: $gapXS;
+
+  &.center {
+    align-items: center;
+    justify-content: center;
+  }
+
+  .case__date-with-day--header {
+    font-size: $textFontSizeM;
+    font-weight: $fontWeightL;
+    color: $colorBlack;
+
+    &.high-light {
+      font-weight: $fontWeightXL;
+    }
+  }
+
+  .case__date-with-day--sub {
+    font-size: $textFontSizeM;
+    font-weight: $fontWeightL;
+    color: $colorLightGray;
+    text-transform: capitalize;
+  }
+}
+
+// Trường hợp phương thức thanh toán
+.case__payment-method {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  gap: $gapXS;
+
+  .case__payment-method--title {
+    font-size: $textFontSizeM;
+    font-weight: $fontWeightL;
+    color: $colorBlack;
+
+    &.high-light {
+      font-weight: $fontWeightXL;
+    }
+  }
+
+  .case__payment-method--money {
+    font-size: $textFontSizeM;
+    font-weight: $fontWeightL;
+    color: $colorLightGray;
+  }
+}
+
+// Trường hợp mã đơn
+.case__code_order {
+  display: flex;
+
+  .case__code_order--code {
+    font-size: $textFontSizeM;
+    font-weight: $fontWeightXL;
+    color: $colorBlue;
+    transition: all 0.3s ease;
+
+    &:hover {
+      color: $colorOrange
+    }
+  }
+}
+
+// Trường hợp tên khách hàng, số điện thoại và hạng
+.case__customer-name-phone-rank {
+  display: flex;
+  flex-direction: column;
+  gap: $gapXS;
+
+  .case__customer-name-phone-rank--name {
+    font-size: $textFontSizeM;
+    font-weight: $fontWeightXL;
+    color: $colorBlue;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      color: $colorOrange;
+    }
+  }
+
+  .case__customer-name-phone-rank--phone {
+    font-size: $textFontSizeM;
+    font-weight: $fontWeightL;
+    color: $colorLightGray;
+
+    &.high-light {
+      font-weight: $fontWeightXL;
+    }
+  }
+
+  .case__customer-name-phone-rank--rank {
+    display: flex;
+    gap: $gapXS;
+    align-items: center;
+
+
+    .case__customer-name-phone-rank--rank-sub {
+      color: $colorLightGray;
+      font-size: $textFontSizeM;
+      font-weight: $fontWeightL;
+    }
+    .case__customer-name-phone-rank--rank-level {
+      padding: 4px;
+      border-radius: $borderRadiusL;
+      background-color: $colorExtraLightGray;
+      border: 1px solid $colorLightGray;
+      font-size: $textFontSizeM;
+      font-weight: $fontWeightL;
+
+      &.new {
+        background-color: $colorOrange;
+        color: $colorWhite;
+        border-color: $colorOrange;
+      }
+
+      &.member {
+        background-color: $colorExtraLightOrange;
+        color: $colorOrange;
+        border-color: $colorOrange;
+      }
+
+      &.silver {
+        background-color: $colorExtraLightSlate;
+        color: $colorSlate;
+        border-color: $colorSlate;
+      }
+
+      &.gold {
+        background-color: $colorExtraLightYellow;
+        color: $colorAmber;
+        border-color: $colorYellow;
+      }
+
+      &.platinum {
+        background-color: $colorExtraLightCyan;
+        color: $colorBlue;
+        border-color: $colorCyan;
+      }
+    }
+  }
+}
+
+// Trường hợp tên đối tác, số điện thoại và số sao
+.case__collaborator-name-phone-star {
+  display: flex;
+  flex-direction: column;
+  gap: $gapXS;
+
+  .case__collaborator-name-phone-star--finding {
+    color: $colorOrange;
+    font-size: $textFontSizeM;
+    font-weight: $fontWeightL;
+  }
+  .case__collaborator-name-phone-star--name {
+    font-size: $textFontSizeM;
+    font-weight: $fontWeightXL;
+    color: $colorBlue;
+  }
+
+  .case__collaborator-name-phone-star--phone {
+    font-size: $textFontSizeM;
+    font-weight: $fontWeightL;
+    color: $colorLightGray;
+  }
+
+  .case__collaborator-name-phone-star--star {
+    display: flex;
+    gap: $gapXS;
+
+    .case__collaborator-name-phone-star--star-number {
+      font-size: $textFontSizeM;
+      font-weight: $fontWeightXL;
+      color: $colorOrange;
+    }
+  }
+
+}
+
 /* Các trường chỉ hiển chữ mới */
 .case__normal-text {
   display: flex;
@@ -960,6 +1185,7 @@ span {
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
+    line-height: 1.2;
 
     &.uppercase {
       text-transform: uppercase;

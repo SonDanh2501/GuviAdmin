@@ -644,7 +644,7 @@ const ReportOrder = () => {
     {
       customTitle: <HeaderInfo title="Trạng thái" />,
       dataIndex: "status",
-      key: "status",
+      key: "case_status",
       width: 110,
       fontSize: "text-size-M text-weight-500",
     },

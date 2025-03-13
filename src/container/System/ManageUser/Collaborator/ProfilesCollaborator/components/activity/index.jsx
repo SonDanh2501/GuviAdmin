@@ -60,9 +60,10 @@ const Activity = ({ id }) => {
   ] = useState([]); // Dữ liệu của lịch sử hoạt động
   const [timePeriod, setTimePeriod] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [valueSelectStatus, setValueSelectStatus] = useState("all");
+  const [valueSelectStatus, setValueSelectStatus] = useState("confirm");
   const [valueSelectService, setValueSelectService] = useState("");
-  const [valueSelectPaymentMethod, setValueSelectPaymentMethod] = useState("all");
+  const [valueSelectPaymentMethod, setValueSelectPaymentMethod] =
+    useState("all");
   const [valueSelectTypeDate, setValueSelectTypeDate] = useState("date_work");
 
   /* ~~~ List ~~~ */
@@ -95,13 +96,13 @@ const Activity = ({ id }) => {
   ]);
 
   const [listStatus, setListStatus] = useState([
-    { code: "all", label: "Tất cả" },
-    { code: "processing", label: "Chờ thanh toán" },
-    { code: "pending", label: "Đang Chờ làm" },
-    { code: "confirm", label: "Đã nhận" },
-    { code: "doing", label: "Đang làm" },
-    { code: "done", label: "Hoàn thành" },
-    { code: "cancel", label: "Đã hủy" },
+    { code: "all", label: "Tất cả", total: 0 },
+    // { code: "processing", label: "Chờ thanh toán", total: 0 },
+    // { code: "pending", label: "Đang Chờ làm", total: 0 },
+    { code: "confirm", label: "Đã nhận", total: 0 },
+    { code: "doing", label: "Đang làm", total: 0 },
+    { code: "done", label: "Hoàn thành", total: 0 },
+    { code: "cancel", label: "Đã hủy", total: 0 },
   ]);
 
   // 2. Danh sách các loại dịch vụ
@@ -146,83 +147,57 @@ const Activity = ({ id }) => {
   // 1. Danh sách các cột trong bảng
   const columns = [
     {
-      customTitle: (
-        <CustomHeaderDatatable
-          title="STT"
-
-        />
-      ),
+      customTitle: <CustomHeaderDatatable title="STT" position="center"/>,
       dataIndex: "",
-      key: "ordinal",
-      width: 50,
+      key: "case_numbering",
+      width: 30,
     },
     {
-      title: "Mã đơn",
-      // dataIndex: "",
-      key: "code_order",
+      customTitle: <CustomHeaderDatatable title="Mã đơn" />,
+      key: "case_code_order",
       width: 60,
-      FontSize: "text-size-M",
-    },
-
-    {
-      title: "Khách hàng",
-      // dataIndex: "",
-      key: "customer_name_phone",
-      width: 55,
-      FontSize: "text-size-M",
     },
     {
-      title: "Dịch vụ",
-      // dataIndex: "review",
-      key: "service",
-      width: 50,
-      FontSize: "text-size-M",
-    },
-    {
-      customTitle: (
-        <CustomHeaderDatatable
-          title="Ngày tạo"
-
-        />
-      ),
+      customTitle: <CustomHeaderDatatable title="Ngày tạo" />,
       dataIndex: "date_create",
-      key: "date_work",
+      key: "case_date-create-day",
       width: 50,
-      FontSize: "text-size-M",
     },
     {
-      customTitle: (
-        <CustomHeaderDatatable
-          title="Ngày làm"
+      customTitle: <CustomHeaderDatatable title="Khách hàng" />,
+      dataIndex: "customer_name_phone",
+      key: "case_customer_name_phone",
+      width: 55,
+    },
+    {
+      customTitle: <CustomHeaderDatatable title="Dịch vụ" />,
+      key: "case_service",
+      width: 50,
+    },
 
-        />
-      ),
+    {
+      customTitle: <CustomHeaderDatatable title="Ngày làm" />,
       dataIndex: "date_work",
-      key: "date_work",
+      key: "case_date-work-day",
       width: 50,
-      FontSize: "text-size-M",
     },
     {
-      title: "Địa chỉ",
+      customTitle: <CustomHeaderDatatable title="Địa chỉ" />,
       dataIndex: "address",
-      key: "text",
-      width: 70,
-      FontSize: "text-size-M",
+      key: "case_text",
+      width: 170,
     },
     {
-      title: "Phương thức thanh toán",
-      // dataIndex: "short_review",
-      key: "pay",
-      width: 70,
-      FontSize: "text-size-M",
-    },
-    {
-      title: "Trạng thái",
-      // dataIndex: "short_review",
-      key: "status",
+      customTitle: <CustomHeaderDatatable title="Trạng thái" position="center" />,
+      key: "case_status",
       width: 50,
-      FontSize: "text-size-M",
     },
+    {
+      customTitle: <CustomHeaderDatatable title="Thanh Toán" position="right" />,
+      key: "case_payment-method",
+      width: 50,
+    },
+
   ];
   // 2. Danh sách đơn hàng thống kê theo tháng
   const orderDataStatistic = [
@@ -361,7 +336,7 @@ const Activity = ({ id }) => {
       <div className="manage-order__filter-content">
         {listStatus?.map((el) => (
           <div
-            onClick={() => setListStatus(el.code)}
+            onClick={() => setValueSelectStatus(el.code)}
             className={`manage-order__filter-content--tab ${
               valueSelectStatus === el.code && "selected"
             }`}
@@ -391,14 +366,6 @@ const Activity = ({ id }) => {
         </div>
         <div>
           <ButtonCustom
-            label="Loại ngày"
-            options={listTypeDate}
-            value={valueSelectTypeDate}
-            setValueSelectedProps={setValueSelectTypeDate}
-          />
-        </div>
-        <div>
-          <ButtonCustom
             label="Dịch vụ"
             options={listService}
             value={valueSelectService}
@@ -411,6 +378,14 @@ const Activity = ({ id }) => {
             options={listPaymentMethod}
             value={valueSelectPaymentMethod}
             setValueSelectedProps={setValueSelectPaymentMethod}
+          />
+        </div>
+        <div>
+          <ButtonCustom
+            label="Sắp xếp theo"
+            options={listTypeDate}
+            value={valueSelectTypeDate}
+            setValueSelectedProps={setValueSelectTypeDate}
           />
         </div>
       </div>
@@ -462,6 +437,7 @@ const Activity = ({ id }) => {
       </div> */}
       {/* Lịch sử đơn hàng và Lịch sử hoạt động */}
       <div className="collaborator-activity__history">
+        <FilterData leftContent={filterByStatus()} />
         <FilterData rightContent={filterContentRight()} />
         <div className="collaborator-activity__history--order">
           <DataTable

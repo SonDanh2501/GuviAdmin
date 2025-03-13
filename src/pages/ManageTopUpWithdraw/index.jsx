@@ -53,7 +53,7 @@ const ManageTopUpWithdraw = (props) => {
   // Action rút tiền
   const handleWithdraw = (value) => {
     createTransaction({
-      transfer_note: value.transfer_note,
+      transfer_note: value.note,
       type_transfer: "withdraw",
       money: value.money,
       id_collaborator: value.id,
@@ -164,7 +164,7 @@ const ManageTopUpWithdraw = (props) => {
   const [startDate, setStartDate] = useState(""); // Giá trị ngày bắt đầu
   const [endDate, setEndDate] = useState(""); // Giá trị ngày kết thúc
   const [selectFilter, setSelectFilter] = useState([
-    { key: "status", code: "" },
+    { key: "case_status", code: "" },
     { key: "subject", code: "" },
     { key: "type_transfer", code: "" },
     { key: "payment_out", code: "" },
@@ -783,6 +783,7 @@ const ManageTopUpWithdraw = (props) => {
     },
   };
 
+  console.log("check >>>", data)
   /* ~~~ Main ~~~ */
   return (
     <div className="manage-top-up-with-draw">
