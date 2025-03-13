@@ -217,7 +217,7 @@ const ReferredList = () => {
   const [startDate, setStartDate] = useState(""); // Giá trị ngày bắt đầu
   const [endDate, setEndDate] = useState(""); // Giá trị ngày kết thúc
   const [selectFilter, setSelectFilter] = useState([
-    { key: "case_status", code: "" },
+    { key: "status", code: "" },
     { key: "subject", code: "" },
     { key: "type_transfer", code: "" },
     { key: "payment_out", code: "" },

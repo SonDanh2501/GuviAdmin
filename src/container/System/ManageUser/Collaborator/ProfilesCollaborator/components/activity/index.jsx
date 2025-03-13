@@ -358,14 +358,6 @@ const Activity = ({ id }) => {
       <div className="manage-order__filter-content">
         <div>
           <ButtonCustom
-            label="Trạng thái"
-            options={listStatus}
-            value={valueSelectStatus}
-            setValueSelectedProps={setValueSelectStatus}
-          />
-        </div>
-        <div>
-          <ButtonCustom
             label="Dịch vụ"
             options={listService}
             value={valueSelectService}
@@ -437,8 +429,10 @@ const Activity = ({ id }) => {
       </div> */}
       {/* Lịch sử đơn hàng và Lịch sử hoạt động */}
       <div className="collaborator-activity__history">
-        <FilterData leftContent={filterByStatus()} />
-        <FilterData rightContent={filterContentRight()} />
+        <FilterData
+          leftContent={filterByStatus()}
+          rightContent={filterContentRight()}
+        />
         <div className="collaborator-activity__history--order">
           <DataTable
             columns={columns}
