@@ -2740,6 +2740,41 @@ const DataTable = (props) => {
             );
             break;
           }
+          case "case_timer": {
+            const current = new Date();
+            const date = new Date(data[item.dataIndex]);
+            const distance = current - date; // Khoảng cách tính bằng mili-giây
+
+            // Chuyển đổi sang số ngày, giờ, phút
+            const diffDays = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const diffHours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const diffMinutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const diffSeconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            return (
+              <div className="case__timer">
+                <div className="case__timer--element">
+                  <div className="case__timer--element-number">
+                    <span>{diffDays}</span>
+                  </div>
+                  <span className="case__timer--element-label">ngày</span>
+                </div>
+                <div className="case__timer--element">
+                  <div className="case__timer--element-number">
+                    <span>{diffHours}</span>
+                  </div>
+                  <span className="case__timer--element-label">giờ</span>
+                </div>
+                <div className="case__timer--element">
+                  <div className="case__timer--element-number">
+                    <span>{diffMinutes}</span>
+                  </div>
+                  <span className="case__timer--element-label">phút</span>
+                </div>
+              </div>
+            );
+            break;
+          }
           default: {
             return (
               <Tooltip placement="top" title={data[item.dataIndex]}>

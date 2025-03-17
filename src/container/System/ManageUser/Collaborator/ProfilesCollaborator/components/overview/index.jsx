@@ -23,6 +23,7 @@ import CardRanking from "../../../../../../../components/card/cardRanking";
 import CardProgressBar from "../../../../../../../components/card/cardProgressBar";
 import CardInformation from "../../../../../../../components/card/cardInformation";
 import CardCheckList from "../../../../../../../components/card/cardCheckList";
+import CardOrderActivityLog from "../../../../../../../components/card/cardOrderActivityLog";
 
 const Overview = ({ id, star }) => {
   const dispatch = useDispatch();
@@ -313,7 +314,7 @@ const Overview = ({ id, star }) => {
         <CardInfo
           cardHeader="Hoạt động gần đây"
           cardContent={
-            <CardActivityLog
+            <CardOrderActivityLog
               data={listRecentOrderActivity?.data}
               totalItem={listRecentOrderActivity?.data?.length}
               dateIndex="date_work"
