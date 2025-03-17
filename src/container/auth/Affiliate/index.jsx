@@ -25,7 +25,7 @@
     loginWithOnlyTokenAction,
   } from "../../../redux/actions/auth";
   import { useNavigate } from "react-router-dom";
-  import loginLandingImage from "../../../assets/images/loginLanding.svg";
+  import loginLandingAffiliateImage from "../../../assets/images/loginLandingAffiliate.svg";
   import { checkPasswordRequired, province } from "../../../utils/contant";
   import i18n from "../../../i18n";
   import { getLanguageState } from "../../../redux/selectors/auth";
@@ -317,7 +317,7 @@ import moment from "moment";
         <div className="login-affiliate__form">
           <div className="login-affiliate__form--left">
             <div className="login-affiliate__form--left-child">
-              <img src={loginLandingImage} alt=""></img>
+              <img src={loginLandingAffiliateImage} alt=""></img>
             </div>
           </div>
           <div className="login-affiliate__form--right">

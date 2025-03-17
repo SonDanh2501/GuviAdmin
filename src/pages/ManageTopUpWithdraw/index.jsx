@@ -716,10 +716,10 @@ const ManageTopUpWithdraw = (props) => {
       const _isDisableVerify =
         record?.status === "done" ||
         record?.status === "cancel" ||
-        record?.status === "revoke" ||
-        record?.status === "waiting" ||
-        record?.status === "doing" ||
-        record?.status === "processing" ||
+        // record?.status === "revoke" ||
+        // record?.status === "waiting" ||
+        // record?.status === "doing" ||
+        // record?.status === "processing" ||
         !permission.find((el) => el.name_api === "Duyệt/huỷ lệnh nạp CTV");
       // Set disabled = true nếu status là một trong các trường hợp trên
       if (_isDisableVerify) {

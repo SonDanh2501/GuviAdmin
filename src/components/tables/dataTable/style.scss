@@ -952,7 +952,7 @@ span {
     transition: all 0.3s ease;
 
     &:hover {
-      color: $colorOrange;
+      color: $colorDarkBlue;
     }
   }
 
@@ -1050,7 +1050,7 @@ span {
     transition: all 0.3s ease;
 
     &:hover {
-      color: $colorOrange
+      color: $colorDarkBlue
     }
   }
 }
@@ -1069,7 +1069,7 @@ span {
     transition: all 0.3s ease;
 
     &:hover {
-      color: $colorOrange;
+      color: $colorDarkBlue;
     }
   }
 
@@ -1156,7 +1156,7 @@ span {
     cursor: pointer;
     
     &:hover {
-      color: $colorOrange
+      color: $colorDarkBlue
     }
   }
 
@@ -1220,6 +1220,45 @@ span {
     }
   }
 
+}
+
+// Trường hợp đếm số thời gian còn lại
+.case__timer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $gapM;
+  
+  .case__timer--element {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $gapXS;
+
+
+    .case__timer--element-number {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid $colorMoreLightGray;
+      border-radius: $borderRadiusL;
+      background-color: $colorExtraLightGray;
+      width: 30px;
+      height: 30px;
+
+      span {
+        font-size: $textFontSizeM;
+        font-weight: $fontWeightXL;
+        color: $colorBlack;
+      }
+    }
+
+    .case__timer--element-label {
+      font-size: $textFontSizeM;
+      font-weight: $fontWeightL;
+      color: $colorLightGray;
+    }
+  }
 }
 
 /* Các trường chỉ hiển chữ mới */

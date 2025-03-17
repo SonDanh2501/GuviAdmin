@@ -136,7 +136,6 @@ const ManagePunish = () => {
     },
 
   ];
-
   const [listData, setListData] = useState([]);
   const [statusList, setStatusList] = useState([
     { code: "", label: "Tất cả", total: 0 },
@@ -564,6 +563,7 @@ const ManagePunish = () => {
     setSelectValueOfStatusPunishTicket(item);
   };
 
+  console.log("check data >>> ", listData);
   return (
     <div className="manage-punish">
       {/* Header */}
