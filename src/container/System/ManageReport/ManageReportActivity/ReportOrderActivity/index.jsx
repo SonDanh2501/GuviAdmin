@@ -420,7 +420,6 @@ const ReportOrderActivity = () => {
         payload.startDate,
         payload.endDate
       );
-      console.log("chheck res", res);
       setListData(res?.data);
       setListTotalStatistic(res.totalItem[0]);
       setTotalItem(res?.total);

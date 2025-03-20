@@ -182,7 +182,7 @@ const ManageTopUpWithdraw = (props) => {
   // 1. Danh sách các loại trạng thái
   const [statusList, setStatusList] = useState([
     { code: "", label: "Tất cả", total: 0 },
-    { code: "processing", label: "Đang xử lí", total: 0 },
+    { code: "pending", label: "Đang xử lí", total: 0 },
     { code: "transferred", label: "Đã chuyển tiền", total: 0 },
     { code: "holding", label: "Tạm giữ", total: 0 },
     { code: "done", label: "Hoàn thành", total: 0 },
@@ -783,7 +783,6 @@ const ManageTopUpWithdraw = (props) => {
     },
   };
 
-  console.log("check >>>", data)
   /* ~~~ Main ~~~ */
   return (
     <div className="manage-top-up-with-draw">

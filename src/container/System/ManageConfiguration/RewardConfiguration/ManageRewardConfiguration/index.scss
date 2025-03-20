@@ -1,0 +1,46 @@
+@import "../../../../../@theme/style.scss";
+
+.punish-configuration {
+    display: flex;
+    gap: $gapL;
+    height: fit-content;
+    width: 100%;
+    padding-bottom: 16px;
+
+    .punish-configuration__child {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        height: fit-content;
+        background-color: $colorWhite;
+        padding: 12px;
+        background-color: $colorWhite;
+        border-radius: $borderRadiusL;
+        gap: $gapL;
+
+        .punish-configuration__child--input {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            gap: $gapL;
+
+            .punish-configuration__child--input-title {
+                font-size: $textFontSizeM;
+                font-weight: $fontWeightXL;
+                color: $colorBlack;
+            }
+
+            .punish-configuration__child--input-title-toggle {
+                display: flex;
+                align-items: center;
+                gap: $gapS;
+
+                span {
+                    font-size: $textFontSizeM;
+                    font-weight: $fontWeightXL;
+                    color: $colorBlack;
+                }
+            }
+        }
+    }
+}
