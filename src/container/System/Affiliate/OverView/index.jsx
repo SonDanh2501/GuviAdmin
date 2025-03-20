@@ -51,7 +51,7 @@ import { useSelector } from "react-redux";
 import { getUser } from "../../../../redux/selectors/auth";
 import { Modal } from "antd";
 import useWindowDimensions from "../../../../helper/useWindowDimensions";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 const {
   MdDoubleArrow,
   IoLogoFacebook,
@@ -64,6 +64,8 @@ const {
 } = icons;
 
 const OverView = () => {
+  const location = useLocation();
+  const closePopup = location.state?.closePopup || false;
   const { width } = useWindowDimensions();
   const navigate = useNavigate();
   const user = useSelector(getUser);
@@ -663,14 +665,14 @@ const OverView = () => {
           </div>
         )}
       </div>
-      {isShowPopup && (
-        <div className="affiliate-overview__popup">
+      {isShowPopup && !closePopup && (
+        <div
+          onClick={() => setIsShowPopup(false)}
+          className="affiliate-overview__popup"
+        >
           <div className="affiliate-overview__popup--image">
             <img src={affiliateWelcomePopupImage} alt=""></img>
-            <div
-              onClick={() => setIsShowPopup(false)}
-              className="affiliate-overview__popup--close"
-            >
+            <div className="affiliate-overview__popup--close">
               <span>Xem ngay</span>
               <span className="affiliate-overview__popup--close-icon">
                 <IoPlay />

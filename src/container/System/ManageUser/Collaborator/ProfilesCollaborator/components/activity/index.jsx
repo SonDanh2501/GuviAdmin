@@ -390,11 +390,6 @@ const Activity = ({ id }) => {
     );
   };
 
-
-  console.log(
-    "check dataHistoryActivitiesCollaborator >>>",
-    dataHistoryActivitiesCollaborator
-  );
   /* ~~~ Main ~~~ */
   return (
     <div className="collaborator-activity">

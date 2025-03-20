@@ -122,7 +122,10 @@ import ReportDetailCashBookCollaborator from "../container/System/ManageReport/M
 import ReportDetailCashBookCustomer from "../container/System/ManageReport/ManageReportCashBook/ReportDetailCashBookCustomer";
 import ReportDetailOrderActivity from "../container/System/ManageReport/ManageReportActivity/ReportDetailOrderActivity";
 import ManagePunishNew from "../pages/ManagePunish/ManagePunishNew";
-// import ManageFinance from "../pages/ManageFinance";
+import PunishConfiguration from "../container/System/ManageConfiguration/PunishConfiguration";
+import RewardConfiguration from "../container/System/ManageConfiguration/RewardConfiguration";
+import ManageRewardConfiguration from "../container/System/ManageConfiguration/RewardConfiguration/ManageRewardConfiguration";
+import ManagePunishConfiguration from "../container/System/ManageConfiguration/PunishConfiguration/ManagePunishConfiguration";
 
 const Admin = () => {
   return (
@@ -155,10 +158,7 @@ const Admin = () => {
         element={<ManageCollaborator />}
       />
 
-      <Route
-        path="/collaborator/manage"
-        element={<CollaboratorVerify />}
-      />
+      <Route path="/collaborator/manage" element={<CollaboratorVerify />} />
       <Route
         path="/collaborator/apply-manage"
         element={<CollaboratorNotVerify />}
@@ -549,6 +549,24 @@ const Admin = () => {
       <Route
         path="/adminManage/manage-configuration/business_manage"
         element={<BusinessConfig />}
+      />
+      <Route path="/configuration/punish" element={<PunishConfiguration />} />
+      <Route
+        path="/configuration/punish/create"
+        element={<ManagePunishConfiguration />}
+      />
+      <Route
+        path="/configuration/punish/edit/:id"
+        element={<ManagePunishConfiguration />}
+      />
+      <Route path="/configuration/reward" element={<RewardConfiguration />} />
+      <Route
+        path="/configuration/reward/create"
+        element={<ManageRewardConfiguration />}
+      />
+      <Route
+        path="/configuration/reward/edit/:id"
+        element={<ManageRewardConfiguration />}
       />
     </Routes>
   );

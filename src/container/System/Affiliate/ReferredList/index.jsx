@@ -789,7 +789,7 @@ const ReferredList = () => {
           </div>
           {/* Loggout */}
           <div
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/", { state: { closePopup: true } })}
             className="refferend-list-affiliate__content--left-exit card-shadow"
           >
             <span className="refferend-list-affiliate__content--left-exit-title">

@@ -20,37 +20,48 @@ const CustomHeaderDatatable = ({
   return (
     <div
       className={`custom-table-header ${
-        position === "center" ? "center" : position === "right" ? "right" : "left"
+        position === "center"
+          ? "center"
+          : position === "right"
+          ? "right"
+          : "left"
       }`}
     >
       <div className="custom-table-header__label">
-        <span className="custom-table-header__label--title">{title}</span>
-        {textToolTip && (
-          <Popover
-            content={textToolTip}
-            placement="top"
-            overlayInnerStyle={{
-              backgroundColor: "white",
-            }}
-          >
-            <div>
-              <IoHelpCircleOutline
-                size={size ? size : 14}
-                color={color ? color : "white"}
-              />
+        <div className="custom-table-header__label--title">
+          <span className="custom-table-header__label--title">{title}</span>
+          {textToolTip && (
+            <Popover
+              content={textToolTip}
+              placement="top"
+              overlayInnerStyle={{
+                backgroundColor: "white",
+              }}
+            >
+              <div>
+                <IoHelpCircleOutline
+                  size={size ? size : 14}
+                  color={color ? color : "white"}
+                />
+              </div>
+            </Popover>
+          )}
+          {sortValue && (
+            <div className="custom-table-header__label--sort">
+              <span onClick={() => setSortValue(1)}>
+                <IoCaretUp
+                  color={`${sortValue === 1 ? "#43464b" : "#ffffff"}`}
+                />
+              </span>
+              <span onClick={() => setSortValue(-1)}>
+                <IoCaretDown
+                  color={`${sortValue === -1 ? "#43464b" : "#ffffff"}`}
+                />
+              </span>
             </div>
-          </Popover>
-        )}
-        {sortValue && (
-          <div className="custom-table-header__label--sort">
-            <span onClick={() => setSortValue(1)}>
-              <IoCaretUp color={`${sortValue === 1 ? "#43464b" : "#ffffff"}`} />
-            </span>
-            <span onClick={() => setSortValue(-1)}>
-              <IoCaretDown color={`${sortValue === -1 ? "#43464b" : "#ffffff"}`} />
-            </span>
-          </div>
-        )}
+          )}
+        </div>
+
         {subValue !== undefined && subValue !== null && (
           <span
             className={`custom-table-header__sub-value ${
