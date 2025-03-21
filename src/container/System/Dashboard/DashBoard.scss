@@ -3736,9 +3736,9 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 330px;
-    height: 330px;
-    background-color: $colorExtraLightViolet;
+    width: 350px;
+    height: 350px;
+    background-color: $colorExtraLightGray;
     border-radius: $borderRadiusFull;
     z-index: 1;
   }
@@ -3893,16 +3893,39 @@
           font-weight: $fontWeightXL;
           color: $colorWhite
         }
+
+        &.first-place {
+          background-color: $colorYellow;
+        }
+        
+        &.second-place {
+          background-color: $colorSlate;
+        }
+        
+        &.third-place {
+          background-color: $colorOrange;
+        }
       }
 
       .ranking-board__columns--child-avatar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
         position: relative;
         width: 50px;
+        min-width: 50px;
         height: 50px;
+        min-height: 50px;
         border-radius: $borderRadiusFull;
         background-color: $colorBlack;
-        border: 1px solid $colorExtraLightGray;
+        border: 2px solid $colorLightGray;
         margin-bottom: 12px;
+
+        img {
+          width: 49px;
+          height: 49px;
+          border-radius: $borderRadiusFull;
+        }
 
         .ranking-board__columns--child-avatar-medal {
           position: absolute;
@@ -3917,6 +3940,9 @@
         font-size: $textFontSizeM;
         font-weight: $fontWeightXL;
         color: $colorBlack;
+        // white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
 
       .ranking-board__columns--child-trapezoid {
@@ -3941,7 +3967,7 @@
 
         .ranking-board__columns--child-vertical {
           height: 360px;
-          background-image: linear-gradient(360deg, $colorLightViolet 0%, $colorDarkViolet 100%);
+          background-image: linear-gradient(360deg, $colorLightOrange 50%, $colorOrange 100%);
 
           .ranking-board__columns--child-vertical-number {
             font-size: 5.5rem;
@@ -3950,7 +3976,7 @@
         }
 
         .ranking-board__columns--child-trapezoid {
-          border-bottom: 20px solid $colorLightViolet;
+          border-bottom: 20px solid $colorLightOrange;
           border-left: 0px solid transparent;
           border-right: 20px solid transparent;
         }
@@ -3960,7 +3986,7 @@
 
         .ranking-board__columns--child-vertical {
           height: 380px;
-          background-image: linear-gradient(360deg, $colorLightViolet 0%, $colorDarkViolet 100%);
+          background-image: linear-gradient(360deg, $colorLightSlate 50%, $colorSlate 100%);
 
           .ranking-board__columns--child-vertical-number {
             color: $colorWhite;
@@ -3968,7 +3994,7 @@
         }
 
         .ranking-board__columns--child-trapezoid {
-          border-bottom: 20px solid $colorLightViolet;
+          border-bottom: 20px solid $colorLightSlate;
           border-left: 20px solid transparent;
           border-right: 0px solid transparent;
         }
@@ -3979,7 +4005,7 @@
 
         .ranking-board__columns--child-vertical {
           height: 400px;
-          background-image: linear-gradient(360deg, $colorLightViolet 0%, $colorViolet 100%);
+          background-image: linear-gradient(360deg, $colorLightYellow 50%, $colorYellow 100%);
 
           .ranking-board__columns--child-vertical-number {
             font-size: 7rem;
@@ -3988,9 +4014,10 @@
         }
 
         .ranking-board__columns--child-trapezoid {
-          border-bottom: 20px solid $colorLightViolet;
+          border-bottom: 20px solid $colorLightYellow;
           border-left: 20px solid transparent;
           border-right: 20px solid transparent;
+
         }
 
         .ranking-board__columns--child-avatar {

@@ -1,6 +1,6 @@
 import axiosClient from "../axios";
 
-export const fetchPromotion = (
+export const fetchPromotionApi = (
   search,
   status,
   start,
@@ -9,11 +9,12 @@ export const fetchPromotion = (
   brand,
   id_service,
   exchange,
+  typeSort,
   sort,
   group
 ) => {
   return axiosClient.get(
-    `/admin/promotion_manager/get_list?search=${search}&status=${status}&start=${start}&length=${length}&typeSort=${type}&brand=${brand}&id_service=${id_service}&exchange=${exchange}&fieldSort=date_create&valueSort=${sort}&id_group_promotion=${group}`
+    `api/admin/promotion_manager/get_list?search=${search}&status=${status}&start=${start}&length=${length}&typeSort=${type}&brand=${brand}&id_service=${id_service}&exchange=${exchange}&fieldSort=${typeSort}&valueSort=${sort}&id_group_promotion=${group}`
   );
 };
 

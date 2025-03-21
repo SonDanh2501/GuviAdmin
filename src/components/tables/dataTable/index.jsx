@@ -2390,12 +2390,17 @@ const DataTable = (props) => {
                     item.high_light && "high-light"
                   }`}
                 >
-                  {moment(new Date(data[item.dataIndex])).format("DD/MM/YYYY")}
+                  {data[item.dataIndex]
+                    ? moment(new Date(data[item.dataIndex])).format(
+                        "DD/MM/YYYY"
+                      )
+                    : "Không có"}
                 </span>
                 <span className="case__date-with-day--sub">
-                  {moment(new Date(data[item.dataIndex]))
-                    .locale(lang)
-                    .format("HH:mm:ss")}
+                  {data[item.dataIndex] &&
+                    moment(new Date(data[item.dataIndex]))
+                      .locale(lang)
+                      .format("HH:mm:ss")}
                 </span>
               </div>
             );
@@ -2446,6 +2451,40 @@ const DataTable = (props) => {
                     : data?.status === "processing"
                     ? "Chờ thanh toán"
                     : `${i18n.t("cancel", { lng: lang })}`}
+                </span>
+              </div>
+            );
+            break;
+          }
+          case "case_status_promotion": {
+            return (
+              <div className="case__status_promotion">
+                <span
+                  className={`case__status_promotion--text ${
+                    data?.status === "upcoming"
+                      ? "upcoming"
+                      : data?.status === "doing"
+                      ? "doing"
+                      : data?.status === "out_of_stock"
+                      ? "out_of_stock"
+                      : data?.status === "out_of_date"
+                      ? "out_of_date"
+                      : data?.status === "done"
+                      ? "done"
+                      : ""
+                  }`}
+                >
+                  {data?.status === "upcoming"
+                    ? `${i18n.t("upcoming", { lng: lang })}`
+                    : data?.status === "doing"
+                    ? `${i18n.t("happenning", { lng: lang })}`
+                    : data?.status === "out_of_stock"
+                    ? `${i18n.t("out_stock", { lng: lang })}`
+                    : data?.status === "out_of_date"
+                    ? `${i18n.t("out_date", { lng: lang })}`
+                    : data?.status === "done"
+                    ? `${i18n.t("closed", { lng: lang })}`
+                    : ""}
                 </span>
               </div>
             );

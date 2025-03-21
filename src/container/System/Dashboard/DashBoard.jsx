@@ -69,6 +69,8 @@ import useWindowDimensions from "../../../helper/useWindowDimensions";
 import RangeDatePicker from "../../../components/datePicker/RangeDatePicker";
 import avatarDefaultImage from "../../../assets/images/user.png";
 import icons from "../../../utils/icons";
+import { errorNotify } from "../../../helper/toast";
+import { getCurrentLeaderBoardApi } from "../../../api/accumulation";
 
 moment.locale("vi");
 dayjs.extend(customParseFormat);
@@ -111,9 +113,8 @@ export default function Home() {
   const lang = useSelector(getLanguageState);
   const province = useSelector(getProvince);
 
-
-
   const [isExpandListRanking, setIsExpandListRanking] = useState(false);
+  const [listRanking, setListRanking] = useState([]);
 
   // useEffect(() => {
   //   if (startDate !== "") {
@@ -530,6 +531,19 @@ export default function Home() {
       </text>
     );
   };
+
+  const fetchCurrentRank = async () => {
+    try {
+      const res = await getCurrentLeaderBoardApi();
+      setListRanking(res.data);
+    } catch (err) {
+      errorNotify({message: err?.message || err})
+    }
+  }
+
+  useEffect(() => {
+    fetchCurrentRank();
+  }, [])
   return (
     <div className="container-dash">
       {checkElement?.includes("get_general_total_report_dashboard") && (
@@ -1326,13 +1340,16 @@ export default function Home() {
         <div className="ranking-board__columns">
           <div className="ranking-board__columns--child medium">
             <div className="ranking-board__columns--child-avatar">
-              <img src={avatarDefaultImage} alt=""></img>
+              <img
+                src={listRanking[1]?.avatar || avatarDefaultImage}
+                alt=""
+              ></img>
             </div>
             <span className="ranking-board__columns--child-info">
-              Nguyễn Tú
+              {listRanking[1]?.full_name}
             </span>
-            <div className="ranking-board__columns--child-point">
-              <span>1.469</span>
+            <div className="ranking-board__columns--child-point second-place">
+              <span>{listRanking[1]?.reward_point}</span>
             </div>
             <div className="ranking-board__columns--child-trapezoid"></div>
             <div className="ranking-board__columns--child-vertical">
@@ -1343,14 +1360,19 @@ export default function Home() {
           </div>
           <div className="ranking-board__columns--child large">
             <div className="ranking-board__columns--child-avatar">
-              <img src={avatarDefaultImage} alt=""></img>
+              <img
+                src={listRanking[0]?.avatar || avatarDefaultImage}
+                alt=""
+              ></img>
               <div className="ranking-board__columns--child-avatar-medal">
                 <FaCrown color="white" size="10px" />
               </div>
             </div>
-            <span className="ranking-board__columns--child-info">Sơn Danh</span>
-            <div className="ranking-board__columns--child-point">
-              <span>2.569</span>
+            <span className="ranking-board__columns--child-info">
+              {listRanking[0]?.full_name}
+            </span>
+            <div className="ranking-board__columns--child-point first-place">
+              <span>{listRanking[0]?.reward_point}</span>
             </div>
             <div className="ranking-board__columns--child-trapezoid"></div>
             <div className="ranking-board__columns--child-vertical">
@@ -1361,13 +1383,16 @@ export default function Home() {
           </div>
           <div className="ranking-board__columns--child small">
             <div className="ranking-board__columns--child-avatar">
-              <img src={avatarDefaultImage} alt=""></img>
+              <img
+                src={listRanking[2]?.avatar || avatarDefaultImage}
+                alt=""
+              ></img>
             </div>
             <span className="ranking-board__columns--child-info">
-              Nguyễn Kim
+              {listRanking[2]?.full_name}
             </span>
-            <div className="ranking-board__columns--child-point">
-              <span>1,045</span>
+            <div className="ranking-board__columns--child-point third-place">
+              <span>{listRanking[2]?.reward_point}</span>
             </div>
             <div className="ranking-board__columns--child-trapezoid"></div>
             <div className="ranking-board__columns--child-vertical">
@@ -1384,4 +1409,3 @@ export default function Home() {
 }
 
 const COLORS_CANCEL = ["#FCD34D", "#FBBF24", "#F59E0B", "#ff8000", "#ff1919"];
-
