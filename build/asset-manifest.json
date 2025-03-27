@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.26ec5ee0.css",
-    "main.js": "/static/js/main.835b3a43.js",
+    "main.css": "/static/css/main.4709ee70.css",
+    "main.js": "/static/js/main.3b4556e2.js",
     "static/media/description.png": "/static/media/description.5da8e5eb29ad845b842c.png",
     "static/media/thumnailContent.png": "/static/media/thumnailContent.5f47e4a8f0e0c87659a9.png",
     "static/media/title.png": "/static/media/title.71a2ab4847b010aa171e.png",
@@ -29,6 +29,7 @@
     "static/media/punish_ticket.svg": "/static/media/punish_ticket.c5d0e05086d40c447ff60ec638e4d845.svg",
     "static/media/loginLanding.svg": "/static/media/loginLanding.62cb886b291ddfdec2fd70c13bdd98f3.svg",
     "static/media/overViewAffiliate.svg": "/static/media/overViewAffiliate.9990a4cbec6123cfab1132bdabc821d0.svg",
+    "static/media/loginLandingAffiliate.svg": "/static/media/loginLandingAffiliate.b4a2fac79079214108da19d3b9ae2f75.svg",
     "static/media/tenPercentage.svg": "/static/media/tenPercentage.cbb648d7d23ecd6752f4afc0eedbeb69.svg",
     "static/media/logoNoBackGround.svg": "/static/media/logoNoBackGround.085e576fed6f1f39242e8db1471d6515.svg",
     "static/media/testLogo.svg": "/static/media/testLogo.989503ac0cefe867873527c9f9002221.svg",
@@ -65,6 +66,7 @@
     "static/media/google_play.svg": "/static/media/google_play.903c5d5821b0ea694ef83d32c8a18893.svg",
     "static/media/bank_pvc.svg": "/static/media/bank_pvc.e0829c24a6006aa5d63e3413979275a2.svg",
     "static/media/flag_brunei.svg": "/static/media/flag_brunei.86de8ce17cfda54af3612aafffa4f299.svg",
+    "static/media/not_found_image.svg": "/static/media/not_found_image.7b736882f4d46bdeac55a98e98c0719a.svg",
     "static/media/chartAffiliate.svg": "/static/media/chartAffiliate.678f0dec2e7caed800ac4b13334d52f3.svg",
     "static/media/bank_vietcom.svg": "/static/media/bank_vietcom.64effef4fe87fdb63f8a3d7a0c08066a.svg",
     "static/media/flag_american.svg": "/static/media/flag_american.7da7be9d3c6ce776647eb10d6710daee.svg",
@@ -73,7 +75,6 @@
     "static/media/LogoS.svg": "/static/media/LogoS.73015f281049db8b840bc1659afb5e7e.svg",
     "static/media/bank_bidv.svg": "/static/media/bank_bidv.79c578e2c84a1b797986a70103110aef.svg",
     "static/media/like.svg": "/static/media/like.a82f69cdb2bd32bdd46e665d0514eb96.svg",
-    "static/media/not_found_image.svg": "/static/media/not_found_image.872c4108c760f1f2c711f8f3dbc0f9be.svg",
     "static/media/setting.svg": "/static/media/setting.b190f0e00d16366d6a7779aaba38c0a6.svg",
     "static/media/bank_lp.svg": "/static/media/bank_lp.a7259eb05f9d4e3fa54a1ac0aee3cd1b.svg",
     "static/media/flag_timor.svg": "/static/media/flag_timor.5f8d8862dc471c0740d133185de5e3ce.svg",
@@ -116,11 +117,11 @@
     "static/media/offline.svg": "/static/media/offline.33acbe8c955951e587e68725985e74e7.svg",
     "static/media/online.svg": "/static/media/online.acf17c611c1affd9615cf0c62302674d.svg",
     "static/media/pending.svg": "/static/media/pending.ae3d796b3e3d6c6272a35edc144a2e90.svg",
-    "main.26ec5ee0.css.map": "/static/css/main.26ec5ee0.css.map",
-    "main.835b3a43.js.map": "/static/js/main.835b3a43.js.map"
+    "main.4709ee70.css.map": "/static/css/main.4709ee70.css.map",
+    "main.3b4556e2.js.map": "/static/js/main.3b4556e2.js.map"
   },
   "entrypoints": [
-    "static/css/main.26ec5ee0.css",
-    "static/js/main.835b3a43.js"
+    "static/css/main.4709ee70.css",
+    "static/js/main.3b4556e2.js"
   ]
 }
