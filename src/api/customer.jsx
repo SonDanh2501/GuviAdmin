@@ -1,8 +1,17 @@
 import axiosClient from "../axios";
 
-export const fetchCustomers = (lang, start, length, type, group, payload) => {
+export const fetchCustomers = (
+  lang,
+  start,
+  length,
+  type,
+  group,
+  payload,
+  start_date,
+  end_date
+) => {
   return axiosClient.get(
-    `/admin/customer_manager/get_customer_by_type?lang=${lang}&start=${start}&length=${length}&customer_type=${type}&id_group_customer=${group}&search=${payload}`
+    `/admin/customer_manager/get_customer_by_type?lang=${lang}&start=${start}&length=${length}&customer_type=${type}&id_group_customer=${group}&start_date=${start_date}&end_date=${end_date}&search=${payload}`
   );
 };
 
@@ -127,4 +136,3 @@ export const createAddressForCustomer = (id, data) => {
     data
   );
 };
-

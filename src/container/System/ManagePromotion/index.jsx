@@ -2,7 +2,7 @@ import _debounce from "lodash/debounce";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getGroupPromotion } from "../../../api/configuration.jsx";
-import { fetchPromotion } from "../../../api/promotion.jsx";
+import { fetchPromotionApi, testMigrateApi } from "../../../api/promotion.jsx";
 import { errorNotify } from "../../../helper/toast.js";
 import {
   getElementState,
@@ -33,7 +33,7 @@ const ManagePromotions = () => {
   const checkElement = useSelector(getElementState);
   const navigate = useNavigate();
   /* ~~~ Value ~~~ */
-  const typeSort = -1; // Giá trị sort (lọc giá trị theo phần từ mới nhất của bảng từ trên xuống)
+  const valueSort = -1; // Giá trị sort (lọc giá trị theo phần từ mới nhất của bảng từ trên xuống)
   const [groupPromotion, setGroupPromotion] = useState([]); // Dữ liệu nhóm khuyến mãi
   const [valueSearch, setValueSearch] = useState("");
   const [data, setData] = useState([]); // Dữ liệu của bảng
@@ -43,19 +43,32 @@ const ManagePromotions = () => {
   const [selectPromotionType, setSelectPromotionType] = useState(""); // Giá trị select của loại khuyến mãi
   const [selectGroupPromotionType, setSelectGroupPromotionType] = useState(""); // Giá trị select của nhóm khuyến mãi
   const [selectStatus, setSelectStatus] = useState(""); // Giá trị select của trạng thái
+  const [valueSelectTypeSort, setValueSelectTypeSort] = useState("date_create"); // Giá trị sắp xếp
+
   /* ~~~ List ~~~ */
   const columns = [
+    {
+      customTitle: <CustomHeaderDatatable title="STT" position="center" />,
+      dataIndex: "",
+      key: "case_numbering",
+      width: 15,
+    },
     {
       customTitle: (
         <CustomHeaderDatatable
           title="Mã khuyến mãi"
           textToolTip="Mã để áp dụng khuyến mãi"
-          position="left"
         />
       ),
       dataIndex: "",
       key: "promotion_code",
-      width: 50,
+      width: 90,
+    },
+    {
+      customTitle: <CustomHeaderDatatable title="Ngày tạo" />,
+      dataIndex: "date_create",
+      key: "case_date-create-time",
+      width: 30,
     },
     {
       customTitle: (
@@ -66,7 +79,7 @@ const ManagePromotions = () => {
       ),
       dataIndex: "",
       key: "type_promotion",
-      width: 20,
+      width: 30,
       position: "center",
     },
     {
@@ -78,7 +91,7 @@ const ManagePromotions = () => {
       ),
       dataIndex: "",
       key: "img_promotion",
-      width: 20,
+      width: 30,
     },
     {
       customTitle: (
@@ -89,7 +102,7 @@ const ManagePromotions = () => {
       ),
       dataIndex: "",
       key: "area_promotion",
-      width: 25,
+      width: 30,
     },
     {
       customTitle: (
@@ -98,9 +111,9 @@ const ManagePromotions = () => {
           textToolTip="Trạng thái của mã khuyến mãi"
         />
       ),
-      dataIndex: "",
-      key: "status_promotion",
-      width: 25,
+      dataIndex: "status",
+      key: "case_status_promotion",
+      width: 35,
     },
     {
       customTitle: (
@@ -111,32 +124,30 @@ const ManagePromotions = () => {
       ),
       dataIndex: "",
       key: "time_using_promotion",
-      width: 20,
+      width: 30,
       position: "center",
     },
     {
       customTitle: (
         <CustomHeaderDatatable
-          title="Ngày bắt đầu"
-          textToolTip="Ngày bắt đầu"
+          title="Hẹn bắt đầu"
+          textToolTip="Ngày hẹn để bắt đầu khuyến mãi (nếu không có thì khuyến mãi sẽ kích hoạt ngay từ lúc tạo ra)"
         />
       ),
-      dataIndex: "",
-      key: "start_date_promotion",
-      width: 25,
-      position: "center",
+      dataIndex: "limit_start_date",
+      key: "case_date-create-time",
+      width: 35,
     },
     {
       customTitle: (
         <CustomHeaderDatatable
-          title="Ngày kết thúc"
-          textToolTip="Ngày kết thúc"
+          title="Hẹn kết thúc"
+          textToolTip="Ngày hẹn để kết thúc khuyến mãi (nếu không có thì khuyến mãi sẽ kích hoạt đến khi dừng hoặc đủ số lượng sử dụng)"
         />
       ),
-      dataIndex: "",
-      key: "end_date_promotion",
-      width: 25,
-      position: "center",
+      dataIndex: "limit_end_date",
+      key: "case_date-create-time",
+      width: 35,
     },
   ];
   // Danh sách các dịch vụ
@@ -222,12 +233,29 @@ const ManagePromotions = () => {
       label: "Hết lượt sử dụng",
     },
   ];
+
+  // Danh sách các đối tượng
+  const listTypeSort = [
+    {
+      code: "date_create",
+      label: "Ngày tạo",
+    },
+    {
+      code: "limit_start_date",
+      label: "Ngày bắt đầu",
+    },
+    {
+      code: "limit_end_date",
+      label: "Ngày kết thúc",
+    },
+  ];
+
   /* ~~~ Handle function ~~~ */
   // 1. Fetch dữ liệu bảng
   const fetchData = async () => {
     try {
       dispatch(loadingAction.loadingRequest(true));
-      const res = await fetchPromotion(
+      const res = await fetchPromotionApi(
         valueSearch,
         selectStatus,
         startPage,
@@ -236,7 +264,8 @@ const ManagePromotions = () => {
         selectObject,
         selectService,
         "",
-        typeSort,
+        valueSelectTypeSort,
+        valueSort,
         selectGroupPromotionType
       );
       setData(res?.data);
@@ -271,18 +300,25 @@ const ManagePromotions = () => {
   // 1. Fetch dữ liệu bảng
   useEffect(() => {
     fetchData();
-    fetchGroupPromotion();
   }, [
     startPage,
     lengthPage,
-    typeSort,
+    valueSort,
     selectStatus,
     selectPromotionType,
     selectObject,
     selectService,
     selectGroupPromotionType,
     valueSearch,
+    valueSelectTypeSort
   ]);
+  useEffect(() => {
+    fetchGroupPromotion();
+  }, []);
+
+  // useEffect(async () => {
+  //   await testMigrateApi();
+  // }, []);
   /* ~~~ Other ~~~ */
   const filterContentLeft = () => {
     return (
@@ -307,6 +343,15 @@ const ManagePromotions = () => {
   const filterContentRight = () => {
     return (
       <div className="manange-promotion__filter-content">
+        {/* Sắp xếp theo loại ngày */}
+        <div>
+          <ButtonCustom
+            label="Sắp xếp"
+            options={listTypeSort}
+            value={valueSelectTypeSort}
+            setValueSelectedProps={setValueSelectTypeSort}
+          />
+        </div>
         {/* Lọc theo loại dịch vụ */}
         <div>
           <ButtonCustom
@@ -328,7 +373,7 @@ const ManagePromotions = () => {
         {/* Lọc theo loại khuyến mãi*/}
         <div>
           <ButtonCustom
-            label="Loại khuyến mãi"
+            label="Loại KM"
             options={promotionTypeList}
             value={selectPromotionType}
             setValueSelectedProps={setSelectPromotionType}
@@ -337,7 +382,7 @@ const ManagePromotions = () => {
         {/* Lọc theo loại nhóm khuyến mãi*/}
         <div>
           <ButtonCustom
-            label="Nhóm khuyến mãi"
+            label="Nhóm KM"
             options={groupPromotionList}
             value={selectGroupPromotionType}
             setValueSelectedProps={setSelectGroupPromotionType}

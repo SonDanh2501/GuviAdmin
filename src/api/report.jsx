@@ -475,9 +475,10 @@ export const getReportDetailOrderActivityApi = (
   start,
   length,
   start_date,
-  end_date
+  end_date,
+  status
 ) => {
   return axiosClient.get(
-    `api/admin/report_mananger/report_detail_order_activity?start=${start}&length=${length}&start_date=${start_date}&end_date=${end_date}`
+    `api/admin/report_mananger/report_detail_order_activity?start=${start}&length=${length}&start_date=${start_date}&end_date=${end_date}&status=${status}`
   );
 };

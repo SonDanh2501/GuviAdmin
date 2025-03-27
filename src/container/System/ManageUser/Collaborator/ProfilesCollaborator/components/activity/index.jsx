@@ -482,7 +482,8 @@ const Activity = ({ id }) => {
               }
             />
           </div>
-          <div className="collaborator-activity__history--activities-activity">
+          {/* Thẻ lịch sử nhận điểm thưởng và lịch sử nhận phạt (ẩn đi vừa tính năng đang tạm dừng) */}
+          {/* <div className="collaborator-activity__history--activities-activity">
             <CardInfo
               cardHeader="Lịch sử khen thưởng"
               cardContent={
@@ -517,7 +518,7 @@ const Activity = ({ id }) => {
                 />
               }
             />
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

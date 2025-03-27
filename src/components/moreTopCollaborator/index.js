@@ -61,12 +61,7 @@ const MoreTopCollaborator = () => {
   return (
     <>
       <div onClick={showDrawer} className="btn-see">
-        <a>
-          {`${i18n.t("see_more", {
-            lng: lang,
-          })}`}
-        </a>{" "}
-        <i class="uil uil-angle-right"></i>
+        <span>Chi tiết</span>
       </div>
 
       <Drawer
@@ -105,7 +100,9 @@ const MoreTopCollaborator = () => {
                 <div className="div-item-more-collaborator">
                   <div className="div-name-more">
                     <a className="text-number">{index + 1}.</a>
-                    <a className="text-name">{item?._id?.full_name || item?.full_name}</a>
+                    <a className="text-name">
+                      {item?._id?.full_name || item?.full_name}
+                    </a>
                   </div>
                   <a className="text-money-more">
                     {formatMoney(item?.sumIncome)}
