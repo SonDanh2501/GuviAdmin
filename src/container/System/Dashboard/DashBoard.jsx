@@ -383,14 +383,14 @@ const Home = () => {
     );
   };
 
-  const fetchCurrentRank = async () => {
-    try {
-      const res = await getCurrentLeaderBoardApi();
-      setListRanking(res.data);
-    } catch (err) {
-      errorNotify({ message: err?.message || err });
-    }
-  };
+  // const fetchCurrentRank = async () => {
+  //   try {
+  //     const res = await getCurrentLeaderBoardApi();
+  //     setListRanking(res.data);
+  //   } catch (err) {
+  //     errorNotify({ message: err?.message || err });
+  //   }
+  // };
 
   const fetchTotalStatisticHeader = async () => {
     try {
@@ -482,7 +482,7 @@ const Home = () => {
 
   useEffect(() => {
     fetchTotalStatisticHeader();
-    fetchCurrentRank();
+    // fetchCurrentRank();
   }, []);
 
   /* ~~~ Other ~~~ */
@@ -655,18 +655,18 @@ const Home = () => {
                 </div>
               </div>
               <div className="dash_board__container--statistic-chart-body-data">
-                <ResponsiveContainer width="98%" height={300}>
+                <ResponsiveContainer width="97%" height={300}>
                   <AreaChart data={arrResult}>
                     <defs>
                       <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
                         <stop
                           offset="15%"
-                          stopColor={"#79808c"}
+                          stopColor={"#d8b4fe"}
                           stopOpacity={0.9}
                         />
                         <stop
                           offset="100%"
-                          stopColor={"#79808c"}
+                          stopColor={"#d8b4fe"}
                           stopOpacity={0.2}
                         />
                       </linearGradient>
@@ -689,7 +689,7 @@ const Home = () => {
                       // label={true}
                       type="monotone"
                       dataKey="total_item"
-                      stroke={"#475569"}
+                      stroke={"#7c3aed"}
                       strokeWidth={3}
                       fillOpacity={1}
                       fill="url(#colorUv)"
@@ -947,7 +947,7 @@ const Home = () => {
               <span>Thống kê đơn hàng theo dịch vụ</span>
             </div>
             <div className="dash_board__container--order-statistic-hour-body">
-              <ResponsiveContainer width={"98%"} height={215}>
+              <ResponsiveContainer width="97%" height={215}>
                 <BarChart
                   data={dataChartDetail}
                   margin={{
@@ -1017,7 +1017,7 @@ const Home = () => {
                 <span className="high-light">Tổng khách hàng:</span>
                 <span>10.000</span>
               </div>
-              <ResponsiveContainer width={"98%"} height={200}>
+              <ResponsiveContainer width="97%" height={200}>
                 <ComposedChart
                   data={dataChartUser.slice(0, moment().utc().month() + 1)}
                   margin={{
@@ -1102,7 +1102,7 @@ const Home = () => {
             <span>Thống kê đơn hủy</span>
           </div>
           <div className="dash_board__container--pie-order-cancel-body">
-            <ResponsiveContainer width="98%" height={300}>
+            <ResponsiveContainer width="97%" height={300}>
               <PieChart>
                 <Pie
                   data={dataChartCancel}

@@ -12,9 +12,6 @@
     height: 100%;
     gap: $gapL;
 
-
-
-
     .dash_board__container--table {
       display: flex;
     }
@@ -79,6 +76,7 @@
   .dash_board__container-first-line {
     display: flex;
     gap: $gapL;
+
     .dash_board__container--statistic {
       display: flex;
       flex-direction: column;
@@ -385,7 +383,7 @@
       display: flex;
       flex-direction: row;
       gap: $gapL;
-      width: 66%;
+      width: 70%;
 
       .dash_board__container--ranking-board {
         display: flex;
@@ -735,7 +733,7 @@
     .dash_board__container--order-statistic {
       display: flex;
       flex-direction: column;
-      width: 33%;
+      width: 30%;
       gap: $gapL;
 
       .dash_board__container--order-statistic-hour {
@@ -899,7 +897,7 @@
         display: flex;
         flex-direction: column;
         gap: $gapL;
-        width: 65%;
+        width: 50%;
   
         .dash_board__container--statistic-cards {
           display: flex;
@@ -1058,7 +1056,7 @@
       .dash_board__container--pie-chart {
         display: flex;
         flex-direction: column;
-        width: 35%;
+        width: 50%;
         gap: $gapL;
   
         .dash_board__container--pie-chart-activity {
