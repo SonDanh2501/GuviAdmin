@@ -2247,7 +2247,6 @@ const DataTable = (props) => {
                   .join("") + `&start_date=${startOfDay}&end_date=${endOfDay}`
               : `&start_date=${startOfDay}&end_date=${endOfDay}`;
 
-            console.log("check query >>>", query);
             return (
               <div
                 onClick={() => window.open(`${url}?${query}`, "_blank")}
@@ -2535,7 +2534,7 @@ const DataTable = (props) => {
           }
           case "case_code_order": {
             linkRedirect = `/details-order/${
-              data?.id_group_order ? data?.id_group_order : data?._id
+              data?.id_group_order ? data?.id_group_order : data?.id_order?.id_group_order
             }`;
             return (
               <div className="case__code_order ">
@@ -2543,10 +2542,14 @@ const DataTable = (props) => {
                   target="_blank"
                   onClick={() => saveToCookie("order_scrolly", scrollY)}
                   to={linkRedirect}
-                  style={{ textDecoration: "none" , lineHeight: 1}}
+                  style={{ textDecoration: "none", lineHeight: 1 }}
                 >
                   <span className="case__code_order--code">
-                    {data?.id_view}
+                    {data?.id_order
+                      ? data?.id_order?.id_view
+                        ? data?.id_order?.id_view
+                        : data?.id_view
+                      : data?.id_view}
                   </span>
                 </Link>
               </div>

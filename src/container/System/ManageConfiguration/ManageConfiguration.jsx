@@ -152,24 +152,24 @@ const ManageConfiguration = () => {
   };
   
   return (
-    <div className="manage-report-cash-book">
+    <div className="manage-configuration">
       {listNewConfiguration?.map((item, index) => (
-        <div key={index} className="manage-report-cash-book__child card-shadow">
-          <div className="manage-report-cash-book__child--circle"></div>
+        <div key={index} className="manage-configuration__child card-shadow">
+          <div className="manage-configuration__child--circle"></div>
           <div
             onClick={() => handleOpenNewTab(item.linkNavigate)}
-            className="manage-report-cash-book__child--detail"
+            className="manage-configuration__child--detail"
           >
             <span>Chi tiết</span>
           </div>
-          <div className="manage-report-cash-book__child--numbered">
+          <div className="manage-configuration__child--numbered">
             <span>{index + 1}</span>
           </div>
-          <div className="manage-report-cash-book__child--title">
-            <span className="manage-report-cash-book__child--title-header">
+          <div className="manage-configuration__child--title">
+            <span className="manage-configuration__child--title-header">
               {item?.title}
             </span>
-            <span className="manage-report-cash-book__child--title-sub-header">
+            <span className="manage-configuration__child--title-sub-header">
               {item?.detail}
             </span>
           </div>

@@ -2,7 +2,7 @@ import _debounce from "lodash/debounce";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getGroupPromotion } from "../../../api/configuration.jsx";
-import { fetchPromotionApi } from "../../../api/promotion.jsx";
+import { fetchPromotionApi, testMigrateApi } from "../../../api/promotion.jsx";
 import { errorNotify } from "../../../helper/toast.js";
 import {
   getElementState,
@@ -315,6 +315,10 @@ const ManagePromotions = () => {
   useEffect(() => {
     fetchGroupPromotion();
   }, []);
+
+  // useEffect(async () => {
+  //   await testMigrateApi();
+  // }, []);
   /* ~~~ Other ~~~ */
   const filterContentLeft = () => {
     return (

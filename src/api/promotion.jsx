@@ -99,3 +99,9 @@ export const updatePositionPromotion = (data) => {
     data
   );
 };
+
+export const testMigrateApi = () => {
+  return axiosClient.get(
+    `api/admin/promotion_manager/test_update`,
+  );
+}

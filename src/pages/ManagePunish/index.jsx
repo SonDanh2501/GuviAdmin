@@ -311,6 +311,7 @@ const ManagePunish = () => {
         payload.selectValueCreatedBy,
         payload.valueSearch
       );
+      console.log("check res >>>", res);
       setListData(res?.data);
       setTotal(res?.totalItem);
       setIsLoading(false);

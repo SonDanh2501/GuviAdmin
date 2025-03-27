@@ -5,13 +5,15 @@
   flex-direction: column;
   gap: $gapL;
   padding-bottom: 16px;
-  
+
   .collaborator-rating__overview {
     display: flex;
     gap: $gapL;
+
     .collaborator-rating__overview--total {
       width: 30%;
     }
+
     .collaborator-rating__overview--statistic {
       width: 70%;
     }
@@ -24,7 +26,7 @@
     width: 100%;
     height: fit-content;
     // padding: 12px;
-    
+
     .collaborator-rating__activity-bar--header {
       display: flex;
       flex-direction: column;
@@ -33,9 +35,145 @@
       opacity: 0.5;
       // align-items: center;
     }
+
+    
+  }
+
+  .collaborator-rating__favorite {
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    background-color: $colorWhite;
+    border-radius: $borderRadiusL;
+    scrollbar-gutter: stable both-edges;
+
+    .collaborator-rating__favorite--header {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px;
+      border-bottom: 2px solid $colorExtraLightGray;
+      align-items: center;
+
+      .collaborator-rating__favorite--header-title {
+        display: flex;
+
+        span {
+          font-size: $textFontSizeM;
+          font-weight: $fontWeightXL;
+          color: $colorBlack;
+        }
+      }
+
+    }
+
+    .collaborator-rating__favorite--tab {
+      display: flex;
+      justify-content: center;
+      gap: $gapM;
+      padding: 8px 16px 4px 16px;
+      scrollbar-gutter: stable both-edges;
+
+      .collaborator-rating__favorite--tab-item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 50%;
+        padding: 8px;
+        border-radius: $borderRadiusL;
+        background-color: $colorExtraLightGray;
+        cursor: pointer;
+        
+        &.favorite {
+          background-color: $colorRed;
+          color: $colorWhite;
+        }
+
+        &.limit {
+          background-color: $colorBlue;
+          color: $colorWhite;
+        }
+
+      }
+    }
+    .collaborator-rating__favorite--list {
+      display: flex;
+      flex-direction: column;
+      gap: $gapM;
+      max-height: 400px;
+      overflow: auto;
+      padding: 8px 16px 16px 16px;
+      scrollbar-gutter: stable both-edges;
+      margin-right: 4px;
+
+        .collaborator-rating__favorite--list-item {
+          display: flex;
+          gap: $gapM;
+          align-items: center;
+          border-radius: $borderRadiusL;
+          padding: 8px;
+          width: 250px;
+
+          .collaborator-rating__favorite--list-item-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: $borderRadiusFull;
+            background-color: $colorBlack;
+          }
+
+          .collaborator-rating__favorite--list-item-info {
+            display: flex;
+            flex-direction: column;
+            gap: $gapXS;
+
+            .collaborator-rating__favorite--list-item-info-name {
+              font-size: $textFontSizeM;
+              font-weight: $fontWeightXL;
+              color: $colorBlack;
+            }
+
+            .collaborator-rating__favorite--list-item-info-phone {
+              font-size: $textFontSizeM;
+              font-weight: $fontWeightL;
+              color: $colorLightGray;
+            }
+
+          }
+
+          .collaborator-rating__favorite--list-item-detail {
+            margin-left: auto; // Đẩy phần tử này sát về bên phải
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            
+            span {
+              display: flex;
+              align-items: center;
+            }
+          }
+        }
+    }
   }
 }
 
+.collaborator-rating__favorite--list::-webkit-scrollbar {
+  width: 0.3em;
+}
+
+.collaborator-rating__favorite--list::-webkit-scrollbar-track {
+  background-color: $colorExtraLightGray;
+  margin-block: 1rem;
+  border-radius: 8px;
+}
+
+.collaborator-rating__favorite--list::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+  // border: 2px solid $colorExtraLightGray;
+  background-color: $colorMoreLightGray;
+}
+
+.collaborator-rating__favorite--list::-webkit-scrollbar-thumb:hover {
+  background-color: $colorGray;
+}
 
 
 .text-total-star {
@@ -106,3 +244,4 @@
     margin: 0;
   }
 }
+
