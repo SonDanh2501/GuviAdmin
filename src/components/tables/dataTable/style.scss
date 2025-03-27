@@ -890,9 +890,11 @@ span {
   justify-content: center;
 
   .case__promotion-province--label {
-    padding: 6px 8px;
+    padding: 8px;
     background-color: $colorMoreLightGray;
     border-radius: $borderRadiusL;
+    font-size: $textFontSizeM;
+    font-weight: $fontWeightXL;
     color: $colorBlack;
   }
 
@@ -952,7 +954,7 @@ span {
     transition: all 0.3s ease;
 
     &:hover {
-      color: $colorOrange;
+      color: $colorDarkBlue;
     }
   }
 
@@ -1050,7 +1052,7 @@ span {
     transition: all 0.3s ease;
 
     &:hover {
-      color: $colorOrange
+      color: $colorDarkBlue
     }
   }
 }
@@ -1069,7 +1071,7 @@ span {
     transition: all 0.3s ease;
 
     &:hover {
-      color: $colorOrange;
+      color: $colorDarkBlue;
     }
   }
 
@@ -1156,7 +1158,7 @@ span {
     cursor: pointer;
     
     &:hover {
-      color: $colorOrange
+      color: $colorDarkBlue
     }
   }
 
@@ -1217,6 +1219,84 @@ span {
     &.waiting &.processing {
       color: $colorOrange;
       background-color: $colorExtraLightOrange;
+    }
+  }
+
+}
+
+// Trường hợp đếm số thời gian còn lại
+.case__timer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $gapM;
+  
+  .case__timer--element {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $gapXS;
+
+
+    .case__timer--element-number {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid $colorMoreLightGray;
+      border-radius: $borderRadiusL;
+      background-color: $colorExtraLightGray;
+      width: 30px;
+      height: 30px;
+
+      span {
+        font-size: $textFontSizeM;
+        font-weight: $fontWeightXL;
+        color: $colorBlack;
+      }
+    }
+
+    .case__timer--element-label {
+      font-size: $textFontSizeM;
+      font-weight: $fontWeightL;
+      color: $colorLightGray;
+    }
+  }
+}
+
+// Trường hợp trạng thái của các khuyến mãi 
+.case__status_promotion {
+  display: flex;
+  align-items: center;
+  width: 100%;
+
+  .case__status_promotion--text {
+    width: 100%;
+    padding: 8px;
+    border-radius: $borderRadiusL;
+    font-weight: $fontWeightXL;
+    font-size: $textFontSizeM;
+    text-align: center;
+
+    &.upcoming {
+      color: $colorYellow;
+      background-color: $colorExtraLightYellow;
+    }
+
+    &.doing {
+      color: $colorBlue;
+      background-color: $colorExtraLightBlue;
+    }
+
+    &.done {
+      color: $colorGreen;
+      background-color: $colorExtraLightGreen;
+    }
+
+    &.out_of_stock,
+    &.out_of_date,
+    &.cancel {
+      color: $colorRed;
+      background-color: $colorExtraLightRed;
     }
   }
 

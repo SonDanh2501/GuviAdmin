@@ -234,8 +234,9 @@
     .collaborator-activity__history--activities {
       display: flex;
       gap: $gapL;
+      
       .collaborator-activity__history--activities-activity {
-        width: 50%;
+       width: 50%;
       }
     }
   }

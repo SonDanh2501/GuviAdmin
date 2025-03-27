@@ -1,0 +1,139 @@
+@import "../../../../@theme/style.scss";
+
+
+.manage-punish-configuration {
+    display: flex;
+    flex-direction: column;
+    gap: $gapL;
+    border-radius: $borderRadiusL;
+    padding-bottom: 16px;
+
+
+
+    .manage-punish-configuration__list {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: $gapL;
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .manage-punish-configuration__list--child {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            background-color: $colorWhite;
+            border-radius: $borderRadiusL;
+            padding: 12px;
+            border: 1px solid $colorMoreLightGray;
+            position: relative;
+            animation: fadeIn 1s ease-out;
+
+            .manage-punish-configuration__list--child-title {
+                display: flex;
+                flex-direction: column;
+                gap: $gapXS;
+
+                .manage-punish-configuration__list--child-title-label {
+                    font-size: $textFontSizeM;
+                    font-weight: $fontWeightXL;
+                    color: $colorBlack;
+                }
+
+                .manage-punish-configuration__list--child-title-description {
+                    font-size: $textFontSizeM;
+                    font-weight: $fontWeightL;
+                    color: $colorLightGray;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    width: 80%;
+                }
+            }
+
+            .manage-punish-configuration__list--child-numbering {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: absolute;
+                top: 0;
+                right: 0;
+                height: 30px;
+                width: 30px;
+                border-radius: $borderRadiusFull;
+                background-color: $colorMoreLightGray;
+                margin: 8px;
+
+                span {
+                    font-size: $textFontSizeM;
+                    font-weight: $fontWeightXL;
+                    color: $colorLightGray;
+                }
+            }
+
+            .manage-punish-configuration__list--child-action {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding-top: 12px;
+
+                .manage-punish-configuration__list--child-action-status {
+                    font-size: $textFontSizeM;
+                    font-weight: $fontWeightXL;
+                    color: $colorBlack;
+                    border: 1px solid $colorBlack;
+                    padding: 4px 8px;
+                    border-radius: $borderRadiusL;
+
+                    &.doing {
+                        background-color: $colorExtraLightBlue;
+                        color: $colorBlue;
+                        border-color: $colorBlue;
+                    }
+
+                    &.pause {
+                        background-color: $colorExtraLightRed;
+                        color: $colorRed;
+                        border-color: $colorRed;
+                    }
+
+                    &.standby {
+                        background-color: $colorExtraLightYellow;
+                        color: $colorYellow;
+                        border-color: $colorYellow;
+                    }
+                }
+
+                .manage-punish-configuration__list--child-action-container {
+                    display: flex;
+
+                    .manage-punish-configuration__list--child-action-container-icon {
+                        display: flex;
+                        align-items: center;
+                        padding: 4px;
+                        cursor: pointer;
+
+                        span {
+                            font-size: 1.2rem;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .manage-punish-configuration__pagination {
+        display: flex;
+        justify-content: space-between;
+    }
+
+}

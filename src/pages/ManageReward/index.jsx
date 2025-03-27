@@ -110,12 +110,7 @@ const ManageReward = () => {
       key: "case_id_admin_action",
       width: 50,
     },
-    {
-      customTitle: <CustomHeaderDatatable title="Số tiền"  position="right"/>,
-      dataIndex: "punish_money",
-      key: "case_money",
-      width: 70,
-    },
+
     // {
     //   customTitle: <CustomHeaderDatatable title="Mã đơn hàng"  />,
     //   dataIndex: "id_order",
@@ -123,8 +118,8 @@ const ManageReward = () => {
     //   width: 70,
     // },
     {
-      customTitle: <CustomHeaderDatatable title="Ngày xác nhận"  />,
-      dataIndex: "time_end",
+      customTitle: <CustomHeaderDatatable title="Ngày xác nhận" />,
+      dataIndex: "execution_date",
       key: "case_date-create-time",
       width: 70,
     },
@@ -135,9 +130,100 @@ const ManageReward = () => {
       width: 70,
     },
 
+    {
+      customTitle: <CustomHeaderDatatable title="Nội dung" />,
+      dataIndex: "note_admin",
+      key: "case_text",
+      width: 100,
+    },
+    {
+      customTitle: <CustomHeaderDatatable title="Số tiền" position="right" />,
+      dataIndex: "reward_money",
+      key: "case_money",
+      width: 70,
+    },
   ];
 
-  const [listData, setListData] = useState([]);
+  const [listData, setListData] = useState([
+    {
+      date_create: "2025-03-15T09:44:40.583Z",
+      execution_date: "2025-03-14T09:44:40.583Z",
+      id_collaborator: {
+        full_name: "NGUYỄN NGỌC KIM",
+        phone: "0932505583",
+        _id: "66f03c1405f7562511ee6dbc",
+      },
+      note_admin: "Thưởng đạt điểm tuần",
+      reward_money: 30000,
+      status: "done",
+      id_view: "#20250205KHWP",
+    },
+    {
+      date_create: "2025-03-13T09:44:40.583Z",
+      execution_date: "2025-03-14T09:44:40.583Z",
+      id_collaborator: {
+        full_name: "NGUYỄN PHẠM THẢO",
+        phone: "0123575521",
+        _id: "66f03c1405f7562511ee6dbc",
+      },
+      note_admin: "Thưởng đạt điểm tuần",
+      reward_money: 50000,
+      status: "cancel",
+      id_view: "#20250205KHWP",
+    },
+    {
+      date_create: "2025-03-14T09:44:40.583Z",
+      execution_date: "2025-03-14T09:44:40.583Z",
+      id_collaborator: {
+        full_name: "NGUYỄN ĐIỀN TRÍ",
+        phone: "0123575541",
+        _id: "66f03c1405f7562511ee6dbc",
+      },
+      note_admin: "Thưởng đạt điểm tuần",
+      reward_money: 150000,
+      status: "done",
+      id_view: "#20250205KHWP",
+    },
+    {
+      date_create: "2025-03-14T09:44:40.583Z",
+      execution_date: "2025-03-14T09:44:40.583Z",
+      id_collaborator: {
+        full_name: "NGUYỄN ĐIỀN TRÍ",
+        phone: "0123575541",
+        _id: "66f03c1405f7562511ee6dbc",
+      },
+      note_admin: "Thưởng đạt điểm tuần",
+      reward_money: 150000,
+      status: "done",
+      id_view: "#20250205KHWP",
+    },
+    {
+      date_create: "2025-03-14T09:44:40.583Z",
+      execution_date: "2025-03-14T09:44:40.583Z",
+      id_collaborator: {
+        full_name: "NGUYỄN ĐIỀN TRÍ",
+        phone: "0123575541",
+        _id: "66f03c1405f7562511ee6dbc",
+      },
+      note_admin: "Thưởng đạt điểm tuần",
+      reward_money: 150000,
+      status: "done",
+      id_view: "#20250205KHWP",
+    },
+    {
+      date_create: "2025-03-14T09:44:40.583Z",
+      execution_date: "2025-03-14T09:44:40.583Z",
+      id_collaborator: {
+        full_name: "NGUYỄN ĐIỀN TRÍ",
+        phone: "0123575541",
+        _id: "66f03c1405f7562511ee6dbc",
+      },
+      note_admin: "Thưởng đạt điểm tuần",
+      reward_money: 150000,
+      status: "done",
+      id_view: "#20250205KHWP",
+    },
+  ]);
   const [statusList, setStatusList] = useState([
     { code: "", label: "Tất cả", total: 0 },
     { code: "processing", label: "Chờ duyệt", total: 0 },
@@ -148,12 +234,7 @@ const ManageReward = () => {
     { code: "cancel", label: "Đã hủy", total: 0 },
     { code: "revoke", label: "Đã thu hồi", total: 0 },
   ]);
-  // Danh sách các đối tượng thưởng
-  const objectPunishList = [
-    { code: "", label: "Tất cả" },
-    { code: "collaborator", label: "Đối tác" },
-    { code: "customer", label: "Khách hàng" },
-  ];
+
   // Danh sách các đối tượng tạo lệnh thưởng
   const objectCreatePunishList = [
     { code: "", label: "Tất cả" },
@@ -322,34 +403,25 @@ const ManageReward = () => {
     );
   };
 
-  // const filterContentLeft = () => {
-  //   return (
-  //     <div className="manage-order__filter-content">
-  //       <div className="manage-order__search">
-  //         <div>
-  //           <PunishDrawer
-  //             titleButton="Tạo lệnh thưởng"
-  //             subject="collaborator"
-  //             titleHeader="Tạo lệnh thưởng cho cộng tác viên"
-  //             onClick={handleCreatePunishTicket}
-  //           />
-  //         </div>
-  //       </div>
-  //     </div>
-  //   );
-  // };
+  const filterContentLeft = () => {
+    return (
+      <div className="manage-order__filter-content">
+        <div className="manage-order__search">
+          <div>
+            <PunishDrawer
+              titleButton="Tạo lệnh thưởng"
+              subject="collaborator"
+              titleHeader="Tạo lệnh thưởng cho cộng tác viên"
+            />
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   const filterContentRight = () => {
     return (
       <div className="manage-punish__filter-content">
-        <div>
-          <ButtonCustom
-            label="Đối tượng thưởng"
-            options={objectPunishList}
-            value={selectValueUserApply}
-            setValueSelectedProps={setSelectValueUserApply}
-          />
-        </div>
         <div>
           <ButtonCustom
             label="Đối tượng tạo lệnh"
@@ -383,7 +455,7 @@ const ManageReward = () => {
         isTimeFilter={true}
         setStartDate={setStartDate}
         setEndDate={setEndDate}
-        // leftContent={filterContentLeft()}
+        leftContent={filterContentLeft()}
         rightContent={filterContentRight()}
         rangeDateDefaults={"thirty_last"}
       />

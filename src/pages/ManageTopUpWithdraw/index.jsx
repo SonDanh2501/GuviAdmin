@@ -182,7 +182,7 @@ const ManageTopUpWithdraw = (props) => {
   // 1. Danh sách các loại trạng thái
   const [statusList, setStatusList] = useState([
     { code: "", label: "Tất cả", total: 0 },
-    { code: "processing", label: "Đang xử lí", total: 0 },
+    { code: "pending", label: "Đang xử lí", total: 0 },
     { code: "transferred", label: "Đã chuyển tiền", total: 0 },
     { code: "holding", label: "Tạm giữ", total: 0 },
     { code: "done", label: "Hoàn thành", total: 0 },
@@ -716,10 +716,10 @@ const ManageTopUpWithdraw = (props) => {
       const _isDisableVerify =
         record?.status === "done" ||
         record?.status === "cancel" ||
-        record?.status === "revoke" ||
-        record?.status === "waiting" ||
-        record?.status === "doing" ||
-        record?.status === "processing" ||
+        // record?.status === "revoke" ||
+        // record?.status === "waiting" ||
+        // record?.status === "doing" ||
+        // record?.status === "processing" ||
         !permission.find((el) => el.name_api === "Duyệt/huỷ lệnh nạp CTV");
       // Set disabled = true nếu status là một trong các trường hợp trên
       if (_isDisableVerify) {
@@ -783,7 +783,6 @@ const ManageTopUpWithdraw = (props) => {
     },
   };
 
-  console.log("check >>>", data)
   /* ~~~ Main ~~~ */
   return (
     <div className="manage-top-up-with-draw">

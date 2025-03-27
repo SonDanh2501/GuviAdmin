@@ -1,6 +1,6 @@
-@import "../../../@theme/style.scss";
+@import "../../@theme/style.scss";
 
-.login-affiliate {
+.login-admin {
     position: relative;
     width: 100%;
     height: 100vh;
@@ -11,7 +11,7 @@
     background-image: linear-gradient(43deg, #3E187A 0%, #C850C0 46%, #FFCC70 100%);
 
     // Khoảng trắng (để làm phần gợn sóng to hơn)
-    .login-affiliate__blank {
+    .login-admin__blank {
         position: absolute;
         top: 0;
         left: 0;
@@ -20,39 +20,39 @@
         background-color: #994ECC;
     }
 
-    .login-affiliate__wave {
+    .login-admin__wave {
         position: absolute;
         width: 100%;
         height: 195px;
         bottom: 0px;
         left: 0;
-        background: url('../../../assets/images/wave.svg');
+        background: url('../../assets/images/wave.svg');
         animation: wave 8s linear infinite;
         // background-position: 200px
     }
 
-    .login-affiliate__wave::before {
+    .login-admin__wave::before {
         content: '';
         position: absolute;
         width: 100%;
         height: 195px;
         bottom: 0px;
         left: 0;
-        background: url('../../../assets/images/wave.svg');
+        background: url('../../assets/images/wave.svg');
         opacity: .2;
         // background-position: 300px
         animation: wave-reverse 8s linear infinite;
 
     }
 
-    .login-affiliate__wave::after {
+    .login-admin__wave::after {
         content: '';
         position: absolute;
         width: 100%;
         height: 195px;
         bottom: 0px;
         left: 0;
-        background: url('../../../assets/images/wave.svg');
+        background: url('../../assets/images/wave.svg');
         opacity: .8;
         animation-delay: -4s;
         // background-position: 600px
@@ -79,7 +79,7 @@
         }
     }
 
-    .login-affiliate__form {
+    .login-admin__form {
         display: flex;
         // margin-top: 210px;
         // padding: 16px;
@@ -90,14 +90,14 @@
         border-radius: $borderRadiusL;
         box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
 
-        .login-affiliate__form--left {
+        .login-admin__form--left {
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 16px;
             background-color: #4158D0;
             // background-image: linear-gradient(43deg, #3E187A 0%, #C850C0 46%, #FFCC70 100%);
-            background-image: linear-gradient(43deg, #FFCC70 0%, #C850C0 100%);
+            background-image: linear-gradient(43deg, #C850C0 46%, #3E187A 100%);
 
             height: 100%;
             width: 50%;
@@ -105,13 +105,13 @@
             border-bottom-left-radius: $borderRadiusL;
             // border-right: 1px solid black;
 
-            .login-affiliate__form--left-child {
+            .login-admin__form--left-child {
                 background-color: transparent;
                 border-radius: $borderRadiusL;
             }
         }
 
-        .login-affiliate__form--right {
+        .login-admin__form--right {
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -124,19 +124,20 @@
             padding: 12px;
             overflow-y: hidden;
 
-            .login-affiliate__form--right-logo {
-                width: 80px;
-                height: 50px;
+            .login-admin__form--right-logo {
+                width: 100px;
+                height: 80px;
                 border-radius: $borderRadiusFull;
+                padding-bottom: 12px;
             }
 
-            .login-affiliate__form--right-login {
+            .login-admin__form--right-login {
                 display: flex;
                 flex-direction: column;
                 width: 100%;
                 height: 100%;
                 align-items: center;
-                justify-content: center;
+                // justify-content: center;
                 gap: $gapL;
                 opacity: 1;
                 transition: all 0.5s ease-out;
@@ -148,7 +149,7 @@
                     opacity: 0;
                 }
 
-                .login-affiliate__form--right-login-header {
+                .login-admin__form--right-login-header {
                     text-align: center;
 
                     span {
@@ -159,7 +160,7 @@
 
                 }
 
-                .login-affiliate__form--right-login-input {
+                .login-admin__form--right-login-input {
                     display: flex;
                     flex-direction: column;
                     gap: $gapL;
@@ -167,7 +168,7 @@
 
                 }
 
-                .login-affiliate__form--right-login-line {
+                .login-admin__form--right-login-line {
                     position: relative;
                     width: 70%;
                     height: 2px;
@@ -175,7 +176,7 @@
                     border-radius: $borderRadiusL;
                     margin: 0 auto;
 
-                    .login-affiliate__form--right-login-line-other {
+                    .login-admin__form--right-login-line-other {
                         position: absolute;
                         top: 50%;
                         left: 50%;
@@ -186,19 +187,19 @@
                     }
                 }
 
-                .login-affiliate__form--right-login-sign-up {
+                .login-admin__form--right-login-sign-up {
                     display: flex;
                     flex-direction: column;
                     align-items: center;
                     gap: $gapXS;
 
-                    .login-affiliate__form--right-login-sign-up-container {
+                    .login-admin__form--right-login-sign-up-container {
                         display: flex;
                         align-items: center;
                         justify-content: center;
                         gap: $gapXS;
 
-                        .login-affiliate__form--right-login-sign-up-container-label {
+                        .login-admin__form--right-login-sign-up-container-label {
                             font-size: $textFontSizeM;
                             font-weight: $fontWeightL;
                             color: $colorBlack;
@@ -210,7 +211,7 @@
                         }
                     }
 
-                    .login-affiliate__form--right-login-forgot-password-container {
+                    .login-admin__form--right-login-forgot-password-container {
                         display: flex;
                         align-items: center;
                         justify-content: center;
@@ -225,7 +226,7 @@
                 }
             }
 
-            .login-affiliate__form--right-sign-up {
+            .login-admin__form--right-sign-up {
                 display: flex;
                 flex-direction: column;
                 width: 100%;
@@ -242,7 +243,7 @@
                     opacity: 0;
                 }
 
-                .login-affiliate__form--right-sign-up-header {
+                .login-admin__form--right-sign-up-header {
                     text-align: center;
 
                     span {
@@ -253,14 +254,14 @@
 
                 }
 
-                .login-affiliate__form--right-sign-up-input {
+                .login-admin__form--right-sign-up-input {
                     display: flex;
                     flex-direction: column;
                     gap: $gapL;
                     width: 100%;
                 }
 
-                .login-affiliate__form--right-sign-up-line {
+                .login-admin__form--right-sign-up-line {
                     position: relative;
                     width: 70%;
                     height: 2px;
@@ -268,7 +269,7 @@
                     border-radius: $borderRadiusL;
                     margin: 0 auto;
 
-                    .login-affiliate__form--right-sign-up-line-other {
+                    .login-admin__form--right-sign-up-line-other {
                         position: absolute;
                         top: 50%;
                         left: 50%;
@@ -279,13 +280,13 @@
                     }
                 }
 
-                .login-affiliate__form--right-sign-up-sign-up {
+                .login-admin__form--right-sign-up-sign-up {
                     display: flex;
                     align-items: center;
                     justify-content: center;
                     gap: $gapXS;
 
-                    .login-affiliate__form--right-sign-up-sign-up-label {
+                    .login-admin__form--right-sign-up-sign-up-label {
                         font-size: $textFontSizeM;
                         font-weight: $fontWeightL;
                         color: $colorBlack;
@@ -303,7 +304,7 @@
 }
 
 @media screen and (max-width: 640px) {
-    .login-affiliate {
+    .login-admin {
         position: relative;
         width: 100%;
         height: 100vh;
@@ -317,7 +318,7 @@
         // background-size: cover;
 
         // Khoảng trắng (để làm phần gợn sóng to hơn)
-        .login-affiliate__blank {
+        .login-admin__blank {
             position: absolute;
             top: 0;
             left: 0;
@@ -326,39 +327,39 @@
             background-color: #994ECC;
         }
 
-        .login-affiliate__wave {
+        .login-admin__wave {
             position: absolute;
             width: 100%;
             height: 195px;
             bottom: 0px;
             left: 0;
-            background: url('../../../assets/images/wave.svg');
+            background: url('../../assets/images/wave.svg');
             animation: wave 8s linear infinite;
             // background-position: 200px
         }
 
-        .login-affiliate__wave::before {
+        .login-admin__wave::before {
             content: '';
             position: absolute;
             width: 100%;
             height: 195px;
             bottom: 0px;
             left: 0;
-            background: url('../../../assets/images/wave.svg');
+            background: url('../../assets/images/wave.svg');
             opacity: .2;
             // background-position: 300px
             animation: wave-reverse 8s linear infinite;
 
         }
 
-        .login-affiliate__wave::after {
+        .login-admin__wave::after {
             content: '';
             position: absolute;
             width: 100%;
             height: 195px;
             bottom: 0px;
             left: 0;
-            background: url('../../../assets/images/wave.svg');
+            background: url('../../assets/images/wave.svg');
             opacity: .8;
             animation-delay: -4s;
             // background-position: 600px
@@ -385,7 +386,7 @@
             }
         }
 
-        .login-affiliate__form {
+        .login-admin__form {
             display: flex;
             flex-direction: column;
             // margin-top: 210px;
@@ -397,7 +398,7 @@
             border-radius: $borderRadiusL;
             box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
 
-            .login-affiliate__form--left {
+            .login-admin__form--left {
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -409,13 +410,13 @@
                 width: 100%;
                 border-radius: $borderRadiusL $borderRadiusL 0px 0px;
 
-                .login-affiliate__form--left-child {
+                .login-admin__form--left-child {
                     background-color: transparent;
                     border-radius: $borderRadiusL;
                 }
             }
 
-            .login-affiliate__form--right {
+            .login-admin__form--right {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
@@ -427,13 +428,13 @@
                 padding: 12px;
                 overflow-y: hidden;
 
-                .login-affiliate__form--right-logo {
+                .login-admin__form--right-logo {
                     width: 80px;
                     height: 50px;
                     border-radius: $borderRadiusFull;
                 }
 
-                .login-affiliate__form--right-login {
+                .login-admin__form--right-login {
                     display: flex;
                     flex-direction: column;
                     width: 100%;
@@ -451,7 +452,7 @@
                         opacity: 0;
                     }
 
-                    .login-affiliate__form--right-login-header {
+                    .login-admin__form--right-login-header {
                         text-align: center;
 
                         span {
@@ -462,7 +463,7 @@
 
                     }
 
-                    .login-affiliate__form--right-login-input {
+                    .login-admin__form--right-login-input {
                         display: flex;
                         flex-direction: column;
                         gap: $gapL;
@@ -470,7 +471,7 @@
 
                     }
 
-                    .login-affiliate__form--right-login-line {
+                    .login-admin__form--right-login-line {
                         position: relative;
                         width: 70%;
                         height: 2px;
@@ -478,7 +479,7 @@
                         border-radius: $borderRadiusL;
                         margin: 0 auto;
 
-                        .login-affiliate__form--right-login-line-other {
+                        .login-admin__form--right-login-line-other {
                             position: absolute;
                             top: 50%;
                             left: 50%;
@@ -489,13 +490,13 @@
                         }
                     }
 
-                    .login-affiliate__form--right-login-sign-up {
+                    .login-admin__form--right-login-sign-up {
                         display: flex;
                         align-items: center;
                         justify-content: center;
                         gap: $gapXS;
 
-                        .login-affiliate__form--right-login-sign-up-label {
+                        .login-admin__form--right-login-sign-up-label {
                             font-size: $textFontSizeM;
                             font-weight: $fontWeightL;
                             color: $colorBlack;
@@ -508,7 +509,7 @@
                     }
                 }
 
-                .login-affiliate__form--right-sign-up {
+                .login-admin__form--right-sign-up {
                     display: flex;
                     flex-direction: column;
                     width: 100%;
@@ -525,7 +526,7 @@
                         opacity: 0;
                     }
 
-                    .login-affiliate__form--right-sign-up-header {
+                    .login-admin__form--right-sign-up-header {
                         text-align: center;
 
                         span {
@@ -536,14 +537,14 @@
 
                     }
 
-                    .login-affiliate__form--right-sign-up-input {
+                    .login-admin__form--right-sign-up-input {
                         display: flex;
                         flex-direction: column;
                         gap: $gapL;
                         width: 100%;
                     }
 
-                    .login-affiliate__form--right-sign-up-line {
+                    .login-admin__form--right-sign-up-line {
                         position: relative;
                         width: 70%;
                         height: 2px;
@@ -551,7 +552,7 @@
                         border-radius: $borderRadiusL;
                         margin: 0 auto;
 
-                        .login-affiliate__form--right-sign-up-line-other {
+                        .login-admin__form--right-sign-up-line-other {
                             position: absolute;
                             top: 50%;
                             left: 50%;
@@ -562,13 +563,13 @@
                         }
                     }
 
-                    .login-affiliate__form--right-sign-up-sign-up {
+                    .login-admin__form--right-sign-up-sign-up {
                         display: flex;
                         align-items: center;
                         justify-content: center;
                         gap: $gapXS;
 
-                        .login-affiliate__form--right-sign-up-sign-up-label {
+                        .login-admin__form--right-sign-up-sign-up-label {
                             font-size: $textFontSizeM;
                             font-weight: $fontWeightL;
                             color: $colorBlack;
@@ -586,7 +587,7 @@
     }
 }
 
-.login-affiliate__button {
+.login-admin__button {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -615,12 +616,12 @@
 }
 
 // Modal nhập mã OTP
-.login-affiliate__card--information-otp {
+.login-admin__card--information-otp {
     display: flex;
     flex-direction: column;
     gap: $gapM;
 
-    .login-affiliate__card--information-otp-header {
+    .login-admin__card--information-otp-header {
         display: flex;
         align-items: center;
         justify-content: center;
@@ -634,7 +635,7 @@
         }
     }
 
-    .login-affiliate__card--information-otp-label {
+    .login-admin__card--information-otp-label {
         text-align: center;
         font-size: $textFontSizeM;
         font-weight: $fontWeightL;
@@ -653,7 +654,7 @@
         }
     }
 
-    .login-affiliate__card--information-forgot-password {
+    .login-admin__card--information-forgot-password {
         font-size: $textFontSizeM;
         font-weight: $fontWeightL;
         color: $colorBlack;
@@ -671,13 +672,13 @@
     }
 
 
-    .login-affiliate__card--information-otp-digit {
+    .login-admin__card--information-otp-digit {
         display: flex;
         gap: $gapL;
         justify-content: center;
         align-items: center;
 
-        .login-affiliate__card--information-otp-digit-number {
+        .login-admin__card--information-otp-digit-number {
             width: 55px;
             height: 55px;
             font-size: $textFontSizeXL;
@@ -693,29 +694,29 @@
         }
     }
 
-    .login-affiliate__card--information-otp-resend {}
+    .login-admin__card--information-otp-resend {}
 }
 
-.login-affiliate__card--information {
+.login-admin__card--information {
     display: flex;
     flex-direction: column;
     gap: $gapM;
     padding: 12px 12px 0px 12px;
 
-    .login-affiliate__card--information-header {
+    .login-admin__card--information-header {
         display: flex;
         gap: $gapL;
         align-items: center;
         justify-content: center;
         padding-bottom: 4px;
 
-        .login-affiliate__card--information-header-child {
+        .login-admin__card--information-header-child {
             display: flex;
             align-items: center;
             gap: $gapS;
             transition: all 1s ease;
 
-            .login-affiliate__card--information-header-child-step-number {
+            .login-admin__card--information-header-child-step-number {
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -734,19 +735,19 @@
                 }
             }
 
-            .login-affiliate__card--information-header-child-step-title {
+            .login-admin__card--information-header-child-step-title {
                 display: flex;
                 flex-direction: column;
                 gap: $gapXS;
                 transition: all 1s ease;
 
-                .login-affiliate__card--information-header-child-step-title-vietnam {
+                .login-admin__card--information-header-child-step-title-vietnam {
                     font-size: $textFontSizeM;
                     font-weight: $fontWeightXL;
                     color: $colorMoreLightGray;
                 }
 
-                .login-affiliate__card--information-header-child-step-title-english {
+                .login-admin__card--information-header-child-step-title-english {
                     font-size: $textFontSizeM;
                     font-weight: $fontWeightL;
                     color: $colorMoreLightGray;
@@ -755,14 +756,14 @@
 
             }
 
-            .login-affiliate__card--information-header-child-step-line {
+            .login-admin__card--information-header-child-step-line {
                 height: 2px;
                 width: 100px;
                 background-color: $colorMoreLightGray;
             }
 
             &.activated {
-                .login-affiliate__card--information-header-child-step-number {
+                .login-admin__card--information-header-child-step-number {
                     background-color: $colorOrange;
                     border: 2px solid $colorOrange;
 
@@ -771,14 +772,14 @@
                     }
                 }
 
-                .login-affiliate__card--information-header-child-step-title {
+                .login-admin__card--information-header-child-step-title {
                     display: flex;
 
-                    .login-affiliate__card--information-header-child-step-title-vietnam {
+                    .login-admin__card--information-header-child-step-title-vietnam {
                         color: $colorBlack;
                     }
 
-                    .login-affiliate__card--information-header-child-step-title-english {
+                    .login-admin__card--information-header-child-step-title-english {
                         color: $colorLightGray;
                     }
 
@@ -789,25 +790,25 @@
 
     }
 
-    .login-affiliate__card--information-body {
+    .login-admin__card--information-body {
         display: flex;
         flex-direction: column;
         gap: $gapL;
         width: 100%;
         // background-color: black;
 
-        .login-affiliate__card--information-body-child {
+        .login-admin__card--information-body-child {
             display: flex;
             width: 100%;
             gap: $gapL;
 
-            .login-affiliate__card--information-body-child-input {
+            .login-admin__card--information-body-child-input {
                 width: 100%;
             }
         }
 
         
-        .login-affiliate__card--information-process-bar {
+        .login-admin__card--information-process-bar {
             display: flex;
             position: relative;
             width: 100%;
@@ -815,7 +816,7 @@
             border-radius: $borderRadiusFull;
             background-color: $colorExtraLightGray;
 
-            .login-affiliate__card--information-password-process-bar-child {
+            .login-admin__card--information-password-process-bar-child {
                 position: absolute;
                 top: 0;
                 left: 0;
@@ -854,7 +855,7 @@
         }
     }
 
-    .login-affiliate__card--information-process-bar {
+    .login-admin__card--information-process-bar {
         display: flex;
         position: relative;
         width: 100%;
@@ -862,7 +863,7 @@
         border-radius: $borderRadiusFull;
         background-color: $colorExtraLightGray;
 
-        .login-affiliate__card--information-process-bar-child {
+        .login-admin__card--information-process-bar-child {
             position: absolute;
             top: 0;
             left: 0;
@@ -900,11 +901,11 @@
         }
     }
 
-    .login-affiliate__card--information-label {
+    .login-admin__card--information-label {
         display: flex;
         justify-content: space-between;
 
-        .login-affiliate__card--information-label-child {
+        .login-admin__card--information-label-child {
             font-size: $textFontSizeM;
             font: $fontWeightL;
             color: $colorWhite;
@@ -931,12 +932,12 @@
         }
     }
 
-    .login-affiliate__card--information-condition-required {
+    .login-admin__card--information-condition-required {
         display: flex;
         flex-direction: column;
         gap: $gapS;
 
-        .login-affiliate__card--information-condition-required-child {
+        .login-admin__card--information-condition-required-child {
             display: flex;
             gap: $gapXS;
             align-items: center;

@@ -1,99 +1,110 @@
-.container-configuration {
-  width: 90%;
-  background-color: white;
-  min-height: 50%;
-  margin: 10px;
-  padding: 20px;
-  border-radius: 5px;
+@import "../../../@theme/style.scss";
 
-  .btn {
-    background-color: bisque;
-    border: none;
-    color: black;
-    box-shadow: 2px 3px 5px rgb(177, 177, 177);
-  }
+.manage-configuration {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: $gapL;
 
-  .div-list-btn {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+  .manage-configuration__child {
+    position: relative;
+    padding: 12px;
+    height: 100%;
+    min-height: 100px;
+    background-color: $colorWhite;
+    border-radius: $borderRadiusL;
+    transition: all 1.5s ease;
+    overflow: hidden;
 
-    .btn-item {
+    .manage-configuration__child--circle {
+      position: absolute;
+      bottom: -50px;
+      left: -50px;
+      width: 100px;
+      height: 100px;
+      border-radius: $borderRadiusFull;
+      background: linear-gradient(120deg, $colorViolet 30%, $colorOrange 100%);
+      transition: all 1.5s ease;
+      z-index: 1;
+    }
+
+    .manage-configuration__child--detail {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      cursor: pointer;
+      padding: 4px 8px;
+      margin: 12px;
+      background-color: $colorViolet;
+      border-radius: $borderRadiusL;
+      z-index: 2;
+
+      span {
+        font-size: $textFontSizeM;
+        font-weight: $fontWeightXL;
+        color: $colorWhite;
+      }
+    }
+
+    .manage-configuration__child--title {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: $gapXS;
+      z-index: 2;
+      transition: all 1.5s ease;
+
+      .manage-configuration__child--title-header {
+        font-size: 1em;
+        font-weight: $fontWeightXL;
+        color: $colorBlack;
+      }
+
+      .manage-configuration__child--title-sub-header {
+        font-size: 1em;
+        font-weight: $fontWeightL;
+        color: $colorLightGray;
+      }
+    }
+
+    .manage-configuration__child--numbered {
       display: flex;
       align-items: center;
       justify-content: center;
-      background-color: #1b76ed;
-      padding: 10px;
-      border-radius: 4px;
-      margin-top: 10px;
-      margin-left: 10px;
-      width: 23%;
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 30px;
+      width: 30px;
+      border-radius: $borderRadiusFull;
+      background-color: $colorMoreLightGray;
+      margin: 8px;
 
-      .text-btn {
-        font-family: "Roboto";
-        font-style: normal;
-        font-weight: 500;
-        font-size: 12px;
-        color: #ffffff;
+      span {
+        font-size: $textFontSizeM;
+        font-weight: $fontWeightXL;
+        color: $colorLightGray;
       }
     }
 
-    .btn-item-hide {
-      display: none;
+    &:hover {
 
-      .text-btn-hide {
-        display: none;
+      .manage-configuration__child--circle {
+        width: 600px;
+        height: 350px;
+        transform: translate(0, 0);
+        background: linear-gradient(120deg, $colorViolet 30%, $colorOrange 100%);
       }
-    }
-  }
-}
 
-@media screen and (max-width: 490px) {
-  .container-configuration {
-    width: 90%;
-    background-color: white;
-    min-height: 50%;
-    margin: 10px;
-    padding: 20px;
-    border-radius: 5px;
+      .manage-configuration__child--title {
 
-    .btn {
-      background-color: bisque;
-      border: none;
-      color: black;
-      box-shadow: 2px 3px 5px rgb(177, 177, 177);
-    }
+        .manage-configuration__child--title-header {
+          color: $colorOrange;
+          font-weight: $fontWeight2XL;
 
-    .div-list-btn {
-      display: flex;
-      flex-direction: column;
-      flex-wrap: wrap;
-
-      .btn-item {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: #1b76ed;
-        padding: 10px;
-        border-radius: 4px;
-        margin-right: 20px;
-        margin-top: 10px;
-        width: 100%;
-
-        .text-btn {
-          font-family: "Roboto";
-          font-style: normal;
-          font-weight: 500;
-          font-size: 12px;
-          color: #ffffff;
         }
-      }
 
-      .btn-item-hide {
-        display: none;
-
-        .text-btn-hide {
-          display: none;
+        .manage-configuration__child--title-sub-header {
+          color: $colorWhite;
         }
       }
     }

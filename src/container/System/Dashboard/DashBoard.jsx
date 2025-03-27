@@ -2,6 +2,7 @@ import {
   Col,
   DatePicker,
   FloatButton,
+  Image,
   List,
   Progress,
   Row,
@@ -28,7 +29,7 @@ import {
   Pie,
   PieChart,
   ResponsiveContainer,
-  Tooltip,
+  Tooltip as RechartsTooltip,
   XAxis,
   YAxis,
 } from "recharts";
@@ -37,10 +38,10 @@ import {
   getReportServiceDetails,
   getTotalCustomerYear,
 } from "../../../api/report";
-import { getDayReportApi } from "../../../api/statistic";
+import { getDayReportApi, getTotalReportApi } from "../../../api/statistic";
 import CustomDatePicker from "../../../components/customDatePicker";
 import MoreTopCollaborator from "../../../components/moreTopCollaborator";
-import { formatMoney } from "../../../helper/formatMoney";
+import { formatMoney, formatNumber } from "../../../helper/formatMoney";
 import { number_processing } from "../../../helper/numberProcessing";
 import {
   getActiveUser,
@@ -69,64 +70,345 @@ import useWindowDimensions from "../../../helper/useWindowDimensions";
 import RangeDatePicker from "../../../components/datePicker/RangeDatePicker";
 import avatarDefaultImage from "../../../assets/images/user.png";
 import icons from "../../../utils/icons";
+import { errorNotify } from "../../../helper/toast";
+import { getCurrentLeaderBoardApi } from "../../../api/accumulation";
+import {
+  calculateNumberPercent,
+  formatName,
+  getInitials,
+} from "../../../utils/contant";
+import CardInfo from "../../../components/card";
+import CardActivityLog from "../../../components/card/cardActivityLog";
+import DataTable from "../../../components/tables/dataTable";
+import CustomHeaderDatatable from "../../../components/tables/tableHeader";
 
 moment.locale("vi");
 dayjs.extend(customParseFormat);
 
-const { FaCrown } = icons;
+const { FaCrown, IoPeople, IoPerson, IoCart, IoStatsChart, IoCash } = icons;
 
-export default function Home() {
-  const { height, width } = useWindowDimensions();
-  const [arrResult, setArrResult] = useState([]);
+const Home = () => {
+  const yearFormat = "YYYY";
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const historyActivity = useSelector(getHistoryActivitys);
+  const activeUser = useSelector(getActiveUsers);
+  const lastestService = useSelector(getLastestServices);
+  const connectionService = useSelector(getServiceConnects);
+  const topCollaborator = useSelector(getTopCollaborators);
+  const checkElement = useSelector(getElementState);
+  const lang = useSelector(getLanguageState);
+  const province = useSelector(getProvince);
+
+  /* ~~~ Value ~~~ */
+  const [startPage, setStartPage] = useState(0);
+  const [total, setTotal] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+
   const [totalMoneyChart, setTotalMoneyChart] = useState(0);
-  const [day, setDay] = useState([]);
-  const [dataUser, setDataUser] = useState([]);
   const [totalYearUser, setTotalYearUser] = useState(0);
-  const [dataChartCancel, setDataChartCancel] = useState([]);
-  const [dataTotalChartCancel, setDataTotalChartCancel] = useState([]);
   const [codeCity, setCodeCity] = useState();
   const [nameCity, setNameCity] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [startDatePrevious, setStartDatePrevious] = useState("");
   const [endDatePrevious, setEndDatePrevious] = useState("");
-  // const [startDate, setStartDate] = useState(
-  //   moment().subtract(30, "days").startOf("days").add(7, "hours").toISOString()
-  // );
-  // const [endDate, setEndDate] = useState(
-  //   moment().endOf("days").add(7, "hours").toISOString()
-  // );
+  const [lengthPage, setLengthPage] = useState(
+    JSON.parse(localStorage.getItem("linePerPage"))
+      ? JSON.parse(localStorage.getItem("linePerPage")).value
+      : 20
+  );
+  /* ~~~ List ~~~ */
+  const [arrResult, setArrResult] = useState([]);
+  const [dataChartCancel, setDataChartCancel] = useState([]);
+  const [dataTotalChartCancel, setDataTotalChartCancel] = useState([]);
   const [dataChartServiceDetails, setDataChartServiceDetails] = useState([]);
-  const historyActivity = useSelector(getHistoryActivitys);
-  const activeUser = useSelector(getActiveUsers);
-  const lastestService = useSelector(getLastestServices);
-  const connectionService = useSelector(getServiceConnects);
-  const topCollaborator = useSelector(getTopCollaborators);
-  const dispatch = useDispatch();
-  const yearFormat = "YYYY";
+  const [day, setDay] = useState([]);
+  const [dataUser, setDataUser] = useState([]);
+  const [listRanking, setListRanking] = useState([]);
+  const [listTotalStatisticHeader, setListTotalStatisticHeader] = useState([]);
   const dataChartUser = [];
   const cityData = [];
   const dataChartDetail = [];
-  const checkElement = useSelector(getElementState);
-  const lang = useSelector(getLanguageState);
-  const province = useSelector(getProvince);
+  const COLORS_CANCEL = ["#FCD34D", "#FBBF24", "#F59E0B", "#ff8000", "#ff1919"];
+  const columns = [
+    {
+      customTitle: <CustomHeaderDatatable title="STT" />,
+      key: "case_numbering",
+      width: 50,
+    },
+    {
+      customTitle: <CustomHeaderDatatable title="Mã đơn" />,
+      dataIndex: "id_view",
+      key: "case_code_order",
+      width: 140,
+    },
+    {
+      customTitle: <CustomHeaderDatatable title="Ngày Tạo" />,
+      dataIndex: "date_create",
+      key: "case_date-create-time",
+      width: 100,
+    },
+    {
+      customTitle: <CustomHeaderDatatable title="Khách hàng" />,
+      dataIndex: "customer",
+      key: "case_customer_name_phone_rank",
+      width: 140,
+    },
+    {
+      customTitle: <CustomHeaderDatatable title="Dịch vụ" />,
+      key: "case_service",
+      width: 110,
+    },
+    {
+      customTitle: <CustomHeaderDatatable title="Ngày làm" />,
+      dataIndex: "date_work",
+      key: "case_date-work-day",
+      width: 100,
+    },
+    {
+      customTitle: <CustomHeaderDatatable title="Địa chỉ" />,
+      dataIndex: "address",
+      key: "case_text",
+      width: 220,
+    },
+    {
+      customTitle: <CustomHeaderDatatable title="Đối tác" />,
+      key: "case_collaborator-name-phone-star",
+      width: 150,
+    },
+    {
+      customTitle: <CustomHeaderDatatable title="Trạng thái" />,
+      dataIndex: "status",
+      key: "case_status",
+      width: 120,
+    },
+    {
+      customTitle: <CustomHeaderDatatable title="Thanh toán" />,
+      key: "case_payment-method",
+      width: 90,
+    },
+  ];
+  const [ratingStatistic, setRatingStatistic] = useState([
+    { name: "Thg 1", value: 30 },
+    { name: "Thg 2", value: 20 },
+    { name: "Thg 3", value: 40 },
+    { name: "Thg 4", value: 50 },
+    { name: "Thg 5", value: 10 },
+    { name: "Thg 6", value: 23 },
+    { name: "Thg 7", value: 54 },
+    { name: "Thg 8", value: 40 },
+    { name: "Thg 9", value: 23 },
+    { name: "Thg 10", value: 40 },
+    { name: "Thg 11", value: 70 },
+    { name: "Thg 12", value: 100 },
+  ]); // Tổng số giá trị (đánh giá, khen thưởng, vi phạm) thống kê theo từng tháng
+  const COLORS_RATING = {
+    colorBlue: "#3b82f6",
+    colorLightBlue: "#93c5fd",
+    colorMoreLightBlue: "#bfdbfe",
+    colorExtraLightBlue: "#dbeafe",
+    //
+    colorRed: "#ef4444",
+    colorLightRed: "#fca5a5",
+    colorMoreLightRed: "#fecaca",
+    colorExtraLightRed: "#fee2e2",
+    //
+    colorGreen: "#22c55e",
+    colorLightGreen: "#86efac",
+    colorMoreLightGreen: "#bbf7d0",
+    colorExtraLightGreen: "#dcfce7",
+  };
+  const [colorRatingStatistic, setColorRatingStatistic] = useState({
+    color: `${COLORS_RATING.colorBlue}`,
+    lightColor: `${COLORS_RATING.colorLightBlue}`,
+    moreLightColor: `${COLORS_RATING.colorMoreLightBlue}`,
+    ExtraLightcolor: `${COLORS_RATING.colorExtraLightBlue}`,
+  }); // Giá trị màu cho thống kê: đánh giá, khen thưởng, vi phạm
 
-
-
+  /* ~~~ Flag ~~~ */
   const [isExpandListRanking, setIsExpandListRanking] = useState(false);
 
-  // useEffect(() => {
-  //   if (startDate !== "") {
-  //     onChange()
-  //   }
-  // }, [startDate])
+  /* ~~~ Handle function ~~~ */
+  const onChangeCity = useCallback(
+    (value, label) => {
+      setNameCity(label?.label);
+      setCodeCity(value);
+      getReportServiceDetails(startDate, endDate, value)
+        .then((res) => {
+          setDataChartServiceDetails(res?.detailData);
+        })
+        .catch((err) => {});
 
+      getReportCancelReport(startDate, endDate, value, -1)
+        .then((res) => {
+          setDataChartCancel(res?.percent);
+          setDataTotalChartCancel(res);
+        })
+        .catch((err) => {});
+    },
+    [startDate, endDate]
+  );
+
+  function getDates(startDate, stopDate) {
+    var dateArray = [];
+    var currentDate = moment(startDate);
+    var stopDate = moment(stopDate);
+    while (currentDate <= stopDate) {
+      dateArray.push(moment(currentDate).format("YYYY-MM-DD"));
+      currentDate = moment(currentDate).add(1, "days");
+    }
+    return setDay(dateArray);
+  }
+
+  const onChange = useCallback(() => {
+    getDayReportApi(startDate, endDate)
+      .then((res) => {
+        setArrResult(res.arrResult);
+        setTotalMoneyChart(res?.total_money);
+      })
+      .catch((err) => console.log(err));
+
+    getReportServiceDetails(startDate, endDate, codeCity)
+      .then((res) => {
+        setDataChartServiceDetails(res?.detailData);
+      })
+      .catch((err) => {});
+    // getDates(startDate, endDate);
+  }, [startDate, endDate, codeCity]);
+
+  const timeWork = (data) => {
+    const start = moment(new Date(data.date_work_schedule[0].date)).format(
+      "HH:mm"
+    );
+
+    const timeEnd = moment(new Date(data?.date_work_schedule[0]?.date))
+      .add(data?.total_estimate, "hours")
+      .format("HH:mm");
+
+    return start + " - " + timeEnd;
+  };
+
+  const onChangeNumberData = useCallback((number) => {
+    dispatch(
+      getLastestService.getLastestServiceRequest({ start: 0, length: number })
+    );
+  }, []);
+
+  const renderTooltipContent = (o) => {
+    const { payload, label } = o;
+    return (
+      <div className="dash-board__content-tool-chart">
+        <div className="dash-board__content-tool-chart--title ">
+          <span className="high-light">Ngày:</span>
+          <span>{label}</span>
+        </div>
+
+        <div className="dash-board__content-tool-chart--title ">
+          <span className="high-light">GMV:</span>
+          <span className="money">
+            {payload?.length > 0
+              ? formatMoney(payload[0]?.payload?.total_gross_income)
+              : 0}
+          </span>
+        </div>
+
+        <div className="dash-board__content-tool-chart--title ">
+          <span className="high-light">Tổng đơn:</span>
+          <span>
+            {payload?.length > 0 ? payload[0]?.payload?.total_item : 0}&nbsp;đơn
+          </span>
+        </div>
+      </div>
+    );
+  };
+
+  const renderTooltipContentUser = (o) => {
+    const { payload, label } = o;
+
+    return (
+      <div className="div-content-tool-chart-user">
+        <a className="date-text">Tháng {label}</a>
+        <a className="money-text">
+          Số tổng:{" "}
+          {payload?.length > 0
+            ? payload[0]?.payload?.totalNew + payload[0]?.payload?.totalOld
+            : 0}
+        </a>
+        <a className="money-text-new">
+          Số người đăng kí mới:{" "}
+          {payload?.length > 0 ? payload[0]?.payload?.totalNew : 0}
+        </a>
+        <a className="money-text-old">
+          Số người đăng kí cũ:{" "}
+          {payload?.length > 0 ? payload[0]?.payload?.totalOld : 0}
+        </a>
+      </div>
+    );
+  };
+
+  const renderLabelCancel = ({
+    cx,
+    cy,
+    midAngle,
+    innerRadius,
+    outerRadius,
+    value,
+    name,
+  }) => {
+    const RADIAN = Math.PI / 180;
+    // eslint-disable-next-line
+    const radius = 25 + innerRadius + (outerRadius - innerRadius);
+    // eslint-disable-next-line
+    const x = cx + radius * Math.cos(-midAngle * RADIAN);
+    // eslint-disable-next-line
+    const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+    return (
+      <text
+        x={x}
+        y={y}
+        fill="#000000"
+        textAnchor={x > cx ? "start" : "end"}
+        dominantBaseline="central"
+        fontSize={10}
+      >
+        {name === "system_cancel"
+          ? `${i18n.t("system", { lng: lang })}`
+          : name === "customer_cancel"
+          ? `${i18n.t("customer", { lng: lang })}`
+          : `${i18n.t("admin", { lng: lang })}`}{" "}
+        ({value} {"%"})
+      </text>
+    );
+  };
+
+  const fetchCurrentRank = async () => {
+    try {
+      const res = await getCurrentLeaderBoardApi();
+      setListRanking(res.data);
+    } catch (err) {
+      errorNotify({ message: err?.message || err });
+    }
+  };
+
+  const fetchTotalStatisticHeader = async () => {
+    try {
+      const res = await getTotalReportApi("", "");
+      setListTotalStatisticHeader(res);
+    } catch (err) {
+      errorNotify({ message: err?.message || err });
+    }
+  };
+
+  /* ~~~ useEffect ~~~ */
   useEffect(() => {
     if (startDate !== "") {
       // Nếu có total finance job dashboard thì chạy api với giá trị startDate và endDate
       if (checkElement?.includes("total_finance_job_dashboard")) {
         getDayReportApi(startDate, endDate)
           .then((res) => {
+            console.log("check res", res);
             setArrResult(res.arrResult);
             setTotalMoneyChart(res?.total_money);
             getDates(startDate, endDate);
@@ -198,6 +480,39 @@ export default function Home() {
     }
   }, [dataUser]);
 
+  useEffect(() => {
+    fetchTotalStatisticHeader();
+    fetchCurrentRank();
+  }, []);
+
+  /* ~~~ Other ~~~ */
+  const renderCustomizedLabel = ({
+    cx,
+    cy,
+    midAngle,
+    innerRadius,
+    outerRadius,
+    percent,
+    index,
+  }) => {
+    const RADIAN = Math.PI / 180;
+    const radius = innerRadius + (outerRadius - innerRadius) * 0.2;
+    const x = cx + radius * Math.cos(-midAngle * RADIAN);
+    const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+    return (
+      <text
+        x={x}
+        y={y}
+        fill="black"
+        textAnchor={x > cx ? "start" : "end"}
+        dominantBaseline="central"
+      >
+        {percent > 0 && `${(percent * 100).toFixed(0)}%`}
+      </text>
+    );
+  };
+
   dataUser.map((item, index) => {
     return dataChartUser.push({
       totalNew: item?.totalNew,
@@ -224,1164 +539,625 @@ export default function Home() {
     });
   });
 
-  const onChangeCity = useCallback(
-    (value, label) => {
-      setNameCity(label?.label);
-      setCodeCity(value);
-      getReportServiceDetails(startDate, endDate, value)
-        .then((res) => {
-          setDataChartServiceDetails(res?.detailData);
-        })
-        .catch((err) => {});
-
-      getReportCancelReport(startDate, endDate, value, -1)
-        .then((res) => {
-          setDataChartCancel(res?.percent);
-          setDataTotalChartCancel(res);
-        })
-        .catch((err) => {});
-    },
-    [startDate, endDate]
-  );
-
-  function getDates(startDate, stopDate) {
-    var dateArray = [];
-    var currentDate = moment(startDate);
-    var stopDate = moment(stopDate);
-    while (currentDate <= stopDate) {
-      dateArray.push(moment(currentDate).format("YYYY-MM-DD"));
-      currentDate = moment(currentDate).add(1, "days");
-    }
-    return setDay(dateArray);
-  }
-
-  const onChange = useCallback(() => {
-    getDayReportApi(startDate, endDate)
-      .then((res) => {
-        setArrResult(res.arrResult);
-        setTotalMoneyChart(res?.total_money);
-      })
-      .catch((err) => console.log(err));
-
-    getReportServiceDetails(startDate, endDate, codeCity)
-      .then((res) => {
-        setDataChartServiceDetails(res?.detailData);
-      })
-      .catch((err) => {});
-    // getDates(startDate, endDate);
-  }, [startDate, endDate, codeCity]);
-
-  const timeWork = (data) => {
-    const start = moment(new Date(data.date_work_schedule[0].date)).format(
-      "HH:mm"
-    );
-
-    const timeEnd = moment(new Date(data?.date_work_schedule[0]?.date))
-      .add(data?.total_estimate, "hours")
-      .format("HH:mm");
-
-    return start + " - " + timeEnd;
+  const onChangePageHistoryActivity = (value) => {
+    // setStartPageHistoryActivities(value);
   };
 
-  const onChangeNumberData = useCallback((number) => {
-    dispatch(
-      getLastestService.getLastestServiceRequest({ start: 0, length: number })
-    );
-  }, []);
+  const onChangePage = (value) => {
+    setStartPage(value);
+  };
 
-  const columns = [
-    {
-      title: () => {
-        return (
-          <a className="title-head-column">{`${i18n.t("customer", {
-            lng: lang,
-          })}`}</a>
-        );
-      },
-      render: (data) => {
-        return (
-          <Link to={`/profile-customer/${data?.id_customer?._id}`}>
-            <a className="text-collaborator">{data?.id_customer?.full_name}</a>
-          </Link>
-        );
-      },
-    },
-    {
-      title: () => {
-        return (
-          <a className="title-head-column">{`${i18n.t("service", {
-            lng: lang,
-          })}`}</a>
-        );
-      },
-      render: (data) => {
-        return (
-          <div className="div-column-service">
-            <a className="text-service">
-              {data?.type === "loop" && data?.is_auto_order
-                ? `${i18n.t("repeat", { lng: lang })}`
-                : data?.service?._id?.kind === "giup_viec_theo_gio"
-                ? `${i18n.t("cleaning", { lng: lang })}`
-                : data?.service?._id?.kind === "giup_viec_co_dinh"
-                ? `${i18n.t("cleaning_subscription", { lng: lang })}`
-                : data?.service?._id?.kind === "phuc_vu_nha_hang"
-                ? `${i18n.t("serve", { lng: lang })}`
-                : data?.service?._id?.kind === "ve_sinh_may_lanh"
-                ? `${i18n.t("Máy lạnh", { lng: lang })}`
-                : ""}
-            </a>
-            <a className="text-service">{timeWork(data)}</a>
-          </div>
-        );
-      },
-    },
-    {
-      title: () => {
-        return (
-          <a className="title-head-column">{`${i18n.t("time", {
-            lng: lang,
-          })}`}</a>
-        );
-      },
-      render: (data) => {
-        return (
-          <div className="div-column-date">
-            <a className="text-date">
-              {moment(new Date(data.date_work_schedule[0].date)).format(
-                "DD/MM/YYYY"
-              )}
-            </a>
-            <a className="text-time">
-              {moment(new Date(data.date_work_schedule[0].date))
-                .locale(lang)
-                .format("dddd")}
-            </a>
-          </div>
-        );
-      },
-      align: "center",
-    },
-    {
-      title: () => {
-        return (
-          <a className="title-head-column">{`${i18n.t("address", {
-            lng: lang,
-          })}`}</a>
-        );
-      },
-      render: (data) => {
-        return <a className="text-address-dashboard">{data?.address}</a>;
-      },
-    },
-    {
-      title: () => {
-        return (
-          <a className="title-head-column">{`${i18n.t("collaborator", {
-            lng: lang,
-          })}`}</a>
-        );
-      },
-      render: (data) => {
-        return (
-          <div>
-            {!data?.id_collaborator ? (
-              <a className="text-find-collaborator">{`${i18n.t("searching", {
-                lng: lang,
-              })}`}</a>
-            ) : (
-              <Link to={`/details-collaborator/${data?.id_collaborator?._id}`}>
-                <a className="text-collaborator">
-                  {data?.id_collaborator.full_name}
-                </a>
-              </Link>
-            )}
-          </div>
-        );
-      },
-    },
-    {
-      title: () => {
-        return (
-          <a className="title-head-column">{`${i18n.t("progress", {
-            lng: lang,
-          })}`}</a>
-        );
-      },
-      render: (data) => (
-        <a
-          className={
-            data?.status === "pending"
-              ? "text-pending"
-              : data?.status === "confirm"
-              ? "text-confirm"
-              : data?.status === "doing"
-              ? "text-doing"
-              : data?.status === "done"
-              ? "text-done"
-              : "text-cancel"
-          }
-        >
-          {data?.status === "pending"
-            ? `${i18n.t("pending", { lng: lang })}`
-            : data?.status === "confirm"
-            ? `${i18n.t("confirm", { lng: lang })}`
-            : data?.status === "doing"
-            ? `${i18n.t("doing", { lng: lang })}`
-            : data?.status === "done"
-            ? `${i18n.t("complete", { lng: lang })}`
-            : `${i18n.t("cancel", { lng: lang })}`}
-        </a>
-      ),
-    },
-    {
-      key: "action",
-      render: (data) => {
-        return (
-          <div className="div-action">
-            <Link to={`/details-order/${data?._id}`} className="btn-details">
-              <a>{`${i18n.t("detail", { lng: lang })}`}</a>
-            </Link>
-          </div>
-        );
-      },
-    },
+  const data = [
+    { name: "Done Order", value: connectionService.donePercent },
+    { name: "Not Done Order", value: 100 - connectionService.donePercent },
   ];
+  const COLORS = ["#8b5cf6", "#e5e7eb"];
 
-  const renderTooltipContent = (o) => {
-    const { payload, label } = o;
-
-    return (
-      <div className="div-content-tool-chart">
-        <a className="date-text">
-          {/* Ngày: {moment(new Date(label)).format("DD/MM/YYYY")} */}
-          Ngày: {label}
-        </a>
-
-        <a className="money-text-dashboard">
-          GMV:{" "}
-          {payload?.length > 0
-            ? formatMoney(payload[0]?.payload?.total_gross_income)
-            : 0}
-        </a>
-
-        <a className="date-text">
-          Tổng đơn: {payload?.length > 0 ? payload[0]?.payload?.total_item : 0}
-        </a>
-      </div>
-    );
-  };
-
-  const renderTooltipContentUser = (o) => {
-    const { payload, label } = o;
-
-    return (
-      <div className="div-content-tool-chart-user">
-        <a className="date-text">Tháng {label}</a>
-        <a className="money-text">
-          Số tổng:{" "}
-          {payload?.length > 0
-            ? payload[0]?.payload?.totalNew + payload[0]?.payload?.totalOld
-            : 0}
-        </a>
-        <a className="money-text-new">
-          Số người đăng kí mới:{" "}
-          {payload?.length > 0 ? payload[0]?.payload?.totalNew : 0}
-        </a>
-        <a className="money-text-old">
-          Số người đăng kí cũ:{" "}
-          {payload?.length > 0 ? payload[0]?.payload?.totalOld : 0}
-        </a>
-      </div>
-    );
-  };
-
-  const renderLabelCancel = ({
-    cx,
-    cy,
-    midAngle,
-    innerRadius,
-    outerRadius,
-    value,
-    name,
-  }) => {
-    const RADIAN = Math.PI / 180;
-    // eslint-disable-next-line
-    const radius = 25 + innerRadius + (outerRadius - innerRadius);
-    // eslint-disable-next-line
-    const x = cx + radius * Math.cos(-midAngle * RADIAN);
-    // eslint-disable-next-line
-    const y = cy + radius * Math.sin(-midAngle * RADIAN);
-
-    return (
-      <text
-        x={x}
-        y={y}
-        fill="#000000"
-        textAnchor={x > cx ? "start" : "end"}
-        dominantBaseline="central"
-        fontSize={10}
-      >
-        {name === "system_cancel"
-          ? `${i18n.t("system", { lng: lang })}`
-          : name === "customer_cancel"
-          ? `${i18n.t("customer", { lng: lang })}`
-          : `${i18n.t("admin", { lng: lang })}`}{" "}
-        ({value} {"%"})
-      </text>
-    );
-  };
   return (
-    <div className="container-dash">
-      {checkElement?.includes("get_general_total_report_dashboard") && (
-        <Header />
-      )}
-      <div>
-        <div className="div-chart_total_service_collaborator">
-          <div className="chart">
-            <div className="div-head-chart">
-              <div className="div-date">
-                <div className="date-picker">
-                  {/*Date Picker For Statistic*/}
+    <div className="dash_board">
+      <div className="dash_board__container-first-line">
+        {/* Left */}
+        <div className="dash_board__container--statistic">
+          {/* Thẻ thống kê */}
+          <div className="dash_board__container--statistic-cards card-shadow">
+            <div className="dash_board__container--statistic-cards-card">
+              <div className="dash_board__container--statistic-cards-card-icon blue">
+                <span>
+                  <IoPeople />
+                </span>
+              </div>
+              <div className="dash_board__container--statistic-cards-card-info">
+                <span className="dash_board__container--statistic-cards-card-info-title">
+                  Tổng khách hàng
+                </span>
+                <span className="dash_board__container--statistic-cards-card-info-number">
+                  {formatNumber(listTotalStatisticHeader?.total_customer || 0)}
+                  &nbsp;người
+                </span>
+              </div>
+            </div>
+            <div className="dash_board__container--statistic-cards-card">
+              <div className="dash_board__container--statistic-cards-card-icon green">
+                <span>
+                  <IoPerson />
+                </span>
+              </div>
+              <div className="dash_board__container--statistic-cards-card-info">
+                <span className="dash_board__container--statistic-cards-card-info-title">
+                  Tổng đối tác
+                </span>
+                <span className="dash_board__container--statistic-cards-card-info-number">
+                  {formatNumber(
+                    listTotalStatisticHeader?.total_collaborator || 0
+                  )}
+                  &nbsp;người
+                </span>
+              </div>
+            </div>
+            <div className="dash_board__container--statistic-cards-card">
+              <div className="dash_board__container--statistic-cards-card-icon yellow">
+                <span>
+                  <IoCart />
+                </span>
+              </div>
+              <div className="dash_board__container--statistic-cards-card-info">
+                <span className="dash_board__container--statistic-cards-card-info-title">
+                  Tổng đơn hàng
+                </span>
+                <span className="dash_board__container--statistic-cards-card-info-number">
+                  {formatNumber(listTotalStatisticHeader?.total_order || 0)}
+                  &nbsp;đơn
+                </span>
+              </div>
+            </div>
+            <div className="dash_board__container--statistic-cards-card">
+              <div className="dash_board__container--statistic-cards-card-icon red">
+                <span>
+                  <IoCash />
+                </span>
+              </div>
+              <div className="dash_board__container--statistic-cards-card-info">
+                <span className="dash_board__container--statistic-cards-card-info-title">
+                  Tổng doanh thu
+                </span>
+                <span className="dash_board__container--statistic-cards-card-info-number">
+                  {formatMoney(listTotalStatisticHeader?.total_revenue || 0)}
+                </span>
+              </div>
+            </div>
+          </div>
+          {/* Biểu đồ */}
+          <div className="dash_board__container--statistic-chart card-shadow">
+            <div className="dash_board__container--statistic-chart-header">
+              <span className="dash_board__container--statistic-chart-header-title">
+                Thống kê đơn hàng theo ngày
+              </span>
+            </div>
+            <div className="dash_board__container--statistic-chart-body">
+              <div className="dash_board__container--statistic-chart-body-filter">
+                <div></div>
+                <div className="dash_board__container--statistic-chart-body-filter-time">
                   <RangeDatePicker
                     setStartDate={setStartDate}
                     setEndDate={setEndDate}
                     rangeDateDefaults={"thirty_last"}
                     rangeDatePrevious
-
-                    // disableFutureDay
                   />
-                </div>
-                {/* <CustomDatePicker
-                  setStartDate={setStartDate}
-                  setEndDate={setEndDate}
-                  onClick={onChange}
-                  onCancel={() => {}}
-                  setSameStart={() => {}}
-                  setSameEnd={() => {}}
-                /> */}
-                {/*Date Text*/}
-                <div className="div-same">
-                  <p className="text-date-same">
-                    Kỳ này: {moment(startDate).format("DD/MM/YYYY")}-
-                    {moment(endDate).format("DD/MM/YYYY")}
-                  </p>
-                </div>
-                {startDatePrevious && (
-                  <div className="div-same">
-                    <p className="text-date-same">
-                      Kỳ trước: {moment(startDate).format("DD/MM/YYYY")}-
+                  <div className="dash_board__container--statistic-chart-body-filter-time-same-date">
+                    <span className="dash_board__container--statistic-chart-body-filter-time-same-date-title">
+                      Kỳ này:
+                    </span>
+                    <span className="dash_board__container--statistic-chart-body-filter-time-same-date-content">
+                      {moment(startDate).format("DD/MM/YYYY")}&nbsp;-&nbsp;
                       {moment(endDate).format("DD/MM/YYYY")}
-                    </p>
+                    </span>
                   </div>
-                )}
-
-                {/* {startDate && (
-                  <a className="text-date">
-                    {moment(startDate).format("DD/MM/YYYY")} -{" "}
-                    {moment(endDate).format("DD/MM/YYYY")}
-                  </a>
-                )} */}
+                </div>
               </div>
-              {/*Total Money*/}
-              {/* {checkElement?.includes("total_finance_job_dashboard") && (
-                <a className="text-total-money">
-                  {`${i18n.t("sales", { lng: lang })}`}:{" "}
-                  {formatMoney(totalMoneyChart)}
-                </a>
-              )} */}
-            </div>
-            {/* <div className="div-select-city mb-3">
-              <Select
-                style={{ width: 200 }}
-                value={nameCity}
-                onChange={onChangeCity}
-                options={cityData}
-                showSearch
-                filterOption={(input, option) =>
-                  (option?.label ?? "")
-                    .toLowerCase()
-                    .includes(input.toLowerCase())
-                }
-              />
-            </div> */}
-            {/*Dashboard Money Receive*/}
-            {checkElement?.includes("total_finance_job_dashboard") && (
-              <div>
-                <ResponsiveContainer
-                  width={"100%"}
-                  height={200}
-                  min-width={300}
-                >
-                  <AreaChart
-                    width={window.screen.height / 1.2}
-                    height={400}
-                    data={arrResult}
-                    margin={{
-                      top: 10,
-                      right: 30,
-                      left: 0,
-                      bottom: 0,
-                    }}
-                  >
-                    <CartesianGrid strokeDasharray="3 3" />
+              <div className="dash_board__container--statistic-chart-body-data">
+                <ResponsiveContainer width="98%" height={300}>
+                  <AreaChart data={arrResult}>
+                    <defs>
+                      <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+                        <stop
+                          offset="15%"
+                          stopColor={"#79808c"}
+                          stopOpacity={0.9}
+                        />
+                        <stop
+                          offset="100%"
+                          stopColor={"#79808c"}
+                          stopOpacity={0.2}
+                        />
+                      </linearGradient>
+                    </defs>
                     <XAxis
+                      interval="preserveStartEnd"
                       dataKey="_id"
+                      axisLine={false}
+                      tickLine={false}
+                      tick={{
+                        fontSize: 12,
+                        fontFamily: "Roboto",
+                        fill: "#475569",
+                      }}
                       tickFormatter={(tickItem) => tickItem.slice(0, 5)}
                     />
-                    <YAxis
-                      dataKey="total_gross_income"
-                      fontSize={12}
-                      tickFormatter={(tickItem) => number_processing(tickItem)}
-                    />
-                    <Tooltip content={renderTooltipContent} />
+                    <CartesianGrid strokeDasharray="5 10" vertical={false} />
+                    <RechartsTooltip content={renderTooltipContent} />
                     <Area
+                      // label={true}
                       type="monotone"
-                      dataKey="total_gross_income"
-                      stroke="#7e53b2"
-                      fill="#b186e5"
-                      name="GMV"
+                      dataKey="total_item"
+                      stroke={"#475569"}
+                      strokeWidth={3}
+                      fillOpacity={1}
+                      fill="url(#colorUv)"
+                      dot={{ r: 3 }}
+                      activeDot={{ r: 6 }}
                     />
                   </AreaChart>
                 </ResponsiveContainer>
               </div>
-            )}
-            <div>
-              {/*Header For Percentage Online or Offline*/}
-              <p className="label-persen-active">{`${i18n.t(
-                "percentage_of_activity",
-                { lng: lang }
-              )}`}</p>
-              <div className="div-persen">
-                {/*ActivUser in Percent*/}
-                <p className="label-persen">{activeUser?.donePercent}%</p>
-                <p className="label-total">{`${i18n.t("total", {
-                  lng: lang,
-                })}`}</p>
-              </div>
-              {/*Process Bar*/}
-              <Progress
-                percent={activeUser?.donePercent}
-                showInfo={false}
-                strokeColor={"#48CAE4"}
-                className="progress-persent"
-                strokeWidth={15}
-              />
-              <div className="div-container-on">
-                {/*Online User*/}
-                <div className="div-on">
-                  <div className="line-on" />
-                  <div className="total-div-on">
-                    <a className="text-on">Online</a>
-                    <a className="text-total-on">{activeUser?.ActiveUsers}</a>
-                  </div>
-                </div>
-                {/*Offline User*/}
-                <div className="div-on">
-                  <div className="line-off" />
-                  <div className="total-div-on">
-                    <a className="text-on">Offline</a>
-                    <a className="text-total-on">{activeUser?.OfflineUsers}</a>
-                  </div>
-                </div>
-              </div>
             </div>
-          </div>
-          <div className="div-right-conection-dashboard">
-            <div className="div-right">
-              {/*Tỉ lệ dịch vụ kết nối*/}
-              {checkElement?.includes("connection_service_dashboard") && (
-                <div className="div-connect-service">
-                  <div className="div-progress">
-                    <Progress
-                      type="dashboard"
-                      percent={
-                        !connectionService?.donePercent
-                          ? 0
-                          : connectionService?.donePercent
-                      }
-                      gapDegree={5}
-                      strokeColor={"#48CAE4"}
-                      strokeWidth={10}
-                      width={100}
-                      size="small"
-                    />
-                  </div>
-                  <div className="div-progress-text">
-                    <p className="title-progress">{`${i18n.t(
-                      "connection_service_rate",
-                      {
-                        lng: lang,
-                      }
-                    )}`}</p>
-                  </div>
-                  <div className="div-success">
-                    <a className="square" />
-                    <p className="text-success-square">{`${i18n.t("complete", {
-                      lng: lang,
-                    })}`}</p>
-                  </div>
-                  <div className="div-success">
-                    <a className="unsquare" />
-                    <p className="text-success-square">{`${i18n.t(
-                      "uncomplete",
-                      {
-                        lng: lang,
-                      }
-                    )}`}</p>
-                  </div>
-                </div>
-              )}
-              {/*Top CTV*/}
-              {checkElement?.includes("top_collaborator_dashboard") && (
-                <>
-                  {topCollaborator.length > 0 && (
-                    <div className="div-top-collaborator">
-                      <p className="text-top">{`${i18n.t("top_collaborator", {
-                        lng: lang,
-                      })}`}</p>
-                      <div className="level">
-                        <Link
-                          className="level-ctv1"
-                          to={`/details-collaborator/${
-                            topCollaborator[0]?._id?.id_collaborator ||
-                            topCollaborator[0]._id
-                          }`}
-                        >
-                          <p className="text-level">
-                            {topCollaborator[0]?._id?.full_name ||
-                              topCollaborator[0]?.full_name}
-                          </p>
-                          <p className="text-level-number">
-                            {formatMoney(topCollaborator[0]?.sumIncome)}
-                          </p>
-                        </Link>
-                        {topCollaborator.length > 1 && (
-                          <Link
-                            className="level-ctv2"
-                            to={`/details-collaborator/${
-                              topCollaborator[1]?._id?.id_collaborator ||
-                              topCollaborator[1]._id
-                            }`}
-                          >
-                            <p className="text-level">
-                              {topCollaborator[1]?._id?.name ||
-                                topCollaborator[1]?.full_name}
-                            </p>
-                            <p className="text-level-number">
-                              {formatMoney(topCollaborator[1]?.sumIncome)}
-                            </p>
-                          </Link>
-                        )}
-                        {topCollaborator.length > 2 && (
-                          <Link
-                            className="level-ctv3"
-                            to={`/details-collaborator/${
-                              topCollaborator[2]?._id?.id_collaborator ||
-                              topCollaborator[2]._id
-                            }`}
-                          >
-                            <p className="text-level">
-                              {topCollaborator[2]?._id?.name ||
-                                topCollaborator[2]?.full_name}
-                            </p>
-                            <p className="text-level-number">
-                              {formatMoney(topCollaborator[2]?.sumIncome)}
-                            </p>
-                          </Link>
-                        )}
-                        {topCollaborator.length > 3 && (
-                          <Link
-                            className="level-ctv4"
-                            to={`/details-collaborator/${
-                              topCollaborator[3]?._id?.id_collaborator ||
-                              topCollaborator[3]._id
-                            }`}
-                          >
-                            <p className="text-level">
-                              {topCollaborator[3]?._id?.name ||
-                                topCollaborator[3]?.full_name}
-                            </p>
-                            <p className="text-level-number">
-                              {formatMoney(topCollaborator[3]?.sumIncome)}
-                            </p>
-                          </Link>
-                        )}
-                        {topCollaborator.length > 4 && (
-                          <Link
-                            className="level-ctv5"
-                            to={`/details-collaborator/${
-                              topCollaborator[4]?._id?.id_collaborator ||
-                              topCollaborator[4]._id
-                            }`}
-                          >
-                            <p className="text-level">
-                              {topCollaborator[4]?._id?.name ||
-                                topCollaborator[4]?.full_name}
-                            </p>
-                            <p className="text-level-number">
-                              {formatMoney(topCollaborator[4]?.sumIncome)}
-                            </p>
-                          </Link>
-                        )}
-                      </div>
-                      <div className="div-seemore">
-                        <MoreTopCollaborator />
-                      </div>
-                    </div>
-                  )}
-                </>
-              )}
-            </div>
-            {/*Hoạt động gần đây nhất*/}
-            {checkElement?.includes("history_activity_dashboard") && (
-              <div className="col-activity-dashboard">
-                <p className="label-activity">{`${i18n.t("history_acivity", {
-                  lng: lang,
-                })}`}</p>
-                <List
-                  itemLayout="horizontal"
-                  dataSource={historyActivity.slice(0, 6)}
-                  renderItem={(item, index) => {
-                    const subject = item?.id_user_system
-                      ? item?.title_admin.replace(
-                          item?.id_user_system?._id,
-                          item?.id_user_system?.full_name
-                        )
-                      : item?.id_admin_action
-                      ? item?.title_admin.replace(
-                          item?.id_admin_action?._id,
-                          item?.id_admin_action?.full_name
-                        )
-                      : item?.id_customer
-                      ? item?.title_admin.replace(
-                          item?.id_customer?._id,
-                          item?.id_customer?.full_name
-                        )
-                      : item?.id_collaborator
-                      ? item?.title_admin.replace(
-                          item?.id_collaborator?._id,
-                          item?.id_collaborator?.full_name
-                        )
-                      : item?.title_admin.replace(
-                          item?.id_promotion?._id,
-                          item?.id_promotion?.code
-                        );
-
-                    const predicate = item?.id_punish
-                      ? subject.replace(
-                          item?.id_punish?._id,
-                          item?.id_punish?.note_admin
-                        )
-                      : item?.id_reason_punish
-                      ? subject.replace(
-                          item?.id_reason_punish?._id,
-                          item?.id_reason_punish?.title?.vi
-                        )
-                      : item?.id_order
-                      ? subject.replace(
-                          item?.id_order?._id,
-                          item?.id_order?.id_view
-                        )
-                      : item?.id_collaborator
-                      ? subject.replace(
-                          item?.id_collaborator?._id,
-                          item?.id_collaborator?.full_name
-                        )
-                      : item?.id_promotion
-                      ? subject.replace(
-                          item?.id_promotion?._id,
-                          item?.id_promotion?.title?.vi
-                        )
-                      : item?.id_transistion_collaborator
-                      ? subject.replace(
-                          item?.id_transistion_collaborator?._id,
-                          item?.id_transistion_collaborator?.transfer_note
-                        )
-                      : item?.id_reward
-                      ? subject.replace(
-                          item?.id_reward?._id,
-                          item?.id_reward?.title?.vi
-                        )
-                      : item?.id_info_reward_collaborator
-                      ? subject.replace(
-                          item?.id_info_reward_collaborator?._id,
-                          item?.id_info_reward_collaborator
-                            ?.id_reward_collaborator?.title?.vi
-                        )
-                      : item?.id_customer
-                      ? subject.replace(
-                          item?.id_customer?._id,
-                          item?.id_customer?.full_name
-                        )
-                      : item?.id_admin_action
-                      ? subject.replace(
-                          item?.id_admin_action?._id,
-                          item?.id_admin_action?.full_name
-                        )
-                      : item?.id_address
-                      ? subject.replace(item?.id_address, item?.value_string)
-                      : subject.replace(
-                          item?.id_transistion_customer?._id,
-                          item?.id_transistion_customer?.transfer_note
-                        );
-
-                    const object = item?.id_reason_cancel
-                      ? predicate.replace(
-                          item?.id_reason_cancel?._id,
-                          item?.id_reason_cancel?.title?.vi
-                        )
-                      : item?.id_customer
-                      ? predicate.replace(
-                          item?.id_customer?._id,
-                          item?.id_customer?.full_name
-                        )
-                      : item?.id_collaborator
-                      ? predicate.replace(
-                          item?.id_collaborator?._id,
-                          item?.id_collaborator?.full_name
-                        )
-                      : item?.id_address
-                      ? predicate.replace(item?.id_address, item?.value_string)
-                      : item?.id_order
-                      ? predicate.replace(
-                          item?.id_order?._id,
-                          item?.id_order?.id_view
-                        )
-                      : item?.id_transistion_collaborator
-                      ? predicate.replace(
-                          item?.id_transistion_collaborator?._id,
-                          item?.id_transistion_collaborator?.transfer_note
-                        )
-                      : predicate.replace(
-                          item?.id_transistion_customer?._id,
-                          item?.id_transistion_customer?.transfer_note
-                        );
-
-                    return (
-                      <div className="div-list" key={index}>
-                        <div className="div-line">
-                          <div className="circle" />
-                          <div className="line-vertical" />
-                        </div>
-                        <div className="div-details-activity">
-                          <a className="text-date-activity">
-                            {moment(new Date(item?.date_create)).format(
-                              "DD/MM/YYYY HH:mm"
-                            )}
-                          </a>
-                          <a className="text-content-activity">{object}</a>
-                        </div>
-                      </div>
-                    );
-                  }}
-                />
-                <div className="div-seemore">
-                  <MoreActivity />
-                </div>
-              </div>
-            )}
           </div>
         </div>
-        {/*Dịch vụ gần đây nhất*/}
-        {checkElement?.includes("total_finance_job_dashboard") && (
-          <div>
-            <p className="label-service">{`${i18n.t("nearest_service", {
-              lng: lang,
-            })}`}</p>
-            <div className="div-card-service">
-              <Table
-                columns={columns}
-                dataSource={lastestService}
-                pagination={false}
-                scroll={{
-                  x: width <= 900 ? 900 : 0,
-                }}
-              />
-              <div className="div-entries">
-                <Select
-                  style={{ width: 60 }}
-                  defaultValue={"5"}
-                  onChange={onChangeNumberData}
-                  options={[
-                    { value: 5, label: "5" },
-                    { value: 10, label: "10" },
-                    { value: 20, label: "20" },
-                  ]}
-                />
+        {/* Right */}
+        <div className="dash_board__container--pie-chart">
+          <div className="dash_board__container--pie-chart-activity card-shadow">
+            <div className="dash_board__container--pie-chart-activity-header">
+              <span>Tỉ lệ kết nối</span>
+            </div>
+            <div className="dash_board__container--pie-chart-activity-body">
+              <ResponsiveContainer width="100%" height={240}>
+                <PieChart>
+                  <Pie
+                    data={data}
+                    cx="50%"
+                    cy="50%"
+                    labelLine={false}
+                    label={renderCustomizedLabel}
+                    outerRadius={110}
+                    innerRadius={70}
+                    fill="#8884d8"
+                    dataKey="value"
+                    paddingAngle={5}
+                  >
+                    {data.map((entry, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={COLORS[index % COLORS.length]}
+                      />
+                    ))}
+                  </Pie>
+                </PieChart>
+              </ResponsiveContainer>
+              <div className="dash_board__container--pie-chart-activity-body-note">
+                <div className="dash_board__container--pie-chart-activity-body-note">
+                  <div className="dash_board__container--pie-chart-activity-body-note-mark green"></div>
+                  <span>Hoàn thành</span>
+                </div>
+                <div className="dash_board__container--pie-chart-activity-body-note">
+                  <div className="dash_board__container--pie-chart-activity-body-note-mark red"></div>
+                  <span>Chưa hoàn thành</span>
+                </div>
               </div>
             </div>
           </div>
-        )}
-        <div className="div-total-report-dashboard">
-          {/*Thống kê đơn hàng*/}
-          {checkElement?.includes("report_detail_service_dashboard") && (
-            <div className="div-chart-pie-total-dash">
-              <a className="title-chart-area">{`${i18n.t("order_statistic", {
-                lng: lang,
-              })}`}</a>
-              <div className="div-pie-chart">
-                <div className="div-pie">
-                  <ResponsiveContainer
-                    width={"100%"}
-                    height={200}
-                    min-width={350}
-                  >
-                    <BarChart
-                      width={500}
-                      height={300}
-                      data={dataChartDetail}
-                      margin={{
-                        top: 30,
-                        right: 30,
-                        left: 20,
-                        bottom: 5,
-                      }}
-                    >
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="title" />
-                      <YAxis />
-                      <Tooltip />
-                      <Legend />
-                      <Bar
-                        dataKey="percent_2_hour"
-                        fill="#8884d8"
-                        barSize={40}
-                        minPointSize={10}
-                        name={`2 ${i18n.t("hour", {
-                          lng: lang,
-                        })}`}
-                        label={{
-                          position: "top",
-                          fill: "black",
-                          fontSize: 14,
-                        }}
-                      />
-                      <Bar
-                        dataKey="percent_3_hour"
-                        fill="#82ca9d"
-                        barSize={40}
-                        minPointSize={10}
-                        name={`3 ${i18n.t("hour", {
-                          lng: lang,
-                        })}`}
-                        label={{
-                          position: "top",
-                          fill: "black",
-                          fontSize: 14,
-                        }}
-                      />
-                      <Bar
-                        dataKey="percent_4_hour"
-                        fill="#0088FE"
-                        barSize={40}
-                        minPointSize={10}
-                        name={`4 ${i18n.t("hour", {
-                          lng: lang,
-                        })}`}
-                        label={{
-                          position: "top",
-                          fill: "black",
-                          fontSize: 14,
-                        }}
-                      />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
+          <div className="dash_board__container--pie-chart-connection-service card-shadow">
+            <div className="dash_board__container--pie-chart-connection-service-header">
+              <span>Phần trăm hoạt động</span>
             </div>
-          )}
-          {/*Tổng lượt đăng kí*/}
-          {checkElement?.includes("total_customer_monthly_dashboard") && (
-            <div className="div-chart-user">
-              <h4>{`${i18n.t("total_register", {
-                lng: lang,
-              })}`}</h4>
-              <div className="div-total-time-area">
-                <div className="div-time-area">
-                  <div>
-                    <a className="text-time">{`${i18n.t("time", {
-                      lng: lang,
-                    })}`}</a>
-                    <DatePicker
-                      picker="year"
-                      onChange={(date, dateString) => {
-                        getTotalCustomerYear(dateString)
-                          .then((res) => {
-                            setDataUser(res);
-                          })
-                          .catch((err) => {});
-                      }}
-                      defaultValue={dayjs("2023", yearFormat)}
-                      format={yearFormat}
-                    />
-                  </div>
+            <div className="dash_board__container--pie-chart-connection-service-content">
+              <div className="dash_board__container--pie-chart-connection-service-content-item">
+                <div className="dash_board__container--pie-chart-connection-service-content-item-title">
+                  <span className="high-light">Online</span>
+                  <span className="value">
+                    {formatNumber(activeUser?.ActiveUsers || 0)}&nbsp;người
+                  </span>
                 </div>
-                <div className="div-total">
-                  <a className="text-total-user">{`${i18n.t("total_user", {
-                    lng: lang,
-                  })}`}</a>
-                  <div className="div-total">
-                    <a className="text-number-total">{totalYearUser}</a>
-                  </div>
-                </div>
-              </div>
-              <div className="mt-4">
-                <ResponsiveContainer
-                  width={"100%"}
-                  height={225}
-                  min-width={350}
-                >
-                  <ComposedChart
-                    width={500}
-                    height={300}
-                    data={dataChartUser.slice(0, moment().utc().month() + 1)}
-                    margin={{
-                      top: 10,
-                      right: 30,
-                      left: 20,
-                      bottom: 5,
+                <div className="dash_board__container--pie-chart-connection-service-content-item-progressbar ">
+                  <div
+                    style={{
+                      width: `${calculateNumberPercent(
+                        activeUser.AllUser,
+                        activeUser?.ActiveUsers
+                      )}%`,
                     }}
-                    barSize={50}
+                    className={`dash_board__container--pie-chart-connection-service-content-item-progressbar-percent online`}
+                  ></div>
+                </div>
+              </div>
+              <div className="dash_board__container--pie-chart-connection-service-content-item">
+                <div className="dash_board__container--pie-chart-connection-service-content-item-title">
+                  <span className="high-light">Offline</span>
+                  <span className="value">
+                    {formatNumber(activeUser?.OfflineUsers || 0)}&nbsp;người
+                  </span>
+                </div>
+                <div className="dash_board__container--pie-chart-connection-service-content-item-progressbar ">
+                  <div
+                    style={{
+                      width: `${calculateNumberPercent(
+                        activeUser.AllUser,
+                        activeUser?.OfflineUsers
+                      )}%`,
+                    }}
+                    className="dash_board__container--pie-chart-connection-service-content-item-progressbar-percent offline"
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="dash-board__container-second-line">
+        <div className="dash-board__container-second-line-left">
+          <div className="dash_board__container--ranking-board card-shadow">
+            <div className="dash_board__container--ranking-board-more-detail">
+              <MoreTopCollaborator />
+            </div>
+            <div className="dash_board__container--ranking-board__background-circle"></div>
+            <div
+              className={`dash_board__container--ranking-board__list ${
+                isExpandListRanking && "expanded"
+              }`}
+            >
+              <div
+                onClick={() => setIsExpandListRanking(!isExpandListRanking)}
+                className="dash_board__container--ranking-board__list--expand"
+              >
+                <div className="dash_board__container--ranking-board__list--expand-dot"></div>
+              </div>
+              <div className="dash_board__container--ranking-board__list--container">
+                {topCollaborator?.slice(3).map((el, index) => (
+                  <div
+                    key={index}
+                    className="dash_board__container--ranking-board__list--container-child"
                   >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis
-                      dataKey="month"
-                      tickFormatter={(tickItem) =>
-                        `${i18n.t("month", {
-                          lng: lang,
-                        })}` +
-                        " " +
-                        tickItem
-                      }
-                    />
-                    <YAxis />
-                    <Tooltip content={renderTooltipContentUser} />
-                    <Legend />
-
-                    <Bar
-                      dataKey="totalOld"
-                      fill="#82ca9d"
-                      minPointSize={10}
-                      barSize={20}
-                      name={`${i18n.t("customer_old", {
-                        lng: lang,
-                      })}`}
-                      stackId="a"
-                    />
-
-                    <Bar
-                      dataKey="totalNew"
-                      fill="#4376CC"
-                      minPointSize={10}
-                      barSize={20}
-                      name={`${i18n.t("customer_new", {
-                        lng: lang,
-                      })}`}
-                      stackId="a"
-                      label={{
-                        position: "top",
-                        fill: "black",
-                        fontSize: 12,
-                        fontFamily: "Roboto",
-                      }}
-                    />
-                    <Line
-                      type="monotone"
-                      dataKey="totalNew"
-                      stroke="#ff7300"
-                      name={`${i18n.t("customer_new", {
-                        lng: lang,
-                      })}`}
-                    />
-                  </ComposedChart>
-                </ResponsiveContainer>
+                    <div className="dash_board__container--ranking-board__list--container-child-number">
+                      <span>{index + 4}</span>
+                    </div>
+                    <div className="dash_board__container--ranking-board__list--container-child-avatar">
+                      <Image
+                        src={el?.avatar || avatarDefaultImage}
+                        alt=""
+                      ></Image>
+                    </div>
+                    <div className="dash_board__container--ranking-board__list--container-child-info">
+                      <span className="dash_board__container--ranking-board__list--container-child-info-name">
+                        {el?.full_name || ""}
+                      </span>
+                      <span className="dash_board__container--ranking-board__list--container-child-info-point">
+                        {formatMoney(el?.sumIncome) || ""}
+                      </span>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
-          )}
-        </div>
-        <div>
-          {/*Thống kê đơn hủy*/}
-          {checkElement?.includes("report_cancel_order_dashboard") && (
-            <div className="div-chart-pie-total-cancel-dash">
-              <a className="title-chart">
-                {`${i18n.t("order_statistic_cancel", {
-                  lng: lang,
-                })}`}
-              </a>
-              <div className="div-pie-chart-cancel">
-                <div className="div-total-piechart">
-                  <div className="item-total">
-                    <a className="title-total">
-                      {`${i18n.t("total_order_cancel", {
-                        lng: lang,
-                      })}`}
-                    </a>
-                    <a className="text-colon">:</a>
-                    <a className="number-total">
-                      {dataTotalChartCancel?.total_cancel_order}
-                    </a>
-                  </div>
-                  <div className="item-total">
-                    <a className="title-total">{`${i18n.t(
-                      "order_cancel_customer",
-                      {
-                        lng: lang,
-                      }
-                    )}`}</a>
-                    <a className="text-colon">:</a>
-                    <a className="number-total">
-                      {dataTotalChartCancel?.total_cancel_order_by_customer}
-                    </a>
-                  </div>
-                  <div className="item-total">
-                    <a className="title-total">{`${i18n.t(
-                      "order_cancel_system",
-                      {
-                        lng: lang,
-                      }
-                    )}`}</a>
-                    <a className="text-colon">:</a>
-                    <a className="number-total">
-                      {dataTotalChartCancel?.total_cancel_order_by_system}
-                    </a>
-                  </div>
-                  <div className="item-total">
-                    <a className="title-total">{`${i18n.t(
-                      "order_cancel_admin",
-                      {
-                        lng: lang,
-                      }
-                    )}`}</a>
-                    <a className="text-colon">:</a>
-                    <a className="number-total">
-                      {dataTotalChartCancel?.total_cancel_order_by_user_system}
-                    </a>
-                  </div>
+            <div className="dash_board__container--ranking-board__columns">
+              <div className="dash_board__container--ranking-board__columns--child medium">
+                <div className="dash_board__container--ranking-board__columns--child-avatar">
+                  <Image
+                    src={topCollaborator[1]?.avatar || avatarDefaultImage}
+                    alt=""
+                  ></Image>
                 </div>
-                <div className="div-pie-cancel">
-                  <ResponsiveContainer height={300} min-width={500}>
-                    <PieChart>
-                      <Pie
-                        data={dataChartCancel}
-                        cx="50%"
-                        cy="50%"
-                        outerRadius={80}
-                        fill="#8884d8"
-                        dataKey="value"
-                        label={renderLabelCancel}
-                        margin={{
-                          top: 20,
-                          right: 50,
-                          left: 50,
-                          bottom: 5,
-                        }}
-                      >
-                        {dataChartCancel.map((entry, index) => (
-                          <Cell
-                            key={`cell-${index}`}
-                            fill={COLORS_CANCEL[index % COLORS_CANCEL.length]}
-                          />
-                        ))}
-                      </Pie>
-                    </PieChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-      <div className="ranking-board">
-        <div className="ranking-board__background-circle"></div>
-        <div
-          className={`ranking-board__list ${isExpandListRanking && "expanded"}`}
-        >
-          <div
-            onClick={() => setIsExpandListRanking(!isExpandListRanking)}
-            className="ranking-board__list--expand"
-          >
-            <div className="ranking-board__list--expand-dot"></div>
-          </div>
-          <div className="ranking-board__list--container">
-            {Array.from({ length: 7 }, (_, index) => (
-              <div className="ranking-board__list--container-child">
-                <div className="ranking-board__list--container-child-number">
-                  <span>{index + 4}</span>
-                </div>
-                <div className="ranking-board__list--container-child-avatar">
-                  <img src={avatarDefaultImage} alt=""></img>
-                </div>
-                <div className="ranking-board__list--container-child-info">
-                  <span className="ranking-board__list--container-child-info-name">
-                    Danh Trường Sơn
+                <span
+                  onClick={() =>
+                    navigate(`details-collaborator/${topCollaborator[1]._id}`)
+                  }
+                  className="dash_board__container--ranking-board__columns--child-info"
+                >
+                  {formatName(topCollaborator[1]?.full_name || "")}
+                </span>
+                <div className="dash_board__container--ranking-board__columns--child-point second-place">
+                  <span>
+                    {formatMoney(topCollaborator[1]?.sumIncome) || ""}
                   </span>
-                  <span className="ranking-board__list--container-child-info-point">
-                    700
+                </div>
+                <div className="dash_board__container--ranking-board__columns--child-trapezoid"></div>
+                <div className="dash_board__container--ranking-board__columns--child-vertical">
+                  <span className="dash_board__container--ranking-board__columns--child-vertical-number">
+                    2
                   </span>
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
-        <div className="ranking-board__columns">
-          <div className="ranking-board__columns--child medium">
-            <div className="ranking-board__columns--child-avatar">
-              <img src={avatarDefaultImage} alt=""></img>
-            </div>
-            <span className="ranking-board__columns--child-info">
-              Nguyễn Tú
-            </span>
-            <div className="ranking-board__columns--child-point">
-              <span>1.469</span>
-            </div>
-            <div className="ranking-board__columns--child-trapezoid"></div>
-            <div className="ranking-board__columns--child-vertical">
-              <span className="ranking-board__columns--child-vertical-number">
-                2
-              </span>
-            </div>
-          </div>
-          <div className="ranking-board__columns--child large">
-            <div className="ranking-board__columns--child-avatar">
-              <img src={avatarDefaultImage} alt=""></img>
-              <div className="ranking-board__columns--child-avatar-medal">
-                <FaCrown color="white" size="10px" />
+              <div className="dash_board__container--ranking-board__columns--child large">
+                <div className="dash_board__container--ranking-board__columns--child-avatar">
+                  <Image
+                    src={topCollaborator[0]?.avatar || avatarDefaultImage}
+                    alt=""
+                  ></Image>
+                  <div className="dash_board__container--ranking-board__columns--child-avatar-medal">
+                    <FaCrown color="white" size="10px" />
+                  </div>
+                </div>
+                <span
+                  onClick={() =>
+                    navigate(`details-collaborator/${topCollaborator[0]._id}`)
+                  }
+                  className="dash_board__container--ranking-board__columns--child-info"
+                >
+                  {formatName(topCollaborator[0]?.full_name || "")}
+                </span>
+                <div className="dash_board__container--ranking-board__columns--child-point first-place">
+                  <span>
+                    {formatMoney(topCollaborator[0]?.sumIncome) || ""}
+                  </span>
+                </div>
+                <div className="dash_board__container--ranking-board__columns--child-trapezoid"></div>
+                <div className="dash_board__container--ranking-board__columns--child-vertical">
+                  <span className="dash_board__container--ranking-board__columns--child-vertical-number">
+                    1
+                  </span>
+                </div>
+              </div>
+              <div className="dash_board__container--ranking-board__columns--child small">
+                <div className="dash_board__container--ranking-board__columns--child-avatar">
+                  <Image
+                    src={topCollaborator[2]?.avatar || avatarDefaultImage}
+                    alt=""
+                  ></Image>{" "}
+                </div>
+                <span
+                  onClick={() =>
+                    navigate(`details-collaborator/${topCollaborator[2]._id}`)
+                  }
+                  className="dash_board__container--ranking-board__columns--child-info"
+                >
+                  {formatName(topCollaborator[2]?.full_name || "")}
+                </span>
+                <div className="dash_board__container--ranking-board__columns--child-point third-place">
+                  <span>
+                    {formatMoney(topCollaborator[2]?.sumIncome) || ""}
+                  </span>
+                </div>
+                <div className="dash_board__container--ranking-board__columns--child-trapezoid"></div>
+                <div className="dash_board__container--ranking-board__columns--child-vertical">
+                  <span className="dash_board__container--ranking-board__columns--child-vertical-number">
+                    3
+                  </span>
+                </div>
               </div>
             </div>
-            <span className="ranking-board__columns--child-info">Sơn Danh</span>
-            <div className="ranking-board__columns--child-point">
-              <span>2.569</span>
+          </div>
+          <div className="dash_board__container--activity">
+            <CardInfo
+              cardHeader="Lịch sử hoạt động"
+              cardContent={
+                <CardActivityLog
+                  data={historyActivity}
+                  totalItem={historyActivity?.length}
+                  dateIndex="date_create"
+                  statusIndex="type"
+                  pageSize={lengthPage}
+                  setLengthPage={setLengthPage}
+                  onCurrentPageChange={onChangePageHistoryActivity}
+                  pagination={true}
+                />
+              }
+            />
+          </div>
+        </div>
+        <div className="dash_board__container--order-statistic">
+          <div className="dash_board__container--order-statistic-hour card-shadow">
+            <div className="dash_board__container--order-statistic-hour-header">
+              <span>Thống kê đơn hàng theo dịch vụ</span>
             </div>
-            <div className="ranking-board__columns--child-trapezoid"></div>
-            <div className="ranking-board__columns--child-vertical">
-              <span className="ranking-board__columns--child-vertical-number">
-                1
-              </span>
+            <div className="dash_board__container--order-statistic-hour-body">
+              <ResponsiveContainer width={"98%"} height={215}>
+                <BarChart
+                  data={dataChartDetail}
+                  margin={{
+                    top: 30,
+                    right: 30,
+                    left: 20,
+                    bottom: 5,
+                  }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="title" />
+                  {/* <YAxis /> */}
+                  <RechartsTooltip />
+                  <Legend />
+                  <Bar
+                    dataKey="percent_2_hour"
+                    fill="#8884d8"
+                    barSize={40}
+                    minPointSize={10}
+                    name={`2 ${i18n.t("hour", {
+                      lng: lang,
+                    })}`}
+                    label={{
+                      position: "top",
+                      fill: "black",
+                      fontSize: 14,
+                    }}
+                  />
+                  <Bar
+                    dataKey="percent_3_hour"
+                    fill="#82ca9d"
+                    barSize={40}
+                    minPointSize={10}
+                    name={`3 ${i18n.t("hour", {
+                      lng: lang,
+                    })}`}
+                    label={{
+                      position: "top",
+                      fill: "black",
+                      fontSize: 14,
+                    }}
+                  />
+                  <Bar
+                    dataKey="percent_4_hour"
+                    fill="#0088FE"
+                    barSize={40}
+                    minPointSize={10}
+                    name={`4 ${i18n.t("hour", {
+                      lng: lang,
+                    })}`}
+                    label={{
+                      position: "top",
+                      fill: "black",
+                      fontSize: 14,
+                    }}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
             </div>
           </div>
-          <div className="ranking-board__columns--child small">
-            <div className="ranking-board__columns--child-avatar">
-              <img src={avatarDefaultImage} alt=""></img>
+          <div className="dash_board__container--order-statistic-customer card-shadow">
+            <div className="dash_board__container--order-statistic-customer-header">
+              <span>Thống kê khách hàng</span>
             </div>
-            <span className="ranking-board__columns--child-info">
-              Nguyễn Kim
-            </span>
-            <div className="ranking-board__columns--child-point">
-              <span>1,045</span>
-            </div>
-            <div className="ranking-board__columns--child-trapezoid"></div>
-            <div className="ranking-board__columns--child-vertical">
-              <span className="ranking-board__columns--child-vertical-number">
-                3
-              </span>
+            <div className="dash_board__container--order-statistic-customer-body">
+              <div className="dash_board__container--order-statistic-customer-body-total">
+                <span className="high-light">Tổng khách hàng:</span>
+                <span>10.000</span>
+              </div>
+              <ResponsiveContainer width={"98%"} height={200}>
+                <ComposedChart
+                  data={dataChartUser.slice(0, moment().utc().month() + 1)}
+                  margin={{
+                    top: 10,
+                    right: 30,
+                    left: 20,
+                    bottom: 5,
+                  }}
+                  barSize={50}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis
+                    dataKey="month"
+                    tickFormatter={(tickItem) =>
+                      `${i18n.t("month", {
+                        lng: lang,
+                      })}` +
+                      " " +
+                      tickItem
+                    }
+                  />
+                  {/* <YAxis /> */}
+                  <RechartsTooltip content={renderTooltipContentUser} />
+                  <Legend />
+
+                  <Bar
+                    dataKey="totalOld"
+                    fill="#82ca9d"
+                    minPointSize={10}
+                    barSize={20}
+                    name={`${i18n.t("customer_old", {
+                      lng: lang,
+                    })}`}
+                    stackId="a"
+                  />
+
+                  <Bar
+                    dataKey="totalNew"
+                    fill="#4376CC"
+                    minPointSize={10}
+                    barSize={20}
+                    name={`${i18n.t("customer_new", {
+                      lng: lang,
+                    })}`}
+                    stackId="a"
+                    label={{
+                      position: "top",
+                      fill: "black",
+                      fontSize: 12,
+                      fontFamily: "Roboto",
+                    }}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="totalNew"
+                    stroke="#ff7300"
+                    name={`${i18n.t("customer_new", {
+                      lng: lang,
+                    })}`}
+                  />
+                </ComposedChart>
+              </ResponsiveContainer>
             </div>
           </div>
         </div>
       </div>
-      <FloatButton.BackTop />
+      <div className="dash_board__container--table">
+        <DataTable
+          columns={columns}
+          data={lastestService}
+          start={startPage}
+          pageSize={lengthPage}
+          setLengthPage={setLengthPage}
+          totalItem={lastestService.length}
+          onCurrentPageChange={onChangePage}
+          loading={isLoading}
+        />
+      </div>
+      <div className="dash_board__container">
+        <div className="dash_board__container--pie-order-cancel card-shadow">
+          <div className="dash_board__container--pie-order-cancel-header">
+            <span>Thống kê đơn hủy</span>
+          </div>
+          <div className="dash_board__container--pie-order-cancel-body">
+            <ResponsiveContainer width="98%" height={300}>
+              <PieChart>
+                <Pie
+                  data={dataChartCancel}
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={80}
+                  fill="#8884d8"
+                  dataKey="value"
+                  label={renderLabelCancel}
+                  margin={{
+                    top: 20,
+                    right: 50,
+                    left: 50,
+                    bottom: 5,
+                  }}
+                >
+                  {dataChartCancel.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS_CANCEL[index % COLORS_CANCEL.length]}
+                    />
+                  ))}
+                </Pie>
+              </PieChart>
+            </ResponsiveContainer>
+            <div className="dash_board__container--pie-order-cancel-body-value">
+              <div className="dash_board__container--pie-order-cancel-body-value-content">
+                <span className="high-light">Tổng đơn hủy:</span>
+                <span>{dataTotalChartCancel?.total_cancel_order}</span>
+              </div>
+              <div className="dash_board__container--pie-order-cancel-body-value-content">
+                <span className="high-light">Đơn hủy từ khách:</span>
+                <span>
+                  {dataTotalChartCancel?.total_cancel_order_by_customer}
+                </span>
+              </div>
+
+              <div className="dash_board__container--pie-order-cancel-body-value-content">
+                <span className="high-light">Đơn hủy từ quản trị viên:</span>
+                <span>
+                  {dataTotalChartCancel?.total_cancel_order_by_user_system}
+                </span>
+              </div>
+              <div className="dash_board__container--pie-order-cancel-body-value-content">
+                <span className="high-light">Đơn hủy từ hệ thống:</span>
+                <span>
+                  {dataTotalChartCancel?.total_cancel_order_by_system}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
-}
+};
 
-const COLORS_CANCEL = ["#FCD34D", "#FBBF24", "#F59E0B", "#ff8000", "#ff1919"];
-
+export default Home;

@@ -1,7 +1,7 @@
 import { call, put, takeLatest } from "redux-saga/effects";
 import {
   createPromotion,
-  fetchPromotion,
+  fetchPromotionApi,
   updatePromotion,
 } from "../../api/promotion";
 import { errorNotify, successNotify } from "../../helper/toast";
@@ -17,7 +17,7 @@ import {
 function* fetchPromotionSaga(action) {
   try {
     const promotion = yield call(
-      fetchPromotion,
+      fetchPromotionApi,
       action.payload.start,
       action.payload.length,
       action.payload.type,

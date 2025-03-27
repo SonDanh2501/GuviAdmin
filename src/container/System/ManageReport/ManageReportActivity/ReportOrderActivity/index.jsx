@@ -138,12 +138,12 @@ const ReportOrderActivity = () => {
       width: 50,
     },
     {
-      customTitle: <CustomHeaderDatatable title="Ngày tạo" />,
+      customTitle: <CustomHeaderDatatable title="Ngày làm" />,
       dataIndex: "_id",
       key: "date_navigate",
       width: 100,
       position: "center",
-      navigate: "group-order/manage-order",
+      navigate: "report/manage-report/report-detail-order-activity",
       param: [{ key: "is_duplicate", code: "true" }],
     },
     {
@@ -200,7 +200,6 @@ const ReportOrderActivity = () => {
       key: "money",
       width: 150,
     },
-
     {
       customTitle: (
         <CustomHeaderDatatable
@@ -420,7 +419,6 @@ const ReportOrderActivity = () => {
         payload.startDate,
         payload.endDate
       );
-      console.log("chheck res", res);
       setListData(res?.data);
       setListTotalStatistic(res.totalItem[0]);
       setTotalItem(res?.total);
@@ -495,6 +493,7 @@ const ReportOrderActivity = () => {
     }
   }, [startDate, endDate]);
 
+  
   /* ~~~ Other ~~~ */
   const rightContent = (
     startDate,
