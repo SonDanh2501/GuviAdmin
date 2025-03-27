@@ -1801,7 +1801,7 @@ const DataTable = (props) => {
             }
             return (
               <div className="case__withdrawal-type-transfer">
-                {type_transfer === "withdraw" ? (
+                {data?.type_transfer === "withdraw" ? (
                   <p className="case__withdrawal-type-transfer withdrawal">
                     {type_transfer}
                   </p>
@@ -2247,7 +2247,6 @@ const DataTable = (props) => {
                   .join("") + `&start_date=${startOfDay}&end_date=${endOfDay}`
               : `&start_date=${startOfDay}&end_date=${endOfDay}`;
 
-            console.log("check query >>>", query);
             return (
               <div
                 onClick={() => window.open(`${url}?${query}`, "_blank")}
@@ -2390,12 +2389,17 @@ const DataTable = (props) => {
                     item.high_light && "high-light"
                   }`}
                 >
-                  {moment(new Date(data[item.dataIndex])).format("DD/MM/YYYY")}
+                  {data[item.dataIndex]
+                    ? moment(new Date(data[item.dataIndex])).format(
+                        "DD/MM/YYYY"
+                      )
+                    : "Không có"}
                 </span>
                 <span className="case__date-with-day--sub">
-                  {moment(new Date(data[item.dataIndex]))
-                    .locale(lang)
-                    .format("HH:mm:ss")}
+                  {data[item.dataIndex] &&
+                    moment(new Date(data[item.dataIndex]))
+                      .locale(lang)
+                      .format("HH:mm:ss")}
                 </span>
               </div>
             );
@@ -2451,6 +2455,40 @@ const DataTable = (props) => {
             );
             break;
           }
+          case "case_status_promotion": {
+            return (
+              <div className="case__status_promotion">
+                <span
+                  className={`case__status_promotion--text ${
+                    data?.status === "upcoming"
+                      ? "upcoming"
+                      : data?.status === "doing"
+                      ? "doing"
+                      : data?.status === "out_of_stock"
+                      ? "out_of_stock"
+                      : data?.status === "out_of_date"
+                      ? "out_of_date"
+                      : data?.status === "done"
+                      ? "done"
+                      : ""
+                  }`}
+                >
+                  {data?.status === "upcoming"
+                    ? `${i18n.t("upcoming", { lng: lang })}`
+                    : data?.status === "doing"
+                    ? `${i18n.t("happenning", { lng: lang })}`
+                    : data?.status === "out_of_stock"
+                    ? `${i18n.t("out_stock", { lng: lang })}`
+                    : data?.status === "out_of_date"
+                    ? `${i18n.t("out_date", { lng: lang })}`
+                    : data?.status === "done"
+                    ? `${i18n.t("closed", { lng: lang })}`
+                    : ""}
+                </span>
+              </div>
+            );
+            break;
+          }
           case "case_payment-method": {
             return (
               <div
@@ -2496,7 +2534,7 @@ const DataTable = (props) => {
           }
           case "case_code_order": {
             linkRedirect = `/details-order/${
-              data?.id_group_order ? data?.id_group_order : data?._id
+              data?.id_group_order ? data?.id_group_order : data?.id_order?.id_group_order
             }`;
             return (
               <div className="case__code_order ">
@@ -2504,10 +2542,14 @@ const DataTable = (props) => {
                   target="_blank"
                   onClick={() => saveToCookie("order_scrolly", scrollY)}
                   to={linkRedirect}
-                  style={{ textDecoration: "none" , lineHeight: 1}}
+                  style={{ textDecoration: "none", lineHeight: 1 }}
                 >
                   <span className="case__code_order--code">
-                    {data?.id_view}
+                    {data?.id_order
+                      ? data?.id_order?.id_view
+                        ? data?.id_order?.id_view
+                        : data?.id_view
+                      : data?.id_view}
                   </span>
                 </Link>
               </div>
@@ -2736,6 +2778,41 @@ const DataTable = (props) => {
                 <span className="case__money--number">
                   {formatMoney(dataShow) || 0}
                 </span>
+              </div>
+            );
+            break;
+          }
+          case "case_timer": {
+            const current = new Date();
+            const date = new Date(data[item.dataIndex]);
+            const distance = current - date; // Khoảng cách tính bằng mili-giây
+
+            // Chuyển đổi sang số ngày, giờ, phút
+            const diffDays = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const diffHours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const diffMinutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const diffSeconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            return (
+              <div className="case__timer">
+                <div className="case__timer--element">
+                  <div className="case__timer--element-number">
+                    <span>{diffDays}</span>
+                  </div>
+                  <span className="case__timer--element-label">ngày</span>
+                </div>
+                <div className="case__timer--element">
+                  <div className="case__timer--element-number">
+                    <span>{diffHours}</span>
+                  </div>
+                  <span className="case__timer--element-label">giờ</span>
+                </div>
+                <div className="case__timer--element">
+                  <div className="case__timer--element-number">
+                    <span>{diffMinutes}</span>
+                  </div>
+                  <span className="case__timer--element-label">phút</span>
+                </div>
               </div>
             );
             break;

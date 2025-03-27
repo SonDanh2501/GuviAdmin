@@ -1,250 +1,201 @@
 @import "../../../@theme//style.scss";
 
 .card-activities {
-
     display: flex;
     flex-direction: column;
-    gap: $gapM;
-    .card-activities--activity {
+    gap: $gapL;
+    height: 100%;
+    max-height: 470px;
+    width: 100%;
+    overflow-y: auto;
+    padding-right: 8px;
+    padding-bottom: 1px;
+
+    .card-activities__child {
         display: flex;
-        padding-bottom: 12px;
+        gap: $gapL;
+        border-bottom: 2px solid $colorMoreLightGray;
+        padding-bottom: 16px;
 
-        .card-activities--activity-left {
-            width: 25%;
+        .card-activities__child--header {
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
+            gap: $gapXS;
+            padding: 12px;
+            border-radius: $borderRadiusXL;
+            background-color: $colorExtraLightGray;
+            border: 1px solid $colorMoreLightGray;
+            width: fit-content;
+            height: fit-content;
 
-            .card-activities--activity-left-date {
+            .card-activities__child--header-day {
                 font-size: $textFontSizeM;
-                font-weight: $fontWeightXL;
+                font-weight: $fontWeightL;
+                color: $colorLightGray;
+            }
+
+            .card-activities__child--header-number {
+                font-size: $textFontSizeL;
+                font-weight: $fontWeight2XL;
                 color: $colorBlack;
             }
 
-            .card-activities--activity-left-day-in-week {
-                font-size: $textFontSizeM;
-                font-weight: $fontWeightL;
-                color: $colorGray;
-                opacity: $opacityS;
-            }
+            &.punish {
+                background-color: $colorExtraLightRed;
+                border-color: $colorLightRed;
 
-            .card-activities--activity-left-time {
-                font-size: $textFontSizeM;
-                font-weight: $fontWeightL;
-                color: $colorGray;
-                opacity: $opacityS;
-                text-transform: capitalize;
-            }
-        }
-
-        .card-activities--activity-line {
-            width: 16.67%;
-            align-items: center;
-            display: flex;
-            flex-direction: column;
-            margin-bottom: -40px;
-
-            .card-activities--activity-line-icon {
-                padding: 8px 8px;
-                width: fit-content;
-                height: fit-content;
-                border-radius: $borderRadiusFull;
-
-                &.pending {
-                    background-color: $colorExtraLightYellow;
+                .card-activities__child--header-day {
+                    color: $colorLightRed;
                 }
-
-                &.confirm {
-                    background-color: $colorExtraLightBlue;
-                }
-
-                &.doing {
-                    background-color: $colorExtraLightBlue;
-                }
-
-                &.done {
-                    background-color: $colorExtraLightGreen;
-                }
-
-                &.cancel {
-                    background-color: $colorExtraLightRed;
-                }
-
-                &.blue {
-                    background-color: $colorExtraLightBlue;
-                }
-
-                &.green {
-                    background-color: $colorExtraLightGreen;
-                }
-
-                &.red {
-                    background-color: $colorExtraLightRed;
-                }
-
-                &.yellow {
-                    background-color: $colorExtraLightYellow;
-                }
-
-                &.violet {
-                    background-color: $colorExtraLightViolet;
-                }
-            }
-
-            .card-activities--activity-line-icon-line {
-                width: 2px;
-                height: 100%;
-                background-color: $colorMoreLightGray;
-            }
-        }
-
-        .card-activities--activity-right {
-            width: 58.33%;
-
-            .card-activities--activity-right-time {
-                font-size: $textFontSizeM;
-                font-weight: $fontWeightXL;
-                color: $colorBlack;
-            }
-
-            .card-activities--activity-right-address {
-                font-size: $textFontSizeM;
-                font-weight: $fontWeightL;
-                color: $colorGray;
-                opacity: $opacityS;
-                overflow: hidden;
-                display: -webkit-box;
-                -webkit-box-orient: vertical;
-                -webkit-line-clamp: 3;
-            }
-
-            .card-activities--activity-right-status {
-                width: fit-content;
-                padding: 3px 8px;
-                border-radius: $borderRadiusL;
-                // border: 1px solid;
-                margin-top: 4px;
-
-                &.pending {
-                    background-color: $colorExtraLightYellow;
-                    border: 1px solid $colorYellow;
-                    color: $colorYellow;
-                }
-
-                &.confirm {
-                    background-color: $colorExtraLightBlue;
-                    border: 1px solid $colorBlue;
-                    color: $colorBlue;
-                }
-
-                &.doing {
-                    background-color: $colorExtraLightBlue;
-                    border: 1px solid $colorBlue;
-                    color: $colorBlue;
-                }
-
-                &.done {
-                    background-color: $colorExtraLightGreen;
-                    border: 1px solid $colorGreen;
-                    color: $colorGreen;
-                }
-
-                &.cancel {
-                    background-color: $colorExtraLightRed;
-                    border: 1px solid $colorRed;
+    
+                .card-activities__child--header-number {
                     color: $colorRed;
                 }
+            }
 
-                span {
-                    font-size: $textFontSizeM;
-                    font-weight: $fontWeightL;
+            &.reward {
+                background-color: $colorExtraLightGreen;
+                border-color: $colorLightGreen;
+
+                .card-activities__child--header-day {
+                    color: $colorLightGreen;
+                }
+    
+                .card-activities__child--header-number {
+                    color: $colorGreen;
                 }
             }
         }
 
-       
+        .card-activities__child--list {
+            display: flex;
+            flex-direction: column;
+            gap: $gapL;
+            padding-top: 12px;
+            width: 100%;
 
+            .card-activities__child--list-element {
+                display: flex;
+                flex-direction: column;
+                gap: $gapS;
+                position: relative;
+
+
+                .card-activities__child--list-element-dot {
+                    position: absolute;
+                    top: 0;
+                    left: -42px; /* Điều chỉnh giá trị này để dịch sang trái */
+                    // transform: translateY(-0%); /* Căn giữa theo chiều dọc */
+                    background-color: $colorLightGray;
+                    width: 12px;
+                    height: 12px;
+                    border-radius: $borderRadiusFull;
+                    border: 4px solid $colorExtraLightGray;
+
+                    &.punish {
+                        background-color: $colorLightRed;
+                        border-color: $colorExtraLightRed;
+                    }
+
+                    &.reward {
+                        background-color: $colorLightGreen;
+                        border-color: $colorExtraLightGreen;
+                    }
+                }
+
+                .card-activities__child--list-element-title {
+                    display: flex;
+                    // align-items: center;
+                    justify-content: space-between;
+
+                    .card-activities__child--list-element-title-content {
+                        font-size: $textFontSizeM;
+                        font-weight: $fontWeightXL;
+                        color: $colorBlack;
+                        width: 75%;
+                    }
+
+                    .card-activities__child--list-element-title-number {
+                        font-size: $textFontSizeM;
+                        font-weight: $fontWeightXL;
+                        color: $colorBlack;
+
+                        &.adding {
+                            color: $colorGreen;
+                        }
+
+                        &.minus {
+                            color: $colorRed;
+                        }
+                    }
+                }
+
+                .card-activities__child--list-element-time {
+                    display: flex;
+                    gap: $gapXS;
+                    text-transform: capitalize;
+                    font-size: $textFontSizeM;
+                    font-weight: $fontWeightL;
+                    color: $colorLightGray;
+
+                }
+            }
+        }
+
+        &.last-item {
+            border-bottom: 0px solid $colorMoreLightGray;
+            padding-bottom: 0px;
+        }
     }
 
-    .card-activities--pagination {
+    .card-activities__show-more {
         display: flex;
-        justify-content: flex-end;
-        width: 100%;
-        &.hidden {
-            display: none;
+        align-items: center;
+        justify-content: center;
+
+        .card-activities__show-more--container {
+            display: flex;
+            gap: $gapXS;
+            width: fit-content;
+            cursor: pointer;
+
+            .card-activities__show-more--container-label {
+                font-size: $textFontSizeM;
+                font-weight: $fontWeightL;
+                color: $colorLightGray;
+            }
+    
+            .card-activities__show-more--container-button {
+                font-size: $textFontSizeM;
+                color: $colorLightGray;
+                transform: rotate(90deg);
+            }
         }
+       
     }
 }
 
 
-// .card-activities {
-//     display: flex;
-//     flex-direction: column;
-//     padding: 12px;
-    
+.card-activities::-webkit-scrollbar {
+    width: 0.4em;
+}
 
-//     .card-activities__child {
-//         display: flex;
-//         flex-direction: column;
-//         gap: $gapL;
+.card-activities::-webkit-scrollbar-track {
+    background-color: $colorExtraLightGray;
+    margin-block: 1em;
+    border-radius: 8px;
+}
 
-//         .card-activities__child--header {
-//             padding: 4px 8px;
-//             border-radius: $borderRadiusL;
-//             background-color: $colorMoreLightGray;
-//             width: fit-content;
+.card-activities::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    // border: 2px solid $colorExtraLightGray;
+    background-color: $colorMoreLightGray;
+}
 
-//             span {
-//                 font-size: $textFontSizeM;
-//                 font-weight: $fontWeightXL;
-//                 color: $colorBlack;
-//             }
-//         }
-//         .card-activities__child--list {
-//             display: flex;
-//             gap: $gapL;
+.card-activities::-webkit-scrollbar-thumb:hover {
+    background-color: $colorGray;
+}
 
-//             .card-activities__child--list-left {
-//                 display: flex;
-//                 align-items: center;
-//                 justify-content: center;
-//                 width: fit-content;
 
-//                 .card-activities__child--list-left-dot {
-//                     width: 20px;
-//                     height: 20px;
-//                     background-color: $colorViolet;
-//                     border: 6px solid $colorExtraLightViolet;
-//                     border-radius: $borderRadiusFull;
-//                 }
-//             }
-
-//             .card-activities__child--list-middle {
-//                 display: flex;
-//                 align-items: center;
-//                 justify-content: center;
-//                 width: 20%;
-
-//                 span {
-//                     font-size: $textFontSizeM;
-//                     font-weight: $fontWeightL;
-//                     color: $colorLightGray;
-//                 }
-//             }
-
-//             .card-activities__child--list-right {
-//                 width: 100%;
-//                 background-color: $colorExtraLightGray;
-//                 border-radius: $borderRadiusL;
-//                 border: 1px solid $colorMoreLightGray;
-//                 padding: 12px;
-
-//                 span {
-//                     font-size: $textFontSizeM;
-//                     font-weight: $fontWeightXL;
-//                     color: $colorBlack;
-//                 }
-//             }
-//         }
-//     }
-// }

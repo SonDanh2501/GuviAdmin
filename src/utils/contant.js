@@ -9914,9 +9914,16 @@ export const exportToExcel = (listData, fileName) => {
   }
 };
 
-
 /* 11. Hàm kiểm tra định dạng email */
 export const checkIsEmailFormat = (email) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
 }
+
+
+/* Hàm lấy chữ cái đầu và chữ cái cuối */
+export const formatName = (fullName) => {
+  const words = fullName.split(" ");
+  return `${words[words.length - 1]} ${words[0]}`;
+};
+

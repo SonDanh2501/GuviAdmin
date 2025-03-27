@@ -10,6 +10,9 @@ import useWindowDimensions from "../../../../../../../helper/useWindowDimensions
 import CardInfo from "../../../../../../../components/card";
 import DataTable from "../../../../../../../components/tables/dataTable";
 import FilterData from "../../../../../../../components/filterData";
+import icons from "../../../../../../../utils/icons";
+
+const { IoCaretForward } = icons;
 
 const Review = ({ id, totalReview }) => {
   const [timePeriod, setTimePeriod] = useState([]);
@@ -78,9 +81,8 @@ const Review = ({ id, totalReview }) => {
 
   return (
     <div className="collaborator-rating">
-      <div className="collaborator-rating__overview">
-        {/* Thẻ thống kê lượt đánh giá theo năm */}
-        {/* <div className="collaborator-rating__overview--statistic">
+      {/* <div className="collaborator-rating__overview">
+        <div className="collaborator-rating__overview--statistic">
           <CardInfo
             collaboratorRatingStatistic={true}
             collaboratorId={id}
@@ -88,8 +90,7 @@ const Review = ({ id, totalReview }) => {
             timePeriod={timePeriod}
             supportIcon={true}
           />
-        </div> */}
-        {/* Thẻ tổng lượt đánh giá */}
+        </div>
         <div className="collaborator-rating__overview--total">
           <CardInfo
             collaboratorRatingStar={true}
@@ -98,7 +99,7 @@ const Review = ({ id, totalReview }) => {
             collaboratorStar={totalReview}
           />
         </div>
-      </div>
+      </div> */}
       {/* Acvitiy Log */}
       {/* <div className="collaborator-rating__activity-bar shadow">
         <div className="collaborator-rating__activity-bar--header">
@@ -119,6 +120,135 @@ const Review = ({ id, totalReview }) => {
         totalItem={total}
         onCurrentPageChange={onChangePage}
       />
+      {/* <div className="collaborator-rating__favorite card-shadow">
+        <div className="collaborator-rating__favorite--header">
+          <div className="collaborator-rating__favorite--header-title">
+            <span>Danh sách đối tác</span>
+          </div>
+        </div>
+        <div className="collaborator-rating__favorite--tab">
+          <span className="collaborator-rating__favorite--tab-item favorite">
+            Yêu thích
+          </span>
+          <span className="collaborator-rating__favorite--tab-item limit">
+            Hạn chế
+          </span>
+        </div>
+        <div className="collaborator-rating__favorite--list">
+          <div className="collaborator-rating__favorite--list-item card-shadow">
+            <div className="collaborator-rating__favorite--list-item-avatar"></div>
+            <div className="collaborator-rating__favorite--list-item-info">
+              <span className="collaborator-rating__favorite--list-item-info-name">
+                Danh Truong Son
+              </span>
+              <span className="collaborator-rating__favorite--list-item-info-phone">
+                0987654321
+              </span>
+            </div>
+            <div className="collaborator-rating__favorite--list-item-detail">
+              <span>
+                <IoCaretForward />
+              </span>
+            </div>
+          </div>
+          <div className="collaborator-rating__favorite--list-item card-shadow">
+            <div className="collaborator-rating__favorite--list-item-avatar"></div>
+            <div className="collaborator-rating__favorite--list-item-info">
+              <span className="collaborator-rating__favorite--list-item-info-name">
+                Danh Truong Son
+              </span>
+              <span className="collaborator-rating__favorite--list-item-info-phone">
+                0987654321
+              </span>
+            </div>
+            <div className="collaborator-rating__favorite--list-item-detail">
+              <span>
+                <IoCaretForward />
+              </span>
+            </div>
+          </div>
+          <div className="collaborator-rating__favorite--list-item card-shadow">
+            <div className="collaborator-rating__favorite--list-item-avatar"></div>
+            <div className="collaborator-rating__favorite--list-item-info">
+              <span className="collaborator-rating__favorite--list-item-info-name">
+                Danh Truong Son
+              </span>
+              <span className="collaborator-rating__favorite--list-item-info-phone">
+                0987654321
+              </span>
+            </div>
+            <div className="collaborator-rating__favorite--list-item-detail">
+              <span>
+                <IoCaretForward />
+              </span>
+            </div>
+          </div>
+          <div className="collaborator-rating__favorite--list-item card-shadow">
+            <div className="collaborator-rating__favorite--list-item-avatar"></div>
+            <div className="collaborator-rating__favorite--list-item-info">
+              <span className="collaborator-rating__favorite--list-item-info-name">
+                Danh Truong Son
+              </span>
+              <span className="collaborator-rating__favorite--list-item-info-phone">
+                0987654321
+              </span>
+            </div>
+            <div className="collaborator-rating__favorite--list-item-detail">
+              <span>
+                <IoCaretForward />
+              </span>
+            </div>
+          </div>
+          <div className="collaborator-rating__favorite--list-item card-shadow">
+            <div className="collaborator-rating__favorite--list-item-avatar"></div>
+            <div className="collaborator-rating__favorite--list-item-info">
+              <span className="collaborator-rating__favorite--list-item-info-name">
+                Danh Truong Son
+              </span>
+              <span className="collaborator-rating__favorite--list-item-info-phone">
+                0987654321
+              </span>
+            </div>
+            <div className="collaborator-rating__favorite--list-item-detail">
+              <span>
+                <IoCaretForward />
+              </span>
+            </div>
+          </div>
+          <div className="collaborator-rating__favorite--list-item card-shadow">
+            <div className="collaborator-rating__favorite--list-item-avatar"></div>
+            <div className="collaborator-rating__favorite--list-item-info">
+              <span className="collaborator-rating__favorite--list-item-info-name">
+                Danh Truong Son
+              </span>
+              <span className="collaborator-rating__favorite--list-item-info-phone">
+                0987654321
+              </span>
+            </div>
+            <div className="collaborator-rating__favorite--list-item-detail">
+              <span>
+                <IoCaretForward />
+              </span>
+            </div>
+          </div>
+          <div className="collaborator-rating__favorite--list-item card-shadow">
+            <div className="collaborator-rating__favorite--list-item-avatar"></div>
+            <div className="collaborator-rating__favorite--list-item-info">
+              <span className="collaborator-rating__favorite--list-item-info-name">
+                Danh Truong Son
+              </span>
+              <span className="collaborator-rating__favorite--list-item-info-phone">
+                0987654321
+              </span>
+            </div>
+            <div className="collaborator-rating__favorite--list-item-detail">
+              <span>
+                <IoCaretForward />
+              </span>
+            </div>
+          </div>
+        </div>
+      </div> */}
     </div>
   );
 };

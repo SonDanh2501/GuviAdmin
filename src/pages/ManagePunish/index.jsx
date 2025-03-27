@@ -136,7 +136,6 @@ const ManagePunish = () => {
     },
 
   ];
-
   const [listData, setListData] = useState([]);
   const [statusList, setStatusList] = useState([
     { code: "", label: "Tất cả", total: 0 },
@@ -312,6 +311,7 @@ const ManagePunish = () => {
         payload.selectValueCreatedBy,
         payload.valueSearch
       );
+      console.log("check res >>>", res);
       setListData(res?.data);
       setTotal(res?.totalItem);
       setIsLoading(false);
@@ -564,6 +564,7 @@ const ManagePunish = () => {
     setSelectValueOfStatusPunishTicket(item);
   };
 
+  console.log("check data >>> ", listData);
   return (
     <div className="manage-punish">
       {/* Header */}

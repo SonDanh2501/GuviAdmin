@@ -58,6 +58,10 @@ const Activity = ({ id }) => {
     dataHistoryActivitiesCollaborator,
     setDataHistoryActivitiesCollaborator,
   ] = useState([]); // Dữ liệu của lịch sử hoạt động
+  const [
+    totalItemHistoryActivitiesCollaborator,
+    setTotalItemHistoryActivitiesCollaborator,
+  ] = useState(0);
   const [timePeriod, setTimePeriod] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [valueSelectStatus, setValueSelectStatus] = useState("confirm");
@@ -293,7 +297,8 @@ const Activity = ({ id }) => {
     try {
       dispatch(loadingAction.loadingRequest(true));
       const res = await getHistoryActivityCollaborator(id, start, length);
-      setDataHistoryActivitiesCollaborator(res);
+      setDataHistoryActivitiesCollaborator((prev) => [...prev, ...res?.data]);
+      setTotalItemHistoryActivitiesCollaborator(res?.totalItem)
       dispatch(loadingAction.loadingRequest(false));
     } catch (err) {
       errorNotify({
@@ -324,6 +329,7 @@ const Activity = ({ id }) => {
   ]);
   // 2. Fetch giá trị lịch sử hoạt động của đối tác
   useEffect(() => {
+   
     fetchHistoryActivitiesCollaborator(
       id,
       startPageHistoryActivities,
@@ -464,8 +470,8 @@ const Activity = ({ id }) => {
               cardHeader="Lịch sử hoạt động"
               cardContent={
                 <CardActivityLog
-                  data={dataHistoryActivitiesCollaborator?.data}
-                  totalItem={dataHistoryActivitiesCollaborator?.totalItem}
+                  data={dataHistoryActivitiesCollaborator}
+                  totalItem={totalItemHistoryActivitiesCollaborator}
                   dateIndex="date_create"
                   statusIndex="type"
                   pageSize={lengthPage}
@@ -476,19 +482,39 @@ const Activity = ({ id }) => {
               }
             />
           </div>
+          {/* Thẻ lịch sử nhận điểm thưởng và lịch sử nhận phạt (ẩn đi vừa tính năng đang tạm dừng) */}
           {/* <div className="collaborator-activity__history--activities-activity">
             <CardInfo
-              cardHeader="Lịch sử trạng thái"
+              cardHeader="Lịch sử khen thưởng"
               cardContent={
                 <CardActivityLog
-                  data={dataHistoryActivitiesCollaborator?.data}
-                  totalItem={dataHistoryActivitiesCollaborator?.totalItem}
+                  data={dataHistoryActivitiesCollaborator}
+                  totalItem={totalItemHistoryActivitiesCollaborator}
                   dateIndex="date_create"
                   statusIndex="type"
-                  start={startPageOrder}
                   pageSize={lengthPage}
                   setLengthPage={setLengthPage}
-                  onCurrentPageChange={onChangePageOrder}
+                  onCurrentPageChange={onChangePageHistoryActivity}
+                  pagination={true}
+                  type="reward"
+                />
+              }
+            />
+          </div>
+          <div className="collaborator-activity__history--activities-activity">
+            <CardInfo
+              cardHeader="Lịch sử phạt"
+              cardContent={
+                <CardActivityLog
+                  data={dataHistoryActivitiesCollaborator}
+                  totalItem={totalItemHistoryActivitiesCollaborator}
+                  dateIndex="date_create"
+                  statusIndex="type"
+                  pageSize={lengthPage}
+                  setLengthPage={setLengthPage}
+                  onCurrentPageChange={onChangePageHistoryActivity}
+                  pagination={true}
+                  type="punish"
                 />
               }
             />

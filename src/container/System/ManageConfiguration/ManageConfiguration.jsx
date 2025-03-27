@@ -68,31 +68,113 @@ const ManageConfiguration = () => {
     }
   };
 
-  return (
-    <div className="container-configuration">
-      <div className="div-list-btn">
-        {DATA.map((item) => {
-          return (
-            <div
-              key={item?.id}
-              className={
-                checkElement?.includes(item?.role)
-                  ? "btn-item"
-                  : "btn-item-hide"
-              }
-              onClick={() => onClick(item)}
-            >
-              <a className="text-btn">{`${i18n.t(item?.title, {
-                lng: lang,
-              })}`}</a>
-            </div>
-          );
-        })}
-        {/* <a href="https://guvico.com/guvi-app/?code=123">Link 1</a>
-        <a href="https://guvico.com/guvi-app?code=0389888952">Link 2</a> */}
-      </div>
+  const listNewConfiguration = [
+    {
+      title: "Cấu hình nguyên nhân hủy",
+      detail: "Cấu hình nguyên nhân hủy",
+      linkNavigate: "adminManage/manage-configuration/manage-reason",
+    },
+    {
+      title: "Cầu hình nhóm khách hàng",
+      detail: "Cầu hình nhóm khách hàng",
+      linkNavigate: "adminManage/manage-configuration/manage-group-customer",
+    },
+    {
+      title: "Cấu hình ứng dụng khách hàng",
+      detail: "Cấu hình ứng dụng khách hàng",
+      linkNavigate: "adminManage/manage-configuration/manage-app-customer",
+    },
+    {
+      title: "Cấu hình ứng dụng đối tác",
+      detail: "Cấu hình ứng dụng đối tác",
+      linkNavigate: "adminManage/manage-configuration/manage-app-collaborator",
+    },
+    {
+      title: "Cấu hình tài khoản quản trị",
+      detail: "Cấu hình tài khoản quản trị",
+      linkNavigate: "adminManage/manage-configuration/create-account",
+    },
+    {
+      title: "Cấu hình bộ câu hỏi",
+      detail: "Cấu hình bộ câu hỏi",
+      linkNavigate: "adminManage/manage-configuration/lesson",
+    },
+    {
+      title: "Cấu hình lí do phạt",
+      detail: "Cấu hình lí do phạt",
+      linkNavigate: "adminManage/manage-configuration/reason_punish",
+    },
+    {
+      title: "Cấu hình quyền quản trị",
+      detail: "Cấu hình quyền quản trị",
+      linkNavigate: "adminManage/manage-configuration/setting_role",
+    },
+    {
+      title: "Cấu hình điều kiện thưởng đối tác",
+      detail: "Cấu hình điều kiện thưởng đối tác",
+      linkNavigate: "adminManage/manage-configuration/reward_collaborator",
+    },
+    {
+      title: "Cấu hình dịch vụ",
+      detail: "Cấu hình dịch vụ",
+      linkNavigate: "services/manage-group-service",
+    },
+    {
+      title: "Cấu hình nhóm khuyến mãi",
+      detail: "Cấu hình nhóm khuyến mãi",
+      linkNavigate: "adminManage/manage-configuration/group_promotion_manage",
+    },
+    {
+      title: "Cấu hình đối tác kinh doanh",
+      detail: "Cấu hình đối tác kinh doanh",
+      linkNavigate: "adminManage/manage-configuration/business_manage",
+    },
+    {
+      title: "Cấu hình hình ảnh",
+      detail: "Cấu hình hình ảnh",
+      linkNavigate: "adminManage/manage-configuration/image_manage",
+    },
+    {
+      title: "Cấu hình phạt",
+      detail: "Thêm mới, chỉnh sửa các quy định phạt",
+      linkNavigate: "configuration/punish",
+    },
+    {
+      title: "Cấu hình thưởng",
+      detail: "Thêm mới, chỉnh sửa các quy định thưởng",
+      linkNavigate: "configuration/reward",
+    },
+  ];
 
-      {/* <SettingQrCode /> */}
+  const handleOpenNewTab = (link) => {
+    const url = `${window.location.origin}/${link}`;
+    window.open(url, "_blank");
+  };
+  
+  return (
+    <div className="manage-configuration">
+      {listNewConfiguration?.map((item, index) => (
+        <div key={index} className="manage-configuration__child card-shadow">
+          <div className="manage-configuration__child--circle"></div>
+          <div
+            onClick={() => handleOpenNewTab(item.linkNavigate)}
+            className="manage-configuration__child--detail"
+          >
+            <span>Chi tiết</span>
+          </div>
+          <div className="manage-configuration__child--numbered">
+            <span>{index + 1}</span>
+          </div>
+          <div className="manage-configuration__child--title">
+            <span className="manage-configuration__child--title-header">
+              {item?.title}
+            </span>
+            <span className="manage-configuration__child--title-sub-header">
+              {item?.detail}
+            </span>
+          </div>
+        </div>
+      ))}
     </div>
   );
 };

@@ -626,10 +626,7 @@ const router = [
     <IoPerson />,
     [
       getItem(
-        <Link
-          style={{ textDecoration: "none" }}
-          to="/collaborator/manage"
-        >
+        <Link style={{ textDecoration: "none" }} to="/collaborator/manage">
           Đang hoạt động
         </Link>,
         "/collaborator/manage",
@@ -650,7 +647,10 @@ const router = [
       ),
       "collaborator",
       getItem(
-        <Link style={{ textDecoration: "none" }} to="/collaborator/manage-punish">
+        <Link
+          style={{ textDecoration: "none" }}
+          to="/collaborator/manage-punish"
+        >
           Phạt
         </Link>,
         "/collaborator/manage-punish",
@@ -659,21 +659,24 @@ const router = [
       ),
       "collaborator",
       getItem(
-        <Link style={{ textDecoration: "none" }} to="/collaborator/manage-punish">
+        <Link
+          style={{ textDecoration: "none" }}
+          to="/collaborator/manage-punish"
+        >
           Thưởng
         </Link>,
         "/collaborator/manage-reward",
         null,
         null
       ),
-      // getItem(
-      //   <Link style={{ textDecoration: "none" }} to="/system/manage-new-punish">
-      //     Lý do phạt
-      //   </Link>,
-      //   "/system/manage-new-punish",
-      //   null,
-      //   null
-      // ),
+      getItem(
+        <Link style={{ textDecoration: "none" }} to="/system/manage-new-punish">
+          Danh sách khóa
+        </Link>,
+        "/system/manage-new-punish",
+        null,
+        null
+      ),
     ],
     "collaborator"
   ),

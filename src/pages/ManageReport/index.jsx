@@ -20,7 +20,6 @@ import TabPanelContent from "../../components/tabs/TabPanel"
 import "./index.scss";
 import ManageReportCashBook from "../../container/System/ManageReport/ManageReportCashBook";
 import ManageReportActivity from "../../container/System/ManageReport/ManageReportActivity";
-import ManageReportRewardAnhPunish from "../../container/System/ManageReport/ManageReportRewardAnhPunish";
 
 const ManageReport = () => {
 
@@ -66,7 +65,7 @@ const ManageReport = () => {
       key: 7,
     },
     // {
-    //   label: "Báo cáo thưởng phạt",
+    //   label: "Báo cáo khóa",
     //   content: <ManageReportRewardAnhPunish />,
     //   key: 8,
     // },
