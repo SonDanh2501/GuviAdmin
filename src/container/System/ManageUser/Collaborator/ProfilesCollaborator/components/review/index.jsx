@@ -81,7 +81,7 @@ const Review = ({ id, totalReview }) => {
 
   return (
     <div className="collaborator-rating">
-      <div className="collaborator-rating__overview">
+      {/* <div className="collaborator-rating__overview">
         <div className="collaborator-rating__overview--statistic">
           <CardInfo
             collaboratorRatingStatistic={true}
@@ -99,7 +99,7 @@ const Review = ({ id, totalReview }) => {
             collaboratorStar={totalReview}
           />
         </div>
-      </div>
+      </div> */}
       {/* Acvitiy Log */}
       {/* <div className="collaborator-rating__activity-bar shadow">
         <div className="collaborator-rating__activity-bar--header">
@@ -120,7 +120,7 @@ const Review = ({ id, totalReview }) => {
         totalItem={total}
         onCurrentPageChange={onChangePage}
       />
-      <div className="collaborator-rating__favorite card-shadow">
+      {/* <div className="collaborator-rating__favorite card-shadow">
         <div className="collaborator-rating__favorite--header">
           <div className="collaborator-rating__favorite--header-title">
             <span>Danh sách đối tác</span>
@@ -248,7 +248,7 @@ const Review = ({ id, totalReview }) => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

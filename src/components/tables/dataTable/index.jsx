@@ -1801,7 +1801,7 @@ const DataTable = (props) => {
             }
             return (
               <div className="case__withdrawal-type-transfer">
-                {type_transfer === "withdraw" ? (
+                {data?.type_transfer === "withdraw" ? (
                   <p className="case__withdrawal-type-transfer withdrawal">
                     {type_transfer}
                   </p>
