@@ -48,7 +48,7 @@ export const getOrderDetailApi = (id) => {
 export const getHistoryOrderApi = (id, start, length, lang = "vi") => {
   return axiosClient.get(
     // `api/admin/group_order_manager/get_history_order_by_group_order/${id}?start=${start}&length=${length}&lang=${lang}`
-    `admin/group_order_manager/get_history_order_by_group_order/${id}?start=${start}&length=${length}&lang=${lang}`
+    `admin/group-order-manager/get_history_order_by_group_order/${id}?start=${start}&length=${length}&lang=${lang}`
   );
 };
 
