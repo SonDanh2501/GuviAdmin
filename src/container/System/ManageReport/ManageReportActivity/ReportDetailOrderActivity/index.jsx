@@ -85,7 +85,6 @@ const ReportDetailOrderActivity = () => {
           title="Tổng giá trị giao dịch dự kiến"
           typeSubValue="money"
           textToolTip="GMV - Gross Merchandise Volume"
-          position="right"
           subValue={listTotalStatistic?.total_gmv}
         />
       ),
@@ -99,7 +98,6 @@ const ReportDetailOrderActivity = () => {
           title="Thu hộ dịch vụ dự kiến"
           typeSubValue="money"
           textToolTip="Bao gồm phí dịch vụ trả đối tác: tiền tip từ khách,..."
-          position="right"
           subValue={
             listTotalStatistic?.total_projected_service_collection_amount
           }
@@ -115,7 +113,6 @@ const ReportDetailOrderActivity = () => {
           title="Doanh thu dự kiến"
           typeSubValue="money"
           textToolTip="Doanh thu = Tổng giá trị giao dịch (-) Thu hộ dịch vụ"
-          position="right"
           subValue={listTotalStatistic?.total_projected_revenue}
         />
       ),
@@ -130,7 +127,6 @@ const ReportDetailOrderActivity = () => {
           title="Giảm giá dự kiến"
           typeSubValue="money"
           textToolTip="Tổng số tiền giảm giá từ: giảm giá dịch vụ, giảm giá đơn hàng, đồng giá, ctkm,…"
-          position="right"
           subValue={listTotalStatistic?.total_projected_discount || null}
         />
       ),
@@ -144,7 +140,6 @@ const ReportDetailOrderActivity = () => {
           title="Thanh toán bằng ngân hàng"
           typeSubValue="money"
           textToolTip="Doanh thu = Tổng giá trị giao dịch (-) Thu hộ dịch vụ"
-          position="right"
           subValue={listTotalStatistic?.total_money_payment_method_from_bank}
         />
       ),
@@ -160,7 +155,6 @@ const ReportDetailOrderActivity = () => {
           title="Thanh toán bằng VNPAY-QR"
           typeSubValue="money"
           textToolTip="Doanh thu = Tổng giá trị giao dịch (-) Thu hộ dịch vụ"
-          position="right"
           subValue={listTotalStatistic?.total_money_payment_method_from_vnpay}
         />
       ),
