@@ -237,140 +237,9 @@
 
     }
 
-    .dash_board__container--pie-chart {
+    .dash_board__container--activity {
       display: flex;
-      flex-direction: column;
       width: 30%;
-      gap: $gapL;
-
-      .dash_board__container--pie-chart-activity {
-        display: flex;
-        flex-direction: column;
-        border-radius: $borderRadiusL;
-        background-color: $colorWhite;
-        height: 65%;
-
-        .dash_board__container--pie-chart-activity-header {
-          display: flex;
-          padding: 12px;
-          border-bottom: 2px solid $colorMoreLightGray;
-
-          span {
-            font-size: $textFontSizeM;
-            font-weight: $fontWeightXL;
-            color: $colorBlack;
-          }
-        }
-
-        .dash_board__container--pie-chart-activity-body {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          gap: $gapS;
-
-          .dash_board__container--pie-chart-activity-body-note {
-            display: flex;
-            gap: $gapM;
-
-            .dash_board__container--pie-chart-activity-body-note-mark {
-              height: 12px;
-              width: 12px;
-              border-radius: $borderRadiusFull;
-
-              &.green {
-                background-color: $colorViolet;
-              }
-
-              &.red {
-                background-color: $colorMoreLightGray;
-              }
-            }
-          }
-        }
-      }
-
-      .dash_board__container--pie-chart-connection-service {
-        display: flex;
-        flex-direction: column;
-        border-radius: $borderRadiusL;
-        background-color: $colorWhite;
-        height: 35%;
-
-        .dash_board__container--pie-chart-connection-service-header {
-          display: flex;
-          padding: 12px;
-          border-bottom: 2px solid $colorMoreLightGray;
-
-          span {
-            font-size: $textFontSizeM;
-            font-weight: $fontWeightXL;
-            color: $colorBlack;
-          }
-        }
-
-        .dash_board__container--pie-chart-connection-service-content {
-          display: flex;
-          flex-direction: column;
-          gap: $gapL;
-          padding: 16px;
-          justify-content: center;
-          height: 100%;
-
-          .dash_board__container--pie-chart-connection-service-content-item {
-            display: flex;
-            flex-direction: column;
-            gap: $gapM;
-
-            .dash_board__container--pie-chart-connection-service-content-item-title {
-              display: flex;
-              justify-content: space-between;
-
-              span {
-                font-size: $textFontSizeM;
-                font-weight: $fontWeightL;
-                color: $colorBlack;
-
-                &.high-light {
-                  font-weight: $fontWeightXL;
-                }
-
-                &.value {
-                  color: $colorLightGray;
-                }
-              }
-            }
-
-
-            .dash_board__container--pie-chart-connection-service-content-item-progressbar {
-              display: flex;
-              position: relative;
-              background-color: $colorMoreLightGray;
-              border-radius: $borderRadiusFull;
-              height: 12px;
-              width: 100%;
-
-              .dash_board__container--pie-chart-connection-service-content-item-progressbar-percent {
-                position: absolute;
-                top: 0;
-                height: 100%;
-                border-radius: $borderRadiusFull;
-                min-width: 5%;
-
-                &.online {
-                  background-color: $colorGreen;
-
-                }
-
-                &.offline {
-                  background-color: $colorRed;
-                }
-              }
-            }
-          }
-
-        }
-      }
     }
   }
 
@@ -554,8 +423,8 @@
           }
   
           &.expanded {
-            height: 95%;
-            max-height: 95%;
+            height: 90%;
+            max-height: 90%;
           }
         }
   
@@ -723,11 +592,143 @@
           }
         }
       }
-  
-      .dash_board__container--activity {
+
+      .dash_board__container--pie-chart {
         display: flex;
+        flex-direction: column;
         width: 50%;
+        gap: $gapL;
+  
+        .dash_board__container--pie-chart-activity {
+          display: flex;
+          flex-direction: column;
+          border-radius: $borderRadiusL;
+          background-color: $colorWhite;
+          height: 50%;
+  
+          .dash_board__container--pie-chart-activity-header {
+            display: flex;
+            padding: 12px;
+            border-bottom: 2px solid $colorMoreLightGray;
+  
+            span {
+              font-size: $textFontSizeM;
+              font-weight: $fontWeightXL;
+              color: $colorBlack;
+            }
+          }
+  
+          .dash_board__container--pie-chart-activity-body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: $gapS;
+  
+            .dash_board__container--pie-chart-activity-body-note {
+              display: flex;
+              gap: $gapM;
+  
+              .dash_board__container--pie-chart-activity-body-note-mark {
+                height: 12px;
+                width: 12px;
+                border-radius: $borderRadiusFull;
+  
+                &.green {
+                  background-color: $colorViolet;
+                }
+  
+                &.red {
+                  background-color: $colorMoreLightGray;
+                }
+              }
+            }
+          }
+        }
+  
+        .dash_board__container--pie-chart-connection-service {
+          display: flex;
+          flex-direction: column;
+          border-radius: $borderRadiusL;
+          background-color: $colorWhite;
+          height: 50%;
+  
+          .dash_board__container--pie-chart-connection-service-header {
+            display: flex;
+            padding: 12px;
+            border-bottom: 2px solid $colorMoreLightGray;
+  
+            span {
+              font-size: $textFontSizeM;
+              font-weight: $fontWeightXL;
+              color: $colorBlack;
+            }
+          }
+  
+          .dash_board__container--pie-chart-connection-service-content {
+            display: flex;
+            flex-direction: column;
+            gap: $gapL;
+            padding: 16px;
+            justify-content: center;
+            height: 100%;
+  
+            .dash_board__container--pie-chart-connection-service-content-item {
+              display: flex;
+              flex-direction: column;
+              gap: $gapM;
+  
+              .dash_board__container--pie-chart-connection-service-content-item-title {
+                display: flex;
+                justify-content: space-between;
+  
+                span {
+                  font-size: $textFontSizeM;
+                  font-weight: $fontWeightL;
+                  color: $colorBlack;
+  
+                  &.high-light {
+                    font-weight: $fontWeightXL;
+                  }
+  
+                  &.value {
+                    color: $colorLightGray;
+                  }
+                }
+              }
+  
+  
+              .dash_board__container--pie-chart-connection-service-content-item-progressbar {
+                display: flex;
+                position: relative;
+                background-color: $colorMoreLightGray;
+                border-radius: $borderRadiusFull;
+                height: 12px;
+                width: 100%;
+  
+                .dash_board__container--pie-chart-connection-service-content-item-progressbar-percent {
+                  position: absolute;
+                  top: 0;
+                  height: 100%;
+                  border-radius: $borderRadiusFull;
+                  min-width: 5%;
+  
+                  &.online {
+                    background-color: $colorGreen;
+  
+                  }
+  
+                  &.offline {
+                    background-color: $colorRed;
+                  }
+                }
+              }
+            }
+  
+          }
+        }
       }
+
     }
 
     .dash_board__container--order-statistic {
@@ -814,7 +815,7 @@
   }
 }
 
-@media screen and (max-width: 1400px) {
+@media screen and (max-width: 1280px) {
   .dash_board {
     display: flex;
     flex-direction: column;
@@ -825,9 +826,6 @@
       display: flex;
       height: 100%;
       gap: $gapL;
-  
-  
-  
   
       .dash_board__container--table {
         display: flex;
@@ -893,6 +891,7 @@
     .dash_board__container-first-line {
       display: flex;
       gap: $gapL;
+
       .dash_board__container--statistic {
         display: flex;
         flex-direction: column;
@@ -1053,140 +1052,9 @@
   
       }
   
-      .dash_board__container--pie-chart {
+      .dash_board__container--activity {
         display: flex;
-        flex-direction: column;
         width: 50%;
-        gap: $gapL;
-  
-        .dash_board__container--pie-chart-activity {
-          display: flex;
-          flex-direction: column;
-          border-radius: $borderRadiusL;
-          background-color: $colorWhite;
-          height: 65%;
-  
-          .dash_board__container--pie-chart-activity-header {
-            display: flex;
-            padding: 12px;
-            border-bottom: 2px solid $colorMoreLightGray;
-  
-            span {
-              font-size: $textFontSizeM;
-              font-weight: $fontWeightXL;
-              color: $colorBlack;
-            }
-          }
-  
-          .dash_board__container--pie-chart-activity-body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: $gapS;
-  
-            .dash_board__container--pie-chart-activity-body-note {
-              display: flex;
-              gap: $gapM;
-  
-              .dash_board__container--pie-chart-activity-body-note-mark {
-                height: 12px;
-                width: 12px;
-                border-radius: $borderRadiusFull;
-  
-                &.green {
-                  background-color: $colorViolet;
-                }
-  
-                &.red {
-                  background-color: $colorMoreLightGray;
-                }
-              }
-            }
-          }
-        }
-  
-        .dash_board__container--pie-chart-connection-service {
-          display: flex;
-          flex-direction: column;
-          border-radius: $borderRadiusL;
-          background-color: $colorWhite;
-          height: 35%;
-  
-          .dash_board__container--pie-chart-connection-service-header {
-            display: flex;
-            padding: 12px;
-            border-bottom: 2px solid $colorMoreLightGray;
-  
-            span {
-              font-size: $textFontSizeM;
-              font-weight: $fontWeightXL;
-              color: $colorBlack;
-            }
-          }
-  
-          .dash_board__container--pie-chart-connection-service-content {
-            display: flex;
-            flex-direction: column;
-            gap: $gapL;
-            padding: 16px;
-            justify-content: center;
-            height: 100%;
-  
-            .dash_board__container--pie-chart-connection-service-content-item {
-              display: flex;
-              flex-direction: column;
-              gap: $gapM;
-  
-              .dash_board__container--pie-chart-connection-service-content-item-title {
-                display: flex;
-                justify-content: space-between;
-  
-                span {
-                  font-size: $textFontSizeM;
-                  font-weight: $fontWeightL;
-                  color: $colorBlack;
-  
-                  &.high-light {
-                    font-weight: $fontWeightXL;
-                  }
-  
-                  &.value {
-                    color: $colorLightGray;
-                  }
-                }
-              }
-  
-  
-              .dash_board__container--pie-chart-connection-service-content-item-progressbar {
-                display: flex;
-                position: relative;
-                background-color: $colorMoreLightGray;
-                border-radius: $borderRadiusFull;
-                height: 12px;
-                width: 100%;
-  
-                .dash_board__container--pie-chart-connection-service-content-item-progressbar-percent {
-                  position: absolute;
-                  top: 0;
-                  height: 100%;
-                  border-radius: $borderRadiusFull;
-                  min-width: 5%;
-  
-                  &.online {
-                    background-color: $colorGreen;
-  
-                  }
-  
-                  &.offline {
-                    background-color: $colorRed;
-                  }
-                }
-              }
-            }
-  
-          }
-        }
       }
     }
   
@@ -1370,8 +1238,8 @@
             }
     
             &.expanded {
-              height: 95%;
-              max-height: 95%;
+              height: 90%;
+              max-height: 90%;
             }
           }
     
@@ -1539,831 +1407,144 @@
             }
           }
         }
-    
-        .dash_board__container--activity {
-          display: flex;
-          width: 50%;
-        }
-      }
-      .dash_board__container--order-statistic {
-        display: flex;
-        flex-direction: row;
-        width: 100%;
-        gap: $gapL;
   
-        .dash_board__container--order-statistic-hour {
+        .dash_board__container--pie-chart {
           display: flex;
           flex-direction: column;
-          height: 100%;
           width: 50%;
-          background-color: $colorWhite;
-          border-radius: $borderRadiusL;
-  
-          .dash_board__container--order-statistic-hour-header {
-            display: flex;
-            padding: 12px;
-            border-bottom: 2px solid $colorMoreLightGray;
-  
-            span {
-              font-size: $textFontSizeM;
-              font-weight: $fontWeightXL;
-              color: $colorBlack;
-            }
-          }
-  
-          .dash_board__container--order-statistic-hour-body {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 16px;
-          }
-        }
-  
-        .dash_board__container--order-statistic-customer {
-          display: flex;
-          flex-direction: column;
-          height: 100%;
-          width: 50%;
-          background-color: $colorWhite;
-          border-radius: $borderRadiusL;
-  
-          .dash_board__container--order-statistic-customer-header {
-            display: flex;
-            padding: 12px;
-            border-bottom: 2px solid $colorMoreLightGray;
-  
-            span {
-              font-size: $textFontSizeM;
-              font-weight: $fontWeightXL;
-              color: $colorBlack;
-            }
-          }
-  
-  
-          .dash_board__container--order-statistic-customer-body {
-            display: flex;
-            flex-direction: column;
-            gap: $gapXS;
-            align-items: center;
-            justify-content: center;
-            padding: 16px;
-  
-            .dash_board__container--order-statistic-customer-body-total {
-              display: flex;
-              gap: $gapXS;
-  
-              span {
-                font-size: $textFontSizeM;
-                font-weight: $fontWeightL;
-                color: $colorBlack;
-    
-                &.high-light {
-                  font-weight: $fontWeightXL;
-                }
-              }
-            }
-           
-          }
-        }
-      }
-    }
-  }
-}
-
-
-@media screen and (max-width: 1000px) {
-  .dash_board {
-    display: flex;
-    flex-direction: column;
-    gap: $gapL;
-    padding-bottom: 16px;
-  
-    .dash_board__container {
-      display: flex;
-      height: 100%;
-      gap: $gapL;
-  
-      .dash_board__container--table {
-        display: flex;
-      }
-  
-      .dash_board__container--pie-order-cancel {
-        display: flex;
-        flex-direction: column;
-        width: 33%;
-        height: fit-content;
-        background-color: $colorWhite;
-        border-radius: $borderRadiusL;
-        // padding: 16px;
-  
-        .dash_board__container--pie-order-cancel-header {
-          display: flex;
-          padding: 16px;
-          border-bottom: 2px solid $colorMoreLightGray;
-  
-          span {
-            font-size: $textFontSizeM;
-            font-weight: $fontWeightXL;
-            color: $colorBlack;
-          }
-        }
-  
-        .dash_board__container--pie-order-cancel-body {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          padding: 16px;
-  
-          .dash_board__container--pie-order-cancel-body-value {
-            display: flex;
-            flex-direction: column;
-            justify-content: start;
-            gap: $gapS;
-  
-            .dash_board__container--pie-order-cancel-body-value-content {
-              display: flex;
-              gap: $gapXS;
-  
-              span {
-                font-size: $textFontSizeM;
-                font-weight: $fontWeightL;
-                color: $colorBlack;
-  
-                &.high-light {
-                  font-weight: $fontWeightXL;
-                }
-              }
-            }
-  
-  
-  
-          }
-        }
-      }
-  
-    }
-  
-    .dash_board__container-first-line {
-      display: flex;
-      flex-direction: column;
-      gap: $gapL;
-
-      .dash_board__container--statistic {
-        display: flex;
-        flex-direction: column;
-        gap: $gapL;
-        width: 100%;
-  
-        .dash_board__container--statistic-cards {
-          display: flex;
           gap: $gapL;
-          background-color: $colorWhite;
-          border-radius: $borderRadiusL;
-          padding: 16px;
-  
-          .dash_board__container--statistic-cards-card {
+    
+          .dash_board__container--pie-chart-activity {
             display: flex;
-            align-items: center;
-            flex: 1;
-            gap: $gapM;
-            width: fit-content;
-  
-  
-            .dash_board__container--statistic-cards-card-icon {
+            flex-direction: column;
+            border-radius: $borderRadiusL;
+            background-color: $colorWhite;
+            height: 50%;
+    
+            .dash_board__container--pie-chart-activity-header {
               display: flex;
-              padding: 8px;
-              border-radius: $borderRadiusXL;
-              align-items: center;
-              justify-content: center;
-  
+              padding: 12px;
+              border-bottom: 2px solid $colorMoreLightGray;
+    
               span {
-                font-size: 1.3rem;
-              }
-  
-              &.blue {
-                background-color: $colorExtraLightBlue;
-  
-                span {
-                  color: $colorBlue;
-                }
-              }
-  
-              &.red {
-                background-color: $colorExtraLightRed;
-  
-                span {
-                  color: $colorRed;
-                }
-              }
-  
-              &.green {
-                background-color: $colorExtraLightGreen;
-  
-                span {
-                  color: $colorGreen;
-                }
-              }
-  
-              &.yellow {
-                background-color: $colorExtraLightYellow;
-  
-                span {
-                  color: $colorYellow;
-                }
-              }
-            }
-  
-            .dash_board__container--statistic-cards-card-info {
-              display: flex;
-              flex-direction: column;
-              gap: $gapXS;
-  
-              .dash_board__container--statistic-cards-card-info-title {
-                font-size: $textFontSizeM;
-                font-weight: $fontWeightL;
-                color: $colorLightGray;
-              }
-  
-              .dash_board__container--statistic-cards-card-info-number {
                 font-size: $textFontSizeM;
                 font-weight: $fontWeightXL;
                 color: $colorBlack;
               }
             }
-  
-          }
-        }
-  
-        .dash_board__container--statistic-chart {
-          display: flex;
-          flex-direction: column;
-          background-color: $colorWhite;
-          border-radius: $borderRadiusL;
-  
-          .dash_board__container--statistic-chart-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px;
-            border-bottom: 2px solid $colorMoreLightGray;
-  
-            .dash_board__container--statistic-chart-header-title {
-              font-size: $textFontSizeM;
-              font-weight: $fontWeightXL;
-              color: $colorBlack;
-            }
-  
-            .dash_board__container--statistic-chart-header-filter {
+    
+            .dash_board__container--pie-chart-activity-body {
               display: flex;
-              gap: $gapL;
-            }
-  
-          }
-  
-          .dash_board__container--statistic-chart-body {
-            display: flex;
-            flex-direction: column;
-            gap: $gapL;
-            padding: 12px;
-  
-            .dash_board__container--statistic-chart-body-filter {
-              display: flex;
+              flex-direction: column;
               align-items: center;
-              justify-content: space-between;
-  
-              .dash_board__container--statistic-chart-body-filter-time {
+              justify-content: center;
+              gap: $gapS;
+    
+              .dash_board__container--pie-chart-activity-body-note {
                 display: flex;
-                gap: $gapL;
-  
-                .dash_board__container--statistic-chart-body-filter-time-same-date {
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  border: 1px solid $colorMoreLightGray;
-                  border-radius: $borderRadiusL;
-                  padding: 8px;
-                  gap: $gapS;
-  
-                  .dash_board__container--statistic-chart-body-filter-time-same-date-title {
-                    font-size: $textFontSizeM;
-                    font-weight: $fontWeightXL;
-                    color: $colorBlack
-                  }
-  
-                  .dash_board__container--statistic-chart-body-filter-time-same-date-content {
-                    font-size: $textFontSizeM;
-                    font-weight: $fontWeightL;
-                    color: $colorBlack
-                  }
-                }
-              }
-            }
-  
-            .dash_board__container--statistic-chart-body-data {
-              display: flex;
-              padding: 0px 2px;
-            }
-          }
-        }
-  
-      }
-  
-      .dash_board__container--pie-chart {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        gap: $gapL;
-  
-        .dash_board__container--pie-chart-activity {
-          display: flex;
-          flex-direction: column;
-          border-radius: $borderRadiusL;
-          background-color: $colorWhite;
-          height: 100%;
-          width: 100%;
-  
-          .dash_board__container--pie-chart-activity-header {
-            display: flex;
-            padding: 12px;
-            border-bottom: 2px solid $colorMoreLightGray;
-  
-            span {
-              font-size: $textFontSizeM;
-              font-weight: $fontWeightXL;
-              color: $colorBlack;
-            }
-          }
-  
-          .dash_board__container--pie-chart-activity-body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: $gapS;
-            padding-bottom: 12px;
-  
-            .dash_board__container--pie-chart-activity-body-note {
-              display: flex;
-              gap: $gapM;
-  
-              .dash_board__container--pie-chart-activity-body-note-mark {
-                height: 12px;
-                width: 12px;
-                border-radius: $borderRadiusFull;
-  
-                &.green {
-                  background-color: $colorViolet;
-                }
-  
-                &.red {
-                  background-color: $colorMoreLightGray;
-                }
-              }
-            }
-          }
-        }
-  
-        .dash_board__container--pie-chart-connection-service {
-          display: flex;
-          flex-direction: column;
-          border-radius: $borderRadiusL;
-          background-color: $colorWhite;
-          height: 100%;
-          width: 100%;
-  
-          .dash_board__container--pie-chart-connection-service-header {
-            display: flex;
-            padding: 12px;
-            border-bottom: 2px solid $colorMoreLightGray;
-  
-            span {
-              font-size: $textFontSizeM;
-              font-weight: $fontWeightXL;
-              color: $colorBlack;
-            }
-          }
-  
-          .dash_board__container--pie-chart-connection-service-content {
-            display: flex;
-            flex-direction: column;
-            gap: $gapL;
-            padding: 16px;
-            justify-content: center;
-            height: 100%;
-  
-            .dash_board__container--pie-chart-connection-service-content-item {
-              display: flex;
-              flex-direction: column;
-              gap: $gapM;
-  
-              .dash_board__container--pie-chart-connection-service-content-item-title {
-                display: flex;
-                justify-content: space-between;
-  
-                span {
-                  font-size: $textFontSizeM;
-                  font-weight: $fontWeightL;
-                  color: $colorBlack;
-  
-                  &.high-light {
-                    font-weight: $fontWeightXL;
-                  }
-  
-                  &.value {
-                    color: $colorLightGray;
-                  }
-                }
-              }
-  
-  
-              .dash_board__container--pie-chart-connection-service-content-item-progressbar {
-                display: flex;
-                position: relative;
-                background-color: $colorMoreLightGray;
-                border-radius: $borderRadiusFull;
-                height: 12px;
-                width: 100%;
-  
-                .dash_board__container--pie-chart-connection-service-content-item-progressbar-percent {
-                  position: absolute;
-                  top: 0;
-                  height: 100%;
+                gap: $gapM;
+    
+                .dash_board__container--pie-chart-activity-body-note-mark {
+                  height: 12px;
+                  width: 12px;
                   border-radius: $borderRadiusFull;
-                  min-width: 5%;
-  
-                  &.online {
-                    background-color: $colorGreen;
-  
+    
+                  &.green {
+                    background-color: $colorViolet;
                   }
-  
-                  &.offline {
-                    background-color: $colorRed;
+    
+                  &.red {
+                    background-color: $colorMoreLightGray;
                   }
                 }
               }
             }
-  
-          }
-        }
-      }
-    }
-  
-    .dash-board__container-second-line {
-      display: flex;
-      flex-direction: column;
-      gap: $gapL;
-  
-      .dash-board__container-second-line-left {
-        display: flex;
-        flex-direction: row;
-        gap: $gapL;
-        width: 100%;
-
-        .dash_board__container--ranking-board {
-          display: flex;
-          align-items: end;
-          justify-content: center;
-          position: relative;
-          width: 50%;
-          height: 100%;
-          // max-height: 500px;
-          background-color: $colorWhite;
-          border-radius: $borderRadiusL;
-          padding: 16px;
-    
-          .dash_board__container--ranking-board-more-detail {
-            top: 0;
-            right: 0;
-            padding: 12px;
-            position: absolute;
-            z-index: 999;
-    
-            .dash_board__container--ranking-board-more-detail-button {
-              background-color: transparent;
-              padding: 4px 8px;
-              border: 2px solid $colorViolet;
-              border-radius: $borderRadiusFull;
-              color: $colorViolet;
-              font-size: $textFontSizeM;
-              font-weight: $fontWeightXL;
-              cursor: pointer;
-              transition: all 0.5s ease;
-    
-              &:hover {
-                background-color: $colorViolet;
-                color: $colorWhite;
-              }
-            }
           }
     
-          .dash_board__container--ranking-board__background-circle {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 350px;
-            height: 350px;
-            background-color: $colorExtraLightGray;
-            border-radius: $borderRadiusFull;
-            z-index: 1;
-          }
-    
-          .dash_board__container--ranking-board__list {
+          .dash_board__container--pie-chart-connection-service {
             display: flex;
             flex-direction: column;
-            gap: $gapL;
-            align-items: center;
-            position: absolute;
-            bottom: 0;
-            width: 92%;
-            height: 250px;
-            max-height: 250px;
-            background-color: #eeeefd;
-            border-radius: $borderRadiusXL;
-            padding: 16px;
-            transition: all 1.5s ease;
-            z-index: 3;
-            margin-bottom: 12px;
+            border-radius: $borderRadiusL;
+            background-color: $colorWhite;
+            height: 50%;
     
-            .dash_board__container--ranking-board__list--container {
+            .dash_board__container--pie-chart-connection-service-header {
+              display: flex;
+              padding: 12px;
+              border-bottom: 2px solid $colorMoreLightGray;
+    
+              span {
+                font-size: $textFontSizeM;
+                font-weight: $fontWeightXL;
+                color: $colorBlack;
+              }
+            }
+    
+            .dash_board__container--pie-chart-connection-service-content {
               display: flex;
               flex-direction: column;
-              gap: $gapM;
-              width: 100%;
+              gap: $gapL;
+              padding: 16px;
+              justify-content: center;
               height: 100%;
-              overflow-y: auto;
-              padding: 4px;
     
-    
-              .dash_board__container--ranking-board__list--container-child {
+              .dash_board__container--pie-chart-connection-service-content-item {
                 display: flex;
-                align-items: center;
-                gap: $gapL;
-                width: 100%;
-                height: 60px;
-                min-height: 60px;
-                max-height: 60px;
-                background-color: $colorWhite;
-                border-radius: $borderRadiusL;
-                border: 2px solid $colorMoreLightGray;
-                padding: 12px;
+                flex-direction: column;
+                gap: $gapM;
     
-                .dash_board__container--ranking-board__list--container-child-number {
+                .dash_board__container--pie-chart-connection-service-content-item-title {
                   display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  width: 20px;
-                  height: 20px;
-                  border: 1px solid $colorMoreLightGray;
-                  border-radius: $borderRadiusFull;
+                  justify-content: space-between;
     
                   span {
                     font-size: $textFontSizeM;
-                    font-weight: $fontWeightXL;
-                    color: $colorLightGray;
-                  }
-                }
-    
-                .dash_board__container--ranking-board__list--container-child-avatar {
-                  width: 40px;
-                  height: 40px;
-                  border-radius: $borderRadiusFull;
-                  background-color: black;
-                }
-    
-                .dash_board__container--ranking-board__list--container-child-info {
-                  display: flex;
-                  flex-direction: column;
-                  gap: $gapS;
-    
-                  .dash_board__container--ranking-board__list--container-child-info-name {
-                    font-size: $textFontSizeL;
-                    font-weight: $fontWeightXL;
-                    color: $colorBlack;
-                  }
-    
-                  .dash_board__container--ranking-board__list--container-child-info-point {
-                    font-size: $textFontSizeM;
                     font-weight: $fontWeightL;
-                    color: $colorLightGray;
+                    color: $colorBlack;
+    
+                    &.high-light {
+                      font-weight: $fontWeightXL;
+                    }
+    
+                    &.value {
+                      color: $colorLightGray;
+                    }
+                  }
+                }
+    
+    
+                .dash_board__container--pie-chart-connection-service-content-item-progressbar {
+                  display: flex;
+                  position: relative;
+                  background-color: $colorMoreLightGray;
+                  border-radius: $borderRadiusFull;
+                  height: 12px;
+                  width: 100%;
+    
+                  .dash_board__container--pie-chart-connection-service-content-item-progressbar-percent {
+                    position: absolute;
+                    top: 0;
+                    height: 100%;
+                    border-radius: $borderRadiusFull;
+                    min-width: 5%;
+    
+                    &.online {
+                      background-color: $colorGreen;
+    
+                    }
+    
+                    &.offline {
+                      background-color: $colorRed;
+                    }
                   }
                 }
               }
-            }
     
-    
-            .dash_board__container--ranking-board__list--expand {
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              position: absolute;
-              top: 0;
-              width: 30px;
-              height: 15px;
-              background-color: #eeeefd;
-              border-top-left-radius: $borderRadiusFull;
-              border-top-right-radius: $borderRadiusFull;
-              transform: translateY(-50%);
-              cursor: pointer;
-              transition: all 1.5s ease;
-              z-index: 4;
-    
-              .dash_board__container--ranking-board__list--expand-dot {
-                width: 8px;
-                height: 8px;
-                border-radius: $borderRadiusFull;
-                background-color: $colorViolet;
-                transition: all 0.5s ease;
-              }
-    
-              &:hover {
-    
-                .dash_board__container--ranking-board__list--expand-dot {
-                  background-color: $colorOrange;
-                }
-              }
-            }
-    
-            &.expanded {
-              height: 95%;
-              max-height: 95%;
             }
           }
-    
-          .dash_board__container--ranking-board__columns {
-            display: flex;
-            align-items: end;
-            position: relative;
-            z-index: 2;
-    
-            .dash_board__container--ranking-board__columns--child {
-              display: flex;
-              flex-direction: column;
-              align-items: center;
-              justify-content: center;
-              transition: all 1.5s ease;
-    
-              .dash_board__container--ranking-board__columns--child-point {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                padding: 8px 12px;
-                background-color: $colorViolet;
-                border-radius: $borderRadiusL;
-                margin: 4px 0px 12px 0px;
-    
-                span {
-                  font-size: $textFontSizeM;
-                  font-weight: $fontWeightXL;
-                  color: $colorWhite
-                }
-    
-                &.first-place {
-                  background-color: $colorYellow;
-                }
-    
-                &.second-place {
-                  background-color: $colorSlate;
-                }
-    
-                &.third-place {
-                  background-color: $colorOrange;
-                }
-              }
-    
-              .dash_board__container--ranking-board__columns--child-avatar {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                position: relative;
-                width: 50px;
-                min-width: 50px;
-                height: 50px;
-                min-height: 50px;
-                border-radius: $borderRadiusFull;
-                margin-bottom: 12px;
-    
-                img {
-                  width: 49px;
-                  height: 49px;
-                  border-radius: $borderRadiusFull;
-                }
-    
-                .dash_board__container--ranking-board__columns--child-avatar-medal {
-                  position: absolute;
-                  bottom: 0;
-                  right: 0;
-                  padding: 4px;
-                  border-radius: $borderRadiusFull;
-                }
-              }
-    
-              .dash_board__container--ranking-board__columns--child-info {
-                font-size: $textFontSizeM;
-                font-weight: $fontWeightXL;
-                color: $colorBlack;
-                // white-space: nowrap;
-                line-height: 1.2;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                cursor: pointer;
-              }
-    
-              .dash_board__container--ranking-board__columns--child-trapezoid {
-                width: 110px;
-                height: 0;
-              }
-    
-              .dash_board__container--ranking-board__columns--child-vertical {
-                display: flex;
-                justify-content: center;
-                width: 110px;
-    
-                .dash_board__container--ranking-board__columns--child-vertical-number {
-                  font-size: 6rem;
-                  font-weight: $fontWeightXL;
-                  color: $colorWhite;
-                  padding-top: 16px;
-                }
-              }
-    
-              &.small {
-    
-                .dash_board__container--ranking-board__columns--child-vertical {
-                  height: 350px;
-                  background-image: linear-gradient(360deg, $colorLightOrange 50%, $colorOrange 100%);
-    
-                  .dash_board__container--ranking-board__columns--child-vertical-number {
-                    font-size: 5.5rem;
-                    color: $colorWhite;
-                  }
-                }
-    
-                .dash_board__container--ranking-board__columns--child-trapezoid {
-                  border-bottom: 20px solid $colorLightOrange;
-                  border-left: 0px solid transparent;
-                  border-right: 20px solid transparent;
-                }
-              }
-    
-              &.medium {
-    
-                .dash_board__container--ranking-board__columns--child-vertical {
-                  height: 360px;
-                  background-image: linear-gradient(360deg, $colorLightSlate 50%, $colorSlate 100%);
-    
-                  .dash_board__container--ranking-board__columns--child-vertical-number {
-                    color: $colorWhite;
-                  }
-                }
-    
-                .dash_board__container--ranking-board__columns--child-trapezoid {
-                  border-bottom: 20px solid $colorLightSlate;
-                  border-left: 20px solid transparent;
-                  border-right: 0px solid transparent;
-                }
-    
-              }
-    
-              &.large {
-    
-                .dash_board__container--ranking-board__columns--child-vertical {
-                  height: 380px;
-                  background-image: linear-gradient(360deg, $colorLightYellow 50%, $colorYellow 100%);
-    
-                  .dash_board__container--ranking-board__columns--child-vertical-number {
-                    font-size: 7rem;
-                    color: $colorWhite;
-                  }
-                }
-    
-                .dash_board__container--ranking-board__columns--child-trapezoid {
-                  border-bottom: 20px solid $colorLightYellow;
-                  border-left: 20px solid transparent;
-                  border-right: 20px solid transparent;
-    
-                }
-    
-                .dash_board__container--ranking-board__columns--child-avatar {
-    
-                  .dash_board__container--ranking-board__columns--child-avatar-medal {
-                    background-color: $colorYellow
-                  }
-                }
-              }
-            }
-          }
-        }
-    
-        .dash_board__container--activity {
-          display: flex;
-          width: 50%;
         }
       }
+
       .dash_board__container--order-statistic {
         display: flex;
         flex-direction: row;
@@ -2373,8 +1554,8 @@
         .dash_board__container--order-statistic-hour {
           display: flex;
           flex-direction: column;
-          height: 100%;
-          width: 50%;
+          height: 50%;
+          width: 100%;
           background-color: $colorWhite;
           border-radius: $borderRadiusL;
   
@@ -2401,8 +1582,8 @@
         .dash_board__container--order-statistic-customer {
           display: flex;
           flex-direction: column;
-          height: 100%;
-          width: 50%;
+          height: 50%;
+          width: 100%;
           background-color: $colorWhite;
           border-radius: $borderRadiusL;
   

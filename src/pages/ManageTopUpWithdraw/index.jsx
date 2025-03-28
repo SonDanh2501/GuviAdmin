@@ -182,7 +182,11 @@ const ManageTopUpWithdraw = (props) => {
   // 1. Danh sách các loại trạng thái
   const [statusList, setStatusList] = useState([
     { code: "", label: "Tất cả", total: 0 },
-    { code: "pending", label: "Đang xử lí", total: 0 },
+    {
+      code: `${object === "customer" ? "processing" : "pending"}`,
+      label: "Đang xử lý",
+      total: 0,
+    }, // pending là đang xử lý của đối tác, processing là đang xử lý của khách hàng
     { code: "transferred", label: "Đã chuyển tiền", total: 0 },
     { code: "holding", label: "Tạm giữ", total: 0 },
     { code: "done", label: "Hoàn thành", total: 0 },
@@ -490,10 +494,12 @@ const ManageTopUpWithdraw = (props) => {
       let selectFilterNoStatus = selectFilter.filter(
         (el) => el.key !== "status"
       );
+
       let query =
         selectFilterNoStatus
           .map((item) => `&${item?.key}=${item?.code}`)
           .join("") + `&start_date=${startDate}&end_date=${endDate}`;
+
       const res = await getTotalTransactionApi(query, valueSearch);
       setStatusList((prevList) =>
         prevList.map((item) => ({
@@ -599,6 +605,22 @@ const ManageTopUpWithdraw = (props) => {
       setSelectDateType(params.get("type_date"));
     }
   }, []);
+
+  useEffect(() => {
+    setStatusList([
+      { code: "", label: "Tất cả", total: 0 },
+      {
+        code: object === "customer" ? "processing" : "pending",
+        label: "Đang xử lý",
+        total: 0,
+      },
+      { code: "transferred", label: "Đã chuyển tiền", total: 0 },
+      { code: "holding", label: "Tạm giữ", total: 0 },
+      { code: "done", label: "Hoàn thành", total: 0 },
+      { code: "cancel", label: "Đã hủy", total: 0 },
+    ]);
+  }, [object]); // Theo dõi sự thay đổi của `object`
+  
   /* ~~~ Other ~~~ */
   const leftContent = () => {
     return (
@@ -783,6 +805,7 @@ const ManageTopUpWithdraw = (props) => {
     },
   };
 
+  console.log("check statusList >>>", statusList, object);
   /* ~~~ Main ~~~ */
   return (
     <div className="manage-top-up-with-draw">
