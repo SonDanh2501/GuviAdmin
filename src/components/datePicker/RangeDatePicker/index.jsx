@@ -12,7 +12,7 @@ import icons from "../../../utils/icons";
 const { IoAddCircleOutline, IoCalendarOutline, IoHelpCircleOutline } = icons;
 
 const RangeDatePicker = (props) => {
-  const timeTemp = new Date(2000, 0, 1);
+  const timeTemp = new Date(2025, 0, 1);
   const timeEndTemp = new Date();
   const { width } = useWindowDimensions();
   const lang = useSelector(getLanguageState);
