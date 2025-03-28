@@ -655,7 +655,7 @@ const Home = () => {
                 </div>
               </div>
               <div className="dash_board__container--statistic-chart-body-data">
-                <ResponsiveContainer width="97%" height={300}>
+                <ResponsiveContainer width="97%" height={350}>
                   <AreaChart data={arrResult}>
                     <defs>
                       <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
@@ -703,92 +703,22 @@ const Home = () => {
           </div>
         </div>
         {/* Right */}
-        <div className="dash_board__container--pie-chart">
-          <div className="dash_board__container--pie-chart-activity card-shadow">
-            <div className="dash_board__container--pie-chart-activity-header">
-              <span>Tỉ lệ kết nối</span>
-            </div>
-            <div className="dash_board__container--pie-chart-activity-body">
-              <ResponsiveContainer width="100%" height={240}>
-                <PieChart>
-                  <Pie
-                    data={data}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={false}
-                    label={renderCustomizedLabel}
-                    outerRadius={110}
-                    innerRadius={70}
-                    fill="#8884d8"
-                    dataKey="value"
-                    paddingAngle={5}
-                  >
-                    {data.map((entry, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={COLORS[index % COLORS.length]}
-                      />
-                    ))}
-                  </Pie>
-                </PieChart>
-              </ResponsiveContainer>
-              <div className="dash_board__container--pie-chart-activity-body-note">
-                <div className="dash_board__container--pie-chart-activity-body-note">
-                  <div className="dash_board__container--pie-chart-activity-body-note-mark green"></div>
-                  <span>Hoàn thành</span>
-                </div>
-                <div className="dash_board__container--pie-chart-activity-body-note">
-                  <div className="dash_board__container--pie-chart-activity-body-note-mark red"></div>
-                  <span>Chưa hoàn thành</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="dash_board__container--pie-chart-connection-service card-shadow">
-            <div className="dash_board__container--pie-chart-connection-service-header">
-              <span>Phần trăm hoạt động</span>
-            </div>
-            <div className="dash_board__container--pie-chart-connection-service-content">
-              <div className="dash_board__container--pie-chart-connection-service-content-item">
-                <div className="dash_board__container--pie-chart-connection-service-content-item-title">
-                  <span className="high-light">Online</span>
-                  <span className="value">
-                    {formatNumber(activeUser?.ActiveUsers || 0)}&nbsp;người
-                  </span>
-                </div>
-                <div className="dash_board__container--pie-chart-connection-service-content-item-progressbar ">
-                  <div
-                    style={{
-                      width: `${calculateNumberPercent(
-                        activeUser.AllUser,
-                        activeUser?.ActiveUsers
-                      )}%`,
-                    }}
-                    className={`dash_board__container--pie-chart-connection-service-content-item-progressbar-percent online`}
-                  ></div>
-                </div>
-              </div>
-              <div className="dash_board__container--pie-chart-connection-service-content-item">
-                <div className="dash_board__container--pie-chart-connection-service-content-item-title">
-                  <span className="high-light">Offline</span>
-                  <span className="value">
-                    {formatNumber(activeUser?.OfflineUsers || 0)}&nbsp;người
-                  </span>
-                </div>
-                <div className="dash_board__container--pie-chart-connection-service-content-item-progressbar ">
-                  <div
-                    style={{
-                      width: `${calculateNumberPercent(
-                        activeUser.AllUser,
-                        activeUser?.OfflineUsers
-                      )}%`,
-                    }}
-                    className="dash_board__container--pie-chart-connection-service-content-item-progressbar-percent offline"
-                  ></div>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div className="dash_board__container--activity">
+          <CardInfo
+            cardHeader="Lịch sử hoạt động"
+            cardContent={
+              <CardActivityLog
+                data={historyActivity}
+                totalItem={historyActivity?.length}
+                dateIndex="date_create"
+                statusIndex="type"
+                pageSize={lengthPage}
+                setLengthPage={setLengthPage}
+                onCurrentPageChange={onChangePageHistoryActivity}
+                pagination={true}
+              />
+            }
+          />
         </div>
       </div>
       <div className="dash-board__container-second-line">
@@ -923,166 +853,236 @@ const Home = () => {
               </div>
             </div>
           </div>
-          <div className="dash_board__container--activity">
-            <CardInfo
-              cardHeader="Lịch sử hoạt động"
-              cardContent={
-                <CardActivityLog
-                  data={historyActivity}
-                  totalItem={historyActivity?.length}
-                  dateIndex="date_create"
-                  statusIndex="type"
-                  pageSize={lengthPage}
-                  setLengthPage={setLengthPage}
-                  onCurrentPageChange={onChangePageHistoryActivity}
-                  pagination={true}
-                />
-              }
-            />
+      <div className="dash_board__container--pie-chart">
+          <div className="dash_board__container--pie-chart-activity card-shadow">
+            <div className="dash_board__container--pie-chart-activity-header">
+              <span>Tỉ lệ kết nối</span>
+            </div>
+            <div className="dash_board__container--pie-chart-activity-body">
+              <ResponsiveContainer width="100%" height={210}>
+                <PieChart>
+                  <Pie
+                    data={data}
+                    cx="50%"
+                    cy="50%"
+                    labelLine={false}
+                    label={renderCustomizedLabel}
+                    outerRadius={100}
+                    innerRadius={70}
+                    fill="#8884d8"
+                    dataKey="value"
+                    paddingAngle={5}
+                  >
+                    {data.map((entry, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={COLORS[index % COLORS.length]}
+                      />
+                    ))}
+                  </Pie>
+                </PieChart>
+              </ResponsiveContainer>
+              <div className="dash_board__container--pie-chart-activity-body-note">
+                <div className="dash_board__container--pie-chart-activity-body-note">
+                  <div className="dash_board__container--pie-chart-activity-body-note-mark green"></div>
+                  <span>Hoàn thành</span>
+                </div>
+                <div className="dash_board__container--pie-chart-activity-body-note">
+                  <div className="dash_board__container--pie-chart-activity-body-note-mark red"></div>
+                  <span>Chưa hoàn thành</span>
+                </div>
+              </div>
+            </div>
           </div>
+          <div className="dash_board__container--pie-chart-connection-service card-shadow">
+            <div className="dash_board__container--pie-chart-connection-service-header">
+              <span>Phần trăm hoạt động</span>
+            </div>
+            <div className="dash_board__container--pie-chart-connection-service-content">
+              <div className="dash_board__container--pie-chart-connection-service-content-item">
+                <div className="dash_board__container--pie-chart-connection-service-content-item-title">
+                  <span className="high-light">Online</span>
+                  <span className="value">
+                    {formatNumber(activeUser?.ActiveUsers || 0)}&nbsp;người
+                  </span>
+                </div>
+                <div className="dash_board__container--pie-chart-connection-service-content-item-progressbar ">
+                  <div
+                    style={{
+                      width: `${calculateNumberPercent(
+                        activeUser.AllUser,
+                        activeUser?.ActiveUsers
+                      )}%`,
+                    }}
+                    className={`dash_board__container--pie-chart-connection-service-content-item-progressbar-percent online`}
+                  ></div>
+                </div>
+              </div>
+              <div className="dash_board__container--pie-chart-connection-service-content-item">
+                <div className="dash_board__container--pie-chart-connection-service-content-item-title">
+                  <span className="high-light">Offline</span>
+                  <span className="value">
+                    {formatNumber(activeUser?.OfflineUsers || 0)}&nbsp;người
+                  </span>
+                </div>
+                <div className="dash_board__container--pie-chart-connection-service-content-item-progressbar ">
+                  <div
+                    style={{
+                      width: `${calculateNumberPercent(
+                        activeUser.AllUser,
+                        activeUser?.OfflineUsers
+                      )}%`,
+                    }}
+                    className="dash_board__container--pie-chart-connection-service-content-item-progressbar-percent offline"
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         </div>
         <div className="dash_board__container--order-statistic">
-          <div className="dash_board__container--order-statistic-hour card-shadow">
-            <div className="dash_board__container--order-statistic-hour-header">
-              <span>Thống kê đơn hàng theo dịch vụ</span>
-            </div>
-            <div className="dash_board__container--order-statistic-hour-body">
-              <ResponsiveContainer width="97%" height={215}>
-                <BarChart
-                  data={dataChartDetail}
-                  margin={{
-                    top: 30,
-                    right: 30,
-                    left: 20,
-                    bottom: 5,
-                  }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="title" />
-                  {/* <YAxis /> */}
-                  <RechartsTooltip />
-                  <Legend />
-                  <Bar
-                    dataKey="percent_2_hour"
-                    fill="#8884d8"
-                    barSize={40}
-                    minPointSize={10}
-                    name={`2 ${i18n.t("hour", {
-                      lng: lang,
-                    })}`}
-                    label={{
-                      position: "top",
-                      fill: "black",
-                      fontSize: 14,
-                    }}
-                  />
-                  <Bar
-                    dataKey="percent_3_hour"
-                    fill="#82ca9d"
-                    barSize={40}
-                    minPointSize={10}
-                    name={`3 ${i18n.t("hour", {
-                      lng: lang,
-                    })}`}
-                    label={{
-                      position: "top",
-                      fill: "black",
-                      fontSize: 14,
-                    }}
-                  />
-                  <Bar
-                    dataKey="percent_4_hour"
-                    fill="#0088FE"
-                    barSize={40}
-                    minPointSize={10}
-                    name={`4 ${i18n.t("hour", {
-                      lng: lang,
-                    })}`}
-                    label={{
-                      position: "top",
-                      fill: "black",
-                      fontSize: 14,
-                    }}
-                  />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-          <div className="dash_board__container--order-statistic-customer card-shadow">
-            <div className="dash_board__container--order-statistic-customer-header">
-              <span>Thống kê khách hàng</span>
-            </div>
-            <div className="dash_board__container--order-statistic-customer-body">
-              <div className="dash_board__container--order-statistic-customer-body-total">
-                <span className="high-light">Tổng khách hàng:</span>
-                <span>10.000</span>
+            <div className="dash_board__container--order-statistic-hour card-shadow">
+              <div className="dash_board__container--order-statistic-hour-header">
+                <span>Thống kê đơn hàng theo dịch vụ</span>
               </div>
-              <ResponsiveContainer width="97%" height={200}>
-                <ComposedChart
-                  data={dataChartUser.slice(0, moment().utc().month() + 1)}
-                  margin={{
-                    top: 10,
-                    right: 30,
-                    left: 20,
-                    bottom: 5,
-                  }}
-                  barSize={50}
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis
-                    dataKey="month"
-                    tickFormatter={(tickItem) =>
-                      `${i18n.t("month", {
-                        lng: lang,
-                      })}` +
-                      " " +
-                      tickItem
-                    }
-                  />
-                  {/* <YAxis /> */}
-                  <RechartsTooltip content={renderTooltipContentUser} />
-                  <Legend />
-
-                  <Bar
-                    dataKey="totalOld"
-                    fill="#82ca9d"
-                    minPointSize={10}
-                    barSize={20}
-                    name={`${i18n.t("customer_old", {
-                      lng: lang,
-                    })}`}
-                    stackId="a"
-                  />
-
-                  <Bar
-                    dataKey="totalNew"
-                    fill="#4376CC"
-                    minPointSize={10}
-                    barSize={20}
-                    name={`${i18n.t("customer_new", {
-                      lng: lang,
-                    })}`}
-                    stackId="a"
-                    label={{
-                      position: "top",
-                      fill: "black",
-                      fontSize: 12,
-                      fontFamily: "Roboto",
+              <div className="dash_board__container--order-statistic-hour-body">
+                <ResponsiveContainer width="97%" height={215}>
+                  <BarChart
+                    data={dataChartDetail}
+                    margin={{
+                      top: 30,
+                      right: 30,
+                      left: 20,
+                      bottom: 5,
                     }}
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="totalNew"
-                    stroke="#ff7300"
-                    name={`${i18n.t("customer_new", {
-                      lng: lang,
-                    })}`}
-                  />
-                </ComposedChart>
-              </ResponsiveContainer>
+                  >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="title" />
+                    {/* <YAxis /> */}
+                    <RechartsTooltip />
+                    <Legend />
+                    <Bar
+                      dataKey="percent_2_hour"
+                      fill="#8884d8"
+                      barSize={40}
+                      minPointSize={10}
+                      name={`2 ${i18n.t("hour", {
+                        lng: lang,
+                      })}`}
+                      label={{
+                        position: "top",
+                        fill: "black",
+                        fontSize: 14,
+                      }}
+                    />
+                    <Bar
+                      dataKey="percent_3_hour"
+                      fill="#82ca9d"
+                      barSize={40}
+                      minPointSize={10}
+                      name={`3 ${i18n.t("hour", {
+                        lng: lang,
+                      })}`}
+                      label={{
+                        position: "top",
+                        fill: "black",
+                        fontSize: 14,
+                      }}
+                    />
+                    <Bar
+                      dataKey="percent_4_hour"
+                      fill="#0088FE"
+                      barSize={40}
+                      minPointSize={10}
+                      name={`4 ${i18n.t("hour", {
+                        lng: lang,
+                      })}`}
+                      label={{
+                        position: "top",
+                        fill: "black",
+                        fontSize: 14,
+                      }}
+                    />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+            <div className="dash_board__container--order-statistic-customer card-shadow">
+              <div className="dash_board__container--order-statistic-customer-header">
+                <span>Thống kê khách hàng</span>
+              </div>
+              <div className="dash_board__container--order-statistic-customer-body">
+                <div className="dash_board__container--order-statistic-customer-body-total">
+                  <span className="high-light">Tổng khách hàng:</span>
+                  <span>10.000</span>
+                </div>
+                <ResponsiveContainer width="97%" height={200}>
+                  <ComposedChart
+                    data={dataChartUser.slice(0, moment().utc().month() + 1)}
+                    margin={{
+                      top: 10,
+                      right: 30,
+                      left: 20,
+                      bottom: 5,
+                    }}
+                    barSize={50}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis
+                      dataKey="month"
+                      tickFormatter={(tickItem) =>
+                        `${i18n.t("month", {
+                          lng: lang,
+                        })}` +
+                        " " +
+                        tickItem
+                      }
+                    />
+                    {/* <YAxis /> */}
+                    <RechartsTooltip content={renderTooltipContentUser} />
+                    <Legend />
+
+                    <Bar
+                      dataKey="totalOld"
+                      fill="#82ca9d"
+                      minPointSize={10}
+                      barSize={20}
+                      name={`${i18n.t("customer_old", {
+                        lng: lang,
+                      })}`}
+                      stackId="a"
+                    />
+
+                    <Bar
+                      dataKey="totalNew"
+                      fill="#4376CC"
+                      minPointSize={10}
+                      barSize={20}
+                      name={`${i18n.t("customer_new", {
+                        lng: lang,
+                      })}`}
+                      stackId="a"
+                      label={{
+                        position: "top",
+                        fill: "black",
+                        fontSize: 12,
+                        fontFamily: "Roboto",
+                      }}
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="totalNew"
+                      stroke="#ff7300"
+                      name={`${i18n.t("customer_new", {
+                        lng: lang,
+                      })}`}
+                    />
+                  </ComposedChart>
+                </ResponsiveContainer>
+              </div>
             </div>
           </div>
-        </div>
       </div>
       <div className="dash_board__container--table">
         <DataTable
