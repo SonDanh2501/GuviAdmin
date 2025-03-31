@@ -176,7 +176,7 @@ const DetailsProfile = ({ id }) => {
   // 1. Fetch thông tin khách hàng
   useEffect(() => {
     fetchCustomerInfo(id);
-    fetchInvitedListOfCustomer();
+    // fetchInvitedListOfCustomer();
     fetchListInviterOfCustomer(id);
   }, [id, dispatch]);
   // 2. Kiểm tra mức rank hiện tại của khách hàng
