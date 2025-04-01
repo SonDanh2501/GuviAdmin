@@ -6,14 +6,13 @@ import { logoutAction } from "./redux/actions/auth";
 let token;
 getToken().then((res) => (token = res));
 
-const BaseUrl = process.env.REACT_APP_BASE_URL;
 const TestUrl = process.env.REACT_APP_TEST_URL;
 const DevUrl = process.env.REACT_APP_DEV_URL;
 
 const TestLocalUrl = process.env.REACT_APP_LOCAL_TEST_URL;
 
 const axiosClient = axios.create({
-  baseURL: BaseUrl,
+  baseURL: DevUrl,
   headers: {
     "Content-Type": "application/json",
     Authorization: `Bearer ${token}`,
