@@ -8,9 +8,9 @@
   </a>
   <h3 align="center">Professional Hourly Maid Service</h3>
   <p align="center">
-    <a href="https://github.com/othneildrew/Best-README-Template"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/SonDanh2501/GUVI-Web-Admin/tree/master"><strong>Explore the docs »</strong></a>
     <br />
-    <a href="https://github.com/othneildrew/Best-README-Template">View Demo</a>
+    <a href="https://admin-dev.guvico.com/">View Demo (gmail: admindev@gmail.com password: 123456)</a> 
   </p>
 </div>
 
