@@ -45,10 +45,7 @@
 
 [![Product Name Screen Shot][product-screenshot]](https://example.com)
 
-Guvi is a service-based application that connects customers with workers to
-perform cleaning-related tasks. Company staff receive requests and manage operations
-through a Customer Relationship Management (CRM) web platform.
-
+An end-to-end solution for booking and managing on-demand housekeeping services. Over 40,000 customers served, making home cleaning simpler, faster, and stress-free.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
