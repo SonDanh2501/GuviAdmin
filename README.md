@@ -44,9 +44,6 @@
 ## About The Project
 
 [![Product Name Screen Shot][product-screenshot]](https://example.com)
-<a href="https://example.com">
-    <img src="src/assets/images/demo_app.jpg" alt="Product Name Screen Shot" width="300">
-</a>
 
 Guvi is a service-based application that connects customers with workers to
 perform cleaning-related tasks. Company staff receive requests and manage operations
